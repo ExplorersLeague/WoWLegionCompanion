@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using bgs.RPCServices;
 using bnet.protocol;
-using bnet.protocol.connection;
 
 namespace bgs
 {
@@ -319,32 +318,6 @@ namespace bgs
 			{
 				this.incomingPackets.Enqueue(p);
 			}
-		}
-
-		public void SetConnectionMeteringContentHandles(ConnectionMeteringContentHandles handles, LocalStorageAPI localStorage)
-		{
-			if (handles == null || !handles.IsInitialized || handles.ContentHandleCount == 0)
-			{
-				this.m_cmLogSource.LogWarning("Invalid connection metering content handle received.");
-				return;
-			}
-			if (handles.ContentHandleCount != 1)
-			{
-				this.m_cmLogSource.LogWarning("More than 1 connection metering content handle specified!");
-			}
-			ContentHandle contentHandle = handles.ContentHandle[0];
-			if (contentHandle == null || !contentHandle.IsInitialized)
-			{
-				this.m_cmLogSource.LogWarning("The content handle received is not valid!");
-				return;
-			}
-			this.m_cmLogSource.LogDebug("Received request to enable connection metering.");
-			ContentHandle contentHandle2 = ContentHandle.FromProtocol(contentHandle);
-			this.m_cmLogSource.LogDebug("Requesting file from local storage. ContentHandle={0}", new object[]
-			{
-				contentHandle2
-			});
-			localStorage.GetFile(contentHandle2, new LocalStorageAPI.DownloadCompletedCallback(this.DownloadCompletedCallback), null);
 		}
 
 		protected Header CreateHeader(uint serviceId, uint methodId, uint objectId, uint token, uint size)

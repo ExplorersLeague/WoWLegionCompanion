@@ -45,7 +45,7 @@ namespace WoWCompanionApp
 				foreach (WrapperWorldQuestReward wrapperWorldQuestReward in worldQuest.Items)
 				{
 					Sprite rewardSprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, wrapperWorldQuestReward.FileDataID);
-					this.m_rewardInfo[num].SetReward(MissionRewardDisplay.RewardType.item, wrapperWorldQuestReward.RecordID, wrapperWorldQuestReward.Quantity, rewardSprite, wrapperWorldQuestReward.ItemContext);
+					this.m_rewardInfo[num].SetReward(MissionRewardDisplay.RewardType.item, wrapperWorldQuestReward.RecordID, wrapperWorldQuestReward.Quantity, rewardSprite, wrapperWorldQuestReward.ItemContext, wrapperWorldQuestReward.ItemInstance);
 					this.EnableAdditionalRewardDisplays(num++);
 					if (num >= 3)
 					{
@@ -175,12 +175,7 @@ namespace WoWCompanionApp
 			}
 			bool active = (record2.Modifiers & 2) != 0;
 			this.m_dragonFrame.gameObject.SetActive(active);
-			if (record2.Type == 7)
-			{
-				this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-NormalQuest");
-				this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/Map-LegionInvasion-SargerasCrest");
-				return;
-			}
+			this.m_factionEmblems.SetActive(record2.Type == 12);
 			this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-NormalQuest");
 			bool flag = (record2.Modifiers & 1) != 0;
 			if (flag && record2.Type != 3)
@@ -314,20 +309,20 @@ namespace WoWCompanionApp
 					text = "Mobile-Mining";
 					break;
 				}
-				goto IL_6F5;
+				goto IL_6D3;
 			}
 			case 3:
 				uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 				text = "Mobile-PVP";
-				goto IL_6F5;
+				goto IL_6D3;
 			case 4:
 				uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 				text = "Mobile-Pets";
-				goto IL_6F5;
+				goto IL_6D3;
 			}
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 			text = "Mobile-QuestExclamationIcon";
-			IL_6F5:
+			IL_6D3:
 			if (text != null)
 			{
 				this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/" + text);
@@ -346,21 +341,25 @@ namespace WoWCompanionApp
 			this.m_doubleEmissaryFiligree.SetActive(activeBounties == 2);
 		}
 
-		private void UpdateTimeRemaining()
+		private bool UpdateTimeRemaining()
 		{
 			TimeSpan timeSpan = this.m_endTime - GarrisonStatus.CurrentTime();
 			if (timeSpan.TotalSeconds < 0.0)
 			{
 				timeSpan = TimeSpan.Zero;
 			}
-			this.m_worldQuestTimeText.text = this.m_timeLeftString + " " + timeSpan.GetDurationString(false);
+			this.m_worldQuestTimeText.text = this.m_timeLeftString + " " + timeSpan.GetDurationString(true, TimeUnit.Minute);
 			bool active = timeSpan.TotalSeconds < 4500.0;
 			this.m_expiringSoon.gameObject.SetActive(active);
+			return timeSpan.TotalSeconds > 0.0;
 		}
 
 		private void Update()
 		{
-			this.UpdateTimeRemaining();
+			if (!this.UpdateTimeRemaining())
+			{
+				base.gameObject.SetActive(false);
+			}
 		}
 
 		[Header("World Quest Icon Layers")]
@@ -371,6 +370,8 @@ namespace WoWCompanionApp
 		public Image m_main;
 
 		public Image m_expiringSoon;
+
+		public GameObject m_factionEmblems;
 
 		[Header("World Quest Info")]
 		public Text m_worldQuestNameText;

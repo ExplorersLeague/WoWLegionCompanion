@@ -22,17 +22,31 @@ namespace WoWCompanionApp
 			}
 		}
 
-		public WrapperItemStats? GetItemStats(int itemID, int itemContext)
+		private bool IsCoverItem(int itemID)
+		{
+			return itemID == 163857 || (itemID >= 164577 && itemID <= 166370);
+		}
+
+		public bool HasItemStats(int itemID)
+		{
+			return !this.IsCoverItem(itemID) && this.m_records.ContainsKey(itemID);
+		}
+
+		public WrapperItemStats? GetItemStats(int itemID, int itemContext, WrapperItemInstance? itemInstance)
 		{
 			if (this.m_records.ContainsKey(itemID))
 			{
+				if (this.IsCoverItem(itemID))
+				{
+					LegionCompanionWrapper.GetItemTooltipInfo(itemID, itemContext, itemInstance);
+				}
 				return new WrapperItemStats?(this.m_records[itemID]);
 			}
-			LegionCompanionWrapper.GetItemTooltipInfo(itemID, itemContext);
+			LegionCompanionWrapper.GetItemTooltipInfo(itemID, itemContext, itemInstance);
 			return null;
 		}
 
-		public void AddMobileItemStats(int itemID, int itemContext, WrapperItemStats stats)
+		public void AddMobileItemStats(int itemID, int itemContext, WrapperItemStats stats, WrapperItemInstance? itemInstance)
 		{
 			if (!this.m_records.ContainsKey(itemID))
 			{
@@ -44,7 +58,7 @@ namespace WoWCompanionApp
 			}
 			if (this.ItemStatCacheUpdateAction != null)
 			{
-				this.ItemStatCacheUpdateAction(itemID, itemContext, stats);
+				this.ItemStatCacheUpdateAction(itemID, itemContext, stats, itemInstance);
 			}
 		}
 
@@ -57,6 +71,6 @@ namespace WoWCompanionApp
 
 		private Dictionary<int, WrapperItemStats> m_records = new Dictionary<int, WrapperItemStats>();
 
-		public Action<int, int, WrapperItemStats> ItemStatCacheUpdateAction;
+		public Action<int, int, WrapperItemStats, WrapperItemInstance?> ItemStatCacheUpdateAction;
 	}
 }

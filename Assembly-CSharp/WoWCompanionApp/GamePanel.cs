@@ -28,7 +28,7 @@ namespace WoWCompanionApp
 			{
 				this.m_currentPanel = this.m_troopsPanel.gameObject;
 			}
-			if (Main.instance.IsIphoneX() && this.m_navBarLayout != null)
+			if (Main.instance.HasNotch() && this.m_navBarLayout != null)
 			{
 				HorizontalLayoutGroup component = this.m_navBarLayout.GetComponent<HorizontalLayoutGroup>();
 				if (component != null)

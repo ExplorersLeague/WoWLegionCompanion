@@ -394,7 +394,7 @@ namespace WoWCompanionApp
 			default:
 				if (statIndex != BonusStatIndex.MASTERY_RATING)
 				{
-					return statIndex.ToString();
+					return string.Empty;
 				}
 				return StaticDB.GetString("ITEM_MOD_MASTERY_RATING", null);
 			case BonusStatIndex.AGILITY:
@@ -463,7 +463,7 @@ namespace WoWCompanionApp
 								follower.GarrFollowerID
 							}));
 						}
-						else if ((record.Flags & 1u) == 0u)
+						else
 						{
 							IEnumerable<GarrAbilityEffectRec> source = from garrAbilityEffectRec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record.ID)
 							where garrAbilityEffectRec.GarrMechanicTypeID != 0u && garrAbilityEffectRec.AbilityAction == 0u && (long)garrMechanicTypeID == (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID)
@@ -576,30 +576,39 @@ namespace WoWCompanionApp
 				{
 					foreach (GarrAbilityEffectRec garrAbilityEffectRec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record.ID))
 					{
-						bool flag = false;
-						uint abilityAction = garrAbilityEffectRec.AbilityAction;
-						switch (abilityAction)
+						if ((garrAbilityEffectRec.Flags & 1u) == 0u)
 						{
-						case 0u:
-							break;
-						case 1u:
-						{
-							MissionFollowerSlot[] componentsInChildren = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
-							int num = 0;
-							foreach (MissionFollowerSlot missionFollowerSlot in componentsInChildren)
-							{
-								if (missionFollowerSlot.GetCurrentGarrFollowerID() > 0)
-								{
-									num++;
-								}
-							}
-							flag = (num == 1);
-							break;
-						}
-						default:
+							bool flag = false;
+							uint abilityAction = garrAbilityEffectRec.AbilityAction;
 							switch (abilityAction)
 							{
-							case 22u:
+							case 0u:
+								break;
+							case 1u:
+							{
+								MissionFollowerSlot[] componentsInChildren = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+								int num = 0;
+								foreach (MissionFollowerSlot missionFollowerSlot in componentsInChildren)
+								{
+									if (missionFollowerSlot.GetCurrentGarrFollowerID() > 0)
+									{
+										num++;
+									}
+								}
+								flag = (num == 1);
+								break;
+							}
+							case 2u:
+							case 17u:
+							case 21u:
+								flag = true;
+								break;
+							default:
+								if (abilityAction != 37u)
+								{
+								}
+								break;
+							case 5u:
 							{
 								MissionFollowerSlot[] componentsInChildren2 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 								bool flag2 = false;
@@ -611,8 +620,8 @@ namespace WoWCompanionApp
 										GarrFollowerRec record2 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID);
 										if (record2 != null)
 										{
-											uint num2 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record2.HordeGarrClassSpecID : record2.AllianceGarrClassSpecID;
-											if (num2 == garrAbilityEffectRec.ActionRecordID)
+											uint num2 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record2.HordeGarrFollRaceID : record2.AllianceGarrFollRaceID;
+											if (num2 == garrAbilityEffectRec.ActionRace)
 											{
 												flag2 = true;
 												break;
@@ -623,18 +632,40 @@ namespace WoWCompanionApp
 								flag = flag2;
 								break;
 							}
-							case 23u:
+							case 6u:
+								flag = ((float)missionDuration >= garrAbilityEffectRec.ActionHours * 3600f);
+								break;
+							case 7u:
+								flag = ((float)missionDuration <= garrAbilityEffectRec.ActionHours * 3600f);
+								break;
+							case 9u:
 							{
+								GarrMissionRec record3 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+								flag = (record3 != null && record3.TravelDuration >= garrAbilityEffectRec.ActionHours * 3600f);
+								break;
+							}
+							case 10u:
+							{
+								GarrMissionRec record4 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+								flag = (record4 != null && record4.TravelDuration <= garrAbilityEffectRec.ActionHours * 3600f);
+								break;
+							}
+							case 12u:
+								break;
+							case 22u:
+							{
+								MissionFollowerSlot[] componentsInChildren3 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 								bool flag3 = false;
-								if (PersistentMissionData.missionDictionary.ContainsKey(garrMissionID))
+								foreach (MissionFollowerSlot missionFollowerSlot3 in componentsInChildren3)
 								{
-									WrapperGarrisonMission wrapperGarrisonMission = PersistentMissionData.missionDictionary[garrMissionID];
-									for (int l = 0; l < wrapperGarrisonMission.Encounters.Count; l++)
+									int currentGarrFollowerID2 = missionFollowerSlot3.GetCurrentGarrFollowerID();
+									if (currentGarrFollowerID2 > 0 && currentGarrFollowerID2 != wrapperGarrisonFollower.GarrFollowerID)
 									{
-										for (int m = 0; m < wrapperGarrisonMission.Encounters[l].MechanicIDs.Count; m++)
+										GarrFollowerRec record5 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID2);
+										if (record5 != null)
 										{
-											GarrMechanicRec record3 = StaticDB.garrMechanicDB.GetRecord(wrapperGarrisonMission.Encounters[l].MechanicIDs[m]);
-											if (record3 != null && garrAbilityEffectRec.GarrMechanicTypeID == record3.GarrMechanicTypeID)
+											uint num3 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record5.HordeGarrClassSpecID : record5.AllianceGarrClassSpecID;
+											if (num3 == garrAbilityEffectRec.ActionRecordID)
 											{
 												flag3 = true;
 												break;
@@ -645,77 +676,49 @@ namespace WoWCompanionApp
 								flag = flag3;
 								break;
 							}
-							default:
-								if (abilityAction != 37u)
-								{
-								}
-								break;
-							case 26u:
+							case 23u:
 							{
-								MissionFollowerSlot[] componentsInChildren3 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 								bool flag4 = false;
-								foreach (MissionFollowerSlot missionFollowerSlot3 in componentsInChildren3)
+								if (PersistentMissionData.missionDictionary.ContainsKey(garrMissionID))
 								{
-									int currentGarrFollowerID2 = missionFollowerSlot3.GetCurrentGarrFollowerID();
-									if (currentGarrFollowerID2 > 0 && currentGarrFollowerID2 != wrapperGarrisonFollower.GarrFollowerID && (ulong)garrAbilityEffectRec.ActionRecordID == (ulong)((long)currentGarrFollowerID2))
+									WrapperGarrisonMission wrapperGarrisonMission = PersistentMissionData.missionDictionary[garrMissionID];
+									for (int m = 0; m < wrapperGarrisonMission.Encounters.Count; m++)
 									{
-										flag4 = true;
-										break;
+										for (int n = 0; n < wrapperGarrisonMission.Encounters[m].MechanicIDs.Count; n++)
+										{
+											GarrMechanicRec record6 = StaticDB.garrMechanicDB.GetRecord(wrapperGarrisonMission.Encounters[m].MechanicIDs[n]);
+											if (record6 != null && garrAbilityEffectRec.GarrMechanicTypeID == record6.GarrMechanicTypeID)
+											{
+												flag4 = true;
+												break;
+											}
+										}
 									}
 								}
 								flag = flag4;
 								break;
 							}
-							}
-							break;
-						case 5u:
-						{
-							MissionFollowerSlot[] componentsInChildren4 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
-							bool flag5 = false;
-							foreach (MissionFollowerSlot missionFollowerSlot4 in componentsInChildren4)
+							case 26u:
 							{
-								int currentGarrFollowerID3 = missionFollowerSlot4.GetCurrentGarrFollowerID();
-								if (currentGarrFollowerID3 > 0 && currentGarrFollowerID3 != wrapperGarrisonFollower.GarrFollowerID)
+								MissionFollowerSlot[] componentsInChildren4 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+								bool flag5 = false;
+								foreach (MissionFollowerSlot missionFollowerSlot4 in componentsInChildren4)
 								{
-									GarrFollowerRec record4 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID3);
-									if (record4 != null)
+									int currentGarrFollowerID3 = missionFollowerSlot4.GetCurrentGarrFollowerID();
+									if (currentGarrFollowerID3 > 0 && currentGarrFollowerID3 != wrapperGarrisonFollower.GarrFollowerID && (ulong)garrAbilityEffectRec.ActionRecordID == (ulong)((long)currentGarrFollowerID3))
 									{
-										uint num4 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record4.HordeGarrFollRaceID : record4.AllianceGarrFollRaceID;
-										if (num4 == garrAbilityEffectRec.ActionRace)
-										{
-											flag5 = true;
-											break;
-										}
+										flag5 = true;
+										break;
 									}
 								}
+								flag = flag5;
+								break;
 							}
-							flag = flag5;
-							break;
-						}
-						case 6u:
-							flag = ((float)missionDuration >= garrAbilityEffectRec.ActionHours * 3600f);
-							break;
-						case 7u:
-							flag = ((float)missionDuration <= garrAbilityEffectRec.ActionHours * 3600f);
-							break;
-						case 9u:
-						{
-							GarrMissionRec record5 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-							flag = (record5 != null && record5.TravelDuration >= garrAbilityEffectRec.ActionHours * 3600f);
-							break;
-						}
-						case 10u:
-						{
-							GarrMissionRec record6 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-							flag = (record6 != null && record6.TravelDuration <= garrAbilityEffectRec.ActionHours * 3600f);
-							break;
-						}
-						case 12u:
-							break;
-						}
-						if (flag)
-						{
-							hashSet.Add(record.ID);
+							}
+							if (flag)
+							{
+								hashSet.Add(record.ID);
+							}
 						}
 					}
 				}

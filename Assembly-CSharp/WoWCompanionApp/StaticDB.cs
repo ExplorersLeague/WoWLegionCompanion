@@ -586,23 +586,19 @@ namespace WoWCompanionApp
 
 		public static string GetString(string baseTag, string fallbackString = null)
 		{
-			if (Singleton<StaticDB>.instance == null)
+			if (Singleton<StaticDB>.instance == null || Singleton<StaticDB>.instance.m_mobileStringsDB == null)
 			{
-				return string.Empty;
+				return fallbackString ?? "<NoStringsLoaded>";
 			}
 			MobileStringsRec record = Singleton<StaticDB>.instance.m_mobileStringsDB.GetRecord(baseTag);
 			if (record == null)
 			{
 				Debug.Log("No rec for tag " + baseTag);
-				return (fallbackString != null) ? fallbackString : "<NoRec>";
-			}
-			if (record.TagText == string.Empty && fallbackString != null)
-			{
-				return fallbackString;
+				return fallbackString ?? "<NoRec>";
 			}
 			if (record.TagText == string.Empty)
 			{
-				return "<NoTxt>";
+				return fallbackString ?? "<NoTxt>";
 			}
 			return record.TagText;
 		}

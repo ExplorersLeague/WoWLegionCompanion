@@ -18,10 +18,18 @@ namespace WoWCompanionApp
 		private void Start()
 		{
 			this.InitFollowerList();
-			Main main = Main.instance;
-			main.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(main.GarrisonDataResetFinishedAction, new Action(this.InitFollowerList));
-			Main main2 = Main.instance;
-			main2.FollowerDataChangedAction = (Action)Delegate.Combine(main2.FollowerDataChangedAction, new Action(this.InitFollowerList));
+		}
+
+		private void OnEnable()
+		{
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction += this.InitFollowerList;
+			Singleton<GarrisonWrapper>.Instance.FollowerDataChangedAction += this.InitFollowerList;
+		}
+
+		private void OnDisable()
+		{
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction -= this.InitFollowerList;
+			Singleton<GarrisonWrapper>.Instance.FollowerDataChangedAction -= this.InitFollowerList;
 		}
 
 		private void Update()

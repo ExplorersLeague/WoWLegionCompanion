@@ -52,41 +52,37 @@ namespace WoWCompanionApp
 				}
 				this.SetAvailabilityStatus(PersistentFollowerData.followerDictionary[this.m_followerID]);
 			}
-			Main instance = Main.instance;
-			instance.FollowerDataChangedAction = (Action)Delegate.Combine(instance.FollowerDataChangedAction, new Action(this.FollowerDataChanged));
-			Main instance2 = Main.instance;
-			instance2.UseArmamentResultAction = (Action<int, WrapperGarrisonFollower, WrapperGarrisonFollower>)Delegate.Combine(instance2.UseArmamentResultAction, new Action<int, WrapperGarrisonFollower, WrapperGarrisonFollower>(this.HandleUseArmamentResult));
+			Singleton<GarrisonWrapper>.Instance.FollowerDataChangedAction += this.FollowerDataChanged;
+			Singleton<GarrisonWrapper>.Instance.UseArmamentResultAction += this.HandleUseArmamentResult;
 			if (AdventureMapPanel.instance != null)
 			{
-				AdventureMapPanel instance3 = AdventureMapPanel.instance;
-				instance3.OnMissionFollowerSlotChanged = (Action<int, bool>)Delegate.Combine(instance3.OnMissionFollowerSlotChanged, new Action<int, bool>(this.OnMissionFollowerSlotChanged));
-				AdventureMapPanel instance4 = AdventureMapPanel.instance;
-				instance4.DeselectAllFollowerListItemsAction = (Action)Delegate.Combine(instance4.DeselectAllFollowerListItemsAction, new Action(this.DeselectMe));
+				AdventureMapPanel instance = AdventureMapPanel.instance;
+				instance.OnMissionFollowerSlotChanged = (Action<int, bool>)Delegate.Combine(instance.OnMissionFollowerSlotChanged, new Action<int, bool>(this.OnMissionFollowerSlotChanged));
+				AdventureMapPanel instance2 = AdventureMapPanel.instance;
+				instance2.DeselectAllFollowerListItemsAction = (Action)Delegate.Combine(instance2.DeselectAllFollowerListItemsAction, new Action(this.DeselectMe));
 			}
 			if (this.m_followerDetailView != null && OrderHallFollowersPanel.instance != null)
 			{
-				OrderHallFollowersPanel instance5 = OrderHallFollowersPanel.instance;
-				instance5.FollowerDetailListItemSelectedAction = (Action<int>)Delegate.Combine(instance5.FollowerDetailListItemSelectedAction, new Action<int>(this.DetailFollowerListItem_ManageFollowerDetailViewSize));
+				OrderHallFollowersPanel instance3 = OrderHallFollowersPanel.instance;
+				instance3.FollowerDetailListItemSelectedAction = (Action<int>)Delegate.Combine(instance3.FollowerDetailListItemSelectedAction, new Action<int>(this.DetailFollowerListItem_ManageFollowerDetailViewSize));
 			}
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.FollowerDataChangedAction = (Action)Delegate.Remove(instance.FollowerDataChangedAction, new Action(this.FollowerDataChanged));
-			Main instance2 = Main.instance;
-			instance2.UseArmamentResultAction = (Action<int, WrapperGarrisonFollower, WrapperGarrisonFollower>)Delegate.Remove(instance2.UseArmamentResultAction, new Action<int, WrapperGarrisonFollower, WrapperGarrisonFollower>(this.HandleUseArmamentResult));
+			Singleton<GarrisonWrapper>.Instance.FollowerDataChangedAction -= this.FollowerDataChanged;
+			Singleton<GarrisonWrapper>.Instance.UseArmamentResultAction -= this.HandleUseArmamentResult;
 			if (AdventureMapPanel.instance != null)
 			{
-				AdventureMapPanel instance3 = AdventureMapPanel.instance;
-				instance3.OnMissionFollowerSlotChanged = (Action<int, bool>)Delegate.Remove(instance3.OnMissionFollowerSlotChanged, new Action<int, bool>(this.OnMissionFollowerSlotChanged));
-				AdventureMapPanel instance4 = AdventureMapPanel.instance;
-				instance4.DeselectAllFollowerListItemsAction = (Action)Delegate.Remove(instance4.DeselectAllFollowerListItemsAction, new Action(this.DeselectMe));
+				AdventureMapPanel instance = AdventureMapPanel.instance;
+				instance.OnMissionFollowerSlotChanged = (Action<int, bool>)Delegate.Remove(instance.OnMissionFollowerSlotChanged, new Action<int, bool>(this.OnMissionFollowerSlotChanged));
+				AdventureMapPanel instance2 = AdventureMapPanel.instance;
+				instance2.DeselectAllFollowerListItemsAction = (Action)Delegate.Remove(instance2.DeselectAllFollowerListItemsAction, new Action(this.DeselectMe));
 			}
 			if (this.m_followerDetailView != null && OrderHallFollowersPanel.instance != null)
 			{
-				OrderHallFollowersPanel instance5 = OrderHallFollowersPanel.instance;
-				instance5.FollowerDetailListItemSelectedAction = (Action<int>)Delegate.Remove(instance5.FollowerDetailListItemSelectedAction, new Action<int>(this.DetailFollowerListItem_ManageFollowerDetailViewSize));
+				OrderHallFollowersPanel instance3 = OrderHallFollowersPanel.instance;
+				instance3.FollowerDetailListItemSelectedAction = (Action<int>)Delegate.Remove(instance3.FollowerDetailListItemSelectedAction, new Action<int>(this.DetailFollowerListItem_ManageFollowerDetailViewSize));
 			}
 		}
 
@@ -233,7 +229,7 @@ namespace WoWCompanionApp
 			if (timeSpan.TotalSeconds > 0.0)
 			{
 				this.m_statusTextSB.Length = 0;
-				this.m_statusTextSB.ConcatFormat("{0} - {1}", FollowerListItem.m_onMissionString, timeSpan.GetDurationString(false));
+				this.m_statusTextSB.ConcatFormat("{0} - {1}", FollowerListItem.m_onMissionString, timeSpan.GetDurationString(false, TimeUnit.Second));
 				this.m_statusText.text = this.m_statusTextSB.ToString();
 			}
 			else
@@ -434,6 +430,7 @@ namespace WoWCompanionApp
 			AbilityDisplay[] componentsInChildren = this.usefulAbilitiesGroup.GetComponentsInChildren<AbilityDisplay>(true);
 			for (int i = 0; i < componentsInChildren.Length; i++)
 			{
+				componentsInChildren[i].transform.SetParent(null);
 				Object.Destroy(componentsInChildren[i].gameObject);
 			}
 			WrapperGarrisonMission wrapperGarrisonMission = PersistentMissionData.missionDictionary[currentGarrMissionID];
@@ -459,7 +456,8 @@ namespace WoWCompanionApp
 			}
 			List<int> usefulBuffAbilitiesForFollower = MissionMechanic.GetUsefulBuffAbilitiesForFollower(this.m_followerID);
 			List<int> list = usefulCounterAbilityIDs.Values.Union(usefulBuffAbilitiesForFollower).ToList<int>();
-			foreach (int num2 in PersistentFollowerData.followerDictionary[this.m_followerID].AbilityIDs)
+			WrapperGarrisonFollower wrapperGarrisonFollower = PersistentFollowerData.followerDictionary[this.m_followerID];
+			foreach (int num2 in wrapperGarrisonFollower.AbilityIDs)
 			{
 				foreach (int num3 in list)
 				{
@@ -472,6 +470,15 @@ namespace WoWCompanionApp
 						component.m_abilityNameText.gameObject.SetActive(false);
 					}
 				}
+			}
+			GarrMissionRec record2 = StaticDB.garrMissionDB.GetRecord(currentGarrMissionID);
+			if (wrapperGarrisonFollower.AbilityIDs.Contains(1262) && record2 != null && record2.EnvGarrMechanicID == 139)
+			{
+				GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_abilityDisplayPrefab);
+				gameObject2.transform.SetParent(this.usefulAbilitiesGroup.transform, false);
+				AbilityDisplay component2 = gameObject2.GetComponent<AbilityDisplay>();
+				component2.SetAbility(1262, true, false, null);
+				component2.m_abilityNameText.gameObject.SetActive(false);
 			}
 		}
 

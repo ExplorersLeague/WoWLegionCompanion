@@ -171,29 +171,26 @@ namespace WoWCompanionApp
 				for (int j = 0; j < follower.AbilityIDs.Count; j++)
 				{
 					GarrAbilityRec record2 = StaticDB.garrAbilityDB.GetRecord(follower.AbilityIDs[j]);
-					if ((record2.Flags & 1u) == 0u)
+					GarrAbilityEffectRec garrAbilityEffectRec2 = StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record2.ID).FirstOrDefault(delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 					{
-						GarrAbilityEffectRec garrAbilityEffectRec2 = StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record2.ID).FirstOrDefault(delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+						if (garrAbilityEffectRec.GarrMechanicTypeID == 0u || garrAbilityEffectRec.AbilityAction != 0u)
 						{
-							if (garrAbilityEffectRec.GarrMechanicTypeID == 0u || garrAbilityEffectRec.AbilityAction != 0u)
-							{
-								return false;
-							}
-							GarrMechanicTypeRec garrMechanicTypeRec = StaticDB.garrMechanicTypeDB.GetRecord((int)garrAbilityEffectRec.GarrMechanicTypeID);
-							return garrMechanicTypeRec != null && mechanics.Any((MissionMechanic mechanic) => mechanic.m_missionMechanicTypeID == garrMechanicTypeRec.ID);
-						});
-						if (garrAbilityEffectRec2 != null)
-						{
-							GameObject gameObject = Object.Instantiate<GameObject>(this.m_missionMechanicCounterPrefab, this.m_abilityAreaRootObject.transform, false);
-							MissionMechanicTypeCounter component = gameObject.GetComponent<MissionMechanicTypeCounter>();
-							component.usedIcon.gameObject.SetActive(false);
-							Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record2.IconFileDataID);
-							if (sprite != null)
-							{
-								component.missionMechanicIcon.sprite = sprite;
-							}
-							component.countersMissionMechanicTypeID = (int)garrAbilityEffectRec2.GarrMechanicTypeID;
+							return false;
 						}
+						GarrMechanicTypeRec garrMechanicTypeRec = StaticDB.garrMechanicTypeDB.GetRecord((int)garrAbilityEffectRec.GarrMechanicTypeID);
+						return garrMechanicTypeRec != null && mechanics.Any((MissionMechanic mechanic) => mechanic.m_missionMechanicTypeID == garrMechanicTypeRec.ID);
+					});
+					if (garrAbilityEffectRec2 != null)
+					{
+						GameObject gameObject = Object.Instantiate<GameObject>(this.m_missionMechanicCounterPrefab, this.m_abilityAreaRootObject.transform, false);
+						MissionMechanicTypeCounter component = gameObject.GetComponent<MissionMechanicTypeCounter>();
+						component.usedIcon.gameObject.SetActive(false);
+						Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record2.IconFileDataID);
+						if (sprite != null)
+						{
+							component.missionMechanicIcon.sprite = sprite;
+						}
+						component.countersMissionMechanicTypeID = (int)garrAbilityEffectRec2.GarrMechanicTypeID;
 					}
 				}
 			}
@@ -260,12 +257,17 @@ namespace WoWCompanionApp
 					Object.Destroy(image.gameObject);
 				}
 			}
+			WrapperGarrisonFollower wrapperGarrisonFollower = this.m_follower;
+			if (PersistentFollowerData.preMissionFollowerDictionary.ContainsKey(this.m_follower.GarrFollowerID))
+			{
+				wrapperGarrisonFollower = PersistentFollowerData.preMissionFollowerDictionary[this.m_follower.GarrFollowerID];
+			}
 			int num = 1;
 			if (GeneralHelpers.MissionHasUncounteredDeadly(this.m_enemyPortraitsGroup))
 			{
-				num = this.m_follower.Durability;
+				num = wrapperGarrisonFollower.Durability;
 			}
-			for (int j = 0; j < this.m_follower.Durability - num; j++)
+			for (int j = 0; j < wrapperGarrisonFollower.Durability - num; j++)
 			{
 				GameObject gameObject = Object.Instantiate<GameObject>(this.m_fullHeartPrefab);
 				gameObject.transform.SetParent(this.m_heartArea.transform, false);
@@ -275,7 +277,7 @@ namespace WoWCompanionApp
 				GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_outlineHeartPrefab);
 				gameObject2.transform.SetParent(this.m_heartArea.transform, false);
 			}
-			for (int l = 0; l < this.m_garrFollowerRec.Vitality - this.m_follower.Durability; l++)
+			for (int l = 0; l < this.m_garrFollowerRec.Vitality - wrapperGarrisonFollower.Durability; l++)
 			{
 				GameObject gameObject3 = Object.Instantiate<GameObject>(this.m_emptyHeartPrefab);
 				gameObject3.transform.SetParent(this.m_heartArea.transform, false);
@@ -285,6 +287,11 @@ namespace WoWCompanionApp
 		public void PlayUnslotSound()
 		{
 			Main.instance.m_UISound.Play_DefaultNavClick();
+		}
+
+		public bool CountersStealth()
+		{
+			return this.currentGarrFollowerID != 0 && PersistentFollowerData.followerDictionary.ContainsKey(this.currentGarrFollowerID) && PersistentFollowerData.followerDictionary[this.currentGarrFollowerID].AbilityIDs.Contains(1262);
 		}
 
 		public Image m_portraitFrameImage;

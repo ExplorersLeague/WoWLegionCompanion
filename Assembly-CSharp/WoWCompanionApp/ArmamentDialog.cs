@@ -20,8 +20,7 @@ namespace WoWCompanionApp
 			Main.instance.m_backButtonManager.PushBackAction(BackActionType.hideAllPopups, null);
 			Main.instance.m_UISound.Play_ShowGenericTooltip();
 			Main.instance.m_canvasBlurManager.AddBlurRef_MainCanvas();
-			Main instance = Main.instance;
-			instance.ArmamentInventoryChangedAction = (Action)Delegate.Combine(instance.ArmamentInventoryChangedAction, new Action(this.HandleArmamentsChanged));
+			Singleton<GarrisonWrapper>.Instance.ArmamentInventoryChangedAction += this.HandleArmamentsChanged;
 			LegionCompanionWrapper.RequestFollowerArmamentsExtended((int)GarrisonStatus.GarrisonFollowerType);
 		}
 
@@ -29,8 +28,7 @@ namespace WoWCompanionApp
 		{
 			Main.instance.m_backButtonManager.PopBackAction();
 			Main.instance.m_canvasBlurManager.RemoveBlurRef_MainCanvas();
-			Main instance = Main.instance;
-			instance.ArmamentInventoryChangedAction = (Action)Delegate.Remove(instance.ArmamentInventoryChangedAction, new Action(this.HandleArmamentsChanged));
+			Singleton<GarrisonWrapper>.Instance.ArmamentInventoryChangedAction -= this.HandleArmamentsChanged;
 			this.m_currentFollowerDetailView = null;
 		}
 

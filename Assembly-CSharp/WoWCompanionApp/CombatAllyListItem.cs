@@ -27,14 +27,12 @@ namespace WoWCompanionApp
 		{
 			this.ClearCombatAllyDisplay();
 			this.UpdateVisuals();
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(instance.GarrisonDataResetFinishedAction, new Action(this.HandleDataResetFinished));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction += this.HandleDataResetFinished;
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Remove(instance.GarrisonDataResetFinishedAction, new Action(this.HandleDataResetFinished));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction -= this.HandleDataResetFinished;
 		}
 
 		public void HandleDataResetFinished()
@@ -118,7 +116,7 @@ namespace WoWCompanionApp
 
 		public void UnassignCombatAlly()
 		{
-			Main.instance.CompleteMission(this.m_combatAllyMissionID);
+			Singleton<GarrisonWrapper>.Instance.CompleteMission(this.m_combatAllyMissionID);
 		}
 
 		public void ShowCombatAllyDialog()

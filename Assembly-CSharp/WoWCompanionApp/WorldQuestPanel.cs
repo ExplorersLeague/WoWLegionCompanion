@@ -33,7 +33,7 @@ namespace WoWCompanionApp
 					{
 						timeSpan = TimeSpan.Zero;
 					}
-					this.m_worldQuestTimeText.text = timeSpan.GetDurationString(false);
+					this.m_worldQuestTimeText.text = timeSpan.GetDurationString(false, TimeUnit.Second);
 					MissionRewardDisplay.InitWorldQuestRewards(worldQuest, this.m_missionRewardDisplayPrefab.gameObject, this.m_lootGroupObj.transform);
 				}
 			}

@@ -26,18 +26,16 @@ namespace WoWCompanionApp
 
 		private void OnEnable()
 		{
-			Main instance = Main.instance;
-			instance.UseEquipmentResultAction = (Action<WrapperGarrisonFollower, WrapperGarrisonFollower>)Delegate.Combine(instance.UseEquipmentResultAction, new Action<WrapperGarrisonFollower, WrapperGarrisonFollower>(this.HandleUseEquipmentResult));
-			AdventureMapPanel instance2 = AdventureMapPanel.instance;
-			instance2.FollowerToInspectChangedAction = (Action<int>)Delegate.Combine(instance2.FollowerToInspectChangedAction, new Action<int>(this.HandleFollowerToInspectChanged));
+			Singleton<GarrisonWrapper>.Instance.UseEquipmentResultAction += this.HandleUseEquipmentResult;
+			AdventureMapPanel instance = AdventureMapPanel.instance;
+			instance.FollowerToInspectChangedAction = (Action<int>)Delegate.Combine(instance.FollowerToInspectChangedAction, new Action<int>(this.HandleFollowerToInspectChanged));
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.UseEquipmentResultAction = (Action<WrapperGarrisonFollower, WrapperGarrisonFollower>)Delegate.Remove(instance.UseEquipmentResultAction, new Action<WrapperGarrisonFollower, WrapperGarrisonFollower>(this.HandleUseEquipmentResult));
-			AdventureMapPanel instance2 = AdventureMapPanel.instance;
-			instance2.FollowerToInspectChangedAction = (Action<int>)Delegate.Remove(instance2.FollowerToInspectChangedAction, new Action<int>(this.HandleFollowerToInspectChanged));
+			Singleton<GarrisonWrapper>.Instance.UseEquipmentResultAction -= this.HandleUseEquipmentResult;
+			AdventureMapPanel instance = AdventureMapPanel.instance;
+			instance.FollowerToInspectChangedAction = (Action<int>)Delegate.Remove(instance.FollowerToInspectChangedAction, new Action<int>(this.HandleFollowerToInspectChanged));
 		}
 
 		private void HandleFollowerToInspectChanged(int garrFollowerID)

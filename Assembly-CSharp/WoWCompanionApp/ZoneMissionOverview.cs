@@ -14,12 +14,14 @@ namespace WoWCompanionApp
 			}
 			PinchZoomContentManager pinchZoomManager = ZoneMissionOverview.m_pinchZoomManager;
 			pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
+			Singleton<GarrisonWrapper>.Instance.InvasionPOIChangedAction += this.HandleInvasionPOIChanged;
 		}
 
 		private void OnDisable()
 		{
 			PinchZoomContentManager pinchZoomManager = ZoneMissionOverview.m_pinchZoomManager;
 			pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
+			Singleton<GarrisonWrapper>.Instance.InvasionPOIChangedAction -= this.HandleInvasionPOIChanged;
 		}
 
 		private void Start()
@@ -28,9 +30,7 @@ namespace WoWCompanionApp
 			{
 				this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
 				this.zoneNameText.text = StaticDB.GetString(this.zoneNameTag, null);
-				this.m_invasionZoneNameText.text = StaticDB.GetString(this.zoneNameTag, null);
-				this.m_invasionZoneNameArea.SetActive(false);
-				this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
+				this.HandleInvasionPOIChanged();
 			}
 			else
 			{
@@ -48,7 +48,6 @@ namespace WoWCompanionApp
 				if (((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan).TotalSeconds <= 0.0)
 				{
 					this.m_invasionZoneNameArea.SetActive(false);
-					this.m_zoneNameArea.SetActive(!string.IsNullOrEmpty(this.zoneNameTag));
 				}
 			}
 		}
@@ -65,6 +64,18 @@ namespace WoWCompanionApp
 			else
 			{
 				component.interactable = true;
+			}
+		}
+
+		private void HandleInvasionPOIChanged()
+		{
+			if (LegionfallData.HasCurrentInvasionPOI() && LegionfallData.GetCurrentInvasionPOI().AreaPoiID == this.m_invasionPOIID)
+			{
+				this.m_invasionZoneNameArea.SetActive(true);
+			}
+			else
+			{
+				this.m_invasionZoneNameArea.SetActive(false);
 			}
 		}
 
@@ -93,8 +104,6 @@ namespace WoWCompanionApp
 		public int m_invasionPOIID;
 
 		public GameObject m_invasionZoneNameArea;
-
-		public Text m_invasionZoneNameText;
 
 		private static PinchZoomContentManager m_pinchZoomManager;
 	}

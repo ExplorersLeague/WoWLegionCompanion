@@ -76,11 +76,6 @@ namespace WoWCompanionApp
 			}
 			else
 			{
-				this.m_missionListPanelRTH.DisableTargetList();
-				this.m_troopsPanelRTH.DisableTargetList();
-				this.m_adventureMapPanelRTH.DisableTargetList();
-				this.m_followersPanelRTH.DisableTargetList();
-				this.m_talentTreePanelRTH.DisableTargetList();
 				this.m_missionListPanelCanvasGroup.alpha = 0f;
 				this.m_missionListPanelCanvasGroup.interactable = false;
 				this.m_missionListPanelCanvasGroup.blocksRaycasts = false;
@@ -111,7 +106,6 @@ namespace WoWCompanionApp
 			}
 			else
 			{
-				this.m_missionListPanelRTH.EnableTargetList();
 				this.m_missionListPanelCanvasGroup.alpha = 1f;
 				this.m_missionListPanelCanvasGroup.interactable = true;
 				this.m_missionListPanelCanvasGroup.blocksRaycasts = true;
@@ -127,7 +121,6 @@ namespace WoWCompanionApp
 			}
 			else
 			{
-				this.m_troopsPanelRTH.EnableTargetList();
 				this.m_troopsPanelCanvasGroup.alpha = 1f;
 				this.m_troopsPanelCanvasGroup.interactable = true;
 				this.m_troopsPanelCanvasGroup.blocksRaycasts = true;
@@ -143,7 +136,6 @@ namespace WoWCompanionApp
 			}
 			else
 			{
-				this.m_adventureMapPanelRTH.EnableTargetList();
 				this.m_adventureMapPanelCanvasGroup.alpha = 1f;
 				this.m_adventureMapPanelCanvasGroup.interactable = true;
 				this.m_adventureMapPanelCanvasGroup.blocksRaycasts = true;
@@ -162,7 +154,6 @@ namespace WoWCompanionApp
 			}
 			else
 			{
-				this.m_followersPanelRTH.EnableTargetList();
 				this.m_followersPanelCanvasGroup.alpha = 1f;
 				this.m_followersPanelCanvasGroup.interactable = true;
 				this.m_followersPanelCanvasGroup.blocksRaycasts = true;
@@ -178,7 +169,6 @@ namespace WoWCompanionApp
 			}
 			else
 			{
-				this.m_talentTreePanelRTH.EnableTargetList();
 				this.m_talentTreePanelCanvasGroup.alpha = 1f;
 				this.m_talentTreePanelCanvasGroup.interactable = true;
 				this.m_talentTreePanelCanvasGroup.blocksRaycasts = true;
@@ -230,15 +220,11 @@ namespace WoWCompanionApp
 
 		public MiniMissionListPanel m_miniMissionListPanel;
 
-		public RaycastTargetHack m_missionListPanelRTH;
-
 		public Canvas m_troopsPanelCanvas;
 
 		public CanvasGroup m_troopsPanelCanvasGroup;
 
 		public TroopsPanel m_troopsPanel;
-
-		public RaycastTargetHack m_troopsPanelRTH;
 
 		public Canvas m_adventureMapPanelCanvas;
 
@@ -248,23 +234,17 @@ namespace WoWCompanionApp
 
 		public AdventureMapPanel m_adventureMapPanel;
 
-		public RaycastTargetHack m_adventureMapPanelRTH;
-
 		public Canvas m_followersPanelCanvas;
 
 		public CanvasGroup m_followersPanelCanvasGroup;
 
 		public OrderHallFollowersPanel m_followersPanel;
 
-		public RaycastTargetHack m_followersPanelRTH;
-
 		public Canvas m_talentTreePanelCanvas;
 
 		public CanvasGroup m_talentTreePanelCanvasGroup;
 
 		public TalentTreePanel m_talentTreePanel;
-
-		public RaycastTargetHack m_talentTreePanelRTH;
 
 		public GameObject m_navBarArea;
 

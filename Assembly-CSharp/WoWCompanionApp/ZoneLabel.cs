@@ -15,7 +15,7 @@ namespace WoWCompanionApp
 				this.m_canvasGroup.interactable = false;
 			}
 			this.m_canvasGroup.alpha = 0f;
-			this.m_mainMapInfo = AdventureMapPanel.instance.m_mainMapInfo;
+			this.m_mainMapInfo = AdventureMapPanel.instance.m_activeMapInfo;
 		}
 
 		private void Update()

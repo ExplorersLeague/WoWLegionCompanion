@@ -39,7 +39,6 @@ namespace WoWCompanionApp
 			this.m_armamentDialog.gameObject.SetActive(false);
 			this.m_equipmentDialog.gameObject.SetActive(false);
 			this.m_unassignCombatAllyConfirmationDialog.gameObject.SetActive(false);
-			this.m_legionfallDialog.gameObject.SetActive(false);
 		}
 
 		public void HideLevel3Popups()
@@ -90,7 +89,7 @@ namespace WoWCompanionApp
 		public void ShowRewardTooltip(MissionRewardDisplay.RewardType rewardType, int rewardID, int rewardQuantity, Image rewardImage, int itemContext)
 		{
 			this.m_rewardInfoPopup.gameObject.SetActive(true);
-			this.m_rewardInfoPopup.SetReward(rewardType, rewardID, rewardQuantity, rewardImage.sprite, itemContext);
+			this.m_rewardInfoPopup.SetReward(rewardType, rewardID, rewardQuantity, rewardImage.sprite, itemContext, null);
 		}
 
 		public void ShowAbilityInfoPopup(int garrAbilityID)
@@ -267,8 +266,6 @@ namespace WoWCompanionApp
 		public MissionDialog m_missionDialog;
 
 		public LevelUpToast m_levelUpToast;
-
-		public LegionfallDialog m_legionfallDialog;
 
 		public GameObject m_hamburgerPrefab;
 

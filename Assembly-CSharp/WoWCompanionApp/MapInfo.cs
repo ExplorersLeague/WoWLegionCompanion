@@ -1,11 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using WowStatConstants;
 
 namespace WoWCompanionApp
 {
 	public class MapInfo : MonoBehaviour
 	{
+		public static void RegisterMapInfo(MapInfo mapInfo)
+		{
+			if (!MapInfo.s_mapInfoDictionary.ContainsKey(mapInfo.m_zone))
+			{
+				MapInfo.s_mapInfoDictionary.Add(mapInfo.m_zone, mapInfo);
+			}
+			else
+			{
+				MapInfo.s_mapInfoDictionary[mapInfo.m_zone] = mapInfo;
+			}
+		}
+
+		public static MapInfo GetMapInfo(AdventureMapPanel.eZone zone)
+		{
+			return (!MapInfo.s_mapInfoDictionary.ContainsKey(zone)) ? null : MapInfo.s_mapInfoDictionary[zone];
+		}
+
+		public static List<MapInfo> GetAllMapInfos()
+		{
+			return (from info in MapInfo.s_mapInfoDictionary.Values
+			orderby (int)(((GarrisonStatus.Faction() != PVP_FACTION.HORDE || info.m_zone != AdventureMapPanel.eZone.Zandalar) && (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE || info.m_zone != AdventureMapPanel.eZone.Kultiras)) ? info.m_zone : ((AdventureMapPanel.eZone)(-2147483648)))
+			select info).ToList<MapInfo>();
+		}
+
 		private void Awake()
 		{
 			this.Init();
@@ -68,6 +95,13 @@ namespace WoWCompanionApp
 			}
 		}
 
+		public GameObject GetWorldQuestArea()
+		{
+			return base.gameObject.GetComponentInChildren<ZoneButtonMissionArea>().gameObject;
+		}
+
+		public AdventureMapPanel.eZone m_zone;
+
 		public float m_minZoomFactor;
 
 		public float m_maxZoomFactor;
@@ -80,10 +114,28 @@ namespace WoWCompanionApp
 
 		public float m_mapH;
 
+		public float m_sizeDeltaY;
+
+		public Vector2 m_anchoredPos;
+
+		public Sprite m_navButtonSprite;
+
+		public Sprite m_mapSwapButtonSprite;
+
+		public string m_zoneNameCapsKey;
+
+		public string m_zoneNameKey;
+
+		public float m_worldQuestScale;
+
+		public Vector2 m_worldQuestOffset;
+
 		private bool m_initialized;
 
 		private Vector2 m_fillViewSize;
 
 		private float m_viewRelativeScale;
+
+		private static Dictionary<AdventureMapPanel.eZone, MapInfo> s_mapInfoDictionary = new Dictionary<AdventureMapPanel.eZone, MapInfo>();
 	}
 }

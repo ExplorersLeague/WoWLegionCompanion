@@ -40,7 +40,7 @@ namespace WoWCompanionApp
 				return;
 			}
 			this.image.sprite = this.sprites[Random.Range(0, this.sprites.Length - 1)];
-			this.image.preserveAspect = true;
+			this.image.preserveAspect = this.preserveAspect;
 			RectTransform rectTransform = base.transform as RectTransform;
 			rectTransform.sizeDelta = new Vector2((float)this.image.sprite.texture.width, (float)this.image.sprite.texture.height);
 		}
@@ -59,5 +59,7 @@ namespace WoWCompanionApp
 		public Sprite[] sprites;
 
 		private Image image;
+
+		public bool preserveAspect = true;
 	}
 }

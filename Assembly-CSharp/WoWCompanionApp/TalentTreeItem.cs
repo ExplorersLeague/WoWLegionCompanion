@@ -22,18 +22,14 @@ namespace WoWCompanionApp
 
 		private void OnEnable()
 		{
-			Main instance = Main.instance;
-			instance.CanResearchGarrisonTalentResultAction = (Action<int, int, string>)Delegate.Combine(instance.CanResearchGarrisonTalentResultAction, new Action<int, int, string>(this.HandleCanResearchGarrisonTalentResult));
-			Main instance2 = Main.instance;
-			instance2.ResearchGarrisonTalentResultAction = (Action<int, int>)Delegate.Combine(instance2.ResearchGarrisonTalentResultAction, new Action<int, int>(this.HandleResearchGarrisonTalentResult));
+			Singleton<GarrisonWrapper>.Instance.CanResearchGarrisonTalentResultAction += this.HandleCanResearchGarrisonTalentResult;
+			Singleton<GarrisonWrapper>.Instance.ResearchGarrisonTalentResultAction += this.HandleResearchGarrisonTalentResult;
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.CanResearchGarrisonTalentResultAction = (Action<int, int, string>)Delegate.Remove(instance.CanResearchGarrisonTalentResultAction, new Action<int, int, string>(this.HandleCanResearchGarrisonTalentResult));
-			Main instance2 = Main.instance;
-			instance2.ResearchGarrisonTalentResultAction = (Action<int, int>)Delegate.Remove(instance2.ResearchGarrisonTalentResultAction, new Action<int, int>(this.HandleResearchGarrisonTalentResult));
+			Singleton<GarrisonWrapper>.Instance.CanResearchGarrisonTalentResultAction -= this.HandleCanResearchGarrisonTalentResult;
+			Singleton<GarrisonWrapper>.Instance.ResearchGarrisonTalentResultAction -= this.HandleResearchGarrisonTalentResult;
 		}
 
 		public void UpdateVisualStates()

@@ -138,14 +138,7 @@ namespace WoWCompanionApp
 
 		public void LeaveClub()
 		{
-			if (Club.GetMemberInfoForSelf(this.ClubId).Value.role == 1 && this.m_memberList.Count < 2)
-			{
-				Club.DestroyClub(this.ClubId);
-			}
-			else
-			{
-				Club.LeaveClub(this.ClubId);
-			}
+			Club.LeaveClub(this.ClubId);
 		}
 
 		public bool HasUnreadMessages(CommunityStream ignoreStream = null)
@@ -237,12 +230,18 @@ namespace WoWCompanionApp
 			}
 		}
 
+		public void HandleMessageUpdatedEvent(Club.ClubMessageUpdatedEvent messageEvent)
+		{
+			if (this.m_streamList.ContainsKey(messageEvent.StreamID))
+			{
+				this.m_streamList[messageEvent.StreamID].HandleMessageUpdatedEvent(messageEvent);
+			}
+		}
+
 		private ClubInfo m_clubInfo;
 
 		private Dictionary<ulong, CommunityStream> m_streamList = new Dictionary<ulong, CommunityStream>();
 
 		private List<CommunityMember> m_memberList = new List<CommunityMember>();
-
-		private ClubPrivilegeInfo m_clubPrivilegeInfo;
 	}
 }

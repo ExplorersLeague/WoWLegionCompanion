@@ -66,7 +66,7 @@ namespace WoWCompanionApp
 			timeSpan = ((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan);
 			if (!this.m_isSupportMission)
 			{
-				this.m_missionTimeRemainingText.text = timeSpan.GetDurationString(false);
+				this.m_missionTimeRemainingText.text = timeSpan.GetDurationString(false, TimeUnit.Second);
 			}
 			if (timeSpan.TotalSeconds == 0.0)
 			{
@@ -78,7 +78,7 @@ namespace WoWCompanionApp
 						{
 							AdventureMapPanel.instance.ShowMissionResultAction(this.m_garrMissionID, 1, false);
 						}
-						Main.instance.CompleteMission(this.m_garrMissionID);
+						Singleton<GarrisonWrapper>.Instance.CompleteMission(this.m_garrMissionID);
 						this.m_autoCompletedSupportMission = true;
 					}
 				}
@@ -230,7 +230,7 @@ namespace WoWCompanionApp
 			{
 				AdventureMapPanel.instance.ShowMissionResultAction(this.m_garrMissionID, 1, false);
 			}
-			Main.instance.CompleteMission(this.m_garrMissionID);
+			Singleton<GarrisonWrapper>.Instance.CompleteMission(this.m_garrMissionID);
 		}
 
 		public void HandleCompleteMissionResult(int garrMissionID, bool missionSucceeded)
@@ -270,7 +270,7 @@ namespace WoWCompanionApp
 			{
 				if (wrapperGarrisonMission.MissionState == 2 || wrapperGarrisonMission.MissionState == 3)
 				{
-					Main.instance.ClaimMissionBonus(this.m_garrMissionID);
+					Singleton<GarrisonWrapper>.Instance.ClaimMissionBonus(this.m_garrMissionID);
 					this.m_claimedMyLoot = true;
 				}
 				return;

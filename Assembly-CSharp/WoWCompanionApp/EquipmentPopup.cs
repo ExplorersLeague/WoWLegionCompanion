@@ -97,7 +97,7 @@ namespace WoWCompanionApp
 				" replacing ability ",
 				replaceThisAbilityID
 			}));
-			Main.instance.UseEquipment(this.m_garrFollowerID, this.m_item.ItemID, replaceThisAbilityID);
+			Singleton<GarrisonWrapper>.Instance.UseEquipment(this.m_garrFollowerID, this.m_item.ItemID, replaceThisAbilityID);
 			base.gameObject.SetActive(false);
 		}
 

@@ -25,33 +25,10 @@ namespace bgs
 			this.m_exportedServices = new List<ServiceDescriptor>();
 			this.m_apiList = new List<BattleNetAPI>();
 			this.m_bnetEvents = new List<BattleNet.BnetEvent>();
-			this.m_friendAPI = new FriendsAPI(this);
-			this.m_presenceAPI = new PresenceAPI(this);
-			this.m_channelAPI = new ChannelAPI(this);
 			this.m_gamesAPI = new GamesAPI(this);
-			this.m_partyAPI = new PartyAPI(this);
 			this.m_challengeAPI = new ChallengeAPI(this);
-			this.m_whisperAPI = new WhisperAPI(this);
-			this.m_notificationAPI = new NotificationAPI(this);
-			this.m_broadcastAPI = new BroadcastAPI(this);
 			this.m_accountAPI = new AccountAPI(this);
 			this.m_authenticationAPI = new AuthenticationAPI(this);
-			this.m_localStorageAPI = new LocalStorageAPI(this);
-			this.m_resourcesAPI = new ResourcesAPI(this);
-			this.m_profanityAPI = new ProfanityAPI(this);
-			this.m_notificationHandlers.Add("GQ_ENTRY", new BattleNetCSharp.NotificationHandler(this.m_gamesAPI.QueueEntryHandler));
-			this.m_notificationHandlers.Add("GQ_UPDATE", new BattleNetCSharp.NotificationHandler(this.m_gamesAPI.QueueUpdateHandler));
-			this.m_notificationHandlers.Add("GQ_EXIT", new BattleNetCSharp.NotificationHandler(this.m_gamesAPI.QueueExitHandler));
-			this.m_notificationHandlers.Add("MM_START", new BattleNetCSharp.NotificationHandler(this.m_gamesAPI.MatchMakerStartHandler));
-			this.m_notificationHandlers.Add("MM_END", new BattleNetCSharp.NotificationHandler(this.m_gamesAPI.MatchMakerEndHandler));
-			this.m_notificationHandlers.Add("G_RESULT", new BattleNetCSharp.NotificationHandler(this.m_gamesAPI.GameEntryHandler));
-			this.m_notificationHandlers.Add("WHISPER", new BattleNetCSharp.NotificationHandler(this.m_whisperAPI.OnWhisper));
-			this.m_notificationHandlers.Add("BROADCAST", new BattleNetCSharp.NotificationHandler(this.m_broadcastAPI.OnBroadcast));
-			this.m_notificationHandlers.Add("WTCG.UtilNotificationMessage", delegate(Notification n)
-			{
-				this.m_notificationAPI.OnNotification("WTCG.UtilNotificationMessage", n);
-			});
-			this.m_broadcastAPI.RegisterListener(new BroadcastAPI.BroadcastCallback(this.OnBroadcastReceived));
 			this.m_stateHandlers.Add(BattleNetCSharp.ConnectionState.Connect, new BattleNetCSharp.AuroraStateHandler(this.AuroraStateHandler_Connect));
 			this.m_stateHandlers.Add(BattleNetCSharp.ConnectionState.InitRPC, new BattleNetCSharp.AuroraStateHandler(this.AuroraStateHandler_InitRPC));
 			this.m_stateHandlers.Add(BattleNetCSharp.ConnectionState.WaitForInitRPC, new BattleNetCSharp.AuroraStateHandler(this.AuroraStateHandler_WaitForInitRPC));
@@ -64,36 +41,8 @@ namespace bgs
 			this.m_stateHandlers.Add(BattleNetCSharp.ConnectionState.Error, new BattleNetCSharp.AuroraStateHandler(this.AuroraStateHandler_Error));
 			this.m_apiList.Add(this.m_gamesAPI);
 			this.m_apiList.Add(this.m_challengeAPI);
-			this.m_apiList.Add(this.m_notificationAPI);
-			this.m_apiList.Add(this.m_broadcastAPI);
 			this.m_apiList.Add(this.m_accountAPI);
 			this.m_apiList.Add(this.m_authenticationAPI);
-			this.m_apiList.Add(this.m_localStorageAPI);
-			this.m_apiList.Add(this.m_resourcesAPI);
-		}
-
-		public FriendsAPI Friends
-		{
-			get
-			{
-				return this.m_friendAPI;
-			}
-		}
-
-		public PresenceAPI Presence
-		{
-			get
-			{
-				return this.m_presenceAPI;
-			}
-		}
-
-		public ChannelAPI Channel
-		{
-			get
-			{
-				return this.m_channelAPI;
-			}
 		}
 
 		public GamesAPI Games
@@ -101,14 +50,6 @@ namespace bgs
 			get
 			{
 				return this.m_gamesAPI;
-			}
-		}
-
-		public PartyAPI Party
-		{
-			get
-			{
-				return this.m_partyAPI;
 			}
 		}
 
@@ -120,51 +61,11 @@ namespace bgs
 			}
 		}
 
-		public WhisperAPI Whisper
-		{
-			get
-			{
-				return this.m_whisperAPI;
-			}
-		}
-
-		public NotificationAPI Notification
-		{
-			get
-			{
-				return this.m_notificationAPI;
-			}
-		}
-
-		public BroadcastAPI Broadcast
-		{
-			get
-			{
-				return this.m_broadcastAPI;
-			}
-		}
-
 		public AccountAPI Account
 		{
 			get
 			{
 				return this.m_accountAPI;
-			}
-		}
-
-		public ResourcesAPI Resources
-		{
-			get
-			{
-				return this.m_resourcesAPI;
-			}
-		}
-
-		public LocalStorageAPI LocalStorage
-		{
-			get
-			{
-				return this.m_localStorageAPI;
 			}
 		}
 
@@ -553,326 +454,6 @@ namespace bgs
 			this.m_bnetEvents.CopyTo(bnetEvents);
 		}
 
-		public void FindGame(byte[] requestGuid, int gameType, int missionId, long deckId, long aiDeckId, bool setScenarioIdAttr)
-		{
-			this.m_gamesAPI.FindGame(requestGuid, gameType, missionId, deckId, aiDeckId, setScenarioIdAttr);
-		}
-
-		public void CancelFindGame()
-		{
-			this.m_gamesAPI.CancelFindGame();
-		}
-
-		public QueueEvent GetQueueEvent()
-		{
-			return this.m_gamesAPI.GetQueueEvent();
-		}
-
-		public int PresenceSize()
-		{
-			return this.m_presenceAPI.PresenceSize();
-		}
-
-		public void ClearPresence()
-		{
-			this.m_presenceAPI.ClearPresence();
-		}
-
-		public void GetPresence([Out] PresenceUpdate[] updates)
-		{
-			this.m_presenceAPI.GetPresence(updates);
-		}
-
-		public void SetPresenceBool(uint field, bool val)
-		{
-			this.m_presenceAPI.SetPresenceBool(field, val);
-		}
-
-		public void SetPresenceInt(uint field, long val)
-		{
-			this.m_presenceAPI.SetPresenceInt(field, val);
-		}
-
-		public void SetPresenceString(uint field, string val)
-		{
-			this.m_presenceAPI.SetPresenceString(field, val);
-		}
-
-		public void SetPresenceBlob(uint field, byte[] val)
-		{
-			this.m_presenceAPI.SetPresenceBlob(field, val);
-		}
-
-		public void SetRichPresence([In] RichPresenceUpdate[] updates)
-		{
-			this.m_presenceAPI.PublishRichPresence(updates);
-		}
-
-		public void RequestPresenceFields(bool isGameAccountEntityId, [In] bgs.types.EntityId entityId, [In] PresenceFieldKey[] fieldList)
-		{
-			this.m_presenceAPI.RequestPresenceFields(isGameAccountEntityId, entityId, fieldList);
-		}
-
-		public void SendFriendlyChallengeInvite(ref bgs.types.EntityId gameAccount, int scenarioId)
-		{
-			this.m_partyAPI.SendFriendlyChallengeInvite(gameAccount.ToProtocol(), scenarioId);
-		}
-
-		public void SetMyFriendlyChallengeDeck(ref bgs.types.EntityId partyId, long deckID)
-		{
-			this.m_partyAPI.SetPartyDeck(partyId.ToProtocol(), deckID);
-		}
-
-		public void GetPartyUpdatesInfo(ref PartyInfo info)
-		{
-			info.size = this.m_partyAPI.GetPartyUpdateCount();
-		}
-
-		public void GetPartyUpdates([Out] PartyEvent[] updates)
-		{
-			this.m_partyAPI.GetPartyUpdates(updates);
-		}
-
-		public void ClearPartyUpdates()
-		{
-			this.m_partyAPI.ClearPartyUpdates();
-		}
-
-		public void AcceptFriendlyChallenge(ref bgs.types.EntityId partyId)
-		{
-			this.m_partyAPI.AcceptFriendlyChallenge(partyId.ToProtocol());
-		}
-
-		public void DeclineFriendlyChallenge(ref bgs.types.EntityId partyId)
-		{
-			this.m_partyAPI.DeclineFriendlyChallenge(partyId.ToProtocol(), "deny");
-		}
-
-		public void RescindFriendlyChallenge(ref bgs.types.EntityId partyId)
-		{
-			this.m_partyAPI.DeclineFriendlyChallenge(partyId.ToProtocol(), "kill");
-		}
-
-		public void CreateParty(string szPartyType, int privacyLevel, byte[] creatorBlob)
-		{
-			this.m_partyAPI.CreateParty(szPartyType, privacyLevel, creatorBlob);
-		}
-
-		public void JoinParty(bgs.types.EntityId partyId, string szPartyType)
-		{
-			this.m_partyAPI.JoinParty(partyId.ToProtocol(), szPartyType);
-		}
-
-		public void LeaveParty(bgs.types.EntityId partyId)
-		{
-			this.m_partyAPI.LeaveParty(partyId.ToProtocol());
-		}
-
-		public void DissolveParty(bgs.types.EntityId partyId)
-		{
-			this.m_partyAPI.DissolveParty(partyId.ToProtocol());
-		}
-
-		public void SetPartyPrivacy(bgs.types.EntityId partyId, int privacyLevel)
-		{
-			this.m_partyAPI.SetPartyPrivacy(partyId.ToProtocol(), privacyLevel);
-		}
-
-		public void AssignPartyRole(bgs.types.EntityId partyId, bgs.types.EntityId memberId, uint roleId)
-		{
-			this.m_partyAPI.AssignPartyRole(partyId.ToProtocol(), memberId.ToProtocol(), roleId);
-		}
-
-		public void SendPartyInvite(bgs.types.EntityId partyId, bgs.types.EntityId inviteeId, bool isReservation)
-		{
-			this.m_partyAPI.SendPartyInvite(partyId.ToProtocol(), inviteeId.ToProtocol(), isReservation);
-		}
-
-		public void AcceptPartyInvite(ulong invitationId)
-		{
-			this.m_partyAPI.AcceptPartyInvite(invitationId);
-		}
-
-		public void DeclinePartyInvite(ulong invitationId)
-		{
-			this.m_partyAPI.DeclinePartyInvite(invitationId);
-		}
-
-		public void RevokePartyInvite(bgs.types.EntityId partyId, ulong invitationId)
-		{
-			this.m_partyAPI.RevokePartyInvite(partyId.ToProtocol(), invitationId);
-		}
-
-		public void RequestPartyInvite(bgs.types.EntityId partyId, bgs.types.EntityId whomToAskForApproval, bgs.types.EntityId whomToInvite, string szPartyType)
-		{
-			this.m_partyAPI.RequestPartyInvite(partyId.ToProtocol(), whomToAskForApproval.ToProtocol(), whomToInvite.ToProtocol(), szPartyType);
-		}
-
-		public void IgnoreInviteRequest(bgs.types.EntityId partyId, bgs.types.EntityId requestedTargetId)
-		{
-			this.m_partyAPI.IgnoreInviteRequest(partyId.ToProtocol(), requestedTargetId.ToProtocol());
-		}
-
-		public void KickPartyMember(bgs.types.EntityId partyId, bgs.types.EntityId memberId)
-		{
-			this.m_partyAPI.KickPartyMember(partyId.ToProtocol(), memberId.ToProtocol());
-		}
-
-		public void SendPartyChatMessage(bgs.types.EntityId partyId, string message)
-		{
-			this.m_partyAPI.SendPartyChatMessage(partyId.ToProtocol(), message);
-		}
-
-		public void ClearPartyAttribute(bgs.types.EntityId partyId, string attributeKey)
-		{
-			this.m_partyAPI.ClearPartyAttribute(partyId.ToProtocol(), attributeKey);
-		}
-
-		public void SetPartyAttributeLong(bgs.types.EntityId partyId, string attributeKey, [In] long value)
-		{
-			this.m_partyAPI.SetPartyAttributeLong(partyId.ToProtocol(), attributeKey, value);
-		}
-
-		public void SetPartyAttributeString(bgs.types.EntityId partyId, string attributeKey, [In] string value)
-		{
-			this.m_partyAPI.SetPartyAttributeString(partyId.ToProtocol(), attributeKey, value);
-		}
-
-		public void SetPartyAttributeBlob(bgs.types.EntityId partyId, string attributeKey, [In] byte[] value)
-		{
-			this.m_partyAPI.SetPartyAttributeBlob(partyId.ToProtocol(), attributeKey, value);
-		}
-
-		public int GetPartyPrivacy(bgs.types.EntityId partyId)
-		{
-			return this.m_partyAPI.GetPartyPrivacy(partyId.ToProtocol());
-		}
-
-		public int GetCountPartyMembers(bgs.types.EntityId partyId)
-		{
-			return this.m_partyAPI.GetCountPartyMembers(partyId.ToProtocol());
-		}
-
-		public int GetMaxPartyMembers(bgs.types.EntityId partyId)
-		{
-			return this.m_partyAPI.GetMaxPartyMembers(partyId.ToProtocol());
-		}
-
-		public void GetPartyMembers(bgs.types.EntityId partyId, out PartyMember[] members)
-		{
-			this.m_partyAPI.GetPartyMembers(partyId.ToProtocol(), out members);
-		}
-
-		public void GetReceivedPartyInvites(out PartyInvite[] invites)
-		{
-			this.m_partyAPI.GetReceivedPartyInvites(out invites);
-		}
-
-		public void GetPartySentInvites(bgs.types.EntityId partyId, out PartyInvite[] invites)
-		{
-			this.m_partyAPI.GetPartySentInvites(partyId.ToProtocol(), out invites);
-		}
-
-		public void GetPartyInviteRequests(bgs.types.EntityId partyId, out InviteRequest[] requests)
-		{
-			this.m_partyAPI.GetPartyInviteRequests(partyId.ToProtocol(), out requests);
-		}
-
-		public void GetAllPartyAttributes(bgs.types.EntityId partyId, out string[] allKeys)
-		{
-			this.m_partyAPI.GetAllPartyAttributes(partyId.ToProtocol(), out allKeys);
-		}
-
-		public bool GetPartyAttributeLong(bgs.types.EntityId partyId, string attributeKey, out long value)
-		{
-			return this.m_partyAPI.GetPartyAttributeLong(partyId.ToProtocol(), attributeKey, out value);
-		}
-
-		public void GetPartyAttributeString(bgs.types.EntityId partyId, string attributeKey, out string value)
-		{
-			this.m_partyAPI.GetPartyAttributeString(partyId.ToProtocol(), attributeKey, out value);
-		}
-
-		public void GetPartyAttributeBlob(bgs.types.EntityId partyId, string attributeKey, out byte[] value)
-		{
-			this.m_partyAPI.GetPartyAttributeBlob(partyId.ToProtocol(), attributeKey, out value);
-		}
-
-		public void GetPartyListenerEvents(out PartyListenerEvent[] updates)
-		{
-			this.m_partyAPI.GetPartyListenerEvents(out updates);
-		}
-
-		public void ClearPartyListenerEvents()
-		{
-			this.m_partyAPI.ClearPartyListenerEvents();
-		}
-
-		public void GetFriendsInfo(ref FriendsInfo info)
-		{
-			this.m_friendAPI.GetFriendsInfo(ref info);
-		}
-
-		public void ClearFriendsUpdates()
-		{
-			this.m_friendAPI.ClearFriendsUpdates();
-		}
-
-		public void GetFriendsUpdates([Out] FriendsUpdate[] updates)
-		{
-			this.m_friendAPI.GetFriendsUpdates(updates);
-		}
-
-		public void SendFriendInvite(string sender, string target, bool byEmail)
-		{
-			this.m_friendAPI.SendFriendInvite(sender, target, byEmail);
-		}
-
-		public void ManageFriendInvite(int action, ulong inviteId)
-		{
-			this.m_friendAPI.ManageFriendInvite(action, inviteId);
-		}
-
-		public void RemoveFriend(BnetAccountId account)
-		{
-			this.m_friendAPI.RemoveFriend(account);
-		}
-
-		public void SendWhisper(BnetGameAccountId gameAccount, string message)
-		{
-			this.m_whisperAPI.SendWhisper(gameAccount, message);
-		}
-
-		public void GetWhisperInfo(ref WhisperInfo info)
-		{
-			this.m_whisperAPI.GetWhisperInfo(ref info);
-		}
-
-		public void GetWhispers([Out] BnetWhisper[] whispers)
-		{
-			this.m_whisperAPI.GetWhispers(whispers);
-		}
-
-		public void ClearWhispers()
-		{
-			this.m_whisperAPI.ClearWhispers();
-		}
-
-		public int GetNotificationCount()
-		{
-			return this.m_notificationAPI.GetNotificationCount();
-		}
-
-		public void GetNotifications([Out] BnetNotification[] notifications)
-		{
-			this.m_notificationAPI.GetNotifications(notifications);
-		}
-
-		public void ClearNotifications()
-		{
-			this.m_notificationAPI.ClearNotifications();
-		}
-
 		public int NumChallenges()
 		{
 			return this.m_challengeAPI.NumChallenges();
@@ -941,16 +522,6 @@ namespace bgs
 			{
 				this.m_authenticationAPI.VerifyWebCredentials(token);
 			}
-		}
-
-		public string FilterProfanity(string unfiltered)
-		{
-			return this.m_profanityAPI.FilterProfanity(unfiltered);
-		}
-
-		public void SetConnectedRegion(uint region)
-		{
-			this.m_connectedRegion = region;
 		}
 
 		public void EnqueueErrorInfo(BnetFeature feature, BnetFeatureEvent featureEvent, BattleNetErrors error, int context = 0)
@@ -1036,7 +607,7 @@ namespace bgs
 
 		private void HandleNotificationReceived(RPCContext context)
 		{
-			Notification notification = bnet.protocol.notification.Notification.ParseFrom(context.Payload);
+			Notification notification = Notification.ParseFrom(context.Payload);
 			this.m_logSource.LogDebug("Notification: " + notification);
 			BattleNetCSharp.NotificationHandler notificationHandler;
 			if (this.m_notificationHandlers.TryGetValue(notification.Type, out notificationHandler))
@@ -1075,23 +646,11 @@ namespace bgs
 			ConnectRequest connectRequest = new ConnectRequest();
 			this.m_importedServices.Add(this.m_authenticationAPI.AuthServerService);
 			this.m_importedServices.Add(this.m_gamesAPI.GameUtilityService);
-			this.m_importedServices.Add(this.m_gamesAPI.GameMasterService);
 			this.m_importedServices.Add(this.m_notificationService);
-			this.m_importedServices.Add(this.m_presenceAPI.PresenceService);
-			this.m_importedServices.Add(this.m_channelAPI.ChannelService);
-			this.m_importedServices.Add(this.m_channelAPI.ChannelOwnerService);
-			this.m_importedServices.Add(this.m_channelAPI.ChannelInvitationService);
-			this.m_importedServices.Add(this.m_friendAPI.FriendsService);
 			this.m_importedServices.Add(this.m_challengeAPI.ChallengeService);
 			this.m_importedServices.Add(this.m_accountAPI.AccountService);
-			this.m_importedServices.Add(this.m_resourcesAPI.ResourcesService);
 			this.m_exportedServices.Add(this.m_authenticationAPI.AuthClientService);
-			this.m_exportedServices.Add(this.m_gamesAPI.GameMasterSubscriberService);
-			this.m_exportedServices.Add(this.m_gamesAPI.GameFactorySubscribeService);
 			this.m_exportedServices.Add(this.m_notificationListenerService);
-			this.m_exportedServices.Add(this.m_channelAPI.ChannelSubscriberService);
-			this.m_exportedServices.Add(this.m_channelAPI.ChannelInvitationNotifyService);
-			this.m_exportedServices.Add(this.m_friendAPI.FriendsNotifyService);
 			this.m_exportedServices.Add(this.m_challengeAPI.ChallengeNotifyService);
 			this.m_exportedServices.Add(this.m_accountAPI.AccountNotifyService);
 			connectRequest.SetBindRequest(this.CreateBindRequest(this.m_importedServices, this.m_exportedServices));
@@ -1128,21 +687,6 @@ namespace bgs
 						serviceDescriptor.Id,
 						serviceDescriptor.Name
 					});
-				}
-				if (connectResponse.HasContentHandleArray)
-				{
-					if (!this.m_clientInterface.GetDisableConnectionMetering())
-					{
-						this.m_rpcConnection.SetConnectionMeteringContentHandles(connectResponse.ContentHandleArray, this.m_localStorageAPI);
-					}
-					else
-					{
-						this.m_logSource.LogWarning("Connection metering disabled by configuration.");
-					}
-				}
-				else
-				{
-					this.m_logSource.LogDebug("Connection response had not connection metering request");
 				}
 				this.m_logSource.LogDebug("FRONT ServerId={0:x2}", new object[]
 				{
@@ -1352,33 +896,13 @@ namespace bgs
 
 		private BattleNetLogSource m_logSource = new BattleNetLogSource("Main");
 
-		private FriendsAPI m_friendAPI;
-
-		private PresenceAPI m_presenceAPI;
-
-		private ChannelAPI m_channelAPI;
-
 		private GamesAPI m_gamesAPI;
 
-		private PartyAPI m_partyAPI;
-
 		private ChallengeAPI m_challengeAPI;
-
-		private WhisperAPI m_whisperAPI;
-
-		private NotificationAPI m_notificationAPI;
-
-		private BroadcastAPI m_broadcastAPI;
 
 		private AccountAPI m_accountAPI;
 
 		private AuthenticationAPI m_authenticationAPI;
-
-		private LocalStorageAPI m_localStorageAPI;
-
-		private ResourcesAPI m_resourcesAPI;
-
-		private ProfanityAPI m_profanityAPI;
 
 		private Dictionary<string, BattleNetCSharp.NotificationHandler> m_notificationHandlers;
 

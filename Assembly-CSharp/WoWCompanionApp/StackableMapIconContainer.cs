@@ -54,6 +54,18 @@ namespace WoWCompanionApp
 			{
 				RectTransform component = this.m_iconAreaCanvas.GetComponent<RectTransform>();
 				component.rect.Set(0f, 0f, 120f, 192f);
+				if (this.m_closeButton != null)
+				{
+					RectTransform rectTransform = this.m_closeButton.transform as RectTransform;
+					AdventureMapPanel componentInParent = base.gameObject.GetComponentInParent<AdventureMapPanel>();
+					if (componentInParent != null)
+					{
+						RectTransform rectTransform2 = base.gameObject.GetComponentInParent<AdventureMapPanel>().transform as RectTransform;
+						rectTransform.position = rectTransform2.position;
+						rectTransform.SetSizeWithCurrentAnchors(0, rectTransform2.rect.width);
+						rectTransform.SetSizeWithCurrentAnchors(1, rectTransform2.rect.height);
+					}
+				}
 			}
 			if (show && this.GetIconCount() > 1)
 			{
@@ -62,6 +74,10 @@ namespace WoWCompanionApp
 			else
 			{
 				this.m_iconAreaCanvas.sortingOrder = 1;
+			}
+			if (this.m_closeButton != null)
+			{
+				this.m_closeButton.gameObject.SetActive(show && this.GetIconCount() > 1);
 			}
 		}
 
@@ -185,6 +201,8 @@ namespace WoWCompanionApp
 		public Image m_iconAreaBG;
 
 		public int m_startLocationMapID;
+
+		public GameObject m_closeButton;
 
 		public List<StackableMapIcon> m_icons;
 	}

@@ -12,8 +12,6 @@ namespace WoWCompanionApp
 		private void Start()
 		{
 			this.InitFollowerList();
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(instance.GarrisonDataResetFinishedAction, new Action(this.InitFollowerList));
 		}
 
 		private void OnEnable()
@@ -31,6 +29,7 @@ namespace WoWCompanionApp
 				AdventureMapPanel instance2 = AdventureMapPanel.instance;
 				instance2.MissionMapSelectionChangedAction = (Action<int>)Delegate.Combine(instance2.MissionMapSelectionChangedAction, new Action<int>(this.HandleMissionChanged));
 			}
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction += this.InitFollowerList;
 		}
 
 		private void OnDisable()
@@ -48,6 +47,7 @@ namespace WoWCompanionApp
 				AdventureMapPanel instance2 = AdventureMapPanel.instance;
 				instance2.MissionMapSelectionChangedAction = (Action<int>)Delegate.Remove(instance2.MissionMapSelectionChangedAction, new Action<int>(this.HandleMissionChanged));
 			}
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction -= this.InitFollowerList;
 		}
 
 		private void SyncVisibleListOrderToSortedFollowerList()

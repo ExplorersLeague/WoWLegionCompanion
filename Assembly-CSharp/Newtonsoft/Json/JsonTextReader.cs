@@ -972,10 +972,17 @@ namespace Newtonsoft.Json
 				}
 				catch (OverflowException innerException)
 				{
-					throw new JsonReaderException("JSON integer {0} is too large or small for an Int64.".FormatWith(CultureInfo.InvariantCulture, new object[]
+					try
 					{
-						text
-					}), innerException);
+						value2 = Convert.ToUInt64(text, CultureInfo.InvariantCulture);
+					}
+					catch (OverflowException ex)
+					{
+						throw new JsonReaderException("JSON integer {0} is too large or small for an Int64 or UInt64.".FormatWith(CultureInfo.InvariantCulture, new object[]
+						{
+							text
+						}), innerException);
+					}
 				}
 				newToken = JsonToken.Integer;
 			}

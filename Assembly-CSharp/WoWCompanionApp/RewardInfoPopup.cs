@@ -31,6 +31,10 @@ namespace WoWCompanionApp
 			{
 				this.m_azeriteFrame.SetActive(false);
 			}
+			if (this.m_rewardIconBorder != null)
+			{
+				this.m_rewardIconBorder.gameObject.SetActive(false);
+			}
 		}
 
 		private void OnDisable()
@@ -40,15 +44,10 @@ namespace WoWCompanionApp
 				Main.instance.m_canvasBlurManager.RemoveBlurRef_MainCanvas();
 				Main.instance.m_canvasBlurManager.RemoveBlurRef_Level2Canvas();
 			}
-			if (this.m_rewardType == MissionRewardDisplay.RewardType.item)
-			{
-				ItemStatCache instance = ItemStatCache.instance;
-				instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats>)Delegate.Remove(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats>(this.ItemStatsUpdated));
-			}
 			Main.instance.m_backButtonManager.PopBackAction();
 		}
 
-		public void SetReward(MissionRewardDisplay.RewardType rewardType, int rewardID, int rewardQuantity, Sprite rewardSprite, int itemContext)
+		public void SetReward(MissionRewardDisplay.RewardType rewardType, int rewardID, int rewardQuantity, Sprite rewardSprite, int itemContext, WrapperItemInstance? itemInstance)
 		{
 			this.m_rewardType = rewardType;
 			this.m_rewardID = rewardID;
@@ -57,8 +56,8 @@ namespace WoWCompanionApp
 			case MissionRewardDisplay.RewardType.item:
 			{
 				ItemStatCache instance = ItemStatCache.instance;
-				instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats>)Delegate.Combine(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats>(this.ItemStatsUpdated));
-				this.SetItem(rewardID, itemContext, rewardSprite);
+				instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats, WrapperItemInstance?>)Delegate.Combine(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats, WrapperItemInstance?>(this.ItemStatsUpdated));
+				this.SetItem(rewardID, itemContext, rewardSprite, itemInstance);
 				break;
 			}
 			case MissionRewardDisplay.RewardType.gold:
@@ -76,15 +75,17 @@ namespace WoWCompanionApp
 			}
 		}
 
-		private void ItemStatsUpdated(int itemID, int itemContext, WrapperItemStats itemStats)
+		private void ItemStatsUpdated(int itemID, int itemContext, WrapperItemStats itemStats, WrapperItemInstance? itemInstance)
 		{
 			if (this.m_rewardType == MissionRewardDisplay.RewardType.item)
 			{
-				this.SetItem(this.m_rewardID, itemContext, this.m_rewardIcon.sprite);
+				this.SetItem(this.m_rewardID, itemContext, this.m_rewardIcon.sprite, itemInstance);
+				ItemStatCache instance = ItemStatCache.instance;
+				instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats, WrapperItemInstance?>)Delegate.Remove(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats, WrapperItemInstance?>(this.ItemStatsUpdated));
 			}
 		}
 
-		public void SetItem(int itemID, int itemContext, Sprite iconSprite)
+		public void SetItem(int itemID, int itemContext, Sprite iconSprite, WrapperItemInstance? itemInstance)
 		{
 			this.m_rewardQuantity.text = string.Empty;
 			this.m_rewardName.text = string.Empty;
@@ -93,14 +94,18 @@ namespace WoWCompanionApp
 			ItemRec record3 = StaticDB.itemDB.GetRecord(itemID);
 			if (record3 != null)
 			{
-				WrapperItemStats? itemStats = ItemStatCache.instance.GetItemStats(itemID, itemContext);
+				WrapperItemStats? itemStats = ItemStatCache.instance.GetItemStats(itemID, itemContext, itemInstance);
+				Color color;
+				ColorUtility.TryParseHtmlString("#" + GeneralHelpers.GetItemQualityColor(1), ref color);
 				if (itemStats != null)
 				{
 					this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag(itemStats.Value.Quality) + record3.Display + "</color>";
+					ColorUtility.TryParseHtmlString("#" + GeneralHelpers.GetItemQualityColor(itemStats.Value.Quality), ref color);
 				}
 				else
 				{
 					this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag(record3.OverallQualityID) + record3.Display + "</color>";
+					ColorUtility.TryParseHtmlString("#" + GeneralHelpers.GetItemQualityColor(record3.OverallQualityID), ref color);
 				}
 				this.m_rewardName.supportRichText = true;
 				if (record3.ItemNameDescriptionID > 0)
@@ -132,6 +137,7 @@ namespace WoWCompanionApp
 					{
 						itemLevel = itemStats.Value.ItemLevel;
 					}
+					bool flag = itemStats != null && (itemStats.Value.BonusFlags & 16u) != 0u;
 					Text rewardName2 = this.m_rewardName;
 					string text = rewardName2.text;
 					rewardName2.text = string.Concat(new string[]
@@ -143,6 +149,7 @@ namespace WoWCompanionApp
 						StaticDB.GetString("ITEM_LEVEL", null),
 						" ",
 						itemLevel.ToString(),
+						(!flag) ? string.Empty : StaticDB.GetString("PLUS", "+ [PH]"),
 						"</color>"
 					});
 				}
@@ -274,24 +281,28 @@ namespace WoWCompanionApp
 					{
 						if (wrapperItemBonusStat.BonusAmount != 0)
 						{
-							if (this.m_rewardDescription.text != string.Empty)
+							string bonusStatString = GeneralHelpers.GetBonusStatString((BonusStatIndex)wrapperItemBonusStat.StatID);
+							if (!string.IsNullOrEmpty(bonusStatString))
 							{
-								Text rewardDescription10 = this.m_rewardDescription;
-								rewardDescription10.text += "\n";
+								if (this.m_rewardDescription.text != string.Empty)
+								{
+									Text rewardDescription10 = this.m_rewardDescription;
+									rewardDescription10.text += "\n";
+								}
+								Text rewardDescription11 = this.m_rewardDescription;
+								rewardDescription11.text = rewardDescription11.text + "<color=#" + GeneralHelpers.GetMobileStatColorString(wrapperItemBonusStat.Color) + ">";
+								string str;
+								if (wrapperItemBonusStat.BonusAmount > 0)
+								{
+									str = "+";
+								}
+								else
+								{
+									str = "-";
+								}
+								Text rewardDescription12 = this.m_rewardDescription;
+								rewardDescription12.text = rewardDescription12.text + GeneralHelpers.TextOrderString(str + wrapperItemBonusStat.BonusAmount.ToString(), bonusStatString) + "</color>";
 							}
-							Text rewardDescription11 = this.m_rewardDescription;
-							rewardDescription11.text = rewardDescription11.text + "<color=#" + GeneralHelpers.GetMobileStatColorString(wrapperItemBonusStat.Color) + ">";
-							string str;
-							if (wrapperItemBonusStat.BonusAmount > 0)
-							{
-								str = "+";
-							}
-							else
-							{
-								str = "-";
-							}
-							Text rewardDescription12 = this.m_rewardDescription;
-							rewardDescription12.text = rewardDescription12.text + GeneralHelpers.TextOrderString(str + wrapperItemBonusStat.BonusAmount.ToString(), GeneralHelpers.GetBonusStatString((BonusStatIndex)wrapperItemBonusStat.StatID)) + "</color>";
 						}
 					}
 				}
@@ -347,6 +358,11 @@ namespace WoWCompanionApp
 					Text rewardDescription18 = this.m_rewardDescription;
 					rewardDescription18.text += "...";
 				}
+				if (this.m_rewardIconBorder != null)
+				{
+					this.m_rewardIconBorder.gameObject.SetActive(true);
+					this.m_rewardIconBorder.color = color;
+				}
 			}
 			else
 			{
@@ -373,6 +389,13 @@ namespace WoWCompanionApp
 				this.m_rewardDescription.text = GeneralHelpers.QuantityRule(currencyContainerRec.ContainerDescription, quantity);
 				this.m_rewardQuantity.text = string.Empty;
 				this.m_rewardIcon.sprite = iconSprite;
+				if (this.m_rewardIconBorder != null)
+				{
+					Color color;
+					ColorUtility.TryParseHtmlString("#" + GeneralHelpers.GetItemQualityColor(currencyContainerRec.ContainerQuality), ref color);
+					this.m_rewardIconBorder.gameObject.SetActive(true);
+					this.m_rewardIconBorder.color = color;
+				}
 			}
 			else
 			{
@@ -424,6 +447,8 @@ namespace WoWCompanionApp
 		public Text m_rewardQuantity;
 
 		public Image m_rewardIcon;
+
+		public Image m_rewardIconBorder;
 
 		public GameObject m_azeriteFrame;
 

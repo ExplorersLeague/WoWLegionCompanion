@@ -46,6 +46,8 @@ namespace WoWCompanionApp
 				AdventureMapPanel instance = AdventureMapPanel.instance;
 				instance.ShowMissionResultAction = (Action<int, int, bool>)Delegate.Combine(instance.ShowMissionResultAction, new Action<int, int, bool>(this.ShowMissionResults));
 			}
+			Singleton<GarrisonWrapper>.Instance.MissionSuccessChanceChangedAction += this.OnMissionSuccessChanceChanged;
+			Singleton<GarrisonWrapper>.Instance.FollowerDataChangedAction += this.HandleFollowerDataChanged;
 			this.m_okButtonText.text = StaticDB.GetString("OK", null);
 			this.m_inProgressText.text = StaticDB.GetString("IN_PROGRESS", null);
 			this.m_successText.text = StaticDB.GetString("MISSION_SUCCESS", null);
@@ -54,30 +56,12 @@ namespace WoWCompanionApp
 
 		private void OnDisable()
 		{
-			if (Main.instance != null && this.m_mainCallbackInitialized)
-			{
-				Main instance = Main.instance;
-				instance.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Remove(instance.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
-				Main instance2 = Main.instance;
-				instance2.FollowerDataChangedAction = (Action)Delegate.Remove(instance2.FollowerDataChangedAction, new Action(this.HandleFollowerDataChanged));
-				this.m_mainCallbackInitialized = false;
-			}
+			Singleton<GarrisonWrapper>.Instance.MissionSuccessChanceChangedAction -= this.OnMissionSuccessChanceChanged;
+			Singleton<GarrisonWrapper>.Instance.FollowerDataChangedAction -= this.HandleFollowerDataChanged;
 			if (AdventureMapPanel.instance != null)
 			{
-				AdventureMapPanel instance3 = AdventureMapPanel.instance;
-				instance3.ShowMissionResultAction = (Action<int, int, bool>)Delegate.Remove(instance3.ShowMissionResultAction, new Action<int, int, bool>(this.ShowMissionResults));
-			}
-		}
-
-		private void RegisterMainScriptObjEvents()
-		{
-			if (Main.instance != null && !this.m_mainCallbackInitialized)
-			{
-				Main instance = Main.instance;
-				instance.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Combine(instance.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
-				Main instance2 = Main.instance;
-				instance2.FollowerDataChangedAction = (Action)Delegate.Combine(instance2.FollowerDataChangedAction, new Action(this.HandleFollowerDataChanged));
-				this.m_mainCallbackInitialized = true;
+				AdventureMapPanel instance = AdventureMapPanel.instance;
+				instance.ShowMissionResultAction = (Action<int, int, bool>)Delegate.Remove(instance.ShowMissionResultAction, new Action<int, int, bool>(this.ShowMissionResults));
 			}
 		}
 
@@ -91,14 +75,14 @@ namespace WoWCompanionApp
 			TimeSpan timeSpan = this.m_missionDurationInSeconds - t;
 			bool flag = timeSpan.TotalSeconds < 0.0 && this.m_popupView.gameObject.activeSelf;
 			timeSpan = ((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan);
-			this.m_missionTimeRemainingText.text = timeSpan.GetDurationString(false);
+			this.m_missionTimeRemainingText.text = timeSpan.GetDurationString(false, TimeUnit.Second);
 			if (flag && !this.m_attemptedAutoComplete)
 			{
 				if (AdventureMapPanel.instance.ShowMissionResultAction != null)
 				{
 					AdventureMapPanel.instance.ShowMissionResultAction(this.m_garrMissionID, 1, false);
 				}
-				Main.instance.CompleteMission(this.m_garrMissionID);
+				Singleton<GarrisonWrapper>.Instance.CompleteMission(this.m_garrMissionID);
 				this.m_attemptedAutoComplete = true;
 			}
 		}
@@ -236,7 +220,6 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
-			this.RegisterMainScriptObjEvents();
 			this.m_missionResultsDisplayCanvasGroupAutoFadeOut.Reset();
 			this.m_currentResultType = (MissionResultType)missionResultType;
 			this.m_followerExperienceDisplayArea.SetActive(false);
@@ -847,7 +830,5 @@ namespace WoWCompanionApp
 		public GameObject m_EnemiesGroup;
 
 		public GameObject m_FollowerSlotGroup;
-
-		private bool m_mainCallbackInitialized;
 	}
 }

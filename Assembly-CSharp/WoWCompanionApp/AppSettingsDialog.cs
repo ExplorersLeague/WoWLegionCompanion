@@ -62,7 +62,7 @@ namespace WoWCompanionApp
 
 		private void AdjustForNotch()
 		{
-			if (Main.instance.IsIphoneX())
+			if (Main.instance.HasNotch())
 			{
 				Vector2 sizeDelta = this.m_headerBar.sizeDelta;
 				sizeDelta.y += 40f;

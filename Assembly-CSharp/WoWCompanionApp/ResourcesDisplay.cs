@@ -9,14 +9,12 @@ namespace WoWCompanionApp
 		private void OnEnable()
 		{
 			this.UpdateCurrencyDisplayAmount();
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(instance.GarrisonDataResetFinishedAction, new Action(this.UpdateCurrencyDisplayAmount));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction += this.UpdateCurrencyDisplayAmount;
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Remove(instance.GarrisonDataResetFinishedAction, new Action(this.UpdateCurrencyDisplayAmount));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction -= this.UpdateCurrencyDisplayAmount;
 		}
 
 		private void Start()

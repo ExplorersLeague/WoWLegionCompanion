@@ -47,9 +47,9 @@ namespace WoWCompanionApp
 
 		private void Update()
 		{
-			if (this.updateCounter < 5)
+			if (this.updateCounter < 5 || this.queueTextureUpdate)
 			{
-				this.OnRectTransformDimensionsChange();
+				this.UpdateRandomTexture();
 				this.updateCounter++;
 			}
 		}
@@ -57,6 +57,11 @@ namespace WoWCompanionApp
 		protected override void OnRectTransformDimensionsChange()
 		{
 			base.OnRectTransformDimensionsChange();
+			this.queueTextureUpdate = true;
+		}
+
+		private void UpdateRandomTexture()
+		{
 			RectTransform rectTransform = base.transform as RectTransform;
 			float num = (this.tilingDirection != TiledRandomTexture.TilingDirection.Horizontal) ? rectTransform.rect.height : rectTransform.rect.width;
 			float num2;
@@ -81,22 +86,51 @@ namespace WoWCompanionApp
 			}
 			int num3 = Mathf.CeilToInt(num / num2);
 			this.textures = base.GetComponentsInChildren<RandomTexture>().ToList<RandomTexture>();
+			if (this.endcap != null && num3 < this.textures.Count && num3 > 1)
+			{
+				this.textures[num3 - 1].GetComponentInChildren<Image>().sprite = this.endcap;
+			}
 			int num4 = this.textures.Count - 1;
 			while (num4 >= num3 && num4 >= 0)
 			{
 				Object.Destroy(this.textures[num4].gameObject);
 				num4--;
 			}
+			if (this.endcap != null && num3 > this.textures.Count && this.textures.Count > 1)
+			{
+				this.textures[this.textures.Count - 1].GetComponent<RandomTexture>().ChangeTexture();
+			}
 			for (int i = this.textures.Count; i < num3; i++)
 			{
-				Object @object = Object.Instantiate(this.randomTexturePrefab, base.transform, false);
-				@object.name = this.randomTexturePrefab.GetType().Name + " " + i;
+				RandomTexture randomTexture = Object.Instantiate<RandomTexture>(this.randomTexturePrefab, base.transform, false);
+				randomTexture.name = this.randomTexturePrefab.GetType().Name + " " + i;
+				this.textures.Add(randomTexture);
+			}
+			if (this.endcap != null)
+			{
+				if (this.textures.Count > 0)
+				{
+					this.textures[0].GetComponentInChildren<Image>().sprite = this.endcap;
+				}
+				if (this.textures.Count > 1)
+				{
+					this.textures[this.textures.Count - 1].GetComponentInChildren<Image>().sprite = this.endcap;
+				}
 			}
 			for (int j = 0; j < this.textures.Count; j++)
 			{
 				this.textures[j].RotateImage((float)this.rotation);
 			}
+			if (this.endcap != null && this.textures.Count > 1)
+			{
+				Vector3 localScale = this.textures[this.textures.Count - 1].GetComponentInChildren<Image>().transform.localScale;
+				localScale.x = this.textures[0].GetComponentInChildren<Image>().transform.localScale.x * -1f;
+				this.textures[this.textures.Count - 1].GetComponentInChildren<Image>().transform.localScale = localScale;
+			}
+			this.queueTextureUpdate = false;
 		}
+
+		public Sprite endcap;
 
 		public RandomTexture randomTexturePrefab;
 
@@ -107,6 +141,8 @@ namespace WoWCompanionApp
 		private List<RandomTexture> textures;
 
 		private int updateCounter;
+
+		private bool queueTextureUpdate;
 
 		public enum TilingDirection
 		{

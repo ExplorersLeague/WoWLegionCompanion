@@ -125,7 +125,7 @@ namespace WoWCompanionApp
 			this.m_messages.Clear();
 			foreach (ClubMessageInfo messageInfo in messagesInRange)
 			{
-				this.m_messages.Add(new CommunityChatMessage(messageInfo));
+				this.m_messages.Add(new CommunityChatMessage(this.m_clubId, this.StreamId, messageInfo));
 			}
 		}
 
@@ -134,8 +134,19 @@ namespace WoWCompanionApp
 			ClubMessageInfo? messageInfo = Club.GetMessageInfo(this.m_clubId, this.StreamId, messageEvent.MessageID);
 			if (messageInfo != null)
 			{
-				CommunityChatMessage communityChatMessage = new CommunityChatMessage(messageInfo.Value);
+				CommunityChatMessage communityChatMessage = new CommunityChatMessage(this.m_clubId, this.StreamId, messageInfo.Value);
 				this.m_messages.Add(communityChatMessage);
+				return communityChatMessage;
+			}
+			return null;
+		}
+
+		public CommunityChatMessage HandleMessageUpdatedEvent(Club.ClubMessageUpdatedEvent messageEvent)
+		{
+			if (messageEvent.ClubID == this.m_clubId && messageEvent.StreamID == this.StreamId)
+			{
+				CommunityChatMessage communityChatMessage = this.m_messages.Find((CommunityChatMessage message) => message.MessageIdentifier.epoch == messageEvent.MessageID.epoch && message.MessageIdentifier.position == messageEvent.MessageID.position);
+				communityChatMessage.UpdateMessage(messageEvent);
 				return communityChatMessage;
 			}
 			return null;

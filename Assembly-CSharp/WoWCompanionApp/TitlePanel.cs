@@ -21,7 +21,7 @@ namespace WoWCompanionApp
 				"/",
 				utcNow.Year
 			}));
-			DateTime t = new DateTime(2018, 9, 14, 7, 0, 0, DateTimeKind.Utc);
+			DateTime t = new DateTime(2018, 12, 14, 7, 0, 0, DateTimeKind.Utc);
 			if (utcNow > t)
 			{
 				this.m_showPTR = false;

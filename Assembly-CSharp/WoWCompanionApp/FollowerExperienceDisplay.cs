@@ -12,7 +12,6 @@ namespace WoWCompanionApp
 		{
 			this.m_followerNameText.font = GeneralHelpers.LoadStandardFont();
 			this.m_iLevelText.font = GeneralHelpers.LoadStandardFont();
-			this.m_classText.font = GeneralHelpers.LoadStandardFont();
 			this.m_xpAmountText.font = GeneralHelpers.LoadStandardFont();
 			this.m_toNextLevelOrUpgradeText.font = GeneralHelpers.LoadStandardFont();
 		}
@@ -100,7 +99,7 @@ namespace WoWCompanionApp
 				{
 					DelayedUIAnim delayedUIAnim = base.gameObject.AddComponent<DelayedUIAnim>();
 					float num4 = initialEntranceDelay + (float)(wrapperGarrisonFollower.Durability - follower.Durability) * num + 1f;
-					delayedUIAnim.Init(num4, "RedFailX", "SFX/UI_Mission_Fail_Red_X", this.m_followerPortrait.transform, 1.5f, 0.3f);
+					delayedUIAnim.Init(num4, "RedFailX", "FollowerDead", this.m_followerPortrait.transform, 1.5f);
 					DelayedObjectEnable delayedObjectEnable = base.gameObject.AddComponent<DelayedObjectEnable>();
 					delayedObjectEnable.Init(num4 + 0.25f, this.m_expiredPortraitX);
 				}
@@ -146,8 +145,6 @@ namespace WoWCompanionApp
 				this.m_followerNameText.text = record2.Name;
 			}
 			this.m_iLevelText.text = follower.FollowerLevel.ToString();
-			GarrClassSpecRec record3 = StaticDB.garrClassSpecDB.GetRecord((int)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID));
-			this.m_classText.text = record3.ClassSpec;
 			if (!isTroop)
 			{
 				if (isMaxLevelAndMaxQuality)
@@ -240,8 +237,6 @@ namespace WoWCompanionApp
 		public Text m_followerNameText;
 
 		public Text m_iLevelText;
-
-		public Text m_classText;
 
 		public GameObject m_troopBackground;
 

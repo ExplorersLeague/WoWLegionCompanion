@@ -54,6 +54,8 @@ namespace WoWCompanionApp
 
 		public void OnLogoutButtonClicked()
 		{
+			Singleton<Login>.Instance.ReturnToCharacterList = false;
+			Singleton<Login>.Instance.ReturnToRecentCharacter = false;
 			Singleton<Login>.Instance.ReturnToTitleScene();
 		}
 

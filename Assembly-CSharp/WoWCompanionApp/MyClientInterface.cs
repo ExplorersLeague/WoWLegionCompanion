@@ -52,9 +52,9 @@ namespace WoWCompanionApp
 			string text = Login.m_portal.ToLower();
 			if (text != null)
 			{
-				if (MyClientInterface.<>f__switch$map8 == null)
+				if (MyClientInterface.<>f__switch$map9 == null)
 				{
-					MyClientInterface.<>f__switch$map8 = new Dictionary<string, int>(7)
+					MyClientInterface.<>f__switch$map9 = new Dictionary<string, int>(7)
 					{
 						{
 							"us",
@@ -87,7 +87,7 @@ namespace WoWCompanionApp
 					};
 				}
 				int num;
-				if (MyClientInterface.<>f__switch$map8.TryGetValue(text, out num))
+				if (MyClientInterface.<>f__switch$map9.TryGetValue(text, out num))
 				{
 					if (num == 0)
 					{

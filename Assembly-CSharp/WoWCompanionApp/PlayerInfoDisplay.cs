@@ -47,14 +47,12 @@ namespace WoWCompanionApp
 		private void OnEnable()
 		{
 			this.InitPlayerDisplay(GarrisonStatus.CharacterLevel());
-			Main instance = Main.instance;
-			instance.PlayerLeveledUpAction = (Action<int>)Delegate.Combine(instance.PlayerLeveledUpAction, new Action<int>(this.HandlePlayerLeveledUp));
+			Singleton<GarrisonWrapper>.Instance.PlayerLeveledUpAction += this.HandlePlayerLeveledUp;
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.PlayerLeveledUpAction = (Action<int>)Delegate.Remove(instance.PlayerLeveledUpAction, new Action<int>(this.HandlePlayerLeveledUp));
+			Singleton<GarrisonWrapper>.Instance.PlayerLeveledUpAction -= this.HandlePlayerLeveledUp;
 		}
 
 		private void HandlePlayerLeveledUp(int newLevel)

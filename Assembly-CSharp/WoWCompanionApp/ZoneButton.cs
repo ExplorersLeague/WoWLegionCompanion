@@ -22,7 +22,7 @@ namespace WoWCompanionApp
 		public void OnTap()
 		{
 			AdventureMapPanel.instance.SetSelectedIconContainer(null);
-			if (AdventureMapPanel.instance.m_testEnableTapToZoomOut && Mathf.Approximately(AdventureMapPanel.instance.m_pinchZoomContentManager.m_zoomFactor, AdventureMapPanel.instance.m_mainMapInfo.m_maxZoomFactor))
+			if (AdventureMapPanel.instance.m_testEnableTapToZoomOut && Mathf.Approximately(AdventureMapPanel.instance.m_pinchZoomContentManager.m_zoomFactor, AdventureMapPanel.instance.m_activeMapInfo.m_maxZoomFactor))
 			{
 				if (AdventureMapPanel.instance.GetCurrentMapMission() > 0 || AdventureMapPanel.instance.GetCurrentWorldQuest() > 0)
 				{

@@ -62,12 +62,11 @@ namespace WoWCompanionApp
 				gameObject2.transform.SetParent(this.m_bountyQuestIconArea.transform, false);
 			}
 			this.UpdateTimeRemaining();
-			bounty.Items.RemoveAll((WrapperWorldQuestReward item) => item.RecordID == 157831 || item.RecordID == 1500);
 			if (bounty.Items.Count > 0 && StaticDB.itemDB.GetRecord(bounty.Items[0].RecordID) != null)
 			{
 				WrapperWorldQuestReward wrapperWorldQuestReward = bounty.Items[0];
 				Sprite rewardSprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, wrapperWorldQuestReward.FileDataID);
-				this.m_rewardInfo.SetReward(MissionRewardDisplay.RewardType.item, wrapperWorldQuestReward.RecordID, wrapperWorldQuestReward.Quantity, rewardSprite, wrapperWorldQuestReward.ItemContext);
+				this.m_rewardInfo.SetReward(MissionRewardDisplay.RewardType.item, wrapperWorldQuestReward.RecordID, wrapperWorldQuestReward.Quantity, rewardSprite, wrapperWorldQuestReward.ItemContext, wrapperWorldQuestReward.ItemInstance);
 			}
 			else if (bounty.Money > 1000000)
 			{
@@ -79,28 +78,30 @@ namespace WoWCompanionApp
 				int num = 0;
 				foreach (WrapperWorldQuestReward wrapperWorldQuestReward2 in bounty.Currencies)
 				{
+					bool flag = wrapperWorldQuestReward2.RecordID == 1560;
 					CurrencyTypesRec record2 = StaticDB.currencyTypesDB.GetRecord(wrapperWorldQuestReward2.RecordID);
-					if (wrapperWorldQuestReward2.RecordID == 1553 && record2 != null)
+					CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+					if (currencyContainerRec != null)
 					{
-						CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
-						if (currencyContainerRec != null)
+						Sprite iconSprite2 = CurrencyContainerDB.LoadCurrencyContainerIcon(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+						int num2 = wrapperWorldQuestReward2.Quantity / (((record2.Flags & 8u) == 0u) ? 1 : 100);
+						if (num2 > num)
 						{
-							Sprite iconSprite2 = CurrencyContainerDB.LoadCurrencyContainerIcon(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
-							int num2 = wrapperWorldQuestReward2.Quantity / (((record2.Flags & 8u) == 0u) ? 1 : 100);
-							if (num2 > num)
-							{
-								num = num2;
-								this.m_rewardInfo.SetCurrency(wrapperWorldQuestReward2.RecordID, num, iconSprite2);
-							}
+							num = num2;
+							this.m_rewardInfo.SetCurrency(wrapperWorldQuestReward2.RecordID, num, iconSprite2);
 						}
-						else
+					}
+					else
+					{
+						Sprite iconSprite2 = GeneralHelpers.LoadCurrencyIcon(wrapperWorldQuestReward2.RecordID);
+						int num3 = wrapperWorldQuestReward2.Quantity / (((record2.Flags & 8u) == 0u) ? 1 : 100);
+						if (num3 > num || flag)
 						{
-							Sprite iconSprite2 = GeneralHelpers.LoadCurrencyIcon(wrapperWorldQuestReward2.RecordID);
-							int num3 = wrapperWorldQuestReward2.Quantity / (((record2.Flags & 8u) == 0u) ? 1 : 100);
-							if (num3 > num)
+							num = num3;
+							this.m_rewardInfo.SetCurrency(wrapperWorldQuestReward2.RecordID, num, iconSprite2);
+							if (flag)
 							{
-								num = num3;
-								this.m_rewardInfo.SetCurrency(wrapperWorldQuestReward2.RecordID, num, iconSprite2);
+								break;
 							}
 						}
 					}
@@ -108,16 +109,20 @@ namespace WoWCompanionApp
 			}
 		}
 
-		private void UpdateTimeRemaining()
+		private bool UpdateTimeRemaining()
 		{
 			TimeSpan timeSpan = this.m_bounty.EndTime - GarrisonStatus.CurrentTime();
 			timeSpan = ((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan);
-			this.m_timeLeft.text = StaticDB.GetString("TIME_LEFT", "Time Left: PH") + " " + timeSpan.GetDurationString(false);
+			this.m_timeLeft.text = StaticDB.GetString("TIME_LEFT", "Time Left: PH") + " " + timeSpan.GetDurationString(timeSpan.Days == 0, TimeUnit.Minute);
+			return timeSpan.TotalSeconds > 0.0;
 		}
 
 		private void Update()
 		{
-			this.UpdateTimeRemaining();
+			if (!this.UpdateTimeRemaining())
+			{
+				base.gameObject.SetActive(false);
+			}
 		}
 
 		public Image m_bountyIcon;

@@ -23,7 +23,6 @@ namespace WoWCompanionApp
 			this.LatestVersion = new Version(0, 0, 0);
 			this.ForceUpgrade = false;
 			this.m_locale = MobileDeviceLocale.GetBestGuessForLocale();
-			this.InitAssetBundleManager();
 		}
 
 		public bool IsInitialized()
@@ -31,7 +30,7 @@ namespace WoWCompanionApp
 			return AssetBundleManager.s_initialized;
 		}
 
-		private void InitAssetBundleManager()
+		public void InitAssetBundleManager()
 		{
 			if (AssetBundleManager.s_initialized)
 			{
@@ -110,6 +109,7 @@ namespace WoWCompanionApp
 			}
 			IEnumerable<string> bundlesToDownload = from bundle in this.m_manifest.GetAllAssetBundles()
 			where bundle.IndexOf('.') == -1 || bundle.EndsWith(this.$this.m_locale, StringComparison.OrdinalIgnoreCase)
+			where !bundle.Equals("legionfall", StringComparison.OrdinalIgnoreCase)
 			select bundle;
 			this.m_numDownloads = bundlesToDownload.Count<string>();
 			this.m_numCompleteDownloads = 0;
@@ -434,6 +434,7 @@ namespace WoWCompanionApp
 			private BundleName(string name)
 			{
 				this.m_name = name;
+				AssetBundleManager.BundleName.bundleNames.Add(name, this);
 			}
 
 			public static implicit operator string(AssetBundleManager.BundleName bundleName)
@@ -443,7 +444,7 @@ namespace WoWCompanionApp
 
 			public static implicit operator AssetBundleManager.BundleName(string name)
 			{
-				return new AssetBundleManager.BundleName(name);
+				return AssetBundleManager.BundleName.bundleNames[name];
 			}
 
 			public static bool operator ==(AssetBundleManager.BundleName name1, AssetBundleManager.BundleName name2)
@@ -470,6 +471,8 @@ namespace WoWCompanionApp
 			{
 				return this.m_name.GetHashCode();
 			}
+
+			private static Dictionary<string, AssetBundleManager.BundleName> bundleNames = new Dictionary<string, AssetBundleManager.BundleName>();
 
 			public static AssetBundleManager.BundleName IconBundleName = new AssetBundleManager.BundleName("icn");
 

@@ -19,8 +19,7 @@ namespace WoWCompanionApp
 		{
 			if (Main.instance != null)
 			{
-				Main instance = Main.instance;
-				instance.CompleteShipmentResultAction = (Action<SHIPMENT_RESULT, ulong>)Delegate.Combine(instance.CompleteShipmentResultAction, new Action<SHIPMENT_RESULT, ulong>(this.HandleCollectTroopResult));
+				Singleton<GarrisonWrapper>.Instance.CompleteShipmentResultAction += this.HandleCollectTroopResult;
 			}
 		}
 
@@ -28,8 +27,7 @@ namespace WoWCompanionApp
 		{
 			if (Main.instance != null)
 			{
-				Main instance = Main.instance;
-				instance.CompleteShipmentResultAction = (Action<SHIPMENT_RESULT, ulong>)Delegate.Remove(instance.CompleteShipmentResultAction, new Action<SHIPMENT_RESULT, ulong>(this.HandleCollectTroopResult));
+				Singleton<GarrisonWrapper>.Instance.CompleteShipmentResultAction -= this.HandleCollectTroopResult;
 			}
 		}
 
@@ -155,7 +153,7 @@ namespace WoWCompanionApp
 				}
 				if (timeSpan.TotalSeconds > 0.0)
 				{
-					this.m_timeRemainingText.text = timeSpan.GetDurationString(true);
+					this.m_timeRemainingText.text = timeSpan.GetDurationString(true, TimeUnit.Second);
 				}
 				else if (this.m_glowLoopHandle == null)
 				{

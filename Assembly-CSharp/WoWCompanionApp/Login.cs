@@ -24,7 +24,7 @@ namespace WoWCompanionApp
 {
 	public class Login : Singleton<Login>
 	{
-		public bool ReturnToRecentCharacter { get; private set; }
+		public bool ReturnToRecentCharacter { get; set; }
 
 		public bool ReturnToCharacterList { get; set; }
 
@@ -64,6 +64,14 @@ namespace WoWCompanionApp
 				return true;
 			}
 			return false;
+		}
+
+		public void OnConnectionLost(Network.ConnectionLostEvent eventArgs)
+		{
+			if (this.GetLoginState() == Login.eLoginState.MOBILE_LOGGED_IN || this.GetLoginState() == Login.eLoginState.MOBILE_LOGGED_IN_IDLE || this.GetLoginState() == Login.eLoginState.MOBILE_LOGGED_IN_DATA_COMPLETE)
+			{
+				this.MobileDisconnect(DisconnectReason.ConnectionLost);
+			}
 		}
 
 		private void OnReturnToTitleScene(Scene scene, LoadSceneMode loadSceneMode)
@@ -206,12 +214,11 @@ namespace WoWCompanionApp
 					case Login.eLoginState.WEB_AUTH_START:
 					case Login.eLoginState.WEB_AUTH_LOADING:
 					case Login.eLoginState.WEB_AUTH_IN_PROGRESS:
-						break;
-					default:
-						this.LoginUI.ShowConnectingPanel();
-						break;
+						goto IL_11E;
 					}
+					this.LoginUI.ShowConnectingPanel();
 				}
+				IL_11E:
 				BattleNet.ApplicationWasUnpaused();
 				if (!this.m_initialUnpause)
 				{
@@ -280,7 +287,7 @@ namespace WoWCompanionApp
 					default:
 						if (loginState != Login.eLoginState.BN_CHARACTER_LIST_WAIT)
 						{
-							if (this.m_loginState != Login.eLoginState.IDLE)
+							if (this.m_loginState != Login.eLoginState.IDLE && this.m_loginState != Login.eLoginState.NO_NETWORK)
 							{
 								this.LoginLog("OnApplicationPause: Back to Title");
 								this.ReturnToTitleScene();
@@ -313,6 +320,24 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
+			this.TryStartConnection();
+		}
+
+		private void TryStartConnection()
+		{
+			this.LoginLog("Attempting to start connection");
+			if (Application.internetReachability == null)
+			{
+				this.LoginLog("No network connectivity");
+				this.SetLoginState(Login.eLoginState.NO_NETWORK);
+				GenericPopup.DisabledAction = delegate
+				{
+					this.SetLoginState(Login.eLoginState.IDLE);
+				};
+				this.LoginUI.ShowGenericPopupFull(this.GetNoInternetErrorText());
+				return;
+			}
+			this.LoginLog("Starting connection");
 			this.LoginUI.ShowConnectingPanel();
 			this.SetLoginState(Login.eLoginState.WAIT_FOR_ASSET_BUNDLES);
 			this.InitRecentCharacters();
@@ -324,6 +349,7 @@ namespace WoWCompanionApp
 			}
 			this.SubscribeToEvents();
 			Network.Initialize();
+			Singleton<AssetBundleManager>.Instance.InitAssetBundleManager();
 		}
 
 		private void OnDestroy()
@@ -342,6 +368,7 @@ namespace WoWCompanionApp
 			Network.OnLoginFailedVeteranAccount += new Network.LoginFailedVeteranAccountHandler(this.LoginFailedVeteranAccountHandler);
 			Network.OnLoginFailedConsumptionTimeNotAllowed += new Network.LoginFailedConsumptionTimeNotAllowedHandler(this.LoginFailedConsumptionTimeNotAllowedHandler);
 			Network.OnLoginFailedTrialNotAllowed += new Network.LoginFailedTrialNotAllowedHandler(this.LoginFailedTrialNotAllowedHandler);
+			Network.OnConnectionLost += new Network.ConnectionLostHandler(Singleton<Login>.Instance.OnConnectionLost);
 		}
 
 		private void UnsubscribeFromEvents()
@@ -351,6 +378,7 @@ namespace WoWCompanionApp
 			Network.OnLoginFailedVeteranAccount -= new Network.LoginFailedVeteranAccountHandler(this.LoginFailedVeteranAccountHandler);
 			Network.OnLoginFailedConsumptionTimeNotAllowed -= new Network.LoginFailedConsumptionTimeNotAllowedHandler(this.LoginFailedConsumptionTimeNotAllowedHandler);
 			Network.OnLoginFailedTrialNotAllowed -= new Network.LoginFailedTrialNotAllowedHandler(this.LoginFailedTrialNotAllowedHandler);
+			Network.OnConnectionLost -= new Network.ConnectionLostHandler(Singleton<Login>.Instance.OnConnectionLost);
 		}
 
 		private void LoginFailedDuplicateCharacterHandler(Network.LoginFailedDuplicateCharacterEvent eventArgs)
@@ -408,6 +436,14 @@ namespace WoWCompanionApp
 
 		private void Update()
 		{
+			if (this.GetLoginState() == Login.eLoginState.MOBILE_LOGGED_IN_DATA_COMPLETE && Application.internetReachability == null)
+			{
+				this.LoginLog("No network connectivity");
+				this.SetLoginState(Login.eLoginState.NO_NETWORK);
+				GenericPopup.DisabledAction = new Action(this.ReturnToTitleScene);
+				this.LoginUI.ShowGenericPopupFull(this.GetNoInternetErrorText());
+				return;
+			}
 			this.UpdateLoginState();
 			this.BnErrorsUpdate();
 			if (this.m_urlDownloader != null)
@@ -422,10 +458,12 @@ namespace WoWCompanionApp
 			switch (this.m_loginState)
 			{
 			case Login.eLoginState.IDLE:
-				if (this.ReturnToRecentCharacter)
+				if (this.ReturnToRecentCharacter || this.ReturnToCharacterList)
 				{
 					this.SetLoginState(Login.eLoginState.BN_LOGIN_START);
 					this.ReturnToRecentCharacter = false;
+					this.ReturnToCharacterList = false;
+					this.TryStartConnection();
 				}
 				break;
 			case Login.eLoginState.WAIT_FOR_ASSET_BUNDLES:
@@ -759,6 +797,7 @@ namespace WoWCompanionApp
 
 		private void BnLoginStart(bool cachedLogin, bool cachedRealm, bool cachedCharacter, bool returnToRecentCharacter = false)
 		{
+			Main.instance.OnBeginConnection();
 			BattleNet.RequestCloseAurora();
 			BattleNet.ProcessAurora();
 			this.BnErrorsUpdate();
@@ -2128,6 +2167,39 @@ namespace WoWCompanionApp
 			return (!this.m_realmNames.ContainsKey(virtualAddress)) ? string.Empty : this.m_realmNames[virtualAddress];
 		}
 
+		private string GetNoInternetErrorText()
+		{
+			if (StaticDB.StringsAvailable())
+			{
+				return StaticDB.GetString("NO_INTERNET_CONNECTION", "[PH] No internet connection");
+			}
+			string bestGuessForLocale = MobileDeviceLocale.GetBestGuessForLocale();
+			switch (bestGuessForLocale)
+			{
+			case "koKR":
+				return "인터넷 연결이 끊겼습니다";
+			case "frFR":
+				return "Aucune connexion Internet";
+			case "deDE":
+				return "Keine Internetverbindung";
+			case "zhCN":
+				return "没有网络连接";
+			case "zhTW":
+				return "沒有網路連線";
+			case "esES":
+				return "No hay conexión a Internet";
+			case "esMX":
+				return "Sin conexión a internet";
+			case "ruRU":
+				return "Отсутствует подключение к Интернету";
+			case "ptBR":
+				return "Sem conexão com a internet";
+			case "itIT":
+				return "Connessione a internet assente.";
+			}
+			return "No internet connection";
+		}
+
 		private string m_webToken;
 
 		private Login.eLoginState m_loginState = Login.eLoginState.WAIT_FOR_ASSET_BUNDLES;
@@ -2253,6 +2325,7 @@ namespace WoWCompanionApp
 		public enum eLoginState
 		{
 			IDLE,
+			NO_NETWORK,
 			WAIT_FOR_ASSET_BUNDLES,
 			WEB_AUTH_START,
 			WEB_AUTH_LOADING,

@@ -4,6 +4,22 @@ namespace WowStatConstants
 {
 	internal static class Constants
 	{
+		public const int UI_TEXTURE_ATLAS_ID_STAR = 7746;
+
+		public const int UI_TEXTURE_ATLAS_ID_SWORD = 7747;
+
+		public const int UI_TEXTURE_ATLAS_ID_BOOT = 7748;
+
+		public const int UI_TEXTURE_ATLAS_ID_STEALTH = 7749;
+
+		public const int UI_TEXTURE_ATLAS_ID_SCROLL = 8046;
+
+		public const int UI_TEXTURE_ATLAS_ID_TREASURE_CHEST = 8778;
+
+		public const int STEALTH_COUNTER_ABILITY_ID = 1262;
+
+		public const int STEALTH_MECHANIC_ID = 139;
+
 		public const int FOLLOWER_MAX_LEVEL = 110;
 
 		public const int GARRISON_MISSION_BASE_ITEM_LEVEL = 600;
@@ -29,6 +45,10 @@ namespace WowStatConstants
 		public const int BOUNTY_QUESTID_ALLIANCEWAREFFORT = 50605;
 
 		public const int BOUNTY_QUESTID_HORDERWAREFFORT = 50606;
+
+		public const int MAPID_EASTERN_KINGDOMS = 0;
+
+		public const int MAPID_KALIMDOR = 1;
 
 		public const int MAPID_BROKEN_ISLES = 1220;
 
@@ -86,6 +106,12 @@ namespace WowStatConstants
 
 		public const int POLISHED_PET_CHARM_ITEM_ID = 163036;
 
+		public const int AZERITE_CACHE_COVER_ITEM_ID = 163857;
+
+		public const int START_COVER_ITEM_ID_BLOCK = 164577;
+
+		public const int END_COVER_ITEM_ID_BLOCK = 166370;
+
 		public const int ORDER_HALL_RESOURCES_CURRENCY_ID = 1220;
 
 		public const int AZERITE_CURRENCY_ID = 1553;
@@ -135,6 +161,18 @@ namespace WowStatConstants
 		public const int ALLIANCE_GARR_TALENT_ID = 153;
 
 		public const int BATTLE_PET_WORLD_QUEST_QUESTINFOID = 115;
+
+		public const int ASSAULT_ID_TIRAGARDE = 5896;
+
+		public const int ASSAULT_ID_DRUSTVAR = 5964;
+
+		public const int ASSAULT_ID_STORMSONG = 5966;
+
+		public const int ASSAULT_ID_NAZMIR = 5969;
+
+		public const int ASSAULT_ID_VOLDUN = 5970;
+
+		public const int ASSAULT_ID_ZULDAZAR = 5973;
 
 		public const int SUBSTANTIAL_GOLD_REWARD = 1000000;
 	}

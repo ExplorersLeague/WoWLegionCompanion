@@ -152,6 +152,36 @@ namespace WoWCompanionApp
 			return missionTypeDialog;
 		}
 
+		public MissionInfoDialog CreateMissionInfoDialog()
+		{
+			MissionInfoDialog missionInfoDialog = Object.Instantiate<MissionInfoDialog>(this.m_missionInfoDialogPrefab, this.Level3Canvas.transform, false);
+			missionInfoDialog.gameObject.name = "MissionInfoDialog";
+			return missionInfoDialog;
+		}
+
+		public CommunitiesChatContextMenu CreateChatContextMenu(CommunityChatMessage message)
+		{
+			if (this.m_communitesChatContextMenu == null)
+			{
+				return null;
+			}
+			CommunitiesChatContextMenu communitiesChatContextMenu = Object.Instantiate<CommunitiesChatContextMenu>(this.m_communitesChatContextMenu, this.Level3Canvas.transform, false);
+			communitiesChatContextMenu.SetContextByMessage(message);
+			communitiesChatContextMenu.gameObject.name = "CommunitiesChatContextMenu";
+			return communitiesChatContextMenu;
+		}
+
+		public ReportPlayerDialog CreateReportPlayerDialog()
+		{
+			if (this.m_reportPlayerDialogPrefab == null)
+			{
+				return null;
+			}
+			ReportPlayerDialog reportPlayerDialog = Object.Instantiate<ReportPlayerDialog>(this.m_reportPlayerDialogPrefab, this.Level3Canvas.transform, false);
+			reportPlayerDialog.gameObject.name = "ReportPlayerDialog";
+			return reportPlayerDialog;
+		}
+
 		public OKCancelDialog CreateOKCancelDialog(string titleKey, string messageKey, Action onOK, Action onCancel = null)
 		{
 			Canvas canvas = this.Level3Canvas ?? this.MainCanvas;
@@ -196,7 +226,13 @@ namespace WoWCompanionApp
 
 		public MissionTypeDialog m_missionTypeDialogPrefab;
 
+		public MissionInfoDialog m_missionInfoDialogPrefab;
+
+		public CommunitiesChatContextMenu m_communitesChatContextMenu;
+
 		public AppSettingsDialog m_appSettingsDialogPrefab;
+
+		public ReportPlayerDialog m_reportPlayerDialogPrefab;
 
 		public CharacterViewPanel m_characterViewPanelPrefab;
 	}

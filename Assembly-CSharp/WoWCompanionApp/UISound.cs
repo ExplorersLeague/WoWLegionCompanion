@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace WoWCompanionApp
@@ -8,12 +10,11 @@ namespace WoWCompanionApp
 		private void Awake()
 		{
 			this.m_oneShotAudioSources = new AudioSource[10];
-			this.m_oneShotAudioSourceNames = new string[10];
 			for (int i = 0; i < 10; i++)
 			{
-				this.m_oneShotAudioSourceNames[i] = "Unused";
 				this.m_oneShotAudioSources[i] = base.gameObject.AddComponent<AudioSource>();
 			}
+			this.m_audioConfigs = this.m_soundConfig.clips.ToDictionary((SoundConfig.AudioClipConfig clip) => clip.name);
 		}
 
 		public void EnableSFX(bool enable)
@@ -26,230 +27,222 @@ namespace WoWCompanionApp
 			return this.m_enableSFX;
 		}
 
-		public void PlayUISound(string soundName, float volumeScale = 1f, int maxInstances = 3)
+		public void PlayUISound(string soundName)
 		{
-			if (!Main.instance.m_UISound.IsSFXEnabled())
+			if (!this.IsSFXEnabled())
 			{
 				return;
 			}
-			if (maxInstances > 0)
+			if (!this.m_audioConfigs.ContainsKey(soundName))
 			{
-				int num = 0;
-				for (int i = 0; i < 10; i++)
-				{
-					if (this.m_oneShotAudioSources[i].isPlaying && this.m_oneShotAudioSourceNames[i] == soundName)
-					{
-						num++;
-						if (num >= maxInstances)
-						{
-							return;
-						}
-					}
-				}
+				Debug.LogError("No config saved for audio clip: " + soundName);
+				return;
 			}
-			for (int j = 0; j < this.m_oneShotAudioSources.Length; j++)
+			SoundConfig.AudioClipConfig config = this.m_audioConfigs[soundName];
+			if (this.m_oneShotAudioSources.Count((AudioSource source) => source.isPlaying && source.clip == config.clip) >= config.maxInstances)
 			{
-				if (!this.m_oneShotAudioSources[j].isPlaying)
-				{
-					AudioClip audioClip = Resources.Load<AudioClip>(soundName);
-					this.m_oneShotAudioSources[j].PlayOneShot(audioClip, volumeScale);
-					this.m_oneShotAudioSourceNames[j] = soundName;
-					break;
-				}
+				return;
+			}
+			AudioSource audioSource = this.m_oneShotAudioSources.FirstOrDefault((AudioSource source) => !source.isPlaying);
+			if (audioSource != null)
+			{
+				audioSource.PlayOneShot(config.clip, config.volume);
 			}
 		}
 
 		public void Play_ButtonRedClick()
 		{
-			this.PlayUISound("SFX/UI_ButtonRed_Click", 1f, 3);
+			this.PlayUISound("ButtonRedClick");
 		}
 
 		public void Play_ButtonBlackClick()
 		{
-			this.PlayUISound("SFX/UI_ButtonBlack_Click", 1f, 3);
+			this.PlayUISound("ButtonBlackClick");
 		}
 
 		public void Play_DefaultNavClick()
 		{
-			this.PlayUISound("SFX/UI_DefaultNav_Click", 1f, 3);
+			this.PlayUISound("DefaultNavClick");
 		}
 
 		public void Play_OrderHallTalentSelect()
 		{
-			this.PlayUISound("SFX/UI_OrderHall_Talent_Select_V2", 0.7f, 3);
+			this.PlayUISound("OrderHallTalentSelect");
 		}
 
 		public void Play_MapZoomIn()
 		{
-			this.PlayUISound("SFX/UI_Mission_Map_Zoom_ALT", 0.6f, 3);
+			this.PlayUISound("MapZoomIn");
 		}
 
 		public void Play_SlotChampion()
 		{
-			this.PlayUISound("SFX/UI_Mission_SlotChampion", 0.5f, 3);
+			this.PlayUISound("SlotChampion");
 		}
 
 		public void Play_SlotTroop()
 		{
-			this.PlayUISound("SFX/UI_Mission_SlotTroop", 0.3f, 3);
+			this.PlayUISound("SlotTroop");
 		}
 
 		public void Play_100Percent()
 		{
-			this.PlayUISound("SFX/UI_Misison_100Percent", 0.5f, 3);
+			this.PlayUISound("100Percent");
 		}
 
 		public void Play_200Percent()
 		{
-			this.PlayUISound("SFX/UI_Mission_200Percent", 0.5f, 3);
+			this.PlayUISound("200Percent");
 		}
 
 		public void Play_IncreasePercent()
 		{
-			this.PlayUISound("SFX/UI_Mission_IncreasePercent", 1f, 3);
+			this.PlayUISound("IncreasePercent");
 		}
 
 		public void Play_LootReady()
 		{
-			this.PlayUISound("SFX/UI_Mission_Loot_Ready", 0.3f, 3);
+			this.PlayUISound("LootReady");
 		}
 
 		public void Play_StartMission()
 		{
-			this.PlayUISound("SFX/UI_Mission_Start_V2", 0.6f, 3);
+			this.PlayUISound("StartMission");
 		}
 
 		public void Play_MissionFailure()
 		{
-			this.PlayUISound("SFX/UI_Mission_Fail", 0.5f, 3);
+			this.PlayUISound("MissionFailure");
 		}
 
 		public void Play_MissionSuccess()
 		{
-			this.PlayUISound("SFX/UI_Mission_Loot_Open_V2", 0.4f, 3);
+			this.PlayUISound("MissionSuccess");
 		}
 
 		public void Play_RecruitTroop()
 		{
-			this.PlayUISound("SFX/UI_Recruit_Troop", 0.7f, 3);
+			this.PlayUISound("RecruitTroop");
 		}
 
 		public void Play_TroopsReadyToast()
 		{
-			this.PlayUISound("SFX/UI_Mission_Troops_Ready_Toast", 0.6f, 1);
+			this.PlayUISound("TroopsReadyToast");
 		}
 
 		public void Play_CollectTroop()
 		{
-			this.PlayUISound("SFX/UI_Mobile_Collect_Troop", 0.7f, 3);
+			this.PlayUISound("CollectTroop");
 		}
 
 		public void Play_GreenCheck()
 		{
-			this.PlayUISound("SFX/UI_Mission_GreenCheck", 0.5f, 3);
+			this.PlayUISound("GreenCheck");
 		}
 
 		public void Play_SelectMission()
 		{
-			this.PlayUISound("SFX/UI_Mission_Select", 1f, 3);
+			this.PlayUISound("SelectMission");
 		}
 
 		public void Play_ActivateChampion()
 		{
-			this.PlayUISound("SFX/UI_Activate_Champion", 1f, 3);
+			this.PlayUISound("ActivateChampion");
 		}
 
 		public void Play_DeactivateChampion()
 		{
-			this.PlayUISound("SFX/UI_Deactivate_Champion", 1f, 3);
+			this.PlayUISound("DeactivateChampion");
 		}
 
 		public void Play_ShowGenericTooltip()
 		{
-			this.PlayUISound("SFX/UI_InfoWindow_Popup", 0.1f, 3);
+			this.PlayUISound("ShowGenericTooltip");
 		}
 
 		public void Play_BeginResearch()
 		{
-			this.PlayUISound("SFX/UI_OrderHall_Talent_BeginResearch", 0.7f, 3);
+			this.PlayUISound("BeginResearch");
 		}
 
 		public void Play_TalentReadyCheck()
 		{
-			this.PlayUISound("SFX/UI_OrderHall_Talent_Ready_Check", 1f, 3);
+			this.PlayUISound("TalentReadyCheck");
 		}
 
 		public void Play_TalentReadyToast()
 		{
-			this.PlayUISound("SFX/UI_OrderHall_Talent_Ready_Toast", 1f, 3);
+			this.PlayUISound("TalentReadyToast");
 		}
 
 		public void Play_SelectWorldQuest()
 		{
-			this.PlayUISound("SFX/UI_WorldQuest_Map_Select", 1f, 3);
+			this.PlayUISound("SelectWorldQuest");
 		}
 
 		public void Play_UpgradeEquipment()
 		{
-			this.PlayUISound("SFX/UI_Upgrade_Equipment_Slot", 0.7f, 3);
+			this.PlayUISound("UpgradeEquipment");
 		}
 
 		public void Play_UpgradeArmament()
 		{
-			this.PlayUISound("SFX/UI_Upgrade_Follower", 0.7f, 3);
+			this.PlayUISound("UpgradeArmament");
 		}
 
 		public void Play_PlayerLevelUp()
 		{
-			this.PlayUISound("SFX/LevelUp", 1f, 3);
+			this.PlayUISound("PlayerLevelUp");
 		}
 
 		public void Play_RedFailX()
 		{
-			this.PlayUISound("SFX/UI_Mission_Fail_Red_X", 0.1f, 3);
+			this.PlayUISound("RedFailX");
 		}
 
 		public void Play_ChampionLevelUp()
 		{
-			this.PlayUISound("SFX/UI_Upgrade_Follower", 0.7f, 3);
+			this.PlayUISound("ChampionLevelUp");
 		}
 
 		public void Play_CloseButton()
 		{
-			this.PlayUISound("SFX/uEscapeScreenClose", 1f, 3);
+			this.PlayUISound("CloseButton");
 		}
 
 		public void Play_ContributeSuccess()
 		{
-			this.PlayUISound("SFX/UI_72_Buildings_Contribute_Resources", 1f, 3);
+			this.PlayUISound("ContributeSuccess");
 		}
 
 		public void Play_GetItem()
 		{
-			this.PlayUISound("SFX/UI_72_Buildings_Get_Item", 1f, 3);
+			this.PlayUISound("GetItem");
 		}
 
 		public void Play_ArtifactClick()
 		{
-			this.PlayUISound("SFX/UI_72_ArtifactNote_Click", 1f, 3);
+			this.PlayUISound("ArtifactClick");
 		}
 
 		public void Play_RewardChestClick()
 		{
-			this.PlayUISound("SFX/UI_Mission_Loot_Chest_Click_01", 0.5f, 3);
+			this.PlayUISound("RewardChestClick");
 		}
 
 		public void Play_MapZoomOut()
 		{
-			this.PlayUISound("SFX/UI_Mission_Map_Zoom_Out_01", 0.5f, 3);
+			this.PlayUISound("MapZoomOut");
 		}
 
-		public AudioSource[] m_oneShotAudioSources;
+		public SoundConfig m_soundConfig;
 
-		public string[] m_oneShotAudioSourceNames;
+		public AudioSource[] m_oneShotAudioSources;
 
 		private const int maxSounds = 10;
 
 		private bool m_enableSFX = true;
+
+		private Dictionary<string, SoundConfig.AudioClipConfig> m_audioConfigs;
 	}
 }

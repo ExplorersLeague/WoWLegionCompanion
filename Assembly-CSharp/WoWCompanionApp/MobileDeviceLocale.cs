@@ -25,6 +25,12 @@ namespace WoWCompanionApp
 				"zh-TW"
 			};
 			Dictionary<string, CultureInfo> dictionary = CultureInfo.GetCultures(CultureTypes.AllCultures).ToDictionary((CultureInfo culture) => culture.Name, (CultureInfo culture) => culture);
+			if (dictionary.ContainsKey("es-ES"))
+			{
+				CultureInfo cultureInfo = dictionary["es-ES"];
+				cultureInfo.NumberFormat.NumberGroupSeparator = " ";
+				cultureInfo.NumberFormat.NumberDecimalSeparator = ",";
+			}
 			foreach (string text in list)
 			{
 				if (dictionary.ContainsKey(text))

@@ -22,14 +22,10 @@ namespace WoWCompanionApp
 
 		public void OnEnable()
 		{
-			Main instance = Main.instance;
-			instance.CreateShipmentResultAction = (Action<int>)Delegate.Combine(instance.CreateShipmentResultAction, new Action<int>(this.HandleRecruitResult));
-			Main instance2 = Main.instance;
-			instance2.FollowerDataChangedAction = (Action)Delegate.Combine(instance2.FollowerDataChangedAction, new Action(this.HandleFollowerDataChanged));
-			Main instance3 = Main.instance;
-			instance3.ShipmentTypesUpdatedAction = (Action)Delegate.Combine(instance3.ShipmentTypesUpdatedAction, new Action(this.InitList));
-			Main instance4 = Main.instance;
-			instance4.ShipmentItemPushedAction = (Action<int, WrapperShipmentItem>)Delegate.Combine(instance4.ShipmentItemPushedAction, new Action<int, WrapperShipmentItem>(this.HandleShipmentItemPushed));
+			Singleton<GarrisonWrapper>.Instance.CreateShipmentResultAction += this.HandleRecruitResult;
+			Singleton<GarrisonWrapper>.Instance.FollowerDataChangedAction += this.HandleFollowerDataChanged;
+			Singleton<GarrisonWrapper>.Instance.ShipmentTypesUpdatedAction += this.InitList;
+			Singleton<GarrisonWrapper>.Instance.ShipmentItemPushedAction += this.HandleShipmentItemPushed;
 			GamePanel gamePanel = this.m_gamePanel;
 			gamePanel.OrderHallNavButtonSelectedAction = (Action<OrderHallNavButton>)Delegate.Combine(gamePanel.OrderHallNavButtonSelectedAction, new Action<OrderHallNavButton>(this.HandleOrderHallNavButtonSelected));
 			this.InitList();
@@ -37,14 +33,10 @@ namespace WoWCompanionApp
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.CreateShipmentResultAction = (Action<int>)Delegate.Remove(instance.CreateShipmentResultAction, new Action<int>(this.HandleRecruitResult));
-			Main instance2 = Main.instance;
-			instance2.FollowerDataChangedAction = (Action)Delegate.Remove(instance2.FollowerDataChangedAction, new Action(this.HandleFollowerDataChanged));
-			Main instance3 = Main.instance;
-			instance3.ShipmentTypesUpdatedAction = (Action)Delegate.Remove(instance3.ShipmentTypesUpdatedAction, new Action(this.InitList));
-			Main instance4 = Main.instance;
-			instance4.ShipmentItemPushedAction = (Action<int, WrapperShipmentItem>)Delegate.Remove(instance4.ShipmentItemPushedAction, new Action<int, WrapperShipmentItem>(this.HandleShipmentItemPushed));
+			Singleton<GarrisonWrapper>.Instance.CreateShipmentResultAction -= this.HandleRecruitResult;
+			Singleton<GarrisonWrapper>.Instance.FollowerDataChangedAction -= this.HandleFollowerDataChanged;
+			Singleton<GarrisonWrapper>.Instance.ShipmentTypesUpdatedAction -= this.InitList;
+			Singleton<GarrisonWrapper>.Instance.ShipmentItemPushedAction -= this.HandleShipmentItemPushed;
 			GamePanel gamePanel = this.m_gamePanel;
 			gamePanel.OrderHallNavButtonSelectedAction = (Action<OrderHallNavButton>)Delegate.Remove(gamePanel.OrderHallNavButtonSelectedAction, new Action<OrderHallNavButton>(this.HandleOrderHallNavButtonSelected));
 		}

@@ -20,7 +20,7 @@ namespace WoWCompanionApp
 			TimeSpan t = GarrisonStatus.CurrentTime() - this.missionStartedTime;
 			TimeSpan timeSpan = this.missionDurationInSeconds - t;
 			timeSpan = ((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan);
-			this.missionTimeRemainingText.text = timeSpan.GetDurationString(false) + " <color=#ff0000ff>(In Progress)</color>";
+			this.missionTimeRemainingText.text = timeSpan.GetDurationString(false, TimeUnit.Second) + " <color=#ff0000ff>(In Progress)</color>";
 		}
 
 		public void OnTap()

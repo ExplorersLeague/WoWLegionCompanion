@@ -15,16 +15,13 @@ namespace WoWCompanionApp
 
 		private void OnEnable()
 		{
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(instance.GarrisonDataResetFinishedAction, new Action(this.HandleGarrisonDataResetFinished));
-			this.HandleEnteredWorld();
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction += this.HandleGarrisonDataResetFinished;
 			this.InitTalentTree();
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Remove(instance.GarrisonDataResetFinishedAction, new Action(this.HandleGarrisonDataResetFinished));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction -= this.HandleGarrisonDataResetFinished;
 		}
 
 		private void HandleGarrisonDataResetFinished()
@@ -95,82 +92,80 @@ namespace WoWCompanionApp
 			this.m_needsFullInit = true;
 		}
 
-		private void HandleEnteredWorld()
-		{
-			this.m_needsFullInit = true;
-		}
-
 		private void InitTalentTree()
 		{
-			this.m_needsFullInit = false;
-			if (GarrisonStatus.Faction() == PVP_FACTION.HORDE)
+			if (this.m_needsFullInit)
 			{
-				this.m_hordeBG.gameObject.SetActive(true);
-				this.m_allianceBG.gameObject.SetActive(false);
-			}
-			else if (GarrisonStatus.Faction() == PVP_FACTION.ALLIANCE)
-			{
-				this.m_hordeBG.gameObject.SetActive(false);
-				this.m_allianceBG.gameObject.SetActive(true);
-			}
-			TalentTreeItem[] componentsInChildren = this.m_talentTreeItemRoot.GetComponentsInChildren<TalentTreeItem>(true);
-			foreach (TalentTreeItem talentTreeItem in componentsInChildren)
-			{
-				talentTreeItem.transform.SetParent(null);
-				Object.Destroy(talentTreeItem.gameObject);
-			}
-			Image[] componentsInChildren2 = this.m_romanNumeralRoot.GetComponentsInChildren<Image>(true);
-			foreach (Image image in componentsInChildren2)
-			{
-				image.transform.SetParent(null);
-				Object.Destroy(image.gameObject);
-			}
-			this.m_talentTreeItems.Clear();
-			int lookupId = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? 153 : 152;
-			GarrTalentTreeRec recordFirstOrDefault = StaticDB.garrTalentTreeDB.GetRecordFirstOrDefault((GarrTalentTreeRec garrTalentTreeRec) => garrTalentTreeRec.ID == lookupId);
-			if (recordFirstOrDefault == null)
-			{
-				Debug.LogError("No GarrTalentTree record found for class " + GarrisonStatus.CharacterClassID());
-				return;
-			}
-			for (int k = 0; k < recordFirstOrDefault.MaxTiers; k++)
-			{
-				GameObject gameObject = Object.Instantiate<GameObject>(this.m_talentTreeItemPrefab);
-				gameObject.transform.SetParent(this.m_talentTreeItemRoot.transform, false);
-				TalentTreeItem component = gameObject.GetComponent<TalentTreeItem>();
-				this.m_talentTreeItems.Add(component);
-				switch (k)
+				this.m_needsFullInit = false;
+				if (GarrisonStatus.Faction() == PVP_FACTION.HORDE)
 				{
-				case 0:
-					component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-One");
-					break;
-				case 1:
-					component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Two");
-					break;
-				case 2:
-					component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Three");
-					break;
-				case 3:
-					component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Four");
-					break;
-				case 4:
-					component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Five");
-					break;
-				case 5:
-					component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Six");
-					break;
-				case 6:
-					component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Seven");
-					break;
-				case 7:
-					component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Eight");
-					break;
+					this.m_hordeBG.gameObject.SetActive(true);
+					this.m_allianceBG.gameObject.SetActive(false);
 				}
-			}
-			foreach (GarrTalentRec garrTalentRec in StaticDB.garrTalentDB.GetRecordsByParentID(recordFirstOrDefault.ID))
-			{
-				this.m_talentTreeItems[garrTalentRec.Tier].SetTalent(garrTalentRec);
-				LegionCompanionWrapper.RequestCanResearchGarrisonTalent(garrTalentRec.ID);
+				else if (GarrisonStatus.Faction() == PVP_FACTION.ALLIANCE)
+				{
+					this.m_hordeBG.gameObject.SetActive(false);
+					this.m_allianceBG.gameObject.SetActive(true);
+				}
+				TalentTreeItem[] componentsInChildren = this.m_talentTreeItemRoot.GetComponentsInChildren<TalentTreeItem>(true);
+				foreach (TalentTreeItem talentTreeItem in componentsInChildren)
+				{
+					talentTreeItem.transform.SetParent(null);
+					Object.Destroy(talentTreeItem.gameObject);
+				}
+				Image[] componentsInChildren2 = this.m_romanNumeralRoot.GetComponentsInChildren<Image>(true);
+				foreach (Image image in componentsInChildren2)
+				{
+					image.transform.SetParent(null);
+					Object.Destroy(image.gameObject);
+				}
+				this.m_talentTreeItems.Clear();
+				int lookupId = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? 153 : 152;
+				GarrTalentTreeRec recordFirstOrDefault = StaticDB.garrTalentTreeDB.GetRecordFirstOrDefault((GarrTalentTreeRec garrTalentTreeRec) => garrTalentTreeRec.ID == lookupId);
+				if (recordFirstOrDefault == null)
+				{
+					Debug.LogError("No GarrTalentTree record found for class " + GarrisonStatus.CharacterClassID());
+					return;
+				}
+				for (int k = 0; k < recordFirstOrDefault.MaxTiers; k++)
+				{
+					GameObject gameObject = Object.Instantiate<GameObject>(this.m_talentTreeItemPrefab);
+					gameObject.transform.SetParent(this.m_talentTreeItemRoot.transform, false);
+					TalentTreeItem component = gameObject.GetComponent<TalentTreeItem>();
+					this.m_talentTreeItems.Add(component);
+					switch (k)
+					{
+					case 0:
+						component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-One");
+						break;
+					case 1:
+						component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Two");
+						break;
+					case 2:
+						component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Three");
+						break;
+					case 3:
+						component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Four");
+						break;
+					case 4:
+						component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Five");
+						break;
+					case 5:
+						component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Six");
+						break;
+					case 6:
+						component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Seven");
+						break;
+					case 7:
+						component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Eight");
+						break;
+					}
+				}
+				foreach (GarrTalentRec garrTalentRec in StaticDB.garrTalentDB.GetRecordsByParentID(recordFirstOrDefault.ID))
+				{
+					this.m_talentTreeItems[garrTalentRec.Tier].SetTalent(garrTalentRec);
+					LegionCompanionWrapper.RequestCanResearchGarrisonTalent(garrTalentRec.ID);
+				}
 			}
 			foreach (TalentTreeItem talentTreeItem2 in this.m_talentTreeItems)
 			{

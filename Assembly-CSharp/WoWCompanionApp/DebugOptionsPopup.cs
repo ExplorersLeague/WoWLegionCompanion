@@ -31,14 +31,6 @@ namespace WoWCompanionApp
 			{
 				this.m_enableCheatCompleteMissionButton.isOn = this.m_cheatCompleteButton.activeSelf;
 			}
-			for (int i = 0; i < this.m_localeDropdown.options.Count; i++)
-			{
-				if (this.m_localeDropdown.options.ToArray()[i].text == Main.instance.GetLocale())
-				{
-					this.m_localeDropdown.value = i;
-					break;
-				}
-			}
 			Main.instance.m_backButtonManager.PushBackAction(BackActionType.hideAllPopups, null);
 		}
 
@@ -88,8 +80,6 @@ namespace WoWCompanionApp
 		public Toggle m_enableCheatCompleteMissionButton;
 
 		public GameObject m_cheatCompleteButton;
-
-		public Dropdown m_localeDropdown;
 
 		public GameObject m_testEffectArea;
 

@@ -66,7 +66,7 @@ namespace WoWCompanionApp
 				" for follower ",
 				this.m_garrFollowerID
 			}));
-			Main.instance.UseArmament(this.m_garrFollowerID, this.m_item.ItemID);
+			Singleton<GarrisonWrapper>.Instance.UseArmament(this.m_garrFollowerID, this.m_item.ItemID);
 			base.gameObject.SetActive(false);
 		}
 

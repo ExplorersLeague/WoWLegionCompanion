@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CFD57480-17C9-4923-A9CF-632CDB532EBB}</ProjectGuid>
+    <ProjectGuid>{37D039E8-B43B-4199-980A-3477CF4250CE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -89,19 +89,15 @@
     <Compile Include="bgs\BnetFeatureEvent.cs" />
     <Compile Include="bgs\BnetGameAccountId.cs" />
     <Compile Include="bgs\BnetNotification.cs" />
-    <Compile Include="bgs\BnetParty.cs" />
     <Compile Include="bgs\BnetPresenceField.cs" />
     <Compile Include="bgs\BnetProgramId.cs" />
     <Compile Include="bgs\BnetWhisper.cs" />
-    <Compile Include="bgs\BroadcastAPI.cs" />
     <Compile Include="bgs\ChallengeAPI.cs" />
-    <Compile Include="bgs\ChannelAPI.cs" />
     <Compile Include="bgs\ClientConnection.cs" />
     <Compile Include="bgs\ClientInterface.cs" />
     <Compile Include="bgs\Compute32.cs" />
     <Compile Include="bgs\ConnectHandler.cs" />
     <Compile Include="bgs\constants.cs" />
-    <Compile Include="bgs\ContentHandle.cs" />
     <Compile Include="bgs\DigitsArray.cs" />
     <Compile Include="bgs\DisconnectHandler.cs" />
     <Compile Include="bgs\DotNetUrlDownloader.cs" />
@@ -111,21 +107,13 @@
     <Compile Include="bgs\ExternalChallenge.cs" />
     <Compile Include="bgs\FileUtil.cs" />
     <Compile Include="bgs\FourCC.cs" />
-    <Compile Include="bgs\FriendsAPI.cs" />
     <Compile Include="bgs\GamesAPI.cs" />
     <Compile Include="bgs\HashPrimeNumbers.cs" />
-    <Compile Include="bgs\HTTPHeader.cs" />
     <Compile Include="bgs\IBattleNet.cs" />
     <Compile Include="bgs\IClientConnection.cs" />
     <Compile Include="bgs\IClientConnectionListener.cs" />
-    <Compile Include="bgs\InviteRemoveReason.cs" />
-    <Compile Include="bgs\InviteRequest.cs" />
-    <Compile Include="bgs\InviteRequestRemovedReason.cs" />
     <Compile Include="bgs\IUrlDownloader.cs" />
-    <Compile Include="bgs\LeaveReason.cs" />
     <Compile Include="bgs\Link.cs" />
-    <Compile Include="bgs\LocalStorageAPI.cs" />
-    <Compile Include="bgs\LocalStorageFileState.cs" />
     <Compile Include="bgs\Log.cs" />
     <Compile Include="bgs\LogAdapter.cs" />
     <Compile Include="bgs\Logger.cs" />
@@ -133,25 +121,9 @@
     <Compile Include="bgs\LogLevel.cs" />
     <Compile Include="bgs\LogThreadHelper.cs" />
     <Compile Include="bgs\Map.cs" />
-    <Compile Include="bgs\MemUtils.cs" />
     <Compile Include="bgs\MethodDescriptor.cs" />
-    <Compile Include="bgs\NotificationAPI.cs" />
-    <Compile Include="bgs\OnlineEventType.cs" />
-    <Compile Include="bgs\OnlinePlayer.cs" />
     <Compile Include="bgs\PacketFormat.cs" />
-    <Compile Include="bgs\PartyAPI.cs" />
-    <Compile Include="bgs\PartyError.cs" />
-    <Compile Include="bgs\PartyId.cs" />
-    <Compile Include="bgs\PartyInfo.cs" />
-    <Compile Include="bgs\PartyInvite.cs" />
-    <Compile Include="bgs\PartyMember.cs" />
-    <Compile Include="bgs\PartyType.cs" />
-    <Compile Include="bgs\PresenceAPI.cs" />
-    <Compile Include="bgs\PrivacyLevel.cs" />
-    <Compile Include="bgs\ProfanityAPI.cs" />
     <Compile Include="bgs\ProtocolHelper.cs" />
-    <Compile Include="bgs\ResourcesAPI.cs" />
-    <Compile Include="bgs\ResourcesAPIPendingState.cs" />
     <Compile Include="bgs\RPCConnection.cs" />
     <Compile Include="bgs\RPCConnectionMetering.cs" />
     <Compile Include="bgs\RPCContext.cs" />
@@ -194,25 +166,11 @@
     <Compile Include="bgs\Tokenizer.cs" />
     <Compile Include="bgs\types\ChallengeInfo.cs" />
     <Compile Include="bgs\types\EntityId.cs" />
-    <Compile Include="bgs\types\FriendsInfo.cs" />
-    <Compile Include="bgs\types\FriendsUpdate.cs" />
-    <Compile Include="bgs\types\GameServerInfo.cs" />
     <Compile Include="bgs\types\Lockouts.cs" />
-    <Compile Include="bgs\types\PartyEvent.cs" />
-    <Compile Include="bgs\types\PartyInfo.cs" />
-    <Compile Include="bgs\types\PartyListenerEvent.cs" />
-    <Compile Include="bgs\types\PartyListenerEventType.cs" />
-    <Compile Include="bgs\types\PartyMember.cs" />
-    <Compile Include="bgs\types\PresenceFieldKey.cs" />
-    <Compile Include="bgs\types\PresenceUpdate.cs" />
-    <Compile Include="bgs\types\QueueEvent.cs" />
     <Compile Include="bgs\types\QueueInfo.cs" />
-    <Compile Include="bgs\types\RichPresenceUpdate.cs" />
-    <Compile Include="bgs\types\WhisperInfo.cs" />
     <Compile Include="bgs\UriUtils.cs" />
     <Compile Include="bgs\UrlDownloadCompletedCallback.cs" />
     <Compile Include="bgs\UrlDownloaderConfig.cs" />
-    <Compile Include="bgs\WhisperAPI.cs" />
     <Compile Include="bgs\Wrapper\Impl\DefaultLogger.cs" />
     <Compile Include="Blizzard\WowAuthCrypto.cs" />
     <Compile Include="BLPushHandler.cs" />
@@ -551,7 +509,6 @@
     <Compile Include="Key.cs" />
     <Compile Include="KeyValue.cs" />
     <Compile Include="LegacyCanvasLevel.cs" />
-    <Compile Include="LegionfallBuffInputHandler.cs" />
     <Compile Include="LFGEyeball.cs" />
     <Compile Include="LoadingSpinner.cs" />
     <Compile Include="MainMap.cs" />
@@ -736,7 +693,6 @@
     <Compile Include="ProtobufUtil.cs" />
     <Compile Include="ProtocolBufferException.cs" />
     <Compile Include="ProtocolParser.cs" />
-    <Compile Include="RaycastTargetHack.cs" />
     <Compile Include="ResetScaleOnEnable.cs" />
     <Compile Include="RotateSample.cs" />
     <Compile Include="SampleInfo.cs" />
@@ -784,6 +740,7 @@
     <Compile Include="WoWCompanionApp\ArmamentDialog.cs" />
     <Compile Include="WoWCompanionApp\ArmamentPopup.cs" />
     <Compile Include="WoWCompanionApp\ArticleView.cs" />
+    <Compile Include="WoWCompanionApp\AssaultNotification.cs" />
     <Compile Include="WoWCompanionApp\AssetBundleManager.cs" />
     <Compile Include="WoWCompanionApp\BackButtonManager.cs" />
     <Compile Include="WoWCompanionApp\BaseDialog.cs" />
@@ -803,6 +760,7 @@
     <Compile Include="WoWCompanionApp\CombatAllyDialog.cs" />
     <Compile Include="WoWCompanionApp\CombatAllyListItem.cs" />
     <Compile Include="WoWCompanionApp\CombatAllyMissionPanel.cs" />
+    <Compile Include="WoWCompanionApp\CommunitiesChatContextMenu.cs" />
     <Compile Include="WoWCompanionApp\Community.cs" />
     <Compile Include="WoWCompanionApp\CommunityButton.cs" />
     <Compile Include="WoWCompanionApp\CommunityChannelButton.cs" />
@@ -845,6 +803,7 @@
     <Compile Include="WoWCompanionApp\EquipmentPopup.cs" />
     <Compile Include="WoWCompanionApp\ExceptionCatcher.cs" />
     <Compile Include="WoWCompanionApp\ExceptionPanel.cs" />
+    <Compile Include="WoWCompanionApp\FactionBasedVisibility.cs" />
     <Compile Include="WoWCompanionApp\FakeScrollbar.cs" />
     <Compile Include="WoWCompanionApp\FancyNumberDisplay.cs" />
     <Compile Include="WoWCompanionApp\FollowerDetailListFakeRandomTiling.cs" />
@@ -862,16 +821,16 @@
     <Compile Include="WoWCompanionApp\GamePanel.cs" />
     <Compile Include="WoWCompanionApp\GarrisonConfig.cs" />
     <Compile Include="WoWCompanionApp\GarrisonStatus.cs" />
+    <Compile Include="WoWCompanionApp\GarrisonWrapper.cs" />
     <Compile Include="WoWCompanionApp\GeneralHelpers.cs" />
     <Compile Include="WoWCompanionApp\GenericPopup.cs" />
     <Compile Include="WoWCompanionApp\HamburgerMenu.cs" />
+    <Compile Include="WoWCompanionApp\HoldPressTrigger.cs" />
     <Compile Include="WoWCompanionApp\InviteLinkDialog.cs" />
     <Compile Include="WoWCompanionApp\ItemStatCache.cs" />
     <Compile Include="WoWCompanionApp\LanguageDropdown.cs" />
-    <Compile Include="WoWCompanionApp\LegionfallBuildingPanel.cs" />
     <Compile Include="WoWCompanionApp\LegionfallButton.cs" />
     <Compile Include="WoWCompanionApp\LegionfallData.cs" />
-    <Compile Include="WoWCompanionApp\LegionfallDialog.cs" />
     <Compile Include="WoWCompanionApp\LevelUpToast.cs" />
     <Compile Include="WoWCompanionApp\LocalizedText.cs" />
     <Compile Include="WoWCompanionApp\LocalNotifications.cs" />
@@ -879,9 +838,11 @@
     <Compile Include="WoWCompanionApp\Login.cs" />
     <Compile Include="WoWCompanionApp\LoginButton.cs" />
     <Compile Include="WoWCompanionApp\LoginUI.cs" />
+    <Compile Include="WoWCompanionApp\LogoutConfirmation.cs" />
     <Compile Include="WoWCompanionApp\LogPanel.cs" />
     <Compile Include="WoWCompanionApp\Main.cs" />
     <Compile Include="WoWCompanionApp\MapInfo.cs" />
+    <Compile Include="WoWCompanionApp\MapSelectDropdown.cs" />
     <Compile Include="WoWCompanionApp\MechanicInfoPopup.cs" />
     <Compile Include="WoWCompanionApp\MemberSettingsPanel.cs" />
     <Compile Include="WoWCompanionApp\MeshGradient.cs" />
@@ -894,6 +855,7 @@
     <Compile Include="WoWCompanionApp\MissionEncounter.cs" />
     <Compile Include="WoWCompanionApp\MissionFollowerSlot.cs" />
     <Compile Include="WoWCompanionApp\MissionFollowerSlotGroup.cs" />
+    <Compile Include="WoWCompanionApp\MissionInfoDialog.cs" />
     <Compile Include="WoWCompanionApp\MissionListItem.cs" />
     <Compile Include="WoWCompanionApp\MissionListPanel.cs" />
     <Compile Include="WoWCompanionApp\MissionListView.cs" />
@@ -906,6 +868,7 @@
     <Compile Include="WoWCompanionApp\MissionStartedEffect.cs" />
     <Compile Include="WoWCompanionApp\MissionTreasureView.cs" />
     <Compile Include="WoWCompanionApp\MissionTypeDialog.cs" />
+    <Compile Include="WoWCompanionApp\MissionTypeIconLoader.cs" />
     <Compile Include="WoWCompanionApp\MobileDeviceLocale.cs" />
     <Compile Include="WoWCompanionApp\MyClientInterface.cs" />
     <Compile Include="WoWCompanionApp\NarrowWideScreenTexture.cs" />
@@ -944,6 +907,8 @@
     <Compile Include="WoWCompanionApp\RecentCharacterButton.cs" />
     <Compile Include="WoWCompanionApp\RecruitTroopsButton.cs" />
     <Compile Include="WoWCompanionApp\RedCloseButton.cs" />
+    <Compile Include="WoWCompanionApp\RegionConfirmation.cs" />
+    <Compile Include="WoWCompanionApp\ReportPlayerDialog.cs" />
     <Compile Include="WoWCompanionApp\ResourcesDisplay.cs" />
     <Compile Include="WoWCompanionApp\RewardInfoPopup.cs" />
     <Compile Include="WoWCompanionApp\RewardPanelSlider.cs" />
@@ -954,6 +919,7 @@
     <Compile Include="WoWCompanionApp\SliderPanel.cs" />
     <Compile Include="WoWCompanionApp\SocialNavButton.cs" />
     <Compile Include="WoWCompanionApp\SocialPanel.cs" />
+    <Compile Include="WoWCompanionApp\SoundConfig.cs" />
     <Compile Include="WoWCompanionApp\SpellDisplay.cs" />
     <Compile Include="WoWCompanionApp\StackableMapIcon.cs" />
     <Compile Include="WoWCompanionApp\StackableMapIconContainer.cs" />
@@ -967,6 +933,7 @@
     <Compile Include="WoWCompanionApp\TestFollowerExperiencePanel.cs" />
     <Compile Include="WoWCompanionApp\TextureAtlas.cs" />
     <Compile Include="WoWCompanionApp\TiledRandomTexture.cs" />
+    <Compile Include="WoWCompanionApp\TimeUnit.cs" />
     <Compile Include="WoWCompanionApp\TitlePanel.cs" />
     <Compile Include="WoWCompanionApp\TroopsListItem.cs" />
     <Compile Include="WoWCompanionApp\TroopSlot.cs" />
@@ -982,6 +949,7 @@
     <Compile Include="WoWCompanionApp\WorldQuestPanel.cs" />
     <Compile Include="WoWCompanionApp\WorldQuestTooltip.cs" />
     <Compile Include="WoWCompanionApp\WowTextParser.cs" />
+    <Compile Include="WoWCompanionApp\WrapperAreaPoiExtensions.cs" />
     <Compile Include="WoWCompanionApp\ZoneButton.cs" />
     <Compile Include="WoWCompanionApp\ZoneButtonMissionArea.cs" />
     <Compile Include="WoWCompanionApp\ZoneLabel.cs" />
@@ -1033,6 +1001,7 @@
     <Compile Include="WowStatConstants\GARR_TYPE.cs" />
     <Compile Include="WowStatConstants\INVENTORY_TYPE.cs" />
     <Compile Include="WowStatConstants\ITEM_BIND.cs" />
+    <Compile Include="WowStatConstants\ITEM_BONUS_OUTPUT_FLAGS.cs" />
     <Compile Include="WowStatConstants\ITEM_CLASS.cs" />
     <Compile Include="WowStatConstants\ITEM_QUALITY.cs" />
     <Compile Include="WowStatConstants\ITEM_STATIC_FLAGS.cs" />

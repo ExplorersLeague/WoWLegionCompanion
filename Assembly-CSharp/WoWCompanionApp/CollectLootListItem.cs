@@ -16,7 +16,7 @@ namespace WoWCompanionApp
 
 		public void CompleteAllMissions()
 		{
-			Main.instance.CompleteAllMissions();
+			Singleton<GarrisonWrapper>.Instance.CompleteAllMissions();
 		}
 
 		public Text completedMissionsText;

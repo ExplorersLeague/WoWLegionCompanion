@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,12 +14,18 @@ namespace WoWCompanionApp
 		{
 			AdventureMapPanel.instance = this;
 			this.MapFiltersChanged = (Action)Delegate.Combine(this.MapFiltersChanged, new Action(this.UpdateWorldQuests));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction += this.InitMissionSites;
+			Singleton<GarrisonWrapper>.Instance.MissionAddedAction += this.HandleMissionAdded;
+			Singleton<GarrisonWrapper>.Instance.BountyInfoUpdatedAction += this.HandleBountyInfoUpdated;
 		}
 
 		private void OnDisable()
 		{
 			AdventureMapPanel.instance = this;
 			this.MapFiltersChanged = (Action)Delegate.Remove(this.MapFiltersChanged, new Action(this.UpdateWorldQuests));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction -= this.InitMissionSites;
+			Singleton<GarrisonWrapper>.Instance.MissionAddedAction -= this.HandleMissionAdded;
+			Singleton<GarrisonWrapper>.Instance.BountyInfoUpdatedAction -= this.HandleBountyInfoUpdated;
 		}
 
 		public void DeselectAllFollowerListItems()
@@ -182,6 +189,16 @@ namespace WoWCompanionApp
 			{
 				this.m_missionResultsPanel.gameObject.SetActive(true);
 			}
+			foreach (MapInfo mapInfo in base.gameObject.GetComponentsInChildren<MapInfo>(true))
+			{
+				MapInfo.RegisterMapInfo(mapInfo);
+			}
+			this.SetStartingMapByFaction();
+			MapSelectDropdown componentInChildren = base.gameObject.GetComponentInChildren<MapSelectDropdown>();
+			if (componentInChildren != null)
+			{
+				componentInChildren.PopulateDropdown();
+			}
 		}
 
 		private void Start()
@@ -195,12 +212,6 @@ namespace WoWCompanionApp
 			this.InitMissionSites();
 			this.UpdateWorldQuests();
 			this.HandleBountyInfoUpdated();
-			Main main = Main.instance;
-			main.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(main.GarrisonDataResetFinishedAction, new Action(this.InitMissionSites));
-			Main main2 = Main.instance;
-			main2.MissionAddedAction = (Action<int, int>)Delegate.Combine(main2.MissionAddedAction, new Action<int, int>(this.HandleMissionAdded));
-			Main main3 = Main.instance;
-			main3.BountyInfoUpdatedAction = (Action)Delegate.Combine(main3.BountyInfoUpdatedAction, new Action(this.HandleBountyInfoUpdated));
 		}
 
 		private void HandleMissionAdded(int garrMissionID, int result)
@@ -305,8 +316,10 @@ namespace WoWCompanionApp
 
 		public void UpdateWorldQuests()
 		{
-			AdventureMapPanel.ClearWorldQuestArea(this.m_missionAndWorldQuestArea_KulTiras);
-			AdventureMapPanel.ClearWorldQuestArea(this.m_missionAndWorldQuestArea_Zandalar);
+			foreach (MapInfo mapInfo in MapInfo.GetAllMapInfos())
+			{
+				AdventureMapPanel.ClearWorldQuestArea(mapInfo.GetWorldQuestArea());
+			}
 			foreach (WrapperWorldQuest worldQuest in WorldQuestData.WorldQuestDictionary.Values)
 			{
 				if (worldQuest.StartLocationMapID != 1220 && worldQuest.StartLocationMapID != 1669)
@@ -499,55 +512,116 @@ namespace WoWCompanionApp
 							continue;
 						}
 					}
-					GameObject gameObject = Object.Instantiate<GameObject>(AdventureMapPanel.instance.m_AdvMapWorldQuestPrefab);
+					Dictionary<int, float> mapScaleTweaks = null;
+					Dictionary<int, Vector2> mapOffsetTweaks = null;
 					if (worldQuest.StartLocationMapID == 1642)
 					{
-						gameObject.transform.SetParent(this.m_missionAndWorldQuestArea_Zandalar.transform, false);
-						float num = 0.152715057f;
-						float num2 = 1250.88025f;
-						float num3 = 697.2115f;
-						if (worldQuest.WorldMapAreaID == 863)
+						mapScaleTweaks = new Dictionary<int, float>
 						{
-							num -= 0.02f;
-						}
-						else if (worldQuest.WorldMapAreaID == 864)
+							{
+								863,
+								-0.02f
+							}
+						};
+						mapOffsetTweaks = new Dictionary<int, Vector2>
 						{
-							num2 += 60f;
-							num3 -= 20f;
+							{
+								864,
+								new Vector2(60f, -20f)
+							}
+						};
+					}
+					GameObject gameObject = this.SetupWorldQuestObject(worldQuest, mapScaleTweaks, mapOffsetTweaks);
+					if (gameObject != null)
+					{
+						AdventureMapWorldQuest component = gameObject.GetComponent<AdventureMapWorldQuest>();
+						component.SetQuestID(worldQuest.QuestID);
+						StackableMapIcon component2 = gameObject.GetComponent<StackableMapIcon>();
+						if (component2 != null)
+						{
+							component2.RegisterWithManager(worldQuest.StartLocationMapID);
 						}
-						this.SetupWorldQuestIcon(worldQuest, gameObject, num2, num3, num);
-					}
-					else if (worldQuest.StartLocationMapID == 1643)
-					{
-						gameObject.transform.SetParent(this.m_missionAndWorldQuestArea_KulTiras.transform, false);
-						float mapScale = 0.152715057f;
-						float mapOffsetX = 1150.88025f;
-						float mapOffsetY = 497.2115f;
-						this.SetupWorldQuestIcon(worldQuest, gameObject, mapOffsetX, mapOffsetY, mapScale);
-					}
-					AdventureMapWorldQuest component = gameObject.GetComponent<AdventureMapWorldQuest>();
-					component.SetQuestID(worldQuest.QuestID);
-					StackableMapIcon component2 = gameObject.GetComponent<StackableMapIcon>();
-					if (component2 != null)
-					{
-						component2.RegisterWithManager(worldQuest.StartLocationMapID);
 					}
 				}
 			}
 			this.m_pinchZoomContentManager.ForceZoomFactorChanged();
 		}
 
+		public static AdventureMapPanel.eZone GetZoneForMapID(int mapID)
+		{
+			if (mapID == 0)
+			{
+				return AdventureMapPanel.eZone.ArathiHighlands;
+			}
+			if (mapID == 1)
+			{
+				return AdventureMapPanel.eZone.Darkshore;
+			}
+			if (mapID == 1642)
+			{
+				return AdventureMapPanel.eZone.Zandalar;
+			}
+			if (mapID != 1643)
+			{
+				return AdventureMapPanel.eZone.None;
+			}
+			return AdventureMapPanel.eZone.Kultiras;
+		}
+
+		private GameObject SetupWorldQuestObject(WrapperWorldQuest worldQuest, Dictionary<int, float> mapScaleTweaks = null, Dictionary<int, Vector2> mapOffsetTweaks = null)
+		{
+			AdventureMapPanel.eZone zoneForMapID = AdventureMapPanel.GetZoneForMapID(worldQuest.StartLocationMapID);
+			if (zoneForMapID == AdventureMapPanel.eZone.None)
+			{
+				Debug.LogError(string.Concat(new object[]
+				{
+					"Unknown start zone ID ",
+					worldQuest.StartLocationMapID,
+					" for world quest ",
+					worldQuest.QuestID
+				}));
+				return null;
+			}
+			MapInfo mapInfo = MapInfo.GetMapInfo(zoneForMapID);
+			if (mapInfo == null)
+			{
+				Debug.LogError("No map info present for world quest " + worldQuest.QuestID);
+				return null;
+			}
+			GameObject worldQuestArea = mapInfo.GetWorldQuestArea();
+			if (worldQuestArea == null)
+			{
+				Debug.LogError("No world quest area object on map for world quest " + worldQuest.QuestID);
+				return null;
+			}
+			float num = mapInfo.m_worldQuestOffset.x;
+			float num2 = mapInfo.m_worldQuestOffset.y;
+			float num3 = mapInfo.m_worldQuestScale;
+			if (mapScaleTweaks != null && mapScaleTweaks.ContainsKey(worldQuest.WorldMapAreaID))
+			{
+				num3 += mapScaleTweaks[worldQuest.WorldMapAreaID];
+			}
+			if (mapOffsetTweaks != null && mapOffsetTweaks.ContainsKey(worldQuest.WorldMapAreaID))
+			{
+				num += mapOffsetTweaks[worldQuest.WorldMapAreaID].x;
+				num2 += mapOffsetTweaks[worldQuest.WorldMapAreaID].y;
+			}
+			GameObject gameObject = Object.Instantiate<GameObject>(this.m_AdvMapWorldQuestPrefab);
+			gameObject.transform.SetParent(worldQuestArea.transform, false);
+			this.SetupWorldQuestIcon(worldQuest, gameObject, num, num2, num3);
+			return gameObject;
+		}
+
 		private static int GetImageWByMapID(int startLocationMapId)
 		{
-			if (startLocationMapId == 1642)
-			{
-				return 1985;
-			}
-			if (startLocationMapId != 1643)
-			{
-				return 0;
-			}
-			return 1985;
+			MapInfo mapInfo = MapInfo.GetMapInfo(AdventureMapPanel.GetZoneForMapID(startLocationMapId));
+			return (!(mapInfo != null)) ? 0 : ((int)mapInfo.m_mapW);
+		}
+
+		private static int GetImageHByMapID(int startLocationMapId)
+		{
+			MapInfo mapInfo = MapInfo.GetMapInfo(AdventureMapPanel.GetZoneForMapID(startLocationMapId));
+			return (!(mapInfo != null)) ? 0 : ((int)mapInfo.m_mapH);
 		}
 
 		private void SetupWorldQuestIcon(WrapperWorldQuest worldQuest, GameObject worldQuestObj, float mapOffsetX, float mapOffsetY, float mapScale)
@@ -557,7 +631,7 @@ namespace WoWCompanionApp
 			num += mapOffsetX;
 			num2 += mapOffsetY;
 			float num3 = (float)AdventureMapPanel.GetImageWByMapID(worldQuest.StartLocationMapID);
-			float num4 = 1334f;
+			float num4 = (float)AdventureMapPanel.GetImageHByMapID(worldQuest.StartLocationMapID);
 			Vector2 vector = new Vector3(num / num3, num2 / num4);
 			RectTransform component = worldQuestObj.GetComponent<RectTransform>();
 			component.anchorMin = vector;
@@ -605,7 +679,7 @@ namespace WoWCompanionApp
 
 		public void ShowWorldMap(bool show)
 		{
-			this.m_mainMapInfo.gameObject.SetActive(show);
+			this.m_activeMapInfo.gameObject.SetActive(show);
 		}
 
 		public void CenterAndZoom(Vector2 tapPos, ZoneButton zoneButton, bool zoomIn)
@@ -637,6 +711,10 @@ namespace WoWCompanionApp
 				if (this.m_pinchZoomContentManager.m_zoomFactor < 1.001f)
 				{
 					Main.instance.m_UISound.Play_MapZoomIn();
+					if (this.OnZoomInMap != null)
+					{
+						this.OnZoomInMap();
+					}
 				}
 				Vector2 vector3 = tapPos - vector2;
 				vector3 *= componentInChildren.m_maxZoomFactor / this.m_pinchZoomContentManager.m_zoomFactor;
@@ -750,7 +828,9 @@ namespace WoWCompanionApp
 				return;
 			}
 			this.m_emissaryCollection.ClearCollection();
-			foreach (WrapperWorldQuestBounty bounty in PersistentBountyData.bountyDictionary.Values)
+			foreach (WrapperWorldQuestBounty bounty in from bt in PersistentBountyData.bountyDictionary.Values
+			orderby bt.EndTime
+			select bt)
 			{
 				QuestV2Rec record = StaticDB.questDB.GetRecord(bounty.QuestID);
 				int num = (record == null) ? 0 : record.QuestSortID;
@@ -799,46 +879,14 @@ namespace WoWCompanionApp
 
 		private void SetActiveMapViewSize()
 		{
-			if (this.m_zoneID == AdventureMapPanel.eZone.Kultiras)
+			MapInfo mapInfo = MapInfo.GetMapInfo(this.m_zoneID);
+			if (mapInfo != null)
 			{
-				this.SetMapViewSize_KulTiras();
+				this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, mapInfo.m_sizeDeltaY);
+				this.m_mapViewRT.anchoredPosition = mapInfo.m_anchoredPos;
+				this.m_pinchZoomContentManager.SetZoom(1f, false);
+				this.CenterAndZoomOut();
 			}
-			else if (this.m_zoneID == AdventureMapPanel.eZone.Zandalar)
-			{
-				this.SetMapViewSize_Zandalar();
-			}
-		}
-
-		private void SetMapViewSize_BrokenIsles()
-		{
-			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 720f);
-			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 0f);
-			this.m_pinchZoomContentManager.SetZoom(1f, false);
-			this.CenterAndZoomOut();
-		}
-
-		private void SetMapViewSize_KulTiras()
-		{
-			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 660f);
-			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 110f);
-			this.m_pinchZoomContentManager.SetZoom(1f, false);
-			this.CenterAndZoomOut();
-		}
-
-		private void SetMapViewSize_Zandalar()
-		{
-			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 660f);
-			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 110f);
-			this.m_pinchZoomContentManager.SetZoom(1f, false);
-			this.CenterAndZoomOut();
-		}
-
-		private void SetMapViewSize_Argus()
-		{
-			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 720f);
-			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 100f);
-			this.m_pinchZoomContentManager.SetZoom(1f, false);
-			this.CenterAndZoomOut();
 		}
 
 		public void CenterMapInstantly()
@@ -868,31 +916,27 @@ namespace WoWCompanionApp
 			this.SetMapByActiveZoneID();
 		}
 
-		public void SwapMaps()
+		public void SetMap(AdventureMapPanel.eZone zone)
 		{
-			this.m_zoneID = ((this.m_zoneID != AdventureMapPanel.eZone.Zandalar) ? AdventureMapPanel.eZone.Zandalar : AdventureMapPanel.eZone.Kultiras);
+			this.m_zoneID = zone;
 			this.SetMapByActiveZoneID();
 		}
 
 		private void SetMapByActiveZoneID()
 		{
-			if (this.m_zoneID == AdventureMapPanel.eZone.Zandalar)
+			foreach (MapInfo mapInfo in MapInfo.GetAllMapInfos())
 			{
-				this.m_mapInfo_Zandalar.gameObject.SetActive(true);
-				this.m_mapInfo_KulTiras.gameObject.SetActive(false);
-				this.m_selectedMapImage.sprite = this.m_zandalarNavButtonImage;
-				this.m_notSelectedMapImage.sprite = this.m_zandalarNavButtonImage;
+				bool flag = this.m_zoneID == mapInfo.m_zone;
+				if (flag)
+				{
+					this.m_selectedMapImage.sprite = mapInfo.m_navButtonSprite;
+					this.m_notSelectedMapImage.sprite = mapInfo.m_navButtonSprite;
+					string zoneNameCapsKey = mapInfo.m_zoneNameCapsKey;
+					this.m_zoneLabelText.text = StaticDB.GetString(zoneNameCapsKey, "[PH] " + zoneNameCapsKey);
+					this.m_activeMapInfo = mapInfo;
+				}
+				mapInfo.gameObject.SetActive(flag);
 			}
-			if (this.m_zoneID == AdventureMapPanel.eZone.Kultiras)
-			{
-				this.m_mapInfo_Zandalar.gameObject.SetActive(false);
-				this.m_mapInfo_KulTiras.gameObject.SetActive(true);
-				this.m_selectedMapImage.sprite = this.m_kultirasNavButtonImage;
-				this.m_notSelectedMapImage.sprite = this.m_kultirasNavButtonImage;
-			}
-			string text = (this.m_zoneID != AdventureMapPanel.eZone.Zandalar) ? "KUL_TIRAS_CAPS" : "ZANDALAR_CAPS";
-			string str = text;
-			this.m_zoneLabelText.text = StaticDB.GetString(text, "[PH] " + str);
 			this.SetActiveMapViewSize();
 		}
 
@@ -916,21 +960,13 @@ namespace WoWCompanionApp
 
 		public RectTransform m_mapViewContentsRT;
 
-		public MapInfo m_mainMapInfo;
+		public MapInfo m_activeMapInfo;
 
 		public GameObject m_AdvMapMissionSitePrefab;
 
 		public GameObject m_AdvMapWorldQuestPrefab;
 
 		public GameObject m_bountySitePrefab;
-
-		public MapInfo m_mapInfo_KulTiras;
-
-		public MapInfo m_mapInfo_Zandalar;
-
-		public GameObject m_missionAndWorldQuestArea_KulTiras;
-
-		public GameObject m_missionAndWorldQuestArea_Zandalar;
 
 		public EmissaryCollection m_emissaryCollection;
 
@@ -956,10 +992,6 @@ namespace WoWCompanionApp
 
 		public Image m_notSelectedMapImage;
 
-		public Sprite m_kultirasNavButtonImage;
-
-		public Sprite m_zandalarNavButtonImage;
-
 		private int m_currentMapMission;
 
 		public Action<int> MissionSelectedFromMapAction;
@@ -975,6 +1007,8 @@ namespace WoWCompanionApp
 		public Action<int> WorldQuestChangedAction;
 
 		public Action OnZoomOutMap;
+
+		public Action OnZoomInMap;
 
 		public Action<int> OnAddMissionLootToRewardPanel;
 
@@ -1031,6 +1065,8 @@ namespace WoWCompanionApp
 			Nazmir,
 			Zandalar,
 			Kultiras,
+			Darkshore,
+			ArathiHighlands,
 			None,
 			NumZones
 		}

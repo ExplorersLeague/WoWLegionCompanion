@@ -85,7 +85,7 @@ namespace WoWCompanionApp
 				flag2 = true;
 			}
 			TimeSpan timeSpan = TimeSpan.FromSeconds((double)((!abilityButton.CanRespec() && !flag && !flag2) ? this.m_garrTalentRec.ResearchDurationSecs : this.m_garrTalentRec.RespecDurationSecs));
-			this.m_researchDurationText.text = timeSpan.GetDurationString(false);
+			this.m_researchDurationText.text = timeSpan.GetDurationString(false, TimeUnit.Second);
 			this.m_yourResourcesDisplayObj.SetActive(false);
 			if (abilityButton.CanResearch() || abilityButton.CanRespec())
 			{
@@ -112,7 +112,7 @@ namespace WoWCompanionApp
 						"<color=#FFC600FF>",
 						StaticDB.GetString("TIME_LEFT", null),
 						"</color> <color=#ffffffff>",
-						timeSpan2.GetDurationString(false),
+						timeSpan2.GetDurationString(false, TimeUnit.Second),
 						"</color>"
 					});
 				}

@@ -98,7 +98,7 @@ namespace WoWCompanionApp
 				if (!this.GetRequestedMissionCollectionDictionary().ContainsKey(componentsInChildren[i].garrMissionID) && PersistentMissionData.missionDictionary.ContainsKey(componentsInChildren[i].garrMissionID) && wrapperGarrisonMission.MissionState == 2)
 				{
 					this.GetRequestedMissionCollectionDictionary().Add(componentsInChildren[i].garrMissionID, true);
-					Main.instance.ClaimMissionBonus(componentsInChildren[i].garrMissionID);
+					Singleton<GarrisonWrapper>.Instance.ClaimMissionBonus(componentsInChildren[i].garrMissionID);
 					break;
 				}
 			}
@@ -106,7 +106,7 @@ namespace WoWCompanionApp
 
 		public void CompleteAllMissions()
 		{
-			Main.instance.CompleteAllMissions();
+			Singleton<GarrisonWrapper>.Instance.CompleteAllMissions();
 			this.missionReportView.SetActive(false);
 			this.missionResultsView.SetActive(true);
 			this.PopulateCompletedMissionList();
@@ -160,7 +160,7 @@ namespace WoWCompanionApp
 		public void ShowMissionListAndRefreshData()
 		{
 			Debug.Log("Request Data Refresh");
-			Main.instance.MobileRequestData();
+			Singleton<GarrisonWrapper>.Instance.MobileRequestData();
 			Main.instance.allPanels.ShowAdventureMap();
 		}
 

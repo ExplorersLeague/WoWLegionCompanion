@@ -122,8 +122,6 @@ namespace WoWCompanionApp
 				this.m_hordeBanner.SetActive(false);
 				this.m_allianceBanner.SetActive(true);
 			}
-			Main instance = Main.instance;
-			instance.ShipmentAddedAction = (Action<int, ulong>)Delegate.Combine(instance.ShipmentAddedAction, new Action<int, ulong>(this.HandleShipmentAdded));
 			this.m_troopResourceCostText.font = GeneralHelpers.LoadStandardFont();
 			this.m_itemResourceCostText.font = GeneralHelpers.LoadStandardFont();
 			this.m_recruitButtonText.font = GeneralHelpers.LoadStandardFont();
@@ -138,12 +136,12 @@ namespace WoWCompanionApp
 		private void OnEnable()
 		{
 			this.HandleFollowerDataChanged();
+			Singleton<GarrisonWrapper>.Instance.ShipmentAddedAction += this.HandleShipmentAdded;
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.ShipmentAddedAction = (Action<int, ulong>)Delegate.Remove(instance.ShipmentAddedAction, new Action<int, ulong>(this.HandleShipmentAdded));
+			Singleton<GarrisonWrapper>.Instance.ShipmentAddedAction -= this.HandleShipmentAdded;
 		}
 
 		public void SetCharShipment(WrapperShipmentType? shipmentType, bool isSealOfFateHack = false, CharShipmentRec sealOfFateHackCharShipmentRec = null)

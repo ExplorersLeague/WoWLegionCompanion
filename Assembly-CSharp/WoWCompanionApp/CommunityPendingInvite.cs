@@ -7,34 +7,16 @@ namespace WoWCompanionApp
 		public CommunityPendingInvite(ClubSelfInvitationInfo inviteInfo)
 		{
 			this.m_clubId = inviteInfo.club.clubId;
-			this.m_clubName = inviteInfo.club.name;
-			this.m_clubDescription = inviteInfo.club.description;
-			this.m_inviter = inviteInfo.inviter.name;
+			this.CommunityName = inviteInfo.club.name;
+			this.CommunityDescription = inviteInfo.club.description;
+			this.Inviter = inviteInfo.inviter.name;
 		}
 
-		public string CommunityName
-		{
-			get
-			{
-				return this.m_clubName;
-			}
-		}
+		public string CommunityName { get; private set; }
 
-		public string CommunityDescription
-		{
-			get
-			{
-				return this.m_clubDescription;
-			}
-		}
+		public string CommunityDescription { get; private set; }
 
-		public string Inviter
-		{
-			get
-			{
-				return this.m_inviter;
-			}
-		}
+		public string Inviter { get; private set; }
 
 		public void AcceptInvite()
 		{
@@ -47,11 +29,5 @@ namespace WoWCompanionApp
 		}
 
 		private ulong m_clubId;
-
-		private string m_clubName;
-
-		private string m_clubDescription;
-
-		private string m_inviter;
 	}
 }

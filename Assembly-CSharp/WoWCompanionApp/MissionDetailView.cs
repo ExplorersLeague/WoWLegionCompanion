@@ -30,6 +30,7 @@ namespace WoWCompanionApp
 			Material material = new Material(this.m_grayscaleShader);
 			this.m_startMissionButton.material = material;
 			this.m_startMissionButton.material.SetFloat("_GrayscaleAmount", 0f);
+			UiAnimMgr.instance.PlayAnim("ItemReadyToUseGlowLoop", this.m_missionTypePulseRoot.transform, Vector3.zero, 0.6f, 0f);
 		}
 
 		private void Start()
@@ -67,6 +68,7 @@ namespace WoWCompanionApp
 
 		private void OnEnable()
 		{
+			PersistentFollowerData.ClearPreMissionFollowerData();
 			if (!this.m_isCombatAlly)
 			{
 				if (this.m_usedForMissionList)
@@ -81,8 +83,7 @@ namespace WoWCompanionApp
 				}
 				if (Main.instance != null)
 				{
-					Main instance3 = Main.instance;
-					instance3.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Combine(instance3.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
+					Singleton<GarrisonWrapper>.Instance.MissionSuccessChanceChangedAction += this.OnMissionSuccessChanceChanged;
 				}
 			}
 			Main.instance.m_backButtonManager.PushBackAction(BackActionType.hideMissionDialog, null);
@@ -104,8 +105,7 @@ namespace WoWCompanionApp
 				}
 				if (Main.instance != null)
 				{
-					Main instance3 = Main.instance;
-					instance3.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Remove(instance3.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
+					Singleton<GarrisonWrapper>.Instance.MissionSuccessChanceChangedAction -= this.OnMissionSuccessChanceChanged;
 				}
 			}
 			Main.instance.m_backButtonManager.PopBackAction();
@@ -323,40 +323,24 @@ namespace WoWCompanionApp
 					this.m_previewMissionTypeImage.overrideSprite = TextureAtlas.instance.GetAtlasSprite((int)record3.UiTextureAtlasMemberID);
 				}
 			}
-			if (this.missionEnvironmentMechanic != null)
-			{
-				this.missionEnvironmentMechanic.SetMechanicType((int)record.EnvGarrMechanicTypeID, 0, true);
-				if (record.EnvGarrMechanicTypeID != 0u)
-				{
-					GarrMechanicRec record4 = StaticDB.garrMechanicDB.GetRecord((int)record.EnvGarrMechanicTypeID);
-					if (record4 != null && record4.GarrAbilityID != 0)
-					{
-						GameObject gameObject3 = Object.Instantiate<GameObject>(this.m_previewMechanicEffectPrefab);
-						gameObject3.transform.SetParent(this.m_previewMechanicsGroup.transform, false);
-						AbilityDisplay component3 = gameObject3.GetComponent<AbilityDisplay>();
-						component3.SetAbility(record4.GarrAbilityID, false, false, null);
-						FollowerCanCounterMechanic canCounterStatus2 = GeneralHelpers.HasFollowerWhoCanCounter((int)record4.GarrMechanicTypeID);
-						component3.SetCanCounterStatus(canCounterStatus2);
-					}
-				}
-			}
 			this.missionTypeText.gameObject.SetActive(false);
 			if (this.missionTypeText != null)
 			{
-				GarrMechanicRec record5 = StaticDB.garrMechanicDB.GetRecord(record.EnvGarrMechanicID);
-				if (record5 != null)
+				GarrMechanicRec record4 = StaticDB.garrMechanicDB.GetRecord(record.EnvGarrMechanicID);
+				if (record4 != null)
 				{
-					GarrAbilityRec record6 = StaticDB.garrAbilityDB.GetRecord(record5.GarrAbilityID);
-					if (record6 != null)
+					GarrAbilityRec record5 = StaticDB.garrAbilityDB.GetRecord(record4.GarrAbilityID);
+					if (record5 != null)
 					{
 						this.missionTypeText.gameObject.SetActive(true);
-						this.m_missionTypeIcon.sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record6.IconFileDataID);
+						this.m_missionTypePulseRoot.gameObject.SetActive(record.EnvGarrMechanicID == 139);
+						this.m_missionTypeIcon.sprite = Singleton<MissionTypeIconLoader>.Instance.GetMissionTypeIconByMissionID(garrMissionID);
 						this.missionTypeText.text = string.Concat(new string[]
 						{
 							"<color=#ffff00ff>",
 							MissionDetailView.m_typeText,
 							": </color><color=#ffffffff>",
-							record6.Name,
+							record5.Name,
 							"</color>"
 						});
 					}
@@ -372,21 +356,21 @@ namespace WoWCompanionApp
 				int num2 = 0;
 				while ((long)num2 < (long)((ulong)record.MaxFollowers))
 				{
-					GameObject gameObject4 = Object.Instantiate<GameObject>(this.missionFollowerSlotPrefab);
-					gameObject4.transform.SetParent(this.missionFollowerSlotGroup.transform, false);
-					MissionFollowerSlot component4 = gameObject4.GetComponent<MissionFollowerSlot>();
-					component4.m_missionDetailView = this;
-					component4.m_enemyPortraitsGroup = this.enemyPortraitsGroup;
+					GameObject gameObject3 = Object.Instantiate<GameObject>(this.missionFollowerSlotPrefab);
+					gameObject3.transform.SetParent(this.missionFollowerSlotGroup.transform, false);
+					MissionFollowerSlot component3 = gameObject3.GetComponent<MissionFollowerSlot>();
+					component3.m_missionDetailView = this;
+					component3.m_enemyPortraitsGroup = this.enemyPortraitsGroup;
 					num2++;
 				}
 			}
 			if (!this.m_isCombatAlly && record.UiTextureKitID > 0u)
 			{
-				UiTextureKitRec record7 = StaticDB.uiTextureKitDB.GetRecord((int)record.UiTextureKitID);
+				UiTextureKitRec record6 = StaticDB.uiTextureKitDB.GetRecord((int)record.UiTextureKitID);
 				this.m_scrollingEnvironment_Back.enabled = false;
 				this.m_scrollingEnvironment_Mid.enabled = false;
 				this.m_scrollingEnvironment_Fore.enabled = false;
-				int uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("_" + record7.KitPrefix + "-Back");
+				int uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("_" + record6.KitPrefix + "-Back");
 				if (uitextureAtlasMemberID > 0)
 				{
 					Sprite atlasSprite = TextureAtlas.instance.GetAtlasSprite(uitextureAtlasMemberID);
@@ -400,7 +384,7 @@ namespace WoWCompanionApp
 						Debug.Log("Missing expected Back sprite from UiTextureKitID: [" + record.UiTextureKitID.ToString() + "]");
 					}
 				}
-				int uitextureAtlasMemberID2 = TextureAtlas.GetUITextureAtlasMemberID("_" + record7.KitPrefix + "-Mid");
+				int uitextureAtlasMemberID2 = TextureAtlas.GetUITextureAtlasMemberID("_" + record6.KitPrefix + "-Mid");
 				if (uitextureAtlasMemberID2 > 0)
 				{
 					Sprite atlasSprite2 = TextureAtlas.instance.GetAtlasSprite(uitextureAtlasMemberID2);
@@ -414,7 +398,7 @@ namespace WoWCompanionApp
 						Debug.Log("Missing expected Mid sprite from UiTextureKitID: [" + record.UiTextureKitID.ToString() + "]");
 					}
 				}
-				int uitextureAtlasMemberID3 = TextureAtlas.GetUITextureAtlasMemberID("_" + record7.KitPrefix + "-Fore");
+				int uitextureAtlasMemberID3 = TextureAtlas.GetUITextureAtlasMemberID("_" + record6.KitPrefix + "-Fore");
 				if (uitextureAtlasMemberID3 > 0)
 				{
 					Sprite atlasSprite3 = TextureAtlas.instance.GetAtlasSprite(uitextureAtlasMemberID3);
@@ -519,15 +503,58 @@ namespace WoWCompanionApp
 							componentsInChildren2[j].SetCountered(isCountered, true);
 						}
 					}
-				}
-				MissionFollowerSlot[] componentsInChildren4 = base.gameObject.GetComponentsInChildren<MissionFollowerSlot>(true);
-				List<WrapperGarrisonFollower> list = new List<WrapperGarrisonFollower>();
-				for (int l = 0; l < componentsInChildren4.Length; l++)
-				{
-					int currentGarrFollowerID = componentsInChildren4[l].GetCurrentGarrFollowerID();
-					if (PersistentFollowerData.followerDictionary.ContainsKey(currentGarrFollowerID))
+					if (record.EnvGarrMechanicID == 139)
 					{
-						WrapperGarrisonFollower item = PersistentFollowerData.followerDictionary[currentGarrFollowerID];
+						bool flag = false;
+						MissionFollowerSlot[] componentsInChildren4 = base.gameObject.GetComponentsInChildren<MissionFollowerSlot>();
+						foreach (MissionFollowerSlot missionFollowerSlot in componentsInChildren4)
+						{
+							if (missionFollowerSlot.CountersStealth())
+							{
+								if (!this.m_missionTypeCounteredObject.activeSelf && this.missionTypeText.gameObject.activeSelf)
+								{
+									UiAnimMgr.instance.PlayAnim("RedFailX", this.m_missionTypeCounteredObject.transform, Vector3.zero, 0.8f, 0f);
+								}
+								flag = true;
+							}
+						}
+						this.m_missionTypeCounteredObject.SetActive(flag);
+						this.m_missionTypePulseRoot.SetActive(!flag);
+						if (!flag)
+						{
+							float alpha = 0.6f;
+							Color color = Color.white;
+							bool flag2 = false;
+							MissionFollowerSlot[] componentsInChildren5 = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+							foreach (MissionFollowerSlot missionFollowerSlot2 in componentsInChildren5)
+							{
+								int currentGarrFollowerID = missionFollowerSlot2.GetCurrentGarrFollowerID();
+								if (currentGarrFollowerID != 0)
+								{
+									if (PersistentFollowerData.followerDictionary.ContainsKey(currentGarrFollowerID) && (PersistentFollowerData.followerDictionary[currentGarrFollowerID].Flags & 8) != 0)
+									{
+										flag2 = true;
+									}
+								}
+							}
+							if (flag2)
+							{
+								alpha = 1f;
+								color = Color.red;
+							}
+							this.m_missionTypePulseRoot.GetComponentInChildren<Image>().color = color;
+							this.m_missionTypePulseRoot.GetComponentInChildren<CanvasGroup>().alpha = alpha;
+						}
+					}
+				}
+				MissionFollowerSlot[] componentsInChildren6 = base.gameObject.GetComponentsInChildren<MissionFollowerSlot>(true);
+				List<WrapperGarrisonFollower> list = new List<WrapperGarrisonFollower>();
+				for (int n = 0; n < componentsInChildren6.Length; n++)
+				{
+					int currentGarrFollowerID2 = componentsInChildren6[n].GetCurrentGarrFollowerID();
+					if (PersistentFollowerData.followerDictionary.ContainsKey(currentGarrFollowerID2))
+					{
+						WrapperGarrisonFollower item = PersistentFollowerData.followerDictionary[currentGarrFollowerID2];
 						list.Add(item);
 					}
 				}
@@ -540,48 +567,48 @@ namespace WoWCompanionApp
 				}
 				if (this.m_partyBuffGroup != null)
 				{
-					AbilityDisplay[] componentsInChildren5 = this.m_partyBuffGroup.GetComponentsInChildren<AbilityDisplay>(true);
-					foreach (AbilityDisplay abilityDisplay in componentsInChildren5)
+					AbilityDisplay[] componentsInChildren7 = this.m_partyBuffGroup.GetComponentsInChildren<AbilityDisplay>(true);
+					foreach (AbilityDisplay abilityDisplay in componentsInChildren7)
 					{
 						Object.Destroy(abilityDisplay.gameObject);
 					}
 				}
 				if (this.m_partyDebuffGroup != null)
 				{
-					AbilityDisplay[] componentsInChildren6 = this.m_partyDebuffGroup.GetComponentsInChildren<AbilityDisplay>(true);
-					foreach (AbilityDisplay abilityDisplay2 in componentsInChildren6)
+					AbilityDisplay[] componentsInChildren8 = this.m_partyDebuffGroup.GetComponentsInChildren<AbilityDisplay>(true);
+					foreach (AbilityDisplay abilityDisplay2 in componentsInChildren8)
 					{
 						Object.Destroy(abilityDisplay2.gameObject);
 					}
 				}
 				int adjustedMissionDuration = GeneralHelpers.GetAdjustedMissionDuration(record, list, this.enemyPortraitsGroup);
 				List<int> list2 = new List<int>();
-				int num2 = 0;
-				int num3 = 0;
 				int num4 = 0;
-				MissionFollowerSlot[] componentsInChildren7 = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
-				foreach (MissionFollowerSlot missionFollowerSlot in componentsInChildren7)
+				int num5 = 0;
+				int num6 = 0;
+				MissionFollowerSlot[] componentsInChildren9 = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+				foreach (MissionFollowerSlot missionFollowerSlot3 in componentsInChildren9)
 				{
-					int currentGarrFollowerID2 = missionFollowerSlot.GetCurrentGarrFollowerID();
-					if (currentGarrFollowerID2 != 0)
+					int currentGarrFollowerID3 = missionFollowerSlot3.GetCurrentGarrFollowerID();
+					if (currentGarrFollowerID3 != 0)
 					{
-						int[] buffsForCurrentMission = GeneralHelpers.GetBuffsForCurrentMission(currentGarrFollowerID2, this.m_currentGarrMissionID, this.missionFollowerSlotGroup, adjustedMissionDuration);
-						num2 += buffsForCurrentMission.Length;
-						foreach (int num7 in buffsForCurrentMission)
+						int[] buffsForCurrentMission = GeneralHelpers.GetBuffsForCurrentMission(currentGarrFollowerID3, this.m_currentGarrMissionID, this.missionFollowerSlotGroup, adjustedMissionDuration);
+						num4 += buffsForCurrentMission.Length;
+						foreach (int num9 in buffsForCurrentMission)
 						{
-							list2.Add(num7);
+							list2.Add(num9);
 							GameObject gameObject = Object.Instantiate<GameObject>(this.m_mechanicEffectDisplayPrefab);
 							gameObject.transform.SetParent(this.m_partyBuffGroup.transform, false);
 							AbilityDisplay component = gameObject.GetComponent<AbilityDisplay>();
-							component.SetAbility(num7, false, false, null);
+							component.SetAbility(num9, false, false, null);
 						}
-						if (PersistentFollowerData.followerDictionary.ContainsKey(currentGarrFollowerID2) && (PersistentFollowerData.followerDictionary[currentGarrFollowerID2].Flags & 8) == 0)
+						if (PersistentFollowerData.followerDictionary.ContainsKey(currentGarrFollowerID3) && (PersistentFollowerData.followerDictionary[currentGarrFollowerID3].Flags & 8) == 0)
 						{
-							num4++;
+							num6++;
 						}
 					}
 				}
-				if (num2 > 8)
+				if (num4 > 8)
 				{
 					this.m_partyBuffsText.text = string.Empty;
 				}
@@ -594,7 +621,7 @@ namespace WoWCompanionApp
 					HorizontalLayoutGroup component2 = this.m_partyBuffGroup.GetComponent<HorizontalLayoutGroup>();
 					if (component2 != null)
 					{
-						if (num2 > 10 && Main.instance.IsNarrowScreen())
+						if (num4 > 10 && Main.instance.IsNarrowScreen())
 						{
 							component2.spacing = 3f;
 						}
@@ -603,11 +630,11 @@ namespace WoWCompanionApp
 							component2.spacing = 6f;
 						}
 					}
-					this.m_partyBuffGroup.SetActive(num2 > 0);
+					this.m_partyBuffGroup.SetActive(num4 > 0);
 				}
 				if (this.m_partyDebuffGroup != null)
 				{
-					this.m_partyDebuffGroup.SetActive(num3 > 0);
+					this.m_partyDebuffGroup.SetActive(num5 > 0);
 				}
 				int trueMissionCost = this.GetTrueMissionCost(record, list2);
 				this.missionCostText.text = GarrisonStatus.WarResources().ToString("N0", MobileDeviceLocale.GetCultureInfoLocale()) + " / " + trueMissionCost.ToString("N0", MobileDeviceLocale.GetCultureInfoLocale());
@@ -624,7 +651,7 @@ namespace WoWCompanionApp
 				{
 					this.m_needMoreResources = true;
 				}
-				if (num4 < 1)
+				if (num6 < 1)
 				{
 					this.m_needAtLeastOneChampion = true;
 				}
@@ -636,8 +663,8 @@ namespace WoWCompanionApp
 				{
 					this.missionCostText.color = Color.white;
 				}
-				bool flag = !this.m_isOverMaxChampionSoftCap && !this.m_needMoreResources && !this.m_needAtLeastOneChampion;
-				if (flag)
+				bool flag3 = !this.m_isOverMaxChampionSoftCap && !this.m_needMoreResources && !this.m_needAtLeastOneChampion;
+				if (flag3)
 				{
 					this.m_startMissionButton.material.SetFloat("_GrayscaleAmount", 0f);
 					this.m_startMissionButtonText.color = new Color(1f, 0.8588f, 0f, 1f);
@@ -660,7 +687,7 @@ namespace WoWCompanionApp
 						" ",
 						record.BaseFollowerXP,
 						" (<color=#ff8600ff>",
-						timeSpan.GetDurationString(false),
+						timeSpan.GetDurationString(false, TimeUnit.Second),
 						"</color>)"
 					});
 				}
@@ -671,7 +698,7 @@ namespace WoWCompanionApp
 						"Hoopy <color=#ffff00ff>",
 						MissionDetailView.m_timeText,
 						": </color><color=#ff8600ff>",
-						timeSpan.GetDurationString(false),
+						timeSpan.GetDurationString(false, TimeUnit.Second),
 						"</color>"
 					});
 				}
@@ -690,8 +717,8 @@ namespace WoWCompanionApp
 				}
 				this.m_combatAllyThisIsWhatYouGetText.gameObject.SetActive(true);
 				this.m_combatAllySupportSpellDisplay.gameObject.SetActive(true);
-				int currentGarrFollowerID3 = componentInChildren.GetCurrentGarrFollowerID();
-				int zoneSupportSpellID = PersistentFollowerData.followerDictionary[currentGarrFollowerID3].ZoneSupportSpellID;
+				int currentGarrFollowerID4 = componentInChildren.GetCurrentGarrFollowerID();
+				int zoneSupportSpellID = PersistentFollowerData.followerDictionary[currentGarrFollowerID4].ZoneSupportSpellID;
 				this.m_combatAllySupportSpellDisplay.SetSpell(zoneSupportSpellID);
 			}
 			else
@@ -859,7 +886,7 @@ namespace WoWCompanionApp
 			IEnumerable<ulong> followerDBIDs = from slot in base.gameObject.GetComponentsInChildren<MissionFollowerSlot>(true)
 			where PersistentFollowerData.followerDictionary.ContainsKey(slot.GetCurrentGarrFollowerID())
 			select PersistentFollowerData.followerDictionary[slot.GetCurrentGarrFollowerID()].DbID;
-			Main.instance.StartMission(this.m_currentGarrMissionID, followerDBIDs);
+			Singleton<GarrisonWrapper>.Instance.StartMission(this.m_currentGarrMissionID, followerDBIDs);
 			AdventureMapPanel.instance.SelectMissionFromMap(0);
 			AdventureMapPanel.instance.SelectMissionFromList(0);
 			AdventureMapPanel.instance.SetSelectedIconContainer(null);
@@ -917,7 +944,7 @@ namespace WoWCompanionApp
 
 		public void UnassignCombatAlly()
 		{
-			Main.instance.CompleteMission(this.m_currentGarrMissionID);
+			Singleton<GarrisonWrapper>.Instance.CompleteMission(this.m_currentGarrMissionID);
 			this.SetCombatAllyMissionState(CombatAllyMissionState.available);
 			MissionFollowerSlot[] componentsInChildren = base.gameObject.GetComponentsInChildren<MissionFollowerSlot>(true);
 			componentsInChildren[0].SetFollower(0);
@@ -1031,7 +1058,13 @@ namespace WoWCompanionApp
 		public void OpenMissionTypeDialog()
 		{
 			MissionTypeDialog missionTypeDialog = Singleton<DialogFactory>.instance.CreateMissionTypeDialog();
-			missionTypeDialog.InitializeMissionDialog(this.m_currentGarrMissionID);
+			missionTypeDialog.InitializeMissionDialog(this.m_currentGarrMissionID, Singleton<MissionTypeIconLoader>.Instance.GetMissionTypeIconByMissionID(this.m_currentGarrMissionID));
+		}
+
+		public void OpenMissionInfoDialog()
+		{
+			MissionInfoDialog missionInfoDialog = Singleton<DialogFactory>.instance.CreateMissionInfoDialog();
+			missionInfoDialog.InitializeDialog(this.m_currentGarrMissionID);
 		}
 
 		[Header("Main Mission Display")]
@@ -1046,6 +1079,10 @@ namespace WoWCompanionApp
 		public Text missionTypeText;
 
 		public Image m_missionTypeIcon;
+
+		public GameObject m_missionTypeCounteredObject;
+
+		public GameObject m_missionTypePulseRoot;
 
 		public Text missionDescriptionText;
 

@@ -266,7 +266,7 @@ namespace WoWCompanionApp
 				}
 				if (this.m_isExpandedDisplay)
 				{
-					this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+					this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0", MobileDeviceLocale.GetCultureInfoLocale()));
 				}
 				break;
 			}
@@ -275,7 +275,7 @@ namespace WoWCompanionApp
 				if (this.m_isExpandedDisplay)
 				{
 					this.m_rewardQuantityText.text = string.Empty;
-					this.m_rewardName.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+					this.m_rewardName.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0", MobileDeviceLocale.GetCultureInfoLocale()));
 				}
 				break;
 			case MissionRewardDisplay.RewardType.followerXP:
@@ -283,7 +283,7 @@ namespace WoWCompanionApp
 				this.m_rewardQuantityText.text = string.Empty;
 				if (this.m_rewardName != null && this.m_isExpandedDisplay)
 				{
-					this.m_rewardName.text = ((this.m_rewardQuantity <= 1) ? string.Empty : (this.m_rewardQuantity.ToString("N0") + " " + StaticDB.GetString("XP2", "XP")));
+					this.m_rewardName.text = ((this.m_rewardQuantity <= 1) ? string.Empty : (this.m_rewardQuantity.ToString("N0", MobileDeviceLocale.GetCultureInfoLocale()) + " " + StaticDB.GetString("XP2", "XP")));
 				}
 				break;
 			case MissionRewardDisplay.RewardType.currency:
@@ -313,13 +313,13 @@ namespace WoWCompanionApp
 						else
 						{
 							this.m_rewardName.text = record2.Name;
-							this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+							this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0", MobileDeviceLocale.GetCultureInfoLocale()));
 						}
 					}
 					else
 					{
 						this.m_rewardName.text = string.Empty;
-						this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+						this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0", MobileDeviceLocale.GetCultureInfoLocale()));
 					}
 				}
 				else
@@ -346,7 +346,7 @@ namespace WoWCompanionApp
 				}
 				else
 				{
-					this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+					this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0", MobileDeviceLocale.GetCultureInfoLocale()));
 				}
 			}
 		}

@@ -7,18 +7,14 @@ namespace WoWCompanionApp
 	{
 		private void OnEnable()
 		{
-			Main instance = Main.instance;
-			instance.ArmamentInventoryChangedAction = (Action)Delegate.Combine(instance.ArmamentInventoryChangedAction, new Action(this.HandleInventoryChanged));
-			Main instance2 = Main.instance;
-			instance2.EquipmentInventoryChangedAction = (Action)Delegate.Combine(instance2.EquipmentInventoryChangedAction, new Action(this.HandleInventoryChanged));
+			Singleton<GarrisonWrapper>.Instance.ArmamentInventoryChangedAction += this.HandleInventoryChanged;
+			Singleton<GarrisonWrapper>.Instance.EquipmentInventoryChangedAction += this.HandleInventoryChanged;
 		}
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.ArmamentInventoryChangedAction = (Action)Delegate.Remove(instance.ArmamentInventoryChangedAction, new Action(this.HandleInventoryChanged));
-			Main instance2 = Main.instance;
-			instance2.EquipmentInventoryChangedAction = (Action)Delegate.Remove(instance2.EquipmentInventoryChangedAction, new Action(this.HandleInventoryChanged));
+			Singleton<GarrisonWrapper>.Instance.ArmamentInventoryChangedAction -= this.HandleInventoryChanged;
+			Singleton<GarrisonWrapper>.Instance.EquipmentInventoryChangedAction -= this.HandleInventoryChanged;
 		}
 
 		private void HandleInventoryChanged()

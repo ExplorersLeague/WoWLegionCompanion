@@ -9,6 +9,12 @@ namespace WoWCompanionApp
 	{
 		private void Awake()
 		{
+			this.originalScale = base.transform.localScale;
+		}
+
+		private void OnEnable()
+		{
+			base.transform.localScale = this.originalScale;
 		}
 
 		public void SetBounty(WrapperWorldQuestBounty bounty)
@@ -45,5 +51,7 @@ namespace WoWCompanionApp
 		public Image m_errorImage;
 
 		private WrapperWorldQuestBounty m_bounty;
+
+		private Vector3 originalScale;
 	}
 }

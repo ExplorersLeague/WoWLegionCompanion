@@ -58,27 +58,7 @@ namespace WoWCompanionApp
 			}
 			if (this.m_missionTypeIcon != null)
 			{
-				GarrMissionTypeRec record2 = StaticDB.garrMissionTypeDB.GetRecord((int)record.GarrMissionTypeID);
-				if ((ulong)record2.UiTextureAtlasMemberID == (ulong)((long)this.m_starIconId))
-				{
-					this.m_missionTypeIcon.sprite = this.m_starSprite;
-				}
-				if ((ulong)record2.UiTextureAtlasMemberID == (ulong)((long)this.m_swordIconID))
-				{
-					this.m_missionTypeIcon.sprite = this.m_swordSprite;
-				}
-				if ((ulong)record2.UiTextureAtlasMemberID == (ulong)((long)this.m_bootIconId))
-				{
-					this.m_missionTypeIcon.sprite = this.m_bootSprite;
-				}
-				if ((ulong)record2.UiTextureAtlasMemberID == (ulong)((long)this.m_stealthIconId))
-				{
-					this.m_missionTypeIcon.sprite = this.m_stealthSprite;
-				}
-				if ((ulong)record2.UiTextureAtlasMemberID == (ulong)((long)this.m_scrollIconId))
-				{
-					this.m_missionTypeIcon.sprite = this.m_scrollSprite;
-				}
+				this.m_missionTypeIcon.sprite = Singleton<MissionTypeIconLoader>.Instance.GetMissionTypeIconByMissionID(mission.MissionRecID);
 			}
 			bool flag = false;
 			if (mission.MissionState == 1)
@@ -130,10 +110,10 @@ namespace WoWCompanionApp
 				this.m_missionTypeBG.color = new Color(0f, 0f, 0f, 0.478f);
 			}
 			this.m_missionLocation.enabled = false;
-			UiTextureKitRec record3 = StaticDB.uiTextureKitDB.GetRecord((int)record.UiTextureKitID);
-			if (record3 != null)
+			UiTextureKitRec record2 = StaticDB.uiTextureKitDB.GetRecord((int)record.UiTextureKitID);
+			if (record2 != null)
 			{
-				int uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID(record3.KitPrefix + "-List");
+				int uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID(record2.KitPrefix + "-List");
 				if (uitextureAtlasMemberID > 0)
 				{
 					Sprite atlasSprite = TextureAtlas.instance.GetAtlasSprite(uitextureAtlasMemberID);
@@ -248,7 +228,7 @@ namespace WoWCompanionApp
 				timeSpan = this.m_mission.MissionDuration - t;
 				if (timeSpan.TotalSeconds > 0.0)
 				{
-					this.m_statusText.text = timeSpan.GetDurationString(false) + " <color=#ff0000ff>(" + StaticDB.GetString("IN_PROGRESS", null) + ")</color>";
+					this.m_statusText.text = timeSpan.GetDurationString(false, TimeUnit.Second) + " <color=#ff0000ff>(" + StaticDB.GetString("IN_PROGRESS", null) + ")</color>";
 				}
 				else
 				{
@@ -260,7 +240,7 @@ namespace WoWCompanionApp
 			timeSpan = ((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan);
 			if (timeSpan.TotalSeconds > 0.0)
 			{
-				timeSpan.GetDurationString(false);
+				timeSpan.GetDurationString(false, TimeUnit.Second);
 			}
 			else if (this.m_mission.MissionState == 0 && this.m_mission.OfferDuration.TotalSeconds > 0.0)
 			{
@@ -289,16 +269,6 @@ namespace WoWCompanionApp
 
 		public Image m_missionLocation;
 
-		public Sprite m_starSprite;
-
-		public Sprite m_swordSprite;
-
-		public Sprite m_bootSprite;
-
-		public Sprite m_stealthSprite;
-
-		public Sprite m_scrollSprite;
-
 		public Text m_missionLevel;
 
 		public Text m_missionTime;
@@ -316,16 +286,6 @@ namespace WoWCompanionApp
 		public GameObject m_previewMechanicsGroup;
 
 		private WrapperGarrisonMission m_mission;
-
-		private int m_starIconId = 7746;
-
-		private int m_swordIconID = 7747;
-
-		private int m_bootIconId = 7748;
-
-		private int m_stealthIconId = 7749;
-
-		private int m_scrollIconId = 8046;
 
 		private int[] m_previewAbilityID;
 

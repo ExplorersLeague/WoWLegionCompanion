@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -23,6 +25,7 @@ namespace WoWCompanionApp
 			Club.OnClubMessageHistoryReceived += new Club.ClubMessageHistoryReceivedHandler(this.OnMessageHistoryReceived);
 			Club.OnClubMessageAdded += new Club.ClubMessageAddedHandler(this.OnMessageAdded);
 			Club.OnStreamViewMarkerUpdated += new Club.StreamViewMarkerUpdatedHandler(this.OnViewMarkerUpdated);
+			Club.OnClubMessageUpdated += new Club.ClubMessageUpdatedHandler(this.OnMessageUpdated);
 		}
 
 		private void OnDestroy()
@@ -31,6 +34,7 @@ namespace WoWCompanionApp
 			Club.OnClubMessageHistoryReceived -= new Club.ClubMessageHistoryReceivedHandler(this.OnMessageHistoryReceived);
 			Club.OnClubMessageAdded -= new Club.ClubMessageAddedHandler(this.OnMessageAdded);
 			Club.OnStreamViewMarkerUpdated -= new Club.StreamViewMarkerUpdatedHandler(this.OnViewMarkerUpdated);
+			Club.OnClubMessageUpdated -= new Club.ClubMessageUpdatedHandler(this.OnMessageUpdated);
 		}
 
 		private void OnDisable()
@@ -57,6 +61,7 @@ namespace WoWCompanionApp
 				this.m_requestPending = false;
 				this.m_focusedStream.UnfocusStream();
 				this.m_focusedStream = null;
+				this.m_pendingMemberIDs.Clear();
 			}
 		}
 
@@ -131,6 +136,27 @@ namespace WoWCompanionApp
 			}
 		}
 
+		private void OnMessageUpdated(Club.ClubMessageUpdatedEvent messageEvent)
+		{
+			CommunityChatMessage newMessage = null;
+			if (this.m_focusedStream != null)
+			{
+				newMessage = this.m_focusedStream.HandleMessageUpdatedEvent(messageEvent);
+			}
+			if (newMessage != null)
+			{
+				CommunityChatItem communityChatItem = this.m_chatContent.GetComponentsInChildren<CommunityChatItem>().FirstOrDefault((CommunityChatItem item) => item.IsSameMessage(newMessage));
+				if (communityChatItem != null)
+				{
+					communityChatItem.SetChatInfo(newMessage);
+				}
+			}
+			else
+			{
+				CommunityData.Instance.HandleMessageUpdatedEvent(messageEvent);
+			}
+		}
+
 		private void OnViewMarkerUpdated(Club.StreamViewMarkerUpdatedEvent markerEvent)
 		{
 			this.UpdateNotificationMarkers();
@@ -179,6 +205,14 @@ namespace WoWCompanionApp
 			GameObject gameObject2 = this.m_chatContent.AddAsChildObject(this.m_chatObjectPrefab);
 			CommunityChatItem component = gameObject2.GetComponent<CommunityChatItem>();
 			component.SetChatInfo(message);
+			if (string.IsNullOrEmpty(message.Author))
+			{
+				if (this.m_pendingMemberIDs.Count == 0)
+				{
+					Club.OnClubMemberUpdated += new Club.ClubMemberUpdatedHandler(this.UpdatePendingMessages);
+				}
+				this.m_pendingMemberIDs.Add(message.MemberID);
+			}
 			if (this.ShouldMinimizeChatItem(message))
 			{
 				gameObject2.GetComponent<CommunityChatItem>().MinimizeChatItem();
@@ -261,6 +295,25 @@ namespace WoWCompanionApp
 			Main.instance.AddChildToLevel2Canvas(this.m_notificationSettingsPrefab);
 		}
 
+		public void UpdatePendingMessages(Club.ClubMemberUpdatedEvent memberEvent)
+		{
+			if (this.m_community.ClubId == memberEvent.ClubID && this.m_pendingMemberIDs.Contains(memberEvent.MemberID))
+			{
+				IEnumerable<CommunityChatItem> enumerable = from item in this.m_chatContent.GetComponentsInChildren<CommunityChatItem>()
+				where item.PostMadeByMemberID(memberEvent.MemberID)
+				select item;
+				foreach (CommunityChatItem communityChatItem in enumerable)
+				{
+					communityChatItem.HandleMemberUpdatedEvent(memberEvent);
+				}
+				this.m_pendingMemberIDs.Remove(memberEvent.MemberID);
+				if (this.m_pendingMemberIDs.Count == 0)
+				{
+					Club.OnClubMemberUpdated -= new Club.ClubMemberUpdatedHandler(this.UpdatePendingMessages);
+				}
+			}
+		}
+
 		public GameObject m_chatContent;
 
 		public GameObject m_chatObjectPrefab;
@@ -300,5 +353,7 @@ namespace WoWCompanionApp
 		private const int MINUTES_FOR_MINIMIZE = 5;
 
 		private const string MON_DAY_YEAR_FORMAT = "MMM dd, yyyy";
+
+		private HashSet<uint> m_pendingMemberIDs = new HashSet<uint>();
 	}
 }

@@ -15,7 +15,6 @@ namespace WoWCompanionApp
 			instance.TestIconSizeChanged = (Action<float>)Delegate.Combine(instance.TestIconSizeChanged, new Action<float>(this.OnTestIconSizeChanged));
 			PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
 			pinchZoomContentManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomContentManager.ZoomFactorChanged, new Action<bool>(this.HandleZoomChanged));
-			this.m_showLootIconInsteadOfMain = true;
 		}
 
 		private void OnDisable()
@@ -26,12 +25,12 @@ namespace WoWCompanionApp
 			pinchZoomContentManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomContentManager.ZoomFactorChanged, new Action<bool>(this.HandleZoomChanged));
 		}
 
-		private void ItemStatsUpdated(int itemID, int itemContext, WrapperItemStats itemStats)
+		private void ItemStatsUpdated(int itemID, int itemContext, WrapperItemStats itemStats, WrapperItemInstance? itemInstance)
 		{
 			if (this.m_itemID == itemID && this.m_itemContext == itemContext)
 			{
 				ItemStatCache instance = ItemStatCache.instance;
-				instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats>)Delegate.Remove(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats>(this.ItemStatsUpdated));
+				instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats, WrapperItemInstance?>)Delegate.Remove(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats, WrapperItemInstance?>(this.ItemStatsUpdated));
 				this.ShowILVL();
 			}
 		}
@@ -74,7 +73,7 @@ namespace WoWCompanionApp
 			}
 			if (AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.Gear) && (record.ClassID == 2 || record.ClassID == 3 || record.ClassID == 4 || record.ClassID == 6))
 			{
-				WrapperItemStats? itemStats = ItemStatCache.instance.GetItemStats(this.m_itemID, this.m_itemContext);
+				WrapperItemStats? itemStats = ItemStatCache.instance.GetItemStats(this.m_itemID, this.m_itemContext, this.m_itemInstance);
 				if (itemStats != null)
 				{
 					this.m_quantityArea.gameObject.SetActive(true);
@@ -83,7 +82,39 @@ namespace WoWCompanionApp
 				else
 				{
 					ItemStatCache instance = ItemStatCache.instance;
-					instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats>)Delegate.Combine(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats>(this.ItemStatsUpdated));
+					instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats, WrapperItemInstance?>)Delegate.Combine(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats, WrapperItemInstance?>(this.ItemStatsUpdated));
+				}
+			}
+		}
+
+		public void UpdateLootQuality(int itemID, int itemContext, WrapperItemStats stats, WrapperItemInstance? itemInstance)
+		{
+			if (itemID != this.m_itemID)
+			{
+				return;
+			}
+			this.UpdateLootQualityImpl(stats);
+			ItemStatCache instance = ItemStatCache.instance;
+			instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats, WrapperItemInstance?>)Delegate.Remove(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats, WrapperItemInstance?>(this.UpdateLootQuality));
+		}
+
+		private void UpdateLootQualityImpl(WrapperItemStats stats)
+		{
+			this.m_lootQuality = (ITEM_QUALITY)stats.Quality;
+			if (this.m_normalGlow != null)
+			{
+				if (this.m_lootQuality < ITEM_QUALITY.STANDARD)
+				{
+					this.m_normalGlow.color = this.WORLD_QUEST_GLOW_COLOR_DEFAULT;
+				}
+				if (this.m_lootQuality > ITEM_QUALITY.STANDARD)
+				{
+					string text = "#" + GeneralHelpers.GetItemQualityColor((int)this.m_lootQuality);
+					Color color;
+					if (ColorUtility.TryParseHtmlString(text, ref color))
+					{
+						this.m_normalGlow.color = color;
+					}
 				}
 			}
 		}
@@ -124,17 +155,25 @@ namespace WoWCompanionApp
 					{
 						this.m_lootQuality = (ITEM_QUALITY)record.OverallQualityID;
 					}
-					if (this.m_showLootIconInsteadOfMain)
+					SpellEffectRec spellEffectRec2 = StaticDB.itemEffectDB.GetRecordsByParentID(wrapperWorldQuestReward.RecordID).SelectMany((ItemEffectRec itemEffectRec) => StaticDB.spellEffectDB.GetRecordsByParentID(itemEffectRec.SpellID)).FirstOrDefault((SpellEffectRec spellEffectRec) => spellEffectRec.Effect == 240);
+					this.m_main.sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, wrapperWorldQuestReward.FileDataID);
+					this.m_itemID = wrapperWorldQuestReward.RecordID;
+					this.m_itemContext = wrapperWorldQuestReward.ItemContext;
+					this.m_itemInstance = wrapperWorldQuestReward.ItemInstance;
+					if (!ItemStatCache.instance.HasItemStats(wrapperWorldQuestReward.RecordID))
 					{
-						SpellEffectRec spellEffectRec2 = StaticDB.itemEffectDB.GetRecordsByParentID(wrapperWorldQuestReward.RecordID).SelectMany((ItemEffectRec itemEffectRec) => StaticDB.spellEffectDB.GetRecordsByParentID(itemEffectRec.SpellID)).FirstOrDefault((SpellEffectRec spellEffectRec) => spellEffectRec.Effect == 240);
-						this.m_main.sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, wrapperWorldQuestReward.FileDataID);
-						this.m_itemID = wrapperWorldQuestReward.RecordID;
-						this.m_itemContext = wrapperWorldQuestReward.ItemContext;
-						this.ShowILVL();
+						ItemStatCache instance = ItemStatCache.instance;
+						instance.ItemStatCacheUpdateAction = (Action<int, int, WrapperItemStats, WrapperItemInstance?>)Delegate.Combine(instance.ItemStatCacheUpdateAction, new Action<int, int, WrapperItemStats, WrapperItemInstance?>(this.UpdateLootQuality));
 					}
+					WrapperItemStats? itemStats = ItemStatCache.instance.GetItemStats(wrapperWorldQuestReward.RecordID, wrapperWorldQuestReward.ItemContext, wrapperWorldQuestReward.ItemInstance);
+					if (itemStats != null)
+					{
+						this.UpdateLootQualityImpl(itemStats.Value);
+					}
+					this.ShowILVL();
 				}
 			}
-			if (!flag && this.m_showLootIconInsteadOfMain)
+			if (!flag)
 			{
 				if (wrapperWorldQuest.Currencies.Count > 0)
 				{
@@ -143,8 +182,9 @@ namespace WoWCompanionApp
 						CurrencyTypesRec record2 = StaticDB.currencyTypesDB.GetRecord(wrapperWorldQuestReward2.RecordID);
 						if (record2 != null)
 						{
-							this.m_main.sprite = CurrencyContainerDB.LoadCurrencyContainerIcon(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
-							CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+							int num = ((record2.Flags & 8u) == 0u) ? 1 : 100;
+							this.m_main.sprite = CurrencyContainerDB.LoadCurrencyContainerIcon(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity / num);
+							CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity / num);
 							if (currencyContainerRec != null)
 							{
 								this.m_lootQuality = (ITEM_QUALITY)currencyContainerRec.ContainerQuality;
@@ -186,8 +226,7 @@ namespace WoWCompanionApp
 			}
 			bool active = (record4.Modifiers & 2) != 0;
 			this.m_dragonFrame.gameObject.SetActive(active);
-			bool flag2 = record4.Type == 7;
-			this.m_normalGlow.gameObject.SetActive(!flag2);
+			bool active2 = record4.Type == 12;
 			if (this.m_lootQuality < ITEM_QUALITY.STANDARD)
 			{
 				this.m_normalGlow.color = this.WORLD_QUEST_GLOW_COLOR_DEFAULT;
@@ -201,164 +240,19 @@ namespace WoWCompanionApp
 					this.m_normalGlow.color = color;
 				}
 			}
-			this.m_legionAssaultGlow.gameObject.SetActive(flag2);
-			bool flag3 = (record4.Modifiers & 1) != 0;
-			if (flag3 && record4.Type != 3)
+			if (this.m_assaultEffect != null)
+			{
+				this.m_assaultEffect.SetActive(active2);
+			}
+			bool flag2 = (record4.Modifiers & 1) != 0;
+			if (flag2 && record4.Type != 3)
 			{
 				this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-RareQuest");
 			}
-			bool flag4 = (record4.Modifiers & 4) != 0;
-			if (flag4 && record4.Type != 3)
+			bool flag3 = (record4.Modifiers & 4) != 0;
+			if (flag3 && record4.Type != 3)
 			{
 				this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-EpicQuest");
-			}
-			int uitextureAtlasMemberID;
-			string text2;
-			switch (record4.Type)
-			{
-			case 1:
-			{
-				int profession = record4.Profession;
-				switch (profession)
-				{
-				case 182:
-					uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-herbalism");
-					text2 = "Mobile-Herbalism";
-					break;
-				default:
-					if (profession != 164)
-					{
-						if (profession != 165)
-						{
-							if (profession != 129)
-							{
-								if (profession != 171)
-								{
-									if (profession != 197)
-									{
-										if (profession != 202)
-										{
-											if (profession != 333)
-											{
-												if (profession != 356)
-												{
-													if (profession != 393)
-													{
-														if (profession != 755)
-														{
-															if (profession != 773)
-															{
-																if (profession != 794)
-																{
-																	uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
-																	text2 = "Mobile-QuestExclamationIcon";
-																}
-																else
-																{
-																	uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-archaeology");
-																	text2 = "Mobile-Archaeology";
-																}
-															}
-															else
-															{
-																uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-inscription");
-																text2 = "Mobile-Inscription";
-															}
-														}
-														else
-														{
-															uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-jewelcrafting");
-															text2 = "Mobile-Jewelcrafting";
-														}
-													}
-													else
-													{
-														uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-skinning");
-														text2 = "Mobile-Skinning";
-													}
-												}
-												else
-												{
-													uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-fishing");
-													text2 = "Mobile-Fishing";
-												}
-											}
-											else
-											{
-												uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-enchanting");
-												text2 = "Mobile-Enchanting";
-											}
-										}
-										else
-										{
-											uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-engineering");
-											text2 = "Mobile-Engineering";
-										}
-									}
-									else
-									{
-										uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-tailoring");
-										text2 = "Mobile-Tailoring";
-									}
-								}
-								else
-								{
-									uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-alchemy");
-									text2 = "Mobile-Alchemy";
-								}
-							}
-							else
-							{
-								uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-firstaid");
-								text2 = "Mobile-FirstAid";
-							}
-						}
-						else
-						{
-							uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-leatherworking");
-							text2 = "Mobile-Leatherworking";
-						}
-					}
-					else
-					{
-						uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-blacksmithing");
-						text2 = "Mobile-Blacksmithing";
-					}
-					break;
-				case 185:
-					uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-cooking");
-					text2 = "Mobile-Cooking";
-					break;
-				case 186:
-					uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-mining");
-					text2 = "Mobile-Mining";
-					break;
-				}
-				goto IL_788;
-			}
-			case 3:
-				uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
-				text2 = "Mobile-PVP";
-				goto IL_788;
-			case 4:
-				uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
-				text2 = "Mobile-Pets";
-				goto IL_788;
-			}
-			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
-			text2 = "Mobile-QuestExclamationIcon";
-			IL_788:
-			if (!this.m_showLootIconInsteadOfMain)
-			{
-				if (text2 != null)
-				{
-					this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/" + text2);
-				}
-				else if (uitextureAtlasMemberID > 0)
-				{
-					this.m_main.sprite = TextureAtlas.instance.GetAtlasSprite(uitextureAtlasMemberID);
-					this.m_main.SetNativeSize();
-				}
 			}
 		}
 
@@ -431,7 +325,7 @@ namespace WoWCompanionApp
 
 		public Image m_normalGlow;
 
-		public Image m_legionAssaultGlow;
+		public GameObject m_assaultEffect;
 
 		private int m_questID;
 
@@ -445,8 +339,8 @@ namespace WoWCompanionApp
 
 		private int m_itemContext;
 
-		private Color WORLD_QUEST_GLOW_COLOR_DEFAULT = new Color(255f, 210f, 0f);
+		private WrapperItemInstance? m_itemInstance;
 
-		public bool m_showLootIconInsteadOfMain;
+		private Color WORLD_QUEST_GLOW_COLOR_DEFAULT = new Color(255f, 210f, 0f);
 	}
 }

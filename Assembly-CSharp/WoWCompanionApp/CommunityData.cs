@@ -246,6 +246,14 @@ namespace WoWCompanionApp
 			}
 		}
 
+		public void HandleMessageUpdatedEvent(Club.ClubMessageUpdatedEvent messageEvent)
+		{
+			if (CommunityData.m_communityDictionary.ContainsKey(messageEvent.ClubID))
+			{
+				CommunityData.m_communityDictionary[messageEvent.ClubID].HandleMessageUpdatedEvent(messageEvent);
+			}
+		}
+
 		private void FireCommunityRefreshCallback()
 		{
 			if (CommunityData.OnCommunityRefresh != null)

@@ -126,12 +126,10 @@ namespace bgs
 				return;
 			}
 			this.m_accountEntity = logonResult.Account;
-			this.m_battleNet.Presence.PresenceSubscribe(this.m_accountEntity);
 			this.m_gameAccounts = new List<bnet.protocol.EntityId>();
-			foreach (bnet.protocol.EntityId entityId in logonResult.GameAccountList)
+			foreach (bnet.protocol.EntityId item in logonResult.GameAccountList)
 			{
-				this.m_gameAccounts.Add(entityId);
-				this.m_battleNet.Presence.PresenceSubscribe(entityId);
+				this.m_gameAccounts.Add(item);
 			}
 			if (logonResult.HasBattleTag)
 			{
@@ -143,7 +141,6 @@ namespace bgs
 			}
 			this.m_sessionKey = logonResult.SessionKey;
 			this.m_battleNet.IssueSelectGameAccountRequest();
-			this.m_battleNet.SetConnectedRegion(logonResult.ConnectedRegion);
 			base.ApiLog.LogDebug("LogonComplete {0}", new object[]
 			{
 				logonResult

@@ -17,10 +17,8 @@ namespace WoWCompanionApp
 
 		public void OnEnable()
 		{
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(instance.GarrisonDataResetFinishedAction, new Action(this.HandleGarrisonDataResetFinished));
-			Main instance2 = Main.instance;
-			instance2.MissionAddedAction = (Action<int, int>)Delegate.Combine(instance2.MissionAddedAction, new Action<int, int>(this.HandleMissionAdded));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction += this.HandleGarrisonDataResetFinished;
+			Singleton<GarrisonWrapper>.Instance.MissionAddedAction += this.HandleMissionAdded;
 			this.InitMissionList();
 			this.ShowAvailableMissionList();
 			Singleton<DialogFactory>.Instance.CloseMissionDialog();
@@ -28,10 +26,9 @@ namespace WoWCompanionApp
 
 		private void OnDisable()
 		{
-			Main instance = Main.instance;
-			instance.GarrisonDataResetFinishedAction = (Action)Delegate.Remove(instance.GarrisonDataResetFinishedAction, new Action(this.HandleGarrisonDataResetFinished));
-			Main instance2 = Main.instance;
-			instance2.MissionAddedAction = (Action<int, int>)Delegate.Remove(instance2.MissionAddedAction, new Action<int, int>(this.HandleMissionAdded));
+			Singleton<GarrisonWrapper>.Instance.GarrisonDataResetFinishedAction -= this.HandleGarrisonDataResetFinished;
+			Singleton<GarrisonWrapper>.Instance.MissionAddedAction -= this.HandleMissionAdded;
+			this.ClearMissionStartedEffect();
 		}
 
 		public void ShowAvailableMissionList()
@@ -166,9 +163,18 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
+			this.ClearMissionStartedEffect();
 			this.m_currentMissionStartedEffectObj = Object.Instantiate<GameObject>(this.m_missionStartedEffectObjPrefab);
 			this.m_currentMissionStartedEffectObj.transform.SetParent(this.m_inProgressMissionsTabButton.transform, false);
 			this.m_currentMissionStartedEffectObj.transform.localPosition = Vector3.zero;
+		}
+
+		private void ClearMissionStartedEffect()
+		{
+			if (this.m_currentMissionStartedEffectObj != null)
+			{
+				Object.Destroy(this.m_currentMissionStartedEffectObj);
+			}
 		}
 
 		public MiniMissionListItem m_miniMissionListItemPrefab;

@@ -10,16 +10,14 @@ namespace WoWCompanionApp
 			this.SetVisibility(LegionfallData.HasAccess());
 			PinchZoomContentManager pinchZoomManager = this.m_pinchZoomManager;
 			pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
-			Main instance = Main.instance;
-			instance.ContributionInfoChangedAction = (Action)Delegate.Combine(instance.ContributionInfoChangedAction, new Action(this.HandleContributionInfoChanged));
+			Singleton<GarrisonWrapper>.Instance.ContributionInfoChangedAction += this.HandleContributionInfoChanged;
 		}
 
 		private void OnDisable()
 		{
 			PinchZoomContentManager pinchZoomManager = this.m_pinchZoomManager;
 			pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
-			Main instance = Main.instance;
-			instance.ContributionInfoChangedAction = (Action)Delegate.Remove(instance.ContributionInfoChangedAction, new Action(this.HandleContributionInfoChanged));
+			Singleton<GarrisonWrapper>.Instance.ContributionInfoChangedAction -= this.HandleContributionInfoChanged;
 		}
 
 		private void OnZoomChanged(bool force)

@@ -344,7 +344,7 @@ namespace WoWCompanionApp
 				return;
 			}
 			Main.instance.m_UISound.Play_StartMission();
-			Main.instance.StartMission(this.m_combatAllyMissionID, new ulong[]
+			Singleton<GarrisonWrapper>.Instance.StartMission(this.m_combatAllyMissionID, new ulong[]
 			{
 				this.m_combatAllyChampion.Value.DbID
 			});
@@ -362,7 +362,7 @@ namespace WoWCompanionApp
 					" for follower ",
 					this.m_followerDetailView.GetCurrentFollower()
 				}));
-				Main.instance.UseArmament(this.m_followerDetailView.GetCurrentFollower(), this.m_armamentItem.Value.ItemID);
+				Singleton<GarrisonWrapper>.Instance.UseArmament(this.m_followerDetailView.GetCurrentFollower(), this.m_armamentItem.Value.ItemID);
 				AllPopups.instance.ShowArmamentDialog(null, false);
 			}
 			else
@@ -377,7 +377,7 @@ namespace WoWCompanionApp
 						" for follower ",
 						this.m_followerDetailView.GetCurrentFollower()
 					}));
-					Main.instance.UseEquipment(this.m_followerDetailView.GetCurrentFollower(), this.m_equipmentItem.Value.ItemID, this.m_abilityToReplace);
+					Singleton<GarrisonWrapper>.Instance.UseEquipment(this.m_followerDetailView.GetCurrentFollower(), this.m_equipmentItem.Value.ItemID, this.m_abilityToReplace);
 					AllPopups.instance.ShowEquipmentDialog(0, null, false);
 				}
 				else
