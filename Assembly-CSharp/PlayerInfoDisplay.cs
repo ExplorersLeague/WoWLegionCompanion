@@ -4,6 +4,18 @@ using UnityEngine.UI;
 
 public class PlayerInfoDisplay : MonoBehaviour
 {
+	private void Start()
+	{
+		if (Main.instance.IsNarrowScreen())
+		{
+			LayoutElement component = base.gameObject.GetComponent<LayoutElement>();
+			if (component != null)
+			{
+				component.minHeight = 130f;
+			}
+		}
+	}
+
 	private void InitPlayerDisplay(int playerLevel)
 	{
 		this.m_characterName.text = GarrisonStatus.CharacterName();

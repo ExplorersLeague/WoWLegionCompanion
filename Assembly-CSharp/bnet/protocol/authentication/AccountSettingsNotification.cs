@@ -48,51 +48,47 @@ namespace bnet.protocol.authentication
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 40)
 								{
-									if (num2 != 40)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else
-									{
-										instance.CanSendVoice = ProtocolParser.ReadBool(stream);
-									}
+									ProtocolParser.SkipKey(stream, key);
 								}
 								else
 								{
-									instance.CanReceiveVoice = ProtocolParser.ReadBool(stream);
+									instance.CanSendVoice = ProtocolParser.ReadBool(stream);
 								}
 							}
 							else
 							{
-								instance.IsPlayingFromIgr = ProtocolParser.ReadBool(stream);
+								instance.CanReceiveVoice = ProtocolParser.ReadBool(stream);
 							}
 						}
 						else
 						{
-							instance.IsUsingRid = ProtocolParser.ReadBool(stream);
+							instance.IsPlayingFromIgr = ProtocolParser.ReadBool(stream);
 						}
 					}
 					else
 					{
-						instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
+						instance.IsUsingRid = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else
+				{
+					instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
 				}
 			}
 			if (stream.Position == limit)

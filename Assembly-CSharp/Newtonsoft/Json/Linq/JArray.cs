@@ -7,7 +7,7 @@ using Newtonsoft.Json.Utilities;
 
 namespace Newtonsoft.Json.Linq
 {
-	public class JArray : JContainer, IEnumerable, IEnumerable<JToken>, ICollection<JToken>, IList<JToken>
+	public class JArray : JContainer, IList<JToken>, ICollection<JToken>, IEnumerable<JToken>, IEnumerable
 	{
 		public JArray()
 		{
@@ -24,19 +24,6 @@ namespace Newtonsoft.Json.Linq
 		public JArray(object content)
 		{
 			this.Add(content);
-		}
-
-		void ICollection<JToken>.CopyTo(JToken[] array, int arrayIndex)
-		{
-			this.CopyItemsTo(array, arrayIndex);
-		}
-
-		bool ICollection<JToken>.IsReadOnly
-		{
-			get
-			{
-				return false;
-			}
 		}
 
 		protected override IList<JToken> ChildrenTokens
@@ -187,6 +174,19 @@ namespace Newtonsoft.Json.Linq
 		public bool Contains(JToken item)
 		{
 			return this.ContainsItem(item);
+		}
+
+		void ICollection<JToken>.CopyTo(JToken[] array, int arrayIndex)
+		{
+			this.CopyItemsTo(array, arrayIndex);
+		}
+
+		bool ICollection<JToken>.IsReadOnly
+		{
+			get
+			{
+				return false;
+			}
 		}
 
 		public bool Remove(JToken item)

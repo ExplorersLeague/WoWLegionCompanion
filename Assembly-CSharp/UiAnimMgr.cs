@@ -151,8 +151,8 @@ public class UiAnimMgr
 			RectTransform component2 = gameObject2.GetComponent<RectTransform>();
 			if (uiTexture.m_anchor != null && uiTexture.m_anchor.relativePoint != null)
 			{
-				string text = uiTexture.m_anchor.relativePoint;
-				switch (text)
+				string relativePoint = uiTexture.m_anchor.relativePoint;
+				switch (relativePoint)
 				{
 				case "TOP":
 					component2.anchorMin = new Vector2(0.5f, 1f);
@@ -195,8 +195,8 @@ public class UiAnimMgr
 			Vector2 vector = default(Vector2);
 			if (uiTexture.m_anchor != null && uiTexture.m_anchor.point != null)
 			{
-				string text = uiTexture.m_anchor.point;
-				switch (text)
+				string point = uiTexture.m_anchor.point;
+				switch (point)
 				{
 				case "TOP":
 					vector.Set(0f, -0.5f * uiTexture.m_image.sprite.rect.height);

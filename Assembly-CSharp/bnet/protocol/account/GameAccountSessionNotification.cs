@@ -42,38 +42,34 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else if (instance.SessionInfo == null)
-						{
-							instance.SessionInfo = GameSessionUpdateInfo.DeserializeLengthDelimited(stream);
-						}
-						else
-						{
-							GameSessionUpdateInfo.DeserializeLengthDelimited(stream, instance.SessionInfo);
-						}
+						ProtocolParser.SkipKey(stream, key);
 					}
-					else if (instance.GameAccount == null)
+					else if (instance.SessionInfo == null)
 					{
-						instance.GameAccount = GameAccountHandle.DeserializeLengthDelimited(stream);
+						instance.SessionInfo = GameSessionUpdateInfo.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						GameAccountHandle.DeserializeLengthDelimited(stream, instance.GameAccount);
+						GameSessionUpdateInfo.DeserializeLengthDelimited(stream, instance.SessionInfo);
 					}
+				}
+				else if (instance.GameAccount == null)
+				{
+					instance.GameAccount = GameAccountHandle.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					GameAccountHandle.DeserializeLengthDelimited(stream, instance.GameAccount);
 				}
 			}
 			if (stream.Position == limit)

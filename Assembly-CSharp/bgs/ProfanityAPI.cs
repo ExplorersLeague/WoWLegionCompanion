@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Text.RegularExpressions;
 using bnet.protocol.profanity;
 
@@ -26,25 +27,38 @@ namespace bgs
 					MatchCollection matchCollection = regex.Matches(text);
 					if (matchCollection.Count != 0)
 					{
-						foreach (object obj in matchCollection)
+						IEnumerator enumerator2 = matchCollection.GetEnumerator();
+						try
 						{
-							Match match = (Match)obj;
-							if (match.Success)
+							while (enumerator2.MoveNext())
 							{
-								char[] array = text.ToCharArray();
-								if (match.Index <= array.Length)
+								object obj = enumerator2.Current;
+								Match match = (Match)obj;
+								if (match.Success)
 								{
-									int num = match.Length;
-									if (match.Index + match.Length > array.Length)
+									char[] array = text.ToCharArray();
+									if (match.Index <= array.Length)
 									{
-										num = array.Length - match.Index;
+										int num = match.Length;
+										if (match.Index + match.Length > array.Length)
+										{
+											num = array.Length - match.Index;
+										}
+										for (int i = 0; i < num; i++)
+										{
+											array[match.Index + i] = this.GetReplacementChar();
+										}
+										text = new string(array);
 									}
-									for (int i = 0; i < num; i++)
-									{
-										array[match.Index + i] = this.GetReplacementChar();
-									}
-									text = new string(array);
 								}
+							}
+						}
+						finally
+						{
+							IDisposable disposable;
+							if ((disposable = (enumerator2 as IDisposable)) != null)
+							{
+								disposable.Dispose();
 							}
 						}
 					}

@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamSpawnRegionPlayerActivity", Version = 28333852u)]
 	public class JamSpawnRegionPlayerActivity
 	{
-		[FlexJamMember(Name = "idleTime", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "idleTime")]
+		[FlexJamMember(Name = "idleTime", Type = FlexJamType.UInt32)]
 		public uint IdleTime { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "player")]

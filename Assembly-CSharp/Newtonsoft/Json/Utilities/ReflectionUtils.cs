@@ -55,8 +55,7 @@ namespace Newtonsoft.Json.Utilities
 			bool flag2 = false;
 			foreach (char c in fullyQualifiedTypeName)
 			{
-				char c2 = c;
-				switch (c2)
+				switch (c)
 				{
 				case '[':
 					flag = false;
@@ -64,7 +63,7 @@ namespace Newtonsoft.Json.Utilities
 					stringBuilder.Append(c);
 					break;
 				default:
-					if (c2 != ',')
+					if (c != ',')
 					{
 						if (!flag2)
 						{
@@ -695,24 +694,26 @@ namespace Newtonsoft.Json.Utilities
 			for (int i = 0; i < fullyQualifiedTypeName.Length; i++)
 			{
 				char c = fullyQualifiedTypeName[i];
-				char c2 = c;
-				switch (c2)
+				if (c != '[')
 				{
-				case '[':
-					num++;
-					break;
-				default:
-					if (c2 == ',')
+					if (c != ']')
 					{
-						if (num == 0)
+						if (c == ',')
 						{
-							return new int?(i);
+							if (num == 0)
+							{
+								return new int?(i);
+							}
 						}
 					}
-					break;
-				case ']':
-					num--;
-					break;
+					else
+					{
+						num--;
+					}
+				}
+				else
+				{
+					num++;
 				}
 			}
 			return null;

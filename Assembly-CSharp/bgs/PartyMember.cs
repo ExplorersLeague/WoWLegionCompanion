@@ -34,14 +34,14 @@ namespace bgs
 
 		public static uint GetLeaderRoleId(PartyType partyType)
 		{
-			if (partyType != PartyType.FRIENDLY_CHALLENGE)
+			if (partyType != PartyType.SPECTATOR_PARTY)
 			{
-				if (partyType == PartyType.SPECTATOR_PARTY)
+				if (partyType != PartyType.FRIENDLY_CHALLENGE)
 				{
-					return Convert.ToUInt32(BnetParty.SpectatorPartyRoleSet.Leader);
 				}
+				return Convert.ToUInt32(BnetParty.FriendlyGameRoleSet.Inviter);
 			}
-			return Convert.ToUInt32(BnetParty.FriendlyGameRoleSet.Inviter);
+			return Convert.ToUInt32(BnetParty.SpectatorPartyRoleSet.Leader);
 		}
 
 		public uint[] RoleIds = new uint[0];

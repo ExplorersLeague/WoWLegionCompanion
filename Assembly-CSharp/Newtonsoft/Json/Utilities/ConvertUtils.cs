@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json.Serialization;
 
 namespace Newtonsoft.Json.Utilities
@@ -290,7 +291,20 @@ namespace Newtonsoft.Json.Utilities
 			}
 		}
 
-		private static readonly ThreadSafeStore<ConvertUtils.TypeConvertKey, Func<object, object>> CastConverters = new ThreadSafeStore<ConvertUtils.TypeConvertKey, Func<object, object>>(new Func<ConvertUtils.TypeConvertKey, Func<object, object>>(ConvertUtils.CreateCastConverter));
+		static ConvertUtils()
+		{
+			// Note: this type is marked as 'beforefieldinit'.
+			if (ConvertUtils.<>f__mg$cache0 == null)
+			{
+				ConvertUtils.<>f__mg$cache0 = new Func<ConvertUtils.TypeConvertKey, Func<object, object>>(ConvertUtils.CreateCastConverter);
+			}
+			ConvertUtils.CastConverters = new ThreadSafeStore<ConvertUtils.TypeConvertKey, Func<object, object>>(ConvertUtils.<>f__mg$cache0);
+		}
+
+		private static readonly ThreadSafeStore<ConvertUtils.TypeConvertKey, Func<object, object>> CastConverters;
+
+		[CompilerGenerated]
+		private static Func<ConvertUtils.TypeConvertKey, Func<object, object>> <>f__mg$cache0;
 
 		internal struct TypeConvertKey : IEquatable<ConvertUtils.TypeConvertKey>
 		{

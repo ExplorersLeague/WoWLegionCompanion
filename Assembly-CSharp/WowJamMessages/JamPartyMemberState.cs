@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamPartyMemberState", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamPartyMemberState", Version = 28333852u)]
 	public class JamPartyMemberState
 	{
 		public JamPartyMemberState()
@@ -13,20 +13,20 @@ namespace WowJamMessages
 			this.PartyType = new byte[2];
 		}
 
-		[FlexJamMember(Name = "level", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "level")]
+		[FlexJamMember(Name = "level", Type = FlexJamType.UInt16)]
 		public ushort Level { get; set; }
 
-		[FlexJamMember(Name = "overrideDisplayPower", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "overrideDisplayPower")]
+		[FlexJamMember(Name = "overrideDisplayPower", Type = FlexJamType.UInt16)]
 		public ushort OverrideDisplayPower { get; set; }
 
-		[FlexJamMember(Name = "maxHealth", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "maxHealth")]
+		[FlexJamMember(Name = "maxHealth", Type = FlexJamType.Int32)]
 		public int MaxHealth { get; set; }
 
-		[FlexJamMember(Name = "maxPower", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "maxPower")]
+		[FlexJamMember(Name = "maxPower", Type = FlexJamType.UInt16)]
 		public ushort MaxPower { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "displayPower")]
@@ -45,8 +45,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "spec", Type = FlexJamType.UInt16)]
 		public ushort Spec { get; set; }
 
-		[FlexJamMember(Name = "vehicleSeatRecID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "vehicleSeatRecID")]
+		[FlexJamMember(Name = "vehicleSeatRecID", Type = FlexJamType.Int32)]
 		public int VehicleSeatRecID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "phase")]

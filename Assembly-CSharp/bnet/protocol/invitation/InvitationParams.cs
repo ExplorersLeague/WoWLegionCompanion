@@ -46,61 +46,57 @@ namespace bnet.protocol.invitation
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						switch (field)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							switch (field)
+						case 103u:
+							if (key.WireType == Wire.LengthDelimited)
 							{
-							case 103u:
-								if (key.WireType == Wire.LengthDelimited)
+								if (instance.FriendParams == null)
 								{
-									if (instance.FriendParams == null)
-									{
-										instance.FriendParams = FriendInvitationParams.DeserializeLengthDelimited(stream);
-									}
-									else
-									{
-										FriendInvitationParams.DeserializeLengthDelimited(stream, instance.FriendParams);
-									}
+									instance.FriendParams = FriendInvitationParams.DeserializeLengthDelimited(stream);
 								}
-								break;
-							default:
-								if (field == 0u)
+								else
 								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+									FriendInvitationParams.DeserializeLengthDelimited(stream, instance.FriendParams);
 								}
-								ProtocolParser.SkipKey(stream, key);
-								break;
-							case 105u:
-								if (key.WireType == Wire.LengthDelimited)
-								{
-									if (instance.ChannelParams == null)
-									{
-										instance.ChannelParams = ChannelInvitationParams.DeserializeLengthDelimited(stream);
-									}
-									else
-									{
-										ChannelInvitationParams.DeserializeLengthDelimited(stream, instance.ChannelParams);
-									}
-								}
-								break;
 							}
-						}
-						else
-						{
-							instance.ExpirationTime = ProtocolParser.ReadUInt64(stream);
+							break;
+						default:
+							if (field == 0u)
+							{
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+							}
+							ProtocolParser.SkipKey(stream, key);
+							break;
+						case 105u:
+							if (key.WireType == Wire.LengthDelimited)
+							{
+								if (instance.ChannelParams == null)
+								{
+									instance.ChannelParams = ChannelInvitationParams.DeserializeLengthDelimited(stream);
+								}
+								else
+								{
+									ChannelInvitationParams.DeserializeLengthDelimited(stream, instance.ChannelParams);
+								}
+							}
+							break;
 						}
 					}
 					else
 					{
-						instance.InvitationMessage = ProtocolParser.ReadString(stream);
+						instance.ExpirationTime = ProtocolParser.ReadUInt64(stream);
 					}
+				}
+				else
+				{
+					instance.InvitationMessage = ProtocolParser.ReadString(stream);
 				}
 			}
 			if (stream.Position == limit)

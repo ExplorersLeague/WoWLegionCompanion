@@ -43,44 +43,40 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 32)
 				{
-					int num2 = num;
-					if (num2 != 32)
+					if (num != 40)
 					{
-						if (num2 != 40)
+						if (num != 48)
 						{
-							if (num2 != 48)
+							if (num != 61)
 							{
-								if (num2 != 61)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.Program = binaryReader.ReadUInt32();
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.SuspensionExpires = ProtocolParser.ReadUInt64(stream);
+								instance.Program = binaryReader.ReadUInt32();
 							}
 						}
 						else
 						{
-							instance.IsBanned = ProtocolParser.ReadBool(stream);
+							instance.SuspensionExpires = ProtocolParser.ReadUInt64(stream);
 						}
 					}
 					else
 					{
-						instance.IsSuspended = ProtocolParser.ReadBool(stream);
+						instance.IsBanned = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else
+				{
+					instance.IsSuspended = ProtocolParser.ReadBool(stream);
 				}
 			}
 			if (stream.Position == limit)

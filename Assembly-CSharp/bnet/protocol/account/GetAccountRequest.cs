@@ -50,83 +50,79 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 80)
 					{
-						if (num2 != 80)
+						if (num != 88)
 						{
-							if (num2 != 88)
+							if (num != 96)
 							{
-								if (num2 != 96)
+								if (num != 104)
 								{
-									if (num2 != 104)
+									if (num != 112)
 									{
-										if (num2 != 112)
+										if (num != 120)
 										{
-											if (num2 != 120)
+											Key key = ProtocolParser.ReadKey((byte)num, stream);
+											uint field = key.Field;
+											if (field != 16u)
 											{
-												Key key = ProtocolParser.ReadKey((byte)num, stream);
-												uint field = key.Field;
-												if (field != 16u)
+												if (field != 17u)
 												{
-													if (field != 17u)
+													if (field == 0u)
 													{
-														if (field == 0u)
-														{
-															throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-														}
-														ProtocolParser.SkipKey(stream, key);
+														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 													}
-													else if (key.WireType == Wire.Varint)
-													{
-														instance.FetchParentalControls = ProtocolParser.ReadBool(stream);
-													}
+													ProtocolParser.SkipKey(stream, key);
 												}
 												else if (key.WireType == Wire.Varint)
 												{
-													instance.FetchLinks = ProtocolParser.ReadBool(stream);
+													instance.FetchParentalControls = ProtocolParser.ReadBool(stream);
 												}
 											}
-											else
+											else if (key.WireType == Wire.Varint)
 											{
-												instance.FetchFullName = ProtocolParser.ReadBool(stream);
+												instance.FetchLinks = ProtocolParser.ReadBool(stream);
 											}
 										}
 										else
 										{
-											instance.FetchBattleTag = ProtocolParser.ReadBool(stream);
+											instance.FetchFullName = ProtocolParser.ReadBool(stream);
 										}
 									}
 									else
 									{
-										instance.FetchEmail = ProtocolParser.ReadBool(stream);
+										instance.FetchBattleTag = ProtocolParser.ReadBool(stream);
 									}
 								}
 								else
 								{
-									instance.FetchId = ProtocolParser.ReadBool(stream);
+									instance.FetchEmail = ProtocolParser.ReadBool(stream);
 								}
 							}
 							else
 							{
-								instance.FetchBlob = ProtocolParser.ReadBool(stream);
+								instance.FetchId = ProtocolParser.ReadBool(stream);
 							}
 						}
 						else
 						{
-							instance.FetchAll = ProtocolParser.ReadBool(stream);
+							instance.FetchBlob = ProtocolParser.ReadBool(stream);
 						}
-					}
-					else if (instance.Ref == null)
-					{
-						instance.Ref = AccountReference.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						AccountReference.DeserializeLengthDelimited(stream, instance.Ref);
+						instance.FetchAll = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else if (instance.Ref == null)
+				{
+					instance.Ref = AccountReference.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					AccountReference.DeserializeLengthDelimited(stream, instance.Ref);
 				}
 			}
 			if (stream.Position == limit)

@@ -42,71 +42,67 @@ namespace bnet.protocol.invitation
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 42)
 								{
-									if (num2 != 42)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else if (instance.Target == null)
-									{
-										instance.Target = InvitationTarget.DeserializeLengthDelimited(stream);
-									}
-									else
-									{
-										InvitationTarget.DeserializeLengthDelimited(stream, instance.Target);
-									}
+									ProtocolParser.SkipKey(stream, key);
 								}
-								else if (instance.AgentInfo == null)
+								else if (instance.Target == null)
 								{
-									instance.AgentInfo = AccountInfo.DeserializeLengthDelimited(stream);
+									instance.Target = InvitationTarget.DeserializeLengthDelimited(stream);
 								}
 								else
 								{
-									AccountInfo.DeserializeLengthDelimited(stream, instance.AgentInfo);
+									InvitationTarget.DeserializeLengthDelimited(stream, instance.Target);
 								}
 							}
-							else if (instance.Params == null)
+							else if (instance.AgentInfo == null)
 							{
-								instance.Params = InvitationParams.DeserializeLengthDelimited(stream);
+								instance.AgentInfo = AccountInfo.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								InvitationParams.DeserializeLengthDelimited(stream, instance.Params);
+								AccountInfo.DeserializeLengthDelimited(stream, instance.AgentInfo);
 							}
 						}
-						else if (instance.TargetId == null)
+						else if (instance.Params == null)
 						{
-							instance.TargetId = EntityId.DeserializeLengthDelimited(stream);
+							instance.Params = InvitationParams.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							EntityId.DeserializeLengthDelimited(stream, instance.TargetId);
+							InvitationParams.DeserializeLengthDelimited(stream, instance.Params);
 						}
 					}
-					else if (instance.AgentIdentity == null)
+					else if (instance.TargetId == null)
 					{
-						instance.AgentIdentity = Identity.DeserializeLengthDelimited(stream);
+						instance.TargetId = EntityId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						Identity.DeserializeLengthDelimited(stream, instance.AgentIdentity);
+						EntityId.DeserializeLengthDelimited(stream, instance.TargetId);
 					}
+				}
+				else if (instance.AgentIdentity == null)
+				{
+					instance.AgentIdentity = Identity.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					Identity.DeserializeLengthDelimited(stream, instance.AgentIdentity);
 				}
 			}
 			if (stream.Position == limit)

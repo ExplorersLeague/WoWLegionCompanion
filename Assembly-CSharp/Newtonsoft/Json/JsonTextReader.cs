@@ -70,12 +70,11 @@ namespace Newtonsoft.Json
 			for (;;)
 			{
 				c = this.MoveNext();
-				char c2 = c;
-				if (c2 != '\0')
+				if (c != '\0')
 				{
-					if (c2 != '"' && c2 != '\'')
+					if (c != '"' && c != '\'')
 					{
-						if (c2 != '\\')
+						if (c != '\\')
 						{
 							this._buffer.Append(c);
 						}
@@ -83,26 +82,32 @@ namespace Newtonsoft.Json
 						{
 							if ((c = this.MoveNext()) == '\0' && this._end)
 							{
-								goto IL_25D;
+								goto IL_243;
 							}
-							char c3 = c;
-							switch (c3)
+							switch (c)
 							{
-							case 'n':
-								this._buffer.Append('\n');
+							case 'r':
+								this._buffer.Append('\r');
 								break;
 							default:
-								if (c3 != '"' && c3 != '\'' && c3 != '/')
+								if (c != '"' && c != '\'' && c != '/')
 								{
-									if (c3 != '\\')
+									if (c != '\\')
 									{
-										if (c3 != 'b')
+										if (c != 'b')
 										{
-											if (c3 != 'f')
+											if (c != 'f')
 											{
-												goto Block_11;
+												if (c != 'n')
+												{
+													goto Block_12;
+												}
+												this._buffer.Append('\n');
 											}
-											this._buffer.Append('\f');
+											else
+											{
+												this._buffer.Append('\f');
+											}
 										}
 										else
 										{
@@ -119,9 +124,6 @@ namespace Newtonsoft.Json
 									this._buffer.Append(c);
 								}
 								break;
-							case 'r':
-								this._buffer.Append('\r');
-								break;
 							case 't':
 								this._buffer.Append('\t');
 								break;
@@ -132,7 +134,7 @@ namespace Newtonsoft.Json
 								{
 									if ((c = this.MoveNext()) == '\0' && this._end)
 									{
-										goto IL_1B0;
+										goto IL_196;
 									}
 									array[i] = c;
 								}
@@ -167,20 +169,20 @@ namespace Newtonsoft.Json
 				this._currentLineNumber,
 				this._currentLinePosition
 			});
-			Block_11:
+			Block_12:
 			throw this.CreateJsonReaderException("Bad JSON escape sequence: {0}. Line {1}, position {2}.", new object[]
 			{
 				"\\" + c,
 				this._currentLineNumber,
 				this._currentLinePosition
 			});
-			IL_1B0:
+			IL_196:
 			throw this.CreateJsonReaderException("Unexpected end while parsing unicode character. Line {0}, position {1}.", new object[]
 			{
 				this._currentLineNumber,
 				this._currentLinePosition
 			});
-			IL_25D:
+			IL_243:
 			throw this.CreateJsonReaderException("Unterminated string. Expected delimiter: {0}. Line {1}, position {2}.", new object[]
 			{
 				quote,
@@ -237,17 +239,21 @@ namespace Newtonsoft.Json
 			else
 			{
 				DateTime dateTime2;
-				switch (dateTimeKind)
+				if (dateTimeKind != DateTimeKind.Unspecified)
 				{
-				case DateTimeKind.Unspecified:
-					dateTime2 = DateTime.SpecifyKind(dateTime.ToLocalTime(), DateTimeKind.Unspecified);
-					goto IL_E5;
-				case DateTimeKind.Local:
-					dateTime2 = dateTime.ToLocalTime();
-					goto IL_E5;
+					if (dateTimeKind != DateTimeKind.Local)
+					{
+						dateTime2 = dateTime;
+					}
+					else
+					{
+						dateTime2 = dateTime.ToLocalTime();
+					}
 				}
-				dateTime2 = dateTime;
-				IL_E5:
+				else
+				{
+					dateTime2 = DateTime.SpecifyKind(dateTime.ToLocalTime(), DateTimeKind.Unspecified);
+				}
 				this.SetToken(JsonToken.Date, dateTime2);
 			}
 		}
@@ -255,15 +261,14 @@ namespace Newtonsoft.Json
 		private char MoveNext()
 		{
 			int num = this._reader.Read();
-			int num2 = num;
-			switch (num2)
+			switch (num)
 			{
 			case 10:
 				this._currentLineNumber++;
 				this._currentLinePosition = 0;
 				break;
 			default:
-				if (num2 == -1)
+				if (num == -1)
 				{
 					this._end = true;
 					return '\0';
@@ -500,68 +505,67 @@ namespace Newtonsoft.Json
 		{
 			for (;;)
 			{
-				char c = currentChar;
-				switch (c)
+				switch (currentChar)
 				{
 				case '\t':
 				case '\n':
 				case '\r':
 					break;
 				default:
-					switch (c)
+					switch (currentChar)
 					{
 					case ')':
-						goto IL_71;
+						goto IL_6F;
 					default:
-						if (c != ' ')
+						if (currentChar != ' ')
 						{
-							if (c == '/')
+							if (currentChar == '/')
 							{
-								goto IL_7B;
+								goto IL_79;
 							}
-							if (c == ']')
+							if (currentChar == ']')
 							{
-								goto IL_67;
+								goto IL_65;
 							}
-							if (c == '}')
+							if (currentChar == '}')
 							{
-								goto IL_5D;
+								goto IL_5B;
 							}
 							if (!char.IsWhiteSpace(currentChar))
 							{
-								goto IL_A0;
+								goto IL_9E;
 							}
 						}
 						break;
 					case ',':
-						goto IL_83;
+						goto IL_81;
 					}
 					break;
 				}
-				IL_DC:
+				IL_DA:
 				if ((currentChar = this.MoveNext()) == '\0' && this._end)
 				{
 					return false;
 				}
 				continue;
-				goto IL_DC;
+				goto IL_DA;
 			}
-			IL_5D:
+			IL_5B:
 			base.SetToken(JsonToken.EndObject);
 			return true;
-			IL_67:
+			IL_65:
 			base.SetToken(JsonToken.EndArray);
 			return true;
-			IL_71:
+			IL_6F:
 			base.SetToken(JsonToken.EndConstructor);
 			return true;
-			IL_7B:
+			IL_79:
 			this.ParseComment();
 			return true;
-			IL_83:
+			IL_81:
 			base.SetStateBasedOnCurrent();
 			return false;
-			IL_A0:
+			IL_9E:
 			throw this.CreateJsonReaderException("After parsing a value an unexpected character was encountered: {0}. Line {1}, position {2}.", new object[]
 			{
 				currentChar,
@@ -574,46 +578,45 @@ namespace Newtonsoft.Json
 		{
 			for (;;)
 			{
-				char c = currentChar;
-				switch (c)
+				switch (currentChar)
 				{
 				case '\t':
 				case '\n':
 				case '\r':
 					break;
 				default:
-					if (c != ' ')
+					if (currentChar != ' ')
 					{
-						if (c == '/')
+						if (currentChar == '/')
 						{
-							goto IL_46;
+							goto IL_44;
 						}
-						if (c == '}')
+						if (currentChar == '}')
 						{
-							goto IL_3C;
+							goto IL_3A;
 						}
 						if (!char.IsWhiteSpace(currentChar))
 						{
-							goto IL_63;
+							goto IL_61;
 						}
 					}
 					break;
 				}
-				IL_70:
+				IL_6E:
 				if ((currentChar = this.MoveNext()) == '\0' && this._end)
 				{
 					return false;
 				}
 				continue;
-				goto IL_70;
+				goto IL_6E;
 			}
-			IL_3C:
+			IL_3A:
 			base.SetToken(JsonToken.EndObject);
 			return true;
-			IL_46:
+			IL_44:
 			this.ParseComment();
 			return true;
-			IL_63:
+			IL_61:
 			return this.ParseProperty(currentChar);
 		}
 
@@ -698,113 +701,112 @@ namespace Newtonsoft.Json
 		{
 			for (;;)
 			{
-				char c = currentChar;
-				switch (c)
+				switch (currentChar)
 				{
 				case '\'':
-					goto IL_C0;
+					goto IL_BE;
 				default:
-					switch (c)
+					switch (currentChar)
 					{
 					case '\t':
 					case '\n':
 					case '\r':
 						break;
 					default:
-						switch (c)
+						switch (currentChar)
 						{
 						case ' ':
 							break;
 						default:
-							switch (c)
+							switch (currentChar)
 							{
 							case '[':
-								goto IL_1C8;
+								goto IL_1C6;
 							default:
-								switch (c)
+								if (currentChar == 't')
+								{
+									goto IL_C7;
+								}
+								if (currentChar == 'u')
+								{
+									goto IL_1B5;
+								}
+								switch (currentChar)
 								{
 								case '{':
-									goto IL_1BF;
+									goto IL_1BD;
 								default:
-									if (c == 't')
+									if (currentChar == 'I')
 									{
-										goto IL_C9;
+										goto IL_184;
 									}
-									if (c == 'u')
+									if (currentChar == 'N')
 									{
-										goto IL_1B7;
+										goto IL_17C;
 									}
-									if (c == 'I')
+									if (currentChar == 'f')
 									{
-										goto IL_186;
+										goto IL_CF;
 									}
-									if (c == 'N')
+									if (currentChar == 'n')
 									{
-										goto IL_17E;
-									}
-									if (c == 'f')
-									{
-										goto IL_D1;
-									}
-									if (c == 'n')
-									{
-										goto IL_D9;
+										goto IL_D7;
 									}
 									if (!char.IsWhiteSpace(currentChar))
 									{
-										goto IL_20E;
+										goto IL_20C;
 									}
 									break;
 								case '}':
-									goto IL_1D1;
+									goto IL_1CF;
 								}
 								break;
 							case ']':
-								goto IL_1DB;
+								goto IL_1D9;
 							}
 							break;
 						case '"':
-							goto IL_C0;
+							goto IL_BE;
 						}
 						break;
 					}
-					IL_26E:
+					IL_26C:
 					if ((currentChar = this.MoveNext()) == '\0' && this._end)
 					{
 						return false;
 					}
 					break;
-					goto IL_26E;
+					goto IL_26C;
 				case ')':
-					goto IL_1EF;
+					goto IL_1ED;
 				case ',':
-					goto IL_1E5;
+					goto IL_1E3;
 				case '-':
-					goto IL_18E;
+					goto IL_18C;
 				case '/':
-					goto IL_1AF;
+					goto IL_1AD;
 				}
 			}
-			IL_C0:
+			IL_BE:
 			this.ParseString(currentChar);
 			return true;
-			IL_C9:
+			IL_C7:
 			this.ParseTrue();
 			return true;
-			IL_D1:
+			IL_CF:
 			this.ParseFalse();
 			return true;
-			IL_D9:
+			IL_D7:
 			if (this.HasNext())
 			{
-				char c2 = (char)this.PeekNext();
-				if (c2 == 'u')
+				char c = (char)this.PeekNext();
+				if (c == 'u')
 				{
 					this.ParseNull();
 				}
 				else
 				{
-					if (c2 != 'e')
+					if (c != 'e')
 					{
 						throw this.CreateJsonReaderException("Unexpected character encountered while parsing value: {0}. Line {1}, position {2}.", new object[]
 						{
@@ -822,13 +824,13 @@ namespace Newtonsoft.Json
 				this._currentLineNumber,
 				this._currentLinePosition
 			});
-			IL_17E:
+			IL_17C:
 			this.ParseNumberNaN();
 			return true;
-			IL_186:
+			IL_184:
 			this.ParseNumberPositiveInfinity();
 			return true;
-			IL_18E:
+			IL_18C:
 			if (this.PeekNext() == 73)
 			{
 				this.ParseNumberNegativeInfinity();
@@ -838,31 +840,31 @@ namespace Newtonsoft.Json
 				this.ParseNumber(currentChar);
 			}
 			return true;
-			IL_1AF:
+			IL_1AD:
 			this.ParseComment();
 			return true;
-			IL_1B7:
+			IL_1B5:
 			this.ParseUndefined();
 			return true;
-			IL_1BF:
+			IL_1BD:
 			base.SetToken(JsonToken.StartObject);
 			return true;
-			IL_1C8:
+			IL_1C6:
 			base.SetToken(JsonToken.StartArray);
 			return true;
-			IL_1D1:
+			IL_1CF:
 			base.SetToken(JsonToken.EndObject);
 			return true;
-			IL_1DB:
+			IL_1D9:
 			base.SetToken(JsonToken.EndArray);
 			return true;
-			IL_1E5:
+			IL_1E3:
 			base.SetToken(JsonToken.Undefined);
 			return true;
-			IL_1EF:
+			IL_1ED:
 			base.SetToken(JsonToken.EndConstructor);
 			return true;
-			IL_20E:
+			IL_20C:
 			if (char.IsNumber(currentChar) || currentChar == '-' || currentChar == '.')
 			{
 				this.ParseNumber(currentChar);
@@ -1223,10 +1225,6 @@ namespace Newtonsoft.Json
 			}
 		}
 
-		private const int LineFeedValue = 10;
-
-		private const int CarriageReturnValue = 13;
-
 		private readonly TextReader _reader;
 
 		private readonly StringBuffer _buffer;
@@ -1242,6 +1240,10 @@ namespace Newtonsoft.Json
 		private JsonTextReader.ReadType _readType;
 
 		private CultureInfo _culture;
+
+		private const int LineFeedValue = 10;
+
+		private const int CarriageReturnValue = 13;
 
 		private enum ReadType
 		{

@@ -316,7 +316,7 @@ namespace Newtonsoft.Json.Bson
 				int num = currentContext.Length - 1;
 				if (currentContext.Position < num)
 				{
-					if ((int)currentContext.Type == 4)
+					if (currentContext.Type == BsonType.Array)
 					{
 						this.ReadElement();
 						this.ReadType(this._currentElementType);
@@ -340,7 +340,7 @@ namespace Newtonsoft.Json.Bson
 					{
 						this.MovePosition(currentContext.Length);
 					}
-					JsonToken token2 = ((int)currentContext.Type != 3) ? JsonToken.EndArray : JsonToken.EndObject;
+					JsonToken token2 = (currentContext.Type != BsonType.Object) ? JsonToken.EndArray : JsonToken.EndObject;
 					base.SetToken(token2);
 					return true;
 				}
@@ -432,18 +432,23 @@ namespace Newtonsoft.Json.Bson
 			{
 				long javaScriptTicks = this.ReadInt64();
 				DateTime dateTime = JsonConvert.ConvertJavaScriptTicksToDateTime(javaScriptTicks);
+				DateTimeKind dateTimeKindHandling = this.DateTimeKindHandling;
 				DateTime dateTime2;
-				switch (this.DateTimeKindHandling)
+				if (dateTimeKindHandling != DateTimeKind.Unspecified)
 				{
-				case DateTimeKind.Unspecified:
-					dateTime2 = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
-					goto IL_17C;
-				case DateTimeKind.Local:
-					dateTime2 = dateTime.ToLocalTime();
-					goto IL_17C;
+					if (dateTimeKindHandling != DateTimeKind.Local)
+					{
+						dateTime2 = dateTime;
+					}
+					else
+					{
+						dateTime2 = dateTime.ToLocalTime();
+					}
 				}
-				dateTime2 = dateTime;
-				IL_17C:
+				else
+				{
+					dateTime2 = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+				}
 				this.SetToken(JsonToken.Date, dateTime2);
 				break;
 			}

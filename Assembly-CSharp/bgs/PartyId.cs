@@ -41,6 +41,29 @@ namespace bgs
 			this.Lo = lowBits;
 		}
 
+		public static implicit operator PartyId(BnetEntityId entityId)
+		{
+			if (entityId == null)
+			{
+				return null;
+			}
+			return new PartyId(entityId.GetHi(), entityId.GetLo());
+		}
+
+		public static bool operator ==(PartyId a, PartyId b)
+		{
+			if (a == null)
+			{
+				return b == null;
+			}
+			return b != null && a.Hi == b.Hi && a.Lo == b.Lo;
+		}
+
+		public static bool operator !=(PartyId a, PartyId b)
+		{
+			return !(a == b);
+		}
+
 		public override bool Equals(object obj)
 		{
 			if (obj is PartyId)
@@ -82,29 +105,6 @@ namespace bgs
 				hi = this.Hi,
 				lo = this.Lo
 			};
-		}
-
-		public static implicit operator PartyId(BnetEntityId entityId)
-		{
-			if (entityId == null)
-			{
-				return null;
-			}
-			return new PartyId(entityId.GetHi(), entityId.GetLo());
-		}
-
-		public static bool operator ==(PartyId a, PartyId b)
-		{
-			if (a == null)
-			{
-				return b == null;
-			}
-			return b != null && a.Hi == b.Hi && a.Lo == b.Lo;
-		}
-
-		public static bool operator !=(PartyId a, PartyId b)
-		{
-			return !(a == b);
 		}
 
 		public static readonly PartyId Empty = new PartyId(0UL, 0UL);

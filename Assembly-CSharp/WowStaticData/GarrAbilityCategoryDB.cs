@@ -13,12 +13,25 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<GarrAbilityCategoryRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrAbilityCategoryRec obj2 = (GarrAbilityCategoryRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrAbilityCategoryRec obj2 = (GarrAbilityCategoryRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

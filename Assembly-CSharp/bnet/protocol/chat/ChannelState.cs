@@ -47,18 +47,17 @@ namespace bnet.protocol.chat
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 29:
 						instance.Locale = binaryReader.ReadUInt32();
 						break;
 					default:
-						if (num2 != 10)
+						if (num != 10)
 						{
-							if (num2 != 21)
+							if (num != 21)
 							{
-								if (num2 != 40)
+								if (num != 40)
 								{
 									Key key = ProtocolParser.ReadKey((byte)num, stream);
 									uint field = key.Field;

@@ -52,80 +52,76 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 90)
 				{
-					int num2 = num;
-					if (num2 != 90)
+					if (num != 98)
 					{
-						if (num2 != 98)
+						if (num != 106)
 						{
-							if (num2 != 106)
+							if (num != 114)
 							{
-								if (num2 != 114)
+								if (num != 122)
 								{
-									if (num2 != 122)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field != 16u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field != 16u)
+										if (field != 17u)
 										{
-											if (field != 17u)
+											if (field == 0u)
 											{
-												if (field == 0u)
-												{
-													throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-												}
-												ProtocolParser.SkipKey(stream, key);
+												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 											}
-											else if (key.WireType == Wire.LengthDelimited)
-											{
-												if (instance.ParentalControlInfo == null)
-												{
-													instance.ParentalControlInfo = ParentalControlInfo.DeserializeLengthDelimited(stream);
-												}
-												else
-												{
-													ParentalControlInfo.DeserializeLengthDelimited(stream, instance.ParentalControlInfo);
-												}
-											}
+											ProtocolParser.SkipKey(stream, key);
 										}
 										else if (key.WireType == Wire.LengthDelimited)
 										{
-											instance.Links.Add(GameAccountLink.DeserializeLengthDelimited(stream));
+											if (instance.ParentalControlInfo == null)
+											{
+												instance.ParentalControlInfo = ParentalControlInfo.DeserializeLengthDelimited(stream);
+											}
+											else
+											{
+												ParentalControlInfo.DeserializeLengthDelimited(stream, instance.ParentalControlInfo);
+											}
 										}
 									}
-									else
+									else if (key.WireType == Wire.LengthDelimited)
 									{
-										instance.FullName = ProtocolParser.ReadString(stream);
+										instance.Links.Add(GameAccountLink.DeserializeLengthDelimited(stream));
 									}
 								}
 								else
 								{
-									instance.BattleTag = ProtocolParser.ReadString(stream);
+									instance.FullName = ProtocolParser.ReadString(stream);
 								}
 							}
 							else
 							{
-								instance.Email.Add(ProtocolParser.ReadString(stream));
+								instance.BattleTag = ProtocolParser.ReadString(stream);
 							}
-						}
-						else if (instance.Id == null)
-						{
-							instance.Id = AccountId.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							AccountId.DeserializeLengthDelimited(stream, instance.Id);
+							instance.Email.Add(ProtocolParser.ReadString(stream));
 						}
 					}
-					else if (instance.Blob == null)
+					else if (instance.Id == null)
 					{
-						instance.Blob = AccountBlob.DeserializeLengthDelimited(stream);
+						instance.Id = AccountId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						AccountBlob.DeserializeLengthDelimited(stream, instance.Blob);
+						AccountId.DeserializeLengthDelimited(stream, instance.Id);
 					}
+				}
+				else if (instance.Blob == null)
+				{
+					instance.Blob = AccountBlob.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					AccountBlob.DeserializeLengthDelimited(stream, instance.Blob);
 				}
 			}
 			if (stream.Position == limit)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -13,32 +14,45 @@ public class MissionListPanel : MonoBehaviour
 
 	private void Update()
 	{
-		foreach (object obj in PersistentMissionData.missionDictionary.Values)
+		IEnumerator enumerator = PersistentMissionData.missionDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
-			bool flag = false;
-			GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
-			if (record != null)
+			while (enumerator.MoveNext())
 			{
-				if (record.GarrFollowerTypeID == 4u)
+				object obj = enumerator.Current;
+				JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
+				bool flag = false;
+				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
+				if (record != null)
 				{
-					if (jamGarrisonMobileMission.MissionState == 1)
+					if (record.GarrFollowerTypeID == 4u)
 					{
-						long num = GarrisonStatus.CurrentTime() - jamGarrisonMobileMission.StartTime;
-						long num2 = jamGarrisonMobileMission.MissionDuration - num;
-						if (num2 <= 0L)
+						if (jamGarrisonMobileMission.MissionState == 1)
+						{
+							long num = GarrisonStatus.CurrentTime() - jamGarrisonMobileMission.StartTime;
+							long num2 = jamGarrisonMobileMission.MissionDuration - num;
+							if (num2 <= 0L)
+							{
+								flag = true;
+							}
+						}
+						if (jamGarrisonMobileMission.MissionState == 2)
 						{
 							flag = true;
 						}
-					}
-					if (jamGarrisonMobileMission.MissionState == 2)
-					{
-						flag = true;
-					}
-					if (flag)
-					{
+						if (flag)
+						{
+						}
 					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 	}

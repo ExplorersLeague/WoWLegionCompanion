@@ -35,9 +35,9 @@ namespace Newtonsoft.Json.Serialization
 						this._type
 					}));
 				}
-				this.Remove(jsonProperty);
+				base.Remove(jsonProperty);
 			}
-			this.Add(property);
+			base.Add(property);
 		}
 
 		public JsonProperty GetClosestMatchProperty(string propertyName)

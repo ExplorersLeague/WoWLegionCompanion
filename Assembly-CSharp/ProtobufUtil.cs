@@ -19,7 +19,7 @@ public class ProtobufUtil
 			length = bytes.Length;
 		}
 		MemoryStream stream = new MemoryStream(bytes, offset, length);
-		T result = (default(T) == null) ? Activator.CreateInstance<T>() : default(T);
+		T result = Activator.CreateInstance<T>();
 		result.Deserialize(stream);
 		return result;
 	}
@@ -27,7 +27,7 @@ public class ProtobufUtil
 	public static IProtoBuf ParseFromGeneric<T>(byte[] bytes) where T : IProtoBuf, new()
 	{
 		MemoryStream stream = new MemoryStream(bytes);
-		T t = (default(T) == null) ? Activator.CreateInstance<T>() : default(T);
+		T t = Activator.CreateInstance<T>();
 		t.Deserialize(stream);
 		return t;
 	}

@@ -140,11 +140,11 @@ namespace bgs
 				{
 					string hostNameOrAddress = text.Substring("::ffff:".Length);
 					IPHostEntry hostEntry2 = Dns.GetHostEntry(hostNameOrAddress);
-					foreach (IPAddress comparand in hostEntry2.AddressList)
+					foreach (IPAddress obj in hostEntry2.AddressList)
 					{
 						foreach (IPAddress ipaddress in hostEntry.AddressList)
 						{
-							if (ipaddress.Equals(comparand))
+							if (ipaddress.Equals(obj))
 							{
 								return true;
 							}

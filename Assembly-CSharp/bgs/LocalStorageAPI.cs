@@ -62,7 +62,7 @@ namespace bgs
 
 		public override void Process()
 		{
-			List<LocalStorageFileState> completedDownloads = LocalStorageAPI.m_completedDownloads;
+			object completedDownloads = LocalStorageAPI.m_completedDownloads;
 			lock (completedDownloads)
 			{
 				foreach (LocalStorageFileState localStorageFileState in LocalStorageAPI.m_completedDownloads)
@@ -454,7 +454,7 @@ namespace bgs
 
 		private static void FinalizeState(LocalStorageFileState state)
 		{
-			List<LocalStorageFileState> completedDownloads = LocalStorageAPI.m_completedDownloads;
+			object completedDownloads = LocalStorageAPI.m_completedDownloads;
 			lock (completedDownloads)
 			{
 				LocalStorageAPI.m_completedDownloads.Add(state);

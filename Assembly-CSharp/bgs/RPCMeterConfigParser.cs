@@ -21,14 +21,13 @@ namespace bgs
 				{
 					return rpcmethodConfig;
 				}
-				string text2 = text;
-				if (text2 == null)
+				if (text == null)
 				{
-					goto IL_1E6;
+					goto IL_1E7;
 				}
-				if (RPCMeterConfigParser.<>f__switch$mapF == null)
+				if (RPCMeterConfigParser.<>f__switch$map8 == null)
 				{
-					RPCMeterConfigParser.<>f__switch$mapF = new Dictionary<string, int>(11)
+					RPCMeterConfigParser.<>f__switch$map8 = new Dictionary<string, int>(11)
 					{
 						{
 							"service_name:",
@@ -77,9 +76,9 @@ namespace bgs
 					};
 				}
 				int num;
-				if (!RPCMeterConfigParser.<>f__switch$mapF.TryGetValue(text2, out num))
+				if (!RPCMeterConfigParser.<>f__switch$map8.TryGetValue(text, out num))
 				{
-					goto IL_1E6;
+					goto IL_1E7;
 				}
 				switch (num)
 				{
@@ -116,11 +115,13 @@ namespace bgs
 				case 10:
 					rpcmethodConfig.Timeout = tokenizer.NextFloat();
 					break;
+				case 11:
+					goto IL_1E7;
 				default:
-					goto IL_1E6;
+					goto IL_1E7;
 				}
 				continue;
-				IL_1E6:
+				IL_1E7:
 				tokenizer.SkipUnknownToken();
 			}
 			throw new Exception("Parsing ended with unfinished RPCMethodConfig");
@@ -137,64 +138,45 @@ namespace bgs
 				{
 					break;
 				}
-				string text2 = text;
-				if (text2 == null)
+				if (text == null)
 				{
-					goto IL_108;
+					goto IL_CF;
 				}
-				if (RPCMeterConfigParser.<>f__switch$map10 == null)
+				if (!(text == "method"))
 				{
-					RPCMeterConfigParser.<>f__switch$map10 = new Dictionary<string, int>(5)
+					if (!(text == "income_per_second:"))
 					{
+						if (!(text == "initial_balance:"))
 						{
-							"method",
-							0
-						},
-						{
-							"income_per_second:",
-							1
-						},
-						{
-							"initial_balance:",
-							2
-						},
-						{
-							"cap_balance:",
-							3
-						},
-						{
-							"startup_period:",
-							4
+							if (!(text == "cap_balance:"))
+							{
+								if (!(text == "startup_period:"))
+								{
+									goto IL_CF;
+								}
+								rpcmeterConfig.StartupPeriod = tokenizer.NextFloat();
+							}
+							else
+							{
+								rpcmeterConfig.CapBalance = tokenizer.NextUInt32();
+							}
 						}
-					};
+						else
+						{
+							rpcmeterConfig.InitialBalance = tokenizer.NextUInt32();
+						}
+					}
+					else
+					{
+						rpcmeterConfig.IncomePerSecond = tokenizer.NextUInt32();
+					}
 				}
-				int num;
-				if (!RPCMeterConfigParser.<>f__switch$map10.TryGetValue(text2, out num))
+				else
 				{
-					goto IL_108;
-				}
-				switch (num)
-				{
-				case 0:
 					rpcmeterConfig.AddMethod(RPCMeterConfigParser.ParseMethod(tokenizer));
-					break;
-				case 1:
-					rpcmeterConfig.IncomePerSecond = tokenizer.NextUInt32();
-					break;
-				case 2:
-					rpcmeterConfig.InitialBalance = tokenizer.NextUInt32();
-					break;
-				case 3:
-					rpcmeterConfig.CapBalance = tokenizer.NextUInt32();
-					break;
-				case 4:
-					rpcmeterConfig.StartupPeriod = tokenizer.NextFloat();
-					break;
-				default:
-					goto IL_108;
 				}
 				continue;
-				IL_108:
+				IL_CF:
 				tokenizer.SkipUnknownToken();
 			}
 			return rpcmeterConfig;

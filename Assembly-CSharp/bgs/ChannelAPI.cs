@@ -279,8 +279,7 @@ namespace bgs
 					this.m_receivedInvitations[serviceType] = list;
 				}
 				list.Add(new ChannelAPI.ReceivedInvite(channelInvitation, invitationAddedNotification.Invitation));
-				ChannelAPI.InvitationServiceType invitationServiceType = serviceType;
-				if (invitationServiceType == ChannelAPI.InvitationServiceType.INVITATION_SERVICE_TYPE_PARTY)
+				if (serviceType == ChannelAPI.InvitationServiceType.INVITATION_SERVICE_TYPE_PARTY)
 				{
 					this.m_battleNet.Party.ReceivedInvitationAdded(invitationAddedNotification, channelInvitation);
 				}
@@ -317,8 +316,7 @@ namespace bgs
 						this.m_receivedInvitations.Remove(serviceType);
 					}
 				}
-				ChannelAPI.InvitationServiceType invitationServiceType = serviceType;
-				if (invitationServiceType == ChannelAPI.InvitationServiceType.INVITATION_SERVICE_TYPE_PARTY)
+				if (serviceType == ChannelAPI.InvitationServiceType.INVITATION_SERVICE_TYPE_PARTY)
 				{
 					this.m_battleNet.Party.ReceivedInvitationRemoved(szPartyType, invitationRemovedNotification, channelInvitation);
 				}
@@ -403,7 +401,7 @@ namespace bgs
 					bnet.protocol.presence.ChannelState presence = addNotification.ChannelState.Presence;
 					this.m_battleNet.Presence.HandlePresenceUpdates(presence, channelReferenceObject);
 				}
-				goto IL_16E;
+				goto IL_16B;
 			}
 			ChannelAPI.ChannelData channelData = (ChannelAPI.ChannelData)channelReferenceObject.m_channelData;
 			if (channelData != null)
@@ -419,7 +417,7 @@ namespace bgs
 					}
 				}
 			}
-			IL_16E:
+			IL_16B:
 			if (channelType == ChannelAPI.ChannelType.PARTY_CHANNEL)
 			{
 				this.m_battleNet.Party.PartyJoined(channelReferenceObject, addNotification);
@@ -440,7 +438,7 @@ namespace bgs
 			switch (channelType)
 			{
 			case ChannelAPI.ChannelType.PRESENCE_CHANNEL:
-				goto IL_103;
+				goto IL_FF;
 			}
 			ChannelAPI.ChannelData channelData = (ChannelAPI.ChannelData)channelReferenceObject.m_channelData;
 			if (channelData != null)
@@ -452,7 +450,7 @@ namespace bgs
 					this.m_battleNet.Presence.PresenceSubscribe(joinNotification.Member.Identity.GameAccountId);
 				}
 			}
-			IL_103:
+			IL_FF:
 			if (channelType == ChannelAPI.ChannelType.PARTY_CHANNEL)
 			{
 				this.m_battleNet.Party.PartyMemberJoined(channelReferenceObject, joinNotification);
@@ -469,18 +467,24 @@ namespace bgs
 				base.ApiLog.LogError("HandleChannelSubscriber_NotifyRemove had unexpected traffic for objectId : " + context.Header.ObjectId);
 				return;
 			}
-			switch (channelReferenceObject.m_channelData.m_channelType)
+			ChannelAPI.ChannelType channelType = channelReferenceObject.m_channelData.m_channelType;
+			if (channelType != ChannelAPI.ChannelType.PARTY_CHANNEL)
 			{
-			case ChannelAPI.ChannelType.CHAT_CHANNEL:
-				break;
-			case ChannelAPI.ChannelType.PARTY_CHANNEL:
+				if (channelType != ChannelAPI.ChannelType.GAME_CHANNEL)
+				{
+					if (channelType != ChannelAPI.ChannelType.CHAT_CHANNEL)
+					{
+						goto IL_147;
+					}
+				}
+				else
+				{
+					this.m_battleNet.Games.GameLeft(channelReferenceObject, removeNotification);
+				}
+			}
+			else
+			{
 				this.m_battleNet.Party.PartyLeft(channelReferenceObject, removeNotification);
-				break;
-			case ChannelAPI.ChannelType.GAME_CHANNEL:
-				this.m_battleNet.Games.GameLeft(channelReferenceObject, removeNotification);
-				break;
-			default:
-				goto IL_144;
 			}
 			ChannelAPI.ChannelData channelData = (ChannelAPI.ChannelData)channelReferenceObject.m_channelData;
 			if (channelData != null)
@@ -493,7 +497,7 @@ namespace bgs
 					}
 				}
 			}
-			IL_144:
+			IL_147:
 			this.RemoveActiveChannel(context.Header.ObjectId);
 		}
 
@@ -507,16 +511,17 @@ namespace bgs
 				base.ApiLog.LogError("HandleChannelSubscriber_NotifyLeave had unexpected traffic for objectId : " + context.Header.ObjectId);
 				return;
 			}
-			switch (channelReferenceObject.m_channelData.m_channelType)
+			ChannelAPI.ChannelType channelType = channelReferenceObject.m_channelData.m_channelType;
+			if (channelType != ChannelAPI.ChannelType.PARTY_CHANNEL)
 			{
-			case ChannelAPI.ChannelType.CHAT_CHANNEL:
-			case ChannelAPI.ChannelType.GAME_CHANNEL:
-				break;
-			case ChannelAPI.ChannelType.PARTY_CHANNEL:
+				if (channelType != ChannelAPI.ChannelType.CHAT_CHANNEL && channelType != ChannelAPI.ChannelType.GAME_CHANNEL)
+				{
+					return;
+				}
+			}
+			else
+			{
 				this.m_battleNet.Party.PartyMemberLeft(channelReferenceObject, leaveNotification);
-				break;
-			default:
-				return;
 			}
 			ChannelAPI.ChannelData channelData = (ChannelAPI.ChannelData)channelReferenceObject.m_channelData;
 			if (channelData != null)

@@ -48,58 +48,54 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 26)
 				{
-					int num2 = num;
-					if (num2 != 26)
+					if (num != 32)
 					{
-						if (num2 != 32)
+						if (num != 40)
 						{
-							if (num2 != 40)
+							if (num != 48)
 							{
-								if (num2 != 48)
+								if (num != 56)
 								{
-									if (num2 != 56)
+									if (num != 64)
 									{
-										if (num2 != 64)
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
 										{
-											Key key = ProtocolParser.ReadKey((byte)num, stream);
-											uint field = key.Field;
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 										}
-										else
-										{
-											instance.PlaySchedule.Add(ProtocolParser.ReadBool(stream));
-										}
+										ProtocolParser.SkipKey(stream, key);
 									}
 									else
 									{
-										instance.CanSendVoice = ProtocolParser.ReadBool(stream);
+										instance.PlaySchedule.Add(ProtocolParser.ReadBool(stream));
 									}
 								}
 								else
 								{
-									instance.CanReceiveVoice = ProtocolParser.ReadBool(stream);
+									instance.CanSendVoice = ProtocolParser.ReadBool(stream);
 								}
 							}
 							else
 							{
-								instance.MinutesPerWeek = ProtocolParser.ReadUInt32(stream);
+								instance.CanReceiveVoice = ProtocolParser.ReadBool(stream);
 							}
 						}
 						else
 						{
-							instance.MinutesPerDay = ProtocolParser.ReadUInt32(stream);
+							instance.MinutesPerWeek = ProtocolParser.ReadUInt32(stream);
 						}
 					}
 					else
 					{
-						instance.Timezone = ProtocolParser.ReadString(stream);
+						instance.MinutesPerDay = ProtocolParser.ReadUInt32(stream);
 					}
+				}
+				else
+				{
+					instance.Timezone = ProtocolParser.ReadString(stream);
 				}
 			}
 			if (stream.Position == limit)

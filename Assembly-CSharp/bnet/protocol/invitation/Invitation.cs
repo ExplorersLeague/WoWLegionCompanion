@@ -46,111 +46,107 @@ namespace bnet.protocol.invitation
 					}
 					return instance;
 				}
-				else
+				else if (num != 9)
 				{
-					int num2 = num;
-					if (num2 != 9)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 42)
 								{
-									if (num2 != 42)
+									if (num != 50)
 									{
-										if (num2 != 50)
+										if (num != 56)
 										{
-											if (num2 != 56)
+											if (num != 64)
 											{
-												if (num2 != 64)
+												Key key = ProtocolParser.ReadKey((byte)num, stream);
+												uint field = key.Field;
+												switch (field)
 												{
-													Key key = ProtocolParser.ReadKey((byte)num, stream);
-													uint field = key.Field;
-													switch (field)
+												case 103u:
+													if (key.WireType == Wire.LengthDelimited)
 													{
-													case 103u:
-														if (key.WireType == Wire.LengthDelimited)
+														if (instance.FriendInvite == null)
 														{
-															if (instance.FriendInvite == null)
-															{
-																instance.FriendInvite = FriendInvitation.DeserializeLengthDelimited(stream);
-															}
-															else
-															{
-																FriendInvitation.DeserializeLengthDelimited(stream, instance.FriendInvite);
-															}
+															instance.FriendInvite = FriendInvitation.DeserializeLengthDelimited(stream);
 														}
-														break;
-													default:
-														if (field == 0u)
+														else
 														{
-															throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+															FriendInvitation.DeserializeLengthDelimited(stream, instance.FriendInvite);
 														}
-														ProtocolParser.SkipKey(stream, key);
-														break;
-													case 105u:
-														if (key.WireType == Wire.LengthDelimited)
-														{
-															if (instance.ChannelInvitation == null)
-															{
-																instance.ChannelInvitation = ChannelInvitation.DeserializeLengthDelimited(stream);
-															}
-															else
-															{
-																ChannelInvitation.DeserializeLengthDelimited(stream, instance.ChannelInvitation);
-															}
-														}
-														break;
 													}
-												}
-												else
-												{
-													instance.ExpirationTime = ProtocolParser.ReadUInt64(stream);
+													break;
+												default:
+													if (field == 0u)
+													{
+														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+													}
+													ProtocolParser.SkipKey(stream, key);
+													break;
+												case 105u:
+													if (key.WireType == Wire.LengthDelimited)
+													{
+														if (instance.ChannelInvitation == null)
+														{
+															instance.ChannelInvitation = ChannelInvitation.DeserializeLengthDelimited(stream);
+														}
+														else
+														{
+															ChannelInvitation.DeserializeLengthDelimited(stream, instance.ChannelInvitation);
+														}
+													}
+													break;
 												}
 											}
 											else
 											{
-												instance.CreationTime = ProtocolParser.ReadUInt64(stream);
+												instance.ExpirationTime = ProtocolParser.ReadUInt64(stream);
 											}
 										}
 										else
 										{
-											instance.InvitationMessage = ProtocolParser.ReadString(stream);
+											instance.CreationTime = ProtocolParser.ReadUInt64(stream);
 										}
 									}
 									else
 									{
-										instance.InviteeName = ProtocolParser.ReadString(stream);
+										instance.InvitationMessage = ProtocolParser.ReadString(stream);
 									}
 								}
 								else
 								{
-									instance.InviterName = ProtocolParser.ReadString(stream);
+									instance.InviteeName = ProtocolParser.ReadString(stream);
 								}
-							}
-							else if (instance.InviteeIdentity == null)
-							{
-								instance.InviteeIdentity = Identity.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								Identity.DeserializeLengthDelimited(stream, instance.InviteeIdentity);
+								instance.InviterName = ProtocolParser.ReadString(stream);
 							}
 						}
-						else if (instance.InviterIdentity == null)
+						else if (instance.InviteeIdentity == null)
 						{
-							instance.InviterIdentity = Identity.DeserializeLengthDelimited(stream);
+							instance.InviteeIdentity = Identity.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							Identity.DeserializeLengthDelimited(stream, instance.InviterIdentity);
+							Identity.DeserializeLengthDelimited(stream, instance.InviteeIdentity);
 						}
+					}
+					else if (instance.InviterIdentity == null)
+					{
+						instance.InviterIdentity = Identity.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						instance.Id = binaryReader.ReadUInt64();
+						Identity.DeserializeLengthDelimited(stream, instance.InviterIdentity);
 					}
+				}
+				else
+				{
+					instance.Id = binaryReader.ReadUInt64();
 				}
 			}
 			if (stream.Position == limit)

@@ -43,23 +43,19 @@ namespace bnet.protocol.game_master
 					}
 					return instance;
 				}
+				else if (num != 9)
+				{
+					Key key = ProtocolParser.ReadKey((byte)num, stream);
+					uint field = key.Field;
+					if (field == 0u)
+					{
+						throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+					}
+					ProtocolParser.SkipKey(stream, key);
+				}
 				else
 				{
-					int num2 = num;
-					if (num2 != 9)
-					{
-						Key key = ProtocolParser.ReadKey((byte)num, stream);
-						uint field = key.Field;
-						if (field == 0u)
-						{
-							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-						}
-						ProtocolParser.SkipKey(stream, key);
-					}
-					else
-					{
-						instance.FactoryId = binaryReader.ReadUInt64();
-					}
+					instance.FactoryId = binaryReader.ReadUInt64();
 				}
 			}
 			if (stream.Position == limit)

@@ -26,6 +26,14 @@ public class MissionResultsPanel : MonoBehaviour
 		}
 	}
 
+	private void Start()
+	{
+		if (Main.instance.IsNarrowScreen())
+		{
+			this.NarrowScreenAdjust();
+		}
+	}
+
 	private void OnEnable()
 	{
 		this.m_missionSuccessMessage.SetActive(false);
@@ -216,14 +224,7 @@ public class MissionResultsPanel : MonoBehaviour
 		if (record.OvermaxRewardPackID > 0 && jamGarrisonMobileMission != null && jamGarrisonMobileMission.OvermaxReward.Length > 0)
 		{
 			this.m_bonusLootDisplay.SetActive(true);
-			this.m_bonusLootChanceText.text = string.Concat(new object[]
-			{
-				"<color=#ffff00ff>",
-				StaticDB.GetString("BONUS", null),
-				" </color>\n<color=#ff8600ff>",
-				Math.Max(0, chance - 100),
-				"%</color>"
-			});
+			this.m_bonusLootChanceText.text = "<color=#ff9600ff>" + Math.Max(0, chance - 100) + "%</color>";
 			this.m_bonusLootChance = Math.Max(0, chance - 100);
 		}
 	}
@@ -527,13 +528,14 @@ public class MissionResultsPanel : MonoBehaviour
 				Object.DestroyImmediate(followerExperienceDisplay.gameObject);
 			}
 		}
-		if (this.m_partyBuffGroup != null)
+		if (this.m_partyBuffGroup == null)
 		{
-			AbilityDisplay[] componentsInChildren8 = this.m_partyBuffGroup.GetComponentsInChildren<AbilityDisplay>(true);
-			foreach (AbilityDisplay abilityDisplay in componentsInChildren8)
-			{
-				Object.DestroyImmediate(abilityDisplay.gameObject);
-			}
+			return;
+		}
+		AbilityDisplay[] componentsInChildren8 = this.m_partyBuffGroup.GetComponentsInChildren<AbilityDisplay>(true);
+		foreach (AbilityDisplay abilityDisplay in componentsInChildren8)
+		{
+			Object.DestroyImmediate(abilityDisplay.gameObject);
 		}
 		int adjustedMissionDuration = GeneralHelpers.GetAdjustedMissionDuration(record, list, this.enemyPortraitsGroup);
 		int num6 = 0;
@@ -550,6 +552,26 @@ public class MissionResultsPanel : MonoBehaviour
 					AbilityDisplay component3 = gameObject3.GetComponent<AbilityDisplay>();
 					component3.SetAbility(garrAbilityID, false, false, null);
 				}
+			}
+		}
+		if (num6 > 8)
+		{
+			this.m_partyBuffsText.text = string.Empty;
+		}
+		else
+		{
+			this.m_partyBuffsText.text = StaticDB.GetString("PARTY_BUFFS", null);
+		}
+		HorizontalLayoutGroup component4 = this.m_partyBuffGroup.GetComponent<HorizontalLayoutGroup>();
+		if (component4 != null)
+		{
+			if (num6 > 10 && Main.instance.IsNarrowScreen())
+			{
+				component4.spacing = 3f;
+			}
+			else
+			{
+				component4.spacing = 6f;
 			}
 		}
 		this.m_partyBuffGroup.SetActive(num6 > 0);
@@ -669,6 +691,24 @@ public class MissionResultsPanel : MonoBehaviour
 	{
 		Main.instance.ExpediteMissionCheat(this.m_garrMissionID);
 		this.HideMissionResults();
+	}
+
+	public void NarrowScreenAdjust()
+	{
+		GridLayoutGroup component = this.m_EnemiesGroup.GetComponent<GridLayoutGroup>();
+		if (component != null)
+		{
+			Vector2 spacing = component.spacing;
+			spacing.x = 40f;
+			component.spacing = spacing;
+		}
+		component = this.m_FollowerSlotGroup.GetComponent<GridLayoutGroup>();
+		if (component != null)
+		{
+			Vector2 spacing2 = component.spacing;
+			spacing2.x = 40f;
+			component.spacing = spacing2;
+		}
 	}
 
 	public GameObject m_darknessBG;
@@ -796,4 +836,9 @@ public class MissionResultsPanel : MonoBehaviour
 	private float m_timeUntilFadeOutMissionDetailsDisplay;
 
 	private float m_timeUntilShowFollowerExperienceDisplays;
+
+	[Header("Narrow Screen")]
+	public GameObject m_EnemiesGroup;
+
+	public GameObject m_FollowerSlotGroup;
 }

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Utilities;
 
@@ -247,6 +248,21 @@ namespace Newtonsoft.Json.Serialization
 			}
 		}
 
+		static JsonTypeReflector()
+		{
+			// Note: this type is marked as 'beforefieldinit'.
+			if (JsonTypeReflector.<>f__mg$cache0 == null)
+			{
+				JsonTypeReflector.<>f__mg$cache0 = new Func<ICustomAttributeProvider, Type>(JsonTypeReflector.GetJsonConverterTypeFromAttribute);
+			}
+			JsonTypeReflector.JsonConverterTypeCache = new ThreadSafeStore<ICustomAttributeProvider, Type>(JsonTypeReflector.<>f__mg$cache0);
+			if (JsonTypeReflector.<>f__mg$cache1 == null)
+			{
+				JsonTypeReflector.<>f__mg$cache1 = new Func<Type, Type>(JsonTypeReflector.GetAssociateMetadataTypeFromAttribute);
+			}
+			JsonTypeReflector.AssociatedMetadataTypesCache = new ThreadSafeStore<Type, Type>(JsonTypeReflector.<>f__mg$cache1);
+		}
+
 		public const string IdPropertyName = "$id";
 
 		public const string RefPropertyName = "$ref";
@@ -261,14 +277,20 @@ namespace Newtonsoft.Json.Serialization
 
 		public const string SpecifiedPostfix = "Specified";
 
+		private static readonly ThreadSafeStore<ICustomAttributeProvider, Type> JsonConverterTypeCache;
+
+		private static readonly ThreadSafeStore<Type, Type> AssociatedMetadataTypesCache;
+
 		private const string MetadataTypeAttributeTypeName = "System.ComponentModel.DataAnnotations.MetadataTypeAttribute, System.ComponentModel.DataAnnotations, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35";
-
-		private static readonly ThreadSafeStore<ICustomAttributeProvider, Type> JsonConverterTypeCache = new ThreadSafeStore<ICustomAttributeProvider, Type>(new Func<ICustomAttributeProvider, Type>(JsonTypeReflector.GetJsonConverterTypeFromAttribute));
-
-		private static readonly ThreadSafeStore<Type, Type> AssociatedMetadataTypesCache = new ThreadSafeStore<Type, Type>(new Func<Type, Type>(JsonTypeReflector.GetAssociateMetadataTypeFromAttribute));
 
 		private static Type _cachedMetadataTypeAttributeType;
 
 		private static bool? _dynamicCodeGeneration;
+
+		[CompilerGenerated]
+		private static Func<ICustomAttributeProvider, Type> <>f__mg$cache0;
+
+		[CompilerGenerated]
+		private static Func<Type, Type> <>f__mg$cache1;
 	}
 }

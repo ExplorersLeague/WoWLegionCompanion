@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Newtonsoft.Json.Utilities
 {
-	internal class DictionaryWrapper<TKey, TValue> : IEnumerable, IWrappedDictionary, ICollection, IDictionary, IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>
+	internal class DictionaryWrapper<TKey, TValue> : IDictionary<TKey, TValue>, IWrappedDictionary, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IDictionary, ICollection
 	{
 		public DictionaryWrapper(IDictionary dictionary)
 		{
@@ -18,128 +18,6 @@ namespace Newtonsoft.Json.Utilities
 		{
 			ValidationUtils.ArgumentNotNull(dictionary, "dictionary");
 			this._genericDictionary = dictionary;
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return this.GetEnumerator();
-		}
-
-		void IDictionary.Add(object key, object value)
-		{
-			if (this._genericDictionary != null)
-			{
-				this._genericDictionary.Add((TKey)((object)key), (TValue)((object)value));
-			}
-			else
-			{
-				this._dictionary.Add(key, value);
-			}
-		}
-
-		bool IDictionary.Contains(object key)
-		{
-			if (this._genericDictionary != null)
-			{
-				return this._genericDictionary.ContainsKey((TKey)((object)key));
-			}
-			return this._dictionary.Contains(key);
-		}
-
-		IDictionaryEnumerator IDictionary.GetEnumerator()
-		{
-			if (this._genericDictionary != null)
-			{
-				return new DictionaryWrapper<TKey, TValue>.DictionaryEnumerator<TKey, TValue>(this._genericDictionary.GetEnumerator());
-			}
-			return this._dictionary.GetEnumerator();
-		}
-
-		bool IDictionary.IsFixedSize
-		{
-			get
-			{
-				return this._genericDictionary == null && this._dictionary.IsFixedSize;
-			}
-		}
-
-		ICollection IDictionary.Keys
-		{
-			get
-			{
-				if (this._genericDictionary != null)
-				{
-					return this._genericDictionary.Keys.ToList<TKey>();
-				}
-				return this._dictionary.Keys;
-			}
-		}
-
-		ICollection IDictionary.Values
-		{
-			get
-			{
-				if (this._genericDictionary != null)
-				{
-					return this._genericDictionary.Values.ToList<TValue>();
-				}
-				return this._dictionary.Values;
-			}
-		}
-
-		object IDictionary.this[object key]
-		{
-			get
-			{
-				if (this._genericDictionary != null)
-				{
-					return this._genericDictionary[(TKey)((object)key)];
-				}
-				return this._dictionary[key];
-			}
-			set
-			{
-				if (this._genericDictionary != null)
-				{
-					this._genericDictionary[(TKey)((object)key)] = (TValue)((object)value);
-				}
-				else
-				{
-					this._dictionary[key] = value;
-				}
-			}
-		}
-
-		void ICollection.CopyTo(Array array, int index)
-		{
-			if (this._genericDictionary != null)
-			{
-				this._genericDictionary.CopyTo((KeyValuePair<TKey, TValue>[])array, index);
-			}
-			else
-			{
-				this._dictionary.CopyTo(array, index);
-			}
-		}
-
-		bool ICollection.IsSynchronized
-		{
-			get
-			{
-				return this._genericDictionary == null && this._dictionary.IsSynchronized;
-			}
-		}
-
-		object ICollection.SyncRoot
-		{
-			get
-			{
-				if (this._syncRoot == null)
-				{
-					Interlocked.CompareExchange(ref this._syncRoot, new object(), null);
-				}
-				return this._syncRoot;
-			}
 		}
 
 		public void Add(TKey key, TValue value)
@@ -280,10 +158,23 @@ namespace Newtonsoft.Json.Utilities
 			}
 			else
 			{
-				foreach (object obj in this._dictionary)
+				IDictionaryEnumerator enumerator = this._dictionary.GetEnumerator();
+				try
 				{
-					DictionaryEntry dictionaryEntry = (DictionaryEntry)obj;
-					array[arrayIndex++] = new KeyValuePair<TKey, TValue>((TKey)((object)dictionaryEntry.Key), (TValue)((object)dictionaryEntry.Value));
+					while (enumerator.MoveNext())
+					{
+						object obj = enumerator.Current;
+						DictionaryEntry dictionaryEntry = (DictionaryEntry)obj;
+						array[arrayIndex++] = new KeyValuePair<TKey, TValue>((TKey)((object)dictionaryEntry.Key), (TValue)((object)dictionaryEntry.Value));
+					}
+				}
+				finally
+				{
+					IDisposable disposable;
+					if ((disposable = (enumerator as IDisposable)) != null)
+					{
+						disposable.Dispose();
+					}
 				}
 			}
 		}
@@ -341,6 +232,61 @@ namespace Newtonsoft.Json.Utilities
 			select new KeyValuePair<TKey, TValue>((TKey)((object)de.Key), (TValue)((object)de.Value))).GetEnumerator();
 		}
 
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return this.GetEnumerator();
+		}
+
+		void IDictionary.Add(object key, object value)
+		{
+			if (this._genericDictionary != null)
+			{
+				this._genericDictionary.Add((TKey)((object)key), (TValue)((object)value));
+			}
+			else
+			{
+				this._dictionary.Add(key, value);
+			}
+		}
+
+		bool IDictionary.Contains(object key)
+		{
+			if (this._genericDictionary != null)
+			{
+				return this._genericDictionary.ContainsKey((TKey)((object)key));
+			}
+			return this._dictionary.Contains(key);
+		}
+
+		IDictionaryEnumerator IDictionary.GetEnumerator()
+		{
+			if (this._genericDictionary != null)
+			{
+				return new DictionaryWrapper<TKey, TValue>.DictionaryEnumerator<TKey, TValue>(this._genericDictionary.GetEnumerator());
+			}
+			return this._dictionary.GetEnumerator();
+		}
+
+		bool IDictionary.IsFixedSize
+		{
+			get
+			{
+				return this._genericDictionary == null && this._dictionary.IsFixedSize;
+			}
+		}
+
+		ICollection IDictionary.Keys
+		{
+			get
+			{
+				if (this._genericDictionary != null)
+				{
+					return this._genericDictionary.Keys.ToList<TKey>();
+				}
+				return this._dictionary.Keys;
+			}
+		}
+
 		public void Remove(object key)
 		{
 			if (this._genericDictionary != null)
@@ -350,6 +296,73 @@ namespace Newtonsoft.Json.Utilities
 			else
 			{
 				this._dictionary.Remove(key);
+			}
+		}
+
+		ICollection IDictionary.Values
+		{
+			get
+			{
+				if (this._genericDictionary != null)
+				{
+					return this._genericDictionary.Values.ToList<TValue>();
+				}
+				return this._dictionary.Values;
+			}
+		}
+
+		object IDictionary.this[object key]
+		{
+			get
+			{
+				if (this._genericDictionary != null)
+				{
+					return this._genericDictionary[(TKey)((object)key)];
+				}
+				return this._dictionary[key];
+			}
+			set
+			{
+				if (this._genericDictionary != null)
+				{
+					this._genericDictionary[(TKey)((object)key)] = (TValue)((object)value);
+				}
+				else
+				{
+					this._dictionary[key] = value;
+				}
+			}
+		}
+
+		void ICollection.CopyTo(Array array, int index)
+		{
+			if (this._genericDictionary != null)
+			{
+				this._genericDictionary.CopyTo((KeyValuePair<TKey, TValue>[])array, index);
+			}
+			else
+			{
+				this._dictionary.CopyTo(array, index);
+			}
+		}
+
+		bool ICollection.IsSynchronized
+		{
+			get
+			{
+				return this._genericDictionary == null && this._dictionary.IsSynchronized;
+			}
+		}
+
+		object ICollection.SyncRoot
+		{
+			get
+			{
+				if (this._syncRoot == null)
+				{
+					Interlocked.CompareExchange(ref this._syncRoot, new object(), null);
+				}
+				return this._syncRoot;
 			}
 		}
 
@@ -371,7 +384,7 @@ namespace Newtonsoft.Json.Utilities
 
 		private object _syncRoot;
 
-		private struct DictionaryEnumerator<TEnumeratorKey, TEnumeratorValue> : IEnumerator, IDictionaryEnumerator
+		private struct DictionaryEnumerator<TEnumeratorKey, TEnumeratorValue> : IDictionaryEnumerator, IEnumerator
 		{
 			public DictionaryEnumerator(IEnumerator<KeyValuePair<TEnumeratorKey, TEnumeratorValue>> e)
 			{

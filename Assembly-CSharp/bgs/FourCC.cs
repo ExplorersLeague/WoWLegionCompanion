@@ -67,31 +67,6 @@ namespace bgs
 			this.m_value = other.m_value;
 		}
 
-		public override bool Equals(object obj)
-		{
-			if (obj == null)
-			{
-				return false;
-			}
-			FourCC fourCC = obj as FourCC;
-			return fourCC != null && this.m_value == fourCC.m_value;
-		}
-
-		public bool Equals(FourCC other)
-		{
-			return other != null && this.m_value == other.m_value;
-		}
-
-		public override int GetHashCode()
-		{
-			return this.m_value.GetHashCode();
-		}
-
-		public override string ToString()
-		{
-			return this.GetString();
-		}
-
 		public static implicit operator FourCC(uint val)
 		{
 			return new FourCC(val);
@@ -117,6 +92,26 @@ namespace bgs
 			return !(fourCC == val);
 		}
 
+		public override bool Equals(object obj)
+		{
+			if (obj == null)
+			{
+				return false;
+			}
+			FourCC fourCC = obj as FourCC;
+			return fourCC != null && this.m_value == fourCC.m_value;
+		}
+
+		public bool Equals(FourCC other)
+		{
+			return other != null && this.m_value == other.m_value;
+		}
+
+		public override int GetHashCode()
+		{
+			return this.m_value.GetHashCode();
+		}
+
 		public static bool operator ==(FourCC a, FourCC b)
 		{
 			return object.ReferenceEquals(a, b) || (a != null && b != null && a.m_value == b.m_value);
@@ -125,6 +120,11 @@ namespace bgs
 		public static bool operator !=(FourCC a, FourCC b)
 		{
 			return !(a == b);
+		}
+
+		public override string ToString()
+		{
+			return this.GetString();
 		}
 
 		protected uint m_value;

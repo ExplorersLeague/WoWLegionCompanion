@@ -44,83 +44,79 @@ namespace bnet.protocol.attribute
 					}
 					return instance;
 				}
-				else
+				else if (num != 16)
 				{
-					int num2 = num;
-					if (num2 != 16)
+					if (num != 24)
 					{
-						if (num2 != 24)
+						if (num != 33)
 						{
-							if (num2 != 33)
+							if (num != 42)
 							{
-								if (num2 != 42)
+								if (num != 50)
 								{
-									if (num2 != 50)
+									if (num != 58)
 									{
-										if (num2 != 58)
+										if (num != 66)
 										{
-											if (num2 != 66)
+											if (num != 72)
 											{
-												if (num2 != 72)
+												if (num != 82)
 												{
-													if (num2 != 82)
+													Key key = ProtocolParser.ReadKey((byte)num, stream);
+													uint field = key.Field;
+													if (field == 0u)
 													{
-														Key key = ProtocolParser.ReadKey((byte)num, stream);
-														uint field = key.Field;
-														if (field == 0u)
-														{
-															throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-														}
-														ProtocolParser.SkipKey(stream, key);
+														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 													}
-													else if (instance.EntityidValue == null)
-													{
-														instance.EntityidValue = EntityId.DeserializeLengthDelimited(stream);
-													}
-													else
-													{
-														EntityId.DeserializeLengthDelimited(stream, instance.EntityidValue);
-													}
+													ProtocolParser.SkipKey(stream, key);
+												}
+												else if (instance.EntityidValue == null)
+												{
+													instance.EntityidValue = EntityId.DeserializeLengthDelimited(stream);
 												}
 												else
 												{
-													instance.UintValue = ProtocolParser.ReadUInt64(stream);
+													EntityId.DeserializeLengthDelimited(stream, instance.EntityidValue);
 												}
 											}
 											else
 											{
-												instance.FourccValue = ProtocolParser.ReadString(stream);
+												instance.UintValue = ProtocolParser.ReadUInt64(stream);
 											}
 										}
 										else
 										{
-											instance.MessageValue = ProtocolParser.ReadBytes(stream);
+											instance.FourccValue = ProtocolParser.ReadString(stream);
 										}
 									}
 									else
 									{
-										instance.BlobValue = ProtocolParser.ReadBytes(stream);
+										instance.MessageValue = ProtocolParser.ReadBytes(stream);
 									}
 								}
 								else
 								{
-									instance.StringValue = ProtocolParser.ReadString(stream);
+									instance.BlobValue = ProtocolParser.ReadBytes(stream);
 								}
 							}
 							else
 							{
-								instance.FloatValue = binaryReader.ReadDouble();
+								instance.StringValue = ProtocolParser.ReadString(stream);
 							}
 						}
 						else
 						{
-							instance.IntValue = (long)ProtocolParser.ReadUInt64(stream);
+							instance.FloatValue = binaryReader.ReadDouble();
 						}
 					}
 					else
 					{
-						instance.BoolValue = ProtocolParser.ReadBool(stream);
+						instance.IntValue = (long)ProtocolParser.ReadUInt64(stream);
 					}
+				}
+				else
+				{
+					instance.BoolValue = ProtocolParser.ReadBool(stream);
 				}
 			}
 			if (stream.Position == limit)

@@ -44,52 +44,48 @@ namespace bnet.protocol.channel
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.FetchMembers = ProtocolParser.ReadBool(stream);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.FetchState = ProtocolParser.ReadBool(stream);
+								instance.FetchMembers = ProtocolParser.ReadBool(stream);
 							}
-						}
-						else if (instance.ChannelId == null)
-						{
-							instance.ChannelId = EntityId.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							EntityId.DeserializeLengthDelimited(stream, instance.ChannelId);
+							instance.FetchState = ProtocolParser.ReadBool(stream);
 						}
 					}
-					else if (instance.AgentId == null)
+					else if (instance.ChannelId == null)
 					{
-						instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+						instance.ChannelId = EntityId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
+						EntityId.DeserializeLengthDelimited(stream, instance.ChannelId);
 					}
+				}
+				else if (instance.AgentId == null)
+				{
+					instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
 				}
 			}
 			if (stream.Position == limit)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -14,6 +15,14 @@ public class MiniMissionListPanel : MonoBehaviour
 		this.m_noMissionsAvailableLabel.text = StaticDB.GetString("NO_MISSIONS_AVAILABLE", "No missions are currently available.");
 		this.m_noMissionsInProgressLabel.font = GeneralHelpers.LoadStandardFont();
 		this.m_noMissionsInProgressLabel.text = StaticDB.GetString("NO_MISSIONS_IN_PROGRESS", "No missions are currently in progress.");
+	}
+
+	private void Start()
+	{
+		if (Main.instance.IsNarrowScreen())
+		{
+			this.NarrowScreenAdjust();
+		}
 	}
 
 	public void OnEnable()
@@ -100,58 +109,71 @@ public class MiniMissionListPanel : MonoBehaviour
 		}
 		MiniMissionListItem[] componentsInChildren2 = this.m_availableMission_listContents.GetComponentsInChildren<MiniMissionListItem>(true);
 		MiniMissionListItem[] componentsInChildren3 = this.m_inProgressMission_listContents.GetComponentsInChildren<MiniMissionListItem>(true);
-		foreach (object obj in PersistentMissionData.missionDictionary.Values)
+		IEnumerator enumerator = PersistentMissionData.missionDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonMobileMission jamGarrisonMobileMission3 = (JamGarrisonMobileMission)obj;
-			bool flag3 = false;
-			foreach (MiniMissionListItem miniMissionListItem3 in componentsInChildren2)
+			while (enumerator.MoveNext())
 			{
-				if (miniMissionListItem3.GetMissionID() == jamGarrisonMobileMission3.MissionRecID)
+				object obj = enumerator.Current;
+				JamGarrisonMobileMission jamGarrisonMobileMission3 = (JamGarrisonMobileMission)obj;
+				bool flag3 = false;
+				foreach (MiniMissionListItem miniMissionListItem3 in componentsInChildren2)
 				{
-					flag3 = true;
-					break;
-				}
-			}
-			if (!flag3)
-			{
-				foreach (MiniMissionListItem miniMissionListItem4 in componentsInChildren3)
-				{
-					if (miniMissionListItem4.GetMissionID() == jamGarrisonMobileMission3.MissionRecID)
+					if (miniMissionListItem3.GetMissionID() == jamGarrisonMobileMission3.MissionRecID)
 					{
 						flag3 = true;
 						break;
 					}
 				}
-			}
-			if (!flag3)
-			{
-				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission3.MissionRecID);
-				if (record == null)
+				if (!flag3)
 				{
-					Debug.LogWarning("Mission Not Found: ID " + jamGarrisonMobileMission3.MissionRecID);
-				}
-				else if (record.GarrFollowerTypeID == 4u)
-				{
-					if ((record.Flags & 16u) != 0u)
+					foreach (MiniMissionListItem miniMissionListItem4 in componentsInChildren3)
 					{
-						this.m_combatAllyListItem.gameObject.SetActive(true);
-					}
-					else
-					{
-						GameObject gameObject = Object.Instantiate<GameObject>(this.m_miniMissionListItemPrefab);
-						if (jamGarrisonMobileMission3.MissionState == 0)
+						if (miniMissionListItem4.GetMissionID() == jamGarrisonMobileMission3.MissionRecID)
 						{
-							gameObject.transform.SetParent(this.m_availableMission_listContents.transform, false);
+							flag3 = true;
+							break;
+						}
+					}
+				}
+				if (!flag3)
+				{
+					GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission3.MissionRecID);
+					if (record == null)
+					{
+						Debug.LogWarning("Mission Not Found: ID " + jamGarrisonMobileMission3.MissionRecID);
+					}
+					else if (record.GarrFollowerTypeID == 4u)
+					{
+						if ((record.Flags & 16u) != 0u)
+						{
+							this.m_combatAllyListItem.gameObject.SetActive(true);
 						}
 						else
 						{
-							gameObject.transform.SetParent(this.m_inProgressMission_listContents.transform, false);
-							this.ShowMissionStartedAnim();
+							GameObject gameObject = Object.Instantiate<GameObject>(this.m_miniMissionListItemPrefab);
+							if (jamGarrisonMobileMission3.MissionState == 0)
+							{
+								gameObject.transform.SetParent(this.m_availableMission_listContents.transform, false);
+							}
+							else
+							{
+								gameObject.transform.SetParent(this.m_inProgressMission_listContents.transform, false);
+								this.ShowMissionStartedAnim();
+							}
+							MiniMissionListItem component = gameObject.GetComponent<MiniMissionListItem>();
+							component.SetMission(jamGarrisonMobileMission3);
 						}
-						MiniMissionListItem component = gameObject.GetComponent<MiniMissionListItem>();
-						component.SetMission(jamGarrisonMobileMission3);
 					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		componentsInChildren2 = this.m_availableMission_listContents.GetComponentsInChildren<MiniMissionListItem>(true);
@@ -176,6 +198,10 @@ public class MiniMissionListPanel : MonoBehaviour
 	}
 
 	private void Update()
+	{
+	}
+
+	private void NarrowScreenAdjust()
 	{
 	}
 
@@ -214,4 +240,9 @@ public class MiniMissionListPanel : MonoBehaviour
 	public OrderHallNavButton m_missionListOrderHallNavButton;
 
 	private GameObject m_currentMissionStartedEffectObj;
+
+	[Header("Notched Screen")]
+	public GameObject m_missionScrollViewport;
+
+	public GameObject m_tabsArea;
 }

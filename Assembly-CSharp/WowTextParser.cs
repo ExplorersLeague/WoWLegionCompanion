@@ -158,21 +158,28 @@ public class WowTextParser
 			string text3 = ".";
 			string text4 = string.Empty;
 			string locale = Main.instance.GetLocale();
-			switch (locale)
+			if (locale != null)
 			{
-			case "esES":
-			case "frFR":
-				text3 = ",";
-				text4 = " de";
-				break;
-			case "itIT":
-				text3 = ",";
-				text4 = " di";
-				break;
-			case "deDE":
-			case "ruRU":
-				text3 = ",";
-				break;
+				if (!(locale == "esES") && !(locale == "frFR"))
+				{
+					if (!(locale == "itIT"))
+					{
+						if (locale == "deDE" || locale == "ruRU")
+						{
+							text3 = ",";
+						}
+					}
+					else
+					{
+						text3 = ",";
+						text4 = " di";
+					}
+				}
+				else
+				{
+					text3 = ",";
+					text4 = " de";
+				}
 			}
 			string newValue;
 			if (num4 > 0L)

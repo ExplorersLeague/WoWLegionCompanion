@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<GarrAbilityEffectRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrAbilityEffectRec obj2 = (GarrAbilityEffectRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrAbilityEffectRec obj2 = (GarrAbilityEffectRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<GarrAbilityEffectRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrAbilityEffectRec garrAbilityEffectRec = (GarrAbilityEffectRec)obj;
-				if ((ulong)garrAbilityEffectRec.GarrAbilityID == (ulong)((long)parentID) && !callback(garrAbilityEffectRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrAbilityEffectRec garrAbilityEffectRec = (GarrAbilityEffectRec)obj;
+					if ((ulong)garrAbilityEffectRec.GarrAbilityID == (ulong)((long)parentID) && !callback(garrAbilityEffectRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

@@ -441,7 +441,7 @@ namespace bgs
 						}
 					}
 				}
-				PresenceAPI.RichPresenceToStringsMap richPresenceStringTables = this.m_richPresenceStringTables;
+				object richPresenceStringTables = this.m_richPresenceStringTables;
 				lock (richPresenceStringTables)
 				{
 					RichPresence key2 = (RichPresence)userContext;
@@ -723,8 +723,6 @@ namespace bgs
 
 		private const float PAYDOWN_RATE_PER_MS = 0.00333333341f;
 
-		private const string variablePrefix = "$0x";
-
 		private float m_presenceSubscriptionBalance;
 
 		private long m_lastPresenceSubscriptionSent;
@@ -746,6 +744,8 @@ namespace bgs
 		private int m_numOutstandingRichPresenceStringFetches;
 
 		private ServiceDescriptor m_presenceService = new PresenceService();
+
+		private const string variablePrefix = "$0x";
 
 		private static char[] hexChars = new char[]
 		{

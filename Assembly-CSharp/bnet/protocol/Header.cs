@@ -50,72 +50,68 @@ namespace bnet.protocol
 					}
 					return instance;
 				}
-				else
+				else if (num != 8)
 				{
-					int num2 = num;
-					if (num2 != 8)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 40)
 								{
-									if (num2 != 40)
+									if (num != 48)
 									{
-										if (num2 != 48)
+										if (num != 58)
 										{
-											if (num2 != 58)
+											if (num != 64)
 											{
-												if (num2 != 64)
+												Key key = ProtocolParser.ReadKey((byte)num, stream);
+												uint field = key.Field;
+												if (field == 0u)
 												{
-													Key key = ProtocolParser.ReadKey((byte)num, stream);
-													uint field = key.Field;
-													if (field == 0u)
-													{
-														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-													}
-													ProtocolParser.SkipKey(stream, key);
+													throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 												}
-												else
-												{
-													instance.Timeout = ProtocolParser.ReadUInt64(stream);
-												}
+												ProtocolParser.SkipKey(stream, key);
 											}
 											else
 											{
-												instance.Error.Add(ErrorInfo.DeserializeLengthDelimited(stream));
+												instance.Timeout = ProtocolParser.ReadUInt64(stream);
 											}
 										}
 										else
 										{
-											instance.Status = ProtocolParser.ReadUInt32(stream);
+											instance.Error.Add(ErrorInfo.DeserializeLengthDelimited(stream));
 										}
 									}
 									else
 									{
-										instance.Size = ProtocolParser.ReadUInt32(stream);
+										instance.Status = ProtocolParser.ReadUInt32(stream);
 									}
 								}
 								else
 								{
-									instance.ObjectId = ProtocolParser.ReadUInt64(stream);
+									instance.Size = ProtocolParser.ReadUInt32(stream);
 								}
 							}
 							else
 							{
-								instance.Token = ProtocolParser.ReadUInt32(stream);
+								instance.ObjectId = ProtocolParser.ReadUInt64(stream);
 							}
 						}
 						else
 						{
-							instance.MethodId = ProtocolParser.ReadUInt32(stream);
+							instance.Token = ProtocolParser.ReadUInt32(stream);
 						}
 					}
 					else
 					{
-						instance.ServiceId = ProtocolParser.ReadUInt32(stream);
+						instance.MethodId = ProtocolParser.ReadUInt32(stream);
 					}
+				}
+				else
+				{
+					instance.ServiceId = ProtocolParser.ReadUInt32(stream);
 				}
 			}
 			if (stream.Position == limit)

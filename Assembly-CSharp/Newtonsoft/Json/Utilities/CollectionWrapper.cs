@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Newtonsoft.Json.Utilities
 {
-	internal class CollectionWrapper<T> : IEnumerable, IWrappedCollection, IList, ICollection, ICollection<T>, IEnumerable<T>
+	internal class CollectionWrapper<T> : ICollection<T>, IWrappedCollection, IEnumerable<T>, IEnumerable, IList, ICollection
 	{
 		public CollectionWrapper(IList list)
 		{
@@ -26,6 +26,103 @@ namespace Newtonsoft.Json.Utilities
 		{
 			ValidationUtils.ArgumentNotNull(list, "list");
 			this._genericCollection = list;
+		}
+
+		public virtual void Add(T item)
+		{
+			if (this._genericCollection != null)
+			{
+				this._genericCollection.Add(item);
+			}
+			else
+			{
+				this._list.Add(item);
+			}
+		}
+
+		public virtual void Clear()
+		{
+			if (this._genericCollection != null)
+			{
+				this._genericCollection.Clear();
+			}
+			else
+			{
+				this._list.Clear();
+			}
+		}
+
+		public virtual bool Contains(T item)
+		{
+			if (this._genericCollection != null)
+			{
+				return this._genericCollection.Contains(item);
+			}
+			return this._list.Contains(item);
+		}
+
+		public virtual void CopyTo(T[] array, int arrayIndex)
+		{
+			if (this._genericCollection != null)
+			{
+				this._genericCollection.CopyTo(array, arrayIndex);
+			}
+			else
+			{
+				this._list.CopyTo(array, arrayIndex);
+			}
+		}
+
+		public virtual int Count
+		{
+			get
+			{
+				if (this._genericCollection != null)
+				{
+					return this._genericCollection.Count;
+				}
+				return this._list.Count;
+			}
+		}
+
+		public virtual bool IsReadOnly
+		{
+			get
+			{
+				if (this._genericCollection != null)
+				{
+					return this._genericCollection.IsReadOnly;
+				}
+				return this._list.IsReadOnly;
+			}
+		}
+
+		public virtual bool Remove(T item)
+		{
+			if (this._genericCollection != null)
+			{
+				return this._genericCollection.Remove(item);
+			}
+			bool flag = this._list.Contains(item);
+			if (flag)
+			{
+				this._list.Remove(item);
+			}
+			return flag;
+		}
+
+		public virtual IEnumerator<T> GetEnumerator()
+		{
+			if (this._genericCollection != null)
+			{
+				return this._genericCollection.GetEnumerator();
+			}
+			return this._list.Cast<T>().GetEnumerator();
+		}
+
+		public bool IsGenericCollection()
+		{
+			return this._genericCollection != null;
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -145,103 +242,6 @@ namespace Newtonsoft.Json.Utilities
 				}
 				return this._syncRoot;
 			}
-		}
-
-		public virtual void Add(T item)
-		{
-			if (this._genericCollection != null)
-			{
-				this._genericCollection.Add(item);
-			}
-			else
-			{
-				this._list.Add(item);
-			}
-		}
-
-		public virtual void Clear()
-		{
-			if (this._genericCollection != null)
-			{
-				this._genericCollection.Clear();
-			}
-			else
-			{
-				this._list.Clear();
-			}
-		}
-
-		public virtual bool Contains(T item)
-		{
-			if (this._genericCollection != null)
-			{
-				return this._genericCollection.Contains(item);
-			}
-			return this._list.Contains(item);
-		}
-
-		public virtual void CopyTo(T[] array, int arrayIndex)
-		{
-			if (this._genericCollection != null)
-			{
-				this._genericCollection.CopyTo(array, arrayIndex);
-			}
-			else
-			{
-				this._list.CopyTo(array, arrayIndex);
-			}
-		}
-
-		public virtual int Count
-		{
-			get
-			{
-				if (this._genericCollection != null)
-				{
-					return this._genericCollection.Count;
-				}
-				return this._list.Count;
-			}
-		}
-
-		public virtual bool IsReadOnly
-		{
-			get
-			{
-				if (this._genericCollection != null)
-				{
-					return this._genericCollection.IsReadOnly;
-				}
-				return this._list.IsReadOnly;
-			}
-		}
-
-		public virtual bool Remove(T item)
-		{
-			if (this._genericCollection != null)
-			{
-				return this._genericCollection.Remove(item);
-			}
-			bool flag = this._list.Contains(item);
-			if (flag)
-			{
-				this._list.Remove(item);
-			}
-			return flag;
-		}
-
-		public virtual IEnumerator<T> GetEnumerator()
-		{
-			if (this._genericCollection != null)
-			{
-				return this._genericCollection.GetEnumerator();
-			}
-			return this._list.Cast<T>().GetEnumerator();
-		}
-
-		public bool IsGenericCollection()
-		{
-			return this._genericCollection != null;
 		}
 
 		private static void VerifyValueType(object value)

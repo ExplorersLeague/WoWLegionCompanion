@@ -163,9 +163,48 @@ namespace bgs
 			}
 		}
 
+		public static implicit operator BigInteger(long value)
+		{
+			return new BigInteger(value);
+		}
+
+		public static implicit operator BigInteger(ulong value)
+		{
+			return new BigInteger(value);
+		}
+
+		public static implicit operator BigInteger(int value)
+		{
+			return new BigInteger((long)value);
+		}
+
+		public static implicit operator BigInteger(uint value)
+		{
+			return new BigInteger((ulong)value);
+		}
+
+		public static BigInteger operator +(BigInteger leftSide, BigInteger rightSide)
+		{
+			int num = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed);
+			DigitsArray digitsArray = new DigitsArray(num + 1);
+			long num2 = 0L;
+			for (int i = 0; i < digitsArray.Count; i++)
+			{
+				long num3 = (long)((ulong)leftSide.m_digits[i] + (ulong)rightSide.m_digits[i] + (ulong)num2);
+				num2 = num3 >> DigitsArray.DataSizeBits;
+				digitsArray[i] = (uint)(num3 & (long)((ulong)DigitsArray.AllBits));
+			}
+			return new BigInteger(digitsArray);
+		}
+
 		public static BigInteger Add(BigInteger leftSide, BigInteger rightSide)
 		{
 			return leftSide - rightSide;
+		}
+
+		public static BigInteger operator ++(BigInteger leftSide)
+		{
+			return leftSide + 1;
 		}
 
 		public static BigInteger Increment(BigInteger leftSide)
@@ -173,14 +212,61 @@ namespace bgs
 			return leftSide + 1;
 		}
 
+		public static BigInteger operator -(BigInteger leftSide, BigInteger rightSide)
+		{
+			int size = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed) + 1;
+			DigitsArray digitsArray = new DigitsArray(size);
+			long num = 0L;
+			for (int i = 0; i < digitsArray.Count; i++)
+			{
+				long num2 = (long)((ulong)leftSide.m_digits[i] - (ulong)rightSide.m_digits[i] - (ulong)num);
+				digitsArray[i] = (uint)(num2 & (long)((ulong)DigitsArray.AllBits));
+				digitsArray.DataUsed++;
+				num = ((num2 >= 0L) ? 0L : 1L);
+			}
+			return new BigInteger(digitsArray);
+		}
+
 		public static BigInteger Subtract(BigInteger leftSide, BigInteger rightSide)
 		{
 			return leftSide - rightSide;
 		}
 
+		public static BigInteger operator --(BigInteger leftSide)
+		{
+			return leftSide - 1;
+		}
+
 		public static BigInteger Decrement(BigInteger leftSide)
 		{
 			return leftSide - 1;
+		}
+
+		public static BigInteger operator -(BigInteger leftSide)
+		{
+			if (object.ReferenceEquals(leftSide, null))
+			{
+				throw new ArgumentNullException("leftSide");
+			}
+			if (leftSide.IsZero)
+			{
+				return new BigInteger(0L);
+			}
+			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits.DataUsed + 1, leftSide.m_digits.DataUsed + 1);
+			for (int i = 0; i < digitsArray.Count; i++)
+			{
+				digitsArray[i] = ~leftSide.m_digits[i];
+			}
+			bool flag = true;
+			int num = 0;
+			while (flag && num < digitsArray.Count)
+			{
+				long num2 = (long)((ulong)digitsArray[num] + 1UL);
+				digitsArray[num] = (uint)(num2 & (long)((ulong)DigitsArray.AllBits));
+				flag = (num2 >> DigitsArray.DataSizeBits > 0L);
+				num++;
+			}
+			return new BigInteger(digitsArray);
 		}
 
 		public BigInteger Negate()
@@ -217,9 +303,75 @@ namespace bgs
 			return bigInteger;
 		}
 
+		public static BigInteger operator *(BigInteger leftSide, BigInteger rightSide)
+		{
+			if (object.ReferenceEquals(leftSide, null))
+			{
+				throw new ArgumentNullException("leftSide");
+			}
+			if (object.ReferenceEquals(rightSide, null))
+			{
+				throw new ArgumentNullException("rightSide");
+			}
+			bool isNegative = leftSide.IsNegative;
+			bool isNegative2 = rightSide.IsNegative;
+			leftSide = BigInteger.Abs(leftSide);
+			rightSide = BigInteger.Abs(rightSide);
+			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits.DataUsed + rightSide.m_digits.DataUsed);
+			digitsArray.DataUsed = digitsArray.Count;
+			for (int i = 0; i < leftSide.m_digits.DataUsed; i++)
+			{
+				ulong num = 0UL;
+				int j = 0;
+				int num2 = i;
+				while (j < rightSide.m_digits.DataUsed)
+				{
+					ulong num3 = (ulong)leftSide.m_digits[i] * (ulong)rightSide.m_digits[j] + (ulong)digitsArray[num2] + num;
+					digitsArray[num2] = (uint)(num3 & (ulong)DigitsArray.AllBits);
+					num = num3 >> DigitsArray.DataSizeBits;
+					j++;
+					num2++;
+				}
+				if (num != 0UL)
+				{
+					digitsArray[i + rightSide.m_digits.DataUsed] = (uint)num;
+				}
+			}
+			BigInteger bigInteger = new BigInteger(digitsArray);
+			return (isNegative == isNegative2) ? bigInteger : (-bigInteger);
+		}
+
 		public static BigInteger Multiply(BigInteger leftSide, BigInteger rightSide)
 		{
 			return leftSide * rightSide;
+		}
+
+		public static BigInteger operator /(BigInteger leftSide, BigInteger rightSide)
+		{
+			if (leftSide == null)
+			{
+				throw new ArgumentNullException("leftSide");
+			}
+			if (rightSide == null)
+			{
+				throw new ArgumentNullException("rightSide");
+			}
+			if (rightSide.IsZero)
+			{
+				throw new DivideByZeroException();
+			}
+			bool isNegative = rightSide.IsNegative;
+			bool isNegative2 = leftSide.IsNegative;
+			leftSide = BigInteger.Abs(leftSide);
+			rightSide = BigInteger.Abs(rightSide);
+			if (leftSide < rightSide)
+			{
+				return new BigInteger(0L);
+			}
+			BigInteger bigInteger;
+			BigInteger bigInteger2;
+			BigInteger.Divide(leftSide, rightSide, out bigInteger, out bigInteger2);
+			return (isNegative2 == isNegative) ? bigInteger : (-bigInteger);
 		}
 
 		public static BigInteger Divide(BigInteger leftSide, BigInteger rightSide)
@@ -359,9 +511,47 @@ namespace bgs
 			quotient = new BigInteger(digitsArray2);
 		}
 
+		public static BigInteger operator %(BigInteger leftSide, BigInteger rightSide)
+		{
+			if (leftSide == null)
+			{
+				throw new ArgumentNullException("leftSide");
+			}
+			if (rightSide == null)
+			{
+				throw new ArgumentNullException("rightSide");
+			}
+			if (rightSide.IsZero)
+			{
+				throw new DivideByZeroException();
+			}
+			bool isNegative = leftSide.IsNegative;
+			leftSide = BigInteger.Abs(leftSide);
+			rightSide = BigInteger.Abs(rightSide);
+			if (leftSide < rightSide)
+			{
+				return leftSide;
+			}
+			BigInteger bigInteger;
+			BigInteger bigInteger2;
+			BigInteger.Divide(leftSide, rightSide, out bigInteger, out bigInteger2);
+			return (!isNegative) ? bigInteger2 : (-bigInteger2);
+		}
+
 		public static BigInteger Modulus(BigInteger leftSide, BigInteger rightSide)
 		{
 			return leftSide % rightSide;
+		}
+
+		public static BigInteger operator &(BigInteger leftSide, BigInteger rightSide)
+		{
+			int num = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed);
+			DigitsArray digitsArray = new DigitsArray(num, num);
+			for (int i = 0; i < num; i++)
+			{
+				digitsArray[i] = (leftSide.m_digits[i] & rightSide.m_digits[i]);
+			}
+			return new BigInteger(digitsArray);
 		}
 
 		public static BigInteger BitwiseAnd(BigInteger leftSide, BigInteger rightSide)
@@ -369,9 +559,31 @@ namespace bgs
 			return leftSide & rightSide;
 		}
 
+		public static BigInteger operator |(BigInteger leftSide, BigInteger rightSide)
+		{
+			int num = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed);
+			DigitsArray digitsArray = new DigitsArray(num, num);
+			for (int i = 0; i < num; i++)
+			{
+				digitsArray[i] = (leftSide.m_digits[i] | rightSide.m_digits[i]);
+			}
+			return new BigInteger(digitsArray);
+		}
+
 		public static BigInteger BitwiseOr(BigInteger leftSide, BigInteger rightSide)
 		{
 			return leftSide | rightSide;
+		}
+
+		public static BigInteger operator ^(BigInteger leftSide, BigInteger rightSide)
+		{
+			int num = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed);
+			DigitsArray digitsArray = new DigitsArray(num, num);
+			for (int i = 0; i < num; i++)
+			{
+				digitsArray[i] = (leftSide.m_digits[i] ^ rightSide.m_digits[i]);
+			}
+			return new BigInteger(digitsArray);
 		}
 
 		public static BigInteger Xor(BigInteger leftSide, BigInteger rightSide)
@@ -379,14 +591,66 @@ namespace bgs
 			return leftSide ^ rightSide;
 		}
 
+		public static BigInteger operator ~(BigInteger leftSide)
+		{
+			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits.Count);
+			for (int i = 0; i < digitsArray.Count; i++)
+			{
+				digitsArray[i] = ~leftSide.m_digits[i];
+			}
+			return new BigInteger(digitsArray);
+		}
+
 		public static BigInteger OnesComplement(BigInteger leftSide)
 		{
 			return ~leftSide;
 		}
 
+		public static BigInteger operator <<(BigInteger leftSide, int shiftCount)
+		{
+			if (leftSide == null)
+			{
+				throw new ArgumentNullException("leftSide");
+			}
+			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits);
+			digitsArray.DataUsed = digitsArray.ShiftLeftWithoutOverflow(shiftCount);
+			return new BigInteger(digitsArray);
+		}
+
 		public static BigInteger LeftShift(BigInteger leftSide, int shiftCount)
 		{
 			return leftSide << shiftCount;
+		}
+
+		public static BigInteger operator >>(BigInteger leftSide, int shiftCount)
+		{
+			if (leftSide == null)
+			{
+				throw new ArgumentNullException("leftSide");
+			}
+			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits);
+			digitsArray.DataUsed = digitsArray.ShiftRight(shiftCount);
+			if (leftSide.IsNegative)
+			{
+				for (int i = digitsArray.Count - 1; i >= digitsArray.DataUsed; i--)
+				{
+					digitsArray[i] = DigitsArray.AllBits;
+				}
+				uint num = DigitsArray.HiBitSet;
+				for (int j = 0; j < DigitsArray.DataSizeBits; j++)
+				{
+					if ((digitsArray[digitsArray.DataUsed - 1] & num) == DigitsArray.HiBitSet)
+					{
+						break;
+					}
+					DigitsArray digitsArray2;
+					int index;
+					(digitsArray2 = digitsArray)[index = digitsArray.DataUsed - 1] = (digitsArray2[index] | num);
+					num >>= 1;
+				}
+				digitsArray.DataUsed = digitsArray.Count;
+			}
+			return new BigInteger(digitsArray);
 		}
 
 		public static BigInteger RightShift(BigInteger leftSide, int shiftCount)
@@ -426,6 +690,82 @@ namespace bgs
 				return 0;
 			}
 			return -1;
+		}
+
+		public static bool operator ==(BigInteger leftSide, BigInteger rightSide)
+		{
+			return object.ReferenceEquals(leftSide, rightSide) || (!object.ReferenceEquals(leftSide, null) && !object.ReferenceEquals(rightSide, null) && leftSide.IsNegative == rightSide.IsNegative && leftSide.Equals(rightSide));
+		}
+
+		public static bool operator !=(BigInteger leftSide, BigInteger rightSide)
+		{
+			return !(leftSide == rightSide);
+		}
+
+		public static bool operator >(BigInteger leftSide, BigInteger rightSide)
+		{
+			if (object.ReferenceEquals(leftSide, null))
+			{
+				throw new ArgumentNullException("leftSide");
+			}
+			if (object.ReferenceEquals(rightSide, null))
+			{
+				throw new ArgumentNullException("rightSide");
+			}
+			if (leftSide.IsNegative != rightSide.IsNegative)
+			{
+				return rightSide.IsNegative;
+			}
+			if (leftSide.m_digits.DataUsed != rightSide.m_digits.DataUsed)
+			{
+				return leftSide.m_digits.DataUsed > rightSide.m_digits.DataUsed;
+			}
+			for (int i = leftSide.m_digits.DataUsed - 1; i >= 0; i--)
+			{
+				if (leftSide.m_digits[i] != rightSide.m_digits[i])
+				{
+					return leftSide.m_digits[i] > rightSide.m_digits[i];
+				}
+			}
+			return false;
+		}
+
+		public static bool operator <(BigInteger leftSide, BigInteger rightSide)
+		{
+			if (object.ReferenceEquals(leftSide, null))
+			{
+				throw new ArgumentNullException("leftSide");
+			}
+			if (object.ReferenceEquals(rightSide, null))
+			{
+				throw new ArgumentNullException("rightSide");
+			}
+			if (leftSide.IsNegative != rightSide.IsNegative)
+			{
+				return leftSide.IsNegative;
+			}
+			if (leftSide.m_digits.DataUsed != rightSide.m_digits.DataUsed)
+			{
+				return leftSide.m_digits.DataUsed < rightSide.m_digits.DataUsed;
+			}
+			for (int i = leftSide.m_digits.DataUsed - 1; i >= 0; i--)
+			{
+				if (leftSide.m_digits[i] != rightSide.m_digits[i])
+				{
+					return leftSide.m_digits[i] < rightSide.m_digits[i];
+				}
+			}
+			return false;
+		}
+
+		public static bool operator >=(BigInteger leftSide, BigInteger rightSide)
+		{
+			return BigInteger.Compare(leftSide, rightSide) >= 0;
+		}
+
+		public static bool operator <=(BigInteger leftSide, BigInteger rightSide)
+		{
+			return BigInteger.Compare(leftSide, rightSide) <= 0;
 		}
 
 		public override bool Equals(object obj)
@@ -557,349 +897,6 @@ namespace bgs
 				throw new ArgumentNullException("value");
 			}
 			return ulong.Parse(value.ToString(), NumberStyles.Integer, CultureInfo.CurrentCulture);
-		}
-
-		public static implicit operator BigInteger(long value)
-		{
-			return new BigInteger(value);
-		}
-
-		public static implicit operator BigInteger(ulong value)
-		{
-			return new BigInteger(value);
-		}
-
-		public static implicit operator BigInteger(int value)
-		{
-			return new BigInteger((long)value);
-		}
-
-		public static implicit operator BigInteger(uint value)
-		{
-			return new BigInteger((ulong)value);
-		}
-
-		public static BigInteger operator +(BigInteger leftSide, BigInteger rightSide)
-		{
-			int num = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed);
-			DigitsArray digitsArray = new DigitsArray(num + 1);
-			long num2 = 0L;
-			for (int i = 0; i < digitsArray.Count; i++)
-			{
-				long num3 = (long)((ulong)leftSide.m_digits[i] + (ulong)rightSide.m_digits[i] + (ulong)num2);
-				num2 = num3 >> DigitsArray.DataSizeBits;
-				digitsArray[i] = (uint)(num3 & (long)((ulong)DigitsArray.AllBits));
-			}
-			return new BigInteger(digitsArray);
-		}
-
-		public static BigInteger operator ++(BigInteger leftSide)
-		{
-			return leftSide + 1;
-		}
-
-		public static BigInteger operator -(BigInteger leftSide, BigInteger rightSide)
-		{
-			int size = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed) + 1;
-			DigitsArray digitsArray = new DigitsArray(size);
-			long num = 0L;
-			for (int i = 0; i < digitsArray.Count; i++)
-			{
-				long num2 = (long)((ulong)leftSide.m_digits[i] - (ulong)rightSide.m_digits[i] - (ulong)num);
-				digitsArray[i] = (uint)(num2 & (long)((ulong)DigitsArray.AllBits));
-				digitsArray.DataUsed++;
-				num = ((num2 >= 0L) ? 0L : 1L);
-			}
-			return new BigInteger(digitsArray);
-		}
-
-		public static BigInteger operator --(BigInteger leftSide)
-		{
-			return leftSide - 1;
-		}
-
-		public static BigInteger operator -(BigInteger leftSide)
-		{
-			if (object.ReferenceEquals(leftSide, null))
-			{
-				throw new ArgumentNullException("leftSide");
-			}
-			if (leftSide.IsZero)
-			{
-				return new BigInteger(0L);
-			}
-			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits.DataUsed + 1, leftSide.m_digits.DataUsed + 1);
-			for (int i = 0; i < digitsArray.Count; i++)
-			{
-				digitsArray[i] = ~leftSide.m_digits[i];
-			}
-			bool flag = true;
-			int num = 0;
-			while (flag && num < digitsArray.Count)
-			{
-				long num2 = (long)((ulong)digitsArray[num] + 1UL);
-				digitsArray[num] = (uint)(num2 & (long)((ulong)DigitsArray.AllBits));
-				flag = (num2 >> DigitsArray.DataSizeBits > 0L);
-				num++;
-			}
-			return new BigInteger(digitsArray);
-		}
-
-		public static BigInteger operator *(BigInteger leftSide, BigInteger rightSide)
-		{
-			if (object.ReferenceEquals(leftSide, null))
-			{
-				throw new ArgumentNullException("leftSide");
-			}
-			if (object.ReferenceEquals(rightSide, null))
-			{
-				throw new ArgumentNullException("rightSide");
-			}
-			bool isNegative = leftSide.IsNegative;
-			bool isNegative2 = rightSide.IsNegative;
-			leftSide = BigInteger.Abs(leftSide);
-			rightSide = BigInteger.Abs(rightSide);
-			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits.DataUsed + rightSide.m_digits.DataUsed);
-			digitsArray.DataUsed = digitsArray.Count;
-			for (int i = 0; i < leftSide.m_digits.DataUsed; i++)
-			{
-				ulong num = 0UL;
-				int j = 0;
-				int num2 = i;
-				while (j < rightSide.m_digits.DataUsed)
-				{
-					ulong num3 = (ulong)leftSide.m_digits[i] * (ulong)rightSide.m_digits[j] + (ulong)digitsArray[num2] + num;
-					digitsArray[num2] = (uint)(num3 & (ulong)DigitsArray.AllBits);
-					num = num3 >> DigitsArray.DataSizeBits;
-					j++;
-					num2++;
-				}
-				if (num != 0UL)
-				{
-					digitsArray[i + rightSide.m_digits.DataUsed] = (uint)num;
-				}
-			}
-			BigInteger bigInteger = new BigInteger(digitsArray);
-			return (isNegative == isNegative2) ? bigInteger : (-bigInteger);
-		}
-
-		public static BigInteger operator /(BigInteger leftSide, BigInteger rightSide)
-		{
-			if (leftSide == null)
-			{
-				throw new ArgumentNullException("leftSide");
-			}
-			if (rightSide == null)
-			{
-				throw new ArgumentNullException("rightSide");
-			}
-			if (rightSide.IsZero)
-			{
-				throw new DivideByZeroException();
-			}
-			bool isNegative = rightSide.IsNegative;
-			bool isNegative2 = leftSide.IsNegative;
-			leftSide = BigInteger.Abs(leftSide);
-			rightSide = BigInteger.Abs(rightSide);
-			if (leftSide < rightSide)
-			{
-				return new BigInteger(0L);
-			}
-			BigInteger bigInteger;
-			BigInteger bigInteger2;
-			BigInteger.Divide(leftSide, rightSide, out bigInteger, out bigInteger2);
-			return (isNegative2 == isNegative) ? bigInteger : (-bigInteger);
-		}
-
-		public static BigInteger operator %(BigInteger leftSide, BigInteger rightSide)
-		{
-			if (leftSide == null)
-			{
-				throw new ArgumentNullException("leftSide");
-			}
-			if (rightSide == null)
-			{
-				throw new ArgumentNullException("rightSide");
-			}
-			if (rightSide.IsZero)
-			{
-				throw new DivideByZeroException();
-			}
-			bool isNegative = leftSide.IsNegative;
-			leftSide = BigInteger.Abs(leftSide);
-			rightSide = BigInteger.Abs(rightSide);
-			if (leftSide < rightSide)
-			{
-				return leftSide;
-			}
-			BigInteger bigInteger;
-			BigInteger bigInteger2;
-			BigInteger.Divide(leftSide, rightSide, out bigInteger, out bigInteger2);
-			return (!isNegative) ? bigInteger2 : (-bigInteger2);
-		}
-
-		public static BigInteger operator &(BigInteger leftSide, BigInteger rightSide)
-		{
-			int num = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed);
-			DigitsArray digitsArray = new DigitsArray(num, num);
-			for (int i = 0; i < num; i++)
-			{
-				digitsArray[i] = (leftSide.m_digits[i] & rightSide.m_digits[i]);
-			}
-			return new BigInteger(digitsArray);
-		}
-
-		public static BigInteger operator |(BigInteger leftSide, BigInteger rightSide)
-		{
-			int num = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed);
-			DigitsArray digitsArray = new DigitsArray(num, num);
-			for (int i = 0; i < num; i++)
-			{
-				digitsArray[i] = (leftSide.m_digits[i] | rightSide.m_digits[i]);
-			}
-			return new BigInteger(digitsArray);
-		}
-
-		public static BigInteger operator ^(BigInteger leftSide, BigInteger rightSide)
-		{
-			int num = Math.Max(leftSide.m_digits.DataUsed, rightSide.m_digits.DataUsed);
-			DigitsArray digitsArray = new DigitsArray(num, num);
-			for (int i = 0; i < num; i++)
-			{
-				digitsArray[i] = (leftSide.m_digits[i] ^ rightSide.m_digits[i]);
-			}
-			return new BigInteger(digitsArray);
-		}
-
-		public static BigInteger operator ~(BigInteger leftSide)
-		{
-			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits.Count);
-			for (int i = 0; i < digitsArray.Count; i++)
-			{
-				digitsArray[i] = ~leftSide.m_digits[i];
-			}
-			return new BigInteger(digitsArray);
-		}
-
-		public static BigInteger operator <<(BigInteger leftSide, int shiftCount)
-		{
-			if (leftSide == null)
-			{
-				throw new ArgumentNullException("leftSide");
-			}
-			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits);
-			digitsArray.DataUsed = digitsArray.ShiftLeftWithoutOverflow(shiftCount);
-			return new BigInteger(digitsArray);
-		}
-
-		public static BigInteger operator >>(BigInteger leftSide, int shiftCount)
-		{
-			if (leftSide == null)
-			{
-				throw new ArgumentNullException("leftSide");
-			}
-			DigitsArray digitsArray = new DigitsArray(leftSide.m_digits);
-			digitsArray.DataUsed = digitsArray.ShiftRight(shiftCount);
-			if (leftSide.IsNegative)
-			{
-				for (int i = digitsArray.Count - 1; i >= digitsArray.DataUsed; i--)
-				{
-					digitsArray[i] = DigitsArray.AllBits;
-				}
-				uint num = DigitsArray.HiBitSet;
-				for (int j = 0; j < DigitsArray.DataSizeBits; j++)
-				{
-					if ((digitsArray[digitsArray.DataUsed - 1] & num) == DigitsArray.HiBitSet)
-					{
-						break;
-					}
-					DigitsArray digitsArray3;
-					DigitsArray digitsArray2 = digitsArray3 = digitsArray;
-					int index2;
-					int index = index2 = digitsArray.DataUsed - 1;
-					uint num2 = digitsArray3[index2];
-					digitsArray2[index] = (num2 | num);
-					num >>= 1;
-				}
-				digitsArray.DataUsed = digitsArray.Count;
-			}
-			return new BigInteger(digitsArray);
-		}
-
-		public static bool operator ==(BigInteger leftSide, BigInteger rightSide)
-		{
-			return object.ReferenceEquals(leftSide, rightSide) || (!object.ReferenceEquals(leftSide, null) && !object.ReferenceEquals(rightSide, null) && leftSide.IsNegative == rightSide.IsNegative && leftSide.Equals(rightSide));
-		}
-
-		public static bool operator !=(BigInteger leftSide, BigInteger rightSide)
-		{
-			return !(leftSide == rightSide);
-		}
-
-		public static bool operator >(BigInteger leftSide, BigInteger rightSide)
-		{
-			if (object.ReferenceEquals(leftSide, null))
-			{
-				throw new ArgumentNullException("leftSide");
-			}
-			if (object.ReferenceEquals(rightSide, null))
-			{
-				throw new ArgumentNullException("rightSide");
-			}
-			if (leftSide.IsNegative != rightSide.IsNegative)
-			{
-				return rightSide.IsNegative;
-			}
-			if (leftSide.m_digits.DataUsed != rightSide.m_digits.DataUsed)
-			{
-				return leftSide.m_digits.DataUsed > rightSide.m_digits.DataUsed;
-			}
-			for (int i = leftSide.m_digits.DataUsed - 1; i >= 0; i--)
-			{
-				if (leftSide.m_digits[i] != rightSide.m_digits[i])
-				{
-					return leftSide.m_digits[i] > rightSide.m_digits[i];
-				}
-			}
-			return false;
-		}
-
-		public static bool operator <(BigInteger leftSide, BigInteger rightSide)
-		{
-			if (object.ReferenceEquals(leftSide, null))
-			{
-				throw new ArgumentNullException("leftSide");
-			}
-			if (object.ReferenceEquals(rightSide, null))
-			{
-				throw new ArgumentNullException("rightSide");
-			}
-			if (leftSide.IsNegative != rightSide.IsNegative)
-			{
-				return leftSide.IsNegative;
-			}
-			if (leftSide.m_digits.DataUsed != rightSide.m_digits.DataUsed)
-			{
-				return leftSide.m_digits.DataUsed < rightSide.m_digits.DataUsed;
-			}
-			for (int i = leftSide.m_digits.DataUsed - 1; i >= 0; i--)
-			{
-				if (leftSide.m_digits[i] != rightSide.m_digits[i])
-				{
-					return leftSide.m_digits[i] < rightSide.m_digits[i];
-				}
-			}
-			return false;
-		}
-
-		public static bool operator >=(BigInteger leftSide, BigInteger rightSide)
-		{
-			return BigInteger.Compare(leftSide, rightSide) >= 0;
-		}
-
-		public static bool operator <=(BigInteger leftSide, BigInteger rightSide)
-		{
-			return BigInteger.Compare(leftSide, rightSide) <= 0;
 		}
 
 		private DigitsArray m_digits;

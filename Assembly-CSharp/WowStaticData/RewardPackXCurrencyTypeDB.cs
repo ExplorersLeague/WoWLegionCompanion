@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<RewardPackXCurrencyTypeRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				RewardPackXCurrencyTypeRec obj2 = (RewardPackXCurrencyTypeRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					RewardPackXCurrencyTypeRec obj2 = (RewardPackXCurrencyTypeRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<RewardPackXCurrencyTypeRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				RewardPackXCurrencyTypeRec rewardPackXCurrencyTypeRec = (RewardPackXCurrencyTypeRec)obj;
-				if (rewardPackXCurrencyTypeRec.RewardPackID == parentID && !callback(rewardPackXCurrencyTypeRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					RewardPackXCurrencyTypeRec rewardPackXCurrencyTypeRec = (RewardPackXCurrencyTypeRec)obj;
+					if (rewardPackXCurrencyTypeRec.RewardPackID == parentID && !callback(rewardPackXCurrencyTypeRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

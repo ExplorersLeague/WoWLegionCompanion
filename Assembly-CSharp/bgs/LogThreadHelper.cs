@@ -12,7 +12,7 @@ namespace bgs
 
 		public void Process()
 		{
-			List<LogThreadHelper.LogEntry> queuedLogs = this.m_queuedLogs;
+			object queuedLogs = this.m_queuedLogs;
 			lock (queuedLogs)
 			{
 				foreach (LogThreadHelper.LogEntry logEntry in this.m_queuedLogs)
@@ -81,7 +81,7 @@ namespace bgs
 
 		private void LogMessage(string message, LogLevel level)
 		{
-			List<LogThreadHelper.LogEntry> queuedLogs = this.m_queuedLogs;
+			object queuedLogs = this.m_queuedLogs;
 			lock (queuedLogs)
 			{
 				this.m_queuedLogs.Add(new LogThreadHelper.LogEntry

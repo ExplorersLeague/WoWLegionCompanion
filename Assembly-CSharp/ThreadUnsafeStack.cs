@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-public class ThreadUnsafeStack : IDisposable, MemoryStreamStack
+public class ThreadUnsafeStack : MemoryStreamStack, IDisposable
 {
 	public MemoryStream Pop()
 	{

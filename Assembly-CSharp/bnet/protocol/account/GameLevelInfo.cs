@@ -49,79 +49,75 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 24)
 				{
-					int num2 = num;
-					if (num2 != 24)
+					if (num != 32)
 					{
-						if (num2 != 32)
+						if (num != 40)
 						{
-							if (num2 != 40)
+							if (num != 48)
 							{
-								if (num2 != 48)
+								if (num != 56)
 								{
-									if (num2 != 56)
+									if (num != 66)
 									{
-										if (num2 != 66)
+										if (num != 77)
 										{
-											if (num2 != 77)
+											if (num != 82)
 											{
-												if (num2 != 82)
+												if (num != 88)
 												{
-													if (num2 != 88)
+													Key key = ProtocolParser.ReadKey((byte)num, stream);
+													uint field = key.Field;
+													if (field == 0u)
 													{
-														Key key = ProtocolParser.ReadKey((byte)num, stream);
-														uint field = key.Field;
-														if (field == 0u)
-														{
-															throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-														}
-														ProtocolParser.SkipKey(stream, key);
+														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 													}
-													else
-													{
-														instance.RealmPermissions = ProtocolParser.ReadUInt32(stream);
-													}
+													ProtocolParser.SkipKey(stream, key);
 												}
 												else
 												{
-													instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
+													instance.RealmPermissions = ProtocolParser.ReadUInt32(stream);
 												}
 											}
 											else
 											{
-												instance.Program = binaryReader.ReadUInt32();
+												instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
 											}
 										}
 										else
 										{
-											instance.Name = ProtocolParser.ReadString(stream);
+											instance.Program = binaryReader.ReadUInt32();
 										}
 									}
 									else
 									{
-										instance.IsBeta = ProtocolParser.ReadBool(stream);
+										instance.Name = ProtocolParser.ReadString(stream);
 									}
 								}
 								else
 								{
-									instance.IsRestricted = ProtocolParser.ReadBool(stream);
+									instance.IsBeta = ProtocolParser.ReadBool(stream);
 								}
 							}
 							else
 							{
-								instance.IsLifetime = ProtocolParser.ReadBool(stream);
+								instance.IsRestricted = ProtocolParser.ReadBool(stream);
 							}
 						}
 						else
 						{
-							instance.IsTrial = ProtocolParser.ReadBool(stream);
+							instance.IsLifetime = ProtocolParser.ReadBool(stream);
 						}
 					}
 					else
 					{
-						instance.IsStarterEdition = ProtocolParser.ReadBool(stream);
+						instance.IsTrial = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else
+				{
+					instance.IsStarterEdition = ProtocolParser.ReadBool(stream);
 				}
 			}
 			if (stream.Position == limit)

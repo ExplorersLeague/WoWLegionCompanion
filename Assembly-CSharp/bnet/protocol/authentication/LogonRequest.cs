@@ -46,107 +46,103 @@ namespace bnet.protocol.authentication
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 42)
 								{
-									if (num2 != 42)
+									if (num != 48)
 									{
-										if (num2 != 48)
+										if (num != 56)
 										{
-											if (num2 != 56)
+											if (num != 66)
 											{
-												if (num2 != 66)
+												if (num != 72)
 												{
-													if (num2 != 72)
+													if (num != 80)
 													{
-														if (num2 != 80)
+														if (num != 88)
 														{
-															if (num2 != 88)
+															if (num != 98)
 															{
-																if (num2 != 98)
+																if (num != 114)
 																{
-																	if (num2 != 114)
+																	Key key = ProtocolParser.ReadKey((byte)num, stream);
+																	uint field = key.Field;
+																	if (field == 0u)
 																	{
-																		Key key = ProtocolParser.ReadKey((byte)num, stream);
-																		uint field = key.Field;
-																		if (field == 0u)
-																		{
-																			throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-																		}
-																		ProtocolParser.SkipKey(stream, key);
+																		throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 																	}
-																	else
-																	{
-																		instance.UserAgent = ProtocolParser.ReadString(stream);
-																	}
+																	ProtocolParser.SkipKey(stream, key);
 																}
 																else
 																{
-																	instance.CachedWebCredentials = ProtocolParser.ReadBytes(stream);
+																	instance.UserAgent = ProtocolParser.ReadString(stream);
 																}
 															}
 															else
 															{
-																instance.WebClientVerification = ProtocolParser.ReadBool(stream);
+																instance.CachedWebCredentials = ProtocolParser.ReadBytes(stream);
 															}
 														}
 														else
 														{
-															instance.AllowLogonQueueNotifications = ProtocolParser.ReadBool(stream);
+															instance.WebClientVerification = ProtocolParser.ReadBool(stream);
 														}
 													}
 													else
 													{
-														instance.DisconnectOnCookieFail = ProtocolParser.ReadBool(stream);
+														instance.AllowLogonQueueNotifications = ProtocolParser.ReadBool(stream);
 													}
 												}
 												else
 												{
-													instance.SsoId = ProtocolParser.ReadBytes(stream);
+													instance.DisconnectOnCookieFail = ProtocolParser.ReadBool(stream);
 												}
 											}
 											else
 											{
-												instance.PublicComputer = ProtocolParser.ReadBool(stream);
+												instance.SsoId = ProtocolParser.ReadBytes(stream);
 											}
 										}
 										else
 										{
-											instance.ApplicationVersion = (int)ProtocolParser.ReadUInt64(stream);
+											instance.PublicComputer = ProtocolParser.ReadBool(stream);
 										}
 									}
 									else
 									{
-										instance.Version = ProtocolParser.ReadString(stream);
+										instance.ApplicationVersion = (int)ProtocolParser.ReadUInt64(stream);
 									}
 								}
 								else
 								{
-									instance.Email = ProtocolParser.ReadString(stream);
+									instance.Version = ProtocolParser.ReadString(stream);
 								}
 							}
 							else
 							{
-								instance.Locale = ProtocolParser.ReadString(stream);
+								instance.Email = ProtocolParser.ReadString(stream);
 							}
 						}
 						else
 						{
-							instance.Platform = ProtocolParser.ReadString(stream);
+							instance.Locale = ProtocolParser.ReadString(stream);
 						}
 					}
 					else
 					{
-						instance.Program = ProtocolParser.ReadString(stream);
+						instance.Platform = ProtocolParser.ReadString(stream);
 					}
+				}
+				else
+				{
+					instance.Program = ProtocolParser.ReadString(stream);
 				}
 			}
 			if (stream.Position == limit)

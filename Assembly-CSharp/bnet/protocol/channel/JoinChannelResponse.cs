@@ -48,37 +48,33 @@ namespace bnet.protocol.channel
 					}
 					return instance;
 				}
-				else
+				else if (num != 8)
 				{
-					int num2 = num;
-					if (num2 != 8)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
 							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 							}
-							else
-							{
-								instance.PrivilegedAccount.Add(EntityId.DeserializeLengthDelimited(stream));
-							}
+							ProtocolParser.SkipKey(stream, key);
 						}
 						else
 						{
-							instance.RequireFriendValidation = ProtocolParser.ReadBool(stream);
+							instance.PrivilegedAccount.Add(EntityId.DeserializeLengthDelimited(stream));
 						}
 					}
 					else
 					{
-						instance.ObjectId = ProtocolParser.ReadUInt64(stream);
+						instance.RequireFriendValidation = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else
+				{
+					instance.ObjectId = ProtocolParser.ReadUInt64(stream);
 				}
 			}
 			if (stream.Position == limit)

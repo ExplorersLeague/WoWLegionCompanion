@@ -43,63 +43,59 @@ namespace bnet.protocol.channel
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 40)
 								{
-									if (num2 != 40)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else
-									{
-										instance.Subscribe = ProtocolParser.ReadBool(stream);
-									}
+									ProtocolParser.SkipKey(stream, key);
 								}
 								else
 								{
-									instance.ObjectId = ProtocolParser.ReadUInt64(stream);
+									instance.Subscribe = ProtocolParser.ReadBool(stream);
 								}
-							}
-							else if (instance.MemberState == null)
-							{
-								instance.MemberState = MemberState.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								MemberState.DeserializeLengthDelimited(stream, instance.MemberState);
+								instance.ObjectId = ProtocolParser.ReadUInt64(stream);
 							}
 						}
-						else if (instance.MemberIdentity == null)
+						else if (instance.MemberState == null)
 						{
-							instance.MemberIdentity = Identity.DeserializeLengthDelimited(stream);
+							instance.MemberState = MemberState.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							Identity.DeserializeLengthDelimited(stream, instance.MemberIdentity);
+							MemberState.DeserializeLengthDelimited(stream, instance.MemberState);
 						}
 					}
-					else if (instance.AgentId == null)
+					else if (instance.MemberIdentity == null)
 					{
-						instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+						instance.MemberIdentity = Identity.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
+						Identity.DeserializeLengthDelimited(stream, instance.MemberIdentity);
 					}
+				}
+				else if (instance.AgentId == null)
+				{
+					instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
 				}
 			}
 			if (stream.Position == limit)

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace JamLib
 {
-	[FlexJamStruct(Name = "WowTime")]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "WowTime")]
+	[StructLayout(LayoutKind.Sequential, Size = 1)]
 	public struct WowTime
 	{
 		[System.Runtime.Serialization.DataMember(Name = "minute")]
@@ -15,8 +17,8 @@ namespace JamLib
 		[FlexJamMember(Name = "hour", Type = FlexJamType.Int32)]
 		public int Hour { get; set; }
 
-		[FlexJamMember(Name = "weekday", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "weekday")]
+		[FlexJamMember(Name = "weekday", Type = FlexJamType.Int32)]
 		public int WeekDay { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "monthDay")]
@@ -27,16 +29,16 @@ namespace JamLib
 		[FlexJamMember(Name = "month", Type = FlexJamType.Int32)]
 		public int Month { get; set; }
 
-		[FlexJamMember(Name = "year", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "year")]
+		[FlexJamMember(Name = "year", Type = FlexJamType.Int32)]
 		public int Year { get; set; }
 
-		[FlexJamMember(Name = "flags", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
+		[FlexJamMember(Name = "flags", Type = FlexJamType.Int32)]
 		public int Flags { get; set; }
 
-		[FlexJamMember(Name = "holidayOffset", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "holidayOffset")]
+		[FlexJamMember(Name = "holidayOffset", Type = FlexJamType.Int32)]
 		public int HolidayOffset { get; set; }
 	}
 }

@@ -55,20 +55,19 @@ namespace bnet.protocol.challenge
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 21:
 						instance.Context = binaryReader.ReadUInt32();
 						break;
 					default:
-						if (num2 != 10)
+						if (num != 10)
 						{
-							if (num2 != 32)
+							if (num != 32)
 							{
-								if (num2 != 42)
+								if (num != 42)
 								{
-									if (num2 != 50)
+									if (num != 50)
 									{
 										Key key = ProtocolParser.ReadKey((byte)num, stream);
 										uint field = key.Field;

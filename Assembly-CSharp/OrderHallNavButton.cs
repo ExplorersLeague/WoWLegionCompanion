@@ -4,6 +4,14 @@ using UnityEngine.UI;
 
 public class OrderHallNavButton : MonoBehaviour
 {
+	private void Start()
+	{
+		if (Main.instance.IsNarrowScreen())
+		{
+			this.m_selectedSize = 100f;
+		}
+	}
+
 	private void OnEnable()
 	{
 		Main instance = Main.instance;

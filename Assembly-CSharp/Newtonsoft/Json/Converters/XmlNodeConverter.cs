@@ -109,18 +109,17 @@ namespace Newtonsoft.Json.Converters
 
 		private bool IsArray(IXmlNode node)
 		{
-			IXmlNode xmlNode2;
+			IXmlNode xmlNode;
 			if (node.Attributes != null)
 			{
-				IXmlNode xmlNode = node.Attributes.SingleOrDefault((IXmlNode a) => a.LocalName == "Array" && a.NamespaceURI == "http://james.newtonking.com/projects/json");
-				xmlNode2 = xmlNode;
+				xmlNode = node.Attributes.SingleOrDefault((IXmlNode a) => a.LocalName == "Array" && a.NamespaceURI == "http://james.newtonking.com/projects/json");
 			}
 			else
 			{
-				xmlNode2 = null;
+				xmlNode = null;
 			}
-			IXmlNode xmlNode3 = xmlNode2;
-			return xmlNode3 != null && XmlConvert.ToBoolean(xmlNode3.Value);
+			IXmlNode xmlNode2 = xmlNode;
+			return xmlNode2 != null && XmlConvert.ToBoolean(xmlNode2.Value);
 		}
 
 		private void SerializeGroupedNodes(JsonWriter writer, IXmlNode node, XmlNamespaceManager manager, bool writePropertyName)
@@ -289,20 +288,28 @@ namespace Newtonsoft.Json.Converters
 
 		private void DeserializeValue(JsonReader reader, IXmlDocument document, XmlNamespaceManager manager, string propertyName, IXmlNode currentNode)
 		{
-			switch (propertyName)
+			if (propertyName != null)
 			{
-			case "#text":
-				currentNode.AppendChild(document.CreateTextNode(reader.Value.ToString()));
-				return;
-			case "#cdata-section":
-				currentNode.AppendChild(document.CreateCDataSection(reader.Value.ToString()));
-				return;
-			case "#whitespace":
-				currentNode.AppendChild(document.CreateWhitespace(reader.Value.ToString()));
-				return;
-			case "#significant-whitespace":
-				currentNode.AppendChild(document.CreateSignificantWhitespace(reader.Value.ToString()));
-				return;
+				if (propertyName == "#text")
+				{
+					currentNode.AppendChild(document.CreateTextNode(reader.Value.ToString()));
+					return;
+				}
+				if (propertyName == "#cdata-section")
+				{
+					currentNode.AppendChild(document.CreateCDataSection(reader.Value.ToString()));
+					return;
+				}
+				if (propertyName == "#whitespace")
+				{
+					currentNode.AppendChild(document.CreateWhitespace(reader.Value.ToString()));
+					return;
+				}
+				if (propertyName == "#significant-whitespace")
+				{
+					currentNode.AppendChild(document.CreateSignificantWhitespace(reader.Value.ToString()));
+					return;
+				}
 			}
 			if (!string.IsNullOrEmpty(propertyName) && propertyName[0] == '?')
 			{
@@ -332,17 +339,7 @@ namespace Newtonsoft.Json.Converters
 			foreach (KeyValuePair<string, string> keyValuePair in dictionary)
 			{
 				string prefix2 = MiscellaneousUtils.GetPrefix(keyValuePair.Key);
-				IXmlNode xmlNode2;
-				if (!string.IsNullOrEmpty(prefix2))
-				{
-					IXmlNode xmlNode = document.CreateAttribute(keyValuePair.Key, manager.LookupNamespace(prefix2), keyValuePair.Value);
-					xmlNode2 = xmlNode;
-				}
-				else
-				{
-					xmlNode2 = document.CreateAttribute(keyValuePair.Key, keyValuePair.Value);
-				}
-				IXmlNode attributeNode = xmlNode2;
+				IXmlNode attributeNode = string.IsNullOrEmpty(prefix2) ? document.CreateAttribute(keyValuePair.Key, keyValuePair.Value) : document.CreateAttribute(keyValuePair.Key, manager.LookupNamespace(prefix2), keyValuePair.Value);
 				xmlElement.SetAttributeNode(attributeNode);
 			}
 			if (reader.TokenType == JsonToken.String)
@@ -428,10 +425,9 @@ namespace Newtonsoft.Json.Converters
 						if (!string.IsNullOrEmpty(text))
 						{
 							char c = text[0];
-							char c2 = c;
-							if (c2 != '$')
+							if (c != '@')
 							{
-								if (c2 != '@')
+								if (c != '$')
 								{
 									flag = true;
 								}
@@ -440,12 +436,19 @@ namespace Newtonsoft.Json.Converters
 									text = text.Substring(1);
 									reader.Read();
 									string text2 = reader.Value.ToString();
-									dictionary.Add(text, text2);
-									string prefix;
-									if (this.IsNamespaceAttribute(text, out prefix))
+									string text3 = manager.LookupPrefix("http://james.newtonking.com/projects/json");
+									if (text3 == null)
 									{
-										manager.AddNamespace(prefix, text2);
+										int? num = null;
+										while (manager.LookupNamespace("json" + num) != null)
+										{
+											num = new int?(num.GetValueOrDefault() + 1);
+										}
+										text3 = "json" + num;
+										dictionary.Add("xmlns:" + text3, "http://james.newtonking.com/projects/json");
+										manager.AddNamespace(text3, "http://james.newtonking.com/projects/json");
 									}
+									dictionary.Add(text3 + ":" + text, text2);
 								}
 							}
 							else
@@ -453,19 +456,12 @@ namespace Newtonsoft.Json.Converters
 								text = text.Substring(1);
 								reader.Read();
 								string text2 = reader.Value.ToString();
-								string text3 = manager.LookupPrefix("http://james.newtonking.com/projects/json");
-								if (text3 == null)
+								dictionary.Add(text, text2);
+								string prefix;
+								if (this.IsNamespaceAttribute(text, out prefix))
 								{
-									int? num = null;
-									while (manager.LookupNamespace("json" + num) != null)
-									{
-										num = new int?(num.GetValueOrDefault() + 1);
-									}
-									text3 = "json" + num;
-									dictionary.Add("xmlns:" + text3, "http://james.newtonking.com/projects/json");
-									manager.AddNamespace(text3, "http://james.newtonking.com/projects/json");
+									manager.AddNamespace(prefix, text2);
 								}
-								dictionary.Add(text3 + ":" + text, text2);
 							}
 						}
 						else
@@ -488,20 +484,26 @@ namespace Newtonsoft.Json.Converters
 				while (reader.Read() && reader.TokenType != JsonToken.EndObject)
 				{
 					string text = reader.Value.ToString();
-					switch (text)
+					if (text != null)
 					{
-					case "@version":
-						reader.Read();
-						version = reader.Value.ToString();
-						continue;
-					case "@encoding":
-						reader.Read();
-						encoding = reader.Value.ToString();
-						continue;
-					case "@standalone":
-						reader.Read();
-						standalone = reader.Value.ToString();
-						continue;
+						if (text == "@version")
+						{
+							reader.Read();
+							version = reader.Value.ToString();
+							continue;
+						}
+						if (text == "@encoding")
+						{
+							reader.Read();
+							encoding = reader.Value.ToString();
+							continue;
+						}
+						if (text == "@standalone")
+						{
+							reader.Read();
+							standalone = reader.Value.ToString();
+							continue;
+						}
 					}
 					throw new JsonSerializationException("Unexpected property name encountered while deserializing XmlDeclaration: " + reader.Value);
 				}
@@ -517,17 +519,7 @@ namespace Newtonsoft.Json.Converters
 
 		private IXmlElement CreateElement(string elementName, IXmlDocument document, string elementPrefix, XmlNamespaceManager manager)
 		{
-			IXmlElement result;
-			if (!string.IsNullOrEmpty(elementPrefix))
-			{
-				IXmlElement xmlElement = document.CreateElement(elementName, manager.LookupNamespace(elementPrefix));
-				result = xmlElement;
-			}
-			else
-			{
-				result = document.CreateElement(elementName);
-			}
-			return result;
+			return string.IsNullOrEmpty(elementPrefix) ? document.CreateElement(elementName) : document.CreateElement(elementName, manager.LookupNamespace(elementPrefix));
 		}
 
 		private void DeserializeNode(JsonReader reader, IXmlDocument document, XmlNamespaceManager manager, IXmlNode currentNode)
@@ -545,7 +537,7 @@ namespace Newtonsoft.Json.Converters
 					{
 						this.DeserializeValue(reader, document, manager, propertyName2, currentNode);
 					}
-					goto IL_17E;
+					goto IL_17B;
 				}
 				case JsonToken.PropertyName:
 				{
@@ -573,14 +565,14 @@ namespace Newtonsoft.Json.Converters
 					{
 						this.DeserializeValue(reader, document, manager, propertyName, currentNode);
 					}
-					goto IL_17E;
+					goto IL_17B;
 				}
 				case JsonToken.Comment:
 					currentNode.AppendChild(document.CreateComment((string)reader.Value));
-					goto IL_17E;
+					goto IL_17B;
 				}
 				break;
-				IL_17E:
+				IL_17B:
 				if (reader.TokenType != JsonToken.PropertyName && !reader.Read())
 				{
 					return;

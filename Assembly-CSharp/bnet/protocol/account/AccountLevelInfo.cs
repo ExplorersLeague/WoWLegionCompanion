@@ -49,44 +49,40 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 26)
 				{
-					int num2 = num;
-					if (num2 != 26)
+					if (num != 37)
 					{
-						if (num2 != 37)
+						if (num != 42)
 						{
-							if (num2 != 42)
+							if (num != 48)
 							{
-								if (num2 != 48)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.PreferredRegion = ProtocolParser.ReadUInt32(stream);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.Country = ProtocolParser.ReadString(stream);
+								instance.PreferredRegion = ProtocolParser.ReadUInt32(stream);
 							}
 						}
 						else
 						{
-							instance.DefaultCurrency = binaryReader.ReadUInt32();
+							instance.Country = ProtocolParser.ReadString(stream);
 						}
 					}
 					else
 					{
-						instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
+						instance.DefaultCurrency = binaryReader.ReadUInt32();
 					}
+				}
+				else
+				{
+					instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
 				}
 			}
 			if (stream.Position == limit)

@@ -48,24 +48,37 @@ public class PersistentMissionData
 	public static int GetNumCompletedMissions(bool skipSupportMissions = false)
 	{
 		int num = 0;
-		foreach (object obj in PersistentMissionData.missionDictionary.Values)
+		IEnumerator enumerator = PersistentMissionData.missionDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
-			GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
-			if (record != null)
+			while (enumerator.MoveNext())
 			{
-				if (record.GarrFollowerTypeID == 4u)
+				object obj = enumerator.Current;
+				JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
+				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
+				if (record != null)
 				{
-					if (!skipSupportMissions || (record.Flags & 16u) == 0u)
+					if (record.GarrFollowerTypeID == 4u)
 					{
-						long num2 = GarrisonStatus.CurrentTime() - jamGarrisonMobileMission.StartTime;
-						long num3 = jamGarrisonMobileMission.MissionDuration - num2;
-						if ((jamGarrisonMobileMission.MissionState == 1 && num3 <= 0L) || jamGarrisonMobileMission.MissionState == 2 || jamGarrisonMobileMission.MissionState == 3)
+						if (!skipSupportMissions || (record.Flags & 16u) == 0u)
 						{
-							num++;
+							long num2 = GarrisonStatus.CurrentTime() - jamGarrisonMobileMission.StartTime;
+							long num3 = jamGarrisonMobileMission.MissionDuration - num2;
+							if ((jamGarrisonMobileMission.MissionState == 1 && num3 <= 0L) || jamGarrisonMobileMission.MissionState == 2 || jamGarrisonMobileMission.MissionState == 3)
+							{
+								num++;
+							}
 						}
 					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		return num;

@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<GarrEncounterSetXEncounterRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrEncounterSetXEncounterRec obj2 = (GarrEncounterSetXEncounterRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrEncounterSetXEncounterRec obj2 = (GarrEncounterSetXEncounterRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<GarrEncounterSetXEncounterRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrEncounterSetXEncounterRec garrEncounterSetXEncounterRec = (GarrEncounterSetXEncounterRec)obj;
-				if (garrEncounterSetXEncounterRec.GarrEncounterSetID == parentID && !callback(garrEncounterSetXEncounterRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrEncounterSetXEncounterRec garrEncounterSetXEncounterRec = (GarrEncounterSetXEncounterRec)obj;
+					if (garrEncounterSetXEncounterRec.GarrEncounterSetID == parentID && !callback(garrEncounterSetXEncounterRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

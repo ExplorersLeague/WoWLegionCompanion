@@ -44,16 +44,11 @@ namespace bnet.protocol.challenge
 					}
 					return instance;
 				}
-				else
+				else if (num != 13)
 				{
-					int num2 = num;
-					switch (num2)
+					if (num != 16)
 					{
-					case 13:
-						instance.Challenge = binaryReader.ReadUInt32();
-						break;
-					default:
-						if (num2 != 24)
+						if (num != 24)
 						{
 							Key key = ProtocolParser.ReadKey((byte)num, stream);
 							uint field = key.Field;
@@ -67,11 +62,15 @@ namespace bnet.protocol.challenge
 						{
 							instance.NewChallengeProtocol = ProtocolParser.ReadBool(stream);
 						}
-						break;
-					case 16:
-						instance.Id = ProtocolParser.ReadUInt32(stream);
-						break;
 					}
+					else
+					{
+						instance.Id = ProtocolParser.ReadUInt32(stream);
+					}
+				}
+				else
+				{
+					instance.Challenge = binaryReader.ReadUInt32();
 				}
 			}
 			if (stream.Position == limit)

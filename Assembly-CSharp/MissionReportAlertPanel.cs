@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -75,16 +76,29 @@ public class MissionReportAlertPanel : MonoBehaviour
 
 	private void PopulateCompletedMissionList()
 	{
-		foreach (object obj in PersistentMissionData.missionDictionary.Values)
+		IEnumerator enumerator = PersistentMissionData.missionDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
-			if ((jamGarrisonMobileMission.MissionState == 2 || jamGarrisonMobileMission.MissionState == 6) && !this.MissionIsOnCompletedMissionList(jamGarrisonMobileMission.MissionRecID))
+			while (enumerator.MoveNext())
 			{
-				GameObject gameObject = Object.Instantiate<GameObject>(this.missionListItemPrefab);
-				gameObject.transform.SetParent(this.completedMissionListContents.transform, false);
-				MissionListItem component = gameObject.GetComponent<MissionListItem>();
-				component.Init(jamGarrisonMobileMission.MissionRecID);
-				component.isResultsItem = true;
+				object obj = enumerator.Current;
+				JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
+				if ((jamGarrisonMobileMission.MissionState == 2 || jamGarrisonMobileMission.MissionState == 6) && !this.MissionIsOnCompletedMissionList(jamGarrisonMobileMission.MissionRecID))
+				{
+					GameObject gameObject = Object.Instantiate<GameObject>(this.missionListItemPrefab);
+					gameObject.transform.SetParent(this.completedMissionListContents.transform, false);
+					MissionListItem component = gameObject.GetComponent<MissionListItem>();
+					component.Init(jamGarrisonMobileMission.MissionRecID);
+					component.isResultsItem = true;
+				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 	}

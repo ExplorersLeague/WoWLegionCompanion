@@ -108,15 +108,14 @@ namespace MiniJSON
 				while (flag)
 				{
 					Json.Parser.TOKEN nextToken = this.NextToken;
-					Json.Parser.TOKEN token = nextToken;
-					switch (token)
+					switch (nextToken)
 					{
 					case Json.Parser.TOKEN.SQUARED_CLOSE:
 						flag = false;
 						break;
 					default:
 					{
-						if (token == Json.Parser.TOKEN.NONE)
+						if (nextToken == Json.Parser.TOKEN.NONE)
 						{
 							return null;
 						}
@@ -145,10 +144,6 @@ namespace MiniJSON
 			{
 				switch (token)
 				{
-				case Json.Parser.TOKEN.CURLY_OPEN:
-					return this.ParseObject();
-				case Json.Parser.TOKEN.SQUARED_OPEN:
-					return this.ParseArray();
 				case Json.Parser.TOKEN.STRING:
 					return this.ParseString();
 				case Json.Parser.TOKEN.NUMBER:
@@ -159,8 +154,16 @@ namespace MiniJSON
 					return false;
 				case Json.Parser.TOKEN.NULL:
 					return null;
+				default:
+					switch (token)
+					{
+					case Json.Parser.TOKEN.CURLY_OPEN:
+						return this.ParseObject();
+					case Json.Parser.TOKEN.SQUARED_OPEN:
+						return this.ParseArray();
+					}
+					return null;
 				}
-				return null;
 			}
 
 			private string ParseString()
@@ -175,10 +178,9 @@ namespace MiniJSON
 						break;
 					}
 					char nextChar = this.NextChar;
-					char c = nextChar;
-					if (c != '"')
+					if (nextChar != '"')
 					{
-						if (c != '\\')
+						if (nextChar != '\\')
 						{
 							stringBuilder.Append(nextChar);
 						}
@@ -189,18 +191,24 @@ namespace MiniJSON
 						else
 						{
 							nextChar = this.NextChar;
-							char c2 = nextChar;
-							switch (c2)
+							switch (nextChar)
 							{
-							case 'n':
-								stringBuilder.Append('\n');
+							case 'r':
+								stringBuilder.Append('\r');
 								break;
 							default:
-								if (c2 != '"' && c2 != '/' && c2 != '\\')
+								if (nextChar != '"' && nextChar != '/' && nextChar != '\\')
 								{
-									if (c2 != 'b')
+									if (nextChar != 'b')
 									{
-										if (c2 == 'f')
+										if (nextChar != 'f')
+										{
+											if (nextChar == 'n')
+											{
+												stringBuilder.Append('\n');
+											}
+										}
+										else
 										{
 											stringBuilder.Append('\f');
 										}
@@ -214,9 +222,6 @@ namespace MiniJSON
 								{
 									stringBuilder.Append(nextChar);
 								}
-								break;
-							case 'r':
-								stringBuilder.Append('\r');
 								break;
 							case 't':
 								stringBuilder.Append('\t');
@@ -313,40 +318,6 @@ namespace MiniJSON
 					char peekChar = this.PeekChar;
 					switch (peekChar)
 					{
-					case '"':
-						return Json.Parser.TOKEN.STRING;
-					default:
-						switch (peekChar)
-						{
-						case '[':
-							return Json.Parser.TOKEN.SQUARED_OPEN;
-						default:
-						{
-							switch (peekChar)
-							{
-							case '{':
-								return Json.Parser.TOKEN.CURLY_OPEN;
-							case '}':
-								this.json.Read();
-								return Json.Parser.TOKEN.CURLY_CLOSE;
-							}
-							string nextWord = this.NextWord;
-							switch (nextWord)
-							{
-							case "false":
-								return Json.Parser.TOKEN.FALSE;
-							case "true":
-								return Json.Parser.TOKEN.TRUE;
-							case "null":
-								return Json.Parser.TOKEN.NULL;
-							}
-							return Json.Parser.TOKEN.NONE;
-						}
-						case ']':
-							this.json.Read();
-							return Json.Parser.TOKEN.SQUARED_CLOSE;
-						}
-						break;
 					case ',':
 						this.json.Read();
 						return Json.Parser.TOKEN.COMMA;
@@ -362,6 +333,48 @@ namespace MiniJSON
 					case '8':
 					case '9':
 						return Json.Parser.TOKEN.NUMBER;
+					default:
+						switch (peekChar)
+						{
+						case '[':
+							return Json.Parser.TOKEN.SQUARED_OPEN;
+						default:
+							switch (peekChar)
+							{
+							case '{':
+								return Json.Parser.TOKEN.CURLY_OPEN;
+							default:
+								if (peekChar != '"')
+								{
+									string nextWord = this.NextWord;
+									if (nextWord != null)
+									{
+										if (nextWord == "false")
+										{
+											return Json.Parser.TOKEN.FALSE;
+										}
+										if (nextWord == "true")
+										{
+											return Json.Parser.TOKEN.TRUE;
+										}
+										if (nextWord == "null")
+										{
+											return Json.Parser.TOKEN.NULL;
+										}
+									}
+									return Json.Parser.TOKEN.NONE;
+								}
+								return Json.Parser.TOKEN.STRING;
+							case '}':
+								this.json.Read();
+								return Json.Parser.TOKEN.CURLY_CLOSE;
+							}
+							break;
+						case ']':
+							this.json.Read();
+							return Json.Parser.TOKEN.SQUARED_CLOSE;
+						}
+						break;
 					case ':':
 						return Json.Parser.TOKEN.COLON;
 					}
@@ -478,8 +491,7 @@ namespace MiniJSON
 				this.builder.Append('"');
 				foreach (char c in str.ToCharArray())
 				{
-					char c2 = c;
-					switch (c2)
+					switch (c)
 					{
 					case '\b':
 						this.builder.Append("\\b");
@@ -491,9 +503,9 @@ namespace MiniJSON
 						this.builder.Append("\\n");
 						break;
 					default:
-						if (c2 != '"')
+						if (c != '"')
 						{
-							if (c2 != '\\')
+							if (c != '\\')
 							{
 								int num = Convert.ToInt32(c);
 								if (num >= 32 && num <= 126)

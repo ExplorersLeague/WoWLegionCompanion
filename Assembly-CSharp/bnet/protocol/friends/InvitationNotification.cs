@@ -44,45 +44,41 @@ namespace bnet.protocol.friends
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
 							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 							}
-							else
-							{
-								instance.Reason = ProtocolParser.ReadUInt32(stream);
-							}
-						}
-						else if (instance.GameAccountId == null)
-						{
-							instance.GameAccountId = EntityId.DeserializeLengthDelimited(stream);
+							ProtocolParser.SkipKey(stream, key);
 						}
 						else
 						{
-							EntityId.DeserializeLengthDelimited(stream, instance.GameAccountId);
+							instance.Reason = ProtocolParser.ReadUInt32(stream);
 						}
 					}
-					else if (instance.Invitation == null)
+					else if (instance.GameAccountId == null)
 					{
-						instance.Invitation = Invitation.DeserializeLengthDelimited(stream);
+						instance.GameAccountId = EntityId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						Invitation.DeserializeLengthDelimited(stream, instance.Invitation);
+						EntityId.DeserializeLengthDelimited(stream, instance.GameAccountId);
 					}
+				}
+				else if (instance.Invitation == null)
+				{
+					instance.Invitation = Invitation.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					Invitation.DeserializeLengthDelimited(stream, instance.Invitation);
 				}
 			}
 			if (stream.Position == limit)

@@ -19,9 +19,8 @@ namespace Newtonsoft.Json.Utilities
 				for (int i = 0; i < value.Length; i++)
 				{
 					char c = value[i];
-					char c2 = c;
 					string text;
-					switch (c2)
+					switch (c)
 					{
 					case '\b':
 						text = "\\b";
@@ -33,17 +32,17 @@ namespace Newtonsoft.Json.Utilities
 						text = "\\n";
 						break;
 					default:
-						if (c2 != '\u2028')
+						if (c != '\u2028')
 						{
-							if (c2 != '\u2029')
+							if (c != '\u2029')
 							{
-								if (c2 != '"')
+								if (c != '"')
 								{
-									if (c2 != '\'')
+									if (c != '\'')
 									{
-										if (c2 != '\\')
+										if (c != '\\')
 										{
-											if (c2 != '\u0085')
+											if (c != '\u0085')
 											{
 												text = ((c > '\u001f') ? null : StringUtils.ToCharAsUnicode(c));
 											}

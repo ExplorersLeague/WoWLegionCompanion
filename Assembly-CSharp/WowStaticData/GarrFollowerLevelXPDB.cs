@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<GarrFollowerLevelXPRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrFollowerLevelXPRec obj2 = (GarrFollowerLevelXPRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrFollowerLevelXPRec obj2 = (GarrFollowerLevelXPRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<GarrFollowerLevelXPRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrFollowerLevelXPRec garrFollowerLevelXPRec = (GarrFollowerLevelXPRec)obj;
-				if ((ulong)garrFollowerLevelXPRec.FollowerLevel == (ulong)((long)parentID) && !callback(garrFollowerLevelXPRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrFollowerLevelXPRec garrFollowerLevelXPRec = (GarrFollowerLevelXPRec)obj;
+					if ((ulong)garrFollowerLevelXPRec.FollowerLevel == (ulong)((long)parentID) && !callback(garrFollowerLevelXPRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

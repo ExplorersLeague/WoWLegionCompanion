@@ -468,28 +468,27 @@ public class Login : MonoBehaviour
 		else if (!this.IsDevRegionList())
 		{
 			string locale = Main.instance.GetLocale();
-			string text = locale;
-			string text2;
-			switch (text)
+			string text;
+			switch (locale)
 			{
 			case "frFR":
 			case "deDE":
 			case "ruRU":
 			case "itIT":
-				text2 = "eu";
-				goto IL_119;
+				text = "eu";
+				goto IL_112;
 			case "koKR":
 			case "zhTW":
-				text2 = "kr";
-				goto IL_119;
+				text = "kr";
+				goto IL_112;
 			case "zhCN":
-				text2 = "cn";
-				goto IL_119;
+				text = "cn";
+				goto IL_112;
 			}
-			text2 = "us";
-			IL_119:
-			Debug.Log("Setting initial portal to " + text2);
-			this.SetPortal(text2);
+			text = "us";
+			IL_112:
+			Debug.Log("Setting initial portal to " + text);
+			this.SetPortal(text);
 		}
 	}
 
@@ -1053,10 +1052,10 @@ public class Login : MonoBehaviour
 		jsonrealmListTicketClientInformation.Info.AudioLocale = fourCC3.GetValue();
 		jsonrealmListTicketClientInformation.Info.Version = new JamJSONGameVersion();
 		jsonrealmListTicketClientInformation.Info.Version.VersionMajor = 7u;
-		jsonrealmListTicketClientInformation.Info.Version.VersionMinor = 0u;
-		jsonrealmListTicketClientInformation.Info.Version.VersionRevision = 3u;
-		jsonrealmListTicketClientInformation.Info.Version.VersionBuild = 21980u;
-		jsonrealmListTicketClientInformation.Info.VersionDataBuild = 21980u;
+		jsonrealmListTicketClientInformation.Info.Version.VersionMinor = 3u;
+		jsonrealmListTicketClientInformation.Info.Version.VersionRevision = 5u;
+		jsonrealmListTicketClientInformation.Info.Version.VersionBuild = (uint)BuildNum.CodeBuildNum;
+		jsonrealmListTicketClientInformation.Info.VersionDataBuild = (uint)BuildNum.DataBuildNum;
 		jsonrealmListTicketClientInformation.Info.CurrentTime = (int)BattleNet.Get().CurrentUTCTime();
 		jsonrealmListTicketClientInformation.Info.TimeZone = "Etc/UTC";
 		this.m_clientSecret = WowAuthCrypto.GenerateSecret();
@@ -1088,8 +1087,35 @@ public class Login : MonoBehaviour
 			foreach (bnet.protocol.attribute.Attribute attribute in utilResponse.m_response.AttributeList)
 			{
 				this.LoginLog("Attrib: <" + attribute.Name + ">");
-				this.m_realmListTicket = attribute.Value.BlobValue;
-				flag = true;
+				if (attribute.Name.StartsWith("Param_MobileErrorVersion"))
+				{
+					flag = false;
+					this.BnLoginFailed(StaticDB.GetString("UPDATE_REQUIRED", null), StaticDB.GetString("UPDATE_REQUIRED_DESCRIPTION", null));
+					break;
+				}
+				if (attribute.Name.StartsWith("Param_MobileError"))
+				{
+					flag = false;
+					this.BnLoginFailed(StaticDB.GetString("LOGIN_UNAVAILABLE", null), null);
+					break;
+				}
+				if (attribute.Name.StartsWith("Param_CustomErrorMessage"))
+				{
+					if (attribute.Value.HasStringValue)
+					{
+						flag = false;
+						this.BnLoginFailed(attribute.Value.StringValue, null);
+						break;
+					}
+					flag = false;
+					this.BnLoginFailed(StaticDB.GetString("LOGIN_UNAVAILABLE", null), null);
+					break;
+				}
+				else if (attribute.Name.StartsWith("Param_RealmListTicket"))
+				{
+					this.m_realmListTicket = attribute.Value.BlobValue;
+					flag = true;
+				}
 			}
 		}
 		if (flag)
@@ -1977,22 +2003,6 @@ public class Login : MonoBehaviour
 		}
 	}
 
-	private const float m_characterListRefreshWaitTime = 30f;
-
-	private const float m_characterListDisplayTimeout = 10f;
-
-	private const float PING_INTERVAL = 10f;
-
-	private const float PONG_TIMEOUT = 60f;
-
-	public const int m_numRecentChars = 3;
-
-	private const int m_unpauseReconnectTime = 30;
-
-	private const int m_recentCharacterVersion = 2;
-
-	private const float m_bnLoginTimeout = 20f;
-
 	public static Login instance;
 
 	private MobileNetwork m_mobileNetwork;
@@ -2029,7 +2039,15 @@ public class Login : MonoBehaviour
 
 	private float m_characterListStartTime;
 
+	private const float m_characterListRefreshWaitTime = 30f;
+
+	private const float m_characterListDisplayTimeout = 10f;
+
 	private Login.RealmJoinInfo m_realmJoinInfo;
+
+	private const float PING_INTERVAL = 10f;
+
+	private const float PONG_TIMEOUT = 60f;
 
 	private float m_lastPongTime;
 
@@ -2055,13 +2073,19 @@ public class Login : MonoBehaviour
 
 	private bool m_useCachedWoWAccount = true;
 
+	public const int m_numRecentChars = 3;
+
 	public EntityId m_gameAccount;
 
 	private JamJSONCharacterEntry m_selectedCharacterEntry;
 
 	private int m_pauseTimestamp;
 
+	private const int m_unpauseReconnectTime = 30;
+
 	private List<RecentCharacter> m_recentCharacters;
+
+	private const int m_recentCharacterVersion = 2;
 
 	private byte[] m_clientChallenge;
 
@@ -2072,6 +2096,8 @@ public class Login : MonoBehaviour
 	private DisconnectReason m_recentDisconnectReason;
 
 	public bool m_clearCharacterListOnReply;
+
+	private const float m_bnLoginTimeout = 20f;
 
 	private float m_bnLoginStartTime;
 
@@ -2385,6 +2411,8 @@ public class Login : MonoBehaviour
 			if (this.IpAddress == null || this.IpAddress == string.Empty)
 			{
 				Login.instance.LoginLog("Couldn't connect to mobile server, ip address was blank.");
+				Login.instance.SetLoginState(Login.eLoginState.MOBILE_CONNECT_FAILED);
+				AllPopups.instance.ShowGenericPopup(StaticDB.GetString("NETWORK_ERROR", null), StaticDB.GetString("CANT_CONNECT", null));
 				return;
 			}
 			int num = this.Port;

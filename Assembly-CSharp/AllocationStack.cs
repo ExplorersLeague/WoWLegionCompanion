@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-public class AllocationStack : IDisposable, MemoryStreamStack
+public class AllocationStack : MemoryStreamStack, IDisposable
 {
 	public MemoryStream Pop()
 	{

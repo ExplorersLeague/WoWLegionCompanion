@@ -42,74 +42,70 @@ namespace bnet.protocol.connection
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 42)
 								{
-									if (num2 != 42)
+									if (num != 48)
 									{
-										if (num2 != 48)
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
 										{
-											Key key = ProtocolParser.ReadKey((byte)num, stream);
-											uint field = key.Field;
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 										}
-										else
-										{
-											instance.ServerTime = ProtocolParser.ReadUInt64(stream);
-										}
-									}
-									else if (instance.ContentHandleArray == null)
-									{
-										instance.ContentHandleArray = ConnectionMeteringContentHandles.DeserializeLengthDelimited(stream);
+										ProtocolParser.SkipKey(stream, key);
 									}
 									else
 									{
-										ConnectionMeteringContentHandles.DeserializeLengthDelimited(stream, instance.ContentHandleArray);
+										instance.ServerTime = ProtocolParser.ReadUInt64(stream);
 									}
 								}
-								else if (instance.BindResponse == null)
+								else if (instance.ContentHandleArray == null)
 								{
-									instance.BindResponse = BindResponse.DeserializeLengthDelimited(stream);
+									instance.ContentHandleArray = ConnectionMeteringContentHandles.DeserializeLengthDelimited(stream);
 								}
 								else
 								{
-									BindResponse.DeserializeLengthDelimited(stream, instance.BindResponse);
+									ConnectionMeteringContentHandles.DeserializeLengthDelimited(stream, instance.ContentHandleArray);
 								}
+							}
+							else if (instance.BindResponse == null)
+							{
+								instance.BindResponse = BindResponse.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								instance.BindResult = ProtocolParser.ReadUInt32(stream);
+								BindResponse.DeserializeLengthDelimited(stream, instance.BindResponse);
 							}
-						}
-						else if (instance.ClientId == null)
-						{
-							instance.ClientId = ProcessId.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							ProcessId.DeserializeLengthDelimited(stream, instance.ClientId);
+							instance.BindResult = ProtocolParser.ReadUInt32(stream);
 						}
 					}
-					else if (instance.ServerId == null)
+					else if (instance.ClientId == null)
 					{
-						instance.ServerId = ProcessId.DeserializeLengthDelimited(stream);
+						instance.ClientId = ProcessId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						ProcessId.DeserializeLengthDelimited(stream, instance.ServerId);
+						ProcessId.DeserializeLengthDelimited(stream, instance.ClientId);
 					}
+				}
+				else if (instance.ServerId == null)
+				{
+					instance.ServerId = ProcessId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					ProcessId.DeserializeLengthDelimited(stream, instance.ServerId);
 				}
 			}
 			if (stream.Position == limit)

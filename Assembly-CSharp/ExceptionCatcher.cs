@@ -191,11 +191,11 @@ public class ExceptionCatcher : MonoBehaviour
 		return ordinalIgnoreCase.Compare(md5Hash2, hash) == 0;
 	}
 
-	private const int WoWCompanionProjectID = 292;
-
 	public ExceptionPanel exceptionPanel;
 
 	private static readonly HashSet<string> sentReports = new HashSet<string>();
 
 	private IPAddress unknownAddress = new IPAddress(new byte[4]);
+
+	private const int WoWCompanionProjectID = 292;
 }

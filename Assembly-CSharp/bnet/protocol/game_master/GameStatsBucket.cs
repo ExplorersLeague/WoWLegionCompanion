@@ -57,32 +57,31 @@ namespace bnet.protocol.game_master
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 21:
 						instance.BucketMax = binaryReader.ReadSingle();
 						break;
 					default:
-						if (num2 != 13)
+						if (num != 13)
 						{
-							if (num2 != 32)
+							if (num != 32)
 							{
-								if (num2 != 40)
+								if (num != 40)
 								{
-									if (num2 != 48)
+									if (num != 48)
 									{
-										if (num2 != 56)
+										if (num != 56)
 										{
-											if (num2 != 64)
+											if (num != 64)
 											{
-												if (num2 != 72)
+												if (num != 72)
 												{
-													if (num2 != 80)
+													if (num != 80)
 													{
-														if (num2 != 88)
+														if (num != 88)
 														{
-															if (num2 != 96)
+															if (num != 96)
 															{
 																Key key = ProtocolParser.ReadKey((byte)num, stream);
 																uint field = key.Field;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -106,12 +107,25 @@ public class OptionsDialog : MonoBehaviour
 
 	private bool BountyIsActive(int bountyQuestID)
 	{
-		foreach (object obj in PersistentBountyData.bountyDictionary.Values)
+		IEnumerator enumerator = PersistentBountyData.bountyDictionary.Values.GetEnumerator();
+		try
 		{
-			MobileWorldQuestBounty mobileWorldQuestBounty = (MobileWorldQuestBounty)obj;
-			if (mobileWorldQuestBounty.QuestID == bountyQuestID)
+			while (enumerator.MoveNext())
 			{
-				return true;
+				object obj = enumerator.Current;
+				MobileWorldQuestBounty mobileWorldQuestBounty = (MobileWorldQuestBounty)obj;
+				if (mobileWorldQuestBounty.QuestID == bountyQuestID)
+				{
+					return true;
+				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		return false;
@@ -119,6 +133,16 @@ public class OptionsDialog : MonoBehaviour
 
 	private void Start()
 	{
+		if (this.m_FilterOptionsArea != null && Main.instance.IsNarrowScreen())
+		{
+			GridLayoutGroup component = this.m_FilterOptionsArea.GetComponent<GridLayoutGroup>();
+			if (component != null)
+			{
+				Vector2 cellSize = component.cellSize;
+				cellSize.x = 185f;
+				component.cellSize = cellSize;
+			}
+		}
 		this.m_enableSFX.onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableSFX));
 		this.m_enableNotifications.onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableNotifications));
 		this.m_titleText.font = GeneralHelpers.LoadStandardFont();
@@ -287,4 +311,6 @@ public class OptionsDialog : MonoBehaviour
 	public Text m_sfxText;
 
 	public Text m_notificationsText;
+
+	public GameObject m_FilterOptionsArea;
 }

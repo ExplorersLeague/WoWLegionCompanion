@@ -55,70 +55,66 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 42)
 							{
-								if (num2 != 42)
+								if (num != 50)
 								{
-									if (num2 != 50)
+									if (num != 58)
 									{
-										if (num2 != 58)
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
 										{
-											Key key = ProtocolParser.ReadKey((byte)num, stream);
-											uint field = key.Field;
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 										}
-										else
-										{
-											instance.GameAccounts.Add(GameAccountList.DeserializeLengthDelimited(stream));
-										}
+										ProtocolParser.SkipKey(stream, key);
 									}
 									else
 									{
-										instance.GameStatus.Add(bnet.protocol.account.GameStatus.DeserializeLengthDelimited(stream));
+										instance.GameAccounts.Add(GameAccountList.DeserializeLengthDelimited(stream));
 									}
 								}
 								else
 								{
-									instance.GameLevelInfo.Add(bnet.protocol.account.GameLevelInfo.DeserializeLengthDelimited(stream));
+									instance.GameStatus.Add(bnet.protocol.account.GameStatus.DeserializeLengthDelimited(stream));
 								}
-							}
-							else if (instance.ParentalControlInfo == null)
-							{
-								instance.ParentalControlInfo = ParentalControlInfo.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								ParentalControlInfo.DeserializeLengthDelimited(stream, instance.ParentalControlInfo);
+								instance.GameLevelInfo.Add(bnet.protocol.account.GameLevelInfo.DeserializeLengthDelimited(stream));
 							}
 						}
-						else if (instance.PrivacyInfo == null)
+						else if (instance.ParentalControlInfo == null)
 						{
-							instance.PrivacyInfo = PrivacyInfo.DeserializeLengthDelimited(stream);
+							instance.ParentalControlInfo = ParentalControlInfo.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							PrivacyInfo.DeserializeLengthDelimited(stream, instance.PrivacyInfo);
+							ParentalControlInfo.DeserializeLengthDelimited(stream, instance.ParentalControlInfo);
 						}
 					}
-					else if (instance.AccountLevelInfo == null)
+					else if (instance.PrivacyInfo == null)
 					{
-						instance.AccountLevelInfo = AccountLevelInfo.DeserializeLengthDelimited(stream);
+						instance.PrivacyInfo = PrivacyInfo.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						AccountLevelInfo.DeserializeLengthDelimited(stream, instance.AccountLevelInfo);
+						PrivacyInfo.DeserializeLengthDelimited(stream, instance.PrivacyInfo);
 					}
+				}
+				else if (instance.AccountLevelInfo == null)
+				{
+					instance.AccountLevelInfo = AccountLevelInfo.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					AccountLevelInfo.DeserializeLengthDelimited(stream, instance.AccountLevelInfo);
 				}
 			}
 			if (stream.Position == limit)

@@ -45,16 +45,15 @@ namespace bnet.protocol.challenge
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 21:
 						instance.Type = binaryReader.ReadUInt32();
 						break;
 					default:
-						if (num2 != 8)
+						if (num != 8)
 						{
-							if (num2 != 34)
+							if (num != 34)
 							{
 								Key key = ProtocolParser.ReadKey((byte)num, stream);
 								uint field = key.Field;

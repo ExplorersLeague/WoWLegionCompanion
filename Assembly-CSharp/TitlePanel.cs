@@ -19,7 +19,7 @@ public class TitlePanel : MonoBehaviour
 			"/",
 			today.Year
 		}));
-		if (today.Year > 2017 || today.Month > 8 || today.Day > 28)
+		if (today.Year > 2018 || today.Month > 1 || today.Day > 15)
 		{
 			this.m_showPTR = false;
 		}
@@ -114,24 +114,40 @@ public class TitlePanel : MonoBehaviour
 		{
 			int value = 0;
 			string bnPortal = Login.instance.GetBnPortal();
-			switch (bnPortal)
+			if (bnPortal != null)
 			{
-			case "us":
-				value = 0;
-				break;
-			case "eu":
-				value = 1;
-				break;
-			case "kr":
-				value = 2;
-				break;
-			case "cn":
-				value = 3;
-				break;
-			case "beta":
-			case "test":
-				value = 4;
-				break;
+				if (!(bnPortal == "us"))
+				{
+					if (!(bnPortal == "eu"))
+					{
+						if (!(bnPortal == "kr"))
+						{
+							if (!(bnPortal == "cn"))
+							{
+								if (bnPortal == "beta" || bnPortal == "test")
+								{
+									value = 4;
+								}
+							}
+							else
+							{
+								value = 3;
+							}
+						}
+						else
+						{
+							value = 2;
+						}
+					}
+					else
+					{
+						value = 1;
+					}
+				}
+				else
+				{
+					value = 0;
+				}
 			}
 			this.m_showDialog = false;
 			this.m_portalDropdown.value = value;

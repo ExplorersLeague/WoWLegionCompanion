@@ -1345,10 +1345,6 @@ namespace bgs
 			this.m_logSource.LogDebug(text);
 		}
 
-		private const int DEFAULT_PORT = 1119;
-
-		public const string s_programName = "WoW";
-
 		private BattleNetLogSource m_logSource = new BattleNetLogSource("Main");
 
 		private FriendsAPI m_friendAPI;
@@ -1425,6 +1421,10 @@ namespace bgs
 
 		private List<BnetErrorInfo> m_errorEvents = new List<BnetErrorInfo>();
 
+		private const int DEFAULT_PORT = 1119;
+
+		public const string s_programName = "WoW";
+
 		private ServiceDescriptor m_connectionService = new ConnectionService();
 
 		private ServiceDescriptor m_notificationService = new NotificationService();
@@ -1445,6 +1445,14 @@ namespace bgs
 			Error
 		}
 
+		public delegate void AuroraStateHandler();
+
+		private delegate void NotificationHandler(Notification notification);
+
+		private delegate void OnConnectHandler(BattleNetErrors error);
+
+		private delegate void OnDisconectHandler(BattleNetErrors error);
+
 		private class BnetErrorComparer : IComparer<BnetErrorInfo>
 		{
 			public int Compare(BnetErrorInfo x, BnetErrorInfo y)
@@ -1464,13 +1472,5 @@ namespace bgs
 				return 0;
 			}
 		}
-
-		public delegate void AuroraStateHandler();
-
-		private delegate void NotificationHandler(Notification notification);
-
-		private delegate void OnConnectHandler(BattleNetErrors error);
-
-		private delegate void OnDisconectHandler(BattleNetErrors error);
 	}
 }

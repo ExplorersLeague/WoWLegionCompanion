@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -298,10 +299,23 @@ public class AdventureMapPanel : MonoBehaviour
 				}
 			}
 		}
-		foreach (object obj in PersistentMissionData.missionDictionary.Values)
+		IEnumerator enumerator = PersistentMissionData.missionDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
-			this.CreateMissionSite(jamGarrisonMobileMission.MissionRecID);
+			while (enumerator.MoveNext())
+			{
+				object obj = enumerator.Current;
+				JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
+				this.CreateMissionSite(jamGarrisonMobileMission.MissionRecID);
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
+			}
 		}
 	}
 
@@ -335,241 +349,254 @@ public class AdventureMapPanel : MonoBehaviour
 				Object.DestroyImmediate(adventureMapWorldQuest2.gameObject);
 			}
 		}
-		foreach (object obj in WorldQuestData.worldQuestDictionary.Values)
+		IEnumerator enumerator = WorldQuestData.worldQuestDictionary.Values.GetEnumerator();
+		try
 		{
-			MobileWorldQuest mobileWorldQuest = (MobileWorldQuest)obj;
-			if (!this.IsFilterEnabled(MapFilterType.All))
+			while (enumerator.MoveNext())
 			{
-				bool matchesFilter = false;
-				if (this.IsFilterEnabled(MapFilterType.ArtifactPower))
+				object obj = enumerator.Current;
+				MobileWorldQuest mobileWorldQuest = (MobileWorldQuest)obj;
+				if (!this.IsFilterEnabled(MapFilterType.All))
 				{
-					foreach (MobileWorldQuestReward mobileWorldQuestReward in mobileWorldQuest.Item)
+					bool matchesFilter = false;
+					if (this.IsFilterEnabled(MapFilterType.ArtifactPower))
 					{
-						StaticDB.itemEffectDB.EnumRecordsByParentID(mobileWorldQuestReward.RecordID, delegate(ItemEffectRec itemEffectRec)
+						foreach (MobileWorldQuestReward mobileWorldQuestReward in mobileWorldQuest.Item)
 						{
-							StaticDB.spellEffectDB.EnumRecordsByParentID(itemEffectRec.SpellID, delegate(SpellEffectRec spellEffectRec)
+							StaticDB.itemEffectDB.EnumRecordsByParentID(mobileWorldQuestReward.RecordID, delegate(ItemEffectRec itemEffectRec)
 							{
-								if (spellEffectRec.Effect == 240)
+								StaticDB.spellEffectDB.EnumRecordsByParentID(itemEffectRec.SpellID, delegate(SpellEffectRec spellEffectRec)
 								{
-									matchesFilter = true;
-									return false;
-								}
-								return true;
+									if (spellEffectRec.Effect == 240)
+									{
+										matchesFilter = true;
+										return false;
+									}
+									return true;
+								});
+								return !matchesFilter;
 							});
-							return !matchesFilter;
-						});
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.OrderResources))
-				{
-					foreach (MobileWorldQuestReward mobileWorldQuestReward2 in mobileWorldQuest.Currency)
-					{
-						if (mobileWorldQuestReward2.RecordID == 1220)
-						{
-							matchesFilter = true;
-							break;
 						}
 					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Gold) && mobileWorldQuest.Money > 0)
-				{
-					matchesFilter = true;
-				}
-				if (this.IsFilterEnabled(MapFilterType.Gear))
-				{
-					foreach (MobileWorldQuestReward mobileWorldQuestReward3 in mobileWorldQuest.Item)
+					if (this.IsFilterEnabled(MapFilterType.OrderResources))
 					{
-						ItemRec record = StaticDB.itemDB.GetRecord(mobileWorldQuestReward3.RecordID);
-						if (record != null && (record.ClassID == 2 || record.ClassID == 3 || record.ClassID == 4 || record.ClassID == 6))
+						foreach (MobileWorldQuestReward mobileWorldQuestReward2 in mobileWorldQuest.Currency)
 						{
-							matchesFilter = true;
-							break;
+							if (mobileWorldQuestReward2.RecordID == 1220)
+							{
+								matchesFilter = true;
+								break;
+							}
 						}
 					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.ProfessionMats))
-				{
-					foreach (MobileWorldQuestReward mobileWorldQuestReward4 in mobileWorldQuest.Item)
-					{
-						ItemRec record2 = StaticDB.itemDB.GetRecord(mobileWorldQuestReward4.RecordID);
-						if (record2 != null && record2.ClassID == 7)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.PetCharms))
-				{
-					foreach (MobileWorldQuestReward mobileWorldQuestReward5 in mobileWorldQuest.Item)
-					{
-						if (mobileWorldQuestReward5.RecordID == 116415)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Bounty_HighmountainTribes) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
-				{
-					MobileBountiesByWorldQuest mobileBountiesByWorldQuest = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
-					for (int num2 = 0; num2 < mobileBountiesByWorldQuest.BountyQuestID.Length; num2++)
-					{
-						if (mobileBountiesByWorldQuest.BountyQuestID[num2] == 42233)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Bounty_CourtOfFarondis) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
-				{
-					MobileBountiesByWorldQuest mobileBountiesByWorldQuest2 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
-					for (int num3 = 0; num3 < mobileBountiesByWorldQuest2.BountyQuestID.Length; num3++)
-					{
-						if (mobileBountiesByWorldQuest2.BountyQuestID[num3] == 42420)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Bounty_Dreamweavers) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
-				{
-					MobileBountiesByWorldQuest mobileBountiesByWorldQuest3 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
-					for (int num4 = 0; num4 < mobileBountiesByWorldQuest3.BountyQuestID.Length; num4++)
-					{
-						if (mobileBountiesByWorldQuest3.BountyQuestID[num4] == 42170)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Bounty_Wardens) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
-				{
-					MobileBountiesByWorldQuest mobileBountiesByWorldQuest4 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
-					for (int num5 = 0; num5 < mobileBountiesByWorldQuest4.BountyQuestID.Length; num5++)
-					{
-						if (mobileBountiesByWorldQuest4.BountyQuestID[num5] == 42422)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Bounty_Nightfallen) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
-				{
-					MobileBountiesByWorldQuest mobileBountiesByWorldQuest5 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
-					for (int num6 = 0; num6 < mobileBountiesByWorldQuest5.BountyQuestID.Length; num6++)
-					{
-						if (mobileBountiesByWorldQuest5.BountyQuestID[num6] == 42421)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Bounty_Valarjar) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
-				{
-					MobileBountiesByWorldQuest mobileBountiesByWorldQuest6 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
-					for (int num7 = 0; num7 < mobileBountiesByWorldQuest6.BountyQuestID.Length; num7++)
-					{
-						if (mobileBountiesByWorldQuest6.BountyQuestID[num7] == 42234)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Bounty_KirinTor) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
-				{
-					MobileBountiesByWorldQuest mobileBountiesByWorldQuest7 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
-					for (int num8 = 0; num8 < mobileBountiesByWorldQuest7.BountyQuestID.Length; num8++)
-					{
-						if (mobileBountiesByWorldQuest7.BountyQuestID[num8] == 43179)
-						{
-							matchesFilter = true;
-							break;
-						}
-					}
-				}
-				if (this.IsFilterEnabled(MapFilterType.Invasion))
-				{
-					QuestInfoRec record3 = StaticDB.questInfoDB.GetRecord(mobileWorldQuest.QuestInfoID);
-					if (record3 == null)
-					{
-						break;
-					}
-					bool flag = record3.Type == 7;
-					if (flag)
+					if (this.IsFilterEnabled(MapFilterType.Gold) && mobileWorldQuest.Money > 0)
 					{
 						matchesFilter = true;
 					}
-				}
-				if (!matchesFilter)
-				{
-					continue;
-				}
-			}
-			GameObject gameObject3 = Object.Instantiate<GameObject>(AdventureMapPanel.instance.m_AdvMapWorldQuestPrefab);
-			if (mobileWorldQuest.StartLocationMapID == 1220)
-			{
-				gameObject3.transform.SetParent(this.m_missionAndWorldQuestArea_BrokenIsles.transform, false);
-				float mapScale = 0.10271506f;
-				float mapOffsetX = 1036.88037f;
-				float mapOffsetY = 597.2115f;
-				this.SetupWorldQuestIcon(mobileWorldQuest, gameObject3, mapOffsetX, mapOffsetY, mapScale);
-			}
-			else
-			{
-				gameObject3.transform.localScale = new Vector3(1.33f, 1.33f, 1.33f);
-				gameObject3.transform.SetParent(this.m_missionAndWorldQuestArea_Argus.transform, false);
-				int worldMapAreaID = mobileWorldQuest.WorldMapAreaID;
-				if (worldMapAreaID != 1170)
-				{
-					if (worldMapAreaID != 1171)
+					if (this.IsFilterEnabled(MapFilterType.Gear))
 					{
-						if (worldMapAreaID != 1135)
+						foreach (MobileWorldQuestReward mobileWorldQuestReward3 in mobileWorldQuest.Item)
 						{
-							Debug.LogError(string.Concat(new object[]
+							ItemRec record = StaticDB.itemDB.GetRecord(mobileWorldQuestReward3.RecordID);
+							if (record != null && (record.ClassID == 2 || record.ClassID == 3 || record.ClassID == 4 || record.ClassID == 6))
 							{
-								"UNHANDLED WORLD QUEST AREA ID ",
-								mobileWorldQuest.QuestTitle,
-								" ",
-								mobileWorldQuest.WorldMapAreaID
-							}));
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.ProfessionMats))
+					{
+						foreach (MobileWorldQuestReward mobileWorldQuestReward4 in mobileWorldQuest.Item)
+						{
+							ItemRec record2 = StaticDB.itemDB.GetRecord(mobileWorldQuestReward4.RecordID);
+							if (record2 != null && record2.ClassID == 7)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.PetCharms))
+					{
+						foreach (MobileWorldQuestReward mobileWorldQuestReward5 in mobileWorldQuest.Item)
+						{
+							if (mobileWorldQuestReward5.RecordID == 116415)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.Bounty_HighmountainTribes) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+					{
+						MobileBountiesByWorldQuest mobileBountiesByWorldQuest = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+						for (int num2 = 0; num2 < mobileBountiesByWorldQuest.BountyQuestID.Length; num2++)
+						{
+							if (mobileBountiesByWorldQuest.BountyQuestID[num2] == 42233)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.Bounty_CourtOfFarondis) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+					{
+						MobileBountiesByWorldQuest mobileBountiesByWorldQuest2 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+						for (int num3 = 0; num3 < mobileBountiesByWorldQuest2.BountyQuestID.Length; num3++)
+						{
+							if (mobileBountiesByWorldQuest2.BountyQuestID[num3] == 42420)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.Bounty_Dreamweavers) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+					{
+						MobileBountiesByWorldQuest mobileBountiesByWorldQuest3 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+						for (int num4 = 0; num4 < mobileBountiesByWorldQuest3.BountyQuestID.Length; num4++)
+						{
+							if (mobileBountiesByWorldQuest3.BountyQuestID[num4] == 42170)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.Bounty_Wardens) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+					{
+						MobileBountiesByWorldQuest mobileBountiesByWorldQuest4 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+						for (int num5 = 0; num5 < mobileBountiesByWorldQuest4.BountyQuestID.Length; num5++)
+						{
+							if (mobileBountiesByWorldQuest4.BountyQuestID[num5] == 42422)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.Bounty_Nightfallen) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+					{
+						MobileBountiesByWorldQuest mobileBountiesByWorldQuest5 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+						for (int num6 = 0; num6 < mobileBountiesByWorldQuest5.BountyQuestID.Length; num6++)
+						{
+							if (mobileBountiesByWorldQuest5.BountyQuestID[num6] == 42421)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.Bounty_Valarjar) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+					{
+						MobileBountiesByWorldQuest mobileBountiesByWorldQuest6 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+						for (int num7 = 0; num7 < mobileBountiesByWorldQuest6.BountyQuestID.Length; num7++)
+						{
+							if (mobileBountiesByWorldQuest6.BountyQuestID[num7] == 42234)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.Bounty_KirinTor) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+					{
+						MobileBountiesByWorldQuest mobileBountiesByWorldQuest7 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+						for (int num8 = 0; num8 < mobileBountiesByWorldQuest7.BountyQuestID.Length; num8++)
+						{
+							if (mobileBountiesByWorldQuest7.BountyQuestID[num8] == 43179)
+							{
+								matchesFilter = true;
+								break;
+							}
+						}
+					}
+					if (this.IsFilterEnabled(MapFilterType.Invasion))
+					{
+						QuestInfoRec record3 = StaticDB.questInfoDB.GetRecord(mobileWorldQuest.QuestInfoID);
+						if (record3 == null)
+						{
+							break;
+						}
+						bool flag = record3.Type == 7;
+						if (flag)
+						{
+							matchesFilter = true;
+						}
+					}
+					if (!matchesFilter)
+					{
+						continue;
+					}
+				}
+				GameObject gameObject3 = Object.Instantiate<GameObject>(AdventureMapPanel.instance.m_AdvMapWorldQuestPrefab);
+				if (mobileWorldQuest.StartLocationMapID == 1220)
+				{
+					gameObject3.transform.SetParent(this.m_missionAndWorldQuestArea_BrokenIsles.transform, false);
+					float mapScale = 0.10271506f;
+					float mapOffsetX = 1036.88037f;
+					float mapOffsetY = 597.2115f;
+					this.SetupWorldQuestIcon(mobileWorldQuest, gameObject3, mapOffsetX, mapOffsetY, mapScale);
+				}
+				else
+				{
+					gameObject3.transform.localScale = new Vector3(1.33f, 1.33f, 1.33f);
+					gameObject3.transform.SetParent(this.m_missionAndWorldQuestArea_Argus.transform, false);
+					int worldMapAreaID = mobileWorldQuest.WorldMapAreaID;
+					if (worldMapAreaID != 1170)
+					{
+						if (worldMapAreaID != 1171)
+						{
+							if (worldMapAreaID != 1135)
+							{
+								Debug.LogError(string.Concat(new object[]
+								{
+									"UNHANDLED WORLD QUEST AREA ID ",
+									mobileWorldQuest.QuestTitle,
+									" ",
+									mobileWorldQuest.WorldMapAreaID
+								}));
+							}
+							else
+							{
+								float mapScale2 = 0.3132809f;
+								float mapOffsetX2 = 2115.88f;
+								float mapOffsetY2 = -7.788513f;
+								this.SetupWorldQuestIcon(mobileWorldQuest, gameObject3, mapOffsetX2, mapOffsetY2, mapScale2);
+							}
 						}
 						else
 						{
-							float mapScale2 = 0.3132809f;
-							float mapOffsetX2 = 2115.88f;
-							float mapOffsetY2 = -7.788513f;
+							float mapScale2 = 0.38f;
+							float mapOffsetX2 = 3981f;
+							float mapOffsetY2 = 1520f;
 							this.SetupWorldQuestIcon(mobileWorldQuest, gameObject3, mapOffsetX2, mapOffsetY2, mapScale2);
 						}
 					}
 					else
 					{
-						float mapScale2 = 0.38f;
-						float mapOffsetX2 = 3981f;
-						float mapOffsetY2 = 1520f;
+						float mapScale2 = 0.39f;
+						float mapOffsetX2 = 4832.76f;
+						float mapOffsetY2 = -1232f;
 						this.SetupWorldQuestIcon(mobileWorldQuest, gameObject3, mapOffsetX2, mapOffsetY2, mapScale2);
 					}
 				}
-				else
+				AdventureMapWorldQuest component3 = gameObject3.GetComponent<AdventureMapWorldQuest>();
+				component3.SetQuestID(mobileWorldQuest.QuestID);
+				StackableMapIcon component4 = gameObject3.GetComponent<StackableMapIcon>();
+				if (component4 != null)
 				{
-					float mapScale2 = 0.39f;
-					float mapOffsetX2 = 4832.76f;
-					float mapOffsetY2 = -1232f;
-					this.SetupWorldQuestIcon(mobileWorldQuest, gameObject3, mapOffsetX2, mapOffsetY2, mapScale2);
+					component4.RegisterWithManager(mobileWorldQuest.StartLocationMapID);
 				}
 			}
-			AdventureMapWorldQuest component3 = gameObject3.GetComponent<AdventureMapWorldQuest>();
-			component3.SetQuestID(mobileWorldQuest.QuestID);
-			StackableMapIcon component4 = gameObject3.GetComponent<StackableMapIcon>();
-			if (component4 != null)
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
 			{
-				component4.RegisterWithManager(mobileWorldQuest.StartLocationMapID);
+				disposable.Dispose();
 			}
 		}
 		this.m_pinchZoomContentManager.ForceZoomFactorChanged();
@@ -795,122 +822,152 @@ public class AdventureMapPanel : MonoBehaviour
 		{
 			return;
 		}
-		foreach (object obj in PersistentBountyData.bountyDictionary.Values)
+		IEnumerator enumerator = PersistentBountyData.bountyDictionary.Values.GetEnumerator();
+		try
 		{
-			MobileWorldQuestBounty mobileWorldQuestBounty = (MobileWorldQuestBounty)obj;
-			GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_bountySitePrefab);
-			if (!(gameObject2 == null))
+			while (enumerator.MoveNext())
 			{
-				BountySite component2 = gameObject2.GetComponent<BountySite>();
-				if (!(component2 == null))
+				object obj = enumerator.Current;
+				MobileWorldQuestBounty mobileWorldQuestBounty = (MobileWorldQuestBounty)obj;
+				GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_bountySitePrefab);
+				if (!(gameObject2 == null))
 				{
-					component2.SetBounty(mobileWorldQuestBounty);
-					gameObject2.name = "BountySite " + mobileWorldQuestBounty.QuestID;
-					RectTransform component3 = gameObject2.GetComponent<RectTransform>();
-					if (!(component3 == null))
+					BountySite component2 = gameObject2.GetComponent<BountySite>();
+					if (!(component2 == null))
 					{
-						component3.anchorMin = new Vector2(0.5f, 0.5f);
-						component3.anchorMax = new Vector2(0.5f, 0.5f);
-						QuestV2Rec record = StaticDB.questDB.GetRecord(mobileWorldQuestBounty.QuestID);
-						int num = (record == null) ? 0 : record.QuestSortID;
-						bool flag = true;
-						ZoneMissionOverview zoneMissionOverview = null;
-						int startLocationMapID = 1220;
-						int num2 = num;
-						switch (num2)
+						component2.SetBounty(mobileWorldQuestBounty);
+						gameObject2.name = "BountySite " + mobileWorldQuestBounty.QuestID;
+						RectTransform component3 = gameObject2.GetComponent<RectTransform>();
+						if (!(component3 == null))
 						{
-						case 7541:
-							zoneMissionOverview = this.m_allZoneMissionOverviews[3];
-							break;
-						default:
-							if (num2 != 7502)
+							component3.anchorMin = new Vector2(0.5f, 0.5f);
+							component3.anchorMax = new Vector2(0.5f, 0.5f);
+							QuestV2Rec record = StaticDB.questDB.GetRecord(mobileWorldQuestBounty.QuestID);
+							int num = (record == null) ? 0 : record.QuestSortID;
+							bool flag = true;
+							ZoneMissionOverview zoneMissionOverview = null;
+							int startLocationMapID = 1220;
+							if (num == 7502)
 							{
-								if (num2 == 7503)
+								goto IL_24B;
+							}
+							if (num != 7503)
+							{
+								switch (num)
 								{
-									zoneMissionOverview = this.m_allZoneMissionOverviews[2];
+								case 7541:
+									zoneMissionOverview = this.m_allZoneMissionOverviews[3];
 									break;
-								}
-								if (num2 == 7334)
-								{
-									zoneMissionOverview = this.m_allZoneMissionOverviews[0];
-									break;
-								}
-								if (num2 == 7558)
-								{
-									zoneMissionOverview = this.m_allZoneMissionOverviews[5];
-									break;
-								}
-								if (num2 == 7637)
-								{
-									zoneMissionOverview = this.m_allZoneMissionOverviews[4];
-									break;
-								}
-								if (num2 != 8147)
-								{
-									if (num2 == 8574)
+								default:
+									if (num != 7334)
 									{
-										zoneMissionOverview = this.m_allZoneMissionOverviews[7];
-										break;
-									}
-									if (num2 != 8701)
-									{
-										Debug.LogError(string.Concat(new object[]
+										if (num != 7558)
 										{
-											"INVALID QUESTSORTID ",
-											num,
-											" for quest ID:",
-											mobileWorldQuestBounty.QuestID
-										}));
-										flag = false;
-										break;
+											if (num != 7637)
+											{
+												if (num == 8147)
+												{
+													goto IL_24B;
+												}
+												if (num != 8574)
+												{
+													if (num != 8701)
+													{
+														Debug.LogError(string.Concat(new object[]
+														{
+															"INVALID QUESTSORTID ",
+															num,
+															" for quest ID:",
+															mobileWorldQuestBounty.QuestID
+														}));
+														flag = false;
+													}
+													else
+													{
+														zoneMissionOverview = this.m_allZoneMissionOverviews[9];
+													}
+												}
+												else
+												{
+													zoneMissionOverview = this.m_allZoneMissionOverviews[7];
+												}
+											}
+											else
+											{
+												zoneMissionOverview = this.m_allZoneMissionOverviews[4];
+											}
+										}
+										else
+										{
+											zoneMissionOverview = this.m_allZoneMissionOverviews[5];
+										}
 									}
-									zoneMissionOverview = this.m_allZoneMissionOverviews[9];
+									else
+									{
+										zoneMissionOverview = this.m_allZoneMissionOverviews[0];
+									}
+									break;
+								case 7543:
+									zoneMissionOverview = this.m_allZoneMissionOverviews[1];
 									break;
 								}
 							}
-							zoneMissionOverview = this.m_allZoneMissionOverviews[6];
-							break;
-						case 7543:
-							zoneMissionOverview = this.m_allZoneMissionOverviews[1];
-							break;
-						}
-						if (flag)
-						{
-							if (zoneMissionOverview != null)
+							else
 							{
-								if (zoneMissionOverview.zoneNameTag != null && zoneMissionOverview.zoneNameTag.Length > 0)
+								zoneMissionOverview = this.m_allZoneMissionOverviews[2];
+							}
+							IL_2C9:
+							if (flag)
+							{
+								if (zoneMissionOverview != null)
 								{
-									if (zoneMissionOverview.m_bountyButtonRoot != null)
+									if (zoneMissionOverview.zoneNameTag != null && zoneMissionOverview.zoneNameTag.Length > 0)
 									{
-										gameObject2.transform.SetParent(zoneMissionOverview.m_bountyButtonRoot.transform, false);
+										if (zoneMissionOverview.m_bountyButtonRoot != null)
+										{
+											gameObject2.transform.SetParent(zoneMissionOverview.m_bountyButtonRoot.transform, false);
+										}
+									}
+									else if (zoneMissionOverview.m_anonymousBountyButtonRoot != null)
+									{
+										gameObject2.transform.SetParent(zoneMissionOverview.m_anonymousBountyButtonRoot.transform, false);
 									}
 								}
-								else if (zoneMissionOverview.m_anonymousBountyButtonRoot != null)
+								gameObject2.transform.localPosition = Vector3.zero;
+								if (component2.m_errorImage != null && component2.m_errorImage.gameObject != null)
 								{
-									gameObject2.transform.SetParent(zoneMissionOverview.m_anonymousBountyButtonRoot.transform, false);
+									component2.m_errorImage.gameObject.SetActive(false);
 								}
 							}
-							gameObject2.transform.localPosition = Vector3.zero;
-							if (component2.m_errorImage != null && component2.m_errorImage.gameObject != null)
+							else
 							{
-								component2.m_errorImage.gameObject.SetActive(false);
+								gameObject2.transform.localPosition = new Vector3(0f, 0f, 0f);
+								if (component2.m_errorImage != null && component2.m_errorImage.gameObject != null)
+								{
+									component2.m_errorImage.gameObject.SetActive(true);
+								}
 							}
-						}
-						else
-						{
-							gameObject2.transform.localPosition = new Vector3(0f, 0f, 0f);
-							if (component2.m_errorImage != null && component2.m_errorImage.gameObject != null)
+							StackableMapIcon component4 = gameObject2.GetComponent<StackableMapIcon>();
+							if (component4 != null)
 							{
-								component2.m_errorImage.gameObject.SetActive(true);
+								component4.RegisterWithManager(startLocationMapID);
+								continue;
 							}
-						}
-						StackableMapIcon component4 = gameObject2.GetComponent<StackableMapIcon>();
-						if (component4 != null)
-						{
-							component4.RegisterWithManager(startLocationMapID);
+							continue;
+							IL_24B:
+							zoneMissionOverview = this.m_allZoneMissionOverviews[6];
+							goto IL_2C9;
 						}
 					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 	}

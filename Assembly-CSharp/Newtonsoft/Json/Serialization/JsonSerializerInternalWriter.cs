@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -362,31 +361,44 @@ namespace Newtonsoft.Json.Serialization
 			writer.WriteStartArray();
 			int top = writer.Top;
 			int num = 0;
-			foreach (object value in values)
+			IEnumerator enumerator = values.GetEnumerator();
+			try
 			{
-				try
+				while (enumerator.MoveNext())
 				{
-					JsonContract contractSafe = this.GetContractSafe(value);
-					if (this.ShouldWriteReference(value, null, contractSafe))
+					object value = enumerator.Current;
+					try
 					{
-						this.WriteReference(writer, value);
+						JsonContract contractSafe = this.GetContractSafe(value);
+						if (this.ShouldWriteReference(value, null, contractSafe))
+						{
+							this.WriteReference(writer, value);
+						}
+						else if (this.CheckForCircularReference(value, null, contract))
+						{
+							this.SerializeValue(writer, value, contractSafe, null, collectionValueContract2);
+						}
 					}
-					else if (this.CheckForCircularReference(value, null, contract))
+					catch (Exception ex)
 					{
-						this.SerializeValue(writer, value, contractSafe, null, collectionValueContract2);
+						if (!base.IsErrorHandled(values.UnderlyingCollection, contract, num, ex))
+						{
+							throw;
+						}
+						this.HandleError(writer, top);
+					}
+					finally
+					{
+						num++;
 					}
 				}
-				catch (Exception ex)
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
 				{
-					if (!base.IsErrorHandled(values.UnderlyingCollection, contract, num, ex))
-					{
-						throw;
-					}
-					this.HandleError(writer, top);
-				}
-				finally
-				{
-					num++;
+					disposable.Dispose();
 				}
 			}
 			writer.WriteEndArray();
@@ -498,7 +510,6 @@ namespace Newtonsoft.Json.Serialization
 			return flag3;
 		}
 
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Security.SecuritySafeCriticalAttribute")]
 		[SecuritySafeCritical]
 		private void SerializeISerializable(JsonWriter writer, ISerializable value, JsonISerializableContract contract)
 		{
@@ -561,33 +572,46 @@ namespace Newtonsoft.Json.Serialization
 			}
 			JsonContract collectionValueContract2 = base.Serializer.ContractResolver.ResolveContract(contract.DictionaryValueType ?? typeof(object));
 			int top = writer.Top;
-			foreach (object obj in values)
+			IDictionaryEnumerator enumerator = values.GetEnumerator();
+			try
 			{
-				DictionaryEntry entry = (DictionaryEntry)obj;
-				string text = this.GetPropertyName(entry);
-				text = ((contract.PropertyNameResolver == null) ? text : contract.PropertyNameResolver(text));
-				try
+				while (enumerator.MoveNext())
 				{
-					object value = entry.Value;
-					JsonContract contractSafe = this.GetContractSafe(value);
-					if (this.ShouldWriteReference(value, null, contractSafe))
+					object obj = enumerator.Current;
+					DictionaryEntry entry = (DictionaryEntry)obj;
+					string text = this.GetPropertyName(entry);
+					text = ((contract.PropertyNameResolver == null) ? text : contract.PropertyNameResolver(text));
+					try
 					{
-						writer.WritePropertyName(text);
-						this.WriteReference(writer, value);
+						object value = entry.Value;
+						JsonContract contractSafe = this.GetContractSafe(value);
+						if (this.ShouldWriteReference(value, null, contractSafe))
+						{
+							writer.WritePropertyName(text);
+							this.WriteReference(writer, value);
+						}
+						else if (this.CheckForCircularReference(value, null, contract))
+						{
+							writer.WritePropertyName(text);
+							this.SerializeValue(writer, value, contractSafe, null, collectionValueContract2);
+						}
 					}
-					else if (this.CheckForCircularReference(value, null, contract))
+					catch (Exception ex)
 					{
-						writer.WritePropertyName(text);
-						this.SerializeValue(writer, value, contractSafe, null, collectionValueContract2);
+						if (!base.IsErrorHandled(values.UnderlyingDictionary, contract, text, ex))
+						{
+							throw;
+						}
+						this.HandleError(writer, top);
 					}
 				}
-				catch (Exception ex)
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
 				{
-					if (!base.IsErrorHandled(values.UnderlyingDictionary, contract, text, ex))
-					{
-						throw;
-					}
-					this.HandleError(writer, top);
+					disposable.Dispose();
 				}
 			}
 			writer.WriteEndObject();

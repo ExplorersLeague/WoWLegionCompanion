@@ -17,11 +17,6 @@ namespace Newtonsoft.Json
 			this.CloseOutput = true;
 		}
 
-		void IDisposable.Dispose()
-		{
-			this.Dispose(true);
-		}
-
 		public bool CloseOutput { get; set; }
 
 		protected internal int Top
@@ -901,6 +896,11 @@ namespace Newtonsoft.Json
 			{
 				throw new JsonWriterException("Only white space characters should be used.");
 			}
+		}
+
+		void IDisposable.Dispose()
+		{
+			this.Dispose(true);
 		}
 
 		private void Dispose(bool disposing)

@@ -43,45 +43,41 @@ namespace bnet.protocol.invitation
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 17)
 					{
-						if (num2 != 17)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
 							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 							}
-							else if (instance.Params == null)
-							{
-								instance.Params = InvitationParams.DeserializeLengthDelimited(stream);
-							}
-							else
-							{
-								InvitationParams.DeserializeLengthDelimited(stream, instance.Params);
-							}
+							ProtocolParser.SkipKey(stream, key);
+						}
+						else if (instance.Params == null)
+						{
+							instance.Params = InvitationParams.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							instance.InvitationId = binaryReader.ReadUInt64();
+							InvitationParams.DeserializeLengthDelimited(stream, instance.Params);
 						}
-					}
-					else if (instance.AgentIdentity == null)
-					{
-						instance.AgentIdentity = Identity.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						Identity.DeserializeLengthDelimited(stream, instance.AgentIdentity);
+						instance.InvitationId = binaryReader.ReadUInt64();
 					}
+				}
+				else if (instance.AgentIdentity == null)
+				{
+					instance.AgentIdentity = Identity.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					Identity.DeserializeLengthDelimited(stream, instance.AgentIdentity);
 				}
 			}
 			if (stream.Position == limit)

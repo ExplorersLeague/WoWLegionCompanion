@@ -42,65 +42,61 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 8)
 				{
-					int num2 = num;
-					if (num2 != 8)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 48)
 								{
-									if (num2 != 48)
+									if (num != 56)
 									{
-										if (num2 != 56)
+										if (num != 64)
 										{
-											if (num2 != 64)
+											Key key = ProtocolParser.ReadKey((byte)num, stream);
+											uint field = key.Field;
+											if (field == 0u)
 											{
-												Key key = ProtocolParser.ReadKey((byte)num, stream);
-												uint field = key.Field;
-												if (field == 0u)
-												{
-													throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-												}
-												ProtocolParser.SkipKey(stream, key);
+												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 											}
-											else
-											{
-												instance.FieldGameAccounts = ProtocolParser.ReadBool(stream);
-											}
+											ProtocolParser.SkipKey(stream, key);
 										}
 										else
 										{
-											instance.FieldGameStatus = ProtocolParser.ReadBool(stream);
+											instance.FieldGameAccounts = ProtocolParser.ReadBool(stream);
 										}
 									}
 									else
 									{
-										instance.FieldGameLevelInfo = ProtocolParser.ReadBool(stream);
+										instance.FieldGameStatus = ProtocolParser.ReadBool(stream);
 									}
 								}
 								else
 								{
-									instance.FieldParentalControlInfo = ProtocolParser.ReadBool(stream);
+									instance.FieldGameLevelInfo = ProtocolParser.ReadBool(stream);
 								}
 							}
 							else
 							{
-								instance.FieldPrivacyInfo = ProtocolParser.ReadBool(stream);
+								instance.FieldParentalControlInfo = ProtocolParser.ReadBool(stream);
 							}
 						}
 						else
 						{
-							instance.FieldAccountLevelInfo = ProtocolParser.ReadBool(stream);
+							instance.FieldPrivacyInfo = ProtocolParser.ReadBool(stream);
 						}
 					}
 					else
 					{
-						instance.AllFields = ProtocolParser.ReadBool(stream);
+						instance.FieldAccountLevelInfo = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else
+				{
+					instance.AllFields = ProtocolParser.ReadBool(stream);
 				}
 			}
 			if (stream.Position == limit)

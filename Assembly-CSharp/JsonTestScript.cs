@@ -278,7 +278,7 @@ public class JsonTestScript
 		this.Log("--------------------");
 	}
 
-	private const string BAD_RESULT_MESSAGE = "Incorrect Deserialized Result";
-
 	private TextMesh _text;
+
+	private const string BAD_RESULT_MESSAGE = "Incorrect Deserialized Result";
 }

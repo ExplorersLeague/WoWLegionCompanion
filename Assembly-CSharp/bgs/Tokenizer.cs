@@ -236,10 +236,10 @@ namespace bgs
 			return num * num2;
 		}
 
-		private const char NULLCHAR = '\0';
-
 		private char[] m_chars;
 
 		private int m_index;
+
+		private const char NULLCHAR = '\0';
 	}
 }

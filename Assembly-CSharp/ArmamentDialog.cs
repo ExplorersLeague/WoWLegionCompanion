@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages.MobileClientJSON;
@@ -45,13 +46,26 @@ public class ArmamentDialog : MonoBehaviour
 			Object.DestroyImmediate(followerInventoryListItem.gameObject);
 		}
 		bool active = true;
-		foreach (object obj in PersistentArmamentData.armamentDictionary.Values)
+		IEnumerator enumerator = PersistentArmamentData.armamentDictionary.Values.GetEnumerator();
+		try
 		{
-			MobileFollowerArmamentExt item = (MobileFollowerArmamentExt)obj;
-			FollowerInventoryListItem followerInventoryListItem2 = Object.Instantiate<FollowerInventoryListItem>(this.m_armamentListItemPrefab);
-			followerInventoryListItem2.transform.SetParent(this.m_armamentListContent.transform, false);
-			followerInventoryListItem2.SetArmament(item, followerDetailView);
-			active = false;
+			while (enumerator.MoveNext())
+			{
+				object obj = enumerator.Current;
+				MobileFollowerArmamentExt item = (MobileFollowerArmamentExt)obj;
+				FollowerInventoryListItem followerInventoryListItem2 = Object.Instantiate<FollowerInventoryListItem>(this.m_armamentListItemPrefab);
+				followerInventoryListItem2.transform.SetParent(this.m_armamentListContent.transform, false);
+				followerInventoryListItem2.SetArmament(item, followerDetailView);
+				active = false;
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
+			}
 		}
 		this.m_emptyMessage.gameObject.SetActive(active);
 	}

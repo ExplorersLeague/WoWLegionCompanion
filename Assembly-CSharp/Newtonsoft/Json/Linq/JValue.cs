@@ -5,7 +5,7 @@ using Newtonsoft.Json.Utilities;
 
 namespace Newtonsoft.Json.Linq
 {
-	public class JValue : JToken, IFormattable, IComparable, IEquatable<JValue>, IComparable<JValue>
+	public class JValue : JToken, IEquatable<JValue>, IFormattable, IComparable, IComparable<JValue>
 	{
 		internal JValue(object value, JTokenType type)
 		{
@@ -55,16 +55,6 @@ namespace Newtonsoft.Json.Linq
 
 		public JValue(object value) : this(value, JValue.GetValueType(null, value))
 		{
-		}
-
-		int IComparable.CompareTo(object obj)
-		{
-			if (obj == null)
-			{
-				return 1;
-			}
-			object objB = (!(obj is JValue)) ? obj : ((JValue)obj).Value;
-			return JValue.Compare(this._valueType, this._value, objB);
 		}
 
 		internal override bool DeepEquals(JToken node)
@@ -463,6 +453,16 @@ namespace Newtonsoft.Json.Linq
 				return formattable.ToString(format, formatProvider);
 			}
 			return this._value.ToString();
+		}
+
+		int IComparable.CompareTo(object obj)
+		{
+			if (obj == null)
+			{
+				return 1;
+			}
+			object objB = (!(obj is JValue)) ? obj : ((JValue)obj).Value;
+			return JValue.Compare(this._valueType, this._value, objB);
 		}
 
 		public int CompareTo(JValue obj)

@@ -42,55 +42,51 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 24)
 				{
-					int num2 = num;
-					if (num2 != 24)
+					if (num != 34)
 					{
-						if (num2 != 34)
+						if (num != 40)
 						{
-							if (num2 != 40)
+							if (num != 48)
 							{
-								if (num2 != 48)
+								if (num != 56)
 								{
-									if (num2 != 56)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else
-									{
-										instance.ParentalControlsActive = ProtocolParser.ReadBool(stream);
-									}
+									ProtocolParser.SkipKey(stream, key);
 								}
 								else
 								{
-									instance.IsUsingIgr = ProtocolParser.ReadBool(stream);
+									instance.ParentalControlsActive = ProtocolParser.ReadBool(stream);
 								}
 							}
 							else
 							{
-								instance.HasBenefactor = ProtocolParser.ReadBool(stream);
+								instance.IsUsingIgr = ProtocolParser.ReadBool(stream);
 							}
-						}
-						else if (instance.Location == null)
-						{
-							instance.Location = GameSessionLocation.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							GameSessionLocation.DeserializeLengthDelimited(stream, instance.Location);
+							instance.HasBenefactor = ProtocolParser.ReadBool(stream);
 						}
+					}
+					else if (instance.Location == null)
+					{
+						instance.Location = GameSessionLocation.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						instance.StartTime = ProtocolParser.ReadUInt32(stream);
+						GameSessionLocation.DeserializeLengthDelimited(stream, instance.Location);
 					}
+				}
+				else
+				{
+					instance.StartTime = ProtocolParser.ReadUInt32(stream);
 				}
 			}
 			if (stream.Position == limit)

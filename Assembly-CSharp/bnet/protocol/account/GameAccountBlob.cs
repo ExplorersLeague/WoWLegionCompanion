@@ -52,111 +52,107 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 40)
 								{
-									if (num2 != 40)
+									if (num != 48)
 									{
-										if (num2 != 48)
+										if (num != 56)
 										{
-											if (num2 != 56)
+											if (num != 80)
 											{
-												if (num2 != 80)
+												if (num != 88)
 												{
-													if (num2 != 88)
+													if (num != 96)
 													{
-														if (num2 != 96)
+														if (num != 104)
 														{
-															if (num2 != 104)
+															if (num != 112)
 															{
-																if (num2 != 112)
+																Key key = ProtocolParser.ReadKey((byte)num, stream);
+																uint field = key.Field;
+																if (field == 0u)
 																{
-																	Key key = ProtocolParser.ReadKey((byte)num, stream);
-																	uint field = key.Field;
-																	if (field == 0u)
-																	{
-																		throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-																	}
-																	if (field != 20u)
-																	{
-																		ProtocolParser.SkipKey(stream, key);
-																	}
-																	else if (key.WireType == Wire.LengthDelimited)
-																	{
-																		instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
-																	}
+																	throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 																}
-																else
+																if (field != 20u)
 																{
-																	instance.BoxLevelExpiration = ProtocolParser.ReadUInt64(stream);
+																	ProtocolParser.SkipKey(stream, key);
+																}
+																else if (key.WireType == Wire.LengthDelimited)
+																{
+																	instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
 																}
 															}
 															else
 															{
-																instance.BoxLevel = ProtocolParser.ReadUInt32(stream);
+																instance.BoxLevelExpiration = ProtocolParser.ReadUInt64(stream);
 															}
 														}
 														else
 														{
-															instance.StatusExpiration = ProtocolParser.ReadUInt64(stream);
+															instance.BoxLevel = ProtocolParser.ReadUInt32(stream);
 														}
 													}
 													else
 													{
-														instance.UnitsRemaining = ProtocolParser.ReadUInt32(stream);
+														instance.StatusExpiration = ProtocolParser.ReadUInt64(stream);
 													}
 												}
 												else
 												{
-													instance.SubscriptionExpiration = ProtocolParser.ReadUInt64(stream);
+													instance.UnitsRemaining = ProtocolParser.ReadUInt32(stream);
 												}
 											}
 											else
 											{
-												instance.CacheExpiration = ProtocolParser.ReadUInt64(stream);
+												instance.SubscriptionExpiration = ProtocolParser.ReadUInt64(stream);
 											}
 										}
 										else
 										{
-											instance.BillingFlags = ProtocolParser.ReadUInt32(stream);
+											instance.CacheExpiration = ProtocolParser.ReadUInt64(stream);
 										}
 									}
 									else
 									{
-										instance.Flags = ProtocolParser.ReadUInt64(stream);
+										instance.BillingFlags = ProtocolParser.ReadUInt32(stream);
 									}
 								}
 								else
 								{
-									instance.Status = ProtocolParser.ReadUInt32(stream);
+									instance.Flags = ProtocolParser.ReadUInt64(stream);
 								}
 							}
 							else
 							{
-								instance.RealmPermissions = ProtocolParser.ReadUInt32(stream);
+								instance.Status = ProtocolParser.ReadUInt32(stream);
 							}
 						}
 						else
 						{
-							instance.Name = ProtocolParser.ReadString(stream);
+							instance.RealmPermissions = ProtocolParser.ReadUInt32(stream);
 						}
-					}
-					else if (instance.GameAccount == null)
-					{
-						instance.GameAccount = GameAccountHandle.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						GameAccountHandle.DeserializeLengthDelimited(stream, instance.GameAccount);
+						instance.Name = ProtocolParser.ReadString(stream);
 					}
+				}
+				else if (instance.GameAccount == null)
+				{
+					instance.GameAccount = GameAccountHandle.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					GameAccountHandle.DeserializeLengthDelimited(stream, instance.GameAccount);
 				}
 			}
 			if (stream.Position == limit)

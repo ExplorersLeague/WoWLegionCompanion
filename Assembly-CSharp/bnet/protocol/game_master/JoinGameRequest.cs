@@ -48,41 +48,37 @@ namespace bnet.protocol.game_master
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
 							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 							}
-							else
-							{
-								instance.AdvancedNotification = ProtocolParser.ReadBool(stream);
-							}
+							ProtocolParser.SkipKey(stream, key);
 						}
 						else
 						{
-							instance.Player.Add(bnet.protocol.game_master.Player.DeserializeLengthDelimited(stream));
+							instance.AdvancedNotification = ProtocolParser.ReadBool(stream);
 						}
-					}
-					else if (instance.GameHandle == null)
-					{
-						instance.GameHandle = GameHandle.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						GameHandle.DeserializeLengthDelimited(stream, instance.GameHandle);
+						instance.Player.Add(bnet.protocol.game_master.Player.DeserializeLengthDelimited(stream));
 					}
+				}
+				else if (instance.GameHandle == null)
+				{
+					instance.GameHandle = GameHandle.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					GameHandle.DeserializeLengthDelimited(stream, instance.GameHandle);
 				}
 			}
 			if (stream.Position == limit)

@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "DebugAttribute", Version = 28333852u)]
 	public class DebugAttribute
 	{
-		[FlexJamMember(Name = "key", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "key")]
+		[FlexJamMember(Name = "key", Type = FlexJamType.String)]
 		public string Key { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "value")]

@@ -45,55 +45,51 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 13)
 				{
-					int num2 = num;
-					if (num2 != 13)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 80)
 								{
-									if (num2 != 80)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else
-									{
-										instance.Region = ProtocolParser.ReadUInt32(stream);
-									}
+									ProtocolParser.SkipKey(stream, key);
 								}
 								else
 								{
-									instance.BattleTag = ProtocolParser.ReadString(stream);
+									instance.Region = ProtocolParser.ReadUInt32(stream);
 								}
-							}
-							else if (instance.Handle == null)
-							{
-								instance.Handle = GameAccountHandle.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								GameAccountHandle.DeserializeLengthDelimited(stream, instance.Handle);
+								instance.BattleTag = ProtocolParser.ReadString(stream);
 							}
+						}
+						else if (instance.Handle == null)
+						{
+							instance.Handle = GameAccountHandle.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							instance.Email = ProtocolParser.ReadString(stream);
+							GameAccountHandle.DeserializeLengthDelimited(stream, instance.Handle);
 						}
 					}
 					else
 					{
-						instance.Id = binaryReader.ReadUInt32();
+						instance.Email = ProtocolParser.ReadString(stream);
 					}
+				}
+				else
+				{
+					instance.Id = binaryReader.ReadUInt32();
 				}
 			}
 			if (stream.Position == limit)

@@ -79,7 +79,7 @@ namespace Newtonsoft.Json.Converters
 			BidirectionalDictionary<string, string> bidirectionalDictionary;
 			if (!this._enumMemberNamesPerType.TryGetValue(t, out bidirectionalDictionary))
 			{
-				Dictionary<Type, BidirectionalDictionary<string, string>> enumMemberNamesPerType = this._enumMemberNamesPerType;
+				object enumMemberNamesPerType = this._enumMemberNamesPerType;
 				lock (enumMemberNamesPerType)
 				{
 					if (this._enumMemberNamesPerType.TryGetValue(t, out bidirectionalDictionary))

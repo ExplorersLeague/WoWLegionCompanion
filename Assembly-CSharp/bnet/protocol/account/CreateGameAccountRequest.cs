@@ -46,16 +46,15 @@ namespace bnet.protocol.account
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 29:
 						instance.Program = binaryReader.ReadUInt32();
 						break;
 					default:
-						if (num2 != 10)
+						if (num != 10)
 						{
-							if (num2 != 16)
+							if (num != 16)
 							{
 								Key key = ProtocolParser.ReadKey((byte)num, stream);
 								uint field = key.Field;

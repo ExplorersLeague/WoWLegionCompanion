@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -101,6 +102,27 @@ public class TroopsListItem : MonoBehaviour
 
 	private void Start()
 	{
+		if (Main.instance.IsNarrowScreen())
+		{
+			if (this.m_troopSpecificArea != null)
+			{
+				Main.instance.NudgeX(ref this.m_troopSpecificArea, 30f);
+			}
+			if (this.m_itemSpecificArea != null)
+			{
+				Main.instance.NudgeX(ref this.m_itemSpecificArea, 30f);
+			}
+			if (this.m_troopSlotsRootObject != null)
+			{
+				GridLayoutGroup component = this.m_troopSlotsRootObject.GetComponent<GridLayoutGroup>();
+				if (component != null)
+				{
+					Vector2 spacing = component.spacing;
+					spacing.x = 10f;
+					component.spacing = spacing;
+				}
+			}
+		}
 		Main instance = Main.instance;
 		instance.ShipmentAddedAction = (Action<int, ulong>)Delegate.Combine(instance.ShipmentAddedAction, new Action<int, ulong>(this.HandleShipmentAdded));
 		this.m_troopName.font = GeneralHelpers.LoadStandardFont();
@@ -199,13 +221,26 @@ public class TroopsListItem : MonoBehaviour
 			flag = false;
 		}
 		int num = 0;
-		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		IEnumerator enumerator = PersistentShipmentData.shipmentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
+			while (enumerator.MoveNext())
 			{
-				num++;
-				break;
+				object obj = enumerator.Current;
+				JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+				if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
+				{
+					num++;
+					break;
+				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		if ((num > 0 && !flag) || (this.m_isArtifactResearch && ArtifactKnowledgeData.s_artifactKnowledgeInfo != null && ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel >= ArtifactKnowledgeData.s_artifactKnowledgeInfo.MaxLevel))
@@ -255,12 +290,25 @@ public class TroopsListItem : MonoBehaviour
 				troopSlot.SetCharShipment(this.m_charShipmentRec.ID, 0UL, 0, false, 0);
 			}
 		}
-		foreach (object obj2 in PersistentShipmentData.shipmentDictionary.Values)
+		IEnumerator enumerator2 = PersistentShipmentData.shipmentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamCharacterShipment jamCharacterShipment2 = (JamCharacterShipment)obj2;
-			if (jamCharacterShipment2.ShipmentRecID == this.m_charShipmentRec.ID)
+			while (enumerator2.MoveNext())
 			{
-				this.SetTroopSlotForPendingShipment(componentsInChildren2, jamCharacterShipment2.ShipmentID);
+				object obj2 = enumerator2.Current;
+				JamCharacterShipment jamCharacterShipment2 = (JamCharacterShipment)obj2;
+				if (jamCharacterShipment2.ShipmentRecID == this.m_charShipmentRec.ID)
+				{
+					this.SetTroopSlotForPendingShipment(componentsInChildren2, jamCharacterShipment2.ShipmentID);
+				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable2;
+			if ((disposable2 = (enumerator2 as IDisposable)) != null)
+			{
+				disposable2.Dispose();
 			}
 		}
 	}
@@ -336,13 +384,26 @@ public class TroopsListItem : MonoBehaviour
 		}
 		this.m_akHintText.gameObject.SetActive(false);
 		int num = 0;
-		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		IEnumerator enumerator = PersistentShipmentData.shipmentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
+			while (enumerator.MoveNext())
 			{
-				num++;
-				break;
+				object obj = enumerator.Current;
+				JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+				if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
+				{
+					num++;
+					break;
+				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		this.m_akResearchDisabled = true;
@@ -522,20 +583,33 @@ public class TroopsListItem : MonoBehaviour
 			}
 		}
 		CharShipmentRec record2 = StaticDB.charShipmentDB.GetRecord(this.m_charShipmentRec.ID);
-		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		IEnumerator enumerator2 = PersistentShipmentData.shipmentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
+			while (enumerator2.MoveNext())
 			{
-				this.SetTroopSlotForPendingShipment(componentsInChildren, jamCharacterShipment.ShipmentID);
-			}
-			else
-			{
-				CharShipmentRec record3 = StaticDB.charShipmentDB.GetRecord(jamCharacterShipment.ShipmentRecID);
-				if (record3.ContainerID == record2.ContainerID)
+				object obj = enumerator2.Current;
+				JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+				if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
 				{
 					this.SetTroopSlotForPendingShipment(componentsInChildren, jamCharacterShipment.ShipmentID);
 				}
+				else
+				{
+					CharShipmentRec record3 = StaticDB.charShipmentDB.GetRecord(jamCharacterShipment.ShipmentRecID);
+					if (record3.ContainerID == record2.ContainerID)
+					{
+						this.SetTroopSlotForPendingShipment(componentsInChildren, jamCharacterShipment.ShipmentID);
+					}
+				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator2 as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 	}
@@ -670,23 +744,36 @@ public class TroopsListItem : MonoBehaviour
 		{
 			maxTroops = (int)record.FollowerClassLimit;
 		}
-		foreach (object obj in PersistentTalentData.talentDictionary.Values)
+		IEnumerator enumerator = PersistentTalentData.talentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonTalent jamGarrisonTalent = (JamGarrisonTalent)obj;
-			if ((jamGarrisonTalent.Flags & 1) != 0)
+			while (enumerator.MoveNext())
 			{
-				GarrTalentRec record2 = StaticDB.garrTalentDB.GetRecord(jamGarrisonTalent.GarrTalentID);
-				if (record2 != null)
+				object obj = enumerator.Current;
+				JamGarrisonTalent jamGarrisonTalent = (JamGarrisonTalent)obj;
+				if ((jamGarrisonTalent.Flags & 1) != 0)
 				{
-					StaticDB.garrAbilityEffectDB.EnumRecordsByParentID((int)record2.GarrAbilityID, delegate(GarrAbilityEffectRec effectRec)
+					GarrTalentRec record2 = StaticDB.garrTalentDB.GetRecord(jamGarrisonTalent.GarrTalentID);
+					if (record2 != null)
 					{
-						if (effectRec.AbilityAction == 34u && (ulong)effectRec.ActionRecordID == (ulong)((long)garrClassSpecID))
+						StaticDB.garrAbilityEffectDB.EnumRecordsByParentID((int)record2.GarrAbilityID, delegate(GarrAbilityEffectRec effectRec)
 						{
-							maxTroops += (int)effectRec.ActionValueFlat;
-						}
-						return true;
-					});
+							if (effectRec.AbilityAction == 34u && (ulong)effectRec.ActionRecordID == (ulong)((long)garrClassSpecID))
+							{
+								maxTroops += (int)effectRec.ActionValueFlat;
+							}
+							return true;
+						});
+					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		return maxTroops;
