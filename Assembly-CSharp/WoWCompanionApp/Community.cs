@@ -16,7 +16,6 @@ namespace WoWCompanionApp
 		{
 			this.RefreshStreams();
 			this.RefreshMemberList();
-			this.GetPrivileges();
 		}
 
 		public ulong ClubId
@@ -82,9 +81,25 @@ namespace WoWCompanionApp
 		public void RefreshStreams()
 		{
 			List<ClubStreamInfo> streams = Club.GetStreams(this.ClubId);
-			foreach (ClubStreamInfo info in streams)
+			List<ulong> list = new List<ulong>();
+			using (Dictionary<ulong, CommunityStream>.Enumerator enumerator = this.m_streamList.GetEnumerator())
 			{
-				this.AddStream(info);
+				while (enumerator.MoveNext())
+				{
+					KeyValuePair<ulong, CommunityStream> stream = enumerator.Current;
+					if (!streams.Any((ClubStreamInfo info) => info.streamId == stream.Value.StreamId))
+					{
+						list.Add(stream.Key);
+					}
+				}
+			}
+			foreach (ulong key in list)
+			{
+				this.m_streamList.Remove(key);
+			}
+			foreach (ClubStreamInfo info2 in streams)
+			{
+				this.AddStream(info2);
 			}
 			List<ClubStreamNotificationSetting> clubStreamNotificationSettings = Club.GetClubStreamNotificationSettings(this.ClubId);
 			foreach (ClubStreamNotificationSetting filter in clubStreamNotificationSettings)
@@ -100,11 +115,6 @@ namespace WoWCompanionApp
 				CommunityStream communityStream = new CommunityStream(this.ClubId, info);
 				this.m_streamList.Add(communityStream.StreamId, communityStream);
 			}
-		}
-
-		public void GetPrivileges()
-		{
-			Club.GetClubPrivileges(this.ClubId);
 		}
 
 		public ReadOnlyCollection<CommunityStream> GetAllStreams()
@@ -136,9 +146,26 @@ namespace WoWCompanionApp
 			return this.m_memberList.AsReadOnly();
 		}
 
-		public void LeaveClub()
+		public void LeaveOrDestroyClub()
 		{
-			Club.LeaveClub(this.ClubId);
+			if (this.CanDeleteClub())
+			{
+				Club.DestroyClub(this.ClubId);
+			}
+			else
+			{
+				Club.LeaveClub(this.ClubId);
+			}
+		}
+
+		public bool CanLeaveClub()
+		{
+			return Club.GetMemberInfoForSelf(this.ClubId).Value.role != 1;
+		}
+
+		public bool CanDeleteClub()
+		{
+			return Club.GetMemberInfoForSelf(this.ClubId).Value.role == 1 && this.m_memberList.Count < 2;
 		}
 
 		public bool HasUnreadMessages(CommunityStream ignoreStream = null)
@@ -187,6 +214,14 @@ namespace WoWCompanionApp
 			}
 		}
 
+		public void HandleStreamUpdatedEvent(Club.ClubStreamUpdatedEvent streamUpdatedEvent)
+		{
+			if (this.m_streamList.ContainsKey(streamUpdatedEvent.StreamID))
+			{
+				this.m_streamList[streamUpdatedEvent.StreamID].HandleStreamUpdatedEvent(streamUpdatedEvent);
+			}
+		}
+
 		public void HandleMemberAddedEvent(Club.ClubMemberAddedEvent addedEvent)
 		{
 			ClubMemberInfo? memberInfo = Club.GetMemberInfo(this.ClubId, addedEvent.MemberID);
@@ -213,13 +248,24 @@ namespace WoWCompanionApp
 		public void HandleMemberRoleUpdatedEvent(Club.ClubMemberRoleUpdatedEvent updateRoleEvent)
 		{
 			CommunityMember communityMember = this.m_memberList.Find((CommunityMember member) => member.MemberID == updateRoleEvent.MemberID);
-			communityMember.HandleRoleUpdateEvent(updateRoleEvent);
+			if (communityMember != null)
+			{
+				communityMember.HandleRoleUpdateEvent(updateRoleEvent);
+				if (communityMember.IsSelf)
+				{
+					this.RefreshStreams();
+					CommunityData.Instance.FireChannelRefreshCallback(updateRoleEvent.ClubID);
+				}
+			}
 		}
 
 		public void HandleMemberPresenceUpdatedEvent(Club.ClubMemberPresenceUpdatedEvent updatePresenceEvent)
 		{
 			CommunityMember communityMember = this.m_memberList.Find((CommunityMember member) => member.MemberID == updatePresenceEvent.MemberID);
-			communityMember.HandlePresenceUpdateEvent(updatePresenceEvent);
+			if (communityMember != null)
+			{
+				communityMember.HandlePresenceUpdateEvent(updatePresenceEvent);
+			}
 		}
 
 		public void HandleMessageAddedEvent(Club.ClubMessageAddedEvent messageEvent)
@@ -236,6 +282,30 @@ namespace WoWCompanionApp
 			{
 				this.m_streamList[messageEvent.StreamID].HandleMessageUpdatedEvent(messageEvent);
 			}
+		}
+
+		public CommunityMember GetUpdatedMember(Club.ClubMemberRoleUpdatedEvent updateRoleEvent)
+		{
+			this.HandleMemberRoleUpdatedEvent(updateRoleEvent);
+			return this.m_memberList.Find((CommunityMember member) => member.MemberID == updateRoleEvent.MemberID);
+		}
+
+		public bool CanAccessUpdatedChannel(Club.ClubStreamUpdatedEvent streamUpdatedEvent)
+		{
+			ClubStreamInfo? streamInfo = Club.GetStreamInfo(streamUpdatedEvent.ClubID, streamUpdatedEvent.StreamID);
+			if (streamInfo != null)
+			{
+				if (!streamInfo.Value.leadersAndModeratorsOnly)
+				{
+					return true;
+				}
+				CommunityMember communityMember = this.m_memberList.Find((CommunityMember member) => member.IsSelf);
+				if (communityMember != null && communityMember.IsModerator)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private ClubInfo m_clubInfo;

@@ -79,6 +79,29 @@ namespace WoWCompanionApp
 			};
 		}
 
+		private DialogType InstantiateDialog<DialogType>(DialogType prefab, Canvas parentCanvas) where DialogType : Component
+		{
+			if (parentCanvas == this.MainCanvas)
+			{
+				string text = DialogFactory.MainCanvasName;
+			}
+			else if (parentCanvas == this.GameCanvas)
+			{
+				string text = DialogFactory.GameCanvasName;
+			}
+			else if (parentCanvas == this.Level2Canvas)
+			{
+				string text = DialogFactory.Level2CanvasName;
+			}
+			else if (parentCanvas == this.Level3Canvas)
+			{
+				string text = DialogFactory.Level3CanvasName;
+			}
+			DialogType result = Object.Instantiate<DialogType>(prefab, parentCanvas.transform, false);
+			result.gameObject.name = typeof(DialogType).Name;
+			return result;
+		}
+
 		public MissionDialog CreateMissionDialog(int missionID)
 		{
 			if (this.m_missionDialog == null)
@@ -196,6 +219,48 @@ namespace WoWCompanionApp
 			return okcancelDialog;
 		}
 
+		public EventInviteResponseDialog CreateEventInviteResponseDialog(CalendarEventItem eventItem)
+		{
+			EventInviteResponseDialog eventInviteResponseDialog = this.InstantiateDialog<EventInviteResponseDialog>(this.m_eventInviteResponseDialogPrefab, this.Level3Canvas);
+			eventInviteResponseDialog.SetCalendarEvent(eventItem);
+			return eventInviteResponseDialog;
+		}
+
+		public ArticleView CreateArticleViewPanel(NewsArticle article)
+		{
+			ArticleView articleView = this.InstantiateDialog<ArticleView>(this.m_ArticleViewPanelPrefab, this.Level3Canvas);
+			articleView.SetArticle(article);
+			return articleView;
+		}
+
+		public AddInviteDialog CreateAddInviteDialog(EventInviteResponseDialog eventDialog)
+		{
+			AddInviteDialog addInviteDialog = this.InstantiateDialog<AddInviteDialog>(this.m_addInviteDialogPrefab, this.Level3Canvas);
+			addInviteDialog.EventDialog = eventDialog;
+			return addInviteDialog;
+		}
+
+		public CalendarFiltersDialog CreateCalendarFiltersDialog(EventsListPanel eventsListPanel)
+		{
+			CalendarFiltersDialog calendarFiltersDialog = this.InstantiateDialog<CalendarFiltersDialog>(this.m_calendarFiltersDialogPrefab, this.Level3Canvas);
+			calendarFiltersDialog.EventsListPanel = eventsListPanel;
+			return calendarFiltersDialog;
+		}
+
+		public CommunityDescriptionDialog CreateCommunityDescriptionDialog(CommunityPendingInvite pendingInvite)
+		{
+			CommunityDescriptionDialog communityDescriptionDialog = this.InstantiateDialog<CommunityDescriptionDialog>(this.m_communityDescriptionDialogPrefab, this.Level3Canvas);
+			communityDescriptionDialog.PopulateFromInvite(pendingInvite);
+			return communityDescriptionDialog;
+		}
+
+		public HolidayDetailsPanel CreateHolidayDetailsPanel(CalendarEventData eventData)
+		{
+			HolidayDetailsPanel holidayDetailsPanel = this.InstantiateDialog<HolidayDetailsPanel>(this.m_holidayDetailsPanel, this.Level3Canvas);
+			holidayDetailsPanel.SetCalendarEventData(eventData);
+			return holidayDetailsPanel;
+		}
+
 		private static readonly string MainCanvasName = "MainCanvas";
 
 		private static readonly string GameCanvasName = "GameCanvas";
@@ -235,5 +300,17 @@ namespace WoWCompanionApp
 		public ReportPlayerDialog m_reportPlayerDialogPrefab;
 
 		public CharacterViewPanel m_characterViewPanelPrefab;
+
+		public EventInviteResponseDialog m_eventInviteResponseDialogPrefab;
+
+		public ArticleView m_ArticleViewPanelPrefab;
+
+		public AddInviteDialog m_addInviteDialogPrefab;
+
+		public CalendarFiltersDialog m_calendarFiltersDialogPrefab;
+
+		public CommunityDescriptionDialog m_communityDescriptionDialogPrefab;
+
+		public HolidayDetailsPanel m_holidayDetailsPanel;
 	}
 }

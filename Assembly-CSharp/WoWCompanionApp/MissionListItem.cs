@@ -68,56 +68,56 @@ namespace WoWCompanionApp
 				}
 			}
 			Image image = null;
-			uint uiTextureKitID = record.UiTextureKitID;
+			ushort uiTextureKitID = record.UiTextureKitID;
 			switch (uiTextureKitID)
 			{
-			case 101u:
+			case 101:
 				image = this.locationImages[1];
 				this.locationIndex = 1;
 				break;
-			case 102u:
+			case 102:
 				image = this.locationImages[10];
 				this.locationIndex = 10;
 				break;
-			case 103u:
+			case 103:
 				image = this.locationImages[3];
 				this.locationIndex = 3;
 				break;
-			case 104u:
+			case 104:
 				image = this.locationImages[4];
 				this.locationIndex = 4;
 				break;
-			case 105u:
+			case 105:
 				image = this.locationImages[9];
 				this.locationIndex = 9;
 				break;
-			case 106u:
+			case 106:
 				image = this.locationImages[7];
 				this.locationIndex = 7;
 				break;
-			case 107u:
+			case 107:
 				image = this.locationImages[8];
 				this.locationIndex = 8;
 				break;
 			default:
 				switch (uiTextureKitID)
 				{
-				case 203u:
+				case 203:
 					image = this.locationImages[2];
 					this.locationIndex = 2;
 					break;
-				case 204u:
+				case 204:
 					image = this.locationImages[6];
 					this.locationIndex = 6;
 					break;
-				case 205u:
+				case 205:
 					image = this.locationImages[5];
 					this.locationIndex = 5;
 					break;
 				default:
-					if (uiTextureKitID != 164u)
+					if (uiTextureKitID != 164)
 					{
-						if (uiTextureKitID != 165u)
+						if (uiTextureKitID != 165)
 						{
 							this.locationIndex = 0;
 						}

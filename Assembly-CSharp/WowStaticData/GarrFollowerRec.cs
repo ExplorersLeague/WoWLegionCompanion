@@ -2,88 +2,69 @@
 
 namespace WowStaticData
 {
-	public class GarrFollowerRec
+	public class GarrFollowerRec : MODBRec
 	{
 		public int ID { get; private set; }
 
-		public uint GarrFollowerTypeID { get; private set; }
+		public byte GarrFollowerTypeID { get; private set; }
 
 		public int HordeCreatureID { get; private set; }
 
 		public int AllianceCreatureID { get; private set; }
 
-		public uint HordeGarrFollRaceID { get; private set; }
+		public byte HordeGarrFollRaceID { get; private set; }
 
-		public uint AllianceGarrFollRaceID { get; private set; }
+		public byte AllianceGarrFollRaceID { get; private set; }
 
-		public uint Quality { get; private set; }
+		public byte Quality { get; private set; }
 
-		public uint HordeGarrClassSpecID { get; private set; }
+		public byte HordeGarrClassSpecID { get; private set; }
 
-		public uint AllianceGarrClassSpecID { get; private set; }
+		public byte AllianceGarrClassSpecID { get; private set; }
 
-		public uint HordeGarrFollItemSetID { get; private set; }
+		public ushort HordeGarrFollItemSetID { get; private set; }
 
-		public uint AllianceGarrFollItemSetID { get; private set; }
+		public ushort AllianceGarrFollItemSetID { get; private set; }
 
-		public uint FollowerLevel { get; private set; }
+		public byte FollowerLevel { get; private set; }
 
-		public uint ItemLevelWeapon { get; private set; }
+		public ushort ItemLevelWeapon { get; private set; }
 
-		public uint ItemLevelArmor { get; private set; }
+		public ushort ItemLevelArmor { get; private set; }
 
-		public uint Gender { get; private set; }
+		public byte Gender { get; private set; }
 
-		public uint Flags { get; private set; }
+		public byte Flags { get; private set; }
 
 		public string HordeSourceText { get; private set; }
 
 		public string AllianceSourceText { get; private set; }
 
-		public int HordeSourceTypeEnum { get; private set; }
+		public sbyte HordeSourceTypeEnum { get; private set; }
 
-		public int AllianceSourceTypeEnum { get; private set; }
+		public sbyte AllianceSourceTypeEnum { get; private set; }
 
 		public int HordeIconFileDataID { get; private set; }
 
 		public int AllianceIconFileDataID { get; private set; }
 
-		public uint HordeUITextureKitID { get; private set; }
+		public ushort HordeUITextureKitID { get; private set; }
 
-		public uint AllianceUITextureKitID { get; private set; }
+		public ushort AllianceUITextureKitID { get; private set; }
 
-		public uint GarrTypeID { get; private set; }
+		public byte GarrTypeID { get; private set; }
 
-		public int Vitality { get; private set; }
+		public byte Vitality { get; private set; }
 
-		public int ChrClassID { get; private set; }
+		public byte ChrClassID { get; private set; }
 
-		public int HordeFlavorGarrStringID { get; private set; }
+		public byte HordeFlavorGarrStringID { get; private set; }
 
-		public int AllianceFlavorGarrStringID { get; private set; }
+		public byte AllianceFlavorGarrStringID { get; private set; }
 
 		public string TitleName { get; private set; }
 
-		public void Deserialize(string valueLine)
-		{
-			int num = 0;
-			int num2 = 0;
-			int num3;
-			do
-			{
-				num3 = valueLine.IndexOf('\t', num);
-				if (num3 >= 0)
-				{
-					string valueText = valueLine.Substring(num, num3 - num).Trim();
-					this.DeserializeIndex(num2, valueText);
-					num2++;
-				}
-				num = num3 + 1;
-			}
-			while (num3 > 0);
-		}
-
-		private void DeserializeIndex(int index, string valueText)
+		protected override void DeserializeIndex(int index, string valueText)
 		{
 			switch (index)
 			{
@@ -91,7 +72,7 @@ namespace WowStaticData
 				this.ID = Convert.ToInt32(valueText);
 				break;
 			case 1:
-				this.GarrFollowerTypeID = Convert.ToUInt32(valueText);
+				this.GarrFollowerTypeID = Convert.ToByte(valueText);
 				break;
 			case 2:
 				this.HordeCreatureID = Convert.ToInt32(valueText);
@@ -100,40 +81,40 @@ namespace WowStaticData
 				this.AllianceCreatureID = Convert.ToInt32(valueText);
 				break;
 			case 4:
-				this.HordeGarrFollRaceID = Convert.ToUInt32(valueText);
+				this.HordeGarrFollRaceID = Convert.ToByte(valueText);
 				break;
 			case 5:
-				this.AllianceGarrFollRaceID = Convert.ToUInt32(valueText);
+				this.AllianceGarrFollRaceID = Convert.ToByte(valueText);
 				break;
 			case 6:
-				this.Quality = Convert.ToUInt32(valueText);
+				this.Quality = Convert.ToByte(valueText);
 				break;
 			case 7:
-				this.HordeGarrClassSpecID = Convert.ToUInt32(valueText);
+				this.HordeGarrClassSpecID = Convert.ToByte(valueText);
 				break;
 			case 8:
-				this.AllianceGarrClassSpecID = Convert.ToUInt32(valueText);
+				this.AllianceGarrClassSpecID = Convert.ToByte(valueText);
 				break;
 			case 9:
-				this.HordeGarrFollItemSetID = Convert.ToUInt32(valueText);
+				this.HordeGarrFollItemSetID = Convert.ToUInt16(valueText);
 				break;
 			case 10:
-				this.AllianceGarrFollItemSetID = Convert.ToUInt32(valueText);
+				this.AllianceGarrFollItemSetID = Convert.ToUInt16(valueText);
 				break;
 			case 11:
-				this.FollowerLevel = Convert.ToUInt32(valueText);
+				this.FollowerLevel = Convert.ToByte(valueText);
 				break;
 			case 12:
-				this.ItemLevelWeapon = Convert.ToUInt32(valueText);
+				this.ItemLevelWeapon = Convert.ToUInt16(valueText);
 				break;
 			case 13:
-				this.ItemLevelArmor = Convert.ToUInt32(valueText);
+				this.ItemLevelArmor = Convert.ToUInt16(valueText);
 				break;
 			case 14:
-				this.Gender = Convert.ToUInt32(valueText);
+				this.Gender = Convert.ToByte(valueText);
 				break;
 			case 15:
-				this.Flags = Convert.ToUInt32(valueText);
+				this.Flags = Convert.ToByte(valueText);
 				break;
 			case 16:
 				this.HordeSourceText = valueText;
@@ -142,10 +123,10 @@ namespace WowStaticData
 				this.AllianceSourceText = valueText;
 				break;
 			case 18:
-				this.HordeSourceTypeEnum = Convert.ToInt32(valueText);
+				this.HordeSourceTypeEnum = Convert.ToSByte(valueText);
 				break;
 			case 19:
-				this.AllianceSourceTypeEnum = Convert.ToInt32(valueText);
+				this.AllianceSourceTypeEnum = Convert.ToSByte(valueText);
 				break;
 			case 20:
 				this.HordeIconFileDataID = Convert.ToInt32(valueText);
@@ -154,25 +135,25 @@ namespace WowStaticData
 				this.AllianceIconFileDataID = Convert.ToInt32(valueText);
 				break;
 			case 22:
-				this.HordeUITextureKitID = Convert.ToUInt32(valueText);
+				this.HordeUITextureKitID = Convert.ToUInt16(valueText);
 				break;
 			case 23:
-				this.AllianceUITextureKitID = Convert.ToUInt32(valueText);
+				this.AllianceUITextureKitID = Convert.ToUInt16(valueText);
 				break;
 			case 24:
-				this.GarrTypeID = Convert.ToUInt32(valueText);
+				this.GarrTypeID = Convert.ToByte(valueText);
 				break;
 			case 25:
-				this.Vitality = Convert.ToInt32(valueText);
+				this.Vitality = Convert.ToByte(valueText);
 				break;
 			case 26:
-				this.ChrClassID = Convert.ToInt32(valueText);
+				this.ChrClassID = Convert.ToByte(valueText);
 				break;
 			case 27:
-				this.HordeFlavorGarrStringID = Convert.ToInt32(valueText);
+				this.HordeFlavorGarrStringID = Convert.ToByte(valueText);
 				break;
 			case 28:
-				this.AllianceFlavorGarrStringID = Convert.ToInt32(valueText);
+				this.AllianceFlavorGarrStringID = Convert.ToByte(valueText);
 				break;
 			case 29:
 				this.TitleName = valueText;

@@ -10,7 +10,7 @@ namespace WoWCompanionApp
 		{
 			this.m_memberInfo = member;
 			this.m_characterName.text = this.m_memberInfo.Name;
-			this.m_classImage.sprite = GeneralHelpers.LoadClassIcon((int)this.m_memberInfo.Class);
+			this.m_classImage.sprite = GeneralHelpers.LoadClassIcon(this.m_memberInfo.Class);
 			this.m_buttonText.SetNewStringKey(this.m_memberInfo.ConvertRoleToString());
 			this.SetButtonState(this.m_memberInfo.GetAssignableRoles().Count > 0);
 			this.SetRoleIconVisibility();

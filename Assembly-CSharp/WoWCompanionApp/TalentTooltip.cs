@@ -39,12 +39,12 @@ namespace WoWCompanionApp
 							this.m_talentDescription.text = regex.Replace(this.m_talentDescription.text, delegate(Match m)
 							{
 								int num2 = int.Parse(m.Groups["quantity"].Value);
-								int russianPluralIndex = GeneralHelpers.GetRussianPluralIndex(num2);
-								if (russianPluralIndex == 0)
+								int pluralIndex = GeneralHelpers.GetPluralIndex(num2);
+								if (pluralIndex == 0)
 								{
 									return num2 + " " + m.Groups["singular"].Value;
 								}
-								if (russianPluralIndex == 1)
+								if (pluralIndex == 1)
 								{
 									return num2 + " " + m.Groups["plural1"].Value;
 								}

@@ -7,23 +7,8 @@ using WowStatConstants;
 
 namespace WowStaticData
 {
-	public class CurrencyContainerDB
+	public class CurrencyContainerDB : MODB<int, CurrencyContainerRec>
 	{
-		public CurrencyContainerRec GetRecord(int id)
-		{
-			return (!this.m_records.ContainsKey(id)) ? null : this.m_records[id];
-		}
-
-		public IEnumerable<CurrencyContainerRec> GetRecordsWhere(Func<CurrencyContainerRec, bool> matcher)
-		{
-			return this.m_records.Values.Where(matcher);
-		}
-
-		public CurrencyContainerRec GetRecordFirstOrDefault(Func<CurrencyContainerRec, bool> matcher)
-		{
-			return this.m_records.Values.FirstOrDefault(matcher);
-		}
-
 		public IEnumerable<CurrencyContainerRec> GetRecordsByParentID(int parentID)
 		{
 			return from rec in this.m_records.Values
@@ -31,44 +16,21 @@ namespace WowStaticData
 			select rec;
 		}
 
-		public bool Load(string path, AssetBundle nonLocalizedBundle, AssetBundle localizedBundle, string locale)
+		public override bool Load(string path, AssetBundle nonLocalizedBundle, AssetBundle localizedBundle, string locale)
 		{
-			string text = string.Concat(new string[]
+			return base.Load(string.Concat(new string[]
 			{
 				path,
 				locale,
 				"/CurrencyContainer_",
 				locale,
 				".txt"
-			});
-			if (this.m_records.Count > 0)
-			{
-				Debug.Log("Already loaded static db " + text);
-				return false;
-			}
-			TextAsset textAsset = localizedBundle.LoadAsset<TextAsset>(text);
-			if (textAsset == null)
-			{
-				Debug.Log("Unable to load static db " + text);
-				return false;
-			}
-			string text2 = textAsset.ToString();
-			int num = 0;
-			int num2;
-			do
-			{
-				num2 = text2.IndexOf('\n', num);
-				if (num2 >= 0)
-				{
-					string valueLine = text2.Substring(num, num2 - num + 1).Trim();
-					CurrencyContainerRec currencyContainerRec = new CurrencyContainerRec();
-					currencyContainerRec.Deserialize(valueLine);
-					this.m_records.Add(currencyContainerRec.ID, currencyContainerRec);
-					num = num2 + 1;
-				}
-			}
-			while (num2 > 0);
-			return true;
+			}), localizedBundle);
+		}
+
+		protected override void AddRecord(CurrencyContainerRec rec)
+		{
+			this.m_records.Add(rec.ID, rec);
 		}
 
 		public static bool IsCurrencyContainerValid(int quantity, int minAmount, int maxAmount)
@@ -97,7 +59,5 @@ namespace WowStaticData
 			}
 			return GeneralHelpers.LoadCurrencyIcon(currencyType);
 		}
-
-		private Dictionary<int, CurrencyContainerRec> m_records = new Dictionary<int, CurrencyContainerRec>();
 	}
 }

@@ -450,6 +450,10 @@ namespace WoWCompanionApp
 			{
 				this.m_urlDownloader.Process();
 			}
+			if (this.GetLoginState() == Login.eLoginState.MOBILE_LOGGED_IN_DATA_COMPLETE)
+			{
+				MobileClient.SetServerTime(GarrisonStatus.CurrentTime());
+			}
 			Network.Update();
 		}
 
@@ -1647,6 +1651,13 @@ namespace WoWCompanionApp
 				this.LoginUI.ShowConnectingPanel();
 			}
 			this.SetLoginState(Login.eLoginState.MOBILE_CONNECT);
+			JamJSONRealmEntry jamJSONRealmEntry = this.m_realmEntries.FirstOrDefault((JamJSONRealmEntry entry) => (ulong)entry.WowRealmAddress == virtualRealmAddress);
+			if (jamJSONRealmEntry != null)
+			{
+				MobileClient.SetCfgLanguagesID(jamJSONRealmEntry.CfgLanguagesID);
+				MobileClient.SetCfgRealmsID(jamJSONRealmEntry.CfgRealmsID);
+				MobileClient.SetPlayerRace((int)this.m_selectedCharacterEntry.RaceID);
+			}
 			BattleNet.Get().RequestCloseAurora();
 			BattleNet.ProcessAurora();
 			this.BnErrorsUpdate();
@@ -2164,7 +2175,8 @@ namespace WoWCompanionApp
 
 		public string GetRealmName(uint virtualAddress)
 		{
-			return (!this.m_realmNames.ContainsKey(virtualAddress)) ? string.Empty : this.m_realmNames[virtualAddress];
+			JamJSONRealmEntry jamJSONRealmEntry = this.m_realmEntries.FirstOrDefault((JamJSONRealmEntry entry) => entry.WowRealmAddress == virtualAddress);
+			return (jamJSONRealmEntry == null) ? string.Empty : jamJSONRealmEntry.Name;
 		}
 
 		private string GetNoInternetErrorText()
@@ -2288,7 +2300,7 @@ namespace WoWCompanionApp
 
 		private bool m_loggingIn;
 
-		private Dictionary<uint, string> m_realmNames = new Dictionary<uint, string>();
+		private HashSet<JamJSONRealmEntry> m_realmEntries = new HashSet<JamJSONRealmEntry>();
 
 		private LoginUI m_loginUI;
 
@@ -2459,6 +2471,11 @@ namespace WoWCompanionApp
 					string @string = SecurePlayerPrefs.GetString("CharacterID", Main.uniqueIdentifier);
 					if (this.m_characters != null && this.m_updates != null)
 					{
+						foreach (JamJSONRealmEntry item in from update in this.m_updates.Updates
+						select update.Update)
+						{
+							Singleton<Login>.instance.m_realmEntries.Add(item);
+						}
 						foreach (JamJSONCharacterEntry jamJSONCharacterEntry in this.m_characters.CharacterList)
 						{
 							bool flag = false;
@@ -2471,13 +2488,6 @@ namespace WoWCompanionApp
 									Singleton<Login>.instance.LoginUI.AddCharacterButton(jamJSONCharacterEntry, this.SubRegion, name, online);
 									flag = true;
 									break;
-								}
-							}
-							foreach (JamJSONRealmListUpdatePart jamJSONRealmListUpdatePart2 in this.m_updates.Updates)
-							{
-								if (!Singleton<Login>.Instance.m_realmNames.ContainsKey(jamJSONRealmListUpdatePart2.Update.WowRealmAddress))
-								{
-									Singleton<Login>.Instance.m_realmNames.Add(jamJSONRealmListUpdatePart2.Update.WowRealmAddress, jamJSONRealmListUpdatePart2.Update.Name);
 								}
 							}
 							if (!flag)

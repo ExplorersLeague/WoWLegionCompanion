@@ -20,7 +20,7 @@ namespace WoWCompanionApp
 			this.m_recentCharacter = recentChar;
 			this.m_characterName.text = this.m_recentCharacter.Entry.Name;
 			this.m_characterLevel.text = this.m_recentCharacter.Entry.ExperienceLevel.ToString();
-			Sprite sprite = GeneralHelpers.LoadClassIcon((int)this.m_recentCharacter.Entry.ClassID);
+			Sprite sprite = GeneralHelpers.LoadClassIcon(new uint?((uint)this.m_recentCharacter.Entry.ClassID));
 			if (sprite != null)
 			{
 				this.m_characterClassIcon.sprite = sprite;

@@ -31,12 +31,11 @@ namespace WoWCompanionApp
 			}
 		}
 
-		public uint ClassID
+		public uint? ClassID
 		{
 			get
 			{
-				uint? classID = this.m_messageInfo.author.classID;
-				return (classID == null) ? 0u : classID.Value;
+				return this.m_messageInfo.author.classID;
 			}
 		}
 
@@ -54,7 +53,7 @@ namespace WoWCompanionApp
 			{
 				if (this.Destroyed && this.m_messageInfo.destroyer != null)
 				{
-					return MobileClient.FormatString(StaticDB.GetString("MESSAGE_DELETED", "[PH] Message deleted by %s"), this.m_messageInfo.destroyer.Value.name ?? string.Empty);
+					return MobileClient.FormatString(StaticDB.GetString(this.MESSAGE_DELETED_KEY, "[PH] Message deleted by %s"), this.m_messageInfo.destroyer.Value.name ?? string.Empty);
 				}
 				return this.m_messageInfo.content;
 			}
@@ -78,7 +77,12 @@ namespace WoWCompanionApp
 
 		public bool PostedByModerator()
 		{
-			return this.m_messageInfo.author.role != null && this.m_messageInfo.author.role.Value != 4;
+			return this.m_messageInfo.author.role != null && this.m_messageInfo.author.role.Value == 3;
+		}
+
+		public bool PostedByLeaderOrOwner()
+		{
+			return this.m_messageInfo.author.role != null && (this.m_messageInfo.author.role.Value == 1 || this.m_messageInfo.author.role.Value == 2);
 		}
 
 		public void UpdateMessage(Club.ClubMessageUpdatedEvent messageEvent)
@@ -134,5 +138,7 @@ namespace WoWCompanionApp
 		private ClubMessageInfo m_messageInfo;
 
 		private static readonly DateTime BASE_EPOCH = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
+		private readonly string MESSAGE_DELETED_KEY = "COMMUNITIES_MESSAGE_DELETED";
 	}
 }

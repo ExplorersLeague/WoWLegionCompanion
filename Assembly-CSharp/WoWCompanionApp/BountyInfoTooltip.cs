@@ -22,7 +22,7 @@ namespace WoWCompanionApp
 				this.m_bountyIconInvalidFileDataID.gameObject.SetActive(true);
 				this.m_bountyIconInvalidFileDataID.text = string.Empty + bounty.IconFileDataID;
 			}
-			QuestV2Rec record = StaticDB.questDB.GetRecord(bounty.QuestID);
+			QuestV2Rec record = StaticDB.questV2DB.GetRecord(bounty.QuestID);
 			if (record != null)
 			{
 				this.m_bountyName.text = record.QuestTitle;

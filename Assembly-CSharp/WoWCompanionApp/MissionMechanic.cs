@@ -65,10 +65,10 @@ namespace WoWCompanionApp
 					GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(abilityID);
 					if (record != null)
 					{
-						if ((record.Flags & 1024u) != 0u)
+						if ((record.Flags & 1024) != 0)
 						{
 							list.AddRange(from rec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID(abilityID)
-							where rec.AbilityAction != 0u
+							where rec.AbilityAction != 0
 							select abilityID);
 						}
 					}
@@ -79,12 +79,12 @@ namespace WoWCompanionApp
 
 		public static int GetAbilityToCounterMechanicType(int garrMechanicTypeID)
 		{
-			Func<GarrFollowerRec, bool> matchesExpansionLevel = (GarrFollowerRec rec) => rec.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType;
-			Func<GarrFollowerRec, bool> matchesMyClass = (GarrFollowerRec rec) => rec.ChrClassID == GarrisonStatus.CharacterClassID() || rec.ChrClassID == 0;
+			Func<GarrFollowerRec, bool> matchesExpansionLevel = (GarrFollowerRec rec) => (GARR_FOLLOWER_TYPE)rec.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType;
+			Func<GarrFollowerRec, bool> matchesMyClass = (GarrFollowerRec rec) => (int)rec.ChrClassID == GarrisonStatus.CharacterClassID() || rec.ChrClassID == 0;
 			HashSet<int> garrFollowerXAbilities = new HashSet<int>(StaticDB.garrFollowerDB.GetRecordsWhere((GarrFollowerRec rec) => matchesExpansionLevel(rec) && matchesMyClass(rec)).SelectMany((GarrFollowerRec garrFollowerRec) => from followerXAbilityRec in StaticDB.garrFollowerXAbilityDB.GetRecordsByParentID(garrFollowerRec.ID)
 			select followerXAbilityRec.GarrAbilityID));
-			GarrAbilityEffectRec recordFirstOrDefault = StaticDB.garrAbilityEffectDB.GetRecordFirstOrDefault((GarrAbilityEffectRec rec) => garrFollowerXAbilities.Contains((int)rec.GarrAbilityID) && (ulong)rec.GarrMechanicTypeID == (ulong)((long)garrMechanicTypeID));
-			return (int)((recordFirstOrDefault == null) ? 0u : recordFirstOrDefault.GarrAbilityID);
+			GarrAbilityEffectRec recordFirstOrDefault = StaticDB.garrAbilityEffectDB.GetRecordFirstOrDefault((GarrAbilityEffectRec rec) => garrFollowerXAbilities.Contains((int)rec.GarrAbilityID) && (int)rec.GarrMechanicTypeID == garrMechanicTypeID);
+			return (int)((recordFirstOrDefault == null) ? 0 : recordFirstOrDefault.GarrAbilityID);
 		}
 
 		public int AbilityID()

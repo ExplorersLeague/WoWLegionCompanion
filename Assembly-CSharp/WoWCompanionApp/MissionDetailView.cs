@@ -166,7 +166,7 @@ namespace WoWCompanionApp
 						if (missionMechanic.AbilityID() != 0)
 						{
 							foreach (GarrAbilityEffectRec garrAbilityEffectRec in from rec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID(missionMechanic.AbilityID())
-							where rec.AbilityAction == 39u
+							where rec.AbilityAction == 39
 							select rec)
 							{
 								num *= garrAbilityEffectRec.ActionValueFlat;
@@ -178,7 +178,7 @@ namespace WoWCompanionApp
 			foreach (int parentID in followerBuffAbilityIDs)
 			{
 				foreach (GarrAbilityEffectRec garrAbilityEffectRec2 in from rec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID(parentID)
-				where rec.AbilityAction == 39u
+				where rec.AbilityAction == 39
 				select rec)
 				{
 					num *= garrAbilityEffectRec2.ActionValueFlat;
@@ -294,7 +294,7 @@ namespace WoWCompanionApp
 			}
 			if (this.missioniLevelText != null)
 			{
-				if (record.TargetLevel < 110)
+				if ((int)record.TargetLevel < 110)
 				{
 					this.missioniLevelText.text = string.Empty + record.TargetLevel;
 				}
@@ -353,18 +353,16 @@ namespace WoWCompanionApp
 			}
 			if (this.missionFollowerSlotGroup != null)
 			{
-				int num2 = 0;
-				while ((long)num2 < (long)((ulong)record.MaxFollowers))
+				for (int n = 0; n < (int)record.MaxFollowers; n++)
 				{
 					GameObject gameObject3 = Object.Instantiate<GameObject>(this.missionFollowerSlotPrefab);
 					gameObject3.transform.SetParent(this.missionFollowerSlotGroup.transform, false);
 					MissionFollowerSlot component3 = gameObject3.GetComponent<MissionFollowerSlot>();
 					component3.m_missionDetailView = this;
 					component3.m_enemyPortraitsGroup = this.enemyPortraitsGroup;
-					num2++;
 				}
 			}
-			if (!this.m_isCombatAlly && record.UiTextureKitID > 0u)
+			if (!this.m_isCombatAlly && record.UiTextureKitID > 0)
 			{
 				UiTextureKitRec record6 = StaticDB.uiTextureKitDB.GetRecord((int)record.UiTextureKitID);
 				this.m_scrollingEnvironment_Back.enabled = false;
@@ -422,11 +420,11 @@ namespace WoWCompanionApp
 				return;
 			}
 			MissionRewardDisplay[] componentsInChildren5 = this.m_lootGroupObj.GetComponentsInChildren<MissionRewardDisplay>(true);
-			for (int n = 0; n < componentsInChildren5.Length; n++)
+			for (int num2 = 0; num2 < componentsInChildren5.Length; num2++)
 			{
-				if (componentsInChildren5[n] != null)
+				if (componentsInChildren5[num2] != null)
 				{
-					Object.Destroy(componentsInChildren5[n].gameObject);
+					Object.Destroy(componentsInChildren5[num2].gameObject);
 				}
 			}
 			if (this.m_previewLootGroup != null)
@@ -967,14 +965,14 @@ namespace WoWCompanionApp
 			{
 				return 0f;
 			}
-			float num = MissionDetailView.ComputeFollowerLevelBias(follower, followerLevel, record.TargetLevel);
+			float num = MissionDetailView.ComputeFollowerLevelBias(follower, followerLevel, (int)record.TargetLevel);
 			num += MissionDetailView.ComputeFollowerItemLevelBias(follower, followerItemLevel, (int)record.GarrFollowerTypeID, (int)record.TargetItemLevel);
 			return Mathf.Clamp(num, -1f, 1f);
 		}
 
 		public static int GarrisonFollower_GetMaxFollowerLevel(int garrFollowerTypeID)
 		{
-			return (int)StaticDB.garrFollowerLevelXPDB.GetRecordsWhere((GarrFollowerLevelXPRec rec) => (ulong)rec.GarrFollowerTypeID == (ulong)((long)garrFollowerTypeID)).Max((GarrFollowerLevelXPRec rec) => rec.FollowerLevel);
+			return (int)StaticDB.garrFollowerLevelXPDB.GetRecordsWhere((GarrFollowerLevelXPRec rec) => (int)rec.GarrFollowerTypeID == garrFollowerTypeID).Max((GarrFollowerLevelXPRec rec) => rec.FollowerLevel);
 		}
 
 		private static float ComputeFollowerItemLevelBias(WrapperGarrisonFollower follower, int followerItemLevel, int garrFollowerTypeID, int targetItemLevel)
@@ -1025,8 +1023,8 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
-			out_levelRangeBias = (int)((record2.LevelRangeBias >= 1u) ? record2.LevelRangeBias : 1u);
-			out_itemLevelRangeBias = (int)((record2.ItemLevelRangeBias >= 1u) ? record2.ItemLevelRangeBias : 1u);
+			out_levelRangeBias = (int)((record2.LevelRangeBias >= 1) ? record2.LevelRangeBias : 1);
+			out_itemLevelRangeBias = (int)((record2.ItemLevelRangeBias >= 1) ? record2.ItemLevelRangeBias : 1);
 		}
 
 		public void NotifyFollowerSlotsChanged()

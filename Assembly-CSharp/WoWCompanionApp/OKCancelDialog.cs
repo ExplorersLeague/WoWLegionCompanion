@@ -29,10 +29,10 @@ namespace WoWCompanionApp
 
 		public void SetText(string titleKey, string messageKey = null)
 		{
-			this.m_titleText.text = StaticDB.GetString(titleKey, null);
+			this.m_titleText.text = StaticDB.GetString(titleKey, titleKey);
 			if (messageKey != null)
 			{
-				this.m_messageText.text = StaticDB.GetString(messageKey, null);
+				this.m_messageText.text = StaticDB.GetString(messageKey, messageKey);
 			}
 			else
 			{
@@ -42,13 +42,19 @@ namespace WoWCompanionApp
 
 		public void OnClickOkay()
 		{
-			this.onOK();
+			if (this.onOK != null)
+			{
+				this.onOK();
+			}
 			Object.Destroy(base.gameObject);
 		}
 
 		public void OnClickCancel()
 		{
-			this.onCancel();
+			if (this.onCancel != null)
+			{
+				this.onCancel();
+			}
 			Object.Destroy(base.gameObject);
 		}
 

@@ -174,7 +174,7 @@ namespace WoWCompanionApp
 		{
 			TalentTreeItemAbilityButton talentTreeItemAbilityButton;
 			TalentTreeItemAbilityButton sameTierButton;
-			if (garrTalentRec.UiOrder == 0)
+			if ((int)garrTalentRec.UiOrder == 0)
 			{
 				talentTreeItemAbilityButton = this.m_talentButtonLeft;
 				sameTierButton = this.m_talentButtonRight;

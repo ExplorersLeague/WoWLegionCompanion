@@ -32,7 +32,7 @@ namespace WoWCompanionApp
 
 		public void SetMemberInfo(CommunityMember member)
 		{
-			this.m_characterNameText.text = member.Name.ToUpper();
+			this.m_characterNameText.text = member.Name;
 			this.m_kickButtonText.text = MobileClient.FormatString(StaticDB.GetString("COMMUNITIES_KICK_MEMBER", "[PH] Kick %s"), this.m_characterNameText.text);
 			this.m_member = member;
 			this.SetRoleToggleState();

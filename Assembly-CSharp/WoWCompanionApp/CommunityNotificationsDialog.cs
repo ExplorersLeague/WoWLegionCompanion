@@ -10,7 +10,7 @@ namespace WoWCompanionApp
 		public void SetCommunity(Community community)
 		{
 			this.m_community = community;
-			this.m_headerCommunityText.text = community.Name.ToUpper();
+			this.m_headerCommunityText.text = community.Name;
 			this.BuildContentPanel();
 		}
 

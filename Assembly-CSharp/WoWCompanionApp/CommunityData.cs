@@ -20,6 +20,7 @@ namespace WoWCompanionApp
 			Club.OnClubMemberPresenceUpdated += new Club.ClubMemberPresenceUpdatedHandler(this.OnMemberPresenceUpdated);
 			Club.OnClubStreamAdded += new Club.ClubStreamAddedHandler(this.OnStreamAdded);
 			Club.OnClubStreamRemoved += new Club.ClubStreamRemovedHandler(this.OnStreamRemoved);
+			Club.OnClubStreamUpdated += new Club.ClubStreamUpdatedHandler(this.OnStreamUpdated);
 		}
 
 		public static event CommunityData.RefreshHandler OnCommunityRefresh;
@@ -58,6 +59,7 @@ namespace WoWCompanionApp
 				Club.OnClubMemberPresenceUpdated -= new Club.ClubMemberPresenceUpdatedHandler(this.OnMemberPresenceUpdated);
 				Club.OnClubStreamAdded -= new Club.ClubStreamAddedHandler(this.OnStreamAdded);
 				Club.OnClubStreamRemoved -= new Club.ClubStreamRemovedHandler(this.OnStreamRemoved);
+				Club.OnClubStreamUpdated -= new Club.ClubStreamUpdatedHandler(this.OnStreamUpdated);
 				CommunityData.m_communityDictionary.Clear();
 				CommunityData.m_pendingInvites.Clear();
 				CommunityData.m_instance = null;
@@ -84,6 +86,10 @@ namespace WoWCompanionApp
 
 		private void OnClubRemoved(Club.ClubRemovedEvent removeClubEvent)
 		{
+			if (CommunityData.m_guildCommunity != null && CommunityData.m_guildCommunity.ClubId == removeClubEvent.ClubID)
+			{
+				CommunityData.m_guildCommunity = null;
+			}
 			CommunityData.m_communityDictionary.Remove(removeClubEvent.ClubID);
 			this.FireCommunityRefreshCallback();
 		}
@@ -103,6 +109,15 @@ namespace WoWCompanionApp
 			{
 				CommunityData.m_communityDictionary[removeStreamEvent.ClubID].HandleStreamRemovedEvent(removeStreamEvent);
 				this.FireChannelRefreshCallback(removeStreamEvent.ClubID);
+			}
+		}
+
+		private void OnStreamUpdated(Club.ClubStreamUpdatedEvent updateStreamEvent)
+		{
+			if (CommunityData.m_communityDictionary.ContainsKey(updateStreamEvent.ClubID))
+			{
+				CommunityData.m_communityDictionary[updateStreamEvent.ClubID].HandleStreamUpdatedEvent(updateStreamEvent);
+				this.FireChannelRefreshCallback(updateStreamEvent.ClubID);
 			}
 		}
 
@@ -175,6 +190,7 @@ namespace WoWCompanionApp
 
 		public void ClearData()
 		{
+			CommunityData.m_guildCommunity = null;
 			CommunityData.m_communityDictionary.Clear();
 			CommunityData.m_pendingInvites.Clear();
 		}
@@ -200,6 +216,7 @@ namespace WoWCompanionApp
 
 		public void RefreshCommunities()
 		{
+			CommunityData.m_guildCommunity = null;
 			List<ClubInfo> subscribedClubs = Club.GetSubscribedClubs();
 			foreach (ClubInfo community in subscribedClubs)
 			{
@@ -254,7 +271,7 @@ namespace WoWCompanionApp
 			}
 		}
 
-		private void FireCommunityRefreshCallback()
+		public void FireCommunityRefreshCallback()
 		{
 			if (CommunityData.OnCommunityRefresh != null)
 			{
@@ -262,7 +279,7 @@ namespace WoWCompanionApp
 			}
 		}
 
-		private void FireRosterRefreshCallback(ulong clubID)
+		public void FireRosterRefreshCallback(ulong clubID)
 		{
 			if (CommunityData.OnRosterRefresh != null)
 			{
@@ -270,7 +287,7 @@ namespace WoWCompanionApp
 			}
 		}
 
-		private void FireChannelRefreshCallback(ulong clubID)
+		public void FireChannelRefreshCallback(ulong clubID)
 		{
 			if (CommunityData.OnChannelRefresh != null)
 			{
@@ -278,7 +295,7 @@ namespace WoWCompanionApp
 			}
 		}
 
-		private void FireInviteRefreshCallback()
+		public void FireInviteRefreshCallback()
 		{
 			if (CommunityData.OnInviteRefresh != null)
 			{
@@ -295,6 +312,16 @@ namespace WoWCompanionApp
 		public bool HasGuild()
 		{
 			return CommunityData.m_guildCommunity != null;
+		}
+
+		public ulong? GetGuildID()
+		{
+			return (!this.HasGuild()) ? null : new ulong?(CommunityData.m_guildCommunity.ClubId);
+		}
+
+		public Community GetCommunity(ulong? communityID)
+		{
+			return (communityID == null || !CommunityData.m_communityDictionary.ContainsKey(communityID.Value)) ? null : CommunityData.m_communityDictionary[communityID.Value];
 		}
 
 		private static CommunityData m_instance = null;

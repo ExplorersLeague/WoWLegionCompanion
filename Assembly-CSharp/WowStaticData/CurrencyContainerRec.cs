@@ -2,7 +2,7 @@
 
 namespace WowStaticData
 {
-	public class CurrencyContainerRec
+	public class CurrencyContainerRec : MODBRec
 	{
 		public int ID { get; private set; }
 
@@ -18,28 +18,9 @@ namespace WowStaticData
 
 		public string ContainerDescription { get; private set; }
 
-		public int ContainerQuality { get; private set; }
+		public short ContainerQuality { get; private set; }
 
-		public void Deserialize(string valueLine)
-		{
-			int num = 0;
-			int num2 = 0;
-			int num3;
-			do
-			{
-				num3 = valueLine.IndexOf('\t', num);
-				if (num3 >= 0)
-				{
-					string valueText = valueLine.Substring(num, num3 - num).Trim();
-					this.DeserializeIndex(num2, valueText);
-					num2++;
-				}
-				num = num3 + 1;
-			}
-			while (num3 > 0);
-		}
-
-		private void DeserializeIndex(int index, string valueText)
+		protected override void DeserializeIndex(int index, string valueText)
 		{
 			switch (index)
 			{
@@ -65,7 +46,7 @@ namespace WowStaticData
 				this.ContainerDescription = valueText;
 				break;
 			case 7:
-				this.ContainerQuality = Convert.ToInt32(valueText);
+				this.ContainerQuality = Convert.ToInt16(valueText);
 				break;
 			}
 		}

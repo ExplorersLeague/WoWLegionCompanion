@@ -101,11 +101,11 @@ namespace WoWCompanionApp
 					this.m_counteredGarrMechanicTypeID = 0;
 					GarrAbilityEffectRec garrAbilityEffectRec2 = StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record.ID).FirstOrDefault(delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 					{
-						if (garrAbilityEffectRec.GarrMechanicTypeID == 0u)
+						if (garrAbilityEffectRec.GarrMechanicTypeID == 0)
 						{
 							return false;
 						}
-						if (garrAbilityEffectRec.AbilityAction != 0u)
+						if (garrAbilityEffectRec.AbilityAction != 0)
 						{
 							return false;
 						}

@@ -56,10 +56,9 @@ namespace WoWCompanionApp
 			GameObject gameObject = Object.Instantiate<GameObject>(this.charListItemPrefab);
 			gameObject.transform.SetParent(this.charListContents.transform, false);
 			CharacterListButton component = gameObject.GetComponent<CharacterListButton>();
-			component.SetGUID(charData.PlayerGuid);
 			component.m_characterEntry = charData;
 			component.m_subRegion = subRegion;
-			Sprite sprite = GeneralHelpers.LoadClassIcon((int)charData.ClassID);
+			Sprite sprite = GeneralHelpers.LoadClassIcon(new uint?((uint)charData.ClassID));
 			if (sprite != null)
 			{
 				component.m_characterClassIcon.sprite = sprite;

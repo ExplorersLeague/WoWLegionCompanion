@@ -2,11 +2,11 @@
 
 namespace WowStaticData
 {
-	public class GarrAbilityRec
+	public class GarrAbilityRec : MODBRec
 	{
 		public int ID { get; private set; }
 
-		public uint Flags { get; private set; }
+		public ushort Flags { get; private set; }
 
 		public string Name { get; private set; }
 
@@ -14,32 +14,13 @@ namespace WowStaticData
 
 		public int IconFileDataID { get; private set; }
 
-		public uint FactionChangeGarrAbilityID { get; private set; }
+		public ushort FactionChangeGarrAbilityID { get; private set; }
 
-		public uint GarrAbilityCategoryID { get; private set; }
+		public byte GarrAbilityCategoryID { get; private set; }
 
-		public uint GarrFollowerTypeID { get; private set; }
+		public byte GarrFollowerTypeID { get; private set; }
 
-		public void Deserialize(string valueLine)
-		{
-			int num = 0;
-			int num2 = 0;
-			int num3;
-			do
-			{
-				num3 = valueLine.IndexOf('\t', num);
-				if (num3 >= 0)
-				{
-					string valueText = valueLine.Substring(num, num3 - num).Trim();
-					this.DeserializeIndex(num2, valueText);
-					num2++;
-				}
-				num = num3 + 1;
-			}
-			while (num3 > 0);
-		}
-
-		private void DeserializeIndex(int index, string valueText)
+		protected override void DeserializeIndex(int index, string valueText)
 		{
 			switch (index)
 			{
@@ -47,7 +28,7 @@ namespace WowStaticData
 				this.ID = Convert.ToInt32(valueText);
 				break;
 			case 1:
-				this.Flags = Convert.ToUInt32(valueText);
+				this.Flags = Convert.ToUInt16(valueText);
 				break;
 			case 2:
 				this.Name = valueText;
@@ -59,13 +40,13 @@ namespace WowStaticData
 				this.IconFileDataID = Convert.ToInt32(valueText);
 				break;
 			case 5:
-				this.FactionChangeGarrAbilityID = Convert.ToUInt32(valueText);
+				this.FactionChangeGarrAbilityID = Convert.ToUInt16(valueText);
 				break;
 			case 6:
-				this.GarrAbilityCategoryID = Convert.ToUInt32(valueText);
+				this.GarrAbilityCategoryID = Convert.ToByte(valueText);
 				break;
 			case 7:
-				this.GarrFollowerTypeID = Convert.ToUInt32(valueText);
+				this.GarrFollowerTypeID = Convert.ToByte(valueText);
 				break;
 			}
 		}

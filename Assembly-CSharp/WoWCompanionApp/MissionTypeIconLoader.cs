@@ -14,23 +14,23 @@ namespace WoWCompanionApp
 				return this.m_normalSprite;
 			}
 			GarrMissionTypeRec record2 = StaticDB.garrMissionTypeDB.GetRecord((int)record.GarrMissionTypeID);
-			uint uiTextureAtlasMemberID = record2.UiTextureAtlasMemberID;
+			ushort uiTextureAtlasMemberID = record2.UiTextureAtlasMemberID;
 			switch (uiTextureAtlasMemberID)
 			{
-			case 7746u:
+			case 7746:
 				return this.m_starSprite;
-			case 7747u:
+			case 7747:
 				return this.m_swordSprite;
-			case 7748u:
+			case 7748:
 				return this.m_bootSprite;
-			case 7749u:
+			case 7749:
 				return this.m_stealthSprite;
 			default:
-				if (uiTextureAtlasMemberID == 8046u)
+				if (uiTextureAtlasMemberID == 8046)
 				{
 					return this.m_scrollSprite;
 				}
-				if (uiTextureAtlasMemberID != 8778u)
+				if (uiTextureAtlasMemberID != 8778)
 				{
 					return this.m_normalSprite;
 				}

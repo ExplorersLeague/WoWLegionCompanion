@@ -429,6 +429,8 @@ namespace WoWCompanionApp
 
 		private string m_locale;
 
+		public CompileTimeString m_assetBundleSubfolder;
+
 		public sealed class BundleName
 		{
 			private BundleName(string name)

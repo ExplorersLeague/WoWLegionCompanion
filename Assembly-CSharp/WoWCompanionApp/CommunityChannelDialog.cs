@@ -20,7 +20,7 @@ namespace WoWCompanionApp
 
 		private void OnChannelRefresh(ulong communityID)
 		{
-			if (this.m_community.ClubId == communityID)
+			if (this.m_community != null && this.m_community.ClubId == communityID)
 			{
 				this.BuildContentPane();
 			}
@@ -46,7 +46,7 @@ namespace WoWCompanionApp
 		public void InitializeContentPane(Community community, UnityAction<CommunityChannelButton> selectCallback, UnityAction cleanupCallback)
 		{
 			this.m_community = community;
-			this.m_headerText.text = this.m_community.Name.ToUpper();
+			this.m_headerText.text = this.m_community.Name;
 			this.m_selectCallback = selectCallback;
 			this.m_cleanupCallback = cleanupCallback;
 			this.BuildContentPane();

@@ -21,7 +21,7 @@ namespace WoWCompanionApp
 
 		protected override void UpdateNotificationState()
 		{
-			this.m_notificationImage.SetActive(false);
+			this.m_notificationImage.SetActive(CommunityData.Instance.HasUnreadCommunityMessages(null));
 		}
 
 		private void OnStreamViewMarkerUpdate(Club.StreamViewMarkerUpdatedEvent markerEvent)

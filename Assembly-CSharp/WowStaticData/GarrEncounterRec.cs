@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Globalization;
 
 namespace WowStaticData
 {
-	public class GarrEncounterRec
+	public class GarrEncounterRec : MODBRec
 	{
 		public int ID { get; private set; }
 
@@ -16,28 +17,9 @@ namespace WowStaticData
 
 		public int PortraitFileDataID { get; private set; }
 
-		public uint UiTextureKitID { get; private set; }
+		public byte UiTextureKitID { get; private set; }
 
-		public void Deserialize(string valueLine)
-		{
-			int num = 0;
-			int num2 = 0;
-			int num3;
-			do
-			{
-				num3 = valueLine.IndexOf('\t', num);
-				if (num3 >= 0)
-				{
-					string valueText = valueLine.Substring(num, num3 - num).Trim();
-					this.DeserializeIndex(num2, valueText);
-					num2++;
-				}
-				num = num3 + 1;
-			}
-			while (num3 > 0);
-		}
-
-		private void DeserializeIndex(int index, string valueText)
+		protected override void DeserializeIndex(int index, string valueText)
 		{
 			switch (index)
 			{
@@ -51,16 +33,16 @@ namespace WowStaticData
 				this.Name = valueText;
 				break;
 			case 3:
-				this.UiAnimScale = (float)Convert.ToDouble(valueText);
+				this.UiAnimScale = (float)Convert.ToDouble(valueText, CultureInfo.InvariantCulture);
 				break;
 			case 4:
-				this.UiAnimHeight = (float)Convert.ToDouble(valueText);
+				this.UiAnimHeight = (float)Convert.ToDouble(valueText, CultureInfo.InvariantCulture);
 				break;
 			case 5:
 				this.PortraitFileDataID = Convert.ToInt32(valueText);
 				break;
 			case 6:
-				this.UiTextureKitID = Convert.ToUInt32(valueText);
+				this.UiTextureKitID = Convert.ToByte(valueText);
 				break;
 			}
 		}

@@ -136,7 +136,7 @@ namespace WoWCompanionApp
 					{
 						if (wrapperBountiesByWorldQuest.BountyQuestIDs[k] == bounty.QuestID)
 						{
-							QuestV2Rec record = StaticDB.questDB.GetRecord(bounty.QuestID);
+							QuestV2Rec record = StaticDB.questV2DB.GetRecord(bounty.QuestID);
 							if (record != null)
 							{
 								GameObject gameObject = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);

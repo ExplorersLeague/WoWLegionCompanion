@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using WowStatConstants;
 
 namespace WoWCompanionApp
 {
@@ -65,18 +66,23 @@ namespace WoWCompanionApp
 
 		private void OnTicketReceived(Club.ClubTicketReceivedEvent ticketEvent)
 		{
-			if (ticketEvent.Error == null)
+			ClubErrorType clubErrorType;
+			ClubInfo? clubInfo;
+			bool flag;
+			Club.GetLastTicketResponse(ticketEvent.Ticket, ref clubErrorType, ref clubInfo, ref flag);
+			if (clubErrorType == null)
 			{
-				if (ticketEvent.Info != null)
+				if (clubInfo != null)
 				{
-					ClubInfo value = ticketEvent.Info.Value;
+					ClubInfo value = clubInfo.Value;
 					if (value.clubType != 1)
 					{
 						this.ShowErrorText("COMMUNITIES_WRONG_COMMUNITY");
 						return;
 					}
 					this.m_nextButton.interactable = true;
-					this.m_communityText.text = value.name.ToUpper();
+					this.m_communityText.text = value.name;
+					this.m_communityIcon.sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, (int)((value.avatarId != 0u) ? value.avatarId : ((uint)StaticDB.communityIconDB.GetRecord(1).IconFileID)));
 					this.m_validTicketKey = ticketEvent.Ticket;
 					this.m_validClubInfo = value;
 				}
@@ -126,6 +132,8 @@ namespace WoWCompanionApp
 		public GameObject m_confirmationParentObj;
 
 		public RectTransform m_windowFrame;
+
+		public Image m_communityIcon;
 
 		public float m_linkInputDialogHeight;
 

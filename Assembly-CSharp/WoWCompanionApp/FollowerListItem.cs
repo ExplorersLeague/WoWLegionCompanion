@@ -135,7 +135,7 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
-			if (record.GarrFollowerTypeID != (uint)GarrisonStatus.GarrisonFollowerType)
+			if ((GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID != GarrisonStatus.GarrisonFollowerType)
 			{
 				return;
 			}
@@ -179,7 +179,7 @@ namespace WoWCompanionApp
 					GameObject gameObject = Object.Instantiate<GameObject>(this.m_troopHeartPrefab);
 					gameObject.transform.SetParent(this.m_troopHeartContainer.transform, false);
 				}
-				for (int k = j; k < record.Vitality; k++)
+				for (int k = j; k < (int)record.Vitality; k++)
 				{
 					GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_troopEmptyHeartPrefab);
 					gameObject2.transform.SetParent(this.m_troopHeartContainer.transform, false);
@@ -404,8 +404,8 @@ namespace WoWCompanionApp
 			else
 			{
 				GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
-				int id = (int)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID);
-				GarrClassSpecRec record2 = StaticDB.garrClassSpecDB.GetRecord(id);
+				int key = (int)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID);
+				GarrClassSpecRec record2 = StaticDB.garrClassSpecDB.GetRecord(key);
 				if (!flag4)
 				{
 					this.m_statusText.text = record2.ClassSpec;
@@ -448,10 +448,10 @@ namespace WoWCompanionApp
 						wrapperGarrisonMission.MissionRecID
 					}));
 				}
-				else if (!usefulCounterAbilityIDs.ContainsKey(record.GarrMechanicTypeID))
+				else if (!usefulCounterAbilityIDs.ContainsKey((uint)record.GarrMechanicTypeID))
 				{
 					int abilityToCounterMechanicType = MissionMechanic.GetAbilityToCounterMechanicType((int)record.GarrMechanicTypeID);
-					usefulCounterAbilityIDs.Add(record.GarrMechanicTypeID, abilityToCounterMechanicType);
+					usefulCounterAbilityIDs.Add((uint)record.GarrMechanicTypeID, abilityToCounterMechanicType);
 				}
 			}
 			List<int> usefulBuffAbilitiesForFollower = MissionMechanic.GetUsefulBuffAbilitiesForFollower(this.m_followerID);

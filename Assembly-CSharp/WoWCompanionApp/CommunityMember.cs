@@ -51,11 +51,27 @@ namespace WoWCompanionApp
 			}
 		}
 
-		public uint Class
+		public uint? Class
 		{
 			get
 			{
-				return this.m_clubMember.classID.Value;
+				return this.m_clubMember.classID;
+			}
+		}
+
+		public bool IsSelf
+		{
+			get
+			{
+				return this.m_clubMember.isSelf;
+			}
+		}
+
+		public bool IsModerator
+		{
+			get
+			{
+				return this.Role == 1 || this.Role == 2 || this.Role == 3;
 			}
 		}
 

@@ -74,7 +74,7 @@ namespace WoWCompanionApp
 			for (int j = 0; j < wrapperGarrisonFollower.AbilityIDs.Count; j++)
 			{
 				GarrAbilityRec record4 = StaticDB.garrAbilityDB.GetRecord(wrapperGarrisonFollower.AbilityIDs[j]);
-				if ((record4.Flags & 1u) != 0u)
+				if ((record4.Flags & 1) != 0)
 				{
 					GameObject gameObject = Object.Instantiate<GameObject>(this.m_followerEquipmentReplacementSlotPrefab);
 					gameObject.transform.SetParent(this.m_followerEquipmentReplacementSlotArea.transform, false);

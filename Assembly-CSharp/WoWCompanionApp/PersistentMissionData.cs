@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WowStatConstants;
 using WowStaticData;
 
 namespace WoWCompanionApp
@@ -53,7 +54,7 @@ namespace WoWCompanionApp
 				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(wrapperGarrisonMission.MissionRecID);
 				if (record != null)
 				{
-					if (record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
+					if ((GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType)
 					{
 						if (!skipSupportMissions || (record.Flags & 16u) == 0u)
 						{
@@ -75,7 +76,7 @@ namespace WoWCompanionApp
 			foreach (WrapperGarrisonMission wrapperGarrisonMission in PersistentMissionData.missionDictionary.Values)
 			{
 				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(wrapperGarrisonMission.MissionRecID);
-				if (record != null && record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType && (record.Flags & 16u) == 0u)
+				if (record != null && (GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType && (record.Flags & 16u) == 0u)
 				{
 					if (wrapperGarrisonMission.MissionState == 1 || wrapperGarrisonMission.MissionState == 2 || wrapperGarrisonMission.MissionState == 3)
 					{

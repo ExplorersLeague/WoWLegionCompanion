@@ -18,7 +18,7 @@ namespace WoWCompanionApp
 
 		public void SetCommunityInfo(Community community, CommunityStream stream)
 		{
-			this.m_channelName.text = stream.Name.ToUpper();
+			this.m_channelName.text = stream.Name;
 			this.m_communityStream = stream;
 			this.m_community = community;
 			this.UpdateNotificationVisibility();

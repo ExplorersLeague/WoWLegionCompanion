@@ -112,7 +112,7 @@ namespace WoWCompanionApp
 				this.m_missionTimeRemainingText.text = "Fortified";
 			}
 			GarrMissionTypeRec record2 = StaticDB.garrMissionTypeDB.GetRecord((int)record.GarrMissionTypeID);
-			if (record2.UiTextureAtlasMemberID > 0u)
+			if (record2.UiTextureAtlasMemberID > 0)
 			{
 				Sprite atlasSprite = TextureAtlas.instance.GetAtlasSprite((int)record2.UiTextureAtlasMemberID);
 				if (atlasSprite != null)
@@ -154,7 +154,7 @@ namespace WoWCompanionApp
 					}
 				}
 			}
-			this.m_missionLevelText.text = string.Empty + record.TargetLevel + ((record.TargetLevel != 110) ? string.Empty : (" (" + record.TargetItemLevel + ")"));
+			this.m_missionLevelText.text = string.Empty + record.TargetLevel + (((int)record.TargetLevel != 110) ? string.Empty : (" (" + record.TargetItemLevel + ")"));
 			this.UpdateMissionRemainingTimeDisplay();
 		}
 

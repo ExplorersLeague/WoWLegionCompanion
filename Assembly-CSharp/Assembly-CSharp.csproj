@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{37D039E8-B43B-4199-980A-3477CF4250CE}</ProjectGuid>
+    <ProjectGuid>{8F3D9AAB-0D25-4051-9356-7F31912736A0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -67,8 +67,6 @@
     <Compile Include="Assets\SimpleAndroidNotifications\NotificationIdHandler.cs" />
     <Compile Include="Assets\SimpleAndroidNotifications\NotificationManager.cs" />
     <Compile Include="Assets\SimpleAndroidNotifications\NotificationParams.cs" />
-    <Compile Include="AutoCenterItem.cs" />
-    <Compile Include="AutoCenterScrollRect.cs" />
     <Compile Include="AutoFadeOut.cs" />
     <Compile Include="AutoHide.cs" />
     <Compile Include="BattleNetErrors.cs" />
@@ -478,7 +476,6 @@
     <Compile Include="DustinHorne\Json\Examples\JNSimpleObjectModel.cs" />
     <Compile Include="DustinHorne\Json\Examples\JNSimpleObjectSample.cs" />
     <Compile Include="DustinHorne\Json\Examples\JNSubClassModel.cs" />
-    <Compile Include="EventsPanel.cs" />
     <Compile Include="FancyEntrance.cs" />
     <Compile Include="FelGlowEffect.cs" />
     <Compile Include="FileUtils.cs" />
@@ -731,6 +728,7 @@
     <Compile Include="WoWCompanionApp\AbilityDisplay.cs" />
     <Compile Include="WoWCompanionApp\AbilityInfoPopup.cs" />
     <Compile Include="WoWCompanionApp\ActivationConfirmationDialog.cs" />
+    <Compile Include="WoWCompanionApp\AddInviteDialog.cs" />
     <Compile Include="WoWCompanionApp\AdventureMapMissionSite.cs" />
     <Compile Include="WoWCompanionApp\AdventureMapPanel.cs" />
     <Compile Include="WoWCompanionApp\AdventureMapWorldQuest.cs" />
@@ -742,6 +740,9 @@
     <Compile Include="WoWCompanionApp\ArticleView.cs" />
     <Compile Include="WoWCompanionApp\AssaultNotification.cs" />
     <Compile Include="WoWCompanionApp\AssetBundleManager.cs" />
+    <Compile Include="WoWCompanionApp\AutoCenterItem.cs" />
+    <Compile Include="WoWCompanionApp\AutoCenterScrollPips.cs" />
+    <Compile Include="WoWCompanionApp\AutoCenterScrollRect.cs" />
     <Compile Include="WoWCompanionApp\BackButtonManager.cs" />
     <Compile Include="WoWCompanionApp\BaseDialog.cs" />
     <Compile Include="WoWCompanionApp\BnGameAccountButton.cs" />
@@ -749,7 +750,32 @@
     <Compile Include="WoWCompanionApp\BountyInfoTooltip.cs" />
     <Compile Include="WoWCompanionApp\BountySite.cs" />
     <Compile Include="WoWCompanionApp\BuildNumDisplay.cs" />
+    <Compile Include="WoWCompanionApp\CalendarConstants.cs" />
+    <Compile Include="WoWCompanionApp\CalendarCVar.cs" />
+    <Compile Include="WoWCompanionApp\CalendarEventData.cs" />
     <Compile Include="WoWCompanionApp\CalendarEventItem.cs" />
+    <Compile Include="WoWCompanionApp\CalendarFilterOptions.cs" />
+    <Compile Include="WoWCompanionApp\CalendarFiltersDialog.cs" />
+    <Compile Include="WoWCompanionApp\CalendarFilterToggle.cs" />
+    <Compile Include="WoWCompanionApp\CalendarInviteRoleStrings.cs" />
+    <Compile Include="WoWCompanionApp\CalendarNavButton.cs" />
+    <Compile Include="WoWCompanionApp\CalendarStatusExtensions.cs" />
+    <Compile Include="WoWCompanionApp\CalendarTimeExtensions.cs" />
+    <Compile Include="WoWCompanionApp\CalendarType.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_COMMAND_TYPE.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_ERROR_TYPE.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_EVENT_BITS.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_EVENT_REPEAT_OPTIONS.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_EVENT_TYPE.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_FILTER_FLAGS.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_GET_EVENT_TYPE.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_INVITE_BITS.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_INVITE_SORT_TYPE.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_INVITE_TYPE.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_MODERATOR_STATUS.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_STATUS.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_TYPE.cs" />
+    <Compile Include="WoWCompanionApp\CALENDAR_WEB_ACTION_TYPE.cs" />
     <Compile Include="WoWCompanionApp\CharacterData.cs" />
     <Compile Include="WoWCompanionApp\CharacterListButton.cs" />
     <Compile Include="WoWCompanionApp\CharacterListPanel.cs" />
@@ -770,6 +796,7 @@
     <Compile Include="WoWCompanionApp\CommunityChatMessage.cs" />
     <Compile Include="WoWCompanionApp\CommunityChatPanel.cs" />
     <Compile Include="WoWCompanionApp\CommunityData.cs" />
+    <Compile Include="WoWCompanionApp\CommunityDescriptionDialog.cs" />
     <Compile Include="WoWCompanionApp\CommunityInviteButton.cs" />
     <Compile Include="WoWCompanionApp\CommunityListPanel.cs" />
     <Compile Include="WoWCompanionApp\CommunityMember.cs" />
@@ -784,6 +811,7 @@
     <Compile Include="WoWCompanionApp\CommunityStream.cs" />
     <Compile Include="WoWCompanionApp\CompanionMultiPanel.cs" />
     <Compile Include="WoWCompanionApp\CompanionNavButton.cs" />
+    <Compile Include="WoWCompanionApp\CompileTimeString.cs" />
     <Compile Include="WoWCompanionApp\ConnectingPanel.cs" />
     <Compile Include="WoWCompanionApp\CreateNewLoginPanel.cs" />
     <Compile Include="WoWCompanionApp\DateTimeExtensions.cs" />
@@ -792,6 +820,7 @@
     <Compile Include="WoWCompanionApp\DebugObject.cs" />
     <Compile Include="WoWCompanionApp\DebugOptionsPopup.cs" />
     <Compile Include="WoWCompanionApp\DebugPrinter.cs" />
+    <Compile Include="WoWCompanionApp\DebugTouchKeyboardDisplay.cs" />
     <Compile Include="WoWCompanionApp\DelayedUIAnim.cs" />
     <Compile Include="WoWCompanionApp\DialogFactory.cs" />
     <Compile Include="WoWCompanionApp\DownloadingPanel.cs" />
@@ -801,6 +830,11 @@
     <Compile Include="WoWCompanionApp\EncounterPopup.cs" />
     <Compile Include="WoWCompanionApp\EquipmentDialog.cs" />
     <Compile Include="WoWCompanionApp\EquipmentPopup.cs" />
+    <Compile Include="WoWCompanionApp\EventInviteListItem.cs" />
+    <Compile Include="WoWCompanionApp\EventInviteResponseDialog.cs" />
+    <Compile Include="WoWCompanionApp\EventRosterPage.cs" />
+    <Compile Include="WoWCompanionApp\EventsListPanel.cs" />
+    <Compile Include="WoWCompanionApp\EventsPanel.cs" />
     <Compile Include="WoWCompanionApp\ExceptionCatcher.cs" />
     <Compile Include="WoWCompanionApp\ExceptionPanel.cs" />
     <Compile Include="WoWCompanionApp\FactionBasedVisibility.cs" />
@@ -826,6 +860,7 @@
     <Compile Include="WoWCompanionApp\GenericPopup.cs" />
     <Compile Include="WoWCompanionApp\HamburgerMenu.cs" />
     <Compile Include="WoWCompanionApp\HoldPressTrigger.cs" />
+    <Compile Include="WoWCompanionApp\HolidayDetailsPanel.cs" />
     <Compile Include="WoWCompanionApp\InviteLinkDialog.cs" />
     <Compile Include="WoWCompanionApp\ItemStatCache.cs" />
     <Compile Include="WoWCompanionApp\LanguageDropdown.cs" />
@@ -900,6 +935,7 @@
     <Compile Include="WoWCompanionApp\PersistentTalentData.cs" />
     <Compile Include="WoWCompanionApp\PinchZoomContentManager.cs" />
     <Compile Include="WoWCompanionApp\PlayerInfoDisplay.cs" />
+    <Compile Include="WoWCompanionApp\PriorityComparer.cs" />
     <Compile Include="WoWCompanionApp\RandomTexture.cs" />
     <Compile Include="WoWCompanionApp\RealmListPanel.cs" />
     <Compile Include="WoWCompanionApp\RealmListView.cs" />
@@ -912,6 +948,8 @@
     <Compile Include="WoWCompanionApp\ResourcesDisplay.cs" />
     <Compile Include="WoWCompanionApp\RewardInfoPopup.cs" />
     <Compile Include="WoWCompanionApp\RewardPanelSlider.cs" />
+    <Compile Include="WoWCompanionApp\RosterPage.cs" />
+    <Compile Include="WoWCompanionApp\RosterPageItem.cs" />
     <Compile Include="WoWCompanionApp\Scenes.cs" />
     <Compile Include="WoWCompanionApp\SetHordeOrAllianceBanner.cs" />
     <Compile Include="WoWCompanionApp\SettingsButton.cs" />
@@ -931,6 +969,7 @@
     <Compile Include="WoWCompanionApp\TalentTreeItemAbilityButton.cs" />
     <Compile Include="WoWCompanionApp\TalentTreePanel.cs" />
     <Compile Include="WoWCompanionApp\TestFollowerExperiencePanel.cs" />
+    <Compile Include="WoWCompanionApp\TextCycler.cs" />
     <Compile Include="WoWCompanionApp\TextureAtlas.cs" />
     <Compile Include="WoWCompanionApp\TiledRandomTexture.cs" />
     <Compile Include="WoWCompanionApp\TimeUnit.cs" />
@@ -941,6 +980,7 @@
     <Compile Include="WoWCompanionApp\UiAnimation.cs" />
     <Compile Include="WoWCompanionApp\UiAnimMgr.cs" />
     <Compile Include="WoWCompanionApp\UISound.cs" />
+    <Compile Include="WoWCompanionApp\UISoundPlayer.cs" />
     <Compile Include="WoWCompanionApp\UnassignCombatAllyConfirmationDialog.cs" />
     <Compile Include="WoWCompanionApp\UnityExtensions.cs" />
     <Compile Include="WoWCompanionApp\WebAuth.cs" />
@@ -1018,12 +1058,22 @@
     <Compile Include="WowStatConstants\TalentVisualState.cs" />
     <Compile Include="WowStaticData\AzeriteEmpoweredItemDB.cs" />
     <Compile Include="WowStaticData\AzeriteEmpoweredItemRec.cs" />
+    <Compile Include="WowStaticData\Cfg_LanguagesDB.cs" />
+    <Compile Include="WowStaticData\Cfg_LanguagesRec.cs" />
+    <Compile Include="WowStaticData\Cfg_RealmsDB.cs" />
+    <Compile Include="WowStaticData\Cfg_RealmsRec.cs" />
+    <Compile Include="WowStaticData\Cfg_RegionsDB.cs" />
+    <Compile Include="WowStaticData\Cfg_RegionsRec.cs" />
     <Compile Include="WowStaticData\CharShipmentContainerDB.cs" />
     <Compile Include="WowStaticData\CharShipmentContainerRec.cs" />
     <Compile Include="WowStaticData\CharShipmentDB.cs" />
     <Compile Include="WowStaticData\CharShipmentRec.cs" />
+    <Compile Include="WowStaticData\ChatProfanityDB.cs" />
+    <Compile Include="WowStaticData\ChatProfanityRec.cs" />
     <Compile Include="WowStaticData\ChrClassesDB.cs" />
     <Compile Include="WowStaticData\ChrClassesRec.cs" />
+    <Compile Include="WowStaticData\ChrRacesDB.cs" />
+    <Compile Include="WowStaticData\ChrRacesRec.cs" />
     <Compile Include="WowStaticData\CommunityIconDB.cs" />
     <Compile Include="WowStaticData\CommunityIconRec.cs" />
     <Compile Include="WowStaticData\CreatureDB.cs" />
@@ -1032,8 +1082,12 @@
     <Compile Include="WowStaticData\CurrencyContainerRec.cs" />
     <Compile Include="WowStaticData\CurrencyTypesDB.cs" />
     <Compile Include="WowStaticData\CurrencyTypesRec.cs" />
+    <Compile Include="WowStaticData\DifficultyDB.cs" />
+    <Compile Include="WowStaticData\DifficultyRec.cs" />
     <Compile Include="WowStaticData\FactionDB.cs" />
     <Compile Include="WowStaticData\FactionRec.cs" />
+    <Compile Include="WowStaticData\FactionTemplateDB.cs" />
+    <Compile Include="WowStaticData\FactionTemplateRec.cs" />
     <Compile Include="WowStaticData\GarrAbilityCategoryDB.cs" />
     <Compile Include="WowStaticData\GarrAbilityCategoryRec.cs" />
     <Compile Include="WowStaticData\GarrAbilityDB.cs" />
@@ -1076,6 +1130,12 @@
     <Compile Include="WowStaticData\GarrTalentRec.cs" />
     <Compile Include="WowStaticData\GarrTalentTreeDB.cs" />
     <Compile Include="WowStaticData\GarrTalentTreeRec.cs" />
+    <Compile Include="WowStaticData\HolidayDescriptionsDB.cs" />
+    <Compile Include="WowStaticData\HolidayDescriptionsRec.cs" />
+    <Compile Include="WowStaticData\HolidayNamesDB.cs" />
+    <Compile Include="WowStaticData\HolidayNamesRec.cs" />
+    <Compile Include="WowStaticData\HolidaysDB.cs" />
+    <Compile Include="WowStaticData\HolidaysRec.cs" />
     <Compile Include="WowStaticData\ItemDB.cs" />
     <Compile Include="WowStaticData\ItemEffectDB.cs" />
     <Compile Include="WowStaticData\ItemEffectRec.cs" />
@@ -1084,8 +1144,14 @@
     <Compile Include="WowStaticData\ItemRec.cs" />
     <Compile Include="WowStaticData\ItemSubClassDB.cs" />
     <Compile Include="WowStaticData\ItemSubClassRec.cs" />
+    <Compile Include="WowStaticData\LFGDungeonsDB.cs" />
+    <Compile Include="WowStaticData\LFGDungeonsRec.cs" />
+    <Compile Include="WowStaticData\MapDB.cs" />
+    <Compile Include="WowStaticData\MapRec.cs" />
     <Compile Include="WowStaticData\MobileStringsDB.cs" />
     <Compile Include="WowStaticData\MobileStringsRec.cs" />
+    <Compile Include="WowStaticData\MODB.cs" />
+    <Compile Include="WowStaticData\MODBRec.cs" />
     <Compile Include="WowStaticData\QuestInfoDB.cs" />
     <Compile Include="WowStaticData\QuestInfoRec.cs" />
     <Compile Include="WowStaticData\QuestV2DB.cs" />
@@ -1096,12 +1162,16 @@
     <Compile Include="WowStaticData\RewardPackXCurrencyTypeRec.cs" />
     <Compile Include="WowStaticData\RewardPackXItemDB.cs" />
     <Compile Include="WowStaticData\RewardPackXItemRec.cs" />
+    <Compile Include="WowStaticData\SpamMessagesDB.cs" />
+    <Compile Include="WowStaticData\SpamMessagesRec.cs" />
     <Compile Include="WowStaticData\SpellDurationDB.cs" />
     <Compile Include="WowStaticData\SpellDurationRec.cs" />
     <Compile Include="WowStaticData\SpellEffectDB.cs" />
     <Compile Include="WowStaticData\SpellEffectRec.cs" />
     <Compile Include="WowStaticData\SpellTooltipDB.cs" />
     <Compile Include="WowStaticData\SpellTooltipRec.cs" />
+    <Compile Include="WowStaticData\TreasureDB.cs" />
+    <Compile Include="WowStaticData\TreasureRec.cs" />
     <Compile Include="WowStaticData\UiTextureAtlasDB.cs" />
     <Compile Include="WowStaticData\UiTextureAtlasMemberDB.cs" />
     <Compile Include="WowStaticData\UiTextureAtlasMemberRec.cs" />

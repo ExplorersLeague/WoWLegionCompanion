@@ -90,7 +90,7 @@ namespace WoWCompanionApp
 						}));
 					}
 				}
-				for (int l = 0; l < record.Vitality; l++)
+				for (int l = 0; l < (int)record.Vitality; l++)
 				{
 					GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_troopEmptyHeartPrefab);
 					gameObject2.transform.SetParent(this.m_troopHeartContainerEmpty.transform, false);

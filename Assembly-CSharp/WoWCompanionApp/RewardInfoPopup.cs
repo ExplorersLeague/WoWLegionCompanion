@@ -199,7 +199,7 @@ namespace WoWCompanionApp
 					}
 				}
 				ItemSubClassRec itemSubclass = StaticDB.GetItemSubclass(record3.ClassID, record3.SubclassID);
-				if (itemSubclass != null && itemSubclass.DisplayName != null && itemSubclass.DisplayName != string.Empty && (itemSubclass.DisplayFlags & 1) == 0 && record3.InventoryType != 16)
+				if (itemSubclass != null && itemSubclass.DisplayName != null && itemSubclass.DisplayName != string.Empty && ((int)itemSubclass.DisplayFlags & 1) == 0 && record3.InventoryType != 16)
 				{
 					if (this.m_rewardDescription.text != string.Empty)
 					{
@@ -385,14 +385,14 @@ namespace WoWCompanionApp
 			CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(currencyID, quantity);
 			if (currencyContainerRec != null)
 			{
-				this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag(currencyContainerRec.ContainerQuality) + currencyContainerRec.ContainerName + "</color>";
+				this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag((int)currencyContainerRec.ContainerQuality) + currencyContainerRec.ContainerName + "</color>";
 				this.m_rewardDescription.text = GeneralHelpers.QuantityRule(currencyContainerRec.ContainerDescription, quantity);
 				this.m_rewardQuantity.text = string.Empty;
 				this.m_rewardIcon.sprite = iconSprite;
 				if (this.m_rewardIconBorder != null)
 				{
 					Color color;
-					ColorUtility.TryParseHtmlString("#" + GeneralHelpers.GetItemQualityColor(currencyContainerRec.ContainerQuality), ref color);
+					ColorUtility.TryParseHtmlString("#" + GeneralHelpers.GetItemQualityColor((int)currencyContainerRec.ContainerQuality), ref color);
 					this.m_rewardIconBorder.gameObject.SetActive(true);
 					this.m_rewardIconBorder.color = color;
 				}

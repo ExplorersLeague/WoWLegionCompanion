@@ -25,7 +25,7 @@ namespace WoWCompanionApp
 		private void OnEnable()
 		{
 			FPSThrottler.SetForceNormalFPS(true);
-			this.m_characterName.text = Singleton<CharacterData>.instance.CharacterName.ToUpper();
+			this.m_characterName.text = Singleton<CharacterData>.instance.CharacterName;
 		}
 
 		private void OnDisable()

@@ -45,6 +45,7 @@ namespace WoWCompanionApp
 		{
 			GarrisonStatus.s_serverConnectTime = serverTime;
 			GarrisonStatus.s_clientConnectTime = DateTime.UtcNow;
+			MobileClient.SetServerTime(GarrisonStatus.CurrentTime());
 		}
 
 		public static DateTime CurrentTime()

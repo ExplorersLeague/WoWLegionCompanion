@@ -125,5 +125,7 @@ namespace WoWCompanionApp
 		public Text m_titleText;
 
 		public Text m_cancelText;
+
+		public const int MaxDevAccounts = 10;
 	}
 }

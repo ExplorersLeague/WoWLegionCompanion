@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using WowStatConstants;
 using WowStaticData;
 
 namespace WoWCompanionApp
@@ -124,7 +125,7 @@ namespace WoWCompanionApp
 					{
 						Debug.LogWarning("Mission Not Found: ID " + mission2.MissionRecID);
 					}
-					else if (record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
+					else if ((GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType)
 					{
 						if ((record.Flags & 16u) != 0u)
 						{

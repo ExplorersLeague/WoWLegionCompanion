@@ -21,7 +21,7 @@ namespace WoWCompanionApp
 			if (pendingInvites.Count > 0)
 			{
 				GameObject gameObject = this.m_scrollContent.AddAsChildObject(this.m_scrollSectionHeaderPrefab);
-				gameObject.GetComponentInChildren<Text>().text = "PENDING INVITATIONS";
+				gameObject.GetComponentInChildren<Text>().text = StaticDB.GetString("COMMUNITIES_PENDING_INVITES", "[PH] PENDING INVITATIONS");
 				GameObject gameObject2 = this.m_scrollContent.AddAsChildObject(this.m_inviteButtonPrefab);
 				string text = StaticDB.GetString("COMMUNITIES_MULTIPLE_INVITATIONS", null);
 				text = GeneralHelpers.QuantityRule(text, pendingInvites.Count);
@@ -35,8 +35,8 @@ namespace WoWCompanionApp
 			if (CommunityData.Instance.HasGuild())
 			{
 				GameObject gameObject = this.m_scrollContent.AddAsChildObject(this.m_scrollSectionHeaderPrefab);
-				string @string = StaticDB.GetString("SOCIAL_CHARACTERS_GUILD", "%s'S GUILD");
-				string text = MobileClient.FormatString(@string, Singleton<CharacterData>.Instance.CharacterName.ToUpper());
+				string @string = StaticDB.GetString("SOCIAL_CHARACTERS_GUILD", "[PH] %s'S GUILD");
+				string text = MobileClient.FormatString(@string, Singleton<CharacterData>.Instance.CharacterName);
 				gameObject.GetComponentInChildren<Text>().text = text;
 				CommunityData.Instance.ForGuild(delegate(Community guild)
 				{
@@ -47,8 +47,8 @@ namespace WoWCompanionApp
 			if (CommunityData.Instance.HasCommunities())
 			{
 				GameObject gameObject2 = this.m_scrollContent.AddAsChildObject(this.m_scrollSectionHeaderPrefab);
-				string string2 = StaticDB.GetString("SOCIAL_CHARACTERS_COMMUNITIES", "%s'S COMMUNITIES");
-				string text2 = MobileClient.FormatString(string2, Singleton<CharacterData>.Instance.CharacterName.ToUpper());
+				string string2 = StaticDB.GetString("SOCIAL_CHARACTERS_COMMUNITIES", "[PH] %s'S COMMUNITIES");
+				string text2 = MobileClient.FormatString(string2, Singleton<CharacterData>.Instance.CharacterName);
 				gameObject2.GetComponentInChildren<Text>().text = text2;
 				CommunityData.Instance.ForEachCommunity(delegate(Community community)
 				{

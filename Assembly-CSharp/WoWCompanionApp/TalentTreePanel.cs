@@ -127,7 +127,7 @@ namespace WoWCompanionApp
 					Debug.LogError("No GarrTalentTree record found for class " + GarrisonStatus.CharacterClassID());
 					return;
 				}
-				for (int k = 0; k < recordFirstOrDefault.MaxTiers; k++)
+				for (int k = 0; k < (int)recordFirstOrDefault.MaxTiers; k++)
 				{
 					GameObject gameObject = Object.Instantiate<GameObject>(this.m_talentTreeItemPrefab);
 					gameObject.transform.SetParent(this.m_talentTreeItemRoot.transform, false);
@@ -163,7 +163,7 @@ namespace WoWCompanionApp
 				}
 				foreach (GarrTalentRec garrTalentRec in StaticDB.garrTalentDB.GetRecordsByParentID(recordFirstOrDefault.ID))
 				{
-					this.m_talentTreeItems[garrTalentRec.Tier].SetTalent(garrTalentRec);
+					this.m_talentTreeItems[(int)garrTalentRec.Tier].SetTalent(garrTalentRec);
 					LegionCompanionWrapper.RequestCanResearchGarrisonTalent(garrTalentRec.ID);
 				}
 			}

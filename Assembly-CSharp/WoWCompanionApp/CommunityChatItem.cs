@@ -30,8 +30,9 @@ namespace WoWCompanionApp
 			this.m_bodyText.text = message.Message;
 			this.m_bodyText.fontStyle = ((!message.Destroyed) ? 0 : 2);
 			this.m_postTime.text = message.TimeStamp.ToShortTimeString();
-			this.m_classIcon.sprite = GeneralHelpers.LoadClassIcon((int)this.m_message.ClassID);
-			this.m_moderatorImage.SetActive(message.PostedByModerator());
+			this.m_classIcon.sprite = GeneralHelpers.LoadClassIcon(this.m_message.ClassID);
+			this.m_moderatorImage.SetActive(message.PostedByModerator() || message.PostedByLeaderOrOwner());
+			this.m_moderatorImage.GetComponent<Image>().sprite = ((!message.PostedByModerator()) ? this.m_leaderOwnerSprite : this.m_moderatorSprite);
 		}
 
 		public void MinimizeChatItem()
@@ -87,6 +88,10 @@ namespace WoWCompanionApp
 		public GameObject m_moderatorImage;
 
 		public Image m_classIcon;
+
+		public Sprite m_moderatorSprite;
+
+		public Sprite m_leaderOwnerSprite;
 
 		private CommunityChatMessage m_message;
 	}

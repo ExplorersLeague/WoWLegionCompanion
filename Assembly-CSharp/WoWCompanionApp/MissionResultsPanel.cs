@@ -279,17 +279,15 @@ namespace WoWCompanionApp
 			this.missionTypeImage.overrideSprite = TextureAtlas.instance.GetAtlasSprite((int)record2.UiTextureAtlasMemberID);
 			if (this.missionFollowerSlotGroup != null)
 			{
-				int num = 0;
-				while ((long)num < (long)((ulong)record.MaxFollowers))
+				for (int l = 0; l < (int)record.MaxFollowers; l++)
 				{
 					GameObject gameObject2 = Object.Instantiate<GameObject>(this.missionFollowerSlotPrefab);
 					gameObject2.transform.SetParent(this.missionFollowerSlotGroup.transform, false);
 					MissionFollowerSlot component2 = gameObject2.GetComponent<MissionFollowerSlot>();
 					component2.m_enemyPortraitsGroup = this.enemyPortraitsGroup;
-					num++;
 				}
 			}
-			if (record.UiTextureKitID > 0u)
+			if (record.UiTextureKitID > 0)
 			{
 				UiTextureKitRec record3 = StaticDB.uiTextureKitDB.GetRecord((int)record.UiTextureKitID);
 				this.m_scrollingEnvironment_Back.enabled = false;
@@ -354,11 +352,11 @@ namespace WoWCompanionApp
 				return;
 			}
 			MissionRewardDisplay[] componentsInChildren3 = this.m_lootGroupObj.GetComponentsInChildren<MissionRewardDisplay>(true);
-			for (int l = 0; l < componentsInChildren3.Length; l++)
+			for (int m = 0; m < componentsInChildren3.Length; m++)
 			{
-				if (componentsInChildren3[l] != null)
+				if (componentsInChildren3[m] != null)
 				{
-					Object.Destroy(componentsInChildren3[l].gameObject);
+					Object.Destroy(componentsInChildren3[m].gameObject);
 				}
 			}
 			if (missionResultType == 1)
@@ -367,12 +365,12 @@ namespace WoWCompanionApp
 			}
 			List<WrapperGarrisonFollower> list = new List<WrapperGarrisonFollower>();
 			MissionFollowerSlot[] componentsInChildren4 = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
-			int num2 = 0;
+			int num = 0;
 			foreach (WrapperGarrisonFollower wrapperGarrisonFollower in PersistentFollowerData.followerDictionary.Values)
 			{
 				if (wrapperGarrisonFollower.CurrentMissionID == garrMissionID)
 				{
-					componentsInChildren4[num2++].SetFollower(wrapperGarrisonFollower.GarrFollowerID);
+					componentsInChildren4[num++].SetFollower(wrapperGarrisonFollower.GarrFollowerID);
 					if (missionResultType == 1)
 					{
 						PersistentFollowerData.CachePreMissionFollower(wrapperGarrisonFollower);
@@ -441,9 +439,9 @@ namespace WoWCompanionApp
 				this.m_fancyEntrance.m_notifyOnBeginCallbackName = "OnShowSuccessMessage";
 				this.m_missionSuccessMessage.SetActive(true);
 				MissionRewardDisplay[] componentsInChildren5 = this.m_lootGroupObj.GetComponentsInChildren<MissionRewardDisplay>(true);
-				for (int n = 0; n < componentsInChildren5.Length; n++)
+				for (int num2 = 0; num2 < componentsInChildren5.Length; num2++)
 				{
-					componentsInChildren5[n].ShowResultSuccess(this.m_lootEffectInitialDelay + this.m_lootEffectDelay * (float)n);
+					componentsInChildren5[num2].ShowResultSuccess(this.m_lootEffectInitialDelay + this.m_lootEffectDelay * (float)num2);
 				}
 				if (this.m_bonusLootChance > 0)
 				{

@@ -68,7 +68,7 @@ namespace WoWCompanionApp
 					this.m_shipmentDuration = wrapperCharacterShipment.ShipmentDuration;
 				}
 			}
-			if (record.GarrFollowerID > 0u)
+			if (record.GarrFollowerID > 0)
 			{
 				this.SetCharShipmentTroop(record, iconFileDataID);
 			}

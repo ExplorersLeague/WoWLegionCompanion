@@ -11,11 +11,11 @@ namespace WoWCompanionApp
 		{
 			SlidingPanel slidingPanel = this.m_slidingPanel;
 			slidingPanel.m_closedAction = (Action)Delegate.Combine(slidingPanel.m_closedAction, new Action(this.HidePanel));
-			this.m_characterName.text = Singleton<CharacterData>.instance.CharacterName.ToUpper();
+			this.m_characterName.text = Singleton<CharacterData>.instance.CharacterName;
 			this.m_viewCharacterObj.SetActive(!Singleton<Login>.instance.GetBnPortal().Equals("cn", StringComparison.OrdinalIgnoreCase));
 			if (this.m_viewCharacterText != null)
 			{
-				this.m_viewCharacterText.text = StaticDB.GetString("SETTINGS_VIEW_CHARACTER", "[PH]VIEW CHARACTER").Replace("&s", Singleton<CharacterData>.instance.CharacterName.ToUpper());
+				this.m_viewCharacterText.text = StaticDB.GetString("SETTINGS_VIEW_CHARACTER", "[PH]VIEW CHARACTER").Replace("&s", Singleton<CharacterData>.instance.CharacterName);
 			}
 		}
 

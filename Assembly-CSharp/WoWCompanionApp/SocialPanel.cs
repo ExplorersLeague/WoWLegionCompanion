@@ -8,6 +8,9 @@ namespace WoWCompanionApp
 	{
 		private void Awake()
 		{
+			CommunityData.Instance.ClearData();
+			CommunityData.Instance.RefreshCommunities();
+			CommunityData.Instance.RefreshInvitations();
 			CommunityData.OnCommunityRefresh += this.RefreshScrollingContent;
 			CommunityData.OnInviteRefresh += this.RefreshScrollingContent;
 		}
@@ -20,6 +23,8 @@ namespace WoWCompanionApp
 
 		private void OnEnable()
 		{
+			CommunityData.Instance.RefreshCommunities();
+			CommunityData.Instance.RefreshInvitations();
 			this.RefreshScrollingContent();
 		}
 

@@ -183,7 +183,7 @@ namespace WoWCompanionApp
 				this.m_troopName.text = "Invalid Shipment ID: " + shipmentType.Value.CharShipmentID;
 				return;
 			}
-			if (charShipmentRec.GarrFollowerID > 0u)
+			if (charShipmentRec.GarrFollowerID > 0)
 			{
 				this.SetCharShipmentTroop(shipmentType.Value, charShipmentRec);
 			}
@@ -406,11 +406,11 @@ namespace WoWCompanionApp
 					troopSlot.SetCharShipment(this.m_charShipmentRec.ID, 0UL, 0, false, 0);
 				}
 			}
-			uint num = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? this.m_followerRec.AllianceGarrClassSpecID : this.m_followerRec.HordeGarrClassSpecID;
+			uint num = (uint)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? this.m_followerRec.AllianceGarrClassSpecID : this.m_followerRec.HordeGarrClassSpecID);
 			foreach (WrapperGarrisonFollower follower in PersistentFollowerData.followerDictionary.Values)
 			{
 				GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
-				uint num2 = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID;
+				uint num2 = (uint)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID);
 				if (num2 == num && follower.Durability > 0)
 				{
 					this.SetTroopSlotForExistingFollower(componentsInChildren, follower);
@@ -460,7 +460,7 @@ namespace WoWCompanionApp
 			}
 			string text = "Assets/BundleAssets/PortraitIcons/cid_" + record2.ID.ToString("D8") + ".png";
 			Sprite sprite = AssetBundleManager.PortraitIcons.LoadAsset<Sprite>(text);
-			for (int i = 0; i < record.Vitality; i++)
+			for (int i = 0; i < (int)record.Vitality; i++)
 			{
 				GameObject gameObject = Object.Instantiate<GameObject>(this.m_troopHeartPrefab);
 				gameObject.transform.SetParent(this.m_troopHeartContainer.transform, false);
@@ -487,7 +487,7 @@ namespace WoWCompanionApp
 
 		public void Recruit()
 		{
-			if (this.m_charShipmentRec.GarrFollowerID > 0u)
+			if (this.m_charShipmentRec.GarrFollowerID > 0)
 			{
 				TroopSlot troopSlot = null;
 				TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
@@ -559,7 +559,7 @@ namespace WoWCompanionApp
 					if (record2 != null)
 					{
 						foreach (GarrAbilityEffectRec garrAbilityEffectRec in from rec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID((int)record2.GarrAbilityID)
-						where rec.AbilityAction == 34u && (ulong)rec.ActionRecordID == (ulong)((long)garrClassSpecID)
+						where rec.AbilityAction == 34 && rec.ActionRecordID == garrClassSpecID
 						select rec)
 						{
 							num += (int)garrAbilityEffectRec.ActionValueFlat;

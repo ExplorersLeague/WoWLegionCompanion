@@ -57,7 +57,7 @@ namespace WoWCompanionApp
 			foreach (int num in newFollower.AbilityIDs)
 			{
 				GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(num);
-				if ((record.Flags & 1u) != 0u)
+				if ((record.Flags & 1) != 0)
 				{
 					bool flag = true;
 					foreach (int num2 in oldFollower.AbilityIDs)
@@ -117,7 +117,7 @@ namespace WoWCompanionApp
 			for (int j = 0; j < follower.AbilityIDs.Count; j++)
 			{
 				GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(follower.AbilityIDs[j]);
-				if ((record.Flags & 1u) != 0u)
+				if ((record.Flags & 1) != 0)
 				{
 					active = true;
 					GameObject gameObject = Object.Instantiate<GameObject>(this.m_equipmentSlotPrefab);
@@ -181,7 +181,7 @@ namespace WoWCompanionApp
 			for (int l = 0; l < follower.AbilityIDs.Count; l++)
 			{
 				GarrAbilityRec record3 = StaticDB.garrAbilityDB.GetRecord(follower.AbilityIDs[l]);
-				if ((record3.Flags & 512u) != 0u)
+				if ((record3.Flags & 512) != 0)
 				{
 					if (!flag)
 					{
@@ -204,9 +204,9 @@ namespace WoWCompanionApp
 			for (int m = 0; m < follower.AbilityIDs.Count; m++)
 			{
 				GarrAbilityRec record4 = StaticDB.garrAbilityDB.GetRecord(follower.AbilityIDs[m]);
-				if ((record4.Flags & 1u) == 0u)
+				if ((record4.Flags & 1) == 0)
 				{
-					if ((record4.Flags & 512u) == 0u)
+					if ((record4.Flags & 512) == 0)
 					{
 						if (!flag2)
 						{
@@ -243,7 +243,7 @@ namespace WoWCompanionApp
 			bool flag3 = (follower.Flags & 8) != 0;
 			if (flag3)
 			{
-				GarrStringRec record5 = StaticDB.garrStringDB.GetRecord((GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record.HordeFlavorGarrStringID : record.AllianceFlavorGarrStringID);
+				GarrStringRec record5 = StaticDB.garrStringDB.GetRecord((int)((GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record.HordeFlavorGarrStringID : record.AllianceFlavorGarrStringID));
 				if (record5 != null)
 				{
 					Text text2 = Object.Instantiate<Text>(this.m_troopDescriptionPrefab);

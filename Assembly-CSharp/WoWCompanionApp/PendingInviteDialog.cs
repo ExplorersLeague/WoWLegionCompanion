@@ -9,6 +9,7 @@ namespace WoWCompanionApp
 		private void Awake()
 		{
 			CommunityData.OnInviteRefresh += this.RefreshInviteList;
+			CommunityData.Instance.RefreshInvitations();
 			this.RefreshInviteList();
 		}
 

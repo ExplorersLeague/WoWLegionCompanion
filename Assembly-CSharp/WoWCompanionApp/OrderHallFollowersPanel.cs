@@ -50,7 +50,7 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
-			if (record.GarrFollowerTypeID != (uint)GarrisonStatus.GarrisonFollowerType)
+			if ((GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID != GarrisonStatus.GarrisonFollowerType)
 			{
 				return;
 			}

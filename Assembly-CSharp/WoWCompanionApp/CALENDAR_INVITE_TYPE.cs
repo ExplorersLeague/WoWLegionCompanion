@@ -1,0 +1,11 @@
+﻿using System;
+
+namespace WoWCompanionApp
+{
+	public enum CALENDAR_INVITE_TYPE
+	{
+		CALENDAR_INVITE_TYPE_NORMAL,
+		CALENDAR_INVITE_TYPE_SIGNUP,
+		NUM_CALENDAR_INVITE_TYPES
+	}
+}

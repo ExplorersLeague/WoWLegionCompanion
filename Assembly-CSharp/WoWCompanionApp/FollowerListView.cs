@@ -86,7 +86,7 @@ namespace WoWCompanionApp
 			{
 				return null;
 			}
-			if (record.GarrFollowerTypeID != (uint)GarrisonStatus.GarrisonFollowerType)
+			if ((GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID != GarrisonStatus.GarrisonFollowerType)
 			{
 				return null;
 			}
@@ -219,10 +219,10 @@ namespace WoWCompanionApp
 				}
 				return (from id in follower.AbilityIDs
 				select StaticDB.garrAbilityDB.GetRecord(id) into garrAbilityRec
-				where garrAbilityRec != null && (garrAbilityRec.Flags & 1u) == 0u
+				where garrAbilityRec != null && (garrAbilityRec.Flags & 1) == 0
 				select garrAbilityRec).SelectMany((GarrAbilityRec garrAbilityRec) => StaticDB.garrAbilityEffectDB.GetRecordsByParentID(garrAbilityRec.ID)).Any(delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 				{
-					if (garrAbilityEffectRec.GarrMechanicTypeID == 0u || garrAbilityEffectRec.AbilityAction != 0u)
+					if (garrAbilityEffectRec.GarrMechanicTypeID == 0 || garrAbilityEffectRec.AbilityAction != 0)
 					{
 						return false;
 					}

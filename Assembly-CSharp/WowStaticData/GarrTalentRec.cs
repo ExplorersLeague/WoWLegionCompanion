@@ -2,15 +2,15 @@
 
 namespace WowStaticData
 {
-	public class GarrTalentRec
+	public class GarrTalentRec : MODBRec
 	{
 		public int ID { get; private set; }
 
 		public uint GarrTalentTreeID { get; private set; }
 
-		public int Tier { get; private set; }
+		public sbyte Tier { get; private set; }
 
-		public int UiOrder { get; private set; }
+		public sbyte UiOrder { get; private set; }
 
 		public int IconFileDataID { get; private set; }
 
@@ -28,7 +28,7 @@ namespace WowStaticData
 
 		public int ResearchGoldCost { get; private set; }
 
-		public int Flags { get; private set; }
+		public sbyte Flags { get; private set; }
 
 		public uint PerkSpellID { get; private set; }
 
@@ -40,26 +40,7 @@ namespace WowStaticData
 
 		public int RespecGoldCost { get; private set; }
 
-		public void Deserialize(string valueLine)
-		{
-			int num = 0;
-			int num2 = 0;
-			int num3;
-			do
-			{
-				num3 = valueLine.IndexOf('\t', num);
-				if (num3 >= 0)
-				{
-					string valueText = valueLine.Substring(num, num3 - num).Trim();
-					this.DeserializeIndex(num2, valueText);
-					num2++;
-				}
-				num = num3 + 1;
-			}
-			while (num3 > 0);
-		}
-
-		private void DeserializeIndex(int index, string valueText)
+		protected override void DeserializeIndex(int index, string valueText)
 		{
 			switch (index)
 			{
@@ -70,10 +51,10 @@ namespace WowStaticData
 				this.GarrTalentTreeID = Convert.ToUInt32(valueText);
 				break;
 			case 2:
-				this.Tier = Convert.ToInt32(valueText);
+				this.Tier = Convert.ToSByte(valueText);
 				break;
 			case 3:
-				this.UiOrder = Convert.ToInt32(valueText);
+				this.UiOrder = Convert.ToSByte(valueText);
 				break;
 			case 4:
 				this.IconFileDataID = Convert.ToInt32(valueText);
@@ -100,7 +81,7 @@ namespace WowStaticData
 				this.ResearchGoldCost = Convert.ToInt32(valueText);
 				break;
 			case 12:
-				this.Flags = Convert.ToInt32(valueText);
+				this.Flags = Convert.ToSByte(valueText);
 				break;
 			case 13:
 				this.PerkSpellID = Convert.ToUInt32(valueText);

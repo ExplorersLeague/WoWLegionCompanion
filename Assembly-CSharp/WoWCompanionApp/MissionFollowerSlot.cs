@@ -139,7 +139,7 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
-			if (record.GarrFollowerTypeID != (uint)GarrisonStatus.GarrisonFollowerType)
+			if ((GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID != GarrisonStatus.GarrisonFollowerType)
 			{
 				return;
 			}
@@ -173,7 +173,7 @@ namespace WoWCompanionApp
 					GarrAbilityRec record2 = StaticDB.garrAbilityDB.GetRecord(follower.AbilityIDs[j]);
 					GarrAbilityEffectRec garrAbilityEffectRec2 = StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record2.ID).FirstOrDefault(delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 					{
-						if (garrAbilityEffectRec.GarrMechanicTypeID == 0u || garrAbilityEffectRec.AbilityAction != 0u)
+						if (garrAbilityEffectRec.GarrMechanicTypeID == 0 || garrAbilityEffectRec.AbilityAction != 0)
 						{
 							return false;
 						}
@@ -277,7 +277,7 @@ namespace WoWCompanionApp
 				GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_outlineHeartPrefab);
 				gameObject2.transform.SetParent(this.m_heartArea.transform, false);
 			}
-			for (int l = 0; l < this.m_garrFollowerRec.Vitality - wrapperGarrisonFollower.Durability; l++)
+			for (int l = 0; l < (int)this.m_garrFollowerRec.Vitality - wrapperGarrisonFollower.Durability; l++)
 			{
 				GameObject gameObject3 = Object.Instantiate<GameObject>(this.m_emptyHeartPrefab);
 				gameObject3.transform.SetParent(this.m_heartArea.transform, false);

@@ -2,7 +2,7 @@
 
 namespace WowStaticData
 {
-	public class MobileStringsRec
+	public class MobileStringsRec : MODBRec
 	{
 		public int ID { get; private set; }
 
@@ -10,26 +10,7 @@ namespace WowStaticData
 
 		public string TagText { get; private set; }
 
-		public void Deserialize(string valueLine)
-		{
-			int num = 0;
-			int num2 = 0;
-			int num3;
-			do
-			{
-				num3 = valueLine.IndexOf('\t', num);
-				if (num3 >= 0)
-				{
-					string valueText = valueLine.Substring(num, num3 - num).Trim();
-					this.DeserializeIndex(num2, valueText);
-					num2++;
-				}
-				num = num3 + 1;
-			}
-			while (num3 > 0);
-		}
-
-		private void DeserializeIndex(int index, string valueText)
+		protected override void DeserializeIndex(int index, string valueText)
 		{
 			if (index != 0)
 			{

@@ -307,7 +307,7 @@ namespace WoWCompanionApp
 						if (currencyContainerRec != null)
 						{
 							this.m_rewardName.text = currencyContainerRec.ContainerName;
-							this.m_rewardName.color = GeneralHelpers.GetQualityColor(currencyContainerRec.ContainerQuality);
+							this.m_rewardName.color = GeneralHelpers.GetQualityColor((int)currencyContainerRec.ContainerQuality);
 							this.m_rewardQuantityText.text = string.Empty;
 						}
 						else
@@ -330,7 +330,7 @@ namespace WoWCompanionApp
 						CurrencyContainerRec currencyContainerRec2 = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(this.m_rewardID, this.m_rewardQuantity);
 						if (currencyContainerRec2 != null && currencyContainerRec2.ContainerQuality > 0 && this.m_qualityBorder != null)
 						{
-							this.m_qualityBorder.color = GeneralHelpers.GetQualityColor(currencyContainerRec2.ContainerQuality);
+							this.m_qualityBorder.color = GeneralHelpers.GetQualityColor((int)currencyContainerRec2.ContainerQuality);
 						}
 					}
 				}

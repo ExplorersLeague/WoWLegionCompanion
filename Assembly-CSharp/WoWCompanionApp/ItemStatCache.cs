@@ -24,7 +24,7 @@ namespace WoWCompanionApp
 
 		private bool IsCoverItem(int itemID)
 		{
-			return itemID == 163857 || (itemID >= 164577 && itemID <= 166370);
+			return StaticDB.treasureDB.IsCoverItem(itemID);
 		}
 
 		public bool HasItemStats(int itemID)

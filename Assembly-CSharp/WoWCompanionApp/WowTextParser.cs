@@ -498,8 +498,8 @@ namespace WoWCompanionApp
 		{
 			this.ConsumeCharacter();
 			this.ReadAndConsumeNumber();
-			int id = Convert.ToInt32(this.m_currentValue);
-			GarrAbilityEffectRec record = StaticDB.garrAbilityEffectDB.GetRecord(id);
+			int key = Convert.ToInt32(this.m_currentValue);
+			GarrAbilityEffectRec record = StaticDB.garrAbilityEffectDB.GetRecord(key);
 			if (record != null)
 			{
 				this.m_currentValue = record.ActionValueFlat.ToString();
@@ -515,8 +515,8 @@ namespace WoWCompanionApp
 		{
 			this.ConsumeCharacter();
 			this.ReadAndConsumeNumber();
-			int id = Convert.ToInt32(this.m_currentValue);
-			GarrAbilityEffectRec record = StaticDB.garrAbilityEffectDB.GetRecord(id);
+			int key = Convert.ToInt32(this.m_currentValue);
+			GarrAbilityEffectRec record = StaticDB.garrAbilityEffectDB.GetRecord(key);
 			if (record != null)
 			{
 				this.m_currentValue = record.CombatWeightBase.ToString();
@@ -532,8 +532,8 @@ namespace WoWCompanionApp
 		{
 			this.ConsumeCharacter();
 			this.ReadAndConsumeNumber();
-			int id = Convert.ToInt32(this.m_currentValue);
-			GarrAbilityEffectRec record = StaticDB.garrAbilityEffectDB.GetRecord(id);
+			int key = Convert.ToInt32(this.m_currentValue);
+			GarrAbilityEffectRec record = StaticDB.garrAbilityEffectDB.GetRecord(key);
 			if (record != null)
 			{
 				this.m_currentValue = record.CombatWeightMax.ToString();
@@ -549,8 +549,8 @@ namespace WoWCompanionApp
 		{
 			this.ConsumeCharacter();
 			this.ReadAndConsumeNumber();
-			int id = Convert.ToInt32(this.m_currentValue);
-			GarrAbilityEffectRec record = StaticDB.garrAbilityEffectDB.GetRecord(id);
+			int key = Convert.ToInt32(this.m_currentValue);
+			GarrAbilityEffectRec record = StaticDB.garrAbilityEffectDB.GetRecord(key);
 			if (record != null)
 			{
 				this.m_currentValue = record.ActionHours.ToString();
@@ -758,8 +758,8 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
-			int id = Convert.ToInt32(this.m_currentValue);
-			GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(id);
+			int key = Convert.ToInt32(this.m_currentValue);
+			GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(key);
 			if (record != null)
 			{
 				WowTextParser wowTextParser = new WowTextParser();

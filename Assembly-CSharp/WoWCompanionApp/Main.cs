@@ -80,7 +80,7 @@ namespace WoWCompanionApp
 			WorldQuestData.ClearData();
 			ItemStatCache.instance.ClearItemStats();
 			GarrisonStatus.Initialized = false;
-			Club.SetCommunityID(Singleton<CharacterData>.Instance.CommunityID);
+			MobileClient.SetCommunityID(Singleton<CharacterData>.Instance.CommunityID);
 			MobileClient.Initialize();
 			Singleton<GarrisonWrapper>.Instance.MobileRequestData();
 		}
@@ -131,7 +131,7 @@ namespace WoWCompanionApp
 			foreach (WrapperGarrisonMission wrapperGarrisonMission in values)
 			{
 				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(wrapperGarrisonMission.MissionRecID);
-				if (record != null && record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
+				if (record != null && (GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType)
 				{
 					if (wrapperGarrisonMission.MissionState == 1)
 					{
@@ -159,7 +159,7 @@ namespace WoWCompanionApp
 				else
 				{
 					string notificationText = "Invalid";
-					if (record2.GarrFollowerID > 0u)
+					if (record2.GarrFollowerID > 0)
 					{
 						GarrFollowerRec record3 = StaticDB.garrFollowerDB.GetRecord((int)record2.GarrFollowerID);
 						if (record3 == null)

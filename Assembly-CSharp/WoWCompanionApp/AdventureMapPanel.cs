@@ -226,7 +226,7 @@ namespace WoWCompanionApp
 				Debug.LogWarning("Mission Not Found: ID " + garrMissionID);
 				return;
 			}
-			if (record.GarrFollowerTypeID != (uint)GarrisonStatus.GarrisonFollowerType)
+			if ((GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID != GarrisonStatus.GarrisonFollowerType)
 			{
 				return;
 			}
@@ -832,7 +832,7 @@ namespace WoWCompanionApp
 			orderby bt.EndTime
 			select bt)
 			{
-				QuestV2Rec record = StaticDB.questDB.GetRecord(bounty.QuestID);
+				QuestV2Rec record = StaticDB.questV2DB.GetRecord(bounty.QuestID);
 				int num = (record == null) ? 0 : record.QuestSortID;
 				if (record == null)
 				{
@@ -886,6 +886,11 @@ namespace WoWCompanionApp
 				this.m_mapViewRT.anchoredPosition = mapInfo.m_anchoredPos;
 				this.m_pinchZoomContentManager.SetZoom(1f, false);
 				this.CenterAndZoomOut();
+				ZoneButton[] componentsInChildren = mapInfo.GetComponentsInChildren<ZoneButton>();
+				if (componentsInChildren.Length == 1)
+				{
+					componentsInChildren[0].OnTap();
+				}
 			}
 		}
 

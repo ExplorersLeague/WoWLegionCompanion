@@ -24,7 +24,7 @@ namespace WoWCompanionApp
 		{
 			get
 			{
-				return this.m_streamInfo.name;
+				return this.GetStreamName();
 			}
 		}
 
@@ -152,14 +152,40 @@ namespace WoWCompanionApp
 			return null;
 		}
 
+		public void HandleStreamUpdatedEvent(Club.ClubStreamUpdatedEvent streamUpdatedEvent)
+		{
+			ClubStreamInfo? streamInfo = Club.GetStreamInfo(streamUpdatedEvent.ClubID, streamUpdatedEvent.StreamID);
+			if (streamInfo != null)
+			{
+				this.m_streamInfo = streamInfo.Value;
+			}
+		}
+
 		public bool HasUnreadMessages()
 		{
 			return Club.GetStreamViewMarker(this.m_clubId, this.StreamId) != null;
 		}
 
+		private string GetStreamName()
+		{
+			if (this.m_streamInfo.streamType == null)
+			{
+				return StaticDB.GetString("COMMUNITIES_CHANNEL_NAME_GENERAL", "[PH] General");
+			}
+			if (this.m_streamInfo.streamType == 1)
+			{
+				return StaticDB.GetString("COMMUNITIES_CHANNEL_NAME_GUILD", "[PH] Guild");
+			}
+			if (this.m_streamInfo.streamType == 2)
+			{
+				return StaticDB.GetString("COMMUNITIES_CHANNEL_NAME_OFFICER", "[PH] Officer");
+			}
+			return this.m_streamInfo.name;
+		}
+
 		private ulong m_clubId;
 
-		private readonly ClubStreamInfo m_streamInfo;
+		private ClubStreamInfo m_streamInfo;
 
 		private List<CommunityChatMessage> m_messages = new List<CommunityChatMessage>();
 

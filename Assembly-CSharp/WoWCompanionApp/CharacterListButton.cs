@@ -16,10 +16,22 @@ namespace WoWCompanionApp
 
 		private void Update()
 		{
-		}
-
-		public void SetGUID(string guid)
-		{
+			int? factionGroup = StaticDB.factionTemplateDB.GetFactionGroup((int)this.m_characterEntry.RaceID);
+			if (this.m_backgroundImage != null && factionGroup != null)
+			{
+				if (((factionGroup == null) ? null : new int?(factionGroup.GetValueOrDefault() & 4)) != 0)
+				{
+					this.m_backgroundImage.sprite = this.m_hordeBackground;
+				}
+				else if (((factionGroup == null) ? null : new int?(factionGroup.GetValueOrDefault() & 2)) != 0)
+				{
+					this.m_backgroundImage.sprite = this.m_allianceBackground;
+				}
+				else
+				{
+					this.m_backgroundImage.sprite = this.m_neutralBackground;
+				}
+			}
 		}
 
 		public void CharacterSelected()
@@ -43,5 +55,13 @@ namespace WoWCompanionApp
 		public JamJSONCharacterEntry m_characterEntry;
 
 		public string m_subRegion;
+
+		public Image m_backgroundImage;
+
+		public Sprite m_allianceBackground;
+
+		public Sprite m_hordeBackground;
+
+		public Sprite m_neutralBackground;
 	}
 }

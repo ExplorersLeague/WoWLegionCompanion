@@ -15,6 +15,10 @@ namespace WoWCompanionApp
 			{
 				this.FilterRosterByString(input);
 			});
+		}
+
+		private void OnEnable()
+		{
 			CommunityData.OnRosterRefresh += this.OnRosterRefresh;
 			Club.OnClubRemoved += new Club.ClubRemovedHandler(this.OnClubRemoved);
 		}
@@ -29,6 +33,7 @@ namespace WoWCompanionApp
 		{
 			if (clubID == this.m_community.ClubId)
 			{
+				this.m_community.RefreshMemberList();
 				this.m_memberList = this.m_community.GetMemberList();
 				this.RefreshRoster();
 			}
@@ -42,17 +47,23 @@ namespace WoWCompanionApp
 			}
 		}
 
+		private void OnPresenceUpdated(Club.ClubMemberPresenceUpdatedEvent eventArgs)
+		{
+			this.OnRosterRefresh(eventArgs.ClubID);
+		}
+
 		public void SetRosterData(Community community)
 		{
 			this.m_community = community;
+			this.m_community.RefreshMemberList();
 			this.m_memberList = this.m_community.GetMemberList();
-			this.m_headerText.text = this.m_community.Name.ToUpper();
+			this.m_headerText.text = this.m_community.Name;
 			this.RefreshRoster();
 		}
 
 		public void ToggleShowOffline()
 		{
-			this.m_showOffline = !this.m_showOffline;
+			this.m_filterOffline = !this.m_filterOffline;
 			this.RefreshRoster();
 		}
 
@@ -70,7 +81,7 @@ namespace WoWCompanionApp
 		private void AddMemberListToPanel(List<CommunityMember> memberList)
 		{
 			this.ClearContentPanel();
-			if (!this.m_showOffline)
+			if (!this.m_filterOffline)
 			{
 				memberList = this.FilterByPresence(memberList);
 			}
@@ -78,16 +89,28 @@ namespace WoWCompanionApp
 			{
 				memberList = this.SortListAlphabetically(memberList);
 			}
+			else
+			{
+				memberList = memberList.OrderBy((CommunityMember member) => member, CommunityRosterDialog.Sorter).ToList<CommunityMember>();
+			}
 			GameObject gameObject = this.AddChildToObject(this.m_contentPanel, this.m_rosterItemPagePrefab);
 			CommunityRosterPage component = gameObject.GetComponent<CommunityRosterPage>();
-			foreach (CommunityMember member in memberList)
+			foreach (CommunityMember member2 in memberList)
 			{
 				if (component.AtCapacity())
 				{
 					gameObject = this.AddChildToObject(this.m_contentPanel, this.m_rosterItemPagePrefab);
 					component = gameObject.GetComponent<CommunityRosterPage>();
 				}
-				component.AddMemberToRoster(member);
+				component.AddMemberToRoster(member2);
+			}
+			Canvas.ForceUpdateCanvases();
+			AutoCenterScrollRect componentInChildren = base.GetComponentInChildren<AutoCenterScrollRect>();
+			ScrollRect componentInChildren2 = base.GetComponentInChildren<ScrollRect>();
+			if (componentInChildren != null && componentInChildren2 != null)
+			{
+				componentInChildren2.horizontalNormalizedPosition = 0f;
+				componentInChildren.ForceSetCenteredItemIndex(0);
 			}
 		}
 
@@ -155,12 +178,19 @@ namespace WoWCompanionApp
 
 		public Text m_headerText;
 
-		public bool m_showOffline;
+		public bool m_filterOffline;
 
 		public bool m_alphabeticalOrdering;
 
 		private ReadOnlyCollection<CommunityMember> m_memberList;
 
 		private Community m_community;
+
+		private static PriorityComparer<CommunityMember> Sorter = new PriorityComparer<CommunityMember>(new PriorityComparer<CommunityMember>.SortFunction[]
+		{
+			(CommunityMember member1, CommunityMember member2) => member1.Presence.CompareTo(member2.Presence),
+			(CommunityMember member1, CommunityMember member2) => member1.Role.CompareTo(member2.Role),
+			(CommunityMember member1, CommunityMember member2) => string.Compare(member1.Name, member2.Name)
+		});
 	}
 }

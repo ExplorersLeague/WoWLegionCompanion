@@ -69,7 +69,7 @@ namespace WoWCompanionApp
 
 		private string GetQuestTitle(int questID)
 		{
-			QuestV2Rec record = StaticDB.questDB.GetRecord(questID);
+			QuestV2Rec record = StaticDB.questV2DB.GetRecord(questID);
 			if (record == null)
 			{
 				Debug.LogError("Invalid Quest ID " + questID);

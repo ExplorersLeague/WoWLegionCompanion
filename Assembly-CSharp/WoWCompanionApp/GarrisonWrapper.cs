@@ -186,7 +186,7 @@ namespace WoWCompanionApp
 			foreach (WrapperGarrisonMission wrapperGarrisonMission in PersistentMissionData.missionDictionary.Values)
 			{
 				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(wrapperGarrisonMission.MissionRecID);
-				if (record != null && record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
+				if (record != null && (GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType)
 				{
 					if (wrapperGarrisonMission.MissionState == 1)
 					{
@@ -233,7 +233,7 @@ namespace WoWCompanionApp
 			foreach (WrapperGarrisonMission wrapperGarrisonMission in PersistentMissionData.missionDictionary.Values)
 			{
 				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(wrapperGarrisonMission.MissionRecID);
-				if (record != null && record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
+				if (record != null && (GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType)
 				{
 					if (wrapperGarrisonMission.MissionState == 1)
 					{

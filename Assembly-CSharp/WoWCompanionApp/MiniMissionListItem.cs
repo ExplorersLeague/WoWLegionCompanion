@@ -29,13 +29,13 @@ namespace WoWCompanionApp
 			float num = (float)record.MissionDuration;
 			foreach (WrapperGarrisonEncounter wrapperGarrisonEncounter in mission.Encounters)
 			{
-				foreach (int id in wrapperGarrisonEncounter.MechanicIDs)
+				foreach (int key in wrapperGarrisonEncounter.MechanicIDs)
 				{
-					GarrMechanicRec record2 = StaticDB.garrMechanicDB.GetRecord(id);
+					GarrMechanicRec record2 = StaticDB.garrMechanicDB.GetRecord(key);
 					if (record2 != null)
 					{
 						foreach (GarrAbilityEffectRec garrAbilityEffectRec in from rec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record2.GarrAbilityID)
-						where rec.AbilityAction == 17u
+						where rec.AbilityAction == 17
 						select rec)
 						{
 							num *= garrAbilityEffectRec.ActionValueFlat;
@@ -83,7 +83,7 @@ namespace WoWCompanionApp
 			this.m_missionName.text = record.Name;
 			if (this.m_missionLevel != null)
 			{
-				if (record.TargetLevel < 110)
+				if ((int)record.TargetLevel < 110)
 				{
 					this.m_missionLevel.text = string.Empty + record.TargetLevel;
 				}
@@ -143,8 +143,8 @@ namespace WoWCompanionApp
 			{
 				for (int i = 0; i < mission.Encounters.Count; i++)
 				{
-					int id = (mission.Encounters[i].MechanicIDs.Count <= 0) ? 0 : mission.Encounters[i].MechanicIDs[0];
-					GarrMechanicRec record = StaticDB.garrMechanicDB.GetRecord(id);
+					int key = (mission.Encounters[i].MechanicIDs.Count <= 0) ? 0 : mission.Encounters[i].MechanicIDs[0];
+					GarrMechanicRec record = StaticDB.garrMechanicDB.GetRecord(key);
 					if (record != null && record.GarrAbilityID != 0)
 					{
 						this.m_previewAbilityID[num] = record.GarrAbilityID;

@@ -106,12 +106,6 @@ namespace WowStatConstants
 
 		public const int POLISHED_PET_CHARM_ITEM_ID = 163036;
 
-		public const int AZERITE_CACHE_COVER_ITEM_ID = 163857;
-
-		public const int START_COVER_ITEM_ID_BLOCK = 164577;
-
-		public const int END_COVER_ITEM_ID_BLOCK = 166370;
-
 		public const int ORDER_HALL_RESOURCES_CURRENCY_ID = 1220;
 
 		public const int AZERITE_CURRENCY_ID = 1553;

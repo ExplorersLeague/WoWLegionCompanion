@@ -9,7 +9,7 @@ namespace WoWCompanionApp
 		public void SetChannel(CommunityStream stream)
 		{
 			this.m_stream = stream;
-			this.m_channelName.text = this.m_stream.Name.ToUpper();
+			this.m_channelName.text = this.m_stream.Name;
 			this.m_leaderModeratorImage.SetActive(this.m_stream.ForLeadersAndModerators);
 			this.UpdateToggleState();
 			this.m_allButton.onValueChanged.AddListener(delegate

@@ -11,7 +11,7 @@ namespace WoWCompanionApp
 		public void SetSpell(int spellID)
 		{
 			this.m_spellID = spellID;
-			VW_MobileSpellRec record = StaticDB.vw_mobileSpellDB.GetRecord(this.m_spellID);
+			VW_MobileSpellRec record = StaticDB.vW_MobileSpellDB.GetRecord(this.m_spellID);
 			if (record == null)
 			{
 				this.m_spellName.text = "Err Spell ID " + this.m_spellID;

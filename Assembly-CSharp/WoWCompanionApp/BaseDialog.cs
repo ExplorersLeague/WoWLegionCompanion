@@ -6,7 +6,7 @@ namespace WoWCompanionApp
 {
 	public class BaseDialog : MonoBehaviour
 	{
-		public void OnEnable()
+		protected virtual void OnEnable()
 		{
 			Main.instance.m_UISound.Play_ShowGenericTooltip();
 			if (this.canvasLevel == LegacyCanvasLevel.Level2Canvas)
@@ -20,7 +20,7 @@ namespace WoWCompanionApp
 			Main.instance.m_backButtonManager.PushBackAction(BackActionType.hideAllPopups, null);
 		}
 
-		private void OnDisable()
+		protected virtual void OnDisable()
 		{
 			if (this.canvasLevel == LegacyCanvasLevel.Level2Canvas)
 			{
@@ -33,7 +33,7 @@ namespace WoWCompanionApp
 			Main.instance.m_backButtonManager.PopBackAction();
 		}
 
-		public void CloseDialog()
+		public virtual void CloseDialog()
 		{
 			Object.Destroy(base.gameObject);
 		}

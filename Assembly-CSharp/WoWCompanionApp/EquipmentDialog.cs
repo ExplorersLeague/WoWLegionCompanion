@@ -64,7 +64,7 @@ namespace WoWCompanionApp
 				GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(item.GarrAbilityID);
 				if (record != null)
 				{
-					if ((record.Flags & 64u) == 0u)
+					if ((record.Flags & 64) == 0)
 					{
 						FollowerInventoryListItem followerInventoryListItem2 = Object.Instantiate<FollowerInventoryListItem>(this.m_equipmentListItemPrefab);
 						followerInventoryListItem2.transform.SetParent(this.m_equipmentListContent.transform, false);

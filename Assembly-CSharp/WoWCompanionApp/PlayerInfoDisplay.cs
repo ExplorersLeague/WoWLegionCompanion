@@ -37,7 +37,7 @@ namespace WoWCompanionApp
 				this.m_characterClassName.text = GeneralHelpers.TextOrderString(StaticDB.GetString("LEVEL", null), playerLevel.ToString()) + " " + GarrisonStatus.CharacterClassName();
 			}
 			this.m_characterListButton.text = StaticDB.GetString("CHARACTER_LIST", null);
-			Sprite sprite = GeneralHelpers.LoadClassIcon(GarrisonStatus.CharacterClassID());
+			Sprite sprite = GeneralHelpers.LoadClassIcon(new uint?((uint)GarrisonStatus.CharacterClassID()));
 			if (sprite != null)
 			{
 				this.m_classIcon.sprite = sprite;

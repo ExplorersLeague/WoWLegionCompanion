@@ -134,14 +134,14 @@ namespace WoWCompanionApp
 		{
 			isMaxLevelAndMaxQuality = false;
 			isQuality = false;
-			GarrFollowerLevelXPRec garrFollowerLevelXPRec = StaticDB.garrFollowerLevelXPDB.GetRecordsByParentID(followerLevel).First((GarrFollowerLevelXPRec rec) => StaticDB.garrFollowerTypeDB.GetRecord((int)rec.GarrFollowerTypeID).GarrTypeID == (uint)GarrisonStatus.GarrisonType);
-			if (garrFollowerLevelXPRec.XpToNextLevel > 0u)
+			GarrFollowerLevelXPRec garrFollowerLevelXPRec = StaticDB.garrFollowerLevelXPDB.GetRecordsByParentID(followerLevel).First((GarrFollowerLevelXPRec rec) => (GARR_TYPE)StaticDB.garrFollowerTypeDB.GetRecord((int)rec.GarrFollowerTypeID).GarrTypeID == GarrisonStatus.GarrisonType);
+			if (garrFollowerLevelXPRec.XpToNextLevel > 0)
 			{
-				xpToNextLevelOrQuality = garrFollowerLevelXPRec.XpToNextLevel;
+				xpToNextLevelOrQuality = (uint)garrFollowerLevelXPRec.XpToNextLevel;
 				return;
 			}
 			isQuality = true;
-			GarrFollowerQualityRec garrFollowerQualityRec = StaticDB.garrFollowerQualityDB.GetRecordsByParentID(followerQuality).First((GarrFollowerQualityRec rec) => rec.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType);
+			GarrFollowerQualityRec garrFollowerQualityRec = StaticDB.garrFollowerQualityDB.GetRecordsByParentID(followerQuality).First((GarrFollowerQualityRec rec) => (GARR_FOLLOWER_TYPE)rec.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType);
 			xpToNextLevelOrQuality = garrFollowerQualityRec.XpToNextQuality;
 			if (garrFollowerQualityRec.XpToNextQuality == 0u)
 			{
@@ -152,7 +152,7 @@ namespace WoWCompanionApp
 		public static uint GetMaxFollowerItemLevel()
 		{
 			GarrFollowerTypeRec record = StaticDB.garrFollowerTypeDB.GetRecord((int)GarrisonStatus.GarrisonFollowerType);
-			return record.MaxItemLevel;
+			return (uint)record.MaxItemLevel;
 		}
 
 		public static FollowerStatus GetFollowerStatus(WrapperGarrisonFollower follower)
@@ -466,7 +466,7 @@ namespace WoWCompanionApp
 						else
 						{
 							IEnumerable<GarrAbilityEffectRec> source = from garrAbilityEffectRec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record.ID)
-							where garrAbilityEffectRec.GarrMechanicTypeID != 0u && garrAbilityEffectRec.AbilityAction == 0u && (long)garrMechanicTypeID == (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID)
+							where garrAbilityEffectRec.GarrMechanicTypeID != 0 && garrAbilityEffectRec.AbilityAction == 0 && garrMechanicTypeID == (int)garrAbilityEffectRec.GarrMechanicTypeID
 							select garrAbilityEffectRec;
 							if (source.Any(delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 							{
@@ -491,49 +491,39 @@ namespace WoWCompanionApp
 			return FollowerCanCounterMechanic.no;
 		}
 
-		public static Sprite LoadClassIcon(int classID)
+		public static Sprite LoadClassIcon(uint? classID)
 		{
-			Sprite result = null;
-			switch (classID)
+			if (classID != null)
 			{
-			case 1:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Warrior");
-				break;
-			case 2:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Paladin");
-				break;
-			case 3:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Hunter");
-				break;
-			case 4:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Rogue");
-				break;
-			case 5:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Priest");
-				break;
-			case 6:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Death Knight");
-				break;
-			case 7:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Shaman");
-				break;
-			case 8:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Mage");
-				break;
-			case 9:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Warlock");
-				break;
-			case 10:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Monk");
-				break;
-			case 11:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Druid");
-				break;
-			case 12:
-				result = Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Demon Hunter");
-				break;
+				switch (classID.Value)
+				{
+				case 1u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Warrior");
+				case 2u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Paladin");
+				case 3u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Hunter");
+				case 4u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Rogue");
+				case 5u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Priest");
+				case 6u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Death Knight");
+				case 7u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Shaman");
+				case 8u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Mage");
+				case 9u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Warlock");
+				case 10u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Monk");
+				case 11u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Druid");
+				case 12u:
+					return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Demon Hunter");
+				}
 			}
-			return result;
+			return Resources.Load<Sprite>("NewLoginPanel/Character-Selection-Unknown");
 		}
 
 		public static Font LoadFancyFont()
@@ -576,15 +566,15 @@ namespace WoWCompanionApp
 				{
 					foreach (GarrAbilityEffectRec garrAbilityEffectRec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID(record.ID))
 					{
-						if ((garrAbilityEffectRec.Flags & 1u) == 0u)
+						if ((garrAbilityEffectRec.Flags & 1) == 0)
 						{
 							bool flag = false;
-							uint abilityAction = garrAbilityEffectRec.AbilityAction;
+							byte abilityAction = garrAbilityEffectRec.AbilityAction;
 							switch (abilityAction)
 							{
-							case 0u:
+							case 0:
 								break;
-							case 1u:
+							case 1:
 							{
 								MissionFollowerSlot[] componentsInChildren = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 								int num = 0;
@@ -598,17 +588,17 @@ namespace WoWCompanionApp
 								flag = (num == 1);
 								break;
 							}
-							case 2u:
-							case 17u:
-							case 21u:
+							case 2:
+							case 17:
+							case 21:
 								flag = true;
 								break;
 							default:
-								if (abilityAction != 37u)
+								if (abilityAction != 37)
 								{
 								}
 								break;
-							case 5u:
+							case 5:
 							{
 								MissionFollowerSlot[] componentsInChildren2 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 								bool flag2 = false;
@@ -620,8 +610,8 @@ namespace WoWCompanionApp
 										GarrFollowerRec record2 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID);
 										if (record2 != null)
 										{
-											uint num2 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record2.HordeGarrFollRaceID : record2.AllianceGarrFollRaceID;
-											if (num2 == garrAbilityEffectRec.ActionRace)
+											uint num2 = (uint)((GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record2.HordeGarrFollRaceID : record2.AllianceGarrFollRaceID);
+											if (num2 == (uint)garrAbilityEffectRec.ActionRace)
 											{
 												flag2 = true;
 												break;
@@ -632,27 +622,27 @@ namespace WoWCompanionApp
 								flag = flag2;
 								break;
 							}
-							case 6u:
-								flag = ((float)missionDuration >= garrAbilityEffectRec.ActionHours * 3600f);
+							case 6:
+								flag = ((float)missionDuration >= (float)garrAbilityEffectRec.ActionHours * 3600f);
 								break;
-							case 7u:
-								flag = ((float)missionDuration <= garrAbilityEffectRec.ActionHours * 3600f);
+							case 7:
+								flag = ((float)missionDuration <= (float)garrAbilityEffectRec.ActionHours * 3600f);
 								break;
-							case 9u:
+							case 9:
 							{
 								GarrMissionRec record3 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-								flag = (record3 != null && record3.TravelDuration >= garrAbilityEffectRec.ActionHours * 3600f);
+								flag = (record3 != null && (float)record3.TravelDuration >= (float)garrAbilityEffectRec.ActionHours * 3600f);
 								break;
 							}
-							case 10u:
+							case 10:
 							{
 								GarrMissionRec record4 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-								flag = (record4 != null && record4.TravelDuration <= garrAbilityEffectRec.ActionHours * 3600f);
+								flag = (record4 != null && (float)record4.TravelDuration <= (float)garrAbilityEffectRec.ActionHours * 3600f);
 								break;
 							}
-							case 12u:
+							case 12:
 								break;
-							case 22u:
+							case 22:
 							{
 								MissionFollowerSlot[] componentsInChildren3 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 								bool flag3 = false;
@@ -664,8 +654,8 @@ namespace WoWCompanionApp
 										GarrFollowerRec record5 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID2);
 										if (record5 != null)
 										{
-											uint num3 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record5.HordeGarrClassSpecID : record5.AllianceGarrClassSpecID;
-											if (num3 == garrAbilityEffectRec.ActionRecordID)
+											uint num3 = (uint)((GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record5.HordeGarrClassSpecID : record5.AllianceGarrClassSpecID);
+											if ((ulong)num3 == (ulong)((long)garrAbilityEffectRec.ActionRecordID))
 											{
 												flag3 = true;
 												break;
@@ -676,7 +666,7 @@ namespace WoWCompanionApp
 								flag = flag3;
 								break;
 							}
-							case 23u:
+							case 23:
 							{
 								bool flag4 = false;
 								if (PersistentMissionData.missionDictionary.ContainsKey(garrMissionID))
@@ -698,14 +688,14 @@ namespace WoWCompanionApp
 								flag = flag4;
 								break;
 							}
-							case 26u:
+							case 26:
 							{
 								MissionFollowerSlot[] componentsInChildren4 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 								bool flag5 = false;
 								foreach (MissionFollowerSlot missionFollowerSlot4 in componentsInChildren4)
 								{
 									int currentGarrFollowerID3 = missionFollowerSlot4.GetCurrentGarrFollowerID();
-									if (currentGarrFollowerID3 > 0 && currentGarrFollowerID3 != wrapperGarrisonFollower.GarrFollowerID && (ulong)garrAbilityEffectRec.ActionRecordID == (ulong)((long)currentGarrFollowerID3))
+									if (currentGarrFollowerID3 > 0 && currentGarrFollowerID3 != wrapperGarrisonFollower.GarrFollowerID && garrAbilityEffectRec.ActionRecordID == currentGarrFollowerID3)
 									{
 										flag5 = true;
 										break;
@@ -736,7 +726,7 @@ namespace WoWCompanionApp
 				enumerable = from garrAbilityEffectRec in (from mechanic in componentsInChildren
 				where !mechanic.IsCountered() && mechanic.AbilityID() != 0
 				select mechanic).SelectMany((MissionMechanic mechanic) => StaticDB.garrAbilityEffectDB.GetRecordsByParentID(mechanic.AbilityID()))
-				where garrAbilityEffectRec.AbilityAction == 17u
+				where garrAbilityEffectRec.AbilityAction == 17
 				select garrAbilityEffectRec;
 				foreach (GarrAbilityEffectRec garrAbilityEffectRec3 in enumerable)
 				{
@@ -744,7 +734,7 @@ namespace WoWCompanionApp
 				}
 			}
 			enumerable = from garrAbilityEffectRec in followerList.SelectMany((WrapperGarrisonFollower follower) => follower.AbilityIDs.SelectMany((int abilityID) => StaticDB.garrAbilityEffectDB.GetRecordsByParentID(abilityID)))
-			where garrAbilityEffectRec.AbilityAction == 17u
+			where garrAbilityEffectRec.AbilityAction == 17
 			select garrAbilityEffectRec;
 			foreach (GarrAbilityEffectRec garrAbilityEffectRec2 in enumerable)
 			{
@@ -788,7 +778,7 @@ namespace WoWCompanionApp
 				MissionMechanic[] componentsInChildren = enemyPortraitsGroup.GetComponentsInChildren<MissionMechanic>(true);
 				return (from mechanic in componentsInChildren
 				where !mechanic.IsCountered() && mechanic.AbilityID() != 0
-				select mechanic).SelectMany((MissionMechanic mechanic) => StaticDB.garrAbilityEffectDB.GetRecordsByParentID(mechanic.AbilityID())).Any((GarrAbilityEffectRec garrAbilityEffectRec) => garrAbilityEffectRec.AbilityAction == 27u);
+				select mechanic).SelectMany((MissionMechanic mechanic) => StaticDB.garrAbilityEffectDB.GetRecordsByParentID(mechanic.AbilityID())).Any((GarrAbilityEffectRec garrAbilityEffectRec) => garrAbilityEffectRec.AbilityAction == 27);
 			}
 			return false;
 		}
@@ -855,7 +845,7 @@ namespace WoWCompanionApp
 						if (record.GarrAbilityID > 0u)
 						{
 							foreach (GarrAbilityEffectRec garrAbilityEffectRec in from rec in StaticDB.garrAbilityEffectDB.GetRecordsByParentID((int)record.GarrAbilityID)
-							where rec.AbilityAction == 17u
+							where rec.AbilityAction == 17
 							select rec)
 							{
 								num *= garrAbilityEffectRec.ActionValueFlat;
@@ -870,11 +860,21 @@ namespace WoWCompanionApp
 		public static string QuantityRule(string formatString, int quantity)
 		{
 			formatString = formatString.Replace("%d", quantity.ToString());
-			Regex regex = new Regex("\\|4(?<singular>[\\p{L}\\d\\s]+):(?<plural>[\\p{L}\\d\\s]+);");
+			Regex regex = new Regex("\\|4(?<singular>[\\p{L}\\d\\s]+):(?<plural1>[\\p{L}\\d\\s]+)(:(?<plural2>[\\p{L}\\d\\s]+))?;");
 			Match match = regex.Match(formatString);
 			if (match.Success)
 			{
-				return regex.Replace(formatString, (Match m) => (quantity <= 1) ? m.Groups["singular"].Value : m.Groups["plural"].Value);
+				return regex.Replace(formatString, delegate(Match m)
+				{
+					switch (GeneralHelpers.GetPluralIndex(quantity))
+					{
+					case 1:
+						return m.Groups["plural1"].Value;
+					case 2:
+						return m.Groups["plural2"].Value;
+					}
+					return m.Groups["singular"].Value;
+				});
 			}
 			if (formatString.Contains("|4"))
 			{
@@ -883,8 +883,12 @@ namespace WoWCompanionApp
 			return formatString;
 		}
 
-		public static int GetRussianPluralIndex(int quantity)
+		public static int GetPluralIndex(int quantity)
 		{
+			if (!MobileDeviceLocale.GetLanguageCode().StartsWith("ru", StringComparison.OrdinalIgnoreCase))
+			{
+				return (quantity <= 1) ? 0 : 1;
+			}
 			switch (quantity % 100)
 			{
 			case 11:

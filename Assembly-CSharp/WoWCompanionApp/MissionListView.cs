@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using WowStatConstants;
 using WowStaticData;
 
 namespace WoWCompanionApp
@@ -44,7 +45,7 @@ namespace WoWCompanionApp
 				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(wrapperGarrisonMission.MissionRecID);
 				if (record != null)
 				{
-					if (record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
+					if ((GARR_FOLLOWER_TYPE)record.GarrFollowerTypeID == GarrisonStatus.GarrisonFollowerType)
 					{
 						if (this.isInProgressMissionList)
 						{

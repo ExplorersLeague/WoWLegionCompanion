@@ -9,7 +9,7 @@ namespace WoWCompanionApp
 		public void InitializeReportDialog(CommunityChatMessage message)
 		{
 			this.m_reportedMessage = message;
-			this.m_headerText.text = "[PH]Report " + message.Author + ":";
+			this.m_headerText.text = MobileClient.FormatString(StaticDB.GetString("REPORT_PLAYER_FOR", "[PH]Report " + message.Author + ":"), message.Author);
 		}
 
 		private void Awake()
@@ -64,7 +64,8 @@ namespace WoWCompanionApp
 
 		public void SendOffReport()
 		{
-			ReportSystem.ReportPlayer(this.m_reasonForReport, new PlayerLocation?(this.m_reportedMessage.GetAsPlayerLocation()), this.m_inputField.text);
+			uint num = ReportSystem.InitiateReportPlayer(this.m_reasonForReport, new PlayerLocation?(this.m_reportedMessage.GetAsPlayerLocation()));
+			ReportSystem.SendReportPlayer(num, this.m_inputField.text);
 		}
 
 		public Text m_headerText;

@@ -9,7 +9,7 @@ namespace WoWCompanionApp
 		{
 		}
 
-		private void OnDisable()
+		private new void OnDisable()
 		{
 			if (GenericPopup.DisabledAction != null)
 			{
