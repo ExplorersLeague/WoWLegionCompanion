@@ -5,6 +5,83 @@ namespace bnet.protocol.channel
 {
 	public class RemoveMemberRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId MemberId { get; set; }
+
+		public void SetMemberId(EntityId val)
+		{
+			this.MemberId = val;
+		}
+
+		public uint Reason
+		{
+			get
+			{
+				return this._Reason;
+			}
+			set
+			{
+				this._Reason = value;
+				this.HasReason = true;
+			}
+		}
+
+		public void SetReason(uint val)
+		{
+			this.Reason = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.MemberId.GetHashCode();
+			if (this.HasReason)
+			{
+				num ^= this.Reason.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			RemoveMemberRequest removeMemberRequest = obj as RemoveMemberRequest;
+			return removeMemberRequest != null && this.HasAgentId == removeMemberRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(removeMemberRequest.AgentId)) && this.MemberId.Equals(removeMemberRequest.MemberId) && this.HasReason == removeMemberRequest.HasReason && (!this.HasReason || this.Reason.Equals(removeMemberRequest.Reason));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static RemoveMemberRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<RemoveMemberRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			RemoveMemberRequest.Deserialize(stream, this);
@@ -130,83 +207,6 @@ namespace bnet.protocol.channel
 				num += ProtocolParser.SizeOfUInt32(this.Reason);
 			}
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId MemberId { get; set; }
-
-		public void SetMemberId(EntityId val)
-		{
-			this.MemberId = val;
-		}
-
-		public uint Reason
-		{
-			get
-			{
-				return this._Reason;
-			}
-			set
-			{
-				this._Reason = value;
-				this.HasReason = true;
-			}
-		}
-
-		public void SetReason(uint val)
-		{
-			this.Reason = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.MemberId.GetHashCode();
-			if (this.HasReason)
-			{
-				num ^= this.Reason.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			RemoveMemberRequest removeMemberRequest = obj as RemoveMemberRequest;
-			return removeMemberRequest != null && this.HasAgentId == removeMemberRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(removeMemberRequest.AgentId)) && this.MemberId.Equals(removeMemberRequest.MemberId) && this.HasReason == removeMemberRequest.HasReason && (!this.HasReason || this.Reason.Equals(removeMemberRequest.Reason));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static RemoveMemberRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<RemoveMemberRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

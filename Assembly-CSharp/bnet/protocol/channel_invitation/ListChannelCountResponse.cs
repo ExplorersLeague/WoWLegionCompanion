@@ -6,6 +6,93 @@ namespace bnet.protocol.channel_invitation
 {
 	public class ListChannelCountResponse : IProtoBuf
 	{
+		public List<ChannelCount> Channel
+		{
+			get
+			{
+				return this._Channel;
+			}
+			set
+			{
+				this._Channel = value;
+			}
+		}
+
+		public List<ChannelCount> ChannelList
+		{
+			get
+			{
+				return this._Channel;
+			}
+		}
+
+		public int ChannelCount
+		{
+			get
+			{
+				return this._Channel.Count;
+			}
+		}
+
+		public void AddChannel(ChannelCount val)
+		{
+			this._Channel.Add(val);
+		}
+
+		public void ClearChannel()
+		{
+			this._Channel.Clear();
+		}
+
+		public void SetChannel(List<ChannelCount> val)
+		{
+			this.Channel = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (ChannelCount channelCount in this.Channel)
+			{
+				num ^= channelCount.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ListChannelCountResponse listChannelCountResponse = obj as ListChannelCountResponse;
+			if (listChannelCountResponse == null)
+			{
+				return false;
+			}
+			if (this.Channel.Count != listChannelCountResponse.Channel.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Channel.Count; i++)
+			{
+				if (!this.Channel[i].Equals(listChannelCountResponse.Channel[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ListChannelCountResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ListChannelCountResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ListChannelCountResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.channel_invitation
 				}
 			}
 			return num;
-		}
-
-		public List<ChannelCount> Channel
-		{
-			get
-			{
-				return this._Channel;
-			}
-			set
-			{
-				this._Channel = value;
-			}
-		}
-
-		public List<ChannelCount> ChannelList
-		{
-			get
-			{
-				return this._Channel;
-			}
-		}
-
-		public int ChannelCount
-		{
-			get
-			{
-				return this._Channel.Count;
-			}
-		}
-
-		public void AddChannel(ChannelCount val)
-		{
-			this._Channel.Add(val);
-		}
-
-		public void ClearChannel()
-		{
-			this._Channel.Clear();
-		}
-
-		public void SetChannel(List<ChannelCount> val)
-		{
-			this.Channel = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (ChannelCount channelCount in this.Channel)
-			{
-				num ^= channelCount.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ListChannelCountResponse listChannelCountResponse = obj as ListChannelCountResponse;
-			if (listChannelCountResponse == null)
-			{
-				return false;
-			}
-			if (this.Channel.Count != listChannelCountResponse.Channel.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Channel.Count; i++)
-			{
-				if (!this.Channel[i].Equals(listChannelCountResponse.Channel[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ListChannelCountResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ListChannelCountResponse>(bs, 0, -1);
 		}
 
 		private List<ChannelCount> _Channel = new List<ChannelCount>();

@@ -6,6 +6,54 @@ namespace bnet.protocol.account
 {
 	public class CurrencyRestriction : IProtoBuf
 	{
+		public string Currency { get; set; }
+
+		public void SetCurrency(string val)
+		{
+			this.Currency = val;
+		}
+
+		public string AuthenticatorCap { get; set; }
+
+		public void SetAuthenticatorCap(string val)
+		{
+			this.AuthenticatorCap = val;
+		}
+
+		public string SoftCap { get; set; }
+
+		public void SetSoftCap(string val)
+		{
+			this.SoftCap = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Currency.GetHashCode();
+			num ^= this.AuthenticatorCap.GetHashCode();
+			return num ^ this.SoftCap.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			CurrencyRestriction currencyRestriction = obj as CurrencyRestriction;
+			return currencyRestriction != null && this.Currency.Equals(currencyRestriction.Currency) && this.AuthenticatorCap.Equals(currencyRestriction.AuthenticatorCap) && this.SoftCap.Equals(currencyRestriction.SoftCap);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static CurrencyRestriction ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<CurrencyRestriction>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			CurrencyRestriction.Deserialize(stream, this);
@@ -116,54 +164,6 @@ namespace bnet.protocol.account
 			uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.SoftCap);
 			num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
 			return num + 3u;
-		}
-
-		public string Currency { get; set; }
-
-		public void SetCurrency(string val)
-		{
-			this.Currency = val;
-		}
-
-		public string AuthenticatorCap { get; set; }
-
-		public void SetAuthenticatorCap(string val)
-		{
-			this.AuthenticatorCap = val;
-		}
-
-		public string SoftCap { get; set; }
-
-		public void SetSoftCap(string val)
-		{
-			this.SoftCap = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Currency.GetHashCode();
-			num ^= this.AuthenticatorCap.GetHashCode();
-			return num ^ this.SoftCap.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			CurrencyRestriction currencyRestriction = obj as CurrencyRestriction;
-			return currencyRestriction != null && this.Currency.Equals(currencyRestriction.Currency) && this.AuthenticatorCap.Equals(currencyRestriction.AuthenticatorCap) && this.SoftCap.Equals(currencyRestriction.SoftCap);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static CurrencyRestriction ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<CurrencyRestriction>(bs, 0, -1);
 		}
 	}
 }

@@ -5,6 +5,75 @@ namespace bnet.protocol
 {
 	public class Identity : IProtoBuf
 	{
+		public EntityId AccountId
+		{
+			get
+			{
+				return this._AccountId;
+			}
+			set
+			{
+				this._AccountId = value;
+				this.HasAccountId = (value != null);
+			}
+		}
+
+		public void SetAccountId(EntityId val)
+		{
+			this.AccountId = val;
+		}
+
+		public EntityId GameAccountId
+		{
+			get
+			{
+				return this._GameAccountId;
+			}
+			set
+			{
+				this._GameAccountId = value;
+				this.HasGameAccountId = (value != null);
+			}
+		}
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAccountId)
+			{
+				num ^= this.AccountId.GetHashCode();
+			}
+			if (this.HasGameAccountId)
+			{
+				num ^= this.GameAccountId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Identity identity = obj as Identity;
+			return identity != null && this.HasAccountId == identity.HasAccountId && (!this.HasAccountId || this.AccountId.Equals(identity.AccountId)) && this.HasGameAccountId == identity.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(identity.GameAccountId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Identity ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Identity>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Identity.Deserialize(stream, this);
@@ -116,75 +185,6 @@ namespace bnet.protocol
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num;
-		}
-
-		public EntityId AccountId
-		{
-			get
-			{
-				return this._AccountId;
-			}
-			set
-			{
-				this._AccountId = value;
-				this.HasAccountId = (value != null);
-			}
-		}
-
-		public void SetAccountId(EntityId val)
-		{
-			this.AccountId = val;
-		}
-
-		public EntityId GameAccountId
-		{
-			get
-			{
-				return this._GameAccountId;
-			}
-			set
-			{
-				this._GameAccountId = value;
-				this.HasGameAccountId = (value != null);
-			}
-		}
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAccountId)
-			{
-				num ^= this.AccountId.GetHashCode();
-			}
-			if (this.HasGameAccountId)
-			{
-				num ^= this.GameAccountId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Identity identity = obj as Identity;
-			return identity != null && this.HasAccountId == identity.HasAccountId && (!this.HasAccountId || this.AccountId.Equals(identity.AccountId)) && this.HasGameAccountId == identity.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(identity.GameAccountId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Identity ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Identity>(bs, 0, -1);
 		}
 
 		public bool HasAccountId;

@@ -6,6 +6,93 @@ namespace bnet.protocol.account
 {
 	public class GetEBalanceRestrictionsResponse : IProtoBuf
 	{
+		public List<CurrencyRestriction> CurrencyRestrictions
+		{
+			get
+			{
+				return this._CurrencyRestrictions;
+			}
+			set
+			{
+				this._CurrencyRestrictions = value;
+			}
+		}
+
+		public List<CurrencyRestriction> CurrencyRestrictionsList
+		{
+			get
+			{
+				return this._CurrencyRestrictions;
+			}
+		}
+
+		public int CurrencyRestrictionsCount
+		{
+			get
+			{
+				return this._CurrencyRestrictions.Count;
+			}
+		}
+
+		public void AddCurrencyRestrictions(CurrencyRestriction val)
+		{
+			this._CurrencyRestrictions.Add(val);
+		}
+
+		public void ClearCurrencyRestrictions()
+		{
+			this._CurrencyRestrictions.Clear();
+		}
+
+		public void SetCurrencyRestrictions(List<CurrencyRestriction> val)
+		{
+			this.CurrencyRestrictions = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (CurrencyRestriction currencyRestriction in this.CurrencyRestrictions)
+			{
+				num ^= currencyRestriction.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetEBalanceRestrictionsResponse getEBalanceRestrictionsResponse = obj as GetEBalanceRestrictionsResponse;
+			if (getEBalanceRestrictionsResponse == null)
+			{
+				return false;
+			}
+			if (this.CurrencyRestrictions.Count != getEBalanceRestrictionsResponse.CurrencyRestrictions.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.CurrencyRestrictions.Count; i++)
+			{
+				if (!this.CurrencyRestrictions[i].Equals(getEBalanceRestrictionsResponse.CurrencyRestrictions[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetEBalanceRestrictionsResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetEBalanceRestrictionsResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetEBalanceRestrictionsResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.account
 				}
 			}
 			return num;
-		}
-
-		public List<CurrencyRestriction> CurrencyRestrictions
-		{
-			get
-			{
-				return this._CurrencyRestrictions;
-			}
-			set
-			{
-				this._CurrencyRestrictions = value;
-			}
-		}
-
-		public List<CurrencyRestriction> CurrencyRestrictionsList
-		{
-			get
-			{
-				return this._CurrencyRestrictions;
-			}
-		}
-
-		public int CurrencyRestrictionsCount
-		{
-			get
-			{
-				return this._CurrencyRestrictions.Count;
-			}
-		}
-
-		public void AddCurrencyRestrictions(CurrencyRestriction val)
-		{
-			this._CurrencyRestrictions.Add(val);
-		}
-
-		public void ClearCurrencyRestrictions()
-		{
-			this._CurrencyRestrictions.Clear();
-		}
-
-		public void SetCurrencyRestrictions(List<CurrencyRestriction> val)
-		{
-			this.CurrencyRestrictions = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (CurrencyRestriction currencyRestriction in this.CurrencyRestrictions)
-			{
-				num ^= currencyRestriction.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetEBalanceRestrictionsResponse getEBalanceRestrictionsResponse = obj as GetEBalanceRestrictionsResponse;
-			if (getEBalanceRestrictionsResponse == null)
-			{
-				return false;
-			}
-			if (this.CurrencyRestrictions.Count != getEBalanceRestrictionsResponse.CurrencyRestrictions.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.CurrencyRestrictions.Count; i++)
-			{
-				if (!this.CurrencyRestrictions[i].Equals(getEBalanceRestrictionsResponse.CurrencyRestrictions[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetEBalanceRestrictionsResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetEBalanceRestrictionsResponse>(bs, 0, -1);
 		}
 
 		private List<CurrencyRestriction> _CurrencyRestrictions = new List<CurrencyRestriction>();

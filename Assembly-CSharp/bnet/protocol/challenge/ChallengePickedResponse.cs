@@ -5,6 +5,53 @@ namespace bnet.protocol.challenge
 {
 	public class ChallengePickedResponse : IProtoBuf
 	{
+		public byte[] Data
+		{
+			get
+			{
+				return this._Data;
+			}
+			set
+			{
+				this._Data = value;
+				this.HasData = (value != null);
+			}
+		}
+
+		public void SetData(byte[] val)
+		{
+			this.Data = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasData)
+			{
+				num ^= this.Data.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChallengePickedResponse challengePickedResponse = obj as ChallengePickedResponse;
+			return challengePickedResponse != null && this.HasData == challengePickedResponse.HasData && (!this.HasData || this.Data.Equals(challengePickedResponse.Data));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChallengePickedResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChallengePickedResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChallengePickedResponse.Deserialize(stream, this);
@@ -87,53 +134,6 @@ namespace bnet.protocol.challenge
 				num += ProtocolParser.SizeOfUInt32(this.Data.Length) + (uint)this.Data.Length;
 			}
 			return num;
-		}
-
-		public byte[] Data
-		{
-			get
-			{
-				return this._Data;
-			}
-			set
-			{
-				this._Data = value;
-				this.HasData = (value != null);
-			}
-		}
-
-		public void SetData(byte[] val)
-		{
-			this.Data = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasData)
-			{
-				num ^= this.Data.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChallengePickedResponse challengePickedResponse = obj as ChallengePickedResponse;
-			return challengePickedResponse != null && this.HasData == challengePickedResponse.HasData && (!this.HasData || this.Data.Equals(challengePickedResponse.Data));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChallengePickedResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChallengePickedResponse>(bs, 0, -1);
 		}
 
 		public bool HasData;

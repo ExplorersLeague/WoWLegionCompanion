@@ -5,6 +5,53 @@ namespace bnet.protocol.challenge
 {
 	public class SendChallengeToUserResponse : IProtoBuf
 	{
+		public uint Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				this._Id = value;
+				this.HasId = true;
+			}
+		}
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasId)
+			{
+				num ^= this.Id.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SendChallengeToUserResponse sendChallengeToUserResponse = obj as SendChallengeToUserResponse;
+			return sendChallengeToUserResponse != null && this.HasId == sendChallengeToUserResponse.HasId && (!this.HasId || this.Id.Equals(sendChallengeToUserResponse.Id));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SendChallengeToUserResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SendChallengeToUserResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SendChallengeToUserResponse.Deserialize(stream, this);
@@ -87,53 +134,6 @@ namespace bnet.protocol.challenge
 				num += ProtocolParser.SizeOfUInt32(this.Id);
 			}
 			return num;
-		}
-
-		public uint Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				this._Id = value;
-				this.HasId = true;
-			}
-		}
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasId)
-			{
-				num ^= this.Id.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SendChallengeToUserResponse sendChallengeToUserResponse = obj as SendChallengeToUserResponse;
-			return sendChallengeToUserResponse != null && this.HasId == sendChallengeToUserResponse.HasId && (!this.HasId || this.Id.Equals(sendChallengeToUserResponse.Id));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SendChallengeToUserResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SendChallengeToUserResponse>(bs, 0, -1);
 		}
 
 		public bool HasId;

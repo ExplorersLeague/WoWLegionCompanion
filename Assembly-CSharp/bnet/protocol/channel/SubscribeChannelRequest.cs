@@ -5,6 +5,68 @@ namespace bnet.protocol.channel
 {
 	public class SubscribeChannelRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId ChannelId { get; set; }
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.ChannelId.GetHashCode();
+			return num ^ this.ObjectId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscribeChannelRequest subscribeChannelRequest = obj as SubscribeChannelRequest;
+			return subscribeChannelRequest != null && this.HasAgentId == subscribeChannelRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(subscribeChannelRequest.AgentId)) && this.ChannelId.Equals(subscribeChannelRequest.ChannelId) && this.ObjectId.Equals(subscribeChannelRequest.ObjectId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscribeChannelRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscribeChannelRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscribeChannelRequest.Deserialize(stream, this);
@@ -123,68 +185,6 @@ namespace bnet.protocol.channel
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			num += ProtocolParser.SizeOfUInt64(this.ObjectId);
 			return num + 2u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId ChannelId { get; set; }
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.ChannelId.GetHashCode();
-			return num ^ this.ObjectId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscribeChannelRequest subscribeChannelRequest = obj as SubscribeChannelRequest;
-			return subscribeChannelRequest != null && this.HasAgentId == subscribeChannelRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(subscribeChannelRequest.AgentId)) && this.ChannelId.Equals(subscribeChannelRequest.ChannelId) && this.ObjectId.Equals(subscribeChannelRequest.ObjectId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscribeChannelRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscribeChannelRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

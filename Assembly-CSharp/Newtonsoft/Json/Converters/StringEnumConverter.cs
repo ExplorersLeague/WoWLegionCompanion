@@ -90,7 +90,7 @@ namespace Newtonsoft.Json.Converters
 					foreach (FieldInfo fieldInfo in t.GetFields())
 					{
 						string name = fieldInfo.Name;
-						string text = (from System.Runtime.Serialization.EnumMemberAttribute a in fieldInfo.GetCustomAttributes(typeof(System.Runtime.Serialization.EnumMemberAttribute), true)
+						string text = (from EnumMemberAttribute a in fieldInfo.GetCustomAttributes(typeof(EnumMemberAttribute), true)
 						select a.Value).SingleOrDefault<string>() ?? fieldInfo.Name;
 						string text2;
 						if (bidirectionalDictionary.TryGetBySecond(text, out text2))

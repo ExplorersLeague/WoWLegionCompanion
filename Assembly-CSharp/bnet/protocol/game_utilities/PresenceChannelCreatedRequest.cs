@@ -5,6 +5,105 @@ namespace bnet.protocol.game_utilities
 {
 	public class PresenceChannelCreatedRequest : IProtoBuf
 	{
+		public EntityId Id { get; set; }
+
+		public void SetId(EntityId val)
+		{
+			this.Id = val;
+		}
+
+		public EntityId GameAccountId
+		{
+			get
+			{
+				return this._GameAccountId;
+			}
+			set
+			{
+				this._GameAccountId = value;
+				this.HasGameAccountId = (value != null);
+			}
+		}
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public EntityId BnetAccountId
+		{
+			get
+			{
+				return this._BnetAccountId;
+			}
+			set
+			{
+				this._BnetAccountId = value;
+				this.HasBnetAccountId = (value != null);
+			}
+		}
+
+		public void SetBnetAccountId(EntityId val)
+		{
+			this.BnetAccountId = val;
+		}
+
+		public ProcessId Host
+		{
+			get
+			{
+				return this._Host;
+			}
+			set
+			{
+				this._Host = value;
+				this.HasHost = (value != null);
+			}
+		}
+
+		public void SetHost(ProcessId val)
+		{
+			this.Host = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Id.GetHashCode();
+			if (this.HasGameAccountId)
+			{
+				num ^= this.GameAccountId.GetHashCode();
+			}
+			if (this.HasBnetAccountId)
+			{
+				num ^= this.BnetAccountId.GetHashCode();
+			}
+			if (this.HasHost)
+			{
+				num ^= this.Host.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			PresenceChannelCreatedRequest presenceChannelCreatedRequest = obj as PresenceChannelCreatedRequest;
+			return presenceChannelCreatedRequest != null && this.Id.Equals(presenceChannelCreatedRequest.Id) && this.HasGameAccountId == presenceChannelCreatedRequest.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(presenceChannelCreatedRequest.GameAccountId)) && this.HasBnetAccountId == presenceChannelCreatedRequest.HasBnetAccountId && (!this.HasBnetAccountId || this.BnetAccountId.Equals(presenceChannelCreatedRequest.BnetAccountId)) && this.HasHost == presenceChannelCreatedRequest.HasHost && (!this.HasHost || this.Host.Equals(presenceChannelCreatedRequest.Host));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static PresenceChannelCreatedRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<PresenceChannelCreatedRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			PresenceChannelCreatedRequest.Deserialize(stream, this);
@@ -159,105 +258,6 @@ namespace bnet.protocol.game_utilities
 				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
 			}
 			return num + 1u;
-		}
-
-		public EntityId Id { get; set; }
-
-		public void SetId(EntityId val)
-		{
-			this.Id = val;
-		}
-
-		public EntityId GameAccountId
-		{
-			get
-			{
-				return this._GameAccountId;
-			}
-			set
-			{
-				this._GameAccountId = value;
-				this.HasGameAccountId = (value != null);
-			}
-		}
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public EntityId BnetAccountId
-		{
-			get
-			{
-				return this._BnetAccountId;
-			}
-			set
-			{
-				this._BnetAccountId = value;
-				this.HasBnetAccountId = (value != null);
-			}
-		}
-
-		public void SetBnetAccountId(EntityId val)
-		{
-			this.BnetAccountId = val;
-		}
-
-		public ProcessId Host
-		{
-			get
-			{
-				return this._Host;
-			}
-			set
-			{
-				this._Host = value;
-				this.HasHost = (value != null);
-			}
-		}
-
-		public void SetHost(ProcessId val)
-		{
-			this.Host = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Id.GetHashCode();
-			if (this.HasGameAccountId)
-			{
-				num ^= this.GameAccountId.GetHashCode();
-			}
-			if (this.HasBnetAccountId)
-			{
-				num ^= this.BnetAccountId.GetHashCode();
-			}
-			if (this.HasHost)
-			{
-				num ^= this.Host.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			PresenceChannelCreatedRequest presenceChannelCreatedRequest = obj as PresenceChannelCreatedRequest;
-			return presenceChannelCreatedRequest != null && this.Id.Equals(presenceChannelCreatedRequest.Id) && this.HasGameAccountId == presenceChannelCreatedRequest.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(presenceChannelCreatedRequest.GameAccountId)) && this.HasBnetAccountId == presenceChannelCreatedRequest.HasBnetAccountId && (!this.HasBnetAccountId || this.BnetAccountId.Equals(presenceChannelCreatedRequest.BnetAccountId)) && this.HasHost == presenceChannelCreatedRequest.HasHost && (!this.HasHost || this.Host.Equals(presenceChannelCreatedRequest.Host));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static PresenceChannelCreatedRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<PresenceChannelCreatedRequest>(bs, 0, -1);
 		}
 
 		public bool HasGameAccountId;

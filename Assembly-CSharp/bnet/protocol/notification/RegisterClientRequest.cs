@@ -5,6 +5,38 @@ namespace bnet.protocol.notification
 {
 	public class RegisterClientRequest : IProtoBuf
 	{
+		public EntityId EntityId { get; set; }
+
+		public void SetEntityId(EntityId val)
+		{
+			this.EntityId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.EntityId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			RegisterClientRequest registerClientRequest = obj as RegisterClientRequest;
+			return registerClientRequest != null && this.EntityId.Equals(registerClientRequest.EntityId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static RegisterClientRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<RegisterClientRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			RegisterClientRequest.Deserialize(stream, this);
@@ -90,38 +122,6 @@ namespace bnet.protocol.notification
 			uint serializedSize = this.EntityId.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 1u;
-		}
-
-		public EntityId EntityId { get; set; }
-
-		public void SetEntityId(EntityId val)
-		{
-			this.EntityId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.EntityId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			RegisterClientRequest registerClientRequest = obj as RegisterClientRequest;
-			return registerClientRequest != null && this.EntityId.Equals(registerClientRequest.EntityId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static RegisterClientRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<RegisterClientRequest>(bs, 0, -1);
 		}
 	}
 }

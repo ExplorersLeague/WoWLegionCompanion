@@ -7,6 +7,193 @@ namespace bnet.protocol.channel
 {
 	public class FindChannelOptions : IProtoBuf
 	{
+		public uint StartIndex
+		{
+			get
+			{
+				return this._StartIndex;
+			}
+			set
+			{
+				this._StartIndex = value;
+				this.HasStartIndex = true;
+			}
+		}
+
+		public void SetStartIndex(uint val)
+		{
+			this.StartIndex = val;
+		}
+
+		public uint MaxResults
+		{
+			get
+			{
+				return this._MaxResults;
+			}
+			set
+			{
+				this._MaxResults = value;
+				this.HasMaxResults = true;
+			}
+		}
+
+		public void SetMaxResults(uint val)
+		{
+			this.MaxResults = val;
+		}
+
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				this._Name = value;
+				this.HasName = (value != null);
+			}
+		}
+
+		public void SetName(string val)
+		{
+			this.Name = val;
+		}
+
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public uint Locale
+		{
+			get
+			{
+				return this._Locale;
+			}
+			set
+			{
+				this._Locale = value;
+				this.HasLocale = true;
+			}
+		}
+
+		public void SetLocale(uint val)
+		{
+			this.Locale = val;
+		}
+
+		public uint CapacityFull
+		{
+			get
+			{
+				return this._CapacityFull;
+			}
+			set
+			{
+				this._CapacityFull = value;
+				this.HasCapacityFull = true;
+			}
+		}
+
+		public void SetCapacityFull(uint val)
+		{
+			this.CapacityFull = val;
+		}
+
+		public AttributeFilter AttributeFilter { get; set; }
+
+		public void SetAttributeFilter(AttributeFilter val)
+		{
+			this.AttributeFilter = val;
+		}
+
+		public string ChannelType
+		{
+			get
+			{
+				return this._ChannelType;
+			}
+			set
+			{
+				this._ChannelType = value;
+				this.HasChannelType = (value != null);
+			}
+		}
+
+		public void SetChannelType(string val)
+		{
+			this.ChannelType = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasStartIndex)
+			{
+				num ^= this.StartIndex.GetHashCode();
+			}
+			if (this.HasMaxResults)
+			{
+				num ^= this.MaxResults.GetHashCode();
+			}
+			if (this.HasName)
+			{
+				num ^= this.Name.GetHashCode();
+			}
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			if (this.HasLocale)
+			{
+				num ^= this.Locale.GetHashCode();
+			}
+			if (this.HasCapacityFull)
+			{
+				num ^= this.CapacityFull.GetHashCode();
+			}
+			num ^= this.AttributeFilter.GetHashCode();
+			if (this.HasChannelType)
+			{
+				num ^= this.ChannelType.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FindChannelOptions findChannelOptions = obj as FindChannelOptions;
+			return findChannelOptions != null && this.HasStartIndex == findChannelOptions.HasStartIndex && (!this.HasStartIndex || this.StartIndex.Equals(findChannelOptions.StartIndex)) && this.HasMaxResults == findChannelOptions.HasMaxResults && (!this.HasMaxResults || this.MaxResults.Equals(findChannelOptions.MaxResults)) && this.HasName == findChannelOptions.HasName && (!this.HasName || this.Name.Equals(findChannelOptions.Name)) && this.HasProgram == findChannelOptions.HasProgram && (!this.HasProgram || this.Program.Equals(findChannelOptions.Program)) && this.HasLocale == findChannelOptions.HasLocale && (!this.HasLocale || this.Locale.Equals(findChannelOptions.Locale)) && this.HasCapacityFull == findChannelOptions.HasCapacityFull && (!this.HasCapacityFull || this.CapacityFull.Equals(findChannelOptions.CapacityFull)) && this.AttributeFilter.Equals(findChannelOptions.AttributeFilter) && this.HasChannelType == findChannelOptions.HasChannelType && (!this.HasChannelType || this.ChannelType.Equals(findChannelOptions.ChannelType));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FindChannelOptions ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FindChannelOptions>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FindChannelOptions.Deserialize(stream, this);
@@ -217,193 +404,6 @@ namespace bnet.protocol.channel
 				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
 			}
 			return num + 1u;
-		}
-
-		public uint StartIndex
-		{
-			get
-			{
-				return this._StartIndex;
-			}
-			set
-			{
-				this._StartIndex = value;
-				this.HasStartIndex = true;
-			}
-		}
-
-		public void SetStartIndex(uint val)
-		{
-			this.StartIndex = val;
-		}
-
-		public uint MaxResults
-		{
-			get
-			{
-				return this._MaxResults;
-			}
-			set
-			{
-				this._MaxResults = value;
-				this.HasMaxResults = true;
-			}
-		}
-
-		public void SetMaxResults(uint val)
-		{
-			this.MaxResults = val;
-		}
-
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				this._Name = value;
-				this.HasName = (value != null);
-			}
-		}
-
-		public void SetName(string val)
-		{
-			this.Name = val;
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public uint Locale
-		{
-			get
-			{
-				return this._Locale;
-			}
-			set
-			{
-				this._Locale = value;
-				this.HasLocale = true;
-			}
-		}
-
-		public void SetLocale(uint val)
-		{
-			this.Locale = val;
-		}
-
-		public uint CapacityFull
-		{
-			get
-			{
-				return this._CapacityFull;
-			}
-			set
-			{
-				this._CapacityFull = value;
-				this.HasCapacityFull = true;
-			}
-		}
-
-		public void SetCapacityFull(uint val)
-		{
-			this.CapacityFull = val;
-		}
-
-		public AttributeFilter AttributeFilter { get; set; }
-
-		public void SetAttributeFilter(AttributeFilter val)
-		{
-			this.AttributeFilter = val;
-		}
-
-		public string ChannelType
-		{
-			get
-			{
-				return this._ChannelType;
-			}
-			set
-			{
-				this._ChannelType = value;
-				this.HasChannelType = (value != null);
-			}
-		}
-
-		public void SetChannelType(string val)
-		{
-			this.ChannelType = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasStartIndex)
-			{
-				num ^= this.StartIndex.GetHashCode();
-			}
-			if (this.HasMaxResults)
-			{
-				num ^= this.MaxResults.GetHashCode();
-			}
-			if (this.HasName)
-			{
-				num ^= this.Name.GetHashCode();
-			}
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			if (this.HasLocale)
-			{
-				num ^= this.Locale.GetHashCode();
-			}
-			if (this.HasCapacityFull)
-			{
-				num ^= this.CapacityFull.GetHashCode();
-			}
-			num ^= this.AttributeFilter.GetHashCode();
-			if (this.HasChannelType)
-			{
-				num ^= this.ChannelType.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FindChannelOptions findChannelOptions = obj as FindChannelOptions;
-			return findChannelOptions != null && this.HasStartIndex == findChannelOptions.HasStartIndex && (!this.HasStartIndex || this.StartIndex.Equals(findChannelOptions.StartIndex)) && this.HasMaxResults == findChannelOptions.HasMaxResults && (!this.HasMaxResults || this.MaxResults.Equals(findChannelOptions.MaxResults)) && this.HasName == findChannelOptions.HasName && (!this.HasName || this.Name.Equals(findChannelOptions.Name)) && this.HasProgram == findChannelOptions.HasProgram && (!this.HasProgram || this.Program.Equals(findChannelOptions.Program)) && this.HasLocale == findChannelOptions.HasLocale && (!this.HasLocale || this.Locale.Equals(findChannelOptions.Locale)) && this.HasCapacityFull == findChannelOptions.HasCapacityFull && (!this.HasCapacityFull || this.CapacityFull.Equals(findChannelOptions.CapacityFull)) && this.AttributeFilter.Equals(findChannelOptions.AttributeFilter) && this.HasChannelType == findChannelOptions.HasChannelType && (!this.HasChannelType || this.ChannelType.Equals(findChannelOptions.ChannelType));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FindChannelOptions ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FindChannelOptions>(bs, 0, -1);
 		}
 
 		public bool HasStartIndex;

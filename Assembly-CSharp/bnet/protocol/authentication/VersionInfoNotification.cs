@@ -5,6 +5,53 @@ namespace bnet.protocol.authentication
 {
 	public class VersionInfoNotification : IProtoBuf
 	{
+		public VersionInfo VersionInfo
+		{
+			get
+			{
+				return this._VersionInfo;
+			}
+			set
+			{
+				this._VersionInfo = value;
+				this.HasVersionInfo = (value != null);
+			}
+		}
+
+		public void SetVersionInfo(VersionInfo val)
+		{
+			this.VersionInfo = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasVersionInfo)
+			{
+				num ^= this.VersionInfo.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			VersionInfoNotification versionInfoNotification = obj as VersionInfoNotification;
+			return versionInfoNotification != null && this.HasVersionInfo == versionInfoNotification.HasVersionInfo && (!this.HasVersionInfo || this.VersionInfo.Equals(versionInfoNotification.VersionInfo));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static VersionInfoNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<VersionInfoNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			VersionInfoNotification.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.authentication
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public VersionInfo VersionInfo
-		{
-			get
-			{
-				return this._VersionInfo;
-			}
-			set
-			{
-				this._VersionInfo = value;
-				this.HasVersionInfo = (value != null);
-			}
-		}
-
-		public void SetVersionInfo(VersionInfo val)
-		{
-			this.VersionInfo = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasVersionInfo)
-			{
-				num ^= this.VersionInfo.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			VersionInfoNotification versionInfoNotification = obj as VersionInfoNotification;
-			return versionInfoNotification != null && this.HasVersionInfo == versionInfoNotification.HasVersionInfo && (!this.HasVersionInfo || this.VersionInfo.Equals(versionInfoNotification.VersionInfo));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static VersionInfoNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<VersionInfoNotification>(bs, 0, -1);
 		}
 
 		public bool HasVersionInfo;

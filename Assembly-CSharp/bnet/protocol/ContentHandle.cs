@@ -6,6 +6,77 @@ namespace bnet.protocol
 {
 	public class ContentHandle : IProtoBuf
 	{
+		public uint Region { get; set; }
+
+		public void SetRegion(uint val)
+		{
+			this.Region = val;
+		}
+
+		public uint Usage { get; set; }
+
+		public void SetUsage(uint val)
+		{
+			this.Usage = val;
+		}
+
+		public byte[] Hash { get; set; }
+
+		public void SetHash(byte[] val)
+		{
+			this.Hash = val;
+		}
+
+		public string ProtoUrl
+		{
+			get
+			{
+				return this._ProtoUrl;
+			}
+			set
+			{
+				this._ProtoUrl = value;
+				this.HasProtoUrl = (value != null);
+			}
+		}
+
+		public void SetProtoUrl(string val)
+		{
+			this.ProtoUrl = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Region.GetHashCode();
+			num ^= this.Usage.GetHashCode();
+			num ^= this.Hash.GetHashCode();
+			if (this.HasProtoUrl)
+			{
+				num ^= this.ProtoUrl.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ContentHandle contentHandle = obj as ContentHandle;
+			return contentHandle != null && this.Region.Equals(contentHandle.Region) && this.Usage.Equals(contentHandle.Usage) && this.Hash.Equals(contentHandle.Hash) && this.HasProtoUrl == contentHandle.HasProtoUrl && (!this.HasProtoUrl || this.ProtoUrl.Equals(contentHandle.ProtoUrl));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ContentHandle ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ContentHandle>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ContentHandle.Deserialize(stream, this);
@@ -125,77 +196,6 @@ namespace bnet.protocol
 				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
 			}
 			return num + 3u;
-		}
-
-		public uint Region { get; set; }
-
-		public void SetRegion(uint val)
-		{
-			this.Region = val;
-		}
-
-		public uint Usage { get; set; }
-
-		public void SetUsage(uint val)
-		{
-			this.Usage = val;
-		}
-
-		public byte[] Hash { get; set; }
-
-		public void SetHash(byte[] val)
-		{
-			this.Hash = val;
-		}
-
-		public string ProtoUrl
-		{
-			get
-			{
-				return this._ProtoUrl;
-			}
-			set
-			{
-				this._ProtoUrl = value;
-				this.HasProtoUrl = (value != null);
-			}
-		}
-
-		public void SetProtoUrl(string val)
-		{
-			this.ProtoUrl = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Region.GetHashCode();
-			num ^= this.Usage.GetHashCode();
-			num ^= this.Hash.GetHashCode();
-			if (this.HasProtoUrl)
-			{
-				num ^= this.ProtoUrl.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ContentHandle contentHandle = obj as ContentHandle;
-			return contentHandle != null && this.Region.Equals(contentHandle.Region) && this.Usage.Equals(contentHandle.Usage) && this.Hash.Equals(contentHandle.Hash) && this.HasProtoUrl == contentHandle.HasProtoUrl && (!this.HasProtoUrl || this.ProtoUrl.Equals(contentHandle.ProtoUrl));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ContentHandle ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ContentHandle>(bs, 0, -1);
 		}
 
 		public bool HasProtoUrl;

@@ -5,6 +5,75 @@ namespace bnet.protocol.account
 {
 	public class GetGameTimeRemainingInfoRequest : IProtoBuf
 	{
+		public EntityId GameAccountId
+		{
+			get
+			{
+				return this._GameAccountId;
+			}
+			set
+			{
+				this._GameAccountId = value;
+				this.HasGameAccountId = (value != null);
+			}
+		}
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public EntityId AccountId
+		{
+			get
+			{
+				return this._AccountId;
+			}
+			set
+			{
+				this._AccountId = value;
+				this.HasAccountId = (value != null);
+			}
+		}
+
+		public void SetAccountId(EntityId val)
+		{
+			this.AccountId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasGameAccountId)
+			{
+				num ^= this.GameAccountId.GetHashCode();
+			}
+			if (this.HasAccountId)
+			{
+				num ^= this.AccountId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetGameTimeRemainingInfoRequest getGameTimeRemainingInfoRequest = obj as GetGameTimeRemainingInfoRequest;
+			return getGameTimeRemainingInfoRequest != null && this.HasGameAccountId == getGameTimeRemainingInfoRequest.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(getGameTimeRemainingInfoRequest.GameAccountId)) && this.HasAccountId == getGameTimeRemainingInfoRequest.HasAccountId && (!this.HasAccountId || this.AccountId.Equals(getGameTimeRemainingInfoRequest.AccountId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetGameTimeRemainingInfoRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetGameTimeRemainingInfoRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetGameTimeRemainingInfoRequest.Deserialize(stream, this);
@@ -116,75 +185,6 @@ namespace bnet.protocol.account
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num;
-		}
-
-		public EntityId GameAccountId
-		{
-			get
-			{
-				return this._GameAccountId;
-			}
-			set
-			{
-				this._GameAccountId = value;
-				this.HasGameAccountId = (value != null);
-			}
-		}
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public EntityId AccountId
-		{
-			get
-			{
-				return this._AccountId;
-			}
-			set
-			{
-				this._AccountId = value;
-				this.HasAccountId = (value != null);
-			}
-		}
-
-		public void SetAccountId(EntityId val)
-		{
-			this.AccountId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasGameAccountId)
-			{
-				num ^= this.GameAccountId.GetHashCode();
-			}
-			if (this.HasAccountId)
-			{
-				num ^= this.AccountId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetGameTimeRemainingInfoRequest getGameTimeRemainingInfoRequest = obj as GetGameTimeRemainingInfoRequest;
-			return getGameTimeRemainingInfoRequest != null && this.HasGameAccountId == getGameTimeRemainingInfoRequest.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(getGameTimeRemainingInfoRequest.GameAccountId)) && this.HasAccountId == getGameTimeRemainingInfoRequest.HasAccountId && (!this.HasAccountId || this.AccountId.Equals(getGameTimeRemainingInfoRequest.AccountId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetGameTimeRemainingInfoRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetGameTimeRemainingInfoRequest>(bs, 0, -1);
 		}
 
 		public bool HasGameAccountId;

@@ -6,6 +6,305 @@ namespace bnet.protocol.account
 {
 	public class Wallet : IProtoBuf
 	{
+		public uint Region { get; set; }
+
+		public void SetRegion(uint val)
+		{
+			this.Region = val;
+		}
+
+		public ulong WalletId { get; set; }
+
+		public void SetWalletId(ulong val)
+		{
+			this.WalletId = val;
+		}
+
+		public uint WalletType { get; set; }
+
+		public void SetWalletType(uint val)
+		{
+			this.WalletType = val;
+		}
+
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				this._Description = value;
+				this.HasDescription = (value != null);
+			}
+		}
+
+		public void SetDescription(string val)
+		{
+			this.Description = val;
+		}
+
+		public uint CountryId { get; set; }
+
+		public void SetCountryId(uint val)
+		{
+			this.CountryId = val;
+		}
+
+		public string State
+		{
+			get
+			{
+				return this._State;
+			}
+			set
+			{
+				this._State = value;
+				this.HasState = (value != null);
+			}
+		}
+
+		public void SetState(string val)
+		{
+			this.State = val;
+		}
+
+		public string City
+		{
+			get
+			{
+				return this._City;
+			}
+			set
+			{
+				this._City = value;
+				this.HasCity = (value != null);
+			}
+		}
+
+		public void SetCity(string val)
+		{
+			this.City = val;
+		}
+
+		public string PostalCode
+		{
+			get
+			{
+				return this._PostalCode;
+			}
+			set
+			{
+				this._PostalCode = value;
+				this.HasPostalCode = (value != null);
+			}
+		}
+
+		public void SetPostalCode(string val)
+		{
+			this.PostalCode = val;
+		}
+
+		public byte[] PaymentInfo
+		{
+			get
+			{
+				return this._PaymentInfo;
+			}
+			set
+			{
+				this._PaymentInfo = value;
+				this.HasPaymentInfo = (value != null);
+			}
+		}
+
+		public void SetPaymentInfo(byte[] val)
+		{
+			this.PaymentInfo = val;
+		}
+
+		public string Bin
+		{
+			get
+			{
+				return this._Bin;
+			}
+			set
+			{
+				this._Bin = value;
+				this.HasBin = (value != null);
+			}
+		}
+
+		public void SetBin(string val)
+		{
+			this.Bin = val;
+		}
+
+		public string LocaleId
+		{
+			get
+			{
+				return this._LocaleId;
+			}
+			set
+			{
+				this._LocaleId = value;
+				this.HasLocaleId = (value != null);
+			}
+		}
+
+		public void SetLocaleId(string val)
+		{
+			this.LocaleId = val;
+		}
+
+		public string Street
+		{
+			get
+			{
+				return this._Street;
+			}
+			set
+			{
+				this._Street = value;
+				this.HasStreet = (value != null);
+			}
+		}
+
+		public void SetStreet(string val)
+		{
+			this.Street = val;
+		}
+
+		public string FirstName
+		{
+			get
+			{
+				return this._FirstName;
+			}
+			set
+			{
+				this._FirstName = value;
+				this.HasFirstName = (value != null);
+			}
+		}
+
+		public void SetFirstName(string val)
+		{
+			this.FirstName = val;
+		}
+
+		public string LastName
+		{
+			get
+			{
+				return this._LastName;
+			}
+			set
+			{
+				this._LastName = value;
+				this.HasLastName = (value != null);
+			}
+		}
+
+		public void SetLastName(string val)
+		{
+			this.LastName = val;
+		}
+
+		public ulong BirthDate
+		{
+			get
+			{
+				return this._BirthDate;
+			}
+			set
+			{
+				this._BirthDate = value;
+				this.HasBirthDate = true;
+			}
+		}
+
+		public void SetBirthDate(ulong val)
+		{
+			this.BirthDate = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Region.GetHashCode();
+			num ^= this.WalletId.GetHashCode();
+			num ^= this.WalletType.GetHashCode();
+			if (this.HasDescription)
+			{
+				num ^= this.Description.GetHashCode();
+			}
+			num ^= this.CountryId.GetHashCode();
+			if (this.HasState)
+			{
+				num ^= this.State.GetHashCode();
+			}
+			if (this.HasCity)
+			{
+				num ^= this.City.GetHashCode();
+			}
+			if (this.HasPostalCode)
+			{
+				num ^= this.PostalCode.GetHashCode();
+			}
+			if (this.HasPaymentInfo)
+			{
+				num ^= this.PaymentInfo.GetHashCode();
+			}
+			if (this.HasBin)
+			{
+				num ^= this.Bin.GetHashCode();
+			}
+			if (this.HasLocaleId)
+			{
+				num ^= this.LocaleId.GetHashCode();
+			}
+			if (this.HasStreet)
+			{
+				num ^= this.Street.GetHashCode();
+			}
+			if (this.HasFirstName)
+			{
+				num ^= this.FirstName.GetHashCode();
+			}
+			if (this.HasLastName)
+			{
+				num ^= this.LastName.GetHashCode();
+			}
+			if (this.HasBirthDate)
+			{
+				num ^= this.BirthDate.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Wallet wallet = obj as Wallet;
+			return wallet != null && this.Region.Equals(wallet.Region) && this.WalletId.Equals(wallet.WalletId) && this.WalletType.Equals(wallet.WalletType) && this.HasDescription == wallet.HasDescription && (!this.HasDescription || this.Description.Equals(wallet.Description)) && this.CountryId.Equals(wallet.CountryId) && this.HasState == wallet.HasState && (!this.HasState || this.State.Equals(wallet.State)) && this.HasCity == wallet.HasCity && (!this.HasCity || this.City.Equals(wallet.City)) && this.HasPostalCode == wallet.HasPostalCode && (!this.HasPostalCode || this.PostalCode.Equals(wallet.PostalCode)) && this.HasPaymentInfo == wallet.HasPaymentInfo && (!this.HasPaymentInfo || this.PaymentInfo.Equals(wallet.PaymentInfo)) && this.HasBin == wallet.HasBin && (!this.HasBin || this.Bin.Equals(wallet.Bin)) && this.HasLocaleId == wallet.HasLocaleId && (!this.HasLocaleId || this.LocaleId.Equals(wallet.LocaleId)) && this.HasStreet == wallet.HasStreet && (!this.HasStreet || this.Street.Equals(wallet.Street)) && this.HasFirstName == wallet.HasFirstName && (!this.HasFirstName || this.FirstName.Equals(wallet.FirstName)) && this.HasLastName == wallet.HasLastName && (!this.HasLastName || this.LastName.Equals(wallet.LastName)) && this.HasBirthDate == wallet.HasBirthDate && (!this.HasBirthDate || this.BirthDate.Equals(wallet.BirthDate));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Wallet ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Wallet>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Wallet.Deserialize(stream, this);
@@ -307,305 +606,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt64(this.BirthDate);
 			}
 			return num + 4u;
-		}
-
-		public uint Region { get; set; }
-
-		public void SetRegion(uint val)
-		{
-			this.Region = val;
-		}
-
-		public ulong WalletId { get; set; }
-
-		public void SetWalletId(ulong val)
-		{
-			this.WalletId = val;
-		}
-
-		public uint WalletType { get; set; }
-
-		public void SetWalletType(uint val)
-		{
-			this.WalletType = val;
-		}
-
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				this._Description = value;
-				this.HasDescription = (value != null);
-			}
-		}
-
-		public void SetDescription(string val)
-		{
-			this.Description = val;
-		}
-
-		public uint CountryId { get; set; }
-
-		public void SetCountryId(uint val)
-		{
-			this.CountryId = val;
-		}
-
-		public string State
-		{
-			get
-			{
-				return this._State;
-			}
-			set
-			{
-				this._State = value;
-				this.HasState = (value != null);
-			}
-		}
-
-		public void SetState(string val)
-		{
-			this.State = val;
-		}
-
-		public string City
-		{
-			get
-			{
-				return this._City;
-			}
-			set
-			{
-				this._City = value;
-				this.HasCity = (value != null);
-			}
-		}
-
-		public void SetCity(string val)
-		{
-			this.City = val;
-		}
-
-		public string PostalCode
-		{
-			get
-			{
-				return this._PostalCode;
-			}
-			set
-			{
-				this._PostalCode = value;
-				this.HasPostalCode = (value != null);
-			}
-		}
-
-		public void SetPostalCode(string val)
-		{
-			this.PostalCode = val;
-		}
-
-		public byte[] PaymentInfo
-		{
-			get
-			{
-				return this._PaymentInfo;
-			}
-			set
-			{
-				this._PaymentInfo = value;
-				this.HasPaymentInfo = (value != null);
-			}
-		}
-
-		public void SetPaymentInfo(byte[] val)
-		{
-			this.PaymentInfo = val;
-		}
-
-		public string Bin
-		{
-			get
-			{
-				return this._Bin;
-			}
-			set
-			{
-				this._Bin = value;
-				this.HasBin = (value != null);
-			}
-		}
-
-		public void SetBin(string val)
-		{
-			this.Bin = val;
-		}
-
-		public string LocaleId
-		{
-			get
-			{
-				return this._LocaleId;
-			}
-			set
-			{
-				this._LocaleId = value;
-				this.HasLocaleId = (value != null);
-			}
-		}
-
-		public void SetLocaleId(string val)
-		{
-			this.LocaleId = val;
-		}
-
-		public string Street
-		{
-			get
-			{
-				return this._Street;
-			}
-			set
-			{
-				this._Street = value;
-				this.HasStreet = (value != null);
-			}
-		}
-
-		public void SetStreet(string val)
-		{
-			this.Street = val;
-		}
-
-		public string FirstName
-		{
-			get
-			{
-				return this._FirstName;
-			}
-			set
-			{
-				this._FirstName = value;
-				this.HasFirstName = (value != null);
-			}
-		}
-
-		public void SetFirstName(string val)
-		{
-			this.FirstName = val;
-		}
-
-		public string LastName
-		{
-			get
-			{
-				return this._LastName;
-			}
-			set
-			{
-				this._LastName = value;
-				this.HasLastName = (value != null);
-			}
-		}
-
-		public void SetLastName(string val)
-		{
-			this.LastName = val;
-		}
-
-		public ulong BirthDate
-		{
-			get
-			{
-				return this._BirthDate;
-			}
-			set
-			{
-				this._BirthDate = value;
-				this.HasBirthDate = true;
-			}
-		}
-
-		public void SetBirthDate(ulong val)
-		{
-			this.BirthDate = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Region.GetHashCode();
-			num ^= this.WalletId.GetHashCode();
-			num ^= this.WalletType.GetHashCode();
-			if (this.HasDescription)
-			{
-				num ^= this.Description.GetHashCode();
-			}
-			num ^= this.CountryId.GetHashCode();
-			if (this.HasState)
-			{
-				num ^= this.State.GetHashCode();
-			}
-			if (this.HasCity)
-			{
-				num ^= this.City.GetHashCode();
-			}
-			if (this.HasPostalCode)
-			{
-				num ^= this.PostalCode.GetHashCode();
-			}
-			if (this.HasPaymentInfo)
-			{
-				num ^= this.PaymentInfo.GetHashCode();
-			}
-			if (this.HasBin)
-			{
-				num ^= this.Bin.GetHashCode();
-			}
-			if (this.HasLocaleId)
-			{
-				num ^= this.LocaleId.GetHashCode();
-			}
-			if (this.HasStreet)
-			{
-				num ^= this.Street.GetHashCode();
-			}
-			if (this.HasFirstName)
-			{
-				num ^= this.FirstName.GetHashCode();
-			}
-			if (this.HasLastName)
-			{
-				num ^= this.LastName.GetHashCode();
-			}
-			if (this.HasBirthDate)
-			{
-				num ^= this.BirthDate.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Wallet wallet = obj as Wallet;
-			return wallet != null && this.Region.Equals(wallet.Region) && this.WalletId.Equals(wallet.WalletId) && this.WalletType.Equals(wallet.WalletType) && this.HasDescription == wallet.HasDescription && (!this.HasDescription || this.Description.Equals(wallet.Description)) && this.CountryId.Equals(wallet.CountryId) && this.HasState == wallet.HasState && (!this.HasState || this.State.Equals(wallet.State)) && this.HasCity == wallet.HasCity && (!this.HasCity || this.City.Equals(wallet.City)) && this.HasPostalCode == wallet.HasPostalCode && (!this.HasPostalCode || this.PostalCode.Equals(wallet.PostalCode)) && this.HasPaymentInfo == wallet.HasPaymentInfo && (!this.HasPaymentInfo || this.PaymentInfo.Equals(wallet.PaymentInfo)) && this.HasBin == wallet.HasBin && (!this.HasBin || this.Bin.Equals(wallet.Bin)) && this.HasLocaleId == wallet.HasLocaleId && (!this.HasLocaleId || this.LocaleId.Equals(wallet.LocaleId)) && this.HasStreet == wallet.HasStreet && (!this.HasStreet || this.Street.Equals(wallet.Street)) && this.HasFirstName == wallet.HasFirstName && (!this.HasFirstName || this.FirstName.Equals(wallet.FirstName)) && this.HasLastName == wallet.HasLastName && (!this.HasLastName || this.LastName.Equals(wallet.LastName)) && this.HasBirthDate == wallet.HasBirthDate && (!this.HasBirthDate || this.BirthDate.Equals(wallet.BirthDate));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Wallet ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Wallet>(bs, 0, -1);
 		}
 
 		public bool HasDescription;

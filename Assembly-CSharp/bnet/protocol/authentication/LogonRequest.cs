@@ -6,303 +6,6 @@ namespace bnet.protocol.authentication
 {
 	public class LogonRequest : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			LogonRequest.Deserialize(stream, this);
-		}
-
-		public static LogonRequest Deserialize(Stream stream, LogonRequest instance)
-		{
-			return LogonRequest.Deserialize(stream, instance, -1L);
-		}
-
-		public static LogonRequest DeserializeLengthDelimited(Stream stream)
-		{
-			LogonRequest logonRequest = new LogonRequest();
-			LogonRequest.DeserializeLengthDelimited(stream, logonRequest);
-			return logonRequest;
-		}
-
-		public static LogonRequest DeserializeLengthDelimited(Stream stream, LogonRequest instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return LogonRequest.Deserialize(stream, instance, num);
-		}
-
-		public static LogonRequest Deserialize(Stream stream, LogonRequest instance, long limit)
-		{
-			instance.DisconnectOnCookieFail = false;
-			instance.AllowLogonQueueNotifications = false;
-			instance.WebClientVerification = false;
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 10)
-				{
-					if (num != 18)
-					{
-						if (num != 26)
-						{
-							if (num != 34)
-							{
-								if (num != 42)
-								{
-									if (num != 48)
-									{
-										if (num != 56)
-										{
-											if (num != 66)
-											{
-												if (num != 72)
-												{
-													if (num != 80)
-													{
-														if (num != 88)
-														{
-															if (num != 98)
-															{
-																if (num != 114)
-																{
-																	Key key = ProtocolParser.ReadKey((byte)num, stream);
-																	uint field = key.Field;
-																	if (field == 0u)
-																	{
-																		throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-																	}
-																	ProtocolParser.SkipKey(stream, key);
-																}
-																else
-																{
-																	instance.UserAgent = ProtocolParser.ReadString(stream);
-																}
-															}
-															else
-															{
-																instance.CachedWebCredentials = ProtocolParser.ReadBytes(stream);
-															}
-														}
-														else
-														{
-															instance.WebClientVerification = ProtocolParser.ReadBool(stream);
-														}
-													}
-													else
-													{
-														instance.AllowLogonQueueNotifications = ProtocolParser.ReadBool(stream);
-													}
-												}
-												else
-												{
-													instance.DisconnectOnCookieFail = ProtocolParser.ReadBool(stream);
-												}
-											}
-											else
-											{
-												instance.SsoId = ProtocolParser.ReadBytes(stream);
-											}
-										}
-										else
-										{
-											instance.PublicComputer = ProtocolParser.ReadBool(stream);
-										}
-									}
-									else
-									{
-										instance.ApplicationVersion = (int)ProtocolParser.ReadUInt64(stream);
-									}
-								}
-								else
-								{
-									instance.Version = ProtocolParser.ReadString(stream);
-								}
-							}
-							else
-							{
-								instance.Email = ProtocolParser.ReadString(stream);
-							}
-						}
-						else
-						{
-							instance.Locale = ProtocolParser.ReadString(stream);
-						}
-					}
-					else
-					{
-						instance.Platform = ProtocolParser.ReadString(stream);
-					}
-				}
-				else
-				{
-					instance.Program = ProtocolParser.ReadString(stream);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			LogonRequest.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, LogonRequest instance)
-		{
-			if (instance.HasProgram)
-			{
-				stream.WriteByte(10);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Program));
-			}
-			if (instance.HasPlatform)
-			{
-				stream.WriteByte(18);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Platform));
-			}
-			if (instance.HasLocale)
-			{
-				stream.WriteByte(26);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Locale));
-			}
-			if (instance.HasEmail)
-			{
-				stream.WriteByte(34);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Email));
-			}
-			if (instance.HasVersion)
-			{
-				stream.WriteByte(42);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Version));
-			}
-			if (instance.HasApplicationVersion)
-			{
-				stream.WriteByte(48);
-				ProtocolParser.WriteUInt64(stream, (ulong)((long)instance.ApplicationVersion));
-			}
-			if (instance.HasPublicComputer)
-			{
-				stream.WriteByte(56);
-				ProtocolParser.WriteBool(stream, instance.PublicComputer);
-			}
-			if (instance.HasSsoId)
-			{
-				stream.WriteByte(66);
-				ProtocolParser.WriteBytes(stream, instance.SsoId);
-			}
-			if (instance.HasDisconnectOnCookieFail)
-			{
-				stream.WriteByte(72);
-				ProtocolParser.WriteBool(stream, instance.DisconnectOnCookieFail);
-			}
-			if (instance.HasAllowLogonQueueNotifications)
-			{
-				stream.WriteByte(80);
-				ProtocolParser.WriteBool(stream, instance.AllowLogonQueueNotifications);
-			}
-			if (instance.HasWebClientVerification)
-			{
-				stream.WriteByte(88);
-				ProtocolParser.WriteBool(stream, instance.WebClientVerification);
-			}
-			if (instance.HasCachedWebCredentials)
-			{
-				stream.WriteByte(98);
-				ProtocolParser.WriteBytes(stream, instance.CachedWebCredentials);
-			}
-			if (instance.HasUserAgent)
-			{
-				stream.WriteByte(114);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.UserAgent));
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasProgram)
-			{
-				num += 1u;
-				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Program);
-				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-			}
-			if (this.HasPlatform)
-			{
-				num += 1u;
-				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.Platform);
-				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
-			}
-			if (this.HasLocale)
-			{
-				num += 1u;
-				uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.Locale);
-				num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
-			}
-			if (this.HasEmail)
-			{
-				num += 1u;
-				uint byteCount4 = (uint)Encoding.UTF8.GetByteCount(this.Email);
-				num += ProtocolParser.SizeOfUInt32(byteCount4) + byteCount4;
-			}
-			if (this.HasVersion)
-			{
-				num += 1u;
-				uint byteCount5 = (uint)Encoding.UTF8.GetByteCount(this.Version);
-				num += ProtocolParser.SizeOfUInt32(byteCount5) + byteCount5;
-			}
-			if (this.HasApplicationVersion)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64((ulong)((long)this.ApplicationVersion));
-			}
-			if (this.HasPublicComputer)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasSsoId)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.SsoId.Length) + (uint)this.SsoId.Length;
-			}
-			if (this.HasDisconnectOnCookieFail)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasAllowLogonQueueNotifications)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasWebClientVerification)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasCachedWebCredentials)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.CachedWebCredentials.Length) + (uint)this.CachedWebCredentials.Length;
-			}
-			if (this.HasUserAgent)
-			{
-				num += 1u;
-				uint byteCount6 = (uint)Encoding.UTF8.GetByteCount(this.UserAgent);
-				num += ProtocolParser.SizeOfUInt32(byteCount6) + byteCount6;
-			}
-			return num;
-		}
-
 		public string Program
 		{
 			get
@@ -612,6 +315,303 @@ namespace bnet.protocol.authentication
 		public static LogonRequest ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<LogonRequest>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			LogonRequest.Deserialize(stream, this);
+		}
+
+		public static LogonRequest Deserialize(Stream stream, LogonRequest instance)
+		{
+			return LogonRequest.Deserialize(stream, instance, -1L);
+		}
+
+		public static LogonRequest DeserializeLengthDelimited(Stream stream)
+		{
+			LogonRequest logonRequest = new LogonRequest();
+			LogonRequest.DeserializeLengthDelimited(stream, logonRequest);
+			return logonRequest;
+		}
+
+		public static LogonRequest DeserializeLengthDelimited(Stream stream, LogonRequest instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return LogonRequest.Deserialize(stream, instance, num);
+		}
+
+		public static LogonRequest Deserialize(Stream stream, LogonRequest instance, long limit)
+		{
+			instance.DisconnectOnCookieFail = false;
+			instance.AllowLogonQueueNotifications = false;
+			instance.WebClientVerification = false;
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 10)
+				{
+					if (num != 18)
+					{
+						if (num != 26)
+						{
+							if (num != 34)
+							{
+								if (num != 42)
+								{
+									if (num != 48)
+									{
+										if (num != 56)
+										{
+											if (num != 66)
+											{
+												if (num != 72)
+												{
+													if (num != 80)
+													{
+														if (num != 88)
+														{
+															if (num != 98)
+															{
+																if (num != 114)
+																{
+																	Key key = ProtocolParser.ReadKey((byte)num, stream);
+																	uint field = key.Field;
+																	if (field == 0u)
+																	{
+																		throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+																	}
+																	ProtocolParser.SkipKey(stream, key);
+																}
+																else
+																{
+																	instance.UserAgent = ProtocolParser.ReadString(stream);
+																}
+															}
+															else
+															{
+																instance.CachedWebCredentials = ProtocolParser.ReadBytes(stream);
+															}
+														}
+														else
+														{
+															instance.WebClientVerification = ProtocolParser.ReadBool(stream);
+														}
+													}
+													else
+													{
+														instance.AllowLogonQueueNotifications = ProtocolParser.ReadBool(stream);
+													}
+												}
+												else
+												{
+													instance.DisconnectOnCookieFail = ProtocolParser.ReadBool(stream);
+												}
+											}
+											else
+											{
+												instance.SsoId = ProtocolParser.ReadBytes(stream);
+											}
+										}
+										else
+										{
+											instance.PublicComputer = ProtocolParser.ReadBool(stream);
+										}
+									}
+									else
+									{
+										instance.ApplicationVersion = (int)ProtocolParser.ReadUInt64(stream);
+									}
+								}
+								else
+								{
+									instance.Version = ProtocolParser.ReadString(stream);
+								}
+							}
+							else
+							{
+								instance.Email = ProtocolParser.ReadString(stream);
+							}
+						}
+						else
+						{
+							instance.Locale = ProtocolParser.ReadString(stream);
+						}
+					}
+					else
+					{
+						instance.Platform = ProtocolParser.ReadString(stream);
+					}
+				}
+				else
+				{
+					instance.Program = ProtocolParser.ReadString(stream);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			LogonRequest.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, LogonRequest instance)
+		{
+			if (instance.HasProgram)
+			{
+				stream.WriteByte(10);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Program));
+			}
+			if (instance.HasPlatform)
+			{
+				stream.WriteByte(18);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Platform));
+			}
+			if (instance.HasLocale)
+			{
+				stream.WriteByte(26);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Locale));
+			}
+			if (instance.HasEmail)
+			{
+				stream.WriteByte(34);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Email));
+			}
+			if (instance.HasVersion)
+			{
+				stream.WriteByte(42);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Version));
+			}
+			if (instance.HasApplicationVersion)
+			{
+				stream.WriteByte(48);
+				ProtocolParser.WriteUInt64(stream, (ulong)((long)instance.ApplicationVersion));
+			}
+			if (instance.HasPublicComputer)
+			{
+				stream.WriteByte(56);
+				ProtocolParser.WriteBool(stream, instance.PublicComputer);
+			}
+			if (instance.HasSsoId)
+			{
+				stream.WriteByte(66);
+				ProtocolParser.WriteBytes(stream, instance.SsoId);
+			}
+			if (instance.HasDisconnectOnCookieFail)
+			{
+				stream.WriteByte(72);
+				ProtocolParser.WriteBool(stream, instance.DisconnectOnCookieFail);
+			}
+			if (instance.HasAllowLogonQueueNotifications)
+			{
+				stream.WriteByte(80);
+				ProtocolParser.WriteBool(stream, instance.AllowLogonQueueNotifications);
+			}
+			if (instance.HasWebClientVerification)
+			{
+				stream.WriteByte(88);
+				ProtocolParser.WriteBool(stream, instance.WebClientVerification);
+			}
+			if (instance.HasCachedWebCredentials)
+			{
+				stream.WriteByte(98);
+				ProtocolParser.WriteBytes(stream, instance.CachedWebCredentials);
+			}
+			if (instance.HasUserAgent)
+			{
+				stream.WriteByte(114);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.UserAgent));
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasProgram)
+			{
+				num += 1u;
+				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Program);
+				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+			}
+			if (this.HasPlatform)
+			{
+				num += 1u;
+				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.Platform);
+				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
+			}
+			if (this.HasLocale)
+			{
+				num += 1u;
+				uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.Locale);
+				num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
+			}
+			if (this.HasEmail)
+			{
+				num += 1u;
+				uint byteCount4 = (uint)Encoding.UTF8.GetByteCount(this.Email);
+				num += ProtocolParser.SizeOfUInt32(byteCount4) + byteCount4;
+			}
+			if (this.HasVersion)
+			{
+				num += 1u;
+				uint byteCount5 = (uint)Encoding.UTF8.GetByteCount(this.Version);
+				num += ProtocolParser.SizeOfUInt32(byteCount5) + byteCount5;
+			}
+			if (this.HasApplicationVersion)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64((ulong)((long)this.ApplicationVersion));
+			}
+			if (this.HasPublicComputer)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasSsoId)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.SsoId.Length) + (uint)this.SsoId.Length;
+			}
+			if (this.HasDisconnectOnCookieFail)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasAllowLogonQueueNotifications)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasWebClientVerification)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasCachedWebCredentials)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.CachedWebCredentials.Length) + (uint)this.CachedWebCredentials.Length;
+			}
+			if (this.HasUserAgent)
+			{
+				num += 1u;
+				uint byteCount6 = (uint)Encoding.UTF8.GetByteCount(this.UserAgent);
+				num += ProtocolParser.SizeOfUInt32(byteCount6) + byteCount6;
+			}
+			return num;
 		}
 
 		public bool HasProgram;

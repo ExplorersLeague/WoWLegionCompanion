@@ -5,6 +5,135 @@ namespace bnet.protocol.channel_invitation
 {
 	public class SuggestInvitationRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId ChannelId { get; set; }
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public EntityId TargetId { get; set; }
+
+		public void SetTargetId(EntityId val)
+		{
+			this.TargetId = val;
+		}
+
+		public EntityId ApprovalId
+		{
+			get
+			{
+				return this._ApprovalId;
+			}
+			set
+			{
+				this._ApprovalId = value;
+				this.HasApprovalId = (value != null);
+			}
+		}
+
+		public void SetApprovalId(EntityId val)
+		{
+			this.ApprovalId = val;
+		}
+
+		public Identity AgentIdentity
+		{
+			get
+			{
+				return this._AgentIdentity;
+			}
+			set
+			{
+				this._AgentIdentity = value;
+				this.HasAgentIdentity = (value != null);
+			}
+		}
+
+		public void SetAgentIdentity(Identity val)
+		{
+			this.AgentIdentity = val;
+		}
+
+		public AccountInfo AgentInfo
+		{
+			get
+			{
+				return this._AgentInfo;
+			}
+			set
+			{
+				this._AgentInfo = value;
+				this.HasAgentInfo = (value != null);
+			}
+		}
+
+		public void SetAgentInfo(AccountInfo val)
+		{
+			this.AgentInfo = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.ChannelId.GetHashCode();
+			num ^= this.TargetId.GetHashCode();
+			if (this.HasApprovalId)
+			{
+				num ^= this.ApprovalId.GetHashCode();
+			}
+			if (this.HasAgentIdentity)
+			{
+				num ^= this.AgentIdentity.GetHashCode();
+			}
+			if (this.HasAgentInfo)
+			{
+				num ^= this.AgentInfo.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SuggestInvitationRequest suggestInvitationRequest = obj as SuggestInvitationRequest;
+			return suggestInvitationRequest != null && this.HasAgentId == suggestInvitationRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(suggestInvitationRequest.AgentId)) && this.ChannelId.Equals(suggestInvitationRequest.ChannelId) && this.TargetId.Equals(suggestInvitationRequest.TargetId) && this.HasApprovalId == suggestInvitationRequest.HasApprovalId && (!this.HasApprovalId || this.ApprovalId.Equals(suggestInvitationRequest.ApprovalId)) && this.HasAgentIdentity == suggestInvitationRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(suggestInvitationRequest.AgentIdentity)) && this.HasAgentInfo == suggestInvitationRequest.HasAgentInfo && (!this.HasAgentInfo || this.AgentInfo.Equals(suggestInvitationRequest.AgentInfo));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SuggestInvitationRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SuggestInvitationRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SuggestInvitationRequest.Deserialize(stream, this);
@@ -202,135 +331,6 @@ namespace bnet.protocol.channel_invitation
 				num += serializedSize6 + ProtocolParser.SizeOfUInt32(serializedSize6);
 			}
 			return num + 2u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId ChannelId { get; set; }
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public EntityId TargetId { get; set; }
-
-		public void SetTargetId(EntityId val)
-		{
-			this.TargetId = val;
-		}
-
-		public EntityId ApprovalId
-		{
-			get
-			{
-				return this._ApprovalId;
-			}
-			set
-			{
-				this._ApprovalId = value;
-				this.HasApprovalId = (value != null);
-			}
-		}
-
-		public void SetApprovalId(EntityId val)
-		{
-			this.ApprovalId = val;
-		}
-
-		public Identity AgentIdentity
-		{
-			get
-			{
-				return this._AgentIdentity;
-			}
-			set
-			{
-				this._AgentIdentity = value;
-				this.HasAgentIdentity = (value != null);
-			}
-		}
-
-		public void SetAgentIdentity(Identity val)
-		{
-			this.AgentIdentity = val;
-		}
-
-		public AccountInfo AgentInfo
-		{
-			get
-			{
-				return this._AgentInfo;
-			}
-			set
-			{
-				this._AgentInfo = value;
-				this.HasAgentInfo = (value != null);
-			}
-		}
-
-		public void SetAgentInfo(AccountInfo val)
-		{
-			this.AgentInfo = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.ChannelId.GetHashCode();
-			num ^= this.TargetId.GetHashCode();
-			if (this.HasApprovalId)
-			{
-				num ^= this.ApprovalId.GetHashCode();
-			}
-			if (this.HasAgentIdentity)
-			{
-				num ^= this.AgentIdentity.GetHashCode();
-			}
-			if (this.HasAgentInfo)
-			{
-				num ^= this.AgentInfo.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SuggestInvitationRequest suggestInvitationRequest = obj as SuggestInvitationRequest;
-			return suggestInvitationRequest != null && this.HasAgentId == suggestInvitationRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(suggestInvitationRequest.AgentId)) && this.ChannelId.Equals(suggestInvitationRequest.ChannelId) && this.TargetId.Equals(suggestInvitationRequest.TargetId) && this.HasApprovalId == suggestInvitationRequest.HasApprovalId && (!this.HasApprovalId || this.ApprovalId.Equals(suggestInvitationRequest.ApprovalId)) && this.HasAgentIdentity == suggestInvitationRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(suggestInvitationRequest.AgentIdentity)) && this.HasAgentInfo == suggestInvitationRequest.HasAgentInfo && (!this.HasAgentInfo || this.AgentInfo.Equals(suggestInvitationRequest.AgentInfo));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SuggestInvitationRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SuggestInvitationRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

@@ -8,238 +8,6 @@ namespace bnet.protocol.friends
 {
 	public class Friend : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			Friend.Deserialize(stream, this);
-		}
-
-		public static Friend Deserialize(Stream stream, Friend instance)
-		{
-			return Friend.Deserialize(stream, instance, -1L);
-		}
-
-		public static Friend DeserializeLengthDelimited(Stream stream)
-		{
-			Friend friend = new Friend();
-			Friend.DeserializeLengthDelimited(stream, friend);
-			return friend;
-		}
-
-		public static Friend DeserializeLengthDelimited(Stream stream, Friend instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return Friend.Deserialize(stream, instance, num);
-		}
-
-		public static Friend Deserialize(Stream stream, Friend instance, long limit)
-		{
-			if (instance.Attribute == null)
-			{
-				instance.Attribute = new List<bnet.protocol.attribute.Attribute>();
-			}
-			if (instance.Role == null)
-			{
-				instance.Role = new List<uint>();
-			}
-			instance.Privileges = 0UL;
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 10)
-				{
-					if (num != 18)
-					{
-						if (num != 26)
-						{
-							if (num != 32)
-							{
-								if (num != 40)
-								{
-									if (num != 50)
-									{
-										if (num != 58)
-										{
-											Key key = ProtocolParser.ReadKey((byte)num, stream);
-											uint field = key.Field;
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
-										}
-										else
-										{
-											instance.BattleTag = ProtocolParser.ReadString(stream);
-										}
-									}
-									else
-									{
-										instance.FullName = ProtocolParser.ReadString(stream);
-									}
-								}
-								else
-								{
-									instance.AttributesEpoch = ProtocolParser.ReadUInt64(stream);
-								}
-							}
-							else
-							{
-								instance.Privileges = ProtocolParser.ReadUInt64(stream);
-							}
-						}
-						else
-						{
-							long num2 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-							num2 += stream.Position;
-							while (stream.Position < num2)
-							{
-								instance.Role.Add(ProtocolParser.ReadUInt32(stream));
-							}
-							if (stream.Position != num2)
-							{
-								throw new ProtocolBufferException("Read too many bytes in packed data");
-							}
-						}
-					}
-					else
-					{
-						instance.Attribute.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
-					}
-				}
-				else if (instance.Id == null)
-				{
-					instance.Id = EntityId.DeserializeLengthDelimited(stream);
-				}
-				else
-				{
-					EntityId.DeserializeLengthDelimited(stream, instance.Id);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			Friend.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, Friend instance)
-		{
-			if (instance.Id == null)
-			{
-				throw new ArgumentNullException("Id", "Required by proto specification.");
-			}
-			stream.WriteByte(10);
-			ProtocolParser.WriteUInt32(stream, instance.Id.GetSerializedSize());
-			EntityId.Serialize(stream, instance.Id);
-			if (instance.Attribute.Count > 0)
-			{
-				foreach (bnet.protocol.attribute.Attribute attribute in instance.Attribute)
-				{
-					stream.WriteByte(18);
-					ProtocolParser.WriteUInt32(stream, attribute.GetSerializedSize());
-					bnet.protocol.attribute.Attribute.Serialize(stream, attribute);
-				}
-			}
-			if (instance.Role.Count > 0)
-			{
-				stream.WriteByte(26);
-				uint num = 0u;
-				foreach (uint val in instance.Role)
-				{
-					num += ProtocolParser.SizeOfUInt32(val);
-				}
-				ProtocolParser.WriteUInt32(stream, num);
-				foreach (uint val2 in instance.Role)
-				{
-					ProtocolParser.WriteUInt32(stream, val2);
-				}
-			}
-			if (instance.HasPrivileges)
-			{
-				stream.WriteByte(32);
-				ProtocolParser.WriteUInt64(stream, instance.Privileges);
-			}
-			if (instance.HasAttributesEpoch)
-			{
-				stream.WriteByte(40);
-				ProtocolParser.WriteUInt64(stream, instance.AttributesEpoch);
-			}
-			if (instance.HasFullName)
-			{
-				stream.WriteByte(50);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.FullName));
-			}
-			if (instance.HasBattleTag)
-			{
-				stream.WriteByte(58);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.BattleTag));
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			uint serializedSize = this.Id.GetSerializedSize();
-			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-			if (this.Attribute.Count > 0)
-			{
-				foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-				{
-					num += 1u;
-					uint serializedSize2 = attribute.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			if (this.Role.Count > 0)
-			{
-				num += 1u;
-				uint num2 = num;
-				foreach (uint val in this.Role)
-				{
-					num += ProtocolParser.SizeOfUInt32(val);
-				}
-				num += ProtocolParser.SizeOfUInt32(num - num2);
-			}
-			if (this.HasPrivileges)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.Privileges);
-			}
-			if (this.HasAttributesEpoch)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.AttributesEpoch);
-			}
-			if (this.HasFullName)
-			{
-				num += 1u;
-				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.FullName);
-				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-			}
-			if (this.HasBattleTag)
-			{
-				num += 1u;
-				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.BattleTag);
-				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
-			}
-			num += 1u;
-			return num;
-		}
-
 		public EntityId Id { get; set; }
 
 		public void SetId(EntityId val)
@@ -483,6 +251,238 @@ namespace bnet.protocol.friends
 		public static Friend ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<Friend>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			Friend.Deserialize(stream, this);
+		}
+
+		public static Friend Deserialize(Stream stream, Friend instance)
+		{
+			return Friend.Deserialize(stream, instance, -1L);
+		}
+
+		public static Friend DeserializeLengthDelimited(Stream stream)
+		{
+			Friend friend = new Friend();
+			Friend.DeserializeLengthDelimited(stream, friend);
+			return friend;
+		}
+
+		public static Friend DeserializeLengthDelimited(Stream stream, Friend instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return Friend.Deserialize(stream, instance, num);
+		}
+
+		public static Friend Deserialize(Stream stream, Friend instance, long limit)
+		{
+			if (instance.Attribute == null)
+			{
+				instance.Attribute = new List<bnet.protocol.attribute.Attribute>();
+			}
+			if (instance.Role == null)
+			{
+				instance.Role = new List<uint>();
+			}
+			instance.Privileges = 0UL;
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 10)
+				{
+					if (num != 18)
+					{
+						if (num != 26)
+						{
+							if (num != 32)
+							{
+								if (num != 40)
+								{
+									if (num != 50)
+									{
+										if (num != 58)
+										{
+											Key key = ProtocolParser.ReadKey((byte)num, stream);
+											uint field = key.Field;
+											if (field == 0u)
+											{
+												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+											}
+											ProtocolParser.SkipKey(stream, key);
+										}
+										else
+										{
+											instance.BattleTag = ProtocolParser.ReadString(stream);
+										}
+									}
+									else
+									{
+										instance.FullName = ProtocolParser.ReadString(stream);
+									}
+								}
+								else
+								{
+									instance.AttributesEpoch = ProtocolParser.ReadUInt64(stream);
+								}
+							}
+							else
+							{
+								instance.Privileges = ProtocolParser.ReadUInt64(stream);
+							}
+						}
+						else
+						{
+							long num2 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+							num2 += stream.Position;
+							while (stream.Position < num2)
+							{
+								instance.Role.Add(ProtocolParser.ReadUInt32(stream));
+							}
+							if (stream.Position != num2)
+							{
+								throw new ProtocolBufferException("Read too many bytes in packed data");
+							}
+						}
+					}
+					else
+					{
+						instance.Attribute.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
+					}
+				}
+				else if (instance.Id == null)
+				{
+					instance.Id = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.Id);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			Friend.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, Friend instance)
+		{
+			if (instance.Id == null)
+			{
+				throw new ArgumentNullException("Id", "Required by proto specification.");
+			}
+			stream.WriteByte(10);
+			ProtocolParser.WriteUInt32(stream, instance.Id.GetSerializedSize());
+			EntityId.Serialize(stream, instance.Id);
+			if (instance.Attribute.Count > 0)
+			{
+				foreach (bnet.protocol.attribute.Attribute attribute in instance.Attribute)
+				{
+					stream.WriteByte(18);
+					ProtocolParser.WriteUInt32(stream, attribute.GetSerializedSize());
+					bnet.protocol.attribute.Attribute.Serialize(stream, attribute);
+				}
+			}
+			if (instance.Role.Count > 0)
+			{
+				stream.WriteByte(26);
+				uint num = 0u;
+				foreach (uint val in instance.Role)
+				{
+					num += ProtocolParser.SizeOfUInt32(val);
+				}
+				ProtocolParser.WriteUInt32(stream, num);
+				foreach (uint val2 in instance.Role)
+				{
+					ProtocolParser.WriteUInt32(stream, val2);
+				}
+			}
+			if (instance.HasPrivileges)
+			{
+				stream.WriteByte(32);
+				ProtocolParser.WriteUInt64(stream, instance.Privileges);
+			}
+			if (instance.HasAttributesEpoch)
+			{
+				stream.WriteByte(40);
+				ProtocolParser.WriteUInt64(stream, instance.AttributesEpoch);
+			}
+			if (instance.HasFullName)
+			{
+				stream.WriteByte(50);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.FullName));
+			}
+			if (instance.HasBattleTag)
+			{
+				stream.WriteByte(58);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.BattleTag));
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			uint serializedSize = this.Id.GetSerializedSize();
+			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+			if (this.Attribute.Count > 0)
+			{
+				foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+				{
+					num += 1u;
+					uint serializedSize2 = attribute.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			if (this.Role.Count > 0)
+			{
+				num += 1u;
+				uint num2 = num;
+				foreach (uint val in this.Role)
+				{
+					num += ProtocolParser.SizeOfUInt32(val);
+				}
+				num += ProtocolParser.SizeOfUInt32(num - num2);
+			}
+			if (this.HasPrivileges)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.Privileges);
+			}
+			if (this.HasAttributesEpoch)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.AttributesEpoch);
+			}
+			if (this.HasFullName)
+			{
+				num += 1u;
+				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.FullName);
+				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+			}
+			if (this.HasBattleTag)
+			{
+				num += 1u;
+				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.BattleTag);
+				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
+			}
+			num += 1u;
+			return num;
 		}
 
 		private List<bnet.protocol.attribute.Attribute> _Attribute = new List<bnet.protocol.attribute.Attribute>();

@@ -6,6 +6,93 @@ namespace bnet.protocol.server_pool
 {
 	public class PoolStateResponse : IProtoBuf
 	{
+		public List<ServerInfo> Info
+		{
+			get
+			{
+				return this._Info;
+			}
+			set
+			{
+				this._Info = value;
+			}
+		}
+
+		public List<ServerInfo> InfoList
+		{
+			get
+			{
+				return this._Info;
+			}
+		}
+
+		public int InfoCount
+		{
+			get
+			{
+				return this._Info.Count;
+			}
+		}
+
+		public void AddInfo(ServerInfo val)
+		{
+			this._Info.Add(val);
+		}
+
+		public void ClearInfo()
+		{
+			this._Info.Clear();
+		}
+
+		public void SetInfo(List<ServerInfo> val)
+		{
+			this.Info = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (ServerInfo serverInfo in this.Info)
+			{
+				num ^= serverInfo.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			PoolStateResponse poolStateResponse = obj as PoolStateResponse;
+			if (poolStateResponse == null)
+			{
+				return false;
+			}
+			if (this.Info.Count != poolStateResponse.Info.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Info.Count; i++)
+			{
+				if (!this.Info[i].Equals(poolStateResponse.Info[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static PoolStateResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<PoolStateResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			PoolStateResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.server_pool
 				}
 			}
 			return num;
-		}
-
-		public List<ServerInfo> Info
-		{
-			get
-			{
-				return this._Info;
-			}
-			set
-			{
-				this._Info = value;
-			}
-		}
-
-		public List<ServerInfo> InfoList
-		{
-			get
-			{
-				return this._Info;
-			}
-		}
-
-		public int InfoCount
-		{
-			get
-			{
-				return this._Info.Count;
-			}
-		}
-
-		public void AddInfo(ServerInfo val)
-		{
-			this._Info.Add(val);
-		}
-
-		public void ClearInfo()
-		{
-			this._Info.Clear();
-		}
-
-		public void SetInfo(List<ServerInfo> val)
-		{
-			this.Info = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (ServerInfo serverInfo in this.Info)
-			{
-				num ^= serverInfo.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			PoolStateResponse poolStateResponse = obj as PoolStateResponse;
-			if (poolStateResponse == null)
-			{
-				return false;
-			}
-			if (this.Info.Count != poolStateResponse.Info.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Info.Count; i++)
-			{
-				if (!this.Info[i].Equals(poolStateResponse.Info[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static PoolStateResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<PoolStateResponse>(bs, 0, -1);
 		}
 
 		private List<ServerInfo> _Info = new List<ServerInfo>();

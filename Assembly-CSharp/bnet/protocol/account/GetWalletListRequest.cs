@@ -5,6 +5,61 @@ namespace bnet.protocol.account
 {
 	public class GetWalletListRequest : IProtoBuf
 	{
+		public AccountId AccountId { get; set; }
+
+		public void SetAccountId(AccountId val)
+		{
+			this.AccountId = val;
+		}
+
+		public bool Refresh
+		{
+			get
+			{
+				return this._Refresh;
+			}
+			set
+			{
+				this._Refresh = value;
+				this.HasRefresh = true;
+			}
+		}
+
+		public void SetRefresh(bool val)
+		{
+			this.Refresh = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.AccountId.GetHashCode();
+			if (this.HasRefresh)
+			{
+				num ^= this.Refresh.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetWalletListRequest getWalletListRequest = obj as GetWalletListRequest;
+			return getWalletListRequest != null && this.AccountId.Equals(getWalletListRequest.AccountId) && this.HasRefresh == getWalletListRequest.HasRefresh && (!this.HasRefresh || this.Refresh.Equals(getWalletListRequest.Refresh));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetWalletListRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetWalletListRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetWalletListRequest.Deserialize(stream, this);
@@ -108,61 +163,6 @@ namespace bnet.protocol.account
 				num += 1u;
 			}
 			return num + 1u;
-		}
-
-		public AccountId AccountId { get; set; }
-
-		public void SetAccountId(AccountId val)
-		{
-			this.AccountId = val;
-		}
-
-		public bool Refresh
-		{
-			get
-			{
-				return this._Refresh;
-			}
-			set
-			{
-				this._Refresh = value;
-				this.HasRefresh = true;
-			}
-		}
-
-		public void SetRefresh(bool val)
-		{
-			this.Refresh = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.AccountId.GetHashCode();
-			if (this.HasRefresh)
-			{
-				num ^= this.Refresh.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetWalletListRequest getWalletListRequest = obj as GetWalletListRequest;
-			return getWalletListRequest != null && this.AccountId.Equals(getWalletListRequest.AccountId) && this.HasRefresh == getWalletListRequest.HasRefresh && (!this.HasRefresh || this.Refresh.Equals(getWalletListRequest.Refresh));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetWalletListRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetWalletListRequest>(bs, 0, -1);
 		}
 
 		public bool HasRefresh;

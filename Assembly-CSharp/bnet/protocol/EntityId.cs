@@ -5,6 +5,46 @@ namespace bnet.protocol
 {
 	public class EntityId : IProtoBuf
 	{
+		public ulong High { get; set; }
+
+		public void SetHigh(ulong val)
+		{
+			this.High = val;
+		}
+
+		public ulong Low { get; set; }
+
+		public void SetLow(ulong val)
+		{
+			this.Low = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.High.GetHashCode();
+			return num ^ this.Low.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			EntityId entityId = obj as EntityId;
+			return entityId != null && this.High.Equals(entityId.High) && this.Low.Equals(entityId.Low);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static EntityId ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<EntityId>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			EntityId.Deserialize(stream, this);
@@ -92,46 +132,6 @@ namespace bnet.protocol
 			num += 8u;
 			num += 8u;
 			return num + 2u;
-		}
-
-		public ulong High { get; set; }
-
-		public void SetHigh(ulong val)
-		{
-			this.High = val;
-		}
-
-		public ulong Low { get; set; }
-
-		public void SetLow(ulong val)
-		{
-			this.Low = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.High.GetHashCode();
-			return num ^ this.Low.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			EntityId entityId = obj as EntityId;
-			return entityId != null && this.High.Equals(entityId.High) && this.Low.Equals(entityId.Low);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static EntityId ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<EntityId>(bs, 0, -1);
 		}
 	}
 }

@@ -6,6 +6,93 @@ namespace bnet.protocol.presence
 {
 	public class QueryResponse : IProtoBuf
 	{
+		public List<Field> Field
+		{
+			get
+			{
+				return this._Field;
+			}
+			set
+			{
+				this._Field = value;
+			}
+		}
+
+		public List<Field> FieldList
+		{
+			get
+			{
+				return this._Field;
+			}
+		}
+
+		public int FieldCount
+		{
+			get
+			{
+				return this._Field.Count;
+			}
+		}
+
+		public void AddField(Field val)
+		{
+			this._Field.Add(val);
+		}
+
+		public void ClearField()
+		{
+			this._Field.Clear();
+		}
+
+		public void SetField(List<Field> val)
+		{
+			this.Field = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (Field field in this.Field)
+			{
+				num ^= field.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			QueryResponse queryResponse = obj as QueryResponse;
+			if (queryResponse == null)
+			{
+				return false;
+			}
+			if (this.Field.Count != queryResponse.Field.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Field.Count; i++)
+			{
+				if (!this.Field[i].Equals(queryResponse.Field[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static QueryResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<QueryResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			QueryResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.presence
 				}
 			}
 			return num;
-		}
-
-		public List<Field> Field
-		{
-			get
-			{
-				return this._Field;
-			}
-			set
-			{
-				this._Field = value;
-			}
-		}
-
-		public List<Field> FieldList
-		{
-			get
-			{
-				return this._Field;
-			}
-		}
-
-		public int FieldCount
-		{
-			get
-			{
-				return this._Field.Count;
-			}
-		}
-
-		public void AddField(Field val)
-		{
-			this._Field.Add(val);
-		}
-
-		public void ClearField()
-		{
-			this._Field.Clear();
-		}
-
-		public void SetField(List<Field> val)
-		{
-			this.Field = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (Field field in this.Field)
-			{
-				num ^= field.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			QueryResponse queryResponse = obj as QueryResponse;
-			if (queryResponse == null)
-			{
-				return false;
-			}
-			if (this.Field.Count != queryResponse.Field.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Field.Count; i++)
-			{
-				if (!this.Field[i].Equals(queryResponse.Field[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static QueryResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<QueryResponse>(bs, 0, -1);
 		}
 
 		private List<Field> _Field = new List<Field>();

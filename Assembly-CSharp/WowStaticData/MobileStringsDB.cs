@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace WowStaticData
@@ -8,32 +9,17 @@ namespace WowStaticData
 	{
 		public MobileStringsRec GetRecord(string baseTag)
 		{
-			return (MobileStringsRec)this.m_records[baseTag];
+			return (!this.m_records.ContainsKey(baseTag)) ? null : this.m_records[baseTag];
 		}
 
-		public void EnumRecords(Predicate<MobileStringsRec> callback)
+		public IEnumerable<MobileStringsRec> GetRecordsWhere(Func<MobileStringsRec, bool> matcher)
 		{
-			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
-			try
-			{
-				while (enumerator.MoveNext())
-				{
-					object obj = enumerator.Current;
-					MobileStringsRec obj2 = (MobileStringsRec)obj;
-					if (!callback(obj2))
-					{
-						break;
-					}
-				}
-			}
-			finally
-			{
-				IDisposable disposable;
-				if ((disposable = (enumerator as IDisposable)) != null)
-				{
-					disposable.Dispose();
-				}
-			}
+			return this.m_records.Values.Where(matcher);
+		}
+
+		public MobileStringsRec GetRecordFirstOrDefault(Func<MobileStringsRec, bool> matcher)
+		{
+			return this.m_records.Values.FirstOrDefault(matcher);
 		}
 
 		public bool Load(string path, AssetBundle nonLocalizedBundle, AssetBundle localizedBundle, string locale)
@@ -46,7 +32,7 @@ namespace WowStaticData
 				locale,
 				".txt"
 			});
-			if (this.m_records != null)
+			if (this.m_records.Count > 0)
 			{
 				Debug.Log("Already loaded static db " + text);
 				return false;
@@ -58,7 +44,6 @@ namespace WowStaticData
 				return false;
 			}
 			string text2 = textAsset.ToString();
-			this.m_records = new Hashtable();
 			int num = 0;
 			int num2;
 			do
@@ -77,6 +62,6 @@ namespace WowStaticData
 			return true;
 		}
 
-		private Hashtable m_records;
+		private Dictionary<string, MobileStringsRec> m_records = new Dictionary<string, MobileStringsRec>();
 	}
 }

@@ -6,6 +6,69 @@ namespace bnet.protocol.game_utilities
 {
 	public class GetAllValuesForAttributeRequest : IProtoBuf
 	{
+		public string AttributeKey
+		{
+			get
+			{
+				return this._AttributeKey;
+			}
+			set
+			{
+				this._AttributeKey = value;
+				this.HasAttributeKey = (value != null);
+			}
+		}
+
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAttributeKey)
+			{
+				num ^= this.AttributeKey.GetHashCode();
+			}
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetAllValuesForAttributeRequest getAllValuesForAttributeRequest = obj as GetAllValuesForAttributeRequest;
+			return getAllValuesForAttributeRequest != null && this.HasAttributeKey == getAllValuesForAttributeRequest.HasAttributeKey && (!this.HasAttributeKey || this.AttributeKey.Equals(getAllValuesForAttributeRequest.AttributeKey)) && this.HasAgentId == getAllValuesForAttributeRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(getAllValuesForAttributeRequest.AgentId)) && this.HasProgram == getAllValuesForAttributeRequest.HasProgram && (!this.HasProgram || this.Program.Equals(getAllValuesForAttributeRequest.Program));
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetAllValuesForAttributeRequest.Deserialize(stream, this);
@@ -131,69 +194,6 @@ namespace bnet.protocol.game_utilities
 				num += 4u;
 			}
 			return num;
-		}
-
-		public string AttributeKey
-		{
-			get
-			{
-				return this._AttributeKey;
-			}
-			set
-			{
-				this._AttributeKey = value;
-				this.HasAttributeKey = (value != null);
-			}
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAttributeKey)
-			{
-				num ^= this.AttributeKey.GetHashCode();
-			}
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetAllValuesForAttributeRequest getAllValuesForAttributeRequest = obj as GetAllValuesForAttributeRequest;
-			return getAllValuesForAttributeRequest != null && this.HasAttributeKey == getAllValuesForAttributeRequest.HasAttributeKey && (!this.HasAttributeKey || this.AttributeKey.Equals(getAllValuesForAttributeRequest.AttributeKey)) && this.HasAgentId == getAllValuesForAttributeRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(getAllValuesForAttributeRequest.AgentId)) && this.HasProgram == getAllValuesForAttributeRequest.HasProgram && (!this.HasProgram || this.Program.Equals(getAllValuesForAttributeRequest.Program));
 		}
 
 		public bool HasAttributeKey;

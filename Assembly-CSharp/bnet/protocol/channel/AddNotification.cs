@@ -6,6 +6,127 @@ namespace bnet.protocol.channel
 {
 	public class AddNotification : IProtoBuf
 	{
+		public Member Self
+		{
+			get
+			{
+				return this._Self;
+			}
+			set
+			{
+				this._Self = value;
+				this.HasSelf = (value != null);
+			}
+		}
+
+		public void SetSelf(Member val)
+		{
+			this.Self = val;
+		}
+
+		public List<Member> Member
+		{
+			get
+			{
+				return this._Member;
+			}
+			set
+			{
+				this._Member = value;
+			}
+		}
+
+		public List<Member> MemberList
+		{
+			get
+			{
+				return this._Member;
+			}
+		}
+
+		public int MemberCount
+		{
+			get
+			{
+				return this._Member.Count;
+			}
+		}
+
+		public void AddMember(Member val)
+		{
+			this._Member.Add(val);
+		}
+
+		public void ClearMember()
+		{
+			this._Member.Clear();
+		}
+
+		public void SetMember(List<Member> val)
+		{
+			this.Member = val;
+		}
+
+		public ChannelState ChannelState { get; set; }
+
+		public void SetChannelState(ChannelState val)
+		{
+			this.ChannelState = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasSelf)
+			{
+				num ^= this.Self.GetHashCode();
+			}
+			foreach (Member member in this.Member)
+			{
+				num ^= member.GetHashCode();
+			}
+			num ^= this.ChannelState.GetHashCode();
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AddNotification addNotification = obj as AddNotification;
+			if (addNotification == null)
+			{
+				return false;
+			}
+			if (this.HasSelf != addNotification.HasSelf || (this.HasSelf && !this.Self.Equals(addNotification.Self)))
+			{
+				return false;
+			}
+			if (this.Member.Count != addNotification.Member.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Member.Count; i++)
+			{
+				if (!this.Member[i].Equals(addNotification.Member[i]))
+				{
+					return false;
+				}
+			}
+			return this.ChannelState.Equals(addNotification.ChannelState);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AddNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AddNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AddNotification.Deserialize(stream, this);
@@ -144,127 +265,6 @@ namespace bnet.protocol.channel
 			num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
 			num += 1u;
 			return num;
-		}
-
-		public Member Self
-		{
-			get
-			{
-				return this._Self;
-			}
-			set
-			{
-				this._Self = value;
-				this.HasSelf = (value != null);
-			}
-		}
-
-		public void SetSelf(Member val)
-		{
-			this.Self = val;
-		}
-
-		public List<Member> Member
-		{
-			get
-			{
-				return this._Member;
-			}
-			set
-			{
-				this._Member = value;
-			}
-		}
-
-		public List<Member> MemberList
-		{
-			get
-			{
-				return this._Member;
-			}
-		}
-
-		public int MemberCount
-		{
-			get
-			{
-				return this._Member.Count;
-			}
-		}
-
-		public void AddMember(Member val)
-		{
-			this._Member.Add(val);
-		}
-
-		public void ClearMember()
-		{
-			this._Member.Clear();
-		}
-
-		public void SetMember(List<Member> val)
-		{
-			this.Member = val;
-		}
-
-		public ChannelState ChannelState { get; set; }
-
-		public void SetChannelState(ChannelState val)
-		{
-			this.ChannelState = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasSelf)
-			{
-				num ^= this.Self.GetHashCode();
-			}
-			foreach (Member member in this.Member)
-			{
-				num ^= member.GetHashCode();
-			}
-			num ^= this.ChannelState.GetHashCode();
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AddNotification addNotification = obj as AddNotification;
-			if (addNotification == null)
-			{
-				return false;
-			}
-			if (this.HasSelf != addNotification.HasSelf || (this.HasSelf && !this.Self.Equals(addNotification.Self)))
-			{
-				return false;
-			}
-			if (this.Member.Count != addNotification.Member.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Member.Count; i++)
-			{
-				if (!this.Member[i].Equals(addNotification.Member[i]))
-				{
-					return false;
-				}
-			}
-			return this.ChannelState.Equals(addNotification.ChannelState);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AddNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AddNotification>(bs, 0, -1);
 		}
 
 		public bool HasSelf;

@@ -7,207 +7,6 @@ namespace bnet.protocol.challenge
 {
 	public class SendChallengeToUserRequest : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			SendChallengeToUserRequest.Deserialize(stream, this);
-		}
-
-		public static SendChallengeToUserRequest Deserialize(Stream stream, SendChallengeToUserRequest instance)
-		{
-			return SendChallengeToUserRequest.Deserialize(stream, instance, -1L);
-		}
-
-		public static SendChallengeToUserRequest DeserializeLengthDelimited(Stream stream)
-		{
-			SendChallengeToUserRequest sendChallengeToUserRequest = new SendChallengeToUserRequest();
-			SendChallengeToUserRequest.DeserializeLengthDelimited(stream, sendChallengeToUserRequest);
-			return sendChallengeToUserRequest;
-		}
-
-		public static SendChallengeToUserRequest DeserializeLengthDelimited(Stream stream, SendChallengeToUserRequest instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return SendChallengeToUserRequest.Deserialize(stream, instance, num);
-		}
-
-		public static SendChallengeToUserRequest Deserialize(Stream stream, SendChallengeToUserRequest instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			if (instance.Challenges == null)
-			{
-				instance.Challenges = new List<Challenge>();
-			}
-			if (instance.Attributes == null)
-			{
-				instance.Attributes = new List<bnet.protocol.attribute.Attribute>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else
-				{
-					switch (num)
-					{
-					case 37:
-						instance.Context = binaryReader.ReadUInt32();
-						break;
-					default:
-						if (num != 10)
-						{
-							if (num != 18)
-							{
-								if (num != 26)
-								{
-									if (num != 50)
-									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
-									}
-									else
-									{
-										instance.Attributes.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
-									}
-								}
-								else
-								{
-									instance.Challenges.Add(Challenge.DeserializeLengthDelimited(stream));
-								}
-							}
-							else if (instance.GameAccountId == null)
-							{
-								instance.GameAccountId = EntityId.DeserializeLengthDelimited(stream);
-							}
-							else
-							{
-								EntityId.DeserializeLengthDelimited(stream, instance.GameAccountId);
-							}
-						}
-						else if (instance.PeerId == null)
-						{
-							instance.PeerId = ProcessId.DeserializeLengthDelimited(stream);
-						}
-						else
-						{
-							ProcessId.DeserializeLengthDelimited(stream, instance.PeerId);
-						}
-						break;
-					case 40:
-						instance.Timeout = ProtocolParser.ReadUInt64(stream);
-						break;
-					}
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			SendChallengeToUserRequest.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, SendChallengeToUserRequest instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			if (instance.HasPeerId)
-			{
-				stream.WriteByte(10);
-				ProtocolParser.WriteUInt32(stream, instance.PeerId.GetSerializedSize());
-				ProcessId.Serialize(stream, instance.PeerId);
-			}
-			if (instance.HasGameAccountId)
-			{
-				stream.WriteByte(18);
-				ProtocolParser.WriteUInt32(stream, instance.GameAccountId.GetSerializedSize());
-				EntityId.Serialize(stream, instance.GameAccountId);
-			}
-			if (instance.Challenges.Count > 0)
-			{
-				foreach (Challenge challenge in instance.Challenges)
-				{
-					stream.WriteByte(26);
-					ProtocolParser.WriteUInt32(stream, challenge.GetSerializedSize());
-					Challenge.Serialize(stream, challenge);
-				}
-			}
-			stream.WriteByte(37);
-			binaryWriter.Write(instance.Context);
-			if (instance.HasTimeout)
-			{
-				stream.WriteByte(40);
-				ProtocolParser.WriteUInt64(stream, instance.Timeout);
-			}
-			if (instance.Attributes.Count > 0)
-			{
-				foreach (bnet.protocol.attribute.Attribute attribute in instance.Attributes)
-				{
-					stream.WriteByte(50);
-					ProtocolParser.WriteUInt32(stream, attribute.GetSerializedSize());
-					bnet.protocol.attribute.Attribute.Serialize(stream, attribute);
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasPeerId)
-			{
-				num += 1u;
-				uint serializedSize = this.PeerId.GetSerializedSize();
-				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-			}
-			if (this.HasGameAccountId)
-			{
-				num += 1u;
-				uint serializedSize2 = this.GameAccountId.GetSerializedSize();
-				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-			}
-			if (this.Challenges.Count > 0)
-			{
-				foreach (Challenge challenge in this.Challenges)
-				{
-					num += 1u;
-					uint serializedSize3 = challenge.GetSerializedSize();
-					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
-				}
-			}
-			num += 4u;
-			if (this.HasTimeout)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.Timeout);
-			}
-			if (this.Attributes.Count > 0)
-			{
-				foreach (bnet.protocol.attribute.Attribute attribute in this.Attributes)
-				{
-					num += 1u;
-					uint serializedSize4 = attribute.GetSerializedSize();
-					num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
-				}
-			}
-			num += 1u;
-			return num;
-		}
-
 		public ProcessId PeerId
 		{
 			get
@@ -441,6 +240,207 @@ namespace bnet.protocol.challenge
 		public static SendChallengeToUserRequest ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<SendChallengeToUserRequest>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			SendChallengeToUserRequest.Deserialize(stream, this);
+		}
+
+		public static SendChallengeToUserRequest Deserialize(Stream stream, SendChallengeToUserRequest instance)
+		{
+			return SendChallengeToUserRequest.Deserialize(stream, instance, -1L);
+		}
+
+		public static SendChallengeToUserRequest DeserializeLengthDelimited(Stream stream)
+		{
+			SendChallengeToUserRequest sendChallengeToUserRequest = new SendChallengeToUserRequest();
+			SendChallengeToUserRequest.DeserializeLengthDelimited(stream, sendChallengeToUserRequest);
+			return sendChallengeToUserRequest;
+		}
+
+		public static SendChallengeToUserRequest DeserializeLengthDelimited(Stream stream, SendChallengeToUserRequest instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return SendChallengeToUserRequest.Deserialize(stream, instance, num);
+		}
+
+		public static SendChallengeToUserRequest Deserialize(Stream stream, SendChallengeToUserRequest instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			if (instance.Challenges == null)
+			{
+				instance.Challenges = new List<Challenge>();
+			}
+			if (instance.Attributes == null)
+			{
+				instance.Attributes = new List<bnet.protocol.attribute.Attribute>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else
+				{
+					switch (num)
+					{
+					case 37:
+						instance.Context = binaryReader.ReadUInt32();
+						break;
+					default:
+						if (num != 10)
+						{
+							if (num != 18)
+							{
+								if (num != 26)
+								{
+									if (num != 50)
+									{
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
+										{
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+										}
+										ProtocolParser.SkipKey(stream, key);
+									}
+									else
+									{
+										instance.Attributes.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
+									}
+								}
+								else
+								{
+									instance.Challenges.Add(Challenge.DeserializeLengthDelimited(stream));
+								}
+							}
+							else if (instance.GameAccountId == null)
+							{
+								instance.GameAccountId = EntityId.DeserializeLengthDelimited(stream);
+							}
+							else
+							{
+								EntityId.DeserializeLengthDelimited(stream, instance.GameAccountId);
+							}
+						}
+						else if (instance.PeerId == null)
+						{
+							instance.PeerId = ProcessId.DeserializeLengthDelimited(stream);
+						}
+						else
+						{
+							ProcessId.DeserializeLengthDelimited(stream, instance.PeerId);
+						}
+						break;
+					case 40:
+						instance.Timeout = ProtocolParser.ReadUInt64(stream);
+						break;
+					}
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			SendChallengeToUserRequest.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, SendChallengeToUserRequest instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			if (instance.HasPeerId)
+			{
+				stream.WriteByte(10);
+				ProtocolParser.WriteUInt32(stream, instance.PeerId.GetSerializedSize());
+				ProcessId.Serialize(stream, instance.PeerId);
+			}
+			if (instance.HasGameAccountId)
+			{
+				stream.WriteByte(18);
+				ProtocolParser.WriteUInt32(stream, instance.GameAccountId.GetSerializedSize());
+				EntityId.Serialize(stream, instance.GameAccountId);
+			}
+			if (instance.Challenges.Count > 0)
+			{
+				foreach (Challenge challenge in instance.Challenges)
+				{
+					stream.WriteByte(26);
+					ProtocolParser.WriteUInt32(stream, challenge.GetSerializedSize());
+					Challenge.Serialize(stream, challenge);
+				}
+			}
+			stream.WriteByte(37);
+			binaryWriter.Write(instance.Context);
+			if (instance.HasTimeout)
+			{
+				stream.WriteByte(40);
+				ProtocolParser.WriteUInt64(stream, instance.Timeout);
+			}
+			if (instance.Attributes.Count > 0)
+			{
+				foreach (bnet.protocol.attribute.Attribute attribute in instance.Attributes)
+				{
+					stream.WriteByte(50);
+					ProtocolParser.WriteUInt32(stream, attribute.GetSerializedSize());
+					bnet.protocol.attribute.Attribute.Serialize(stream, attribute);
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasPeerId)
+			{
+				num += 1u;
+				uint serializedSize = this.PeerId.GetSerializedSize();
+				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+			}
+			if (this.HasGameAccountId)
+			{
+				num += 1u;
+				uint serializedSize2 = this.GameAccountId.GetSerializedSize();
+				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+			}
+			if (this.Challenges.Count > 0)
+			{
+				foreach (Challenge challenge in this.Challenges)
+				{
+					num += 1u;
+					uint serializedSize3 = challenge.GetSerializedSize();
+					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
+				}
+			}
+			num += 4u;
+			if (this.HasTimeout)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.Timeout);
+			}
+			if (this.Attributes.Count > 0)
+			{
+				foreach (bnet.protocol.attribute.Attribute attribute in this.Attributes)
+				{
+					num += 1u;
+					uint serializedSize4 = attribute.GetSerializedSize();
+					num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
+				}
+			}
+			num += 1u;
+			return num;
 		}
 
 		public bool HasPeerId;

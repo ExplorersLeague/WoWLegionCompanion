@@ -5,6 +5,75 @@ namespace bnet.protocol.connection
 {
 	public class EchoResponse : IProtoBuf
 	{
+		public ulong Time
+		{
+			get
+			{
+				return this._Time;
+			}
+			set
+			{
+				this._Time = value;
+				this.HasTime = true;
+			}
+		}
+
+		public void SetTime(ulong val)
+		{
+			this.Time = val;
+		}
+
+		public byte[] Payload
+		{
+			get
+			{
+				return this._Payload;
+			}
+			set
+			{
+				this._Payload = value;
+				this.HasPayload = (value != null);
+			}
+		}
+
+		public void SetPayload(byte[] val)
+		{
+			this.Payload = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasTime)
+			{
+				num ^= this.Time.GetHashCode();
+			}
+			if (this.HasPayload)
+			{
+				num ^= this.Payload.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			EchoResponse echoResponse = obj as EchoResponse;
+			return echoResponse != null && this.HasTime == echoResponse.HasTime && (!this.HasTime || this.Time.Equals(echoResponse.Time)) && this.HasPayload == echoResponse.HasPayload && (!this.HasPayload || this.Payload.Equals(echoResponse.Payload));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static EchoResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<EchoResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			EchoResponse.Deserialize(stream, this);
@@ -106,75 +175,6 @@ namespace bnet.protocol.connection
 				num += ProtocolParser.SizeOfUInt32(this.Payload.Length) + (uint)this.Payload.Length;
 			}
 			return num;
-		}
-
-		public ulong Time
-		{
-			get
-			{
-				return this._Time;
-			}
-			set
-			{
-				this._Time = value;
-				this.HasTime = true;
-			}
-		}
-
-		public void SetTime(ulong val)
-		{
-			this.Time = val;
-		}
-
-		public byte[] Payload
-		{
-			get
-			{
-				return this._Payload;
-			}
-			set
-			{
-				this._Payload = value;
-				this.HasPayload = (value != null);
-			}
-		}
-
-		public void SetPayload(byte[] val)
-		{
-			this.Payload = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasTime)
-			{
-				num ^= this.Time.GetHashCode();
-			}
-			if (this.HasPayload)
-			{
-				num ^= this.Payload.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			EchoResponse echoResponse = obj as EchoResponse;
-			return echoResponse != null && this.HasTime == echoResponse.HasTime && (!this.HasTime || this.Time.Equals(echoResponse.Time)) && this.HasPayload == echoResponse.HasPayload && (!this.HasPayload || this.Payload.Equals(echoResponse.Payload));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static EchoResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<EchoResponse>(bs, 0, -1);
 		}
 
 		public bool HasTime;

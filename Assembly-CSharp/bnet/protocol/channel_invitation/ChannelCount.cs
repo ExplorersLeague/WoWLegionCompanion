@@ -6,6 +6,75 @@ namespace bnet.protocol.channel_invitation
 {
 	public class ChannelCount : IProtoBuf
 	{
+		public EntityId ChannelId
+		{
+			get
+			{
+				return this._ChannelId;
+			}
+			set
+			{
+				this._ChannelId = value;
+				this.HasChannelId = (value != null);
+			}
+		}
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public string ChannelType
+		{
+			get
+			{
+				return this._ChannelType;
+			}
+			set
+			{
+				this._ChannelType = value;
+				this.HasChannelType = (value != null);
+			}
+		}
+
+		public void SetChannelType(string val)
+		{
+			this.ChannelType = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasChannelId)
+			{
+				num ^= this.ChannelId.GetHashCode();
+			}
+			if (this.HasChannelType)
+			{
+				num ^= this.ChannelType.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChannelCount channelCount = obj as ChannelCount;
+			return channelCount != null && this.HasChannelId == channelCount.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(channelCount.ChannelId)) && this.HasChannelType == channelCount.HasChannelType && (!this.HasChannelType || this.ChannelType.Equals(channelCount.ChannelType));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChannelCount ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChannelCount>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChannelCount.Deserialize(stream, this);
@@ -113,75 +182,6 @@ namespace bnet.protocol.channel_invitation
 				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
 			}
 			return num;
-		}
-
-		public EntityId ChannelId
-		{
-			get
-			{
-				return this._ChannelId;
-			}
-			set
-			{
-				this._ChannelId = value;
-				this.HasChannelId = (value != null);
-			}
-		}
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public string ChannelType
-		{
-			get
-			{
-				return this._ChannelType;
-			}
-			set
-			{
-				this._ChannelType = value;
-				this.HasChannelType = (value != null);
-			}
-		}
-
-		public void SetChannelType(string val)
-		{
-			this.ChannelType = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasChannelId)
-			{
-				num ^= this.ChannelId.GetHashCode();
-			}
-			if (this.HasChannelType)
-			{
-				num ^= this.ChannelType.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChannelCount channelCount = obj as ChannelCount;
-			return channelCount != null && this.HasChannelId == channelCount.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(channelCount.ChannelId)) && this.HasChannelType == channelCount.HasChannelType && (!this.HasChannelType || this.ChannelType.Equals(channelCount.ChannelType));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChannelCount ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChannelCount>(bs, 0, -1);
 		}
 
 		public bool HasChannelId;

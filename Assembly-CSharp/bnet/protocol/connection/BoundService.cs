@@ -5,6 +5,46 @@ namespace bnet.protocol.connection
 {
 	public class BoundService : IProtoBuf
 	{
+		public uint Hash { get; set; }
+
+		public void SetHash(uint val)
+		{
+			this.Hash = val;
+		}
+
+		public uint Id { get; set; }
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Hash.GetHashCode();
+			return num ^ this.Id.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			BoundService boundService = obj as BoundService;
+			return boundService != null && this.Hash.Equals(boundService.Hash) && this.Id.Equals(boundService.Id);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static BoundService ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<BoundService>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			BoundService.Deserialize(stream, this);
@@ -92,46 +132,6 @@ namespace bnet.protocol.connection
 			num += 4u;
 			num += ProtocolParser.SizeOfUInt32(this.Id);
 			return num + 2u;
-		}
-
-		public uint Hash { get; set; }
-
-		public void SetHash(uint val)
-		{
-			this.Hash = val;
-		}
-
-		public uint Id { get; set; }
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Hash.GetHashCode();
-			return num ^ this.Id.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			BoundService boundService = obj as BoundService;
-			return boundService != null && this.Hash.Equals(boundService.Hash) && this.Id.Equals(boundService.Id);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static BoundService ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<BoundService>(bs, 0, -1);
 		}
 	}
 }

@@ -5,6 +5,229 @@ namespace bnet.protocol.account
 {
 	public class GetAccountRequest : IProtoBuf
 	{
+		public AccountReference Ref
+		{
+			get
+			{
+				return this._Ref;
+			}
+			set
+			{
+				this._Ref = value;
+				this.HasRef = (value != null);
+			}
+		}
+
+		public void SetRef(AccountReference val)
+		{
+			this.Ref = val;
+		}
+
+		public bool FetchAll
+		{
+			get
+			{
+				return this._FetchAll;
+			}
+			set
+			{
+				this._FetchAll = value;
+				this.HasFetchAll = true;
+			}
+		}
+
+		public void SetFetchAll(bool val)
+		{
+			this.FetchAll = val;
+		}
+
+		public bool FetchBlob
+		{
+			get
+			{
+				return this._FetchBlob;
+			}
+			set
+			{
+				this._FetchBlob = value;
+				this.HasFetchBlob = true;
+			}
+		}
+
+		public void SetFetchBlob(bool val)
+		{
+			this.FetchBlob = val;
+		}
+
+		public bool FetchId
+		{
+			get
+			{
+				return this._FetchId;
+			}
+			set
+			{
+				this._FetchId = value;
+				this.HasFetchId = true;
+			}
+		}
+
+		public void SetFetchId(bool val)
+		{
+			this.FetchId = val;
+		}
+
+		public bool FetchEmail
+		{
+			get
+			{
+				return this._FetchEmail;
+			}
+			set
+			{
+				this._FetchEmail = value;
+				this.HasFetchEmail = true;
+			}
+		}
+
+		public void SetFetchEmail(bool val)
+		{
+			this.FetchEmail = val;
+		}
+
+		public bool FetchBattleTag
+		{
+			get
+			{
+				return this._FetchBattleTag;
+			}
+			set
+			{
+				this._FetchBattleTag = value;
+				this.HasFetchBattleTag = true;
+			}
+		}
+
+		public void SetFetchBattleTag(bool val)
+		{
+			this.FetchBattleTag = val;
+		}
+
+		public bool FetchFullName
+		{
+			get
+			{
+				return this._FetchFullName;
+			}
+			set
+			{
+				this._FetchFullName = value;
+				this.HasFetchFullName = true;
+			}
+		}
+
+		public void SetFetchFullName(bool val)
+		{
+			this.FetchFullName = val;
+		}
+
+		public bool FetchLinks
+		{
+			get
+			{
+				return this._FetchLinks;
+			}
+			set
+			{
+				this._FetchLinks = value;
+				this.HasFetchLinks = true;
+			}
+		}
+
+		public void SetFetchLinks(bool val)
+		{
+			this.FetchLinks = val;
+		}
+
+		public bool FetchParentalControls
+		{
+			get
+			{
+				return this._FetchParentalControls;
+			}
+			set
+			{
+				this._FetchParentalControls = value;
+				this.HasFetchParentalControls = true;
+			}
+		}
+
+		public void SetFetchParentalControls(bool val)
+		{
+			this.FetchParentalControls = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasRef)
+			{
+				num ^= this.Ref.GetHashCode();
+			}
+			if (this.HasFetchAll)
+			{
+				num ^= this.FetchAll.GetHashCode();
+			}
+			if (this.HasFetchBlob)
+			{
+				num ^= this.FetchBlob.GetHashCode();
+			}
+			if (this.HasFetchId)
+			{
+				num ^= this.FetchId.GetHashCode();
+			}
+			if (this.HasFetchEmail)
+			{
+				num ^= this.FetchEmail.GetHashCode();
+			}
+			if (this.HasFetchBattleTag)
+			{
+				num ^= this.FetchBattleTag.GetHashCode();
+			}
+			if (this.HasFetchFullName)
+			{
+				num ^= this.FetchFullName.GetHashCode();
+			}
+			if (this.HasFetchLinks)
+			{
+				num ^= this.FetchLinks.GetHashCode();
+			}
+			if (this.HasFetchParentalControls)
+			{
+				num ^= this.FetchParentalControls.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetAccountRequest getAccountRequest = obj as GetAccountRequest;
+			return getAccountRequest != null && this.HasRef == getAccountRequest.HasRef && (!this.HasRef || this.Ref.Equals(getAccountRequest.Ref)) && this.HasFetchAll == getAccountRequest.HasFetchAll && (!this.HasFetchAll || this.FetchAll.Equals(getAccountRequest.FetchAll)) && this.HasFetchBlob == getAccountRequest.HasFetchBlob && (!this.HasFetchBlob || this.FetchBlob.Equals(getAccountRequest.FetchBlob)) && this.HasFetchId == getAccountRequest.HasFetchId && (!this.HasFetchId || this.FetchId.Equals(getAccountRequest.FetchId)) && this.HasFetchEmail == getAccountRequest.HasFetchEmail && (!this.HasFetchEmail || this.FetchEmail.Equals(getAccountRequest.FetchEmail)) && this.HasFetchBattleTag == getAccountRequest.HasFetchBattleTag && (!this.HasFetchBattleTag || this.FetchBattleTag.Equals(getAccountRequest.FetchBattleTag)) && this.HasFetchFullName == getAccountRequest.HasFetchFullName && (!this.HasFetchFullName || this.FetchFullName.Equals(getAccountRequest.FetchFullName)) && this.HasFetchLinks == getAccountRequest.HasFetchLinks && (!this.HasFetchLinks || this.FetchLinks.Equals(getAccountRequest.FetchLinks)) && this.HasFetchParentalControls == getAccountRequest.HasFetchParentalControls && (!this.HasFetchParentalControls || this.FetchParentalControls.Equals(getAccountRequest.FetchParentalControls));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetAccountRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetAccountRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetAccountRequest.Deserialize(stream, this);
@@ -239,229 +462,6 @@ namespace bnet.protocol.account
 				num += 1u;
 			}
 			return num;
-		}
-
-		public AccountReference Ref
-		{
-			get
-			{
-				return this._Ref;
-			}
-			set
-			{
-				this._Ref = value;
-				this.HasRef = (value != null);
-			}
-		}
-
-		public void SetRef(AccountReference val)
-		{
-			this.Ref = val;
-		}
-
-		public bool FetchAll
-		{
-			get
-			{
-				return this._FetchAll;
-			}
-			set
-			{
-				this._FetchAll = value;
-				this.HasFetchAll = true;
-			}
-		}
-
-		public void SetFetchAll(bool val)
-		{
-			this.FetchAll = val;
-		}
-
-		public bool FetchBlob
-		{
-			get
-			{
-				return this._FetchBlob;
-			}
-			set
-			{
-				this._FetchBlob = value;
-				this.HasFetchBlob = true;
-			}
-		}
-
-		public void SetFetchBlob(bool val)
-		{
-			this.FetchBlob = val;
-		}
-
-		public bool FetchId
-		{
-			get
-			{
-				return this._FetchId;
-			}
-			set
-			{
-				this._FetchId = value;
-				this.HasFetchId = true;
-			}
-		}
-
-		public void SetFetchId(bool val)
-		{
-			this.FetchId = val;
-		}
-
-		public bool FetchEmail
-		{
-			get
-			{
-				return this._FetchEmail;
-			}
-			set
-			{
-				this._FetchEmail = value;
-				this.HasFetchEmail = true;
-			}
-		}
-
-		public void SetFetchEmail(bool val)
-		{
-			this.FetchEmail = val;
-		}
-
-		public bool FetchBattleTag
-		{
-			get
-			{
-				return this._FetchBattleTag;
-			}
-			set
-			{
-				this._FetchBattleTag = value;
-				this.HasFetchBattleTag = true;
-			}
-		}
-
-		public void SetFetchBattleTag(bool val)
-		{
-			this.FetchBattleTag = val;
-		}
-
-		public bool FetchFullName
-		{
-			get
-			{
-				return this._FetchFullName;
-			}
-			set
-			{
-				this._FetchFullName = value;
-				this.HasFetchFullName = true;
-			}
-		}
-
-		public void SetFetchFullName(bool val)
-		{
-			this.FetchFullName = val;
-		}
-
-		public bool FetchLinks
-		{
-			get
-			{
-				return this._FetchLinks;
-			}
-			set
-			{
-				this._FetchLinks = value;
-				this.HasFetchLinks = true;
-			}
-		}
-
-		public void SetFetchLinks(bool val)
-		{
-			this.FetchLinks = val;
-		}
-
-		public bool FetchParentalControls
-		{
-			get
-			{
-				return this._FetchParentalControls;
-			}
-			set
-			{
-				this._FetchParentalControls = value;
-				this.HasFetchParentalControls = true;
-			}
-		}
-
-		public void SetFetchParentalControls(bool val)
-		{
-			this.FetchParentalControls = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasRef)
-			{
-				num ^= this.Ref.GetHashCode();
-			}
-			if (this.HasFetchAll)
-			{
-				num ^= this.FetchAll.GetHashCode();
-			}
-			if (this.HasFetchBlob)
-			{
-				num ^= this.FetchBlob.GetHashCode();
-			}
-			if (this.HasFetchId)
-			{
-				num ^= this.FetchId.GetHashCode();
-			}
-			if (this.HasFetchEmail)
-			{
-				num ^= this.FetchEmail.GetHashCode();
-			}
-			if (this.HasFetchBattleTag)
-			{
-				num ^= this.FetchBattleTag.GetHashCode();
-			}
-			if (this.HasFetchFullName)
-			{
-				num ^= this.FetchFullName.GetHashCode();
-			}
-			if (this.HasFetchLinks)
-			{
-				num ^= this.FetchLinks.GetHashCode();
-			}
-			if (this.HasFetchParentalControls)
-			{
-				num ^= this.FetchParentalControls.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetAccountRequest getAccountRequest = obj as GetAccountRequest;
-			return getAccountRequest != null && this.HasRef == getAccountRequest.HasRef && (!this.HasRef || this.Ref.Equals(getAccountRequest.Ref)) && this.HasFetchAll == getAccountRequest.HasFetchAll && (!this.HasFetchAll || this.FetchAll.Equals(getAccountRequest.FetchAll)) && this.HasFetchBlob == getAccountRequest.HasFetchBlob && (!this.HasFetchBlob || this.FetchBlob.Equals(getAccountRequest.FetchBlob)) && this.HasFetchId == getAccountRequest.HasFetchId && (!this.HasFetchId || this.FetchId.Equals(getAccountRequest.FetchId)) && this.HasFetchEmail == getAccountRequest.HasFetchEmail && (!this.HasFetchEmail || this.FetchEmail.Equals(getAccountRequest.FetchEmail)) && this.HasFetchBattleTag == getAccountRequest.HasFetchBattleTag && (!this.HasFetchBattleTag || this.FetchBattleTag.Equals(getAccountRequest.FetchBattleTag)) && this.HasFetchFullName == getAccountRequest.HasFetchFullName && (!this.HasFetchFullName || this.FetchFullName.Equals(getAccountRequest.FetchFullName)) && this.HasFetchLinks == getAccountRequest.HasFetchLinks && (!this.HasFetchLinks || this.FetchLinks.Equals(getAccountRequest.FetchLinks)) && this.HasFetchParentalControls == getAccountRequest.HasFetchParentalControls && (!this.HasFetchParentalControls || this.FetchParentalControls.Equals(getAccountRequest.FetchParentalControls));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetAccountRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetAccountRequest>(bs, 0, -1);
 		}
 
 		public bool HasRef;

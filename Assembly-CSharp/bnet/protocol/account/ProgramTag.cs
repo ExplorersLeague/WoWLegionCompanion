@@ -5,6 +5,75 @@ namespace bnet.protocol.account
 {
 	public class ProgramTag : IProtoBuf
 	{
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public uint Tag
+		{
+			get
+			{
+				return this._Tag;
+			}
+			set
+			{
+				this._Tag = value;
+				this.HasTag = true;
+			}
+		}
+
+		public void SetTag(uint val)
+		{
+			this.Tag = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			if (this.HasTag)
+			{
+				num ^= this.Tag.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ProgramTag programTag = obj as ProgramTag;
+			return programTag != null && this.HasProgram == programTag.HasProgram && (!this.HasProgram || this.Program.Equals(programTag.Program)) && this.HasTag == programTag.HasTag && (!this.HasTag || this.Tag.Equals(programTag.Tag));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ProgramTag ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ProgramTag>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ProgramTag.Deserialize(stream, this);
@@ -106,75 +175,6 @@ namespace bnet.protocol.account
 				num += 4u;
 			}
 			return num;
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public uint Tag
-		{
-			get
-			{
-				return this._Tag;
-			}
-			set
-			{
-				this._Tag = value;
-				this.HasTag = true;
-			}
-		}
-
-		public void SetTag(uint val)
-		{
-			this.Tag = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			if (this.HasTag)
-			{
-				num ^= this.Tag.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ProgramTag programTag = obj as ProgramTag;
-			return programTag != null && this.HasProgram == programTag.HasProgram && (!this.HasProgram || this.Program.Equals(programTag.Program)) && this.HasTag == programTag.HasTag && (!this.HasTag || this.Tag.Equals(programTag.Tag));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ProgramTag ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ProgramTag>(bs, 0, -1);
 		}
 
 		public bool HasProgram;

@@ -6,6 +6,75 @@ namespace bnet.protocol.challenge
 {
 	public class ChallengeExternalResult : IProtoBuf
 	{
+		public string RequestToken
+		{
+			get
+			{
+				return this._RequestToken;
+			}
+			set
+			{
+				this._RequestToken = value;
+				this.HasRequestToken = (value != null);
+			}
+		}
+
+		public void SetRequestToken(string val)
+		{
+			this.RequestToken = val;
+		}
+
+		public bool Passed
+		{
+			get
+			{
+				return this._Passed;
+			}
+			set
+			{
+				this._Passed = value;
+				this.HasPassed = true;
+			}
+		}
+
+		public void SetPassed(bool val)
+		{
+			this.Passed = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasRequestToken)
+			{
+				num ^= this.RequestToken.GetHashCode();
+			}
+			if (this.HasPassed)
+			{
+				num ^= this.Passed.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChallengeExternalResult challengeExternalResult = obj as ChallengeExternalResult;
+			return challengeExternalResult != null && this.HasRequestToken == challengeExternalResult.HasRequestToken && (!this.HasRequestToken || this.RequestToken.Equals(challengeExternalResult.RequestToken)) && this.HasPassed == challengeExternalResult.HasPassed && (!this.HasPassed || this.Passed.Equals(challengeExternalResult.Passed));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChallengeExternalResult ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChallengeExternalResult>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChallengeExternalResult.Deserialize(stream, this);
@@ -107,75 +176,6 @@ namespace bnet.protocol.challenge
 				num += 1u;
 			}
 			return num;
-		}
-
-		public string RequestToken
-		{
-			get
-			{
-				return this._RequestToken;
-			}
-			set
-			{
-				this._RequestToken = value;
-				this.HasRequestToken = (value != null);
-			}
-		}
-
-		public void SetRequestToken(string val)
-		{
-			this.RequestToken = val;
-		}
-
-		public bool Passed
-		{
-			get
-			{
-				return this._Passed;
-			}
-			set
-			{
-				this._Passed = value;
-				this.HasPassed = true;
-			}
-		}
-
-		public void SetPassed(bool val)
-		{
-			this.Passed = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasRequestToken)
-			{
-				num ^= this.RequestToken.GetHashCode();
-			}
-			if (this.HasPassed)
-			{
-				num ^= this.Passed.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChallengeExternalResult challengeExternalResult = obj as ChallengeExternalResult;
-			return challengeExternalResult != null && this.HasRequestToken == challengeExternalResult.HasRequestToken && (!this.HasRequestToken || this.RequestToken.Equals(challengeExternalResult.RequestToken)) && this.HasPassed == challengeExternalResult.HasPassed && (!this.HasPassed || this.Passed.Equals(challengeExternalResult.Passed));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChallengeExternalResult ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChallengeExternalResult>(bs, 0, -1);
 		}
 
 		public bool HasRequestToken;

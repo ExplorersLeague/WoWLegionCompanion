@@ -5,6 +5,61 @@ namespace bnet.protocol.channel
 {
 	public class CreateChannelResponse : IProtoBuf
 	{
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public EntityId ChannelId
+		{
+			get
+			{
+				return this._ChannelId;
+			}
+			set
+			{
+				this._ChannelId = value;
+				this.HasChannelId = (value != null);
+			}
+		}
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ObjectId.GetHashCode();
+			if (this.HasChannelId)
+			{
+				num ^= this.ChannelId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			CreateChannelResponse createChannelResponse = obj as CreateChannelResponse;
+			return createChannelResponse != null && this.ObjectId.Equals(createChannelResponse.ObjectId) && this.HasChannelId == createChannelResponse.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(createChannelResponse.ChannelId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static CreateChannelResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<CreateChannelResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			CreateChannelResponse.Deserialize(stream, this);
@@ -103,61 +158,6 @@ namespace bnet.protocol.channel
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num + 1u;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public EntityId ChannelId
-		{
-			get
-			{
-				return this._ChannelId;
-			}
-			set
-			{
-				this._ChannelId = value;
-				this.HasChannelId = (value != null);
-			}
-		}
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ObjectId.GetHashCode();
-			if (this.HasChannelId)
-			{
-				num ^= this.ChannelId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			CreateChannelResponse createChannelResponse = obj as CreateChannelResponse;
-			return createChannelResponse != null && this.ObjectId.Equals(createChannelResponse.ObjectId) && this.HasChannelId == createChannelResponse.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(createChannelResponse.ChannelId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static CreateChannelResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<CreateChannelResponse>(bs, 0, -1);
 		}
 
 		public bool HasChannelId;

@@ -7,6 +7,153 @@ namespace bnet.protocol.friends
 {
 	public class UpdateFriendStateRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId TargetId { get; set; }
+
+		public void SetTargetId(EntityId val)
+		{
+			this.TargetId = val;
+		}
+
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public ulong AttributesEpoch
+		{
+			get
+			{
+				return this._AttributesEpoch;
+			}
+			set
+			{
+				this._AttributesEpoch = value;
+				this.HasAttributesEpoch = true;
+			}
+		}
+
+		public void SetAttributesEpoch(ulong val)
+		{
+			this.AttributesEpoch = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.TargetId.GetHashCode();
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			if (this.HasAttributesEpoch)
+			{
+				num ^= this.AttributesEpoch.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			UpdateFriendStateRequest updateFriendStateRequest = obj as UpdateFriendStateRequest;
+			if (updateFriendStateRequest == null)
+			{
+				return false;
+			}
+			if (this.HasAgentId != updateFriendStateRequest.HasAgentId || (this.HasAgentId && !this.AgentId.Equals(updateFriendStateRequest.AgentId)))
+			{
+				return false;
+			}
+			if (!this.TargetId.Equals(updateFriendStateRequest.TargetId))
+			{
+				return false;
+			}
+			if (this.Attribute.Count != updateFriendStateRequest.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(updateFriendStateRequest.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasAttributesEpoch == updateFriendStateRequest.HasAttributesEpoch && (!this.HasAttributesEpoch || this.AttributesEpoch.Equals(updateFriendStateRequest.AttributesEpoch));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UpdateFriendStateRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UpdateFriendStateRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UpdateFriendStateRequest.Deserialize(stream, this);
@@ -162,153 +309,6 @@ namespace bnet.protocol.friends
 			}
 			num += 1u;
 			return num;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId TargetId { get; set; }
-
-		public void SetTargetId(EntityId val)
-		{
-			this.TargetId = val;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public ulong AttributesEpoch
-		{
-			get
-			{
-				return this._AttributesEpoch;
-			}
-			set
-			{
-				this._AttributesEpoch = value;
-				this.HasAttributesEpoch = true;
-			}
-		}
-
-		public void SetAttributesEpoch(ulong val)
-		{
-			this.AttributesEpoch = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.TargetId.GetHashCode();
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			if (this.HasAttributesEpoch)
-			{
-				num ^= this.AttributesEpoch.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			UpdateFriendStateRequest updateFriendStateRequest = obj as UpdateFriendStateRequest;
-			if (updateFriendStateRequest == null)
-			{
-				return false;
-			}
-			if (this.HasAgentId != updateFriendStateRequest.HasAgentId || (this.HasAgentId && !this.AgentId.Equals(updateFriendStateRequest.AgentId)))
-			{
-				return false;
-			}
-			if (!this.TargetId.Equals(updateFriendStateRequest.TargetId))
-			{
-				return false;
-			}
-			if (this.Attribute.Count != updateFriendStateRequest.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(updateFriendStateRequest.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasAttributesEpoch == updateFriendStateRequest.HasAttributesEpoch && (!this.HasAttributesEpoch || this.AttributesEpoch.Equals(updateFriendStateRequest.AttributesEpoch));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UpdateFriendStateRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UpdateFriendStateRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

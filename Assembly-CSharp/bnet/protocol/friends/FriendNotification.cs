@@ -5,6 +5,61 @@ namespace bnet.protocol.friends
 {
 	public class FriendNotification : IProtoBuf
 	{
+		public Friend Target { get; set; }
+
+		public void SetTarget(Friend val)
+		{
+			this.Target = val;
+		}
+
+		public EntityId GameAccountId
+		{
+			get
+			{
+				return this._GameAccountId;
+			}
+			set
+			{
+				this._GameAccountId = value;
+				this.HasGameAccountId = (value != null);
+			}
+		}
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Target.GetHashCode();
+			if (this.HasGameAccountId)
+			{
+				num ^= this.GameAccountId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FriendNotification friendNotification = obj as FriendNotification;
+			return friendNotification != null && this.Target.Equals(friendNotification.Target) && this.HasGameAccountId == friendNotification.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(friendNotification.GameAccountId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FriendNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FriendNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FriendNotification.Deserialize(stream, this);
@@ -113,61 +168,6 @@ namespace bnet.protocol.friends
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num + 1u;
-		}
-
-		public Friend Target { get; set; }
-
-		public void SetTarget(Friend val)
-		{
-			this.Target = val;
-		}
-
-		public EntityId GameAccountId
-		{
-			get
-			{
-				return this._GameAccountId;
-			}
-			set
-			{
-				this._GameAccountId = value;
-				this.HasGameAccountId = (value != null);
-			}
-		}
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Target.GetHashCode();
-			if (this.HasGameAccountId)
-			{
-				num ^= this.GameAccountId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FriendNotification friendNotification = obj as FriendNotification;
-			return friendNotification != null && this.Target.Equals(friendNotification.Target) && this.HasGameAccountId == friendNotification.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(friendNotification.GameAccountId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FriendNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FriendNotification>(bs, 0, -1);
 		}
 
 		public bool HasGameAccountId;

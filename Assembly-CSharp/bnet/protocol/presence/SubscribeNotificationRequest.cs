@@ -5,6 +5,38 @@ namespace bnet.protocol.presence
 {
 	public class SubscribeNotificationRequest : IProtoBuf
 	{
+		public EntityId EntityId { get; set; }
+
+		public void SetEntityId(EntityId val)
+		{
+			this.EntityId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.EntityId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscribeNotificationRequest subscribeNotificationRequest = obj as SubscribeNotificationRequest;
+			return subscribeNotificationRequest != null && this.EntityId.Equals(subscribeNotificationRequest.EntityId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscribeNotificationRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscribeNotificationRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscribeNotificationRequest.Deserialize(stream, this);
@@ -90,38 +122,6 @@ namespace bnet.protocol.presence
 			uint serializedSize = this.EntityId.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 1u;
-		}
-
-		public EntityId EntityId { get; set; }
-
-		public void SetEntityId(EntityId val)
-		{
-			this.EntityId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.EntityId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscribeNotificationRequest subscribeNotificationRequest = obj as SubscribeNotificationRequest;
-			return subscribeNotificationRequest != null && this.EntityId.Equals(subscribeNotificationRequest.EntityId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscribeNotificationRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscribeNotificationRequest>(bs, 0, -1);
 		}
 	}
 }

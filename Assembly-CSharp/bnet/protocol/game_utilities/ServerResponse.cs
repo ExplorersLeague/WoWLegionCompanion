@@ -7,6 +7,93 @@ namespace bnet.protocol.game_utilities
 {
 	public class ServerResponse : IProtoBuf
 	{
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ServerResponse serverResponse = obj as ServerResponse;
+			if (serverResponse == null)
+			{
+				return false;
+			}
+			if (this.Attribute.Count != serverResponse.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(serverResponse.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ServerResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ServerResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ServerResponse.Deserialize(stream, this);
@@ -101,93 +188,6 @@ namespace bnet.protocol.game_utilities
 				}
 			}
 			return num;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ServerResponse serverResponse = obj as ServerResponse;
-			if (serverResponse == null)
-			{
-				return false;
-			}
-			if (this.Attribute.Count != serverResponse.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(serverResponse.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ServerResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ServerResponse>(bs, 0, -1);
 		}
 
 		private List<bnet.protocol.attribute.Attribute> _Attribute = new List<bnet.protocol.attribute.Attribute>();

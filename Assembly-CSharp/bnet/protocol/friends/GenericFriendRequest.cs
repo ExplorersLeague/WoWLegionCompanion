@@ -5,6 +5,60 @@ namespace bnet.protocol.friends
 {
 	public class GenericFriendRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId TargetId { get; set; }
+
+		public void SetTargetId(EntityId val)
+		{
+			this.TargetId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			return num ^ this.TargetId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			GenericFriendRequest genericFriendRequest = obj as GenericFriendRequest;
+			return genericFriendRequest != null && this.HasAgentId == genericFriendRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(genericFriendRequest.AgentId)) && this.TargetId.Equals(genericFriendRequest.TargetId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GenericFriendRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GenericFriendRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GenericFriendRequest.Deserialize(stream, this);
@@ -113,60 +167,6 @@ namespace bnet.protocol.friends
 			uint serializedSize2 = this.TargetId.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId TargetId { get; set; }
-
-		public void SetTargetId(EntityId val)
-		{
-			this.TargetId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			return num ^ this.TargetId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			GenericFriendRequest genericFriendRequest = obj as GenericFriendRequest;
-			return genericFriendRequest != null && this.HasAgentId == genericFriendRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(genericFriendRequest.AgentId)) && this.TargetId.Equals(genericFriendRequest.TargetId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GenericFriendRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GenericFriendRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

@@ -92,7 +92,7 @@ namespace Newtonsoft.Json.Serialization
 
 		protected virtual List<MemberInfo> GetSerializableMembers(Type objectType)
 		{
-			System.Runtime.Serialization.DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(objectType);
+			DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(objectType);
 			List<MemberInfo> list = (from m in ReflectionUtils.GetFieldsAndProperties(objectType, this.DefaultMembersSearchFlags)
 			where !ReflectionUtils.IsIndexedProperty(m)
 			select m).ToList<MemberInfo>();
@@ -112,7 +112,7 @@ namespace Newtonsoft.Json.Serialization
 					{
 						list3.Add(memberInfo);
 					}
-					else if (dataContractAttribute != null && JsonTypeReflector.GetAttribute<System.Runtime.Serialization.DataMemberAttribute>(memberInfo) != null)
+					else if (dataContractAttribute != null && JsonTypeReflector.GetAttribute<DataMemberAttribute>(memberInfo) != null)
 					{
 						list3.Add(memberInfo);
 					}
@@ -262,7 +262,7 @@ namespace Newtonsoft.Json.Serialization
 			}
 			else
 			{
-				System.Runtime.Serialization.DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(contract.UnderlyingType);
+				DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(contract.UnderlyingType);
 				if (dataContractAttribute != null && dataContractAttribute.IsReference)
 				{
 					contract.IsReference = new bool?(true);
@@ -574,8 +574,8 @@ namespace Newtonsoft.Json.Serialization
 		private void SetPropertySettingsFromAttributes(JsonProperty property, ICustomAttributeProvider attributeProvider, string name, Type declaringType, MemberSerialization memberSerialization, out bool allowNonPublicAccess, out bool hasExplicitAttribute)
 		{
 			hasExplicitAttribute = false;
-			System.Runtime.Serialization.DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(declaringType);
-			System.Runtime.Serialization.DataMemberAttribute dataMemberAttribute;
+			DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(declaringType);
+			DataMemberAttribute dataMemberAttribute;
 			if (dataContractAttribute != null && attributeProvider is MemberInfo)
 			{
 				dataMemberAttribute = JsonTypeReflector.GetDataMemberAttribute((MemberInfo)attributeProvider);

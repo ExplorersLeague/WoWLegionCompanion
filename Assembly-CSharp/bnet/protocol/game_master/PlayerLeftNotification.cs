@@ -5,6 +5,69 @@ namespace bnet.protocol.game_master
 {
 	public class PlayerLeftNotification : IProtoBuf
 	{
+		public GameHandle GameHandle { get; set; }
+
+		public void SetGameHandle(GameHandle val)
+		{
+			this.GameHandle = val;
+		}
+
+		public EntityId MemberId { get; set; }
+
+		public void SetMemberId(EntityId val)
+		{
+			this.MemberId = val;
+		}
+
+		public uint Reason
+		{
+			get
+			{
+				return this._Reason;
+			}
+			set
+			{
+				this._Reason = value;
+				this.HasReason = true;
+			}
+		}
+
+		public void SetReason(uint val)
+		{
+			this.Reason = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.GameHandle.GetHashCode();
+			num ^= this.MemberId.GetHashCode();
+			if (this.HasReason)
+			{
+				num ^= this.Reason.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			PlayerLeftNotification playerLeftNotification = obj as PlayerLeftNotification;
+			return playerLeftNotification != null && this.GameHandle.Equals(playerLeftNotification.GameHandle) && this.MemberId.Equals(playerLeftNotification.MemberId) && this.HasReason == playerLeftNotification.HasReason && (!this.HasReason || this.Reason.Equals(playerLeftNotification.Reason));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static PlayerLeftNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<PlayerLeftNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			PlayerLeftNotification.Deserialize(stream, this);
@@ -128,69 +191,6 @@ namespace bnet.protocol.game_master
 				num += ProtocolParser.SizeOfUInt32(this.Reason);
 			}
 			return num + 2u;
-		}
-
-		public GameHandle GameHandle { get; set; }
-
-		public void SetGameHandle(GameHandle val)
-		{
-			this.GameHandle = val;
-		}
-
-		public EntityId MemberId { get; set; }
-
-		public void SetMemberId(EntityId val)
-		{
-			this.MemberId = val;
-		}
-
-		public uint Reason
-		{
-			get
-			{
-				return this._Reason;
-			}
-			set
-			{
-				this._Reason = value;
-				this.HasReason = true;
-			}
-		}
-
-		public void SetReason(uint val)
-		{
-			this.Reason = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.GameHandle.GetHashCode();
-			num ^= this.MemberId.GetHashCode();
-			if (this.HasReason)
-			{
-				num ^= this.Reason.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			PlayerLeftNotification playerLeftNotification = obj as PlayerLeftNotification;
-			return playerLeftNotification != null && this.GameHandle.Equals(playerLeftNotification.GameHandle) && this.MemberId.Equals(playerLeftNotification.MemberId) && this.HasReason == playerLeftNotification.HasReason && (!this.HasReason || this.Reason.Equals(playerLeftNotification.Reason));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static PlayerLeftNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<PlayerLeftNotification>(bs, 0, -1);
 		}
 
 		public bool HasReason;

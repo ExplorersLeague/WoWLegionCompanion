@@ -6,6 +6,61 @@ namespace bnet.protocol.connection
 {
 	public class DisconnectNotification : IProtoBuf
 	{
+		public uint ErrorCode { get; set; }
+
+		public void SetErrorCode(uint val)
+		{
+			this.ErrorCode = val;
+		}
+
+		public string Reason
+		{
+			get
+			{
+				return this._Reason;
+			}
+			set
+			{
+				this._Reason = value;
+				this.HasReason = (value != null);
+			}
+		}
+
+		public void SetReason(string val)
+		{
+			this.Reason = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ErrorCode.GetHashCode();
+			if (this.HasReason)
+			{
+				num ^= this.Reason.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			DisconnectNotification disconnectNotification = obj as DisconnectNotification;
+			return disconnectNotification != null && this.ErrorCode.Equals(disconnectNotification.ErrorCode) && this.HasReason == disconnectNotification.HasReason && (!this.HasReason || this.Reason.Equals(disconnectNotification.Reason));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static DisconnectNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<DisconnectNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			DisconnectNotification.Deserialize(stream, this);
@@ -99,61 +154,6 @@ namespace bnet.protocol.connection
 				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
 			}
 			return num + 1u;
-		}
-
-		public uint ErrorCode { get; set; }
-
-		public void SetErrorCode(uint val)
-		{
-			this.ErrorCode = val;
-		}
-
-		public string Reason
-		{
-			get
-			{
-				return this._Reason;
-			}
-			set
-			{
-				this._Reason = value;
-				this.HasReason = (value != null);
-			}
-		}
-
-		public void SetReason(string val)
-		{
-			this.Reason = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ErrorCode.GetHashCode();
-			if (this.HasReason)
-			{
-				num ^= this.Reason.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			DisconnectNotification disconnectNotification = obj as DisconnectNotification;
-			return disconnectNotification != null && this.ErrorCode.Equals(disconnectNotification.ErrorCode) && this.HasReason == disconnectNotification.HasReason && (!this.HasReason || this.Reason.Equals(disconnectNotification.Reason));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static DisconnectNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<DisconnectNotification>(bs, 0, -1);
 		}
 
 		public bool HasReason;

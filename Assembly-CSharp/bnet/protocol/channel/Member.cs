@@ -5,6 +5,46 @@ namespace bnet.protocol.channel
 {
 	public class Member : IProtoBuf
 	{
+		public Identity Identity { get; set; }
+
+		public void SetIdentity(Identity val)
+		{
+			this.Identity = val;
+		}
+
+		public MemberState State { get; set; }
+
+		public void SetState(MemberState val)
+		{
+			this.State = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Identity.GetHashCode();
+			return num ^ this.State.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			Member member = obj as Member;
+			return member != null && this.Identity.Equals(member.Identity) && this.State.Equals(member.State);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Member ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Member>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Member.Deserialize(stream, this);
@@ -110,46 +150,6 @@ namespace bnet.protocol.channel
 			uint serializedSize2 = this.State.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 2u;
-		}
-
-		public Identity Identity { get; set; }
-
-		public void SetIdentity(Identity val)
-		{
-			this.Identity = val;
-		}
-
-		public MemberState State { get; set; }
-
-		public void SetState(MemberState val)
-		{
-			this.State = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Identity.GetHashCode();
-			return num ^ this.State.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			Member member = obj as Member;
-			return member != null && this.Identity.Equals(member.Identity) && this.State.Equals(member.State);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Member ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Member>(bs, 0, -1);
 		}
 	}
 }

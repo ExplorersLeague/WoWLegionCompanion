@@ -6,137 +6,6 @@ namespace bnet.protocol.channel
 {
 	public class JoinChannelResponse : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			JoinChannelResponse.Deserialize(stream, this);
-		}
-
-		public static JoinChannelResponse Deserialize(Stream stream, JoinChannelResponse instance)
-		{
-			return JoinChannelResponse.Deserialize(stream, instance, -1L);
-		}
-
-		public static JoinChannelResponse DeserializeLengthDelimited(Stream stream)
-		{
-			JoinChannelResponse joinChannelResponse = new JoinChannelResponse();
-			JoinChannelResponse.DeserializeLengthDelimited(stream, joinChannelResponse);
-			return joinChannelResponse;
-		}
-
-		public static JoinChannelResponse DeserializeLengthDelimited(Stream stream, JoinChannelResponse instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return JoinChannelResponse.Deserialize(stream, instance, num);
-		}
-
-		public static JoinChannelResponse Deserialize(Stream stream, JoinChannelResponse instance, long limit)
-		{
-			instance.RequireFriendValidation = false;
-			if (instance.PrivilegedAccount == null)
-			{
-				instance.PrivilegedAccount = new List<EntityId>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 8)
-				{
-					if (num != 16)
-					{
-						if (num != 26)
-						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
-						}
-						else
-						{
-							instance.PrivilegedAccount.Add(EntityId.DeserializeLengthDelimited(stream));
-						}
-					}
-					else
-					{
-						instance.RequireFriendValidation = ProtocolParser.ReadBool(stream);
-					}
-				}
-				else
-				{
-					instance.ObjectId = ProtocolParser.ReadUInt64(stream);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			JoinChannelResponse.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, JoinChannelResponse instance)
-		{
-			if (instance.HasObjectId)
-			{
-				stream.WriteByte(8);
-				ProtocolParser.WriteUInt64(stream, instance.ObjectId);
-			}
-			if (instance.HasRequireFriendValidation)
-			{
-				stream.WriteByte(16);
-				ProtocolParser.WriteBool(stream, instance.RequireFriendValidation);
-			}
-			if (instance.PrivilegedAccount.Count > 0)
-			{
-				foreach (EntityId entityId in instance.PrivilegedAccount)
-				{
-					stream.WriteByte(26);
-					ProtocolParser.WriteUInt32(stream, entityId.GetSerializedSize());
-					EntityId.Serialize(stream, entityId);
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasObjectId)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
-			}
-			if (this.HasRequireFriendValidation)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.PrivilegedAccount.Count > 0)
-			{
-				foreach (EntityId entityId in this.PrivilegedAccount)
-				{
-					num += 1u;
-					uint serializedSize = entityId.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			return num;
-		}
-
 		public ulong ObjectId
 		{
 			get
@@ -274,6 +143,137 @@ namespace bnet.protocol.channel
 		public static JoinChannelResponse ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<JoinChannelResponse>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			JoinChannelResponse.Deserialize(stream, this);
+		}
+
+		public static JoinChannelResponse Deserialize(Stream stream, JoinChannelResponse instance)
+		{
+			return JoinChannelResponse.Deserialize(stream, instance, -1L);
+		}
+
+		public static JoinChannelResponse DeserializeLengthDelimited(Stream stream)
+		{
+			JoinChannelResponse joinChannelResponse = new JoinChannelResponse();
+			JoinChannelResponse.DeserializeLengthDelimited(stream, joinChannelResponse);
+			return joinChannelResponse;
+		}
+
+		public static JoinChannelResponse DeserializeLengthDelimited(Stream stream, JoinChannelResponse instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return JoinChannelResponse.Deserialize(stream, instance, num);
+		}
+
+		public static JoinChannelResponse Deserialize(Stream stream, JoinChannelResponse instance, long limit)
+		{
+			instance.RequireFriendValidation = false;
+			if (instance.PrivilegedAccount == null)
+			{
+				instance.PrivilegedAccount = new List<EntityId>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 8)
+				{
+					if (num != 16)
+					{
+						if (num != 26)
+						{
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
+							{
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+							}
+							ProtocolParser.SkipKey(stream, key);
+						}
+						else
+						{
+							instance.PrivilegedAccount.Add(EntityId.DeserializeLengthDelimited(stream));
+						}
+					}
+					else
+					{
+						instance.RequireFriendValidation = ProtocolParser.ReadBool(stream);
+					}
+				}
+				else
+				{
+					instance.ObjectId = ProtocolParser.ReadUInt64(stream);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			JoinChannelResponse.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, JoinChannelResponse instance)
+		{
+			if (instance.HasObjectId)
+			{
+				stream.WriteByte(8);
+				ProtocolParser.WriteUInt64(stream, instance.ObjectId);
+			}
+			if (instance.HasRequireFriendValidation)
+			{
+				stream.WriteByte(16);
+				ProtocolParser.WriteBool(stream, instance.RequireFriendValidation);
+			}
+			if (instance.PrivilegedAccount.Count > 0)
+			{
+				foreach (EntityId entityId in instance.PrivilegedAccount)
+				{
+					stream.WriteByte(26);
+					ProtocolParser.WriteUInt32(stream, entityId.GetSerializedSize());
+					EntityId.Serialize(stream, entityId);
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasObjectId)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
+			}
+			if (this.HasRequireFriendValidation)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.PrivilegedAccount.Count > 0)
+			{
+				foreach (EntityId entityId in this.PrivilegedAccount)
+				{
+					num += 1u;
+					uint serializedSize = entityId.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			return num;
 		}
 
 		public bool HasObjectId;

@@ -6,211 +6,6 @@ namespace bnet.protocol
 {
 	public class Header : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			Header.Deserialize(stream, this);
-		}
-
-		public static Header Deserialize(Stream stream, Header instance)
-		{
-			return Header.Deserialize(stream, instance, -1L);
-		}
-
-		public static Header DeserializeLengthDelimited(Stream stream)
-		{
-			Header header = new Header();
-			Header.DeserializeLengthDelimited(stream, header);
-			return header;
-		}
-
-		public static Header DeserializeLengthDelimited(Stream stream, Header instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return Header.Deserialize(stream, instance, num);
-		}
-
-		public static Header Deserialize(Stream stream, Header instance, long limit)
-		{
-			instance.ObjectId = 0UL;
-			instance.Size = 0u;
-			instance.Status = 0u;
-			if (instance.Error == null)
-			{
-				instance.Error = new List<ErrorInfo>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 8)
-				{
-					if (num != 16)
-					{
-						if (num != 24)
-						{
-							if (num != 32)
-							{
-								if (num != 40)
-								{
-									if (num != 48)
-									{
-										if (num != 58)
-										{
-											if (num != 64)
-											{
-												Key key = ProtocolParser.ReadKey((byte)num, stream);
-												uint field = key.Field;
-												if (field == 0u)
-												{
-													throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-												}
-												ProtocolParser.SkipKey(stream, key);
-											}
-											else
-											{
-												instance.Timeout = ProtocolParser.ReadUInt64(stream);
-											}
-										}
-										else
-										{
-											instance.Error.Add(ErrorInfo.DeserializeLengthDelimited(stream));
-										}
-									}
-									else
-									{
-										instance.Status = ProtocolParser.ReadUInt32(stream);
-									}
-								}
-								else
-								{
-									instance.Size = ProtocolParser.ReadUInt32(stream);
-								}
-							}
-							else
-							{
-								instance.ObjectId = ProtocolParser.ReadUInt64(stream);
-							}
-						}
-						else
-						{
-							instance.Token = ProtocolParser.ReadUInt32(stream);
-						}
-					}
-					else
-					{
-						instance.MethodId = ProtocolParser.ReadUInt32(stream);
-					}
-				}
-				else
-				{
-					instance.ServiceId = ProtocolParser.ReadUInt32(stream);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			Header.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, Header instance)
-		{
-			stream.WriteByte(8);
-			ProtocolParser.WriteUInt32(stream, instance.ServiceId);
-			if (instance.HasMethodId)
-			{
-				stream.WriteByte(16);
-				ProtocolParser.WriteUInt32(stream, instance.MethodId);
-			}
-			stream.WriteByte(24);
-			ProtocolParser.WriteUInt32(stream, instance.Token);
-			if (instance.HasObjectId)
-			{
-				stream.WriteByte(32);
-				ProtocolParser.WriteUInt64(stream, instance.ObjectId);
-			}
-			if (instance.HasSize)
-			{
-				stream.WriteByte(40);
-				ProtocolParser.WriteUInt32(stream, instance.Size);
-			}
-			if (instance.HasStatus)
-			{
-				stream.WriteByte(48);
-				ProtocolParser.WriteUInt32(stream, instance.Status);
-			}
-			if (instance.Error.Count > 0)
-			{
-				foreach (ErrorInfo errorInfo in instance.Error)
-				{
-					stream.WriteByte(58);
-					ProtocolParser.WriteUInt32(stream, errorInfo.GetSerializedSize());
-					ErrorInfo.Serialize(stream, errorInfo);
-				}
-			}
-			if (instance.HasTimeout)
-			{
-				stream.WriteByte(64);
-				ProtocolParser.WriteUInt64(stream, instance.Timeout);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			num += ProtocolParser.SizeOfUInt32(this.ServiceId);
-			if (this.HasMethodId)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MethodId);
-			}
-			num += ProtocolParser.SizeOfUInt32(this.Token);
-			if (this.HasObjectId)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
-			}
-			if (this.HasSize)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.Size);
-			}
-			if (this.HasStatus)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.Status);
-			}
-			if (this.Error.Count > 0)
-			{
-				foreach (ErrorInfo errorInfo in this.Error)
-				{
-					num += 1u;
-					uint serializedSize = errorInfo.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.HasTimeout)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.Timeout);
-			}
-			num += 2u;
-			return num;
-		}
-
 		public uint ServiceId { get; set; }
 
 		public void SetServiceId(uint val)
@@ -446,6 +241,211 @@ namespace bnet.protocol
 		public static Header ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<Header>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			Header.Deserialize(stream, this);
+		}
+
+		public static Header Deserialize(Stream stream, Header instance)
+		{
+			return Header.Deserialize(stream, instance, -1L);
+		}
+
+		public static Header DeserializeLengthDelimited(Stream stream)
+		{
+			Header header = new Header();
+			Header.DeserializeLengthDelimited(stream, header);
+			return header;
+		}
+
+		public static Header DeserializeLengthDelimited(Stream stream, Header instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return Header.Deserialize(stream, instance, num);
+		}
+
+		public static Header Deserialize(Stream stream, Header instance, long limit)
+		{
+			instance.ObjectId = 0UL;
+			instance.Size = 0u;
+			instance.Status = 0u;
+			if (instance.Error == null)
+			{
+				instance.Error = new List<ErrorInfo>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 8)
+				{
+					if (num != 16)
+					{
+						if (num != 24)
+						{
+							if (num != 32)
+							{
+								if (num != 40)
+								{
+									if (num != 48)
+									{
+										if (num != 58)
+										{
+											if (num != 64)
+											{
+												Key key = ProtocolParser.ReadKey((byte)num, stream);
+												uint field = key.Field;
+												if (field == 0u)
+												{
+													throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+												}
+												ProtocolParser.SkipKey(stream, key);
+											}
+											else
+											{
+												instance.Timeout = ProtocolParser.ReadUInt64(stream);
+											}
+										}
+										else
+										{
+											instance.Error.Add(ErrorInfo.DeserializeLengthDelimited(stream));
+										}
+									}
+									else
+									{
+										instance.Status = ProtocolParser.ReadUInt32(stream);
+									}
+								}
+								else
+								{
+									instance.Size = ProtocolParser.ReadUInt32(stream);
+								}
+							}
+							else
+							{
+								instance.ObjectId = ProtocolParser.ReadUInt64(stream);
+							}
+						}
+						else
+						{
+							instance.Token = ProtocolParser.ReadUInt32(stream);
+						}
+					}
+					else
+					{
+						instance.MethodId = ProtocolParser.ReadUInt32(stream);
+					}
+				}
+				else
+				{
+					instance.ServiceId = ProtocolParser.ReadUInt32(stream);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			Header.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, Header instance)
+		{
+			stream.WriteByte(8);
+			ProtocolParser.WriteUInt32(stream, instance.ServiceId);
+			if (instance.HasMethodId)
+			{
+				stream.WriteByte(16);
+				ProtocolParser.WriteUInt32(stream, instance.MethodId);
+			}
+			stream.WriteByte(24);
+			ProtocolParser.WriteUInt32(stream, instance.Token);
+			if (instance.HasObjectId)
+			{
+				stream.WriteByte(32);
+				ProtocolParser.WriteUInt64(stream, instance.ObjectId);
+			}
+			if (instance.HasSize)
+			{
+				stream.WriteByte(40);
+				ProtocolParser.WriteUInt32(stream, instance.Size);
+			}
+			if (instance.HasStatus)
+			{
+				stream.WriteByte(48);
+				ProtocolParser.WriteUInt32(stream, instance.Status);
+			}
+			if (instance.Error.Count > 0)
+			{
+				foreach (ErrorInfo errorInfo in instance.Error)
+				{
+					stream.WriteByte(58);
+					ProtocolParser.WriteUInt32(stream, errorInfo.GetSerializedSize());
+					ErrorInfo.Serialize(stream, errorInfo);
+				}
+			}
+			if (instance.HasTimeout)
+			{
+				stream.WriteByte(64);
+				ProtocolParser.WriteUInt64(stream, instance.Timeout);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			num += ProtocolParser.SizeOfUInt32(this.ServiceId);
+			if (this.HasMethodId)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MethodId);
+			}
+			num += ProtocolParser.SizeOfUInt32(this.Token);
+			if (this.HasObjectId)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
+			}
+			if (this.HasSize)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.Size);
+			}
+			if (this.HasStatus)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.Status);
+			}
+			if (this.Error.Count > 0)
+			{
+				foreach (ErrorInfo errorInfo in this.Error)
+				{
+					num += 1u;
+					uint serializedSize = errorInfo.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.HasTimeout)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.Timeout);
+			}
+			num += 2u;
+			return num;
 		}
 
 		public bool HasMethodId;

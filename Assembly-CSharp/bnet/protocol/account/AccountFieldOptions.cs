@@ -5,6 +5,185 @@ namespace bnet.protocol.account
 {
 	public class AccountFieldOptions : IProtoBuf
 	{
+		public bool AllFields
+		{
+			get
+			{
+				return this._AllFields;
+			}
+			set
+			{
+				this._AllFields = value;
+				this.HasAllFields = true;
+			}
+		}
+
+		public void SetAllFields(bool val)
+		{
+			this.AllFields = val;
+		}
+
+		public bool FieldAccountLevelInfo
+		{
+			get
+			{
+				return this._FieldAccountLevelInfo;
+			}
+			set
+			{
+				this._FieldAccountLevelInfo = value;
+				this.HasFieldAccountLevelInfo = true;
+			}
+		}
+
+		public void SetFieldAccountLevelInfo(bool val)
+		{
+			this.FieldAccountLevelInfo = val;
+		}
+
+		public bool FieldPrivacyInfo
+		{
+			get
+			{
+				return this._FieldPrivacyInfo;
+			}
+			set
+			{
+				this._FieldPrivacyInfo = value;
+				this.HasFieldPrivacyInfo = true;
+			}
+		}
+
+		public void SetFieldPrivacyInfo(bool val)
+		{
+			this.FieldPrivacyInfo = val;
+		}
+
+		public bool FieldParentalControlInfo
+		{
+			get
+			{
+				return this._FieldParentalControlInfo;
+			}
+			set
+			{
+				this._FieldParentalControlInfo = value;
+				this.HasFieldParentalControlInfo = true;
+			}
+		}
+
+		public void SetFieldParentalControlInfo(bool val)
+		{
+			this.FieldParentalControlInfo = val;
+		}
+
+		public bool FieldGameLevelInfo
+		{
+			get
+			{
+				return this._FieldGameLevelInfo;
+			}
+			set
+			{
+				this._FieldGameLevelInfo = value;
+				this.HasFieldGameLevelInfo = true;
+			}
+		}
+
+		public void SetFieldGameLevelInfo(bool val)
+		{
+			this.FieldGameLevelInfo = val;
+		}
+
+		public bool FieldGameStatus
+		{
+			get
+			{
+				return this._FieldGameStatus;
+			}
+			set
+			{
+				this._FieldGameStatus = value;
+				this.HasFieldGameStatus = true;
+			}
+		}
+
+		public void SetFieldGameStatus(bool val)
+		{
+			this.FieldGameStatus = val;
+		}
+
+		public bool FieldGameAccounts
+		{
+			get
+			{
+				return this._FieldGameAccounts;
+			}
+			set
+			{
+				this._FieldGameAccounts = value;
+				this.HasFieldGameAccounts = true;
+			}
+		}
+
+		public void SetFieldGameAccounts(bool val)
+		{
+			this.FieldGameAccounts = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAllFields)
+			{
+				num ^= this.AllFields.GetHashCode();
+			}
+			if (this.HasFieldAccountLevelInfo)
+			{
+				num ^= this.FieldAccountLevelInfo.GetHashCode();
+			}
+			if (this.HasFieldPrivacyInfo)
+			{
+				num ^= this.FieldPrivacyInfo.GetHashCode();
+			}
+			if (this.HasFieldParentalControlInfo)
+			{
+				num ^= this.FieldParentalControlInfo.GetHashCode();
+			}
+			if (this.HasFieldGameLevelInfo)
+			{
+				num ^= this.FieldGameLevelInfo.GetHashCode();
+			}
+			if (this.HasFieldGameStatus)
+			{
+				num ^= this.FieldGameStatus.GetHashCode();
+			}
+			if (this.HasFieldGameAccounts)
+			{
+				num ^= this.FieldGameAccounts.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountFieldOptions accountFieldOptions = obj as AccountFieldOptions;
+			return accountFieldOptions != null && this.HasAllFields == accountFieldOptions.HasAllFields && (!this.HasAllFields || this.AllFields.Equals(accountFieldOptions.AllFields)) && this.HasFieldAccountLevelInfo == accountFieldOptions.HasFieldAccountLevelInfo && (!this.HasFieldAccountLevelInfo || this.FieldAccountLevelInfo.Equals(accountFieldOptions.FieldAccountLevelInfo)) && this.HasFieldPrivacyInfo == accountFieldOptions.HasFieldPrivacyInfo && (!this.HasFieldPrivacyInfo || this.FieldPrivacyInfo.Equals(accountFieldOptions.FieldPrivacyInfo)) && this.HasFieldParentalControlInfo == accountFieldOptions.HasFieldParentalControlInfo && (!this.HasFieldParentalControlInfo || this.FieldParentalControlInfo.Equals(accountFieldOptions.FieldParentalControlInfo)) && this.HasFieldGameLevelInfo == accountFieldOptions.HasFieldGameLevelInfo && (!this.HasFieldGameLevelInfo || this.FieldGameLevelInfo.Equals(accountFieldOptions.FieldGameLevelInfo)) && this.HasFieldGameStatus == accountFieldOptions.HasFieldGameStatus && (!this.HasFieldGameStatus || this.FieldGameStatus.Equals(accountFieldOptions.FieldGameStatus)) && this.HasFieldGameAccounts == accountFieldOptions.HasFieldGameAccounts && (!this.HasFieldGameAccounts || this.FieldGameAccounts.Equals(accountFieldOptions.FieldGameAccounts));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountFieldOptions ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountFieldOptions>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountFieldOptions.Deserialize(stream, this);
@@ -189,185 +368,6 @@ namespace bnet.protocol.account
 				num += 1u;
 			}
 			return num;
-		}
-
-		public bool AllFields
-		{
-			get
-			{
-				return this._AllFields;
-			}
-			set
-			{
-				this._AllFields = value;
-				this.HasAllFields = true;
-			}
-		}
-
-		public void SetAllFields(bool val)
-		{
-			this.AllFields = val;
-		}
-
-		public bool FieldAccountLevelInfo
-		{
-			get
-			{
-				return this._FieldAccountLevelInfo;
-			}
-			set
-			{
-				this._FieldAccountLevelInfo = value;
-				this.HasFieldAccountLevelInfo = true;
-			}
-		}
-
-		public void SetFieldAccountLevelInfo(bool val)
-		{
-			this.FieldAccountLevelInfo = val;
-		}
-
-		public bool FieldPrivacyInfo
-		{
-			get
-			{
-				return this._FieldPrivacyInfo;
-			}
-			set
-			{
-				this._FieldPrivacyInfo = value;
-				this.HasFieldPrivacyInfo = true;
-			}
-		}
-
-		public void SetFieldPrivacyInfo(bool val)
-		{
-			this.FieldPrivacyInfo = val;
-		}
-
-		public bool FieldParentalControlInfo
-		{
-			get
-			{
-				return this._FieldParentalControlInfo;
-			}
-			set
-			{
-				this._FieldParentalControlInfo = value;
-				this.HasFieldParentalControlInfo = true;
-			}
-		}
-
-		public void SetFieldParentalControlInfo(bool val)
-		{
-			this.FieldParentalControlInfo = val;
-		}
-
-		public bool FieldGameLevelInfo
-		{
-			get
-			{
-				return this._FieldGameLevelInfo;
-			}
-			set
-			{
-				this._FieldGameLevelInfo = value;
-				this.HasFieldGameLevelInfo = true;
-			}
-		}
-
-		public void SetFieldGameLevelInfo(bool val)
-		{
-			this.FieldGameLevelInfo = val;
-		}
-
-		public bool FieldGameStatus
-		{
-			get
-			{
-				return this._FieldGameStatus;
-			}
-			set
-			{
-				this._FieldGameStatus = value;
-				this.HasFieldGameStatus = true;
-			}
-		}
-
-		public void SetFieldGameStatus(bool val)
-		{
-			this.FieldGameStatus = val;
-		}
-
-		public bool FieldGameAccounts
-		{
-			get
-			{
-				return this._FieldGameAccounts;
-			}
-			set
-			{
-				this._FieldGameAccounts = value;
-				this.HasFieldGameAccounts = true;
-			}
-		}
-
-		public void SetFieldGameAccounts(bool val)
-		{
-			this.FieldGameAccounts = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAllFields)
-			{
-				num ^= this.AllFields.GetHashCode();
-			}
-			if (this.HasFieldAccountLevelInfo)
-			{
-				num ^= this.FieldAccountLevelInfo.GetHashCode();
-			}
-			if (this.HasFieldPrivacyInfo)
-			{
-				num ^= this.FieldPrivacyInfo.GetHashCode();
-			}
-			if (this.HasFieldParentalControlInfo)
-			{
-				num ^= this.FieldParentalControlInfo.GetHashCode();
-			}
-			if (this.HasFieldGameLevelInfo)
-			{
-				num ^= this.FieldGameLevelInfo.GetHashCode();
-			}
-			if (this.HasFieldGameStatus)
-			{
-				num ^= this.FieldGameStatus.GetHashCode();
-			}
-			if (this.HasFieldGameAccounts)
-			{
-				num ^= this.FieldGameAccounts.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountFieldOptions accountFieldOptions = obj as AccountFieldOptions;
-			return accountFieldOptions != null && this.HasAllFields == accountFieldOptions.HasAllFields && (!this.HasAllFields || this.AllFields.Equals(accountFieldOptions.AllFields)) && this.HasFieldAccountLevelInfo == accountFieldOptions.HasFieldAccountLevelInfo && (!this.HasFieldAccountLevelInfo || this.FieldAccountLevelInfo.Equals(accountFieldOptions.FieldAccountLevelInfo)) && this.HasFieldPrivacyInfo == accountFieldOptions.HasFieldPrivacyInfo && (!this.HasFieldPrivacyInfo || this.FieldPrivacyInfo.Equals(accountFieldOptions.FieldPrivacyInfo)) && this.HasFieldParentalControlInfo == accountFieldOptions.HasFieldParentalControlInfo && (!this.HasFieldParentalControlInfo || this.FieldParentalControlInfo.Equals(accountFieldOptions.FieldParentalControlInfo)) && this.HasFieldGameLevelInfo == accountFieldOptions.HasFieldGameLevelInfo && (!this.HasFieldGameLevelInfo || this.FieldGameLevelInfo.Equals(accountFieldOptions.FieldGameLevelInfo)) && this.HasFieldGameStatus == accountFieldOptions.HasFieldGameStatus && (!this.HasFieldGameStatus || this.FieldGameStatus.Equals(accountFieldOptions.FieldGameStatus)) && this.HasFieldGameAccounts == accountFieldOptions.HasFieldGameAccounts && (!this.HasFieldGameAccounts || this.FieldGameAccounts.Equals(accountFieldOptions.FieldGameAccounts));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountFieldOptions ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountFieldOptions>(bs, 0, -1);
 		}
 
 		public bool HasAllFields;

@@ -5,6 +5,46 @@ namespace bnet.protocol
 {
 	public class ProcessId : IProtoBuf
 	{
+		public uint Label { get; set; }
+
+		public void SetLabel(uint val)
+		{
+			this.Label = val;
+		}
+
+		public uint Epoch { get; set; }
+
+		public void SetEpoch(uint val)
+		{
+			this.Epoch = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Label.GetHashCode();
+			return num ^ this.Epoch.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			ProcessId processId = obj as ProcessId;
+			return processId != null && this.Label.Equals(processId.Label) && this.Epoch.Equals(processId.Epoch);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ProcessId ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ProcessId>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ProcessId.Deserialize(stream, this);
@@ -90,46 +130,6 @@ namespace bnet.protocol
 			num += ProtocolParser.SizeOfUInt32(this.Label);
 			num += ProtocolParser.SizeOfUInt32(this.Epoch);
 			return num + 2u;
-		}
-
-		public uint Label { get; set; }
-
-		public void SetLabel(uint val)
-		{
-			this.Label = val;
-		}
-
-		public uint Epoch { get; set; }
-
-		public void SetEpoch(uint val)
-		{
-			this.Epoch = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Label.GetHashCode();
-			return num ^ this.Epoch.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			ProcessId processId = obj as ProcessId;
-			return processId != null && this.Label.Equals(processId.Label) && this.Epoch.Equals(processId.Epoch);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ProcessId ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ProcessId>(bs, 0, -1);
 		}
 	}
 }

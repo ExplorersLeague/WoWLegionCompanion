@@ -6,6 +6,105 @@ namespace bnet.protocol.channel_invitation
 {
 	public class IncrementChannelCountRequest : IProtoBuf
 	{
+		public EntityId AgentId { get; set; }
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public List<ChannelCountDescription> Descriptions
+		{
+			get
+			{
+				return this._Descriptions;
+			}
+			set
+			{
+				this._Descriptions = value;
+			}
+		}
+
+		public List<ChannelCountDescription> DescriptionsList
+		{
+			get
+			{
+				return this._Descriptions;
+			}
+		}
+
+		public int DescriptionsCount
+		{
+			get
+			{
+				return this._Descriptions.Count;
+			}
+		}
+
+		public void AddDescriptions(ChannelCountDescription val)
+		{
+			this._Descriptions.Add(val);
+		}
+
+		public void ClearDescriptions()
+		{
+			this._Descriptions.Clear();
+		}
+
+		public void SetDescriptions(List<ChannelCountDescription> val)
+		{
+			this.Descriptions = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.AgentId.GetHashCode();
+			foreach (ChannelCountDescription channelCountDescription in this.Descriptions)
+			{
+				num ^= channelCountDescription.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			IncrementChannelCountRequest incrementChannelCountRequest = obj as IncrementChannelCountRequest;
+			if (incrementChannelCountRequest == null)
+			{
+				return false;
+			}
+			if (!this.AgentId.Equals(incrementChannelCountRequest.AgentId))
+			{
+				return false;
+			}
+			if (this.Descriptions.Count != incrementChannelCountRequest.Descriptions.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Descriptions.Count; i++)
+			{
+				if (!this.Descriptions[i].Equals(incrementChannelCountRequest.Descriptions[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static IncrementChannelCountRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<IncrementChannelCountRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			IncrementChannelCountRequest.Deserialize(stream, this);
@@ -121,105 +220,6 @@ namespace bnet.protocol.channel_invitation
 			}
 			num += 1u;
 			return num;
-		}
-
-		public EntityId AgentId { get; set; }
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public List<ChannelCountDescription> Descriptions
-		{
-			get
-			{
-				return this._Descriptions;
-			}
-			set
-			{
-				this._Descriptions = value;
-			}
-		}
-
-		public List<ChannelCountDescription> DescriptionsList
-		{
-			get
-			{
-				return this._Descriptions;
-			}
-		}
-
-		public int DescriptionsCount
-		{
-			get
-			{
-				return this._Descriptions.Count;
-			}
-		}
-
-		public void AddDescriptions(ChannelCountDescription val)
-		{
-			this._Descriptions.Add(val);
-		}
-
-		public void ClearDescriptions()
-		{
-			this._Descriptions.Clear();
-		}
-
-		public void SetDescriptions(List<ChannelCountDescription> val)
-		{
-			this.Descriptions = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.AgentId.GetHashCode();
-			foreach (ChannelCountDescription channelCountDescription in this.Descriptions)
-			{
-				num ^= channelCountDescription.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			IncrementChannelCountRequest incrementChannelCountRequest = obj as IncrementChannelCountRequest;
-			if (incrementChannelCountRequest == null)
-			{
-				return false;
-			}
-			if (!this.AgentId.Equals(incrementChannelCountRequest.AgentId))
-			{
-				return false;
-			}
-			if (this.Descriptions.Count != incrementChannelCountRequest.Descriptions.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Descriptions.Count; i++)
-			{
-				if (!this.Descriptions[i].Equals(incrementChannelCountRequest.Descriptions[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static IncrementChannelCountRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<IncrementChannelCountRequest>(bs, 0, -1);
 		}
 
 		private List<ChannelCountDescription> _Descriptions = new List<ChannelCountDescription>();

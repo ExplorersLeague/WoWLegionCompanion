@@ -5,6 +5,38 @@ namespace bnet.protocol.authentication
 {
 	public class LogonUpdateRequest : IProtoBuf
 	{
+		public uint ErrorCode { get; set; }
+
+		public void SetErrorCode(uint val)
+		{
+			this.ErrorCode = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.ErrorCode.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			LogonUpdateRequest logonUpdateRequest = obj as LogonUpdateRequest;
+			return logonUpdateRequest != null && this.ErrorCode.Equals(logonUpdateRequest.ErrorCode);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static LogonUpdateRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<LogonUpdateRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			LogonUpdateRequest.Deserialize(stream, this);
@@ -80,38 +112,6 @@ namespace bnet.protocol.authentication
 			uint num = 0u;
 			num += ProtocolParser.SizeOfUInt32(this.ErrorCode);
 			return num + 1u;
-		}
-
-		public uint ErrorCode { get; set; }
-
-		public void SetErrorCode(uint val)
-		{
-			this.ErrorCode = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.ErrorCode.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			LogonUpdateRequest logonUpdateRequest = obj as LogonUpdateRequest;
-			return logonUpdateRequest != null && this.ErrorCode.Equals(logonUpdateRequest.ErrorCode);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static LogonUpdateRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<LogonUpdateRequest>(bs, 0, -1);
 		}
 	}
 }

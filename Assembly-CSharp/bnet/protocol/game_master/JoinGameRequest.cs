@@ -6,6 +6,127 @@ namespace bnet.protocol.game_master
 {
 	public class JoinGameRequest : IProtoBuf
 	{
+		public GameHandle GameHandle { get; set; }
+
+		public void SetGameHandle(GameHandle val)
+		{
+			this.GameHandle = val;
+		}
+
+		public List<Player> Player
+		{
+			get
+			{
+				return this._Player;
+			}
+			set
+			{
+				this._Player = value;
+			}
+		}
+
+		public List<Player> PlayerList
+		{
+			get
+			{
+				return this._Player;
+			}
+		}
+
+		public int PlayerCount
+		{
+			get
+			{
+				return this._Player.Count;
+			}
+		}
+
+		public void AddPlayer(Player val)
+		{
+			this._Player.Add(val);
+		}
+
+		public void ClearPlayer()
+		{
+			this._Player.Clear();
+		}
+
+		public void SetPlayer(List<Player> val)
+		{
+			this.Player = val;
+		}
+
+		public bool AdvancedNotification
+		{
+			get
+			{
+				return this._AdvancedNotification;
+			}
+			set
+			{
+				this._AdvancedNotification = value;
+				this.HasAdvancedNotification = true;
+			}
+		}
+
+		public void SetAdvancedNotification(bool val)
+		{
+			this.AdvancedNotification = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.GameHandle.GetHashCode();
+			foreach (Player player in this.Player)
+			{
+				num ^= player.GetHashCode();
+			}
+			if (this.HasAdvancedNotification)
+			{
+				num ^= this.AdvancedNotification.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			JoinGameRequest joinGameRequest = obj as JoinGameRequest;
+			if (joinGameRequest == null)
+			{
+				return false;
+			}
+			if (!this.GameHandle.Equals(joinGameRequest.GameHandle))
+			{
+				return false;
+			}
+			if (this.Player.Count != joinGameRequest.Player.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Player.Count; i++)
+			{
+				if (!this.Player[i].Equals(joinGameRequest.Player[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasAdvancedNotification == joinGameRequest.HasAdvancedNotification && (!this.HasAdvancedNotification || this.AdvancedNotification.Equals(joinGameRequest.AdvancedNotification));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static JoinGameRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<JoinGameRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			JoinGameRequest.Deserialize(stream, this);
@@ -139,127 +260,6 @@ namespace bnet.protocol.game_master
 			}
 			num += 1u;
 			return num;
-		}
-
-		public GameHandle GameHandle { get; set; }
-
-		public void SetGameHandle(GameHandle val)
-		{
-			this.GameHandle = val;
-		}
-
-		public List<Player> Player
-		{
-			get
-			{
-				return this._Player;
-			}
-			set
-			{
-				this._Player = value;
-			}
-		}
-
-		public List<Player> PlayerList
-		{
-			get
-			{
-				return this._Player;
-			}
-		}
-
-		public int PlayerCount
-		{
-			get
-			{
-				return this._Player.Count;
-			}
-		}
-
-		public void AddPlayer(Player val)
-		{
-			this._Player.Add(val);
-		}
-
-		public void ClearPlayer()
-		{
-			this._Player.Clear();
-		}
-
-		public void SetPlayer(List<Player> val)
-		{
-			this.Player = val;
-		}
-
-		public bool AdvancedNotification
-		{
-			get
-			{
-				return this._AdvancedNotification;
-			}
-			set
-			{
-				this._AdvancedNotification = value;
-				this.HasAdvancedNotification = true;
-			}
-		}
-
-		public void SetAdvancedNotification(bool val)
-		{
-			this.AdvancedNotification = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.GameHandle.GetHashCode();
-			foreach (Player player in this.Player)
-			{
-				num ^= player.GetHashCode();
-			}
-			if (this.HasAdvancedNotification)
-			{
-				num ^= this.AdvancedNotification.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			JoinGameRequest joinGameRequest = obj as JoinGameRequest;
-			if (joinGameRequest == null)
-			{
-				return false;
-			}
-			if (!this.GameHandle.Equals(joinGameRequest.GameHandle))
-			{
-				return false;
-			}
-			if (this.Player.Count != joinGameRequest.Player.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Player.Count; i++)
-			{
-				if (!this.Player[i].Equals(joinGameRequest.Player[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasAdvancedNotification == joinGameRequest.HasAdvancedNotification && (!this.HasAdvancedNotification || this.AdvancedNotification.Equals(joinGameRequest.AdvancedNotification));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static JoinGameRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<JoinGameRequest>(bs, 0, -1);
 		}
 
 		private List<Player> _Player = new List<Player>();

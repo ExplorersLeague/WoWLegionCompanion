@@ -5,6 +5,53 @@ namespace bnet.protocol.channel
 {
 	public class GetChannelInfoResponse : IProtoBuf
 	{
+		public ChannelInfo ChannelInfo
+		{
+			get
+			{
+				return this._ChannelInfo;
+			}
+			set
+			{
+				this._ChannelInfo = value;
+				this.HasChannelInfo = (value != null);
+			}
+		}
+
+		public void SetChannelInfo(ChannelInfo val)
+		{
+			this.ChannelInfo = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasChannelInfo)
+			{
+				num ^= this.ChannelInfo.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetChannelInfoResponse getChannelInfoResponse = obj as GetChannelInfoResponse;
+			return getChannelInfoResponse != null && this.HasChannelInfo == getChannelInfoResponse.HasChannelInfo && (!this.HasChannelInfo || this.ChannelInfo.Equals(getChannelInfoResponse.ChannelInfo));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetChannelInfoResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetChannelInfoResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetChannelInfoResponse.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.channel
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public ChannelInfo ChannelInfo
-		{
-			get
-			{
-				return this._ChannelInfo;
-			}
-			set
-			{
-				this._ChannelInfo = value;
-				this.HasChannelInfo = (value != null);
-			}
-		}
-
-		public void SetChannelInfo(ChannelInfo val)
-		{
-			this.ChannelInfo = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasChannelInfo)
-			{
-				num ^= this.ChannelInfo.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetChannelInfoResponse getChannelInfoResponse = obj as GetChannelInfoResponse;
-			return getChannelInfoResponse != null && this.HasChannelInfo == getChannelInfoResponse.HasChannelInfo && (!this.HasChannelInfo || this.ChannelInfo.Equals(getChannelInfoResponse.ChannelInfo));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetChannelInfoResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetChannelInfoResponse>(bs, 0, -1);
 		}
 
 		public bool HasChannelInfo;

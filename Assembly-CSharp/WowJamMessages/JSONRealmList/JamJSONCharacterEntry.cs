@@ -4,44 +4,48 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[System.Runtime.Serialization.DataContract]
-	[FlexJamStruct(Name = "JamJSONCharacterEntry", Version = 28333852u)]
+	[DataContract]
+	[FlexJamStruct(Name = "JamJSONCharacterEntry", Version = 47212487u)]
 	public class JamJSONCharacterEntry
 	{
-		[System.Runtime.Serialization.DataMember(Name = "raceID")]
+		[DataMember(Name = "raceID")]
 		[FlexJamMember(Name = "raceID", Type = FlexJamType.UInt8)]
 		public byte RaceID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "hasMobileAccess")]
+		[DataMember(Name = "hasMobileAccess")]
 		[FlexJamMember(Name = "hasMobileAccess", Type = FlexJamType.Bool)]
 		public bool HasMobileAccess { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "experienceLevel")]
+		[DataMember(Name = "experienceLevel")]
 		[FlexJamMember(Name = "experienceLevel", Type = FlexJamType.UInt8)]
 		public byte ExperienceLevel { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "playerGuid")]
+		[DataMember(Name = "playerGuid")]
 		[FlexJamMember(Name = "playerGuid", Type = FlexJamType.WowGuid)]
 		public string PlayerGuid { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "lastActiveTime")]
+		[DataMember(Name = "lastActiveTime")]
 		[FlexJamMember(Name = "lastActiveTime", Type = FlexJamType.Int32)]
 		public int LastActiveTime { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
+		[DataMember(Name = "virtualRealmAddress")]
 		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[DataMember(Name = "name")]
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "classID")]
+		[DataMember(Name = "classID")]
 		[FlexJamMember(Name = "classID", Type = FlexJamType.UInt8)]
 		public byte ClassID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "sexID")]
+		[DataMember(Name = "sexID")]
 		[FlexJamMember(Name = "sexID", Type = FlexJamType.UInt8)]
 		public byte SexID { get; set; }
+
+		[DataMember(Name = "communityID")]
+		[FlexJamMember(Name = "communityID", Type = FlexJamType.UInt64)]
+		public ulong CommunityID { get; set; }
 	}
 }

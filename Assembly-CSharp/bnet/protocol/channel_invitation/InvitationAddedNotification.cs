@@ -6,6 +6,38 @@ namespace bnet.protocol.channel_invitation
 {
 	public class InvitationAddedNotification : IProtoBuf
 	{
+		public Invitation Invitation { get; set; }
+
+		public void SetInvitation(Invitation val)
+		{
+			this.Invitation = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.Invitation.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			InvitationAddedNotification invitationAddedNotification = obj as InvitationAddedNotification;
+			return invitationAddedNotification != null && this.Invitation.Equals(invitationAddedNotification.Invitation);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static InvitationAddedNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<InvitationAddedNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			InvitationAddedNotification.Deserialize(stream, this);
@@ -91,38 +123,6 @@ namespace bnet.protocol.channel_invitation
 			uint serializedSize = this.Invitation.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 1u;
-		}
-
-		public Invitation Invitation { get; set; }
-
-		public void SetInvitation(Invitation val)
-		{
-			this.Invitation = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.Invitation.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			InvitationAddedNotification invitationAddedNotification = obj as InvitationAddedNotification;
-			return invitationAddedNotification != null && this.Invitation.Equals(invitationAddedNotification.Invitation);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static InvitationAddedNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<InvitationAddedNotification>(bs, 0, -1);
 		}
 	}
 }

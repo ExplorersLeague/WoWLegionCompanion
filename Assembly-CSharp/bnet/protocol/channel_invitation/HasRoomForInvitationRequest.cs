@@ -6,6 +6,83 @@ namespace bnet.protocol.channel_invitation
 {
 	public class HasRoomForInvitationRequest : IProtoBuf
 	{
+		public uint ServiceType { get; set; }
+
+		public void SetServiceType(uint val)
+		{
+			this.ServiceType = val;
+		}
+
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public string ChannelType
+		{
+			get
+			{
+				return this._ChannelType;
+			}
+			set
+			{
+				this._ChannelType = value;
+				this.HasChannelType = (value != null);
+			}
+		}
+
+		public void SetChannelType(string val)
+		{
+			this.ChannelType = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ServiceType.GetHashCode();
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			if (this.HasChannelType)
+			{
+				num ^= this.ChannelType.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			HasRoomForInvitationRequest hasRoomForInvitationRequest = obj as HasRoomForInvitationRequest;
+			return hasRoomForInvitationRequest != null && this.ServiceType.Equals(hasRoomForInvitationRequest.ServiceType) && this.HasProgram == hasRoomForInvitationRequest.HasProgram && (!this.HasProgram || this.Program.Equals(hasRoomForInvitationRequest.Program)) && this.HasChannelType == hasRoomForInvitationRequest.HasChannelType && (!this.HasChannelType || this.ChannelType.Equals(hasRoomForInvitationRequest.ChannelType));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static HasRoomForInvitationRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<HasRoomForInvitationRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			HasRoomForInvitationRequest.Deserialize(stream, this);
@@ -119,83 +196,6 @@ namespace bnet.protocol.channel_invitation
 				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
 			}
 			return num + 1u;
-		}
-
-		public uint ServiceType { get; set; }
-
-		public void SetServiceType(uint val)
-		{
-			this.ServiceType = val;
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public string ChannelType
-		{
-			get
-			{
-				return this._ChannelType;
-			}
-			set
-			{
-				this._ChannelType = value;
-				this.HasChannelType = (value != null);
-			}
-		}
-
-		public void SetChannelType(string val)
-		{
-			this.ChannelType = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ServiceType.GetHashCode();
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			if (this.HasChannelType)
-			{
-				num ^= this.ChannelType.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			HasRoomForInvitationRequest hasRoomForInvitationRequest = obj as HasRoomForInvitationRequest;
-			return hasRoomForInvitationRequest != null && this.ServiceType.Equals(hasRoomForInvitationRequest.ServiceType) && this.HasProgram == hasRoomForInvitationRequest.HasProgram && (!this.HasProgram || this.Program.Equals(hasRoomForInvitationRequest.Program)) && this.HasChannelType == hasRoomForInvitationRequest.HasChannelType && (!this.HasChannelType || this.ChannelType.Equals(hasRoomForInvitationRequest.ChannelType));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static HasRoomForInvitationRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<HasRoomForInvitationRequest>(bs, 0, -1);
 		}
 
 		public bool HasProgram;

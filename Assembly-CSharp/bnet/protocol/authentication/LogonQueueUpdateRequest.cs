@@ -5,6 +5,54 @@ namespace bnet.protocol.authentication
 {
 	public class LogonQueueUpdateRequest : IProtoBuf
 	{
+		public uint Position { get; set; }
+
+		public void SetPosition(uint val)
+		{
+			this.Position = val;
+		}
+
+		public ulong EstimatedTime { get; set; }
+
+		public void SetEstimatedTime(ulong val)
+		{
+			this.EstimatedTime = val;
+		}
+
+		public ulong EtaDeviationInSec { get; set; }
+
+		public void SetEtaDeviationInSec(ulong val)
+		{
+			this.EtaDeviationInSec = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Position.GetHashCode();
+			num ^= this.EstimatedTime.GetHashCode();
+			return num ^ this.EtaDeviationInSec.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			LogonQueueUpdateRequest logonQueueUpdateRequest = obj as LogonQueueUpdateRequest;
+			return logonQueueUpdateRequest != null && this.Position.Equals(logonQueueUpdateRequest.Position) && this.EstimatedTime.Equals(logonQueueUpdateRequest.EstimatedTime) && this.EtaDeviationInSec.Equals(logonQueueUpdateRequest.EtaDeviationInSec);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static LogonQueueUpdateRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<LogonQueueUpdateRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			LogonQueueUpdateRequest.Deserialize(stream, this);
@@ -100,54 +148,6 @@ namespace bnet.protocol.authentication
 			num += ProtocolParser.SizeOfUInt64(this.EstimatedTime);
 			num += ProtocolParser.SizeOfUInt64(this.EtaDeviationInSec);
 			return num + 3u;
-		}
-
-		public uint Position { get; set; }
-
-		public void SetPosition(uint val)
-		{
-			this.Position = val;
-		}
-
-		public ulong EstimatedTime { get; set; }
-
-		public void SetEstimatedTime(ulong val)
-		{
-			this.EstimatedTime = val;
-		}
-
-		public ulong EtaDeviationInSec { get; set; }
-
-		public void SetEtaDeviationInSec(ulong val)
-		{
-			this.EtaDeviationInSec = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Position.GetHashCode();
-			num ^= this.EstimatedTime.GetHashCode();
-			return num ^ this.EtaDeviationInSec.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			LogonQueueUpdateRequest logonQueueUpdateRequest = obj as LogonQueueUpdateRequest;
-			return logonQueueUpdateRequest != null && this.Position.Equals(logonQueueUpdateRequest.Position) && this.EstimatedTime.Equals(logonQueueUpdateRequest.EstimatedTime) && this.EtaDeviationInSec.Equals(logonQueueUpdateRequest.EtaDeviationInSec);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static LogonQueueUpdateRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<LogonQueueUpdateRequest>(bs, 0, -1);
 		}
 	}
 }

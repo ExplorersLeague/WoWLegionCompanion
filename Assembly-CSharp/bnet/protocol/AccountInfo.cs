@@ -6,6 +6,119 @@ namespace bnet.protocol
 {
 	public class AccountInfo : IProtoBuf
 	{
+		public bool AccountPaid
+		{
+			get
+			{
+				return this._AccountPaid;
+			}
+			set
+			{
+				this._AccountPaid = value;
+				this.HasAccountPaid = true;
+			}
+		}
+
+		public void SetAccountPaid(bool val)
+		{
+			this.AccountPaid = val;
+		}
+
+		public uint CountryId
+		{
+			get
+			{
+				return this._CountryId;
+			}
+			set
+			{
+				this._CountryId = value;
+				this.HasCountryId = true;
+			}
+		}
+
+		public void SetCountryId(uint val)
+		{
+			this.CountryId = val;
+		}
+
+		public string BattleTag
+		{
+			get
+			{
+				return this._BattleTag;
+			}
+			set
+			{
+				this._BattleTag = value;
+				this.HasBattleTag = (value != null);
+			}
+		}
+
+		public void SetBattleTag(string val)
+		{
+			this.BattleTag = val;
+		}
+
+		public bool ManualReview
+		{
+			get
+			{
+				return this._ManualReview;
+			}
+			set
+			{
+				this._ManualReview = value;
+				this.HasManualReview = true;
+			}
+		}
+
+		public void SetManualReview(bool val)
+		{
+			this.ManualReview = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAccountPaid)
+			{
+				num ^= this.AccountPaid.GetHashCode();
+			}
+			if (this.HasCountryId)
+			{
+				num ^= this.CountryId.GetHashCode();
+			}
+			if (this.HasBattleTag)
+			{
+				num ^= this.BattleTag.GetHashCode();
+			}
+			if (this.HasManualReview)
+			{
+				num ^= this.ManualReview.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountInfo accountInfo = obj as AccountInfo;
+			return accountInfo != null && this.HasAccountPaid == accountInfo.HasAccountPaid && (!this.HasAccountPaid || this.AccountPaid.Equals(accountInfo.AccountPaid)) && this.HasCountryId == accountInfo.HasCountryId && (!this.HasCountryId || this.CountryId.Equals(accountInfo.CountryId)) && this.HasBattleTag == accountInfo.HasBattleTag && (!this.HasBattleTag || this.BattleTag.Equals(accountInfo.BattleTag)) && this.HasManualReview == accountInfo.HasManualReview && (!this.HasManualReview || this.ManualReview.Equals(accountInfo.ManualReview));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountInfo.Deserialize(stream, this);
@@ -145,119 +258,6 @@ namespace bnet.protocol
 				num += 1u;
 			}
 			return num;
-		}
-
-		public bool AccountPaid
-		{
-			get
-			{
-				return this._AccountPaid;
-			}
-			set
-			{
-				this._AccountPaid = value;
-				this.HasAccountPaid = true;
-			}
-		}
-
-		public void SetAccountPaid(bool val)
-		{
-			this.AccountPaid = val;
-		}
-
-		public uint CountryId
-		{
-			get
-			{
-				return this._CountryId;
-			}
-			set
-			{
-				this._CountryId = value;
-				this.HasCountryId = true;
-			}
-		}
-
-		public void SetCountryId(uint val)
-		{
-			this.CountryId = val;
-		}
-
-		public string BattleTag
-		{
-			get
-			{
-				return this._BattleTag;
-			}
-			set
-			{
-				this._BattleTag = value;
-				this.HasBattleTag = (value != null);
-			}
-		}
-
-		public void SetBattleTag(string val)
-		{
-			this.BattleTag = val;
-		}
-
-		public bool ManualReview
-		{
-			get
-			{
-				return this._ManualReview;
-			}
-			set
-			{
-				this._ManualReview = value;
-				this.HasManualReview = true;
-			}
-		}
-
-		public void SetManualReview(bool val)
-		{
-			this.ManualReview = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAccountPaid)
-			{
-				num ^= this.AccountPaid.GetHashCode();
-			}
-			if (this.HasCountryId)
-			{
-				num ^= this.CountryId.GetHashCode();
-			}
-			if (this.HasBattleTag)
-			{
-				num ^= this.BattleTag.GetHashCode();
-			}
-			if (this.HasManualReview)
-			{
-				num ^= this.ManualReview.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountInfo accountInfo = obj as AccountInfo;
-			return accountInfo != null && this.HasAccountPaid == accountInfo.HasAccountPaid && (!this.HasAccountPaid || this.AccountPaid.Equals(accountInfo.AccountPaid)) && this.HasCountryId == accountInfo.HasCountryId && (!this.HasCountryId || this.CountryId.Equals(accountInfo.CountryId)) && this.HasBattleTag == accountInfo.HasBattleTag && (!this.HasBattleTag || this.BattleTag.Equals(accountInfo.BattleTag)) && this.HasManualReview == accountInfo.HasManualReview && (!this.HasManualReview || this.ManualReview.Equals(accountInfo.ManualReview));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountInfo>(bs, 0, -1);
 		}
 
 		public bool HasAccountPaid;

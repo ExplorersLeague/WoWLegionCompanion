@@ -8,6 +8,155 @@ namespace bnet.protocol.game_master
 {
 	public class ConnectInfo : IProtoBuf
 	{
+		public EntityId MemberId { get; set; }
+
+		public void SetMemberId(EntityId val)
+		{
+			this.MemberId = val;
+		}
+
+		public string Host { get; set; }
+
+		public void SetHost(string val)
+		{
+			this.Host = val;
+		}
+
+		public int Port { get; set; }
+
+		public void SetPort(int val)
+		{
+			this.Port = val;
+		}
+
+		public byte[] Token
+		{
+			get
+			{
+				return this._Token;
+			}
+			set
+			{
+				this._Token = value;
+				this.HasToken = (value != null);
+			}
+		}
+
+		public void SetToken(byte[] val)
+		{
+			this.Token = val;
+		}
+
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.MemberId.GetHashCode();
+			num ^= this.Host.GetHashCode();
+			num ^= this.Port.GetHashCode();
+			if (this.HasToken)
+			{
+				num ^= this.Token.GetHashCode();
+			}
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ConnectInfo connectInfo = obj as ConnectInfo;
+			if (connectInfo == null)
+			{
+				return false;
+			}
+			if (!this.MemberId.Equals(connectInfo.MemberId))
+			{
+				return false;
+			}
+			if (!this.Host.Equals(connectInfo.Host))
+			{
+				return false;
+			}
+			if (!this.Port.Equals(connectInfo.Port))
+			{
+				return false;
+			}
+			if (this.HasToken != connectInfo.HasToken || (this.HasToken && !this.Token.Equals(connectInfo.Token)))
+			{
+				return false;
+			}
+			if (this.Attribute.Count != connectInfo.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(connectInfo.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ConnectInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ConnectInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ConnectInfo.Deserialize(stream, this);
@@ -165,155 +314,6 @@ namespace bnet.protocol.game_master
 			}
 			num += 3u;
 			return num;
-		}
-
-		public EntityId MemberId { get; set; }
-
-		public void SetMemberId(EntityId val)
-		{
-			this.MemberId = val;
-		}
-
-		public string Host { get; set; }
-
-		public void SetHost(string val)
-		{
-			this.Host = val;
-		}
-
-		public int Port { get; set; }
-
-		public void SetPort(int val)
-		{
-			this.Port = val;
-		}
-
-		public byte[] Token
-		{
-			get
-			{
-				return this._Token;
-			}
-			set
-			{
-				this._Token = value;
-				this.HasToken = (value != null);
-			}
-		}
-
-		public void SetToken(byte[] val)
-		{
-			this.Token = val;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.MemberId.GetHashCode();
-			num ^= this.Host.GetHashCode();
-			num ^= this.Port.GetHashCode();
-			if (this.HasToken)
-			{
-				num ^= this.Token.GetHashCode();
-			}
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ConnectInfo connectInfo = obj as ConnectInfo;
-			if (connectInfo == null)
-			{
-				return false;
-			}
-			if (!this.MemberId.Equals(connectInfo.MemberId))
-			{
-				return false;
-			}
-			if (!this.Host.Equals(connectInfo.Host))
-			{
-				return false;
-			}
-			if (!this.Port.Equals(connectInfo.Port))
-			{
-				return false;
-			}
-			if (this.HasToken != connectInfo.HasToken || (this.HasToken && !this.Token.Equals(connectInfo.Token)))
-			{
-				return false;
-			}
-			if (this.Attribute.Count != connectInfo.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(connectInfo.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ConnectInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ConnectInfo>(bs, 0, -1);
 		}
 
 		public bool HasToken;

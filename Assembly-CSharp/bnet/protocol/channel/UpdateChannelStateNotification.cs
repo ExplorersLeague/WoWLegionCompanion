@@ -5,6 +5,60 @@ namespace bnet.protocol.channel
 {
 	public class UpdateChannelStateNotification : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public ChannelState StateChange { get; set; }
+
+		public void SetStateChange(ChannelState val)
+		{
+			this.StateChange = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			return num ^ this.StateChange.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			UpdateChannelStateNotification updateChannelStateNotification = obj as UpdateChannelStateNotification;
+			return updateChannelStateNotification != null && this.HasAgentId == updateChannelStateNotification.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(updateChannelStateNotification.AgentId)) && this.StateChange.Equals(updateChannelStateNotification.StateChange);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UpdateChannelStateNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UpdateChannelStateNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UpdateChannelStateNotification.Deserialize(stream, this);
@@ -113,60 +167,6 @@ namespace bnet.protocol.channel
 			uint serializedSize2 = this.StateChange.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public ChannelState StateChange { get; set; }
-
-		public void SetStateChange(ChannelState val)
-		{
-			this.StateChange = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			return num ^ this.StateChange.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			UpdateChannelStateNotification updateChannelStateNotification = obj as UpdateChannelStateNotification;
-			return updateChannelStateNotification != null && this.HasAgentId == updateChannelStateNotification.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(updateChannelStateNotification.AgentId)) && this.StateChange.Equals(updateChannelStateNotification.StateChange);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UpdateChannelStateNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UpdateChannelStateNotification>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

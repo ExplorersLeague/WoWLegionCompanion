@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace WowStaticData
@@ -8,63 +9,30 @@ namespace WowStaticData
 	{
 		public GarrFollItemSetMemberRec GetRecord(int id)
 		{
-			return (GarrFollItemSetMemberRec)this.m_records[id];
+			return (!this.m_records.ContainsKey(id)) ? null : this.m_records[id];
 		}
 
-		public void EnumRecords(Predicate<GarrFollItemSetMemberRec> callback)
+		public IEnumerable<GarrFollItemSetMemberRec> GetRecordsWhere(Func<GarrFollItemSetMemberRec, bool> matcher)
 		{
-			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
-			try
-			{
-				while (enumerator.MoveNext())
-				{
-					object obj = enumerator.Current;
-					GarrFollItemSetMemberRec obj2 = (GarrFollItemSetMemberRec)obj;
-					if (!callback(obj2))
-					{
-						break;
-					}
-				}
-			}
-			finally
-			{
-				IDisposable disposable;
-				if ((disposable = (enumerator as IDisposable)) != null)
-				{
-					disposable.Dispose();
-				}
-			}
+			return this.m_records.Values.Where(matcher);
 		}
 
-		public void EnumRecordsByParentID(int parentID, Predicate<GarrFollItemSetMemberRec> callback)
+		public GarrFollItemSetMemberRec GetRecordFirstOrDefault(Func<GarrFollItemSetMemberRec, bool> matcher)
 		{
-			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
-			try
-			{
-				while (enumerator.MoveNext())
-				{
-					object obj = enumerator.Current;
-					GarrFollItemSetMemberRec garrFollItemSetMemberRec = (GarrFollItemSetMemberRec)obj;
-					if ((ulong)garrFollItemSetMemberRec.GarrFollItemSetID == (ulong)((long)parentID) && !callback(garrFollItemSetMemberRec))
-					{
-						break;
-					}
-				}
-			}
-			finally
-			{
-				IDisposable disposable;
-				if ((disposable = (enumerator as IDisposable)) != null)
-				{
-					disposable.Dispose();
-				}
-			}
+			return this.m_records.Values.FirstOrDefault(matcher);
+		}
+
+		public IEnumerable<GarrFollItemSetMemberRec> GetRecordsByParentID(int parentID)
+		{
+			return from rec in this.m_records.Values
+			where (ulong)rec.GarrFollItemSetID == (ulong)((long)parentID)
+			select rec;
 		}
 
 		public bool Load(string path, AssetBundle nonLocalizedBundle, AssetBundle localizedBundle, string locale)
 		{
 			string text = path + "NonLocalized/GarrFollItemSetMember.txt";
-			if (this.m_records != null)
+			if (this.m_records.Count > 0)
 			{
 				Debug.Log("Already loaded static db " + text);
 				return false;
@@ -76,7 +44,6 @@ namespace WowStaticData
 				return false;
 			}
 			string text2 = textAsset.ToString();
-			this.m_records = new Hashtable();
 			int num = 0;
 			int num2;
 			do
@@ -95,6 +62,6 @@ namespace WowStaticData
 			return true;
 		}
 
-		private Hashtable m_records;
+		private Dictionary<int, GarrFollItemSetMemberRec> m_records = new Dictionary<int, GarrFollItemSetMemberRec>();
 	}
 }

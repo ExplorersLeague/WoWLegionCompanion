@@ -8,6 +8,209 @@ namespace bnet.protocol.notification
 {
 	public class Notification : IProtoBuf
 	{
+		public EntityId SenderId
+		{
+			get
+			{
+				return this._SenderId;
+			}
+			set
+			{
+				this._SenderId = value;
+				this.HasSenderId = (value != null);
+			}
+		}
+
+		public void SetSenderId(EntityId val)
+		{
+			this.SenderId = val;
+		}
+
+		public EntityId TargetId { get; set; }
+
+		public void SetTargetId(EntityId val)
+		{
+			this.TargetId = val;
+		}
+
+		public string Type { get; set; }
+
+		public void SetType(string val)
+		{
+			this.Type = val;
+		}
+
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public EntityId SenderAccountId
+		{
+			get
+			{
+				return this._SenderAccountId;
+			}
+			set
+			{
+				this._SenderAccountId = value;
+				this.HasSenderAccountId = (value != null);
+			}
+		}
+
+		public void SetSenderAccountId(EntityId val)
+		{
+			this.SenderAccountId = val;
+		}
+
+		public EntityId TargetAccountId
+		{
+			get
+			{
+				return this._TargetAccountId;
+			}
+			set
+			{
+				this._TargetAccountId = value;
+				this.HasTargetAccountId = (value != null);
+			}
+		}
+
+		public void SetTargetAccountId(EntityId val)
+		{
+			this.TargetAccountId = val;
+		}
+
+		public string SenderBattleTag
+		{
+			get
+			{
+				return this._SenderBattleTag;
+			}
+			set
+			{
+				this._SenderBattleTag = value;
+				this.HasSenderBattleTag = (value != null);
+			}
+		}
+
+		public void SetSenderBattleTag(string val)
+		{
+			this.SenderBattleTag = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasSenderId)
+			{
+				num ^= this.SenderId.GetHashCode();
+			}
+			num ^= this.TargetId.GetHashCode();
+			num ^= this.Type.GetHashCode();
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			if (this.HasSenderAccountId)
+			{
+				num ^= this.SenderAccountId.GetHashCode();
+			}
+			if (this.HasTargetAccountId)
+			{
+				num ^= this.TargetAccountId.GetHashCode();
+			}
+			if (this.HasSenderBattleTag)
+			{
+				num ^= this.SenderBattleTag.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Notification notification = obj as Notification;
+			if (notification == null)
+			{
+				return false;
+			}
+			if (this.HasSenderId != notification.HasSenderId || (this.HasSenderId && !this.SenderId.Equals(notification.SenderId)))
+			{
+				return false;
+			}
+			if (!this.TargetId.Equals(notification.TargetId))
+			{
+				return false;
+			}
+			if (!this.Type.Equals(notification.Type))
+			{
+				return false;
+			}
+			if (this.Attribute.Count != notification.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(notification.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasSenderAccountId == notification.HasSenderAccountId && (!this.HasSenderAccountId || this.SenderAccountId.Equals(notification.SenderAccountId)) && this.HasTargetAccountId == notification.HasTargetAccountId && (!this.HasTargetAccountId || this.TargetAccountId.Equals(notification.TargetAccountId)) && this.HasSenderBattleTag == notification.HasSenderBattleTag && (!this.HasSenderBattleTag || this.SenderBattleTag.Equals(notification.SenderBattleTag));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Notification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Notification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Notification.Deserialize(stream, this);
@@ -225,209 +428,6 @@ namespace bnet.protocol.notification
 			}
 			num += 2u;
 			return num;
-		}
-
-		public EntityId SenderId
-		{
-			get
-			{
-				return this._SenderId;
-			}
-			set
-			{
-				this._SenderId = value;
-				this.HasSenderId = (value != null);
-			}
-		}
-
-		public void SetSenderId(EntityId val)
-		{
-			this.SenderId = val;
-		}
-
-		public EntityId TargetId { get; set; }
-
-		public void SetTargetId(EntityId val)
-		{
-			this.TargetId = val;
-		}
-
-		public string Type { get; set; }
-
-		public void SetType(string val)
-		{
-			this.Type = val;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public EntityId SenderAccountId
-		{
-			get
-			{
-				return this._SenderAccountId;
-			}
-			set
-			{
-				this._SenderAccountId = value;
-				this.HasSenderAccountId = (value != null);
-			}
-		}
-
-		public void SetSenderAccountId(EntityId val)
-		{
-			this.SenderAccountId = val;
-		}
-
-		public EntityId TargetAccountId
-		{
-			get
-			{
-				return this._TargetAccountId;
-			}
-			set
-			{
-				this._TargetAccountId = value;
-				this.HasTargetAccountId = (value != null);
-			}
-		}
-
-		public void SetTargetAccountId(EntityId val)
-		{
-			this.TargetAccountId = val;
-		}
-
-		public string SenderBattleTag
-		{
-			get
-			{
-				return this._SenderBattleTag;
-			}
-			set
-			{
-				this._SenderBattleTag = value;
-				this.HasSenderBattleTag = (value != null);
-			}
-		}
-
-		public void SetSenderBattleTag(string val)
-		{
-			this.SenderBattleTag = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasSenderId)
-			{
-				num ^= this.SenderId.GetHashCode();
-			}
-			num ^= this.TargetId.GetHashCode();
-			num ^= this.Type.GetHashCode();
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			if (this.HasSenderAccountId)
-			{
-				num ^= this.SenderAccountId.GetHashCode();
-			}
-			if (this.HasTargetAccountId)
-			{
-				num ^= this.TargetAccountId.GetHashCode();
-			}
-			if (this.HasSenderBattleTag)
-			{
-				num ^= this.SenderBattleTag.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Notification notification = obj as Notification;
-			if (notification == null)
-			{
-				return false;
-			}
-			if (this.HasSenderId != notification.HasSenderId || (this.HasSenderId && !this.SenderId.Equals(notification.SenderId)))
-			{
-				return false;
-			}
-			if (!this.TargetId.Equals(notification.TargetId))
-			{
-				return false;
-			}
-			if (!this.Type.Equals(notification.Type))
-			{
-				return false;
-			}
-			if (this.Attribute.Count != notification.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(notification.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasSenderAccountId == notification.HasSenderAccountId && (!this.HasSenderAccountId || this.SenderAccountId.Equals(notification.SenderAccountId)) && this.HasTargetAccountId == notification.HasTargetAccountId && (!this.HasTargetAccountId || this.TargetAccountId.Equals(notification.TargetAccountId)) && this.HasSenderBattleTag == notification.HasSenderBattleTag && (!this.HasSenderBattleTag || this.SenderBattleTag.Equals(notification.SenderBattleTag));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Notification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Notification>(bs, 0, -1);
 		}
 
 		public bool HasSenderId;

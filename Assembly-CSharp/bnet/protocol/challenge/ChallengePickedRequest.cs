@@ -5,6 +5,83 @@ namespace bnet.protocol.challenge
 {
 	public class ChallengePickedRequest : IProtoBuf
 	{
+		public uint Challenge { get; set; }
+
+		public void SetChallenge(uint val)
+		{
+			this.Challenge = val;
+		}
+
+		public uint Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				this._Id = value;
+				this.HasId = true;
+			}
+		}
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public bool NewChallengeProtocol
+		{
+			get
+			{
+				return this._NewChallengeProtocol;
+			}
+			set
+			{
+				this._NewChallengeProtocol = value;
+				this.HasNewChallengeProtocol = true;
+			}
+		}
+
+		public void SetNewChallengeProtocol(bool val)
+		{
+			this.NewChallengeProtocol = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Challenge.GetHashCode();
+			if (this.HasId)
+			{
+				num ^= this.Id.GetHashCode();
+			}
+			if (this.HasNewChallengeProtocol)
+			{
+				num ^= this.NewChallengeProtocol.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChallengePickedRequest challengePickedRequest = obj as ChallengePickedRequest;
+			return challengePickedRequest != null && this.Challenge.Equals(challengePickedRequest.Challenge) && this.HasId == challengePickedRequest.HasId && (!this.HasId || this.Id.Equals(challengePickedRequest.Id)) && this.HasNewChallengeProtocol == challengePickedRequest.HasNewChallengeProtocol && (!this.HasNewChallengeProtocol || this.NewChallengeProtocol.Equals(challengePickedRequest.NewChallengeProtocol));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChallengePickedRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChallengePickedRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChallengePickedRequest.Deserialize(stream, this);
@@ -117,83 +194,6 @@ namespace bnet.protocol.challenge
 				num += 1u;
 			}
 			return num + 1u;
-		}
-
-		public uint Challenge { get; set; }
-
-		public void SetChallenge(uint val)
-		{
-			this.Challenge = val;
-		}
-
-		public uint Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				this._Id = value;
-				this.HasId = true;
-			}
-		}
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public bool NewChallengeProtocol
-		{
-			get
-			{
-				return this._NewChallengeProtocol;
-			}
-			set
-			{
-				this._NewChallengeProtocol = value;
-				this.HasNewChallengeProtocol = true;
-			}
-		}
-
-		public void SetNewChallengeProtocol(bool val)
-		{
-			this.NewChallengeProtocol = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Challenge.GetHashCode();
-			if (this.HasId)
-			{
-				num ^= this.Id.GetHashCode();
-			}
-			if (this.HasNewChallengeProtocol)
-			{
-				num ^= this.NewChallengeProtocol.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChallengePickedRequest challengePickedRequest = obj as ChallengePickedRequest;
-			return challengePickedRequest != null && this.Challenge.Equals(challengePickedRequest.Challenge) && this.HasId == challengePickedRequest.HasId && (!this.HasId || this.Id.Equals(challengePickedRequest.Id)) && this.HasNewChallengeProtocol == challengePickedRequest.HasNewChallengeProtocol && (!this.HasNewChallengeProtocol || this.NewChallengeProtocol.Equals(challengePickedRequest.NewChallengeProtocol));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChallengePickedRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChallengePickedRequest>(bs, 0, -1);
 		}
 
 		public bool HasId;

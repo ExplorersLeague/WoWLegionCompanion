@@ -6,6 +6,143 @@ namespace bnet.protocol.presence
 {
 	public class SubscribeRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId EntityId { get; set; }
+
+		public void SetEntityId(EntityId val)
+		{
+			this.EntityId = val;
+		}
+
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public List<uint> ProgramId
+		{
+			get
+			{
+				return this._ProgramId;
+			}
+			set
+			{
+				this._ProgramId = value;
+			}
+		}
+
+		public List<uint> ProgramIdList
+		{
+			get
+			{
+				return this._ProgramId;
+			}
+		}
+
+		public int ProgramIdCount
+		{
+			get
+			{
+				return this._ProgramId.Count;
+			}
+		}
+
+		public void AddProgramId(uint val)
+		{
+			this._ProgramId.Add(val);
+		}
+
+		public void ClearProgramId()
+		{
+			this._ProgramId.Clear();
+		}
+
+		public void SetProgramId(List<uint> val)
+		{
+			this.ProgramId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.EntityId.GetHashCode();
+			num ^= this.ObjectId.GetHashCode();
+			foreach (uint num2 in this.ProgramId)
+			{
+				num ^= num2.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscribeRequest subscribeRequest = obj as SubscribeRequest;
+			if (subscribeRequest == null)
+			{
+				return false;
+			}
+			if (this.HasAgentId != subscribeRequest.HasAgentId || (this.HasAgentId && !this.AgentId.Equals(subscribeRequest.AgentId)))
+			{
+				return false;
+			}
+			if (!this.EntityId.Equals(subscribeRequest.EntityId))
+			{
+				return false;
+			}
+			if (!this.ObjectId.Equals(subscribeRequest.ObjectId))
+			{
+				return false;
+			}
+			if (this.ProgramId.Count != subscribeRequest.ProgramId.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.ProgramId.Count; i++)
+			{
+				if (!this.ProgramId[i].Equals(subscribeRequest.ProgramId[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscribeRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscribeRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscribeRequest.Deserialize(stream, this);
@@ -154,143 +291,6 @@ namespace bnet.protocol.presence
 			}
 			num += 2u;
 			return num;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId EntityId { get; set; }
-
-		public void SetEntityId(EntityId val)
-		{
-			this.EntityId = val;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public List<uint> ProgramId
-		{
-			get
-			{
-				return this._ProgramId;
-			}
-			set
-			{
-				this._ProgramId = value;
-			}
-		}
-
-		public List<uint> ProgramIdList
-		{
-			get
-			{
-				return this._ProgramId;
-			}
-		}
-
-		public int ProgramIdCount
-		{
-			get
-			{
-				return this._ProgramId.Count;
-			}
-		}
-
-		public void AddProgramId(uint val)
-		{
-			this._ProgramId.Add(val);
-		}
-
-		public void ClearProgramId()
-		{
-			this._ProgramId.Clear();
-		}
-
-		public void SetProgramId(List<uint> val)
-		{
-			this.ProgramId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.EntityId.GetHashCode();
-			num ^= this.ObjectId.GetHashCode();
-			foreach (uint num2 in this.ProgramId)
-			{
-				num ^= num2.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscribeRequest subscribeRequest = obj as SubscribeRequest;
-			if (subscribeRequest == null)
-			{
-				return false;
-			}
-			if (this.HasAgentId != subscribeRequest.HasAgentId || (this.HasAgentId && !this.AgentId.Equals(subscribeRequest.AgentId)))
-			{
-				return false;
-			}
-			if (!this.EntityId.Equals(subscribeRequest.EntityId))
-			{
-				return false;
-			}
-			if (!this.ObjectId.Equals(subscribeRequest.ObjectId))
-			{
-				return false;
-			}
-			if (this.ProgramId.Count != subscribeRequest.ProgramId.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.ProgramId.Count; i++)
-			{
-				if (!this.ProgramId[i].Equals(subscribeRequest.ProgramId[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscribeRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscribeRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

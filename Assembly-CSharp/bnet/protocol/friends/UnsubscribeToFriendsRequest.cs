@@ -5,6 +5,75 @@ namespace bnet.protocol.friends
 {
 	public class UnsubscribeToFriendsRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public ulong ObjectId
+		{
+			get
+			{
+				return this._ObjectId;
+			}
+			set
+			{
+				this._ObjectId = value;
+				this.HasObjectId = true;
+			}
+		}
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			if (this.HasObjectId)
+			{
+				num ^= this.ObjectId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			UnsubscribeToFriendsRequest unsubscribeToFriendsRequest = obj as UnsubscribeToFriendsRequest;
+			return unsubscribeToFriendsRequest != null && this.HasAgentId == unsubscribeToFriendsRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(unsubscribeToFriendsRequest.AgentId)) && this.HasObjectId == unsubscribeToFriendsRequest.HasObjectId && (!this.HasObjectId || this.ObjectId.Equals(unsubscribeToFriendsRequest.ObjectId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UnsubscribeToFriendsRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UnsubscribeToFriendsRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UnsubscribeToFriendsRequest.Deserialize(stream, this);
@@ -110,75 +179,6 @@ namespace bnet.protocol.friends
 				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
 			}
 			return num;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public ulong ObjectId
-		{
-			get
-			{
-				return this._ObjectId;
-			}
-			set
-			{
-				this._ObjectId = value;
-				this.HasObjectId = true;
-			}
-		}
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			if (this.HasObjectId)
-			{
-				num ^= this.ObjectId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			UnsubscribeToFriendsRequest unsubscribeToFriendsRequest = obj as UnsubscribeToFriendsRequest;
-			return unsubscribeToFriendsRequest != null && this.HasAgentId == unsubscribeToFriendsRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(unsubscribeToFriendsRequest.AgentId)) && this.HasObjectId == unsubscribeToFriendsRequest.HasObjectId && (!this.HasObjectId || this.ObjectId.Equals(unsubscribeToFriendsRequest.ObjectId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UnsubscribeToFriendsRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UnsubscribeToFriendsRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

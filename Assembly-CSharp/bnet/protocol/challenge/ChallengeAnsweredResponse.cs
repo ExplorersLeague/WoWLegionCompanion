@@ -5,6 +5,97 @@ namespace bnet.protocol.challenge
 {
 	public class ChallengeAnsweredResponse : IProtoBuf
 	{
+		public byte[] Data
+		{
+			get
+			{
+				return this._Data;
+			}
+			set
+			{
+				this._Data = value;
+				this.HasData = (value != null);
+			}
+		}
+
+		public void SetData(byte[] val)
+		{
+			this.Data = val;
+		}
+
+		public bool DoRetry
+		{
+			get
+			{
+				return this._DoRetry;
+			}
+			set
+			{
+				this._DoRetry = value;
+				this.HasDoRetry = true;
+			}
+		}
+
+		public void SetDoRetry(bool val)
+		{
+			this.DoRetry = val;
+		}
+
+		public bool RecordNotFound
+		{
+			get
+			{
+				return this._RecordNotFound;
+			}
+			set
+			{
+				this._RecordNotFound = value;
+				this.HasRecordNotFound = true;
+			}
+		}
+
+		public void SetRecordNotFound(bool val)
+		{
+			this.RecordNotFound = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasData)
+			{
+				num ^= this.Data.GetHashCode();
+			}
+			if (this.HasDoRetry)
+			{
+				num ^= this.DoRetry.GetHashCode();
+			}
+			if (this.HasRecordNotFound)
+			{
+				num ^= this.RecordNotFound.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChallengeAnsweredResponse challengeAnsweredResponse = obj as ChallengeAnsweredResponse;
+			return challengeAnsweredResponse != null && this.HasData == challengeAnsweredResponse.HasData && (!this.HasData || this.Data.Equals(challengeAnsweredResponse.Data)) && this.HasDoRetry == challengeAnsweredResponse.HasDoRetry && (!this.HasDoRetry || this.DoRetry.Equals(challengeAnsweredResponse.DoRetry)) && this.HasRecordNotFound == challengeAnsweredResponse.HasRecordNotFound && (!this.HasRecordNotFound || this.RecordNotFound.Equals(challengeAnsweredResponse.RecordNotFound));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChallengeAnsweredResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChallengeAnsweredResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChallengeAnsweredResponse.Deserialize(stream, this);
@@ -121,97 +212,6 @@ namespace bnet.protocol.challenge
 				num += 1u;
 			}
 			return num;
-		}
-
-		public byte[] Data
-		{
-			get
-			{
-				return this._Data;
-			}
-			set
-			{
-				this._Data = value;
-				this.HasData = (value != null);
-			}
-		}
-
-		public void SetData(byte[] val)
-		{
-			this.Data = val;
-		}
-
-		public bool DoRetry
-		{
-			get
-			{
-				return this._DoRetry;
-			}
-			set
-			{
-				this._DoRetry = value;
-				this.HasDoRetry = true;
-			}
-		}
-
-		public void SetDoRetry(bool val)
-		{
-			this.DoRetry = val;
-		}
-
-		public bool RecordNotFound
-		{
-			get
-			{
-				return this._RecordNotFound;
-			}
-			set
-			{
-				this._RecordNotFound = value;
-				this.HasRecordNotFound = true;
-			}
-		}
-
-		public void SetRecordNotFound(bool val)
-		{
-			this.RecordNotFound = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasData)
-			{
-				num ^= this.Data.GetHashCode();
-			}
-			if (this.HasDoRetry)
-			{
-				num ^= this.DoRetry.GetHashCode();
-			}
-			if (this.HasRecordNotFound)
-			{
-				num ^= this.RecordNotFound.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChallengeAnsweredResponse challengeAnsweredResponse = obj as ChallengeAnsweredResponse;
-			return challengeAnsweredResponse != null && this.HasData == challengeAnsweredResponse.HasData && (!this.HasData || this.Data.Equals(challengeAnsweredResponse.Data)) && this.HasDoRetry == challengeAnsweredResponse.HasDoRetry && (!this.HasDoRetry || this.DoRetry.Equals(challengeAnsweredResponse.DoRetry)) && this.HasRecordNotFound == challengeAnsweredResponse.HasRecordNotFound && (!this.HasRecordNotFound || this.RecordNotFound.Equals(challengeAnsweredResponse.RecordNotFound));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChallengeAnsweredResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChallengeAnsweredResponse>(bs, 0, -1);
 		}
 
 		public bool HasData;

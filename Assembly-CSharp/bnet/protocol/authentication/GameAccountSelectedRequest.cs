@@ -5,6 +5,61 @@ namespace bnet.protocol.authentication
 {
 	public class GameAccountSelectedRequest : IProtoBuf
 	{
+		public uint Result { get; set; }
+
+		public void SetResult(uint val)
+		{
+			this.Result = val;
+		}
+
+		public EntityId GameAccount
+		{
+			get
+			{
+				return this._GameAccount;
+			}
+			set
+			{
+				this._GameAccount = value;
+				this.HasGameAccount = (value != null);
+			}
+		}
+
+		public void SetGameAccount(EntityId val)
+		{
+			this.GameAccount = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Result.GetHashCode();
+			if (this.HasGameAccount)
+			{
+				num ^= this.GameAccount.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountSelectedRequest gameAccountSelectedRequest = obj as GameAccountSelectedRequest;
+			return gameAccountSelectedRequest != null && this.Result.Equals(gameAccountSelectedRequest.Result) && this.HasGameAccount == gameAccountSelectedRequest.HasGameAccount && (!this.HasGameAccount || this.GameAccount.Equals(gameAccountSelectedRequest.GameAccount));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountSelectedRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountSelectedRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountSelectedRequest.Deserialize(stream, this);
@@ -103,61 +158,6 @@ namespace bnet.protocol.authentication
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num + 1u;
-		}
-
-		public uint Result { get; set; }
-
-		public void SetResult(uint val)
-		{
-			this.Result = val;
-		}
-
-		public EntityId GameAccount
-		{
-			get
-			{
-				return this._GameAccount;
-			}
-			set
-			{
-				this._GameAccount = value;
-				this.HasGameAccount = (value != null);
-			}
-		}
-
-		public void SetGameAccount(EntityId val)
-		{
-			this.GameAccount = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Result.GetHashCode();
-			if (this.HasGameAccount)
-			{
-				num ^= this.GameAccount.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountSelectedRequest gameAccountSelectedRequest = obj as GameAccountSelectedRequest;
-			return gameAccountSelectedRequest != null && this.Result.Equals(gameAccountSelectedRequest.Result) && this.HasGameAccount == gameAccountSelectedRequest.HasGameAccount && (!this.HasGameAccount || this.GameAccount.Equals(gameAccountSelectedRequest.GameAccount));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountSelectedRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountSelectedRequest>(bs, 0, -1);
 		}
 
 		public bool HasGameAccount;

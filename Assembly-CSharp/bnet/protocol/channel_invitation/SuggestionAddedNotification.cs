@@ -6,6 +6,38 @@ namespace bnet.protocol.channel_invitation
 {
 	public class SuggestionAddedNotification : IProtoBuf
 	{
+		public Suggestion Suggestion { get; set; }
+
+		public void SetSuggestion(Suggestion val)
+		{
+			this.Suggestion = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.Suggestion.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			SuggestionAddedNotification suggestionAddedNotification = obj as SuggestionAddedNotification;
+			return suggestionAddedNotification != null && this.Suggestion.Equals(suggestionAddedNotification.Suggestion);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SuggestionAddedNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SuggestionAddedNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SuggestionAddedNotification.Deserialize(stream, this);
@@ -91,38 +123,6 @@ namespace bnet.protocol.channel_invitation
 			uint serializedSize = this.Suggestion.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 1u;
-		}
-
-		public Suggestion Suggestion { get; set; }
-
-		public void SetSuggestion(Suggestion val)
-		{
-			this.Suggestion = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.Suggestion.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			SuggestionAddedNotification suggestionAddedNotification = obj as SuggestionAddedNotification;
-			return suggestionAddedNotification != null && this.Suggestion.Equals(suggestionAddedNotification.Suggestion);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SuggestionAddedNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SuggestionAddedNotification>(bs, 0, -1);
 		}
 	}
 }

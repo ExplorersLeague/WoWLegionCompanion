@@ -6,6 +6,137 @@ namespace bnet.protocol.account
 {
 	public class GameAccountNotification : IProtoBuf
 	{
+		public List<GameAccountList> RegionDelta
+		{
+			get
+			{
+				return this._RegionDelta;
+			}
+			set
+			{
+				this._RegionDelta = value;
+			}
+		}
+
+		public List<GameAccountList> RegionDeltaList
+		{
+			get
+			{
+				return this._RegionDelta;
+			}
+		}
+
+		public int RegionDeltaCount
+		{
+			get
+			{
+				return this._RegionDelta.Count;
+			}
+		}
+
+		public void AddRegionDelta(GameAccountList val)
+		{
+			this._RegionDelta.Add(val);
+		}
+
+		public void ClearRegionDelta()
+		{
+			this._RegionDelta.Clear();
+		}
+
+		public void SetRegionDelta(List<GameAccountList> val)
+		{
+			this.RegionDelta = val;
+		}
+
+		public ulong SubscriberId
+		{
+			get
+			{
+				return this._SubscriberId;
+			}
+			set
+			{
+				this._SubscriberId = value;
+				this.HasSubscriberId = true;
+			}
+		}
+
+		public void SetSubscriberId(ulong val)
+		{
+			this.SubscriberId = val;
+		}
+
+		public AccountFieldTags AccountTags
+		{
+			get
+			{
+				return this._AccountTags;
+			}
+			set
+			{
+				this._AccountTags = value;
+				this.HasAccountTags = (value != null);
+			}
+		}
+
+		public void SetAccountTags(AccountFieldTags val)
+		{
+			this.AccountTags = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (GameAccountList gameAccountList in this.RegionDelta)
+			{
+				num ^= gameAccountList.GetHashCode();
+			}
+			if (this.HasSubscriberId)
+			{
+				num ^= this.SubscriberId.GetHashCode();
+			}
+			if (this.HasAccountTags)
+			{
+				num ^= this.AccountTags.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountNotification gameAccountNotification = obj as GameAccountNotification;
+			if (gameAccountNotification == null)
+			{
+				return false;
+			}
+			if (this.RegionDelta.Count != gameAccountNotification.RegionDelta.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.RegionDelta.Count; i++)
+			{
+				if (!this.RegionDelta[i].Equals(gameAccountNotification.RegionDelta[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasSubscriberId == gameAccountNotification.HasSubscriberId && (!this.HasSubscriberId || this.SubscriberId.Equals(gameAccountNotification.SubscriberId)) && this.HasAccountTags == gameAccountNotification.HasAccountTags && (!this.HasAccountTags || this.AccountTags.Equals(gameAccountNotification.AccountTags));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountNotification.Deserialize(stream, this);
@@ -140,137 +271,6 @@ namespace bnet.protocol.account
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num;
-		}
-
-		public List<GameAccountList> RegionDelta
-		{
-			get
-			{
-				return this._RegionDelta;
-			}
-			set
-			{
-				this._RegionDelta = value;
-			}
-		}
-
-		public List<GameAccountList> RegionDeltaList
-		{
-			get
-			{
-				return this._RegionDelta;
-			}
-		}
-
-		public int RegionDeltaCount
-		{
-			get
-			{
-				return this._RegionDelta.Count;
-			}
-		}
-
-		public void AddRegionDelta(GameAccountList val)
-		{
-			this._RegionDelta.Add(val);
-		}
-
-		public void ClearRegionDelta()
-		{
-			this._RegionDelta.Clear();
-		}
-
-		public void SetRegionDelta(List<GameAccountList> val)
-		{
-			this.RegionDelta = val;
-		}
-
-		public ulong SubscriberId
-		{
-			get
-			{
-				return this._SubscriberId;
-			}
-			set
-			{
-				this._SubscriberId = value;
-				this.HasSubscriberId = true;
-			}
-		}
-
-		public void SetSubscriberId(ulong val)
-		{
-			this.SubscriberId = val;
-		}
-
-		public AccountFieldTags AccountTags
-		{
-			get
-			{
-				return this._AccountTags;
-			}
-			set
-			{
-				this._AccountTags = value;
-				this.HasAccountTags = (value != null);
-			}
-		}
-
-		public void SetAccountTags(AccountFieldTags val)
-		{
-			this.AccountTags = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (GameAccountList gameAccountList in this.RegionDelta)
-			{
-				num ^= gameAccountList.GetHashCode();
-			}
-			if (this.HasSubscriberId)
-			{
-				num ^= this.SubscriberId.GetHashCode();
-			}
-			if (this.HasAccountTags)
-			{
-				num ^= this.AccountTags.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountNotification gameAccountNotification = obj as GameAccountNotification;
-			if (gameAccountNotification == null)
-			{
-				return false;
-			}
-			if (this.RegionDelta.Count != gameAccountNotification.RegionDelta.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.RegionDelta.Count; i++)
-			{
-				if (!this.RegionDelta[i].Equals(gameAccountNotification.RegionDelta[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasSubscriberId == gameAccountNotification.HasSubscriberId && (!this.HasSubscriberId || this.SubscriberId.Equals(gameAccountNotification.SubscriberId)) && this.HasAccountTags == gameAccountNotification.HasAccountTags && (!this.HasAccountTags || this.AccountTags.Equals(gameAccountNotification.AccountTags));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountNotification>(bs, 0, -1);
 		}
 
 		private List<GameAccountList> _RegionDelta = new List<GameAccountList>();

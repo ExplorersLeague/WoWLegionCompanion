@@ -5,6 +5,97 @@ namespace bnet.protocol.server_pool
 {
 	public class ServerState : IProtoBuf
 	{
+		public float CurrentLoad
+		{
+			get
+			{
+				return this._CurrentLoad;
+			}
+			set
+			{
+				this._CurrentLoad = value;
+				this.HasCurrentLoad = true;
+			}
+		}
+
+		public void SetCurrentLoad(float val)
+		{
+			this.CurrentLoad = val;
+		}
+
+		public uint GameCount
+		{
+			get
+			{
+				return this._GameCount;
+			}
+			set
+			{
+				this._GameCount = value;
+				this.HasGameCount = true;
+			}
+		}
+
+		public void SetGameCount(uint val)
+		{
+			this.GameCount = val;
+		}
+
+		public uint PlayerCount
+		{
+			get
+			{
+				return this._PlayerCount;
+			}
+			set
+			{
+				this._PlayerCount = value;
+				this.HasPlayerCount = true;
+			}
+		}
+
+		public void SetPlayerCount(uint val)
+		{
+			this.PlayerCount = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasCurrentLoad)
+			{
+				num ^= this.CurrentLoad.GetHashCode();
+			}
+			if (this.HasGameCount)
+			{
+				num ^= this.GameCount.GetHashCode();
+			}
+			if (this.HasPlayerCount)
+			{
+				num ^= this.PlayerCount.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ServerState serverState = obj as ServerState;
+			return serverState != null && this.HasCurrentLoad == serverState.HasCurrentLoad && (!this.HasCurrentLoad || this.CurrentLoad.Equals(serverState.CurrentLoad)) && this.HasGameCount == serverState.HasGameCount && (!this.HasGameCount || this.GameCount.Equals(serverState.GameCount)) && this.HasPlayerCount == serverState.HasPlayerCount && (!this.HasPlayerCount || this.PlayerCount.Equals(serverState.PlayerCount));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ServerState ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ServerState>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ServerState.Deserialize(stream, this);
@@ -126,97 +217,6 @@ namespace bnet.protocol.server_pool
 				num += ProtocolParser.SizeOfUInt32(this.PlayerCount);
 			}
 			return num;
-		}
-
-		public float CurrentLoad
-		{
-			get
-			{
-				return this._CurrentLoad;
-			}
-			set
-			{
-				this._CurrentLoad = value;
-				this.HasCurrentLoad = true;
-			}
-		}
-
-		public void SetCurrentLoad(float val)
-		{
-			this.CurrentLoad = val;
-		}
-
-		public uint GameCount
-		{
-			get
-			{
-				return this._GameCount;
-			}
-			set
-			{
-				this._GameCount = value;
-				this.HasGameCount = true;
-			}
-		}
-
-		public void SetGameCount(uint val)
-		{
-			this.GameCount = val;
-		}
-
-		public uint PlayerCount
-		{
-			get
-			{
-				return this._PlayerCount;
-			}
-			set
-			{
-				this._PlayerCount = value;
-				this.HasPlayerCount = true;
-			}
-		}
-
-		public void SetPlayerCount(uint val)
-		{
-			this.PlayerCount = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasCurrentLoad)
-			{
-				num ^= this.CurrentLoad.GetHashCode();
-			}
-			if (this.HasGameCount)
-			{
-				num ^= this.GameCount.GetHashCode();
-			}
-			if (this.HasPlayerCount)
-			{
-				num ^= this.PlayerCount.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ServerState serverState = obj as ServerState;
-			return serverState != null && this.HasCurrentLoad == serverState.HasCurrentLoad && (!this.HasCurrentLoad || this.CurrentLoad.Equals(serverState.CurrentLoad)) && this.HasGameCount == serverState.HasGameCount && (!this.HasGameCount || this.GameCount.Equals(serverState.GameCount)) && this.HasPlayerCount == serverState.HasPlayerCount && (!this.HasPlayerCount || this.PlayerCount.Equals(serverState.PlayerCount));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ServerState ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ServerState>(bs, 0, -1);
 		}
 
 		public bool HasCurrentLoad;

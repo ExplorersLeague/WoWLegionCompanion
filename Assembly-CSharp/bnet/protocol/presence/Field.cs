@@ -6,6 +6,46 @@ namespace bnet.protocol.presence
 {
 	public class Field : IProtoBuf
 	{
+		public FieldKey Key { get; set; }
+
+		public void SetKey(FieldKey val)
+		{
+			this.Key = val;
+		}
+
+		public Variant Value { get; set; }
+
+		public void SetValue(Variant val)
+		{
+			this.Value = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Key.GetHashCode();
+			return num ^ this.Value.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			Field field = obj as Field;
+			return field != null && this.Key.Equals(field.Key) && this.Value.Equals(field.Value);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Field ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Field>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Field.Deserialize(stream, this);
@@ -111,46 +151,6 @@ namespace bnet.protocol.presence
 			uint serializedSize2 = this.Value.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 2u;
-		}
-
-		public FieldKey Key { get; set; }
-
-		public void SetKey(FieldKey val)
-		{
-			this.Key = val;
-		}
-
-		public Variant Value { get; set; }
-
-		public void SetValue(Variant val)
-		{
-			this.Value = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Key.GetHashCode();
-			return num ^ this.Value.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			Field field = obj as Field;
-			return field != null && this.Key.Equals(field.Key) && this.Value.Equals(field.Value);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Field ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Field>(bs, 0, -1);
 		}
 	}
 }

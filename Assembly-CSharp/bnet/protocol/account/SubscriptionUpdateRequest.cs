@@ -6,6 +6,93 @@ namespace bnet.protocol.account
 {
 	public class SubscriptionUpdateRequest : IProtoBuf
 	{
+		public List<SubscriberReference> Ref
+		{
+			get
+			{
+				return this._Ref;
+			}
+			set
+			{
+				this._Ref = value;
+			}
+		}
+
+		public List<SubscriberReference> RefList
+		{
+			get
+			{
+				return this._Ref;
+			}
+		}
+
+		public int RefCount
+		{
+			get
+			{
+				return this._Ref.Count;
+			}
+		}
+
+		public void AddRef(SubscriberReference val)
+		{
+			this._Ref.Add(val);
+		}
+
+		public void ClearRef()
+		{
+			this._Ref.Clear();
+		}
+
+		public void SetRef(List<SubscriberReference> val)
+		{
+			this.Ref = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (SubscriberReference subscriberReference in this.Ref)
+			{
+				num ^= subscriberReference.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscriptionUpdateRequest subscriptionUpdateRequest = obj as SubscriptionUpdateRequest;
+			if (subscriptionUpdateRequest == null)
+			{
+				return false;
+			}
+			if (this.Ref.Count != subscriptionUpdateRequest.Ref.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Ref.Count; i++)
+			{
+				if (!this.Ref[i].Equals(subscriptionUpdateRequest.Ref[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscriptionUpdateRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscriptionUpdateRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscriptionUpdateRequest.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.account
 				}
 			}
 			return num;
-		}
-
-		public List<SubscriberReference> Ref
-		{
-			get
-			{
-				return this._Ref;
-			}
-			set
-			{
-				this._Ref = value;
-			}
-		}
-
-		public List<SubscriberReference> RefList
-		{
-			get
-			{
-				return this._Ref;
-			}
-		}
-
-		public int RefCount
-		{
-			get
-			{
-				return this._Ref.Count;
-			}
-		}
-
-		public void AddRef(SubscriberReference val)
-		{
-			this._Ref.Add(val);
-		}
-
-		public void ClearRef()
-		{
-			this._Ref.Clear();
-		}
-
-		public void SetRef(List<SubscriberReference> val)
-		{
-			this.Ref = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (SubscriberReference subscriberReference in this.Ref)
-			{
-				num ^= subscriberReference.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscriptionUpdateRequest subscriptionUpdateRequest = obj as SubscriptionUpdateRequest;
-			if (subscriptionUpdateRequest == null)
-			{
-				return false;
-			}
-			if (this.Ref.Count != subscriptionUpdateRequest.Ref.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Ref.Count; i++)
-			{
-				if (!this.Ref[i].Equals(subscriptionUpdateRequest.Ref[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscriptionUpdateRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscriptionUpdateRequest>(bs, 0, -1);
 		}
 
 		private List<SubscriberReference> _Ref = new List<SubscriberReference>();

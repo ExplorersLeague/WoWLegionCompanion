@@ -5,6 +5,62 @@ namespace bnet.protocol
 {
 	public class ErrorInfo : IProtoBuf
 	{
+		public ObjectAddress ObjectAddress { get; set; }
+
+		public void SetObjectAddress(ObjectAddress val)
+		{
+			this.ObjectAddress = val;
+		}
+
+		public uint Status { get; set; }
+
+		public void SetStatus(uint val)
+		{
+			this.Status = val;
+		}
+
+		public uint ServiceHash { get; set; }
+
+		public void SetServiceHash(uint val)
+		{
+			this.ServiceHash = val;
+		}
+
+		public uint MethodId { get; set; }
+
+		public void SetMethodId(uint val)
+		{
+			this.MethodId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ObjectAddress.GetHashCode();
+			num ^= this.Status.GetHashCode();
+			num ^= this.ServiceHash.GetHashCode();
+			return num ^ this.MethodId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			ErrorInfo errorInfo = obj as ErrorInfo;
+			return errorInfo != null && this.ObjectAddress.Equals(errorInfo.ObjectAddress) && this.Status.Equals(errorInfo.Status) && this.ServiceHash.Equals(errorInfo.ServiceHash) && this.MethodId.Equals(errorInfo.MethodId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ErrorInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ErrorInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ErrorInfo.Deserialize(stream, this);
@@ -120,62 +176,6 @@ namespace bnet.protocol
 			num += ProtocolParser.SizeOfUInt32(this.ServiceHash);
 			num += ProtocolParser.SizeOfUInt32(this.MethodId);
 			return num + 4u;
-		}
-
-		public ObjectAddress ObjectAddress { get; set; }
-
-		public void SetObjectAddress(ObjectAddress val)
-		{
-			this.ObjectAddress = val;
-		}
-
-		public uint Status { get; set; }
-
-		public void SetStatus(uint val)
-		{
-			this.Status = val;
-		}
-
-		public uint ServiceHash { get; set; }
-
-		public void SetServiceHash(uint val)
-		{
-			this.ServiceHash = val;
-		}
-
-		public uint MethodId { get; set; }
-
-		public void SetMethodId(uint val)
-		{
-			this.MethodId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ObjectAddress.GetHashCode();
-			num ^= this.Status.GetHashCode();
-			num ^= this.ServiceHash.GetHashCode();
-			return num ^ this.MethodId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			ErrorInfo errorInfo = obj as ErrorInfo;
-			return errorInfo != null && this.ObjectAddress.Equals(errorInfo.ObjectAddress) && this.Status.Equals(errorInfo.Status) && this.ServiceHash.Equals(errorInfo.ServiceHash) && this.MethodId.Equals(errorInfo.MethodId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ErrorInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ErrorInfo>(bs, 0, -1);
 		}
 	}
 }

@@ -6,6 +6,131 @@ namespace bnet.protocol.friends
 {
 	public class AssignRoleRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId TargetId { get; set; }
+
+		public void SetTargetId(EntityId val)
+		{
+			this.TargetId = val;
+		}
+
+		public List<int> Role
+		{
+			get
+			{
+				return this._Role;
+			}
+			set
+			{
+				this._Role = value;
+			}
+		}
+
+		public List<int> RoleList
+		{
+			get
+			{
+				return this._Role;
+			}
+		}
+
+		public int RoleCount
+		{
+			get
+			{
+				return this._Role.Count;
+			}
+		}
+
+		public void AddRole(int val)
+		{
+			this._Role.Add(val);
+		}
+
+		public void ClearRole()
+		{
+			this._Role.Clear();
+		}
+
+		public void SetRole(List<int> val)
+		{
+			this.Role = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.TargetId.GetHashCode();
+			foreach (int num2 in this.Role)
+			{
+				num ^= num2.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AssignRoleRequest assignRoleRequest = obj as AssignRoleRequest;
+			if (assignRoleRequest == null)
+			{
+				return false;
+			}
+			if (this.HasAgentId != assignRoleRequest.HasAgentId || (this.HasAgentId && !this.AgentId.Equals(assignRoleRequest.AgentId)))
+			{
+				return false;
+			}
+			if (!this.TargetId.Equals(assignRoleRequest.TargetId))
+			{
+				return false;
+			}
+			if (this.Role.Count != assignRoleRequest.Role.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Role.Count; i++)
+			{
+				if (!this.Role[i].Equals(assignRoleRequest.Role[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AssignRoleRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AssignRoleRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AssignRoleRequest.Deserialize(stream, this);
@@ -142,131 +267,6 @@ namespace bnet.protocol.friends
 			}
 			num += 1u;
 			return num;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId TargetId { get; set; }
-
-		public void SetTargetId(EntityId val)
-		{
-			this.TargetId = val;
-		}
-
-		public List<int> Role
-		{
-			get
-			{
-				return this._Role;
-			}
-			set
-			{
-				this._Role = value;
-			}
-		}
-
-		public List<int> RoleList
-		{
-			get
-			{
-				return this._Role;
-			}
-		}
-
-		public int RoleCount
-		{
-			get
-			{
-				return this._Role.Count;
-			}
-		}
-
-		public void AddRole(int val)
-		{
-			this._Role.Add(val);
-		}
-
-		public void ClearRole()
-		{
-			this._Role.Clear();
-		}
-
-		public void SetRole(List<int> val)
-		{
-			this.Role = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.TargetId.GetHashCode();
-			foreach (int num2 in this.Role)
-			{
-				num ^= num2.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AssignRoleRequest assignRoleRequest = obj as AssignRoleRequest;
-			if (assignRoleRequest == null)
-			{
-				return false;
-			}
-			if (this.HasAgentId != assignRoleRequest.HasAgentId || (this.HasAgentId && !this.AgentId.Equals(assignRoleRequest.AgentId)))
-			{
-				return false;
-			}
-			if (!this.TargetId.Equals(assignRoleRequest.TargetId))
-			{
-				return false;
-			}
-			if (this.Role.Count != assignRoleRequest.Role.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Role.Count; i++)
-			{
-				if (!this.Role[i].Equals(assignRoleRequest.Role[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AssignRoleRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AssignRoleRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

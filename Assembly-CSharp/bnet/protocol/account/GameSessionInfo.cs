@@ -5,6 +5,141 @@ namespace bnet.protocol.account
 {
 	public class GameSessionInfo : IProtoBuf
 	{
+		public uint StartTime
+		{
+			get
+			{
+				return this._StartTime;
+			}
+			set
+			{
+				this._StartTime = value;
+				this.HasStartTime = true;
+			}
+		}
+
+		public void SetStartTime(uint val)
+		{
+			this.StartTime = val;
+		}
+
+		public GameSessionLocation Location
+		{
+			get
+			{
+				return this._Location;
+			}
+			set
+			{
+				this._Location = value;
+				this.HasLocation = (value != null);
+			}
+		}
+
+		public void SetLocation(GameSessionLocation val)
+		{
+			this.Location = val;
+		}
+
+		public bool HasBenefactor
+		{
+			get
+			{
+				return this._HasBenefactor;
+			}
+			set
+			{
+				this._HasBenefactor = value;
+				this.HasHasBenefactor = true;
+			}
+		}
+
+		public void SetHasBenefactor(bool val)
+		{
+			this.HasBenefactor = val;
+		}
+
+		public bool IsUsingIgr
+		{
+			get
+			{
+				return this._IsUsingIgr;
+			}
+			set
+			{
+				this._IsUsingIgr = value;
+				this.HasIsUsingIgr = true;
+			}
+		}
+
+		public void SetIsUsingIgr(bool val)
+		{
+			this.IsUsingIgr = val;
+		}
+
+		public bool ParentalControlsActive
+		{
+			get
+			{
+				return this._ParentalControlsActive;
+			}
+			set
+			{
+				this._ParentalControlsActive = value;
+				this.HasParentalControlsActive = true;
+			}
+		}
+
+		public void SetParentalControlsActive(bool val)
+		{
+			this.ParentalControlsActive = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasStartTime)
+			{
+				num ^= this.StartTime.GetHashCode();
+			}
+			if (this.HasLocation)
+			{
+				num ^= this.Location.GetHashCode();
+			}
+			if (this.HasHasBenefactor)
+			{
+				num ^= this.HasBenefactor.GetHashCode();
+			}
+			if (this.HasIsUsingIgr)
+			{
+				num ^= this.IsUsingIgr.GetHashCode();
+			}
+			if (this.HasParentalControlsActive)
+			{
+				num ^= this.ParentalControlsActive.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameSessionInfo gameSessionInfo = obj as GameSessionInfo;
+			return gameSessionInfo != null && this.HasStartTime == gameSessionInfo.HasStartTime && (!this.HasStartTime || this.StartTime.Equals(gameSessionInfo.StartTime)) && this.HasLocation == gameSessionInfo.HasLocation && (!this.HasLocation || this.Location.Equals(gameSessionInfo.Location)) && this.HasHasBenefactor == gameSessionInfo.HasHasBenefactor && (!this.HasHasBenefactor || this.HasBenefactor.Equals(gameSessionInfo.HasBenefactor)) && this.HasIsUsingIgr == gameSessionInfo.HasIsUsingIgr && (!this.HasIsUsingIgr || this.IsUsingIgr.Equals(gameSessionInfo.IsUsingIgr)) && this.HasParentalControlsActive == gameSessionInfo.HasParentalControlsActive && (!this.HasParentalControlsActive || this.ParentalControlsActive.Equals(gameSessionInfo.ParentalControlsActive));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameSessionInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameSessionInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameSessionInfo.Deserialize(stream, this);
@@ -161,141 +296,6 @@ namespace bnet.protocol.account
 				num += 1u;
 			}
 			return num;
-		}
-
-		public uint StartTime
-		{
-			get
-			{
-				return this._StartTime;
-			}
-			set
-			{
-				this._StartTime = value;
-				this.HasStartTime = true;
-			}
-		}
-
-		public void SetStartTime(uint val)
-		{
-			this.StartTime = val;
-		}
-
-		public GameSessionLocation Location
-		{
-			get
-			{
-				return this._Location;
-			}
-			set
-			{
-				this._Location = value;
-				this.HasLocation = (value != null);
-			}
-		}
-
-		public void SetLocation(GameSessionLocation val)
-		{
-			this.Location = val;
-		}
-
-		public bool HasBenefactor
-		{
-			get
-			{
-				return this._HasBenefactor;
-			}
-			set
-			{
-				this._HasBenefactor = value;
-				this.HasHasBenefactor = true;
-			}
-		}
-
-		public void SetHasBenefactor(bool val)
-		{
-			this.HasBenefactor = val;
-		}
-
-		public bool IsUsingIgr
-		{
-			get
-			{
-				return this._IsUsingIgr;
-			}
-			set
-			{
-				this._IsUsingIgr = value;
-				this.HasIsUsingIgr = true;
-			}
-		}
-
-		public void SetIsUsingIgr(bool val)
-		{
-			this.IsUsingIgr = val;
-		}
-
-		public bool ParentalControlsActive
-		{
-			get
-			{
-				return this._ParentalControlsActive;
-			}
-			set
-			{
-				this._ParentalControlsActive = value;
-				this.HasParentalControlsActive = true;
-			}
-		}
-
-		public void SetParentalControlsActive(bool val)
-		{
-			this.ParentalControlsActive = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasStartTime)
-			{
-				num ^= this.StartTime.GetHashCode();
-			}
-			if (this.HasLocation)
-			{
-				num ^= this.Location.GetHashCode();
-			}
-			if (this.HasHasBenefactor)
-			{
-				num ^= this.HasBenefactor.GetHashCode();
-			}
-			if (this.HasIsUsingIgr)
-			{
-				num ^= this.IsUsingIgr.GetHashCode();
-			}
-			if (this.HasParentalControlsActive)
-			{
-				num ^= this.ParentalControlsActive.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameSessionInfo gameSessionInfo = obj as GameSessionInfo;
-			return gameSessionInfo != null && this.HasStartTime == gameSessionInfo.HasStartTime && (!this.HasStartTime || this.StartTime.Equals(gameSessionInfo.StartTime)) && this.HasLocation == gameSessionInfo.HasLocation && (!this.HasLocation || this.Location.Equals(gameSessionInfo.Location)) && this.HasHasBenefactor == gameSessionInfo.HasHasBenefactor && (!this.HasHasBenefactor || this.HasBenefactor.Equals(gameSessionInfo.HasBenefactor)) && this.HasIsUsingIgr == gameSessionInfo.HasIsUsingIgr && (!this.HasIsUsingIgr || this.IsUsingIgr.Equals(gameSessionInfo.IsUsingIgr)) && this.HasParentalControlsActive == gameSessionInfo.HasParentalControlsActive && (!this.HasParentalControlsActive || this.ParentalControlsActive.Equals(gameSessionInfo.ParentalControlsActive));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameSessionInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameSessionInfo>(bs, 0, -1);
 		}
 
 		public bool HasStartTime;

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace WowStaticData
@@ -8,38 +9,23 @@ namespace WowStaticData
 	{
 		public GarrTalentTreeRec GetRecord(int id)
 		{
-			return (GarrTalentTreeRec)this.m_records[id];
+			return (!this.m_records.ContainsKey(id)) ? null : this.m_records[id];
 		}
 
-		public void EnumRecords(Predicate<GarrTalentTreeRec> callback)
+		public IEnumerable<GarrTalentTreeRec> GetRecordsWhere(Func<GarrTalentTreeRec, bool> matcher)
 		{
-			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
-			try
-			{
-				while (enumerator.MoveNext())
-				{
-					object obj = enumerator.Current;
-					GarrTalentTreeRec obj2 = (GarrTalentTreeRec)obj;
-					if (!callback(obj2))
-					{
-						break;
-					}
-				}
-			}
-			finally
-			{
-				IDisposable disposable;
-				if ((disposable = (enumerator as IDisposable)) != null)
-				{
-					disposable.Dispose();
-				}
-			}
+			return this.m_records.Values.Where(matcher);
+		}
+
+		public GarrTalentTreeRec GetRecordFirstOrDefault(Func<GarrTalentTreeRec, bool> matcher)
+		{
+			return this.m_records.Values.FirstOrDefault(matcher);
 		}
 
 		public bool Load(string path, AssetBundle nonLocalizedBundle, AssetBundle localizedBundle, string locale)
 		{
 			string text = path + "NonLocalized/GarrTalentTree.txt";
-			if (this.m_records != null)
+			if (this.m_records.Count > 0)
 			{
 				Debug.Log("Already loaded static db " + text);
 				return false;
@@ -51,7 +37,6 @@ namespace WowStaticData
 				return false;
 			}
 			string text2 = textAsset.ToString();
-			this.m_records = new Hashtable();
 			int num = 0;
 			int num2;
 			do
@@ -70,6 +55,6 @@ namespace WowStaticData
 			return true;
 		}
 
-		private Hashtable m_records;
+		private Dictionary<int, GarrTalentTreeRec> m_records = new Dictionary<int, GarrTalentTreeRec>();
 	}
 }

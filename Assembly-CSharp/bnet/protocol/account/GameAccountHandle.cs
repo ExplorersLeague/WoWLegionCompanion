@@ -5,6 +5,54 @@ namespace bnet.protocol.account
 {
 	public class GameAccountHandle : IProtoBuf
 	{
+		public uint Id { get; set; }
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public uint Program { get; set; }
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public uint Region { get; set; }
+
+		public void SetRegion(uint val)
+		{
+			this.Region = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Id.GetHashCode();
+			num ^= this.Program.GetHashCode();
+			return num ^ this.Region.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountHandle gameAccountHandle = obj as GameAccountHandle;
+			return gameAccountHandle != null && this.Id.Equals(gameAccountHandle.Id) && this.Program.Equals(gameAccountHandle.Program) && this.Region.Equals(gameAccountHandle.Region);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountHandle ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountHandle>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountHandle.Deserialize(stream, this);
@@ -102,54 +150,6 @@ namespace bnet.protocol.account
 			num += 4u;
 			num += ProtocolParser.SizeOfUInt32(this.Region);
 			return num + 3u;
-		}
-
-		public uint Id { get; set; }
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public uint Program { get; set; }
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public uint Region { get; set; }
-
-		public void SetRegion(uint val)
-		{
-			this.Region = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Id.GetHashCode();
-			num ^= this.Program.GetHashCode();
-			return num ^ this.Region.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountHandle gameAccountHandle = obj as GameAccountHandle;
-			return gameAccountHandle != null && this.Id.Equals(gameAccountHandle.Id) && this.Program.Equals(gameAccountHandle.Program) && this.Region.Equals(gameAccountHandle.Region);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountHandle ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountHandle>(bs, 0, -1);
 		}
 	}
 }

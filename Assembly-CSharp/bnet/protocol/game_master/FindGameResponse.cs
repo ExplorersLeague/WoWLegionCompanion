@@ -5,6 +5,97 @@ namespace bnet.protocol.game_master
 {
 	public class FindGameResponse : IProtoBuf
 	{
+		public ulong RequestId
+		{
+			get
+			{
+				return this._RequestId;
+			}
+			set
+			{
+				this._RequestId = value;
+				this.HasRequestId = true;
+			}
+		}
+
+		public void SetRequestId(ulong val)
+		{
+			this.RequestId = val;
+		}
+
+		public ulong FactoryId
+		{
+			get
+			{
+				return this._FactoryId;
+			}
+			set
+			{
+				this._FactoryId = value;
+				this.HasFactoryId = true;
+			}
+		}
+
+		public void SetFactoryId(ulong val)
+		{
+			this.FactoryId = val;
+		}
+
+		public bool Queued
+		{
+			get
+			{
+				return this._Queued;
+			}
+			set
+			{
+				this._Queued = value;
+				this.HasQueued = true;
+			}
+		}
+
+		public void SetQueued(bool val)
+		{
+			this.Queued = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasRequestId)
+			{
+				num ^= this.RequestId.GetHashCode();
+			}
+			if (this.HasFactoryId)
+			{
+				num ^= this.FactoryId.GetHashCode();
+			}
+			if (this.HasQueued)
+			{
+				num ^= this.Queued.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FindGameResponse findGameResponse = obj as FindGameResponse;
+			return findGameResponse != null && this.HasRequestId == findGameResponse.HasRequestId && (!this.HasRequestId || this.RequestId.Equals(findGameResponse.RequestId)) && this.HasFactoryId == findGameResponse.HasFactoryId && (!this.HasFactoryId || this.FactoryId.Equals(findGameResponse.FactoryId)) && this.HasQueued == findGameResponse.HasQueued && (!this.HasQueued || this.Queued.Equals(findGameResponse.Queued));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FindGameResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FindGameResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FindGameResponse.Deserialize(stream, this);
@@ -124,97 +215,6 @@ namespace bnet.protocol.game_master
 				num += 1u;
 			}
 			return num;
-		}
-
-		public ulong RequestId
-		{
-			get
-			{
-				return this._RequestId;
-			}
-			set
-			{
-				this._RequestId = value;
-				this.HasRequestId = true;
-			}
-		}
-
-		public void SetRequestId(ulong val)
-		{
-			this.RequestId = val;
-		}
-
-		public ulong FactoryId
-		{
-			get
-			{
-				return this._FactoryId;
-			}
-			set
-			{
-				this._FactoryId = value;
-				this.HasFactoryId = true;
-			}
-		}
-
-		public void SetFactoryId(ulong val)
-		{
-			this.FactoryId = val;
-		}
-
-		public bool Queued
-		{
-			get
-			{
-				return this._Queued;
-			}
-			set
-			{
-				this._Queued = value;
-				this.HasQueued = true;
-			}
-		}
-
-		public void SetQueued(bool val)
-		{
-			this.Queued = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasRequestId)
-			{
-				num ^= this.RequestId.GetHashCode();
-			}
-			if (this.HasFactoryId)
-			{
-				num ^= this.FactoryId.GetHashCode();
-			}
-			if (this.HasQueued)
-			{
-				num ^= this.Queued.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FindGameResponse findGameResponse = obj as FindGameResponse;
-			return findGameResponse != null && this.HasRequestId == findGameResponse.HasRequestId && (!this.HasRequestId || this.RequestId.Equals(findGameResponse.RequestId)) && this.HasFactoryId == findGameResponse.HasFactoryId && (!this.HasFactoryId || this.FactoryId.Equals(findGameResponse.FactoryId)) && this.HasQueued == findGameResponse.HasQueued && (!this.HasQueued || this.Queued.Equals(findGameResponse.Queued));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FindGameResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FindGameResponse>(bs, 0, -1);
 		}
 
 		public bool HasRequestId;

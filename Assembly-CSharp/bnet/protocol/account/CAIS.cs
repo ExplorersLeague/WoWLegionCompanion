@@ -5,6 +5,97 @@ namespace bnet.protocol.account
 {
 	public class CAIS : IProtoBuf
 	{
+		public uint PlayedMinutes
+		{
+			get
+			{
+				return this._PlayedMinutes;
+			}
+			set
+			{
+				this._PlayedMinutes = value;
+				this.HasPlayedMinutes = true;
+			}
+		}
+
+		public void SetPlayedMinutes(uint val)
+		{
+			this.PlayedMinutes = val;
+		}
+
+		public uint RestedMinutes
+		{
+			get
+			{
+				return this._RestedMinutes;
+			}
+			set
+			{
+				this._RestedMinutes = value;
+				this.HasRestedMinutes = true;
+			}
+		}
+
+		public void SetRestedMinutes(uint val)
+		{
+			this.RestedMinutes = val;
+		}
+
+		public ulong LastHeardTime
+		{
+			get
+			{
+				return this._LastHeardTime;
+			}
+			set
+			{
+				this._LastHeardTime = value;
+				this.HasLastHeardTime = true;
+			}
+		}
+
+		public void SetLastHeardTime(ulong val)
+		{
+			this.LastHeardTime = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasPlayedMinutes)
+			{
+				num ^= this.PlayedMinutes.GetHashCode();
+			}
+			if (this.HasRestedMinutes)
+			{
+				num ^= this.RestedMinutes.GetHashCode();
+			}
+			if (this.HasLastHeardTime)
+			{
+				num ^= this.LastHeardTime.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			CAIS cais = obj as CAIS;
+			return cais != null && this.HasPlayedMinutes == cais.HasPlayedMinutes && (!this.HasPlayedMinutes || this.PlayedMinutes.Equals(cais.PlayedMinutes)) && this.HasRestedMinutes == cais.HasRestedMinutes && (!this.HasRestedMinutes || this.RestedMinutes.Equals(cais.RestedMinutes)) && this.HasLastHeardTime == cais.HasLastHeardTime && (!this.HasLastHeardTime || this.LastHeardTime.Equals(cais.LastHeardTime));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static CAIS ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<CAIS>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			CAIS.Deserialize(stream, this);
@@ -121,97 +212,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt64(this.LastHeardTime);
 			}
 			return num;
-		}
-
-		public uint PlayedMinutes
-		{
-			get
-			{
-				return this._PlayedMinutes;
-			}
-			set
-			{
-				this._PlayedMinutes = value;
-				this.HasPlayedMinutes = true;
-			}
-		}
-
-		public void SetPlayedMinutes(uint val)
-		{
-			this.PlayedMinutes = val;
-		}
-
-		public uint RestedMinutes
-		{
-			get
-			{
-				return this._RestedMinutes;
-			}
-			set
-			{
-				this._RestedMinutes = value;
-				this.HasRestedMinutes = true;
-			}
-		}
-
-		public void SetRestedMinutes(uint val)
-		{
-			this.RestedMinutes = val;
-		}
-
-		public ulong LastHeardTime
-		{
-			get
-			{
-				return this._LastHeardTime;
-			}
-			set
-			{
-				this._LastHeardTime = value;
-				this.HasLastHeardTime = true;
-			}
-		}
-
-		public void SetLastHeardTime(ulong val)
-		{
-			this.LastHeardTime = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasPlayedMinutes)
-			{
-				num ^= this.PlayedMinutes.GetHashCode();
-			}
-			if (this.HasRestedMinutes)
-			{
-				num ^= this.RestedMinutes.GetHashCode();
-			}
-			if (this.HasLastHeardTime)
-			{
-				num ^= this.LastHeardTime.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			CAIS cais = obj as CAIS;
-			return cais != null && this.HasPlayedMinutes == cais.HasPlayedMinutes && (!this.HasPlayedMinutes || this.PlayedMinutes.Equals(cais.PlayedMinutes)) && this.HasRestedMinutes == cais.HasRestedMinutes && (!this.HasRestedMinutes || this.RestedMinutes.Equals(cais.RestedMinutes)) && this.HasLastHeardTime == cais.HasLastHeardTime && (!this.HasLastHeardTime || this.LastHeardTime.Equals(cais.LastHeardTime));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static CAIS ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<CAIS>(bs, 0, -1);
 		}
 
 		public bool HasPlayedMinutes;

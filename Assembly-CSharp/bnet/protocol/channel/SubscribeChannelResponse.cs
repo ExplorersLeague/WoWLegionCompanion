@@ -5,6 +5,53 @@ namespace bnet.protocol.channel
 {
 	public class SubscribeChannelResponse : IProtoBuf
 	{
+		public ulong ObjectId
+		{
+			get
+			{
+				return this._ObjectId;
+			}
+			set
+			{
+				this._ObjectId = value;
+				this.HasObjectId = true;
+			}
+		}
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasObjectId)
+			{
+				num ^= this.ObjectId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscribeChannelResponse subscribeChannelResponse = obj as SubscribeChannelResponse;
+			return subscribeChannelResponse != null && this.HasObjectId == subscribeChannelResponse.HasObjectId && (!this.HasObjectId || this.ObjectId.Equals(subscribeChannelResponse.ObjectId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscribeChannelResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscribeChannelResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscribeChannelResponse.Deserialize(stream, this);
@@ -87,53 +134,6 @@ namespace bnet.protocol.channel
 				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
 			}
 			return num;
-		}
-
-		public ulong ObjectId
-		{
-			get
-			{
-				return this._ObjectId;
-			}
-			set
-			{
-				this._ObjectId = value;
-				this.HasObjectId = true;
-			}
-		}
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasObjectId)
-			{
-				num ^= this.ObjectId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscribeChannelResponse subscribeChannelResponse = obj as SubscribeChannelResponse;
-			return subscribeChannelResponse != null && this.HasObjectId == subscribeChannelResponse.HasObjectId && (!this.HasObjectId || this.ObjectId.Equals(subscribeChannelResponse.ObjectId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscribeChannelResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscribeChannelResponse>(bs, 0, -1);
 		}
 
 		public bool HasObjectId;

@@ -5,6 +5,29 @@ namespace bnet.protocol.account
 {
 	public class FlagUpdateResponse : IProtoBuf
 	{
+		public override int GetHashCode()
+		{
+			return base.GetType().GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is FlagUpdateResponse;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FlagUpdateResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FlagUpdateResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FlagUpdateResponse.Deserialize(stream, this);
@@ -72,29 +95,6 @@ namespace bnet.protocol.account
 		public uint GetSerializedSize()
 		{
 			return 0u;
-		}
-
-		public override int GetHashCode()
-		{
-			return base.GetType().GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			return obj is FlagUpdateResponse;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FlagUpdateResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FlagUpdateResponse>(bs, 0, -1);
 		}
 	}
 }

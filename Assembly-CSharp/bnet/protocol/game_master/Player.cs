@@ -7,6 +7,119 @@ namespace bnet.protocol.game_master
 {
 	public class Player : IProtoBuf
 	{
+		public Identity Identity
+		{
+			get
+			{
+				return this._Identity;
+			}
+			set
+			{
+				this._Identity = value;
+				this.HasIdentity = (value != null);
+			}
+		}
+
+		public void SetIdentity(Identity val)
+		{
+			this.Identity = val;
+		}
+
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasIdentity)
+			{
+				num ^= this.Identity.GetHashCode();
+			}
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Player player = obj as Player;
+			if (player == null)
+			{
+				return false;
+			}
+			if (this.HasIdentity != player.HasIdentity || (this.HasIdentity && !this.Identity.Equals(player.Identity)))
+			{
+				return false;
+			}
+			if (this.Attribute.Count != player.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(player.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Player ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Player>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Player.Deserialize(stream, this);
@@ -124,119 +237,6 @@ namespace bnet.protocol.game_master
 				}
 			}
 			return num;
-		}
-
-		public Identity Identity
-		{
-			get
-			{
-				return this._Identity;
-			}
-			set
-			{
-				this._Identity = value;
-				this.HasIdentity = (value != null);
-			}
-		}
-
-		public void SetIdentity(Identity val)
-		{
-			this.Identity = val;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasIdentity)
-			{
-				num ^= this.Identity.GetHashCode();
-			}
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Player player = obj as Player;
-			if (player == null)
-			{
-				return false;
-			}
-			if (this.HasIdentity != player.HasIdentity || (this.HasIdentity && !this.Identity.Equals(player.Identity)))
-			{
-				return false;
-			}
-			if (this.Attribute.Count != player.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(player.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Player ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Player>(bs, 0, -1);
 		}
 
 		public bool HasIdentity;

@@ -5,6 +5,69 @@ namespace bnet.protocol.game_master
 {
 	public class FactoryUpdateNotification : IProtoBuf
 	{
+		public FactoryUpdateNotification.Types.Operation Op { get; set; }
+
+		public void SetOp(FactoryUpdateNotification.Types.Operation val)
+		{
+			this.Op = val;
+		}
+
+		public GameFactoryDescription Description { get; set; }
+
+		public void SetDescription(GameFactoryDescription val)
+		{
+			this.Description = val;
+		}
+
+		public uint ProgramId
+		{
+			get
+			{
+				return this._ProgramId;
+			}
+			set
+			{
+				this._ProgramId = value;
+				this.HasProgramId = true;
+			}
+		}
+
+		public void SetProgramId(uint val)
+		{
+			this.ProgramId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Op.GetHashCode();
+			num ^= this.Description.GetHashCode();
+			if (this.HasProgramId)
+			{
+				num ^= this.ProgramId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FactoryUpdateNotification factoryUpdateNotification = obj as FactoryUpdateNotification;
+			return factoryUpdateNotification != null && this.Op.Equals(factoryUpdateNotification.Op) && this.Description.Equals(factoryUpdateNotification.Description) && this.HasProgramId == factoryUpdateNotification.HasProgramId && (!this.HasProgramId || this.ProgramId.Equals(factoryUpdateNotification.ProgramId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FactoryUpdateNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FactoryUpdateNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FactoryUpdateNotification.Deserialize(stream, this);
@@ -119,69 +182,6 @@ namespace bnet.protocol.game_master
 				num += 4u;
 			}
 			return num + 2u;
-		}
-
-		public FactoryUpdateNotification.Types.Operation Op { get; set; }
-
-		public void SetOp(FactoryUpdateNotification.Types.Operation val)
-		{
-			this.Op = val;
-		}
-
-		public GameFactoryDescription Description { get; set; }
-
-		public void SetDescription(GameFactoryDescription val)
-		{
-			this.Description = val;
-		}
-
-		public uint ProgramId
-		{
-			get
-			{
-				return this._ProgramId;
-			}
-			set
-			{
-				this._ProgramId = value;
-				this.HasProgramId = true;
-			}
-		}
-
-		public void SetProgramId(uint val)
-		{
-			this.ProgramId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Op.GetHashCode();
-			num ^= this.Description.GetHashCode();
-			if (this.HasProgramId)
-			{
-				num ^= this.ProgramId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FactoryUpdateNotification factoryUpdateNotification = obj as FactoryUpdateNotification;
-			return factoryUpdateNotification != null && this.Op.Equals(factoryUpdateNotification.Op) && this.Description.Equals(factoryUpdateNotification.Description) && this.HasProgramId == factoryUpdateNotification.HasProgramId && (!this.HasProgramId || this.ProgramId.Equals(factoryUpdateNotification.ProgramId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FactoryUpdateNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FactoryUpdateNotification>(bs, 0, -1);
 		}
 
 		public bool HasProgramId;

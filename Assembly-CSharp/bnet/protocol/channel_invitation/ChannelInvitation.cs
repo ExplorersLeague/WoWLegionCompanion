@@ -6,6 +6,90 @@ namespace bnet.protocol.channel_invitation
 {
 	public class ChannelInvitation : IProtoBuf
 	{
+		public ChannelDescription ChannelDescription { get; set; }
+
+		public void SetChannelDescription(ChannelDescription val)
+		{
+			this.ChannelDescription = val;
+		}
+
+		public bool Reserved
+		{
+			get
+			{
+				return this._Reserved;
+			}
+			set
+			{
+				this._Reserved = value;
+				this.HasReserved = true;
+			}
+		}
+
+		public void SetReserved(bool val)
+		{
+			this.Reserved = val;
+		}
+
+		public bool Rejoin
+		{
+			get
+			{
+				return this._Rejoin;
+			}
+			set
+			{
+				this._Rejoin = value;
+				this.HasRejoin = true;
+			}
+		}
+
+		public void SetRejoin(bool val)
+		{
+			this.Rejoin = val;
+		}
+
+		public uint ServiceType { get; set; }
+
+		public void SetServiceType(uint val)
+		{
+			this.ServiceType = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ChannelDescription.GetHashCode();
+			if (this.HasReserved)
+			{
+				num ^= this.Reserved.GetHashCode();
+			}
+			if (this.HasRejoin)
+			{
+				num ^= this.Rejoin.GetHashCode();
+			}
+			return num ^ this.ServiceType.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChannelInvitation channelInvitation = obj as ChannelInvitation;
+			return channelInvitation != null && this.ChannelDescription.Equals(channelInvitation.ChannelDescription) && this.HasReserved == channelInvitation.HasReserved && (!this.HasReserved || this.Reserved.Equals(channelInvitation.Reserved)) && this.HasRejoin == channelInvitation.HasRejoin && (!this.HasRejoin || this.Rejoin.Equals(channelInvitation.Rejoin)) && this.ServiceType.Equals(channelInvitation.ServiceType);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChannelInvitation ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChannelInvitation>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChannelInvitation.Deserialize(stream, this);
@@ -137,90 +221,6 @@ namespace bnet.protocol.channel_invitation
 			}
 			num += ProtocolParser.SizeOfUInt32(this.ServiceType);
 			return num + 2u;
-		}
-
-		public ChannelDescription ChannelDescription { get; set; }
-
-		public void SetChannelDescription(ChannelDescription val)
-		{
-			this.ChannelDescription = val;
-		}
-
-		public bool Reserved
-		{
-			get
-			{
-				return this._Reserved;
-			}
-			set
-			{
-				this._Reserved = value;
-				this.HasReserved = true;
-			}
-		}
-
-		public void SetReserved(bool val)
-		{
-			this.Reserved = val;
-		}
-
-		public bool Rejoin
-		{
-			get
-			{
-				return this._Rejoin;
-			}
-			set
-			{
-				this._Rejoin = value;
-				this.HasRejoin = true;
-			}
-		}
-
-		public void SetRejoin(bool val)
-		{
-			this.Rejoin = val;
-		}
-
-		public uint ServiceType { get; set; }
-
-		public void SetServiceType(uint val)
-		{
-			this.ServiceType = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ChannelDescription.GetHashCode();
-			if (this.HasReserved)
-			{
-				num ^= this.Reserved.GetHashCode();
-			}
-			if (this.HasRejoin)
-			{
-				num ^= this.Rejoin.GetHashCode();
-			}
-			return num ^ this.ServiceType.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChannelInvitation channelInvitation = obj as ChannelInvitation;
-			return channelInvitation != null && this.ChannelDescription.Equals(channelInvitation.ChannelDescription) && this.HasReserved == channelInvitation.HasReserved && (!this.HasReserved || this.Reserved.Equals(channelInvitation.Reserved)) && this.HasRejoin == channelInvitation.HasRejoin && (!this.HasRejoin || this.Rejoin.Equals(channelInvitation.Rejoin)) && this.ServiceType.Equals(channelInvitation.ServiceType);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChannelInvitation ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChannelInvitation>(bs, 0, -1);
 		}
 
 		public bool HasReserved;

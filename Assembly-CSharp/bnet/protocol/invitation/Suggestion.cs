@@ -6,6 +6,135 @@ namespace bnet.protocol.invitation
 {
 	public class Suggestion : IProtoBuf
 	{
+		public EntityId ChannelId
+		{
+			get
+			{
+				return this._ChannelId;
+			}
+			set
+			{
+				this._ChannelId = value;
+				this.HasChannelId = (value != null);
+			}
+		}
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public EntityId SuggesterId { get; set; }
+
+		public void SetSuggesterId(EntityId val)
+		{
+			this.SuggesterId = val;
+		}
+
+		public EntityId SuggesteeId { get; set; }
+
+		public void SetSuggesteeId(EntityId val)
+		{
+			this.SuggesteeId = val;
+		}
+
+		public string SuggesterName
+		{
+			get
+			{
+				return this._SuggesterName;
+			}
+			set
+			{
+				this._SuggesterName = value;
+				this.HasSuggesterName = (value != null);
+			}
+		}
+
+		public void SetSuggesterName(string val)
+		{
+			this.SuggesterName = val;
+		}
+
+		public string SuggesteeName
+		{
+			get
+			{
+				return this._SuggesteeName;
+			}
+			set
+			{
+				this._SuggesteeName = value;
+				this.HasSuggesteeName = (value != null);
+			}
+		}
+
+		public void SetSuggesteeName(string val)
+		{
+			this.SuggesteeName = val;
+		}
+
+		public EntityId SuggesterAccountId
+		{
+			get
+			{
+				return this._SuggesterAccountId;
+			}
+			set
+			{
+				this._SuggesterAccountId = value;
+				this.HasSuggesterAccountId = (value != null);
+			}
+		}
+
+		public void SetSuggesterAccountId(EntityId val)
+		{
+			this.SuggesterAccountId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasChannelId)
+			{
+				num ^= this.ChannelId.GetHashCode();
+			}
+			num ^= this.SuggesterId.GetHashCode();
+			num ^= this.SuggesteeId.GetHashCode();
+			if (this.HasSuggesterName)
+			{
+				num ^= this.SuggesterName.GetHashCode();
+			}
+			if (this.HasSuggesteeName)
+			{
+				num ^= this.SuggesteeName.GetHashCode();
+			}
+			if (this.HasSuggesterAccountId)
+			{
+				num ^= this.SuggesterAccountId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Suggestion suggestion = obj as Suggestion;
+			return suggestion != null && this.HasChannelId == suggestion.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(suggestion.ChannelId)) && this.SuggesterId.Equals(suggestion.SuggesterId) && this.SuggesteeId.Equals(suggestion.SuggesteeId) && this.HasSuggesterName == suggestion.HasSuggesterName && (!this.HasSuggesterName || this.SuggesterName.Equals(suggestion.SuggesterName)) && this.HasSuggesteeName == suggestion.HasSuggesteeName && (!this.HasSuggesteeName || this.SuggesteeName.Equals(suggestion.SuggesteeName)) && this.HasSuggesterAccountId == suggestion.HasSuggesterAccountId && (!this.HasSuggesterAccountId || this.SuggesterAccountId.Equals(suggestion.SuggesterAccountId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Suggestion ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Suggestion>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Suggestion.Deserialize(stream, this);
@@ -193,135 +322,6 @@ namespace bnet.protocol.invitation
 				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
 			}
 			return num + 2u;
-		}
-
-		public EntityId ChannelId
-		{
-			get
-			{
-				return this._ChannelId;
-			}
-			set
-			{
-				this._ChannelId = value;
-				this.HasChannelId = (value != null);
-			}
-		}
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public EntityId SuggesterId { get; set; }
-
-		public void SetSuggesterId(EntityId val)
-		{
-			this.SuggesterId = val;
-		}
-
-		public EntityId SuggesteeId { get; set; }
-
-		public void SetSuggesteeId(EntityId val)
-		{
-			this.SuggesteeId = val;
-		}
-
-		public string SuggesterName
-		{
-			get
-			{
-				return this._SuggesterName;
-			}
-			set
-			{
-				this._SuggesterName = value;
-				this.HasSuggesterName = (value != null);
-			}
-		}
-
-		public void SetSuggesterName(string val)
-		{
-			this.SuggesterName = val;
-		}
-
-		public string SuggesteeName
-		{
-			get
-			{
-				return this._SuggesteeName;
-			}
-			set
-			{
-				this._SuggesteeName = value;
-				this.HasSuggesteeName = (value != null);
-			}
-		}
-
-		public void SetSuggesteeName(string val)
-		{
-			this.SuggesteeName = val;
-		}
-
-		public EntityId SuggesterAccountId
-		{
-			get
-			{
-				return this._SuggesterAccountId;
-			}
-			set
-			{
-				this._SuggesterAccountId = value;
-				this.HasSuggesterAccountId = (value != null);
-			}
-		}
-
-		public void SetSuggesterAccountId(EntityId val)
-		{
-			this.SuggesterAccountId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasChannelId)
-			{
-				num ^= this.ChannelId.GetHashCode();
-			}
-			num ^= this.SuggesterId.GetHashCode();
-			num ^= this.SuggesteeId.GetHashCode();
-			if (this.HasSuggesterName)
-			{
-				num ^= this.SuggesterName.GetHashCode();
-			}
-			if (this.HasSuggesteeName)
-			{
-				num ^= this.SuggesteeName.GetHashCode();
-			}
-			if (this.HasSuggesterAccountId)
-			{
-				num ^= this.SuggesterAccountId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Suggestion suggestion = obj as Suggestion;
-			return suggestion != null && this.HasChannelId == suggestion.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(suggestion.ChannelId)) && this.SuggesterId.Equals(suggestion.SuggesterId) && this.SuggesteeId.Equals(suggestion.SuggesteeId) && this.HasSuggesterName == suggestion.HasSuggesterName && (!this.HasSuggesterName || this.SuggesterName.Equals(suggestion.SuggesterName)) && this.HasSuggesteeName == suggestion.HasSuggesteeName && (!this.HasSuggesteeName || this.SuggesteeName.Equals(suggestion.SuggesteeName)) && this.HasSuggesterAccountId == suggestion.HasSuggesterAccountId && (!this.HasSuggesterAccountId || this.SuggesterAccountId.Equals(suggestion.SuggesterAccountId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Suggestion ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Suggestion>(bs, 0, -1);
 		}
 
 		public bool HasChannelId;

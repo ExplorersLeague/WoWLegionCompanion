@@ -6,6 +6,93 @@ namespace bnet.protocol.game_master
 {
 	public class GetGameStatsResponse : IProtoBuf
 	{
+		public List<GameStatsBucket> StatsBucket
+		{
+			get
+			{
+				return this._StatsBucket;
+			}
+			set
+			{
+				this._StatsBucket = value;
+			}
+		}
+
+		public List<GameStatsBucket> StatsBucketList
+		{
+			get
+			{
+				return this._StatsBucket;
+			}
+		}
+
+		public int StatsBucketCount
+		{
+			get
+			{
+				return this._StatsBucket.Count;
+			}
+		}
+
+		public void AddStatsBucket(GameStatsBucket val)
+		{
+			this._StatsBucket.Add(val);
+		}
+
+		public void ClearStatsBucket()
+		{
+			this._StatsBucket.Clear();
+		}
+
+		public void SetStatsBucket(List<GameStatsBucket> val)
+		{
+			this.StatsBucket = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (GameStatsBucket gameStatsBucket in this.StatsBucket)
+			{
+				num ^= gameStatsBucket.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetGameStatsResponse getGameStatsResponse = obj as GetGameStatsResponse;
+			if (getGameStatsResponse == null)
+			{
+				return false;
+			}
+			if (this.StatsBucket.Count != getGameStatsResponse.StatsBucket.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.StatsBucket.Count; i++)
+			{
+				if (!this.StatsBucket[i].Equals(getGameStatsResponse.StatsBucket[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetGameStatsResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetGameStatsResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetGameStatsResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.game_master
 				}
 			}
 			return num;
-		}
-
-		public List<GameStatsBucket> StatsBucket
-		{
-			get
-			{
-				return this._StatsBucket;
-			}
-			set
-			{
-				this._StatsBucket = value;
-			}
-		}
-
-		public List<GameStatsBucket> StatsBucketList
-		{
-			get
-			{
-				return this._StatsBucket;
-			}
-		}
-
-		public int StatsBucketCount
-		{
-			get
-			{
-				return this._StatsBucket.Count;
-			}
-		}
-
-		public void AddStatsBucket(GameStatsBucket val)
-		{
-			this._StatsBucket.Add(val);
-		}
-
-		public void ClearStatsBucket()
-		{
-			this._StatsBucket.Clear();
-		}
-
-		public void SetStatsBucket(List<GameStatsBucket> val)
-		{
-			this.StatsBucket = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (GameStatsBucket gameStatsBucket in this.StatsBucket)
-			{
-				num ^= gameStatsBucket.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetGameStatsResponse getGameStatsResponse = obj as GetGameStatsResponse;
-			if (getGameStatsResponse == null)
-			{
-				return false;
-			}
-			if (this.StatsBucket.Count != getGameStatsResponse.StatsBucket.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.StatsBucket.Count; i++)
-			{
-				if (!this.StatsBucket[i].Equals(getGameStatsResponse.StatsBucket[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetGameStatsResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetGameStatsResponse>(bs, 0, -1);
 		}
 
 		private List<GameStatsBucket> _StatsBucket = new List<GameStatsBucket>();

@@ -6,6 +6,141 @@ namespace bnet.protocol.presence
 {
 	public class ChannelState : IProtoBuf
 	{
+		public EntityId EntityId
+		{
+			get
+			{
+				return this._EntityId;
+			}
+			set
+			{
+				this._EntityId = value;
+				this.HasEntityId = (value != null);
+			}
+		}
+
+		public void SetEntityId(EntityId val)
+		{
+			this.EntityId = val;
+		}
+
+		public List<FieldOperation> FieldOperation
+		{
+			get
+			{
+				return this._FieldOperation;
+			}
+			set
+			{
+				this._FieldOperation = value;
+			}
+		}
+
+		public List<FieldOperation> FieldOperationList
+		{
+			get
+			{
+				return this._FieldOperation;
+			}
+		}
+
+		public int FieldOperationCount
+		{
+			get
+			{
+				return this._FieldOperation.Count;
+			}
+		}
+
+		public void AddFieldOperation(FieldOperation val)
+		{
+			this._FieldOperation.Add(val);
+		}
+
+		public void ClearFieldOperation()
+		{
+			this._FieldOperation.Clear();
+		}
+
+		public void SetFieldOperation(List<FieldOperation> val)
+		{
+			this.FieldOperation = val;
+		}
+
+		public bool Healing
+		{
+			get
+			{
+				return this._Healing;
+			}
+			set
+			{
+				this._Healing = value;
+				this.HasHealing = true;
+			}
+		}
+
+		public void SetHealing(bool val)
+		{
+			this.Healing = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasEntityId)
+			{
+				num ^= this.EntityId.GetHashCode();
+			}
+			foreach (FieldOperation fieldOperation in this.FieldOperation)
+			{
+				num ^= fieldOperation.GetHashCode();
+			}
+			if (this.HasHealing)
+			{
+				num ^= this.Healing.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChannelState channelState = obj as ChannelState;
+			if (channelState == null)
+			{
+				return false;
+			}
+			if (this.HasEntityId != channelState.HasEntityId || (this.HasEntityId && !this.EntityId.Equals(channelState.EntityId)))
+			{
+				return false;
+			}
+			if (this.FieldOperation.Count != channelState.FieldOperation.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.FieldOperation.Count; i++)
+			{
+				if (!this.FieldOperation[i].Equals(channelState.FieldOperation[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasHealing == channelState.HasHealing && (!this.HasHealing || this.Healing.Equals(channelState.Healing));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChannelState ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChannelState>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChannelState.Deserialize(stream, this);
@@ -141,141 +276,6 @@ namespace bnet.protocol.presence
 				num += 1u;
 			}
 			return num;
-		}
-
-		public EntityId EntityId
-		{
-			get
-			{
-				return this._EntityId;
-			}
-			set
-			{
-				this._EntityId = value;
-				this.HasEntityId = (value != null);
-			}
-		}
-
-		public void SetEntityId(EntityId val)
-		{
-			this.EntityId = val;
-		}
-
-		public List<FieldOperation> FieldOperation
-		{
-			get
-			{
-				return this._FieldOperation;
-			}
-			set
-			{
-				this._FieldOperation = value;
-			}
-		}
-
-		public List<FieldOperation> FieldOperationList
-		{
-			get
-			{
-				return this._FieldOperation;
-			}
-		}
-
-		public int FieldOperationCount
-		{
-			get
-			{
-				return this._FieldOperation.Count;
-			}
-		}
-
-		public void AddFieldOperation(FieldOperation val)
-		{
-			this._FieldOperation.Add(val);
-		}
-
-		public void ClearFieldOperation()
-		{
-			this._FieldOperation.Clear();
-		}
-
-		public void SetFieldOperation(List<FieldOperation> val)
-		{
-			this.FieldOperation = val;
-		}
-
-		public bool Healing
-		{
-			get
-			{
-				return this._Healing;
-			}
-			set
-			{
-				this._Healing = value;
-				this.HasHealing = true;
-			}
-		}
-
-		public void SetHealing(bool val)
-		{
-			this.Healing = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasEntityId)
-			{
-				num ^= this.EntityId.GetHashCode();
-			}
-			foreach (FieldOperation fieldOperation in this.FieldOperation)
-			{
-				num ^= fieldOperation.GetHashCode();
-			}
-			if (this.HasHealing)
-			{
-				num ^= this.Healing.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChannelState channelState = obj as ChannelState;
-			if (channelState == null)
-			{
-				return false;
-			}
-			if (this.HasEntityId != channelState.HasEntityId || (this.HasEntityId && !this.EntityId.Equals(channelState.EntityId)))
-			{
-				return false;
-			}
-			if (this.FieldOperation.Count != channelState.FieldOperation.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.FieldOperation.Count; i++)
-			{
-				if (!this.FieldOperation[i].Equals(channelState.FieldOperation[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasHealing == channelState.HasHealing && (!this.HasHealing || this.Healing.Equals(channelState.Healing));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChannelState ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChannelState>(bs, 0, -1);
 		}
 
 		public bool HasEntityId;

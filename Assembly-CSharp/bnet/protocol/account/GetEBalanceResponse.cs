@@ -6,6 +6,53 @@ namespace bnet.protocol.account
 {
 	public class GetEBalanceResponse : IProtoBuf
 	{
+		public string Balance
+		{
+			get
+			{
+				return this._Balance;
+			}
+			set
+			{
+				this._Balance = value;
+				this.HasBalance = (value != null);
+			}
+		}
+
+		public void SetBalance(string val)
+		{
+			this.Balance = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasBalance)
+			{
+				num ^= this.Balance.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetEBalanceResponse getEBalanceResponse = obj as GetEBalanceResponse;
+			return getEBalanceResponse != null && this.HasBalance == getEBalanceResponse.HasBalance && (!this.HasBalance || this.Balance.Equals(getEBalanceResponse.Balance));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetEBalanceResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetEBalanceResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetEBalanceResponse.Deserialize(stream, this);
@@ -89,53 +136,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
 			}
 			return num;
-		}
-
-		public string Balance
-		{
-			get
-			{
-				return this._Balance;
-			}
-			set
-			{
-				this._Balance = value;
-				this.HasBalance = (value != null);
-			}
-		}
-
-		public void SetBalance(string val)
-		{
-			this.Balance = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasBalance)
-			{
-				num ^= this.Balance.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetEBalanceResponse getEBalanceResponse = obj as GetEBalanceResponse;
-			return getEBalanceResponse != null && this.HasBalance == getEBalanceResponse.HasBalance && (!this.HasBalance || this.Balance.Equals(getEBalanceResponse.Balance));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetEBalanceResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetEBalanceResponse>(bs, 0, -1);
 		}
 
 		public bool HasBalance;

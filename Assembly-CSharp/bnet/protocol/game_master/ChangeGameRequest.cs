@@ -7,6 +7,153 @@ namespace bnet.protocol.game_master
 {
 	public class ChangeGameRequest : IProtoBuf
 	{
+		public GameHandle GameHandle { get; set; }
+
+		public void SetGameHandle(GameHandle val)
+		{
+			this.GameHandle = val;
+		}
+
+		public bool Open
+		{
+			get
+			{
+				return this._Open;
+			}
+			set
+			{
+				this._Open = value;
+				this.HasOpen = true;
+			}
+		}
+
+		public void SetOpen(bool val)
+		{
+			this.Open = val;
+		}
+
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public bool Replace
+		{
+			get
+			{
+				return this._Replace;
+			}
+			set
+			{
+				this._Replace = value;
+				this.HasReplace = true;
+			}
+		}
+
+		public void SetReplace(bool val)
+		{
+			this.Replace = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.GameHandle.GetHashCode();
+			if (this.HasOpen)
+			{
+				num ^= this.Open.GetHashCode();
+			}
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			if (this.HasReplace)
+			{
+				num ^= this.Replace.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChangeGameRequest changeGameRequest = obj as ChangeGameRequest;
+			if (changeGameRequest == null)
+			{
+				return false;
+			}
+			if (!this.GameHandle.Equals(changeGameRequest.GameHandle))
+			{
+				return false;
+			}
+			if (this.HasOpen != changeGameRequest.HasOpen || (this.HasOpen && !this.Open.Equals(changeGameRequest.Open)))
+			{
+				return false;
+			}
+			if (this.Attribute.Count != changeGameRequest.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(changeGameRequest.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasReplace == changeGameRequest.HasReplace && (!this.HasReplace || this.Replace.Equals(changeGameRequest.Replace));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChangeGameRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChangeGameRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChangeGameRequest.Deserialize(stream, this);
@@ -157,153 +304,6 @@ namespace bnet.protocol.game_master
 			}
 			num += 1u;
 			return num;
-		}
-
-		public GameHandle GameHandle { get; set; }
-
-		public void SetGameHandle(GameHandle val)
-		{
-			this.GameHandle = val;
-		}
-
-		public bool Open
-		{
-			get
-			{
-				return this._Open;
-			}
-			set
-			{
-				this._Open = value;
-				this.HasOpen = true;
-			}
-		}
-
-		public void SetOpen(bool val)
-		{
-			this.Open = val;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public bool Replace
-		{
-			get
-			{
-				return this._Replace;
-			}
-			set
-			{
-				this._Replace = value;
-				this.HasReplace = true;
-			}
-		}
-
-		public void SetReplace(bool val)
-		{
-			this.Replace = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.GameHandle.GetHashCode();
-			if (this.HasOpen)
-			{
-				num ^= this.Open.GetHashCode();
-			}
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			if (this.HasReplace)
-			{
-				num ^= this.Replace.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChangeGameRequest changeGameRequest = obj as ChangeGameRequest;
-			if (changeGameRequest == null)
-			{
-				return false;
-			}
-			if (!this.GameHandle.Equals(changeGameRequest.GameHandle))
-			{
-				return false;
-			}
-			if (this.HasOpen != changeGameRequest.HasOpen || (this.HasOpen && !this.Open.Equals(changeGameRequest.Open)))
-			{
-				return false;
-			}
-			if (this.Attribute.Count != changeGameRequest.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(changeGameRequest.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasReplace == changeGameRequest.HasReplace && (!this.HasReplace || this.Replace.Equals(changeGameRequest.Replace));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChangeGameRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChangeGameRequest>(bs, 0, -1);
 		}
 
 		public bool HasOpen;

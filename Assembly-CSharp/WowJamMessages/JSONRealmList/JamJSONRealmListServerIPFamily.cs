@@ -4,15 +4,15 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[System.Runtime.Serialization.DataContract]
-	[FlexJamStruct(Name = "JamJSONRealmListServerIPFamily", Version = 28333852u)]
+	[DataContract]
+	[FlexJamStruct(Name = "JamJSONRealmListServerIPFamily", Version = 47212487u)]
 	public class JamJSONRealmListServerIPFamily
 	{
-		[System.Runtime.Serialization.DataMember(Name = "family")]
+		[DataMember(Name = "family")]
 		[FlexJamMember(Name = "family", Type = FlexJamType.Int8)]
 		public sbyte Family { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "addresses")]
+		[DataMember(Name = "addresses")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "addresses", Type = FlexJamType.Struct)]
 		public JamJSONRealmListServerIPAddress[] Addresses { get; set; }
 	}

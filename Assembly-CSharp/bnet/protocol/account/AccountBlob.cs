@@ -7,432 +7,6 @@ namespace bnet.protocol.account
 {
 	public class AccountBlob : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			AccountBlob.Deserialize(stream, this);
-		}
-
-		public static AccountBlob Deserialize(Stream stream, AccountBlob instance)
-		{
-			return AccountBlob.Deserialize(stream, instance, -1L);
-		}
-
-		public static AccountBlob DeserializeLengthDelimited(Stream stream)
-		{
-			AccountBlob accountBlob = new AccountBlob();
-			AccountBlob.DeserializeLengthDelimited(stream, accountBlob);
-			return accountBlob;
-		}
-
-		public static AccountBlob DeserializeLengthDelimited(Stream stream, AccountBlob instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return AccountBlob.Deserialize(stream, instance, num);
-		}
-
-		public static AccountBlob Deserialize(Stream stream, AccountBlob instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			if (instance.Email == null)
-			{
-				instance.Email = new List<string>();
-			}
-			if (instance.Licenses == null)
-			{
-				instance.Licenses = new List<AccountLicense>();
-			}
-			if (instance.Credentials == null)
-			{
-				instance.Credentials = new List<AccountCredential>();
-			}
-			if (instance.AccountLinks == null)
-			{
-				instance.AccountLinks = new List<GameAccountLink>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else
-				{
-					switch (num)
-					{
-					case 21:
-						instance.Id = binaryReader.ReadUInt32();
-						break;
-					default:
-						if (num != 34)
-						{
-							if (num != 40)
-							{
-								if (num != 48)
-								{
-									if (num != 56)
-									{
-										if (num != 64)
-										{
-											if (num != 82)
-											{
-												Key key = ProtocolParser.ReadKey((byte)num, stream);
-												uint field = key.Field;
-												switch (field)
-												{
-												case 20u:
-													if (key.WireType == Wire.LengthDelimited)
-													{
-														instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
-													}
-													break;
-												case 21u:
-													if (key.WireType == Wire.LengthDelimited)
-													{
-														instance.Credentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
-													}
-													break;
-												case 22u:
-													if (key.WireType == Wire.LengthDelimited)
-													{
-														instance.AccountLinks.Add(GameAccountLink.DeserializeLengthDelimited(stream));
-													}
-													break;
-												case 23u:
-													if (key.WireType == Wire.LengthDelimited)
-													{
-														instance.BattleTag = ProtocolParser.ReadString(stream);
-													}
-													break;
-												default:
-													if (field == 0u)
-													{
-														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-													}
-													ProtocolParser.SkipKey(stream, key);
-													break;
-												case 25u:
-													if (key.WireType == Wire.Fixed32)
-													{
-														instance.DefaultCurrency = binaryReader.ReadUInt32();
-													}
-													break;
-												case 26u:
-													if (key.WireType == Wire.Varint)
-													{
-														instance.LegalRegion = ProtocolParser.ReadUInt32(stream);
-													}
-													break;
-												case 27u:
-													if (key.WireType == Wire.Fixed32)
-													{
-														instance.LegalLocale = binaryReader.ReadUInt32();
-													}
-													break;
-												case 30u:
-													if (key.WireType == Wire.Varint)
-													{
-														instance.CacheExpiration = ProtocolParser.ReadUInt64(stream);
-													}
-													break;
-												case 31u:
-													if (key.WireType == Wire.LengthDelimited)
-													{
-														if (instance.ParentalControlInfo == null)
-														{
-															instance.ParentalControlInfo = ParentalControlInfo.DeserializeLengthDelimited(stream);
-														}
-														else
-														{
-															ParentalControlInfo.DeserializeLengthDelimited(stream, instance.ParentalControlInfo);
-														}
-													}
-													break;
-												case 32u:
-													if (key.WireType == Wire.LengthDelimited)
-													{
-														instance.Country = ProtocolParser.ReadString(stream);
-													}
-													break;
-												case 33u:
-													if (key.WireType == Wire.Varint)
-													{
-														instance.PreferredRegion = ProtocolParser.ReadUInt32(stream);
-													}
-													break;
-												}
-											}
-											else
-											{
-												instance.FullName = ProtocolParser.ReadString(stream);
-											}
-										}
-										else
-										{
-											instance.WhitelistEnd = ProtocolParser.ReadUInt64(stream);
-										}
-									}
-									else
-									{
-										instance.WhitelistStart = ProtocolParser.ReadUInt64(stream);
-									}
-								}
-								else
-								{
-									instance.SecureRelease = ProtocolParser.ReadUInt64(stream);
-								}
-							}
-							else
-							{
-								instance.Flags = ProtocolParser.ReadUInt64(stream);
-							}
-						}
-						else
-						{
-							instance.Email.Add(ProtocolParser.ReadString(stream));
-						}
-						break;
-					case 24:
-						instance.Region = ProtocolParser.ReadUInt32(stream);
-						break;
-					}
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			AccountBlob.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, AccountBlob instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			stream.WriteByte(21);
-			binaryWriter.Write(instance.Id);
-			stream.WriteByte(24);
-			ProtocolParser.WriteUInt32(stream, instance.Region);
-			if (instance.Email.Count > 0)
-			{
-				foreach (string s in instance.Email)
-				{
-					stream.WriteByte(34);
-					ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(s));
-				}
-			}
-			stream.WriteByte(40);
-			ProtocolParser.WriteUInt64(stream, instance.Flags);
-			if (instance.HasSecureRelease)
-			{
-				stream.WriteByte(48);
-				ProtocolParser.WriteUInt64(stream, instance.SecureRelease);
-			}
-			if (instance.HasWhitelistStart)
-			{
-				stream.WriteByte(56);
-				ProtocolParser.WriteUInt64(stream, instance.WhitelistStart);
-			}
-			if (instance.HasWhitelistEnd)
-			{
-				stream.WriteByte(64);
-				ProtocolParser.WriteUInt64(stream, instance.WhitelistEnd);
-			}
-			if (instance.FullName == null)
-			{
-				throw new ArgumentNullException("FullName", "Required by proto specification.");
-			}
-			stream.WriteByte(82);
-			ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.FullName));
-			if (instance.Licenses.Count > 0)
-			{
-				foreach (AccountLicense accountLicense in instance.Licenses)
-				{
-					stream.WriteByte(162);
-					stream.WriteByte(1);
-					ProtocolParser.WriteUInt32(stream, accountLicense.GetSerializedSize());
-					AccountLicense.Serialize(stream, accountLicense);
-				}
-			}
-			if (instance.Credentials.Count > 0)
-			{
-				foreach (AccountCredential accountCredential in instance.Credentials)
-				{
-					stream.WriteByte(170);
-					stream.WriteByte(1);
-					ProtocolParser.WriteUInt32(stream, accountCredential.GetSerializedSize());
-					AccountCredential.Serialize(stream, accountCredential);
-				}
-			}
-			if (instance.AccountLinks.Count > 0)
-			{
-				foreach (GameAccountLink gameAccountLink in instance.AccountLinks)
-				{
-					stream.WriteByte(178);
-					stream.WriteByte(1);
-					ProtocolParser.WriteUInt32(stream, gameAccountLink.GetSerializedSize());
-					GameAccountLink.Serialize(stream, gameAccountLink);
-				}
-			}
-			if (instance.HasBattleTag)
-			{
-				stream.WriteByte(186);
-				stream.WriteByte(1);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.BattleTag));
-			}
-			if (instance.HasDefaultCurrency)
-			{
-				stream.WriteByte(205);
-				stream.WriteByte(1);
-				binaryWriter.Write(instance.DefaultCurrency);
-			}
-			if (instance.HasLegalRegion)
-			{
-				stream.WriteByte(208);
-				stream.WriteByte(1);
-				ProtocolParser.WriteUInt32(stream, instance.LegalRegion);
-			}
-			if (instance.HasLegalLocale)
-			{
-				stream.WriteByte(221);
-				stream.WriteByte(1);
-				binaryWriter.Write(instance.LegalLocale);
-			}
-			stream.WriteByte(240);
-			stream.WriteByte(1);
-			ProtocolParser.WriteUInt64(stream, instance.CacheExpiration);
-			if (instance.HasParentalControlInfo)
-			{
-				stream.WriteByte(250);
-				stream.WriteByte(1);
-				ProtocolParser.WriteUInt32(stream, instance.ParentalControlInfo.GetSerializedSize());
-				ParentalControlInfo.Serialize(stream, instance.ParentalControlInfo);
-			}
-			if (instance.HasCountry)
-			{
-				stream.WriteByte(130);
-				stream.WriteByte(2);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Country));
-			}
-			if (instance.HasPreferredRegion)
-			{
-				stream.WriteByte(136);
-				stream.WriteByte(2);
-				ProtocolParser.WriteUInt32(stream, instance.PreferredRegion);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			num += 4u;
-			num += ProtocolParser.SizeOfUInt32(this.Region);
-			if (this.Email.Count > 0)
-			{
-				foreach (string s in this.Email)
-				{
-					num += 1u;
-					uint byteCount = (uint)Encoding.UTF8.GetByteCount(s);
-					num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-				}
-			}
-			num += ProtocolParser.SizeOfUInt64(this.Flags);
-			if (this.HasSecureRelease)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.SecureRelease);
-			}
-			if (this.HasWhitelistStart)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.WhitelistStart);
-			}
-			if (this.HasWhitelistEnd)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.WhitelistEnd);
-			}
-			uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.FullName);
-			num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
-			if (this.Licenses.Count > 0)
-			{
-				foreach (AccountLicense accountLicense in this.Licenses)
-				{
-					num += 2u;
-					uint serializedSize = accountLicense.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.Credentials.Count > 0)
-			{
-				foreach (AccountCredential accountCredential in this.Credentials)
-				{
-					num += 2u;
-					uint serializedSize2 = accountCredential.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			if (this.AccountLinks.Count > 0)
-			{
-				foreach (GameAccountLink gameAccountLink in this.AccountLinks)
-				{
-					num += 2u;
-					uint serializedSize3 = gameAccountLink.GetSerializedSize();
-					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
-				}
-			}
-			if (this.HasBattleTag)
-			{
-				num += 2u;
-				uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.BattleTag);
-				num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
-			}
-			if (this.HasDefaultCurrency)
-			{
-				num += 2u;
-				num += 4u;
-			}
-			if (this.HasLegalRegion)
-			{
-				num += 2u;
-				num += ProtocolParser.SizeOfUInt32(this.LegalRegion);
-			}
-			if (this.HasLegalLocale)
-			{
-				num += 2u;
-				num += 4u;
-			}
-			num += ProtocolParser.SizeOfUInt64(this.CacheExpiration);
-			if (this.HasParentalControlInfo)
-			{
-				num += 2u;
-				uint serializedSize4 = this.ParentalControlInfo.GetSerializedSize();
-				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
-			}
-			if (this.HasCountry)
-			{
-				num += 2u;
-				uint byteCount4 = (uint)Encoding.UTF8.GetByteCount(this.Country);
-				num += ProtocolParser.SizeOfUInt32(byteCount4) + byteCount4;
-			}
-			if (this.HasPreferredRegion)
-			{
-				num += 2u;
-				num += ProtocolParser.SizeOfUInt32(this.PreferredRegion);
-			}
-			num += 6u;
-			return num;
-		}
-
 		public uint Id { get; set; }
 
 		public void SetId(uint val)
@@ -980,6 +554,432 @@ namespace bnet.protocol.account
 		public static AccountBlob ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<AccountBlob>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			AccountBlob.Deserialize(stream, this);
+		}
+
+		public static AccountBlob Deserialize(Stream stream, AccountBlob instance)
+		{
+			return AccountBlob.Deserialize(stream, instance, -1L);
+		}
+
+		public static AccountBlob DeserializeLengthDelimited(Stream stream)
+		{
+			AccountBlob accountBlob = new AccountBlob();
+			AccountBlob.DeserializeLengthDelimited(stream, accountBlob);
+			return accountBlob;
+		}
+
+		public static AccountBlob DeserializeLengthDelimited(Stream stream, AccountBlob instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return AccountBlob.Deserialize(stream, instance, num);
+		}
+
+		public static AccountBlob Deserialize(Stream stream, AccountBlob instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			if (instance.Email == null)
+			{
+				instance.Email = new List<string>();
+			}
+			if (instance.Licenses == null)
+			{
+				instance.Licenses = new List<AccountLicense>();
+			}
+			if (instance.Credentials == null)
+			{
+				instance.Credentials = new List<AccountCredential>();
+			}
+			if (instance.AccountLinks == null)
+			{
+				instance.AccountLinks = new List<GameAccountLink>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else
+				{
+					switch (num)
+					{
+					case 21:
+						instance.Id = binaryReader.ReadUInt32();
+						break;
+					default:
+						if (num != 34)
+						{
+							if (num != 40)
+							{
+								if (num != 48)
+								{
+									if (num != 56)
+									{
+										if (num != 64)
+										{
+											if (num != 82)
+											{
+												Key key = ProtocolParser.ReadKey((byte)num, stream);
+												uint field = key.Field;
+												switch (field)
+												{
+												case 20u:
+													if (key.WireType == Wire.LengthDelimited)
+													{
+														instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
+													}
+													break;
+												case 21u:
+													if (key.WireType == Wire.LengthDelimited)
+													{
+														instance.Credentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
+													}
+													break;
+												case 22u:
+													if (key.WireType == Wire.LengthDelimited)
+													{
+														instance.AccountLinks.Add(GameAccountLink.DeserializeLengthDelimited(stream));
+													}
+													break;
+												case 23u:
+													if (key.WireType == Wire.LengthDelimited)
+													{
+														instance.BattleTag = ProtocolParser.ReadString(stream);
+													}
+													break;
+												default:
+													if (field == 0u)
+													{
+														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+													}
+													ProtocolParser.SkipKey(stream, key);
+													break;
+												case 25u:
+													if (key.WireType == Wire.Fixed32)
+													{
+														instance.DefaultCurrency = binaryReader.ReadUInt32();
+													}
+													break;
+												case 26u:
+													if (key.WireType == Wire.Varint)
+													{
+														instance.LegalRegion = ProtocolParser.ReadUInt32(stream);
+													}
+													break;
+												case 27u:
+													if (key.WireType == Wire.Fixed32)
+													{
+														instance.LegalLocale = binaryReader.ReadUInt32();
+													}
+													break;
+												case 30u:
+													if (key.WireType == Wire.Varint)
+													{
+														instance.CacheExpiration = ProtocolParser.ReadUInt64(stream);
+													}
+													break;
+												case 31u:
+													if (key.WireType == Wire.LengthDelimited)
+													{
+														if (instance.ParentalControlInfo == null)
+														{
+															instance.ParentalControlInfo = ParentalControlInfo.DeserializeLengthDelimited(stream);
+														}
+														else
+														{
+															ParentalControlInfo.DeserializeLengthDelimited(stream, instance.ParentalControlInfo);
+														}
+													}
+													break;
+												case 32u:
+													if (key.WireType == Wire.LengthDelimited)
+													{
+														instance.Country = ProtocolParser.ReadString(stream);
+													}
+													break;
+												case 33u:
+													if (key.WireType == Wire.Varint)
+													{
+														instance.PreferredRegion = ProtocolParser.ReadUInt32(stream);
+													}
+													break;
+												}
+											}
+											else
+											{
+												instance.FullName = ProtocolParser.ReadString(stream);
+											}
+										}
+										else
+										{
+											instance.WhitelistEnd = ProtocolParser.ReadUInt64(stream);
+										}
+									}
+									else
+									{
+										instance.WhitelistStart = ProtocolParser.ReadUInt64(stream);
+									}
+								}
+								else
+								{
+									instance.SecureRelease = ProtocolParser.ReadUInt64(stream);
+								}
+							}
+							else
+							{
+								instance.Flags = ProtocolParser.ReadUInt64(stream);
+							}
+						}
+						else
+						{
+							instance.Email.Add(ProtocolParser.ReadString(stream));
+						}
+						break;
+					case 24:
+						instance.Region = ProtocolParser.ReadUInt32(stream);
+						break;
+					}
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			AccountBlob.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, AccountBlob instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			stream.WriteByte(21);
+			binaryWriter.Write(instance.Id);
+			stream.WriteByte(24);
+			ProtocolParser.WriteUInt32(stream, instance.Region);
+			if (instance.Email.Count > 0)
+			{
+				foreach (string s in instance.Email)
+				{
+					stream.WriteByte(34);
+					ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(s));
+				}
+			}
+			stream.WriteByte(40);
+			ProtocolParser.WriteUInt64(stream, instance.Flags);
+			if (instance.HasSecureRelease)
+			{
+				stream.WriteByte(48);
+				ProtocolParser.WriteUInt64(stream, instance.SecureRelease);
+			}
+			if (instance.HasWhitelistStart)
+			{
+				stream.WriteByte(56);
+				ProtocolParser.WriteUInt64(stream, instance.WhitelistStart);
+			}
+			if (instance.HasWhitelistEnd)
+			{
+				stream.WriteByte(64);
+				ProtocolParser.WriteUInt64(stream, instance.WhitelistEnd);
+			}
+			if (instance.FullName == null)
+			{
+				throw new ArgumentNullException("FullName", "Required by proto specification.");
+			}
+			stream.WriteByte(82);
+			ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.FullName));
+			if (instance.Licenses.Count > 0)
+			{
+				foreach (AccountLicense accountLicense in instance.Licenses)
+				{
+					stream.WriteByte(162);
+					stream.WriteByte(1);
+					ProtocolParser.WriteUInt32(stream, accountLicense.GetSerializedSize());
+					AccountLicense.Serialize(stream, accountLicense);
+				}
+			}
+			if (instance.Credentials.Count > 0)
+			{
+				foreach (AccountCredential accountCredential in instance.Credentials)
+				{
+					stream.WriteByte(170);
+					stream.WriteByte(1);
+					ProtocolParser.WriteUInt32(stream, accountCredential.GetSerializedSize());
+					AccountCredential.Serialize(stream, accountCredential);
+				}
+			}
+			if (instance.AccountLinks.Count > 0)
+			{
+				foreach (GameAccountLink gameAccountLink in instance.AccountLinks)
+				{
+					stream.WriteByte(178);
+					stream.WriteByte(1);
+					ProtocolParser.WriteUInt32(stream, gameAccountLink.GetSerializedSize());
+					GameAccountLink.Serialize(stream, gameAccountLink);
+				}
+			}
+			if (instance.HasBattleTag)
+			{
+				stream.WriteByte(186);
+				stream.WriteByte(1);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.BattleTag));
+			}
+			if (instance.HasDefaultCurrency)
+			{
+				stream.WriteByte(205);
+				stream.WriteByte(1);
+				binaryWriter.Write(instance.DefaultCurrency);
+			}
+			if (instance.HasLegalRegion)
+			{
+				stream.WriteByte(208);
+				stream.WriteByte(1);
+				ProtocolParser.WriteUInt32(stream, instance.LegalRegion);
+			}
+			if (instance.HasLegalLocale)
+			{
+				stream.WriteByte(221);
+				stream.WriteByte(1);
+				binaryWriter.Write(instance.LegalLocale);
+			}
+			stream.WriteByte(240);
+			stream.WriteByte(1);
+			ProtocolParser.WriteUInt64(stream, instance.CacheExpiration);
+			if (instance.HasParentalControlInfo)
+			{
+				stream.WriteByte(250);
+				stream.WriteByte(1);
+				ProtocolParser.WriteUInt32(stream, instance.ParentalControlInfo.GetSerializedSize());
+				ParentalControlInfo.Serialize(stream, instance.ParentalControlInfo);
+			}
+			if (instance.HasCountry)
+			{
+				stream.WriteByte(130);
+				stream.WriteByte(2);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Country));
+			}
+			if (instance.HasPreferredRegion)
+			{
+				stream.WriteByte(136);
+				stream.WriteByte(2);
+				ProtocolParser.WriteUInt32(stream, instance.PreferredRegion);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			num += 4u;
+			num += ProtocolParser.SizeOfUInt32(this.Region);
+			if (this.Email.Count > 0)
+			{
+				foreach (string s in this.Email)
+				{
+					num += 1u;
+					uint byteCount = (uint)Encoding.UTF8.GetByteCount(s);
+					num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+				}
+			}
+			num += ProtocolParser.SizeOfUInt64(this.Flags);
+			if (this.HasSecureRelease)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.SecureRelease);
+			}
+			if (this.HasWhitelistStart)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.WhitelistStart);
+			}
+			if (this.HasWhitelistEnd)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.WhitelistEnd);
+			}
+			uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.FullName);
+			num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
+			if (this.Licenses.Count > 0)
+			{
+				foreach (AccountLicense accountLicense in this.Licenses)
+				{
+					num += 2u;
+					uint serializedSize = accountLicense.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.Credentials.Count > 0)
+			{
+				foreach (AccountCredential accountCredential in this.Credentials)
+				{
+					num += 2u;
+					uint serializedSize2 = accountCredential.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			if (this.AccountLinks.Count > 0)
+			{
+				foreach (GameAccountLink gameAccountLink in this.AccountLinks)
+				{
+					num += 2u;
+					uint serializedSize3 = gameAccountLink.GetSerializedSize();
+					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
+				}
+			}
+			if (this.HasBattleTag)
+			{
+				num += 2u;
+				uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.BattleTag);
+				num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
+			}
+			if (this.HasDefaultCurrency)
+			{
+				num += 2u;
+				num += 4u;
+			}
+			if (this.HasLegalRegion)
+			{
+				num += 2u;
+				num += ProtocolParser.SizeOfUInt32(this.LegalRegion);
+			}
+			if (this.HasLegalLocale)
+			{
+				num += 2u;
+				num += 4u;
+			}
+			num += ProtocolParser.SizeOfUInt64(this.CacheExpiration);
+			if (this.HasParentalControlInfo)
+			{
+				num += 2u;
+				uint serializedSize4 = this.ParentalControlInfo.GetSerializedSize();
+				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
+			}
+			if (this.HasCountry)
+			{
+				num += 2u;
+				uint byteCount4 = (uint)Encoding.UTF8.GetByteCount(this.Country);
+				num += ProtocolParser.SizeOfUInt32(byteCount4) + byteCount4;
+			}
+			if (this.HasPreferredRegion)
+			{
+				num += 2u;
+				num += ProtocolParser.SizeOfUInt32(this.PreferredRegion);
+			}
+			num += 6u;
+			return num;
 		}
 
 		private List<string> _Email = new List<string>();

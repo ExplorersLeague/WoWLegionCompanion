@@ -6,169 +6,6 @@ namespace bnet.protocol.channel
 {
 	public class SetRolesRequest : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			SetRolesRequest.Deserialize(stream, this);
-		}
-
-		public static SetRolesRequest Deserialize(Stream stream, SetRolesRequest instance)
-		{
-			return SetRolesRequest.Deserialize(stream, instance, -1L);
-		}
-
-		public static SetRolesRequest DeserializeLengthDelimited(Stream stream)
-		{
-			SetRolesRequest setRolesRequest = new SetRolesRequest();
-			SetRolesRequest.DeserializeLengthDelimited(stream, setRolesRequest);
-			return setRolesRequest;
-		}
-
-		public static SetRolesRequest DeserializeLengthDelimited(Stream stream, SetRolesRequest instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return SetRolesRequest.Deserialize(stream, instance, num);
-		}
-
-		public static SetRolesRequest Deserialize(Stream stream, SetRolesRequest instance, long limit)
-		{
-			if (instance.Role == null)
-			{
-				instance.Role = new List<uint>();
-			}
-			if (instance.MemberId == null)
-			{
-				instance.MemberId = new List<EntityId>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 10)
-				{
-					if (num != 18)
-					{
-						if (num != 26)
-						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
-						}
-						else
-						{
-							instance.MemberId.Add(EntityId.DeserializeLengthDelimited(stream));
-						}
-					}
-					else
-					{
-						long num2 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-						num2 += stream.Position;
-						while (stream.Position < num2)
-						{
-							instance.Role.Add(ProtocolParser.ReadUInt32(stream));
-						}
-						if (stream.Position != num2)
-						{
-							throw new ProtocolBufferException("Read too many bytes in packed data");
-						}
-					}
-				}
-				else if (instance.AgentId == null)
-				{
-					instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
-				}
-				else
-				{
-					EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			SetRolesRequest.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, SetRolesRequest instance)
-		{
-			if (instance.HasAgentId)
-			{
-				stream.WriteByte(10);
-				ProtocolParser.WriteUInt32(stream, instance.AgentId.GetSerializedSize());
-				EntityId.Serialize(stream, instance.AgentId);
-			}
-			if (instance.Role.Count > 0)
-			{
-				stream.WriteByte(18);
-				uint num = 0u;
-				foreach (uint val in instance.Role)
-				{
-					num += ProtocolParser.SizeOfUInt32(val);
-				}
-				ProtocolParser.WriteUInt32(stream, num);
-				foreach (uint val2 in instance.Role)
-				{
-					ProtocolParser.WriteUInt32(stream, val2);
-				}
-			}
-			if (instance.MemberId.Count > 0)
-			{
-				foreach (EntityId entityId in instance.MemberId)
-				{
-					stream.WriteByte(26);
-					ProtocolParser.WriteUInt32(stream, entityId.GetSerializedSize());
-					EntityId.Serialize(stream, entityId);
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasAgentId)
-			{
-				num += 1u;
-				uint serializedSize = this.AgentId.GetSerializedSize();
-				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-			}
-			if (this.Role.Count > 0)
-			{
-				num += 1u;
-				uint num2 = num;
-				foreach (uint val in this.Role)
-				{
-					num += ProtocolParser.SizeOfUInt32(val);
-				}
-				num += ProtocolParser.SizeOfUInt32(num - num2);
-			}
-			if (this.MemberId.Count > 0)
-			{
-				foreach (EntityId entityId in this.MemberId)
-				{
-					num += 1u;
-					uint serializedSize2 = entityId.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			return num;
-		}
-
 		public EntityId AgentId
 		{
 			get
@@ -338,6 +175,169 @@ namespace bnet.protocol.channel
 		public static SetRolesRequest ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<SetRolesRequest>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			SetRolesRequest.Deserialize(stream, this);
+		}
+
+		public static SetRolesRequest Deserialize(Stream stream, SetRolesRequest instance)
+		{
+			return SetRolesRequest.Deserialize(stream, instance, -1L);
+		}
+
+		public static SetRolesRequest DeserializeLengthDelimited(Stream stream)
+		{
+			SetRolesRequest setRolesRequest = new SetRolesRequest();
+			SetRolesRequest.DeserializeLengthDelimited(stream, setRolesRequest);
+			return setRolesRequest;
+		}
+
+		public static SetRolesRequest DeserializeLengthDelimited(Stream stream, SetRolesRequest instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return SetRolesRequest.Deserialize(stream, instance, num);
+		}
+
+		public static SetRolesRequest Deserialize(Stream stream, SetRolesRequest instance, long limit)
+		{
+			if (instance.Role == null)
+			{
+				instance.Role = new List<uint>();
+			}
+			if (instance.MemberId == null)
+			{
+				instance.MemberId = new List<EntityId>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 10)
+				{
+					if (num != 18)
+					{
+						if (num != 26)
+						{
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
+							{
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+							}
+							ProtocolParser.SkipKey(stream, key);
+						}
+						else
+						{
+							instance.MemberId.Add(EntityId.DeserializeLengthDelimited(stream));
+						}
+					}
+					else
+					{
+						long num2 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+						num2 += stream.Position;
+						while (stream.Position < num2)
+						{
+							instance.Role.Add(ProtocolParser.ReadUInt32(stream));
+						}
+						if (stream.Position != num2)
+						{
+							throw new ProtocolBufferException("Read too many bytes in packed data");
+						}
+					}
+				}
+				else if (instance.AgentId == null)
+				{
+					instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			SetRolesRequest.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, SetRolesRequest instance)
+		{
+			if (instance.HasAgentId)
+			{
+				stream.WriteByte(10);
+				ProtocolParser.WriteUInt32(stream, instance.AgentId.GetSerializedSize());
+				EntityId.Serialize(stream, instance.AgentId);
+			}
+			if (instance.Role.Count > 0)
+			{
+				stream.WriteByte(18);
+				uint num = 0u;
+				foreach (uint val in instance.Role)
+				{
+					num += ProtocolParser.SizeOfUInt32(val);
+				}
+				ProtocolParser.WriteUInt32(stream, num);
+				foreach (uint val2 in instance.Role)
+				{
+					ProtocolParser.WriteUInt32(stream, val2);
+				}
+			}
+			if (instance.MemberId.Count > 0)
+			{
+				foreach (EntityId entityId in instance.MemberId)
+				{
+					stream.WriteByte(26);
+					ProtocolParser.WriteUInt32(stream, entityId.GetSerializedSize());
+					EntityId.Serialize(stream, entityId);
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasAgentId)
+			{
+				num += 1u;
+				uint serializedSize = this.AgentId.GetSerializedSize();
+				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+			}
+			if (this.Role.Count > 0)
+			{
+				num += 1u;
+				uint num2 = num;
+				foreach (uint val in this.Role)
+				{
+					num += ProtocolParser.SizeOfUInt32(val);
+				}
+				num += ProtocolParser.SizeOfUInt32(num - num2);
+			}
+			if (this.MemberId.Count > 0)
+			{
+				foreach (EntityId entityId in this.MemberId)
+				{
+					num += 1u;
+					uint serializedSize2 = entityId.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			return num;
 		}
 
 		public bool HasAgentId;

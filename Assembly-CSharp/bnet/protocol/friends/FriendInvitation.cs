@@ -6,6 +6,119 @@ namespace bnet.protocol.friends
 {
 	public class FriendInvitation : IProtoBuf
 	{
+		public bool FirstReceived
+		{
+			get
+			{
+				return this._FirstReceived;
+			}
+			set
+			{
+				this._FirstReceived = value;
+				this.HasFirstReceived = true;
+			}
+		}
+
+		public void SetFirstReceived(bool val)
+		{
+			this.FirstReceived = val;
+		}
+
+		public List<uint> Role
+		{
+			get
+			{
+				return this._Role;
+			}
+			set
+			{
+				this._Role = value;
+			}
+		}
+
+		public List<uint> RoleList
+		{
+			get
+			{
+				return this._Role;
+			}
+		}
+
+		public int RoleCount
+		{
+			get
+			{
+				return this._Role.Count;
+			}
+		}
+
+		public void AddRole(uint val)
+		{
+			this._Role.Add(val);
+		}
+
+		public void ClearRole()
+		{
+			this._Role.Clear();
+		}
+
+		public void SetRole(List<uint> val)
+		{
+			this.Role = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasFirstReceived)
+			{
+				num ^= this.FirstReceived.GetHashCode();
+			}
+			foreach (uint num2 in this.Role)
+			{
+				num ^= num2.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FriendInvitation friendInvitation = obj as FriendInvitation;
+			if (friendInvitation == null)
+			{
+				return false;
+			}
+			if (this.HasFirstReceived != friendInvitation.HasFirstReceived || (this.HasFirstReceived && !this.FirstReceived.Equals(friendInvitation.FirstReceived)))
+			{
+				return false;
+			}
+			if (this.Role.Count != friendInvitation.Role.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Role.Count; i++)
+			{
+				if (!this.Role[i].Equals(friendInvitation.Role[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FriendInvitation ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FriendInvitation>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FriendInvitation.Deserialize(stream, this);
@@ -133,119 +246,6 @@ namespace bnet.protocol.friends
 				num += ProtocolParser.SizeOfUInt32(num - num2);
 			}
 			return num;
-		}
-
-		public bool FirstReceived
-		{
-			get
-			{
-				return this._FirstReceived;
-			}
-			set
-			{
-				this._FirstReceived = value;
-				this.HasFirstReceived = true;
-			}
-		}
-
-		public void SetFirstReceived(bool val)
-		{
-			this.FirstReceived = val;
-		}
-
-		public List<uint> Role
-		{
-			get
-			{
-				return this._Role;
-			}
-			set
-			{
-				this._Role = value;
-			}
-		}
-
-		public List<uint> RoleList
-		{
-			get
-			{
-				return this._Role;
-			}
-		}
-
-		public int RoleCount
-		{
-			get
-			{
-				return this._Role.Count;
-			}
-		}
-
-		public void AddRole(uint val)
-		{
-			this._Role.Add(val);
-		}
-
-		public void ClearRole()
-		{
-			this._Role.Clear();
-		}
-
-		public void SetRole(List<uint> val)
-		{
-			this.Role = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasFirstReceived)
-			{
-				num ^= this.FirstReceived.GetHashCode();
-			}
-			foreach (uint num2 in this.Role)
-			{
-				num ^= num2.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FriendInvitation friendInvitation = obj as FriendInvitation;
-			if (friendInvitation == null)
-			{
-				return false;
-			}
-			if (this.HasFirstReceived != friendInvitation.HasFirstReceived || (this.HasFirstReceived && !this.FirstReceived.Equals(friendInvitation.FirstReceived)))
-			{
-				return false;
-			}
-			if (this.Role.Count != friendInvitation.Role.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Role.Count; i++)
-			{
-				if (!this.Role[i].Equals(friendInvitation.Role[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FriendInvitation ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FriendInvitation>(bs, 0, -1);
 		}
 
 		public bool HasFirstReceived;

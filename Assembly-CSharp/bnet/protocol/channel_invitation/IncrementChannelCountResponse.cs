@@ -6,6 +6,93 @@ namespace bnet.protocol.channel_invitation
 {
 	public class IncrementChannelCountResponse : IProtoBuf
 	{
+		public List<ulong> ReservationTokens
+		{
+			get
+			{
+				return this._ReservationTokens;
+			}
+			set
+			{
+				this._ReservationTokens = value;
+			}
+		}
+
+		public List<ulong> ReservationTokensList
+		{
+			get
+			{
+				return this._ReservationTokens;
+			}
+		}
+
+		public int ReservationTokensCount
+		{
+			get
+			{
+				return this._ReservationTokens.Count;
+			}
+		}
+
+		public void AddReservationTokens(ulong val)
+		{
+			this._ReservationTokens.Add(val);
+		}
+
+		public void ClearReservationTokens()
+		{
+			this._ReservationTokens.Clear();
+		}
+
+		public void SetReservationTokens(List<ulong> val)
+		{
+			this.ReservationTokens = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (ulong num2 in this.ReservationTokens)
+			{
+				num ^= num2.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			IncrementChannelCountResponse incrementChannelCountResponse = obj as IncrementChannelCountResponse;
+			if (incrementChannelCountResponse == null)
+			{
+				return false;
+			}
+			if (this.ReservationTokens.Count != incrementChannelCountResponse.ReservationTokens.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.ReservationTokens.Count; i++)
+			{
+				if (!this.ReservationTokens[i].Equals(incrementChannelCountResponse.ReservationTokens[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static IncrementChannelCountResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<IncrementChannelCountResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			IncrementChannelCountResponse.Deserialize(stream, this);
@@ -98,93 +185,6 @@ namespace bnet.protocol.channel_invitation
 				}
 			}
 			return num;
-		}
-
-		public List<ulong> ReservationTokens
-		{
-			get
-			{
-				return this._ReservationTokens;
-			}
-			set
-			{
-				this._ReservationTokens = value;
-			}
-		}
-
-		public List<ulong> ReservationTokensList
-		{
-			get
-			{
-				return this._ReservationTokens;
-			}
-		}
-
-		public int ReservationTokensCount
-		{
-			get
-			{
-				return this._ReservationTokens.Count;
-			}
-		}
-
-		public void AddReservationTokens(ulong val)
-		{
-			this._ReservationTokens.Add(val);
-		}
-
-		public void ClearReservationTokens()
-		{
-			this._ReservationTokens.Clear();
-		}
-
-		public void SetReservationTokens(List<ulong> val)
-		{
-			this.ReservationTokens = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (ulong num2 in this.ReservationTokens)
-			{
-				num ^= num2.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			IncrementChannelCountResponse incrementChannelCountResponse = obj as IncrementChannelCountResponse;
-			if (incrementChannelCountResponse == null)
-			{
-				return false;
-			}
-			if (this.ReservationTokens.Count != incrementChannelCountResponse.ReservationTokens.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.ReservationTokens.Count; i++)
-			{
-				if (!this.ReservationTokens[i].Equals(incrementChannelCountResponse.ReservationTokens[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static IncrementChannelCountResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<IncrementChannelCountResponse>(bs, 0, -1);
 		}
 
 		private List<ulong> _ReservationTokens = new List<ulong>();

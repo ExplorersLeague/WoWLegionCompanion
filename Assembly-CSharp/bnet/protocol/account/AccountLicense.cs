@@ -5,6 +5,61 @@ namespace bnet.protocol.account
 {
 	public class AccountLicense : IProtoBuf
 	{
+		public uint Id { get; set; }
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public ulong Expires
+		{
+			get
+			{
+				return this._Expires;
+			}
+			set
+			{
+				this._Expires = value;
+				this.HasExpires = true;
+			}
+		}
+
+		public void SetExpires(ulong val)
+		{
+			this.Expires = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Id.GetHashCode();
+			if (this.HasExpires)
+			{
+				num ^= this.Expires.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountLicense accountLicense = obj as AccountLicense;
+			return accountLicense != null && this.Id.Equals(accountLicense.Id) && this.HasExpires == accountLicense.HasExpires && (!this.HasExpires || this.Expires.Equals(accountLicense.Expires));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountLicense ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountLicense>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountLicense.Deserialize(stream, this);
@@ -97,61 +152,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt64(this.Expires);
 			}
 			return num + 1u;
-		}
-
-		public uint Id { get; set; }
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public ulong Expires
-		{
-			get
-			{
-				return this._Expires;
-			}
-			set
-			{
-				this._Expires = value;
-				this.HasExpires = true;
-			}
-		}
-
-		public void SetExpires(ulong val)
-		{
-			this.Expires = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Id.GetHashCode();
-			if (this.HasExpires)
-			{
-				num ^= this.Expires.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountLicense accountLicense = obj as AccountLicense;
-			return accountLicense != null && this.Id.Equals(accountLicense.Id) && this.HasExpires == accountLicense.HasExpires && (!this.HasExpires || this.Expires.Equals(accountLicense.Expires));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountLicense ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountLicense>(bs, 0, -1);
 		}
 
 		public bool HasExpires;

@@ -6,174 +6,6 @@ namespace bnet.protocol.config
 {
 	public class RPCMeterConfig : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			RPCMeterConfig.Deserialize(stream, this);
-		}
-
-		public static RPCMeterConfig Deserialize(Stream stream, RPCMeterConfig instance)
-		{
-			return RPCMeterConfig.Deserialize(stream, instance, -1L);
-		}
-
-		public static RPCMeterConfig DeserializeLengthDelimited(Stream stream)
-		{
-			RPCMeterConfig rpcmeterConfig = new RPCMeterConfig();
-			RPCMeterConfig.DeserializeLengthDelimited(stream, rpcmeterConfig);
-			return rpcmeterConfig;
-		}
-
-		public static RPCMeterConfig DeserializeLengthDelimited(Stream stream, RPCMeterConfig instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return RPCMeterConfig.Deserialize(stream, instance, num);
-		}
-
-		public static RPCMeterConfig Deserialize(Stream stream, RPCMeterConfig instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			if (instance.Method == null)
-			{
-				instance.Method = new List<RPCMethodConfig>();
-			}
-			instance.IncomePerSecond = 1u;
-			instance.StartupPeriod = 0f;
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 10)
-				{
-					if (num != 16)
-					{
-						if (num != 24)
-						{
-							if (num != 32)
-							{
-								if (num != 45)
-								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
-								}
-								else
-								{
-									instance.StartupPeriod = binaryReader.ReadSingle();
-								}
-							}
-							else
-							{
-								instance.CapBalance = ProtocolParser.ReadUInt32(stream);
-							}
-						}
-						else
-						{
-							instance.InitialBalance = ProtocolParser.ReadUInt32(stream);
-						}
-					}
-					else
-					{
-						instance.IncomePerSecond = ProtocolParser.ReadUInt32(stream);
-					}
-				}
-				else
-				{
-					instance.Method.Add(RPCMethodConfig.DeserializeLengthDelimited(stream));
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			RPCMeterConfig.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, RPCMeterConfig instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			if (instance.Method.Count > 0)
-			{
-				foreach (RPCMethodConfig rpcmethodConfig in instance.Method)
-				{
-					stream.WriteByte(10);
-					ProtocolParser.WriteUInt32(stream, rpcmethodConfig.GetSerializedSize());
-					RPCMethodConfig.Serialize(stream, rpcmethodConfig);
-				}
-			}
-			if (instance.HasIncomePerSecond)
-			{
-				stream.WriteByte(16);
-				ProtocolParser.WriteUInt32(stream, instance.IncomePerSecond);
-			}
-			if (instance.HasInitialBalance)
-			{
-				stream.WriteByte(24);
-				ProtocolParser.WriteUInt32(stream, instance.InitialBalance);
-			}
-			if (instance.HasCapBalance)
-			{
-				stream.WriteByte(32);
-				ProtocolParser.WriteUInt32(stream, instance.CapBalance);
-			}
-			if (instance.HasStartupPeriod)
-			{
-				stream.WriteByte(45);
-				binaryWriter.Write(instance.StartupPeriod);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.Method.Count > 0)
-			{
-				foreach (RPCMethodConfig rpcmethodConfig in this.Method)
-				{
-					num += 1u;
-					uint serializedSize = rpcmethodConfig.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.HasIncomePerSecond)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.IncomePerSecond);
-			}
-			if (this.HasInitialBalance)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.InitialBalance);
-			}
-			if (this.HasCapBalance)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.CapBalance);
-			}
-			if (this.HasStartupPeriod)
-			{
-				num += 1u;
-				num += 4u;
-			}
-			return num;
-		}
-
 		public List<RPCMethodConfig> Method
 		{
 			get
@@ -347,6 +179,174 @@ namespace bnet.protocol.config
 		public static RPCMeterConfig ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<RPCMeterConfig>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			RPCMeterConfig.Deserialize(stream, this);
+		}
+
+		public static RPCMeterConfig Deserialize(Stream stream, RPCMeterConfig instance)
+		{
+			return RPCMeterConfig.Deserialize(stream, instance, -1L);
+		}
+
+		public static RPCMeterConfig DeserializeLengthDelimited(Stream stream)
+		{
+			RPCMeterConfig rpcmeterConfig = new RPCMeterConfig();
+			RPCMeterConfig.DeserializeLengthDelimited(stream, rpcmeterConfig);
+			return rpcmeterConfig;
+		}
+
+		public static RPCMeterConfig DeserializeLengthDelimited(Stream stream, RPCMeterConfig instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return RPCMeterConfig.Deserialize(stream, instance, num);
+		}
+
+		public static RPCMeterConfig Deserialize(Stream stream, RPCMeterConfig instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			if (instance.Method == null)
+			{
+				instance.Method = new List<RPCMethodConfig>();
+			}
+			instance.IncomePerSecond = 1u;
+			instance.StartupPeriod = 0f;
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 10)
+				{
+					if (num != 16)
+					{
+						if (num != 24)
+						{
+							if (num != 32)
+							{
+								if (num != 45)
+								{
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
+									{
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+									}
+									ProtocolParser.SkipKey(stream, key);
+								}
+								else
+								{
+									instance.StartupPeriod = binaryReader.ReadSingle();
+								}
+							}
+							else
+							{
+								instance.CapBalance = ProtocolParser.ReadUInt32(stream);
+							}
+						}
+						else
+						{
+							instance.InitialBalance = ProtocolParser.ReadUInt32(stream);
+						}
+					}
+					else
+					{
+						instance.IncomePerSecond = ProtocolParser.ReadUInt32(stream);
+					}
+				}
+				else
+				{
+					instance.Method.Add(RPCMethodConfig.DeserializeLengthDelimited(stream));
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			RPCMeterConfig.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, RPCMeterConfig instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			if (instance.Method.Count > 0)
+			{
+				foreach (RPCMethodConfig rpcmethodConfig in instance.Method)
+				{
+					stream.WriteByte(10);
+					ProtocolParser.WriteUInt32(stream, rpcmethodConfig.GetSerializedSize());
+					RPCMethodConfig.Serialize(stream, rpcmethodConfig);
+				}
+			}
+			if (instance.HasIncomePerSecond)
+			{
+				stream.WriteByte(16);
+				ProtocolParser.WriteUInt32(stream, instance.IncomePerSecond);
+			}
+			if (instance.HasInitialBalance)
+			{
+				stream.WriteByte(24);
+				ProtocolParser.WriteUInt32(stream, instance.InitialBalance);
+			}
+			if (instance.HasCapBalance)
+			{
+				stream.WriteByte(32);
+				ProtocolParser.WriteUInt32(stream, instance.CapBalance);
+			}
+			if (instance.HasStartupPeriod)
+			{
+				stream.WriteByte(45);
+				binaryWriter.Write(instance.StartupPeriod);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.Method.Count > 0)
+			{
+				foreach (RPCMethodConfig rpcmethodConfig in this.Method)
+				{
+					num += 1u;
+					uint serializedSize = rpcmethodConfig.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.HasIncomePerSecond)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.IncomePerSecond);
+			}
+			if (this.HasInitialBalance)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.InitialBalance);
+			}
+			if (this.HasCapBalance)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.CapBalance);
+			}
+			if (this.HasStartupPeriod)
+			{
+				num += 1u;
+				num += 4u;
+			}
+			return num;
 		}
 
 		private List<RPCMethodConfig> _Method = new List<RPCMethodConfig>();

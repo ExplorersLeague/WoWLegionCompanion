@@ -5,6 +5,83 @@ namespace bnet.protocol.channel
 {
 	public class ChannelDescription : IProtoBuf
 	{
+		public EntityId ChannelId { get; set; }
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public uint CurrentMembers
+		{
+			get
+			{
+				return this._CurrentMembers;
+			}
+			set
+			{
+				this._CurrentMembers = value;
+				this.HasCurrentMembers = true;
+			}
+		}
+
+		public void SetCurrentMembers(uint val)
+		{
+			this.CurrentMembers = val;
+		}
+
+		public ChannelState State
+		{
+			get
+			{
+				return this._State;
+			}
+			set
+			{
+				this._State = value;
+				this.HasState = (value != null);
+			}
+		}
+
+		public void SetState(ChannelState val)
+		{
+			this.State = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ChannelId.GetHashCode();
+			if (this.HasCurrentMembers)
+			{
+				num ^= this.CurrentMembers.GetHashCode();
+			}
+			if (this.HasState)
+			{
+				num ^= this.State.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChannelDescription channelDescription = obj as ChannelDescription;
+			return channelDescription != null && this.ChannelId.Equals(channelDescription.ChannelId) && this.HasCurrentMembers == channelDescription.HasCurrentMembers && (!this.HasCurrentMembers || this.CurrentMembers.Equals(channelDescription.CurrentMembers)) && this.HasState == channelDescription.HasState && (!this.HasState || this.State.Equals(channelDescription.State));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChannelDescription ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChannelDescription>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChannelDescription.Deserialize(stream, this);
@@ -130,83 +207,6 @@ namespace bnet.protocol.channel
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num + 1u;
-		}
-
-		public EntityId ChannelId { get; set; }
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public uint CurrentMembers
-		{
-			get
-			{
-				return this._CurrentMembers;
-			}
-			set
-			{
-				this._CurrentMembers = value;
-				this.HasCurrentMembers = true;
-			}
-		}
-
-		public void SetCurrentMembers(uint val)
-		{
-			this.CurrentMembers = val;
-		}
-
-		public ChannelState State
-		{
-			get
-			{
-				return this._State;
-			}
-			set
-			{
-				this._State = value;
-				this.HasState = (value != null);
-			}
-		}
-
-		public void SetState(ChannelState val)
-		{
-			this.State = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ChannelId.GetHashCode();
-			if (this.HasCurrentMembers)
-			{
-				num ^= this.CurrentMembers.GetHashCode();
-			}
-			if (this.HasState)
-			{
-				num ^= this.State.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChannelDescription channelDescription = obj as ChannelDescription;
-			return channelDescription != null && this.ChannelId.Equals(channelDescription.ChannelId) && this.HasCurrentMembers == channelDescription.HasCurrentMembers && (!this.HasCurrentMembers || this.CurrentMembers.Equals(channelDescription.CurrentMembers)) && this.HasState == channelDescription.HasState && (!this.HasState || this.State.Equals(channelDescription.State));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChannelDescription ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChannelDescription>(bs, 0, -1);
 		}
 
 		public bool HasCurrentMembers;

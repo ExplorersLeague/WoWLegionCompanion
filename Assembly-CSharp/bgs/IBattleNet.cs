@@ -52,6 +52,8 @@ namespace bgs
 
 		bgs.types.EntityId GetMyAccountId();
 
+		string GetMyBattleTag();
+
 		byte[] GetSessionKey();
 
 		void GetQueueInfo(ref QueueInfo queueInfo);

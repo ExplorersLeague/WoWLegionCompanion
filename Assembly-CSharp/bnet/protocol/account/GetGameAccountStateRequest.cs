@@ -5,6 +5,119 @@ namespace bnet.protocol.account
 {
 	public class GetGameAccountStateRequest : IProtoBuf
 	{
+		public EntityId AccountId
+		{
+			get
+			{
+				return this._AccountId;
+			}
+			set
+			{
+				this._AccountId = value;
+				this.HasAccountId = (value != null);
+			}
+		}
+
+		public void SetAccountId(EntityId val)
+		{
+			this.AccountId = val;
+		}
+
+		public EntityId GameAccountId
+		{
+			get
+			{
+				return this._GameAccountId;
+			}
+			set
+			{
+				this._GameAccountId = value;
+				this.HasGameAccountId = (value != null);
+			}
+		}
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public GameAccountFieldOptions Options
+		{
+			get
+			{
+				return this._Options;
+			}
+			set
+			{
+				this._Options = value;
+				this.HasOptions = (value != null);
+			}
+		}
+
+		public void SetOptions(GameAccountFieldOptions val)
+		{
+			this.Options = val;
+		}
+
+		public GameAccountFieldTags Tags
+		{
+			get
+			{
+				return this._Tags;
+			}
+			set
+			{
+				this._Tags = value;
+				this.HasTags = (value != null);
+			}
+		}
+
+		public void SetTags(GameAccountFieldTags val)
+		{
+			this.Tags = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAccountId)
+			{
+				num ^= this.AccountId.GetHashCode();
+			}
+			if (this.HasGameAccountId)
+			{
+				num ^= this.GameAccountId.GetHashCode();
+			}
+			if (this.HasOptions)
+			{
+				num ^= this.Options.GetHashCode();
+			}
+			if (this.HasTags)
+			{
+				num ^= this.Tags.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetGameAccountStateRequest getGameAccountStateRequest = obj as GetGameAccountStateRequest;
+			return getGameAccountStateRequest != null && this.HasAccountId == getGameAccountStateRequest.HasAccountId && (!this.HasAccountId || this.AccountId.Equals(getGameAccountStateRequest.AccountId)) && this.HasGameAccountId == getGameAccountStateRequest.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(getGameAccountStateRequest.GameAccountId)) && this.HasOptions == getGameAccountStateRequest.HasOptions && (!this.HasOptions || this.Options.Equals(getGameAccountStateRequest.Options)) && this.HasTags == getGameAccountStateRequest.HasTags && (!this.HasTags || this.Tags.Equals(getGameAccountStateRequest.Tags));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetGameAccountStateRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetGameAccountStateRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetGameAccountStateRequest.Deserialize(stream, this);
@@ -162,119 +275,6 @@ namespace bnet.protocol.account
 				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
 			}
 			return num;
-		}
-
-		public EntityId AccountId
-		{
-			get
-			{
-				return this._AccountId;
-			}
-			set
-			{
-				this._AccountId = value;
-				this.HasAccountId = (value != null);
-			}
-		}
-
-		public void SetAccountId(EntityId val)
-		{
-			this.AccountId = val;
-		}
-
-		public EntityId GameAccountId
-		{
-			get
-			{
-				return this._GameAccountId;
-			}
-			set
-			{
-				this._GameAccountId = value;
-				this.HasGameAccountId = (value != null);
-			}
-		}
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public GameAccountFieldOptions Options
-		{
-			get
-			{
-				return this._Options;
-			}
-			set
-			{
-				this._Options = value;
-				this.HasOptions = (value != null);
-			}
-		}
-
-		public void SetOptions(GameAccountFieldOptions val)
-		{
-			this.Options = val;
-		}
-
-		public GameAccountFieldTags Tags
-		{
-			get
-			{
-				return this._Tags;
-			}
-			set
-			{
-				this._Tags = value;
-				this.HasTags = (value != null);
-			}
-		}
-
-		public void SetTags(GameAccountFieldTags val)
-		{
-			this.Tags = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAccountId)
-			{
-				num ^= this.AccountId.GetHashCode();
-			}
-			if (this.HasGameAccountId)
-			{
-				num ^= this.GameAccountId.GetHashCode();
-			}
-			if (this.HasOptions)
-			{
-				num ^= this.Options.GetHashCode();
-			}
-			if (this.HasTags)
-			{
-				num ^= this.Tags.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetGameAccountStateRequest getGameAccountStateRequest = obj as GetGameAccountStateRequest;
-			return getGameAccountStateRequest != null && this.HasAccountId == getGameAccountStateRequest.HasAccountId && (!this.HasAccountId || this.AccountId.Equals(getGameAccountStateRequest.AccountId)) && this.HasGameAccountId == getGameAccountStateRequest.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(getGameAccountStateRequest.GameAccountId)) && this.HasOptions == getGameAccountStateRequest.HasOptions && (!this.HasOptions || this.Options.Equals(getGameAccountStateRequest.Options)) && this.HasTags == getGameAccountStateRequest.HasTags && (!this.HasTags || this.Tags.Equals(getGameAccountStateRequest.Tags));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetGameAccountStateRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetGameAccountStateRequest>(bs, 0, -1);
 		}
 
 		public bool HasAccountId;

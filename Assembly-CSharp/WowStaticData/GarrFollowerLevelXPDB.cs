@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace WowStaticData
@@ -8,63 +9,30 @@ namespace WowStaticData
 	{
 		public GarrFollowerLevelXPRec GetRecord(int id)
 		{
-			return (GarrFollowerLevelXPRec)this.m_records[id];
+			return (!this.m_records.ContainsKey(id)) ? null : this.m_records[id];
 		}
 
-		public void EnumRecords(Predicate<GarrFollowerLevelXPRec> callback)
+		public IEnumerable<GarrFollowerLevelXPRec> GetRecordsWhere(Func<GarrFollowerLevelXPRec, bool> matcher)
 		{
-			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
-			try
-			{
-				while (enumerator.MoveNext())
-				{
-					object obj = enumerator.Current;
-					GarrFollowerLevelXPRec obj2 = (GarrFollowerLevelXPRec)obj;
-					if (!callback(obj2))
-					{
-						break;
-					}
-				}
-			}
-			finally
-			{
-				IDisposable disposable;
-				if ((disposable = (enumerator as IDisposable)) != null)
-				{
-					disposable.Dispose();
-				}
-			}
+			return this.m_records.Values.Where(matcher);
 		}
 
-		public void EnumRecordsByParentID(int parentID, Predicate<GarrFollowerLevelXPRec> callback)
+		public GarrFollowerLevelXPRec GetRecordFirstOrDefault(Func<GarrFollowerLevelXPRec, bool> matcher)
 		{
-			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
-			try
-			{
-				while (enumerator.MoveNext())
-				{
-					object obj = enumerator.Current;
-					GarrFollowerLevelXPRec garrFollowerLevelXPRec = (GarrFollowerLevelXPRec)obj;
-					if ((ulong)garrFollowerLevelXPRec.FollowerLevel == (ulong)((long)parentID) && !callback(garrFollowerLevelXPRec))
-					{
-						break;
-					}
-				}
-			}
-			finally
-			{
-				IDisposable disposable;
-				if ((disposable = (enumerator as IDisposable)) != null)
-				{
-					disposable.Dispose();
-				}
-			}
+			return this.m_records.Values.FirstOrDefault(matcher);
+		}
+
+		public IEnumerable<GarrFollowerLevelXPRec> GetRecordsByParentID(int parentID)
+		{
+			return from rec in this.m_records.Values
+			where (ulong)rec.FollowerLevel == (ulong)((long)parentID)
+			select rec;
 		}
 
 		public bool Load(string path, AssetBundle nonLocalizedBundle, AssetBundle localizedBundle, string locale)
 		{
 			string text = path + "NonLocalized/GarrFollowerLevelXP.txt";
-			if (this.m_records != null)
+			if (this.m_records.Count > 0)
 			{
 				Debug.Log("Already loaded static db " + text);
 				return false;
@@ -76,7 +44,6 @@ namespace WowStaticData
 				return false;
 			}
 			string text2 = textAsset.ToString();
-			this.m_records = new Hashtable();
 			int num = 0;
 			int num2;
 			do
@@ -95,6 +62,6 @@ namespace WowStaticData
 			return true;
 		}
 
-		private Hashtable m_records;
+		private Dictionary<int, GarrFollowerLevelXPRec> m_records = new Dictionary<int, GarrFollowerLevelXPRec>();
 	}
 }

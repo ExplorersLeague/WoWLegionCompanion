@@ -5,6 +5,61 @@ namespace bnet.protocol
 {
 	public class ObjectAddress : IProtoBuf
 	{
+		public ProcessId Host { get; set; }
+
+		public void SetHost(ProcessId val)
+		{
+			this.Host = val;
+		}
+
+		public ulong ObjectId
+		{
+			get
+			{
+				return this._ObjectId;
+			}
+			set
+			{
+				this._ObjectId = value;
+				this.HasObjectId = true;
+			}
+		}
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Host.GetHashCode();
+			if (this.HasObjectId)
+			{
+				num ^= this.ObjectId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ObjectAddress objectAddress = obj as ObjectAddress;
+			return objectAddress != null && this.Host.Equals(objectAddress.Host) && this.HasObjectId == objectAddress.HasObjectId && (!this.HasObjectId || this.ObjectId.Equals(objectAddress.ObjectId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ObjectAddress ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ObjectAddress>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ObjectAddress.Deserialize(stream, this);
@@ -108,61 +163,6 @@ namespace bnet.protocol
 				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
 			}
 			return num + 1u;
-		}
-
-		public ProcessId Host { get; set; }
-
-		public void SetHost(ProcessId val)
-		{
-			this.Host = val;
-		}
-
-		public ulong ObjectId
-		{
-			get
-			{
-				return this._ObjectId;
-			}
-			set
-			{
-				this._ObjectId = value;
-				this.HasObjectId = true;
-			}
-		}
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Host.GetHashCode();
-			if (this.HasObjectId)
-			{
-				num ^= this.ObjectId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ObjectAddress objectAddress = obj as ObjectAddress;
-			return objectAddress != null && this.Host.Equals(objectAddress.Host) && this.HasObjectId == objectAddress.HasObjectId && (!this.HasObjectId || this.ObjectId.Equals(objectAddress.ObjectId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ObjectAddress ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ObjectAddress>(bs, 0, -1);
 		}
 
 		public bool HasObjectId;

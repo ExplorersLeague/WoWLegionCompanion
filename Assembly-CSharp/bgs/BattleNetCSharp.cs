@@ -508,6 +508,11 @@ namespace bgs
 			};
 		}
 
+		public string GetMyBattleTag()
+		{
+			return this.m_authenticationAPI.BattleTag;
+		}
+
 		public string GetVersion()
 		{
 			return this.m_clientInterface.GetVersion();

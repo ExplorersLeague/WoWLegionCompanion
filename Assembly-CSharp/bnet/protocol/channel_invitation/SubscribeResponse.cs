@@ -7,131 +7,6 @@ namespace bnet.protocol.channel_invitation
 {
 	public class SubscribeResponse : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			SubscribeResponse.Deserialize(stream, this);
-		}
-
-		public static SubscribeResponse Deserialize(Stream stream, SubscribeResponse instance)
-		{
-			return SubscribeResponse.Deserialize(stream, instance, -1L);
-		}
-
-		public static SubscribeResponse DeserializeLengthDelimited(Stream stream)
-		{
-			SubscribeResponse subscribeResponse = new SubscribeResponse();
-			SubscribeResponse.DeserializeLengthDelimited(stream, subscribeResponse);
-			return subscribeResponse;
-		}
-
-		public static SubscribeResponse DeserializeLengthDelimited(Stream stream, SubscribeResponse instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return SubscribeResponse.Deserialize(stream, instance, num);
-		}
-
-		public static SubscribeResponse Deserialize(Stream stream, SubscribeResponse instance, long limit)
-		{
-			if (instance.Collection == null)
-			{
-				instance.Collection = new List<InvitationCollection>();
-			}
-			if (instance.ReceivedInvitation == null)
-			{
-				instance.ReceivedInvitation = new List<Invitation>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 10)
-				{
-					if (num != 18)
-					{
-						Key key = ProtocolParser.ReadKey((byte)num, stream);
-						uint field = key.Field;
-						if (field == 0u)
-						{
-							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-						}
-						ProtocolParser.SkipKey(stream, key);
-					}
-					else
-					{
-						instance.ReceivedInvitation.Add(Invitation.DeserializeLengthDelimited(stream));
-					}
-				}
-				else
-				{
-					instance.Collection.Add(InvitationCollection.DeserializeLengthDelimited(stream));
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			SubscribeResponse.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, SubscribeResponse instance)
-		{
-			if (instance.Collection.Count > 0)
-			{
-				foreach (InvitationCollection invitationCollection in instance.Collection)
-				{
-					stream.WriteByte(10);
-					ProtocolParser.WriteUInt32(stream, invitationCollection.GetSerializedSize());
-					InvitationCollection.Serialize(stream, invitationCollection);
-				}
-			}
-			if (instance.ReceivedInvitation.Count > 0)
-			{
-				foreach (Invitation invitation in instance.ReceivedInvitation)
-				{
-					stream.WriteByte(18);
-					ProtocolParser.WriteUInt32(stream, invitation.GetSerializedSize());
-					Invitation.Serialize(stream, invitation);
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.Collection.Count > 0)
-			{
-				foreach (InvitationCollection invitationCollection in this.Collection)
-				{
-					num += 1u;
-					uint serializedSize = invitationCollection.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.ReceivedInvitation.Count > 0)
-			{
-				foreach (Invitation invitation in this.ReceivedInvitation)
-				{
-					num += 1u;
-					uint serializedSize2 = invitation.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			return num;
-		}
-
 		public List<InvitationCollection> Collection
 		{
 			get
@@ -275,6 +150,131 @@ namespace bnet.protocol.channel_invitation
 		public static SubscribeResponse ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<SubscribeResponse>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			SubscribeResponse.Deserialize(stream, this);
+		}
+
+		public static SubscribeResponse Deserialize(Stream stream, SubscribeResponse instance)
+		{
+			return SubscribeResponse.Deserialize(stream, instance, -1L);
+		}
+
+		public static SubscribeResponse DeserializeLengthDelimited(Stream stream)
+		{
+			SubscribeResponse subscribeResponse = new SubscribeResponse();
+			SubscribeResponse.DeserializeLengthDelimited(stream, subscribeResponse);
+			return subscribeResponse;
+		}
+
+		public static SubscribeResponse DeserializeLengthDelimited(Stream stream, SubscribeResponse instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return SubscribeResponse.Deserialize(stream, instance, num);
+		}
+
+		public static SubscribeResponse Deserialize(Stream stream, SubscribeResponse instance, long limit)
+		{
+			if (instance.Collection == null)
+			{
+				instance.Collection = new List<InvitationCollection>();
+			}
+			if (instance.ReceivedInvitation == null)
+			{
+				instance.ReceivedInvitation = new List<Invitation>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 10)
+				{
+					if (num != 18)
+					{
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
+						{
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+						}
+						ProtocolParser.SkipKey(stream, key);
+					}
+					else
+					{
+						instance.ReceivedInvitation.Add(Invitation.DeserializeLengthDelimited(stream));
+					}
+				}
+				else
+				{
+					instance.Collection.Add(InvitationCollection.DeserializeLengthDelimited(stream));
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			SubscribeResponse.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, SubscribeResponse instance)
+		{
+			if (instance.Collection.Count > 0)
+			{
+				foreach (InvitationCollection invitationCollection in instance.Collection)
+				{
+					stream.WriteByte(10);
+					ProtocolParser.WriteUInt32(stream, invitationCollection.GetSerializedSize());
+					InvitationCollection.Serialize(stream, invitationCollection);
+				}
+			}
+			if (instance.ReceivedInvitation.Count > 0)
+			{
+				foreach (Invitation invitation in instance.ReceivedInvitation)
+				{
+					stream.WriteByte(18);
+					ProtocolParser.WriteUInt32(stream, invitation.GetSerializedSize());
+					Invitation.Serialize(stream, invitation);
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.Collection.Count > 0)
+			{
+				foreach (InvitationCollection invitationCollection in this.Collection)
+				{
+					num += 1u;
+					uint serializedSize = invitationCollection.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.ReceivedInvitation.Count > 0)
+			{
+				foreach (Invitation invitation in this.ReceivedInvitation)
+				{
+					num += 1u;
+					uint serializedSize2 = invitation.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			return num;
 		}
 
 		private List<InvitationCollection> _Collection = new List<InvitationCollection>();

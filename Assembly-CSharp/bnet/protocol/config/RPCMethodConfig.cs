@@ -6,268 +6,6 @@ namespace bnet.protocol.config
 {
 	public class RPCMethodConfig : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			RPCMethodConfig.Deserialize(stream, this);
-		}
-
-		public static RPCMethodConfig Deserialize(Stream stream, RPCMethodConfig instance)
-		{
-			return RPCMethodConfig.Deserialize(stream, instance, -1L);
-		}
-
-		public static RPCMethodConfig DeserializeLengthDelimited(Stream stream)
-		{
-			RPCMethodConfig rpcmethodConfig = new RPCMethodConfig();
-			RPCMethodConfig.DeserializeLengthDelimited(stream, rpcmethodConfig);
-			return rpcmethodConfig;
-		}
-
-		public static RPCMethodConfig DeserializeLengthDelimited(Stream stream, RPCMethodConfig instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return RPCMethodConfig.Deserialize(stream, instance, num);
-		}
-
-		public static RPCMethodConfig Deserialize(Stream stream, RPCMethodConfig instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			instance.FixedCallCost = 1u;
-			instance.FixedPacketSize = 0u;
-			instance.VariableMultiplier = 0f;
-			instance.Multiplier = 1f;
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else
-				{
-					switch (num)
-					{
-					case 53:
-						instance.Multiplier = binaryReader.ReadSingle();
-						break;
-					default:
-						if (num != 10)
-						{
-							if (num != 18)
-							{
-								if (num != 24)
-								{
-									if (num != 32)
-									{
-										if (num != 45)
-										{
-											if (num != 64)
-											{
-												if (num != 72)
-												{
-													if (num != 80)
-													{
-														if (num != 93)
-														{
-															Key key = ProtocolParser.ReadKey((byte)num, stream);
-															uint field = key.Field;
-															if (field == 0u)
-															{
-																throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-															}
-															ProtocolParser.SkipKey(stream, key);
-														}
-														else
-														{
-															instance.Timeout = binaryReader.ReadSingle();
-														}
-													}
-													else
-													{
-														instance.MaxEncodedSize = ProtocolParser.ReadUInt32(stream);
-													}
-												}
-												else
-												{
-													instance.MaxPacketSize = ProtocolParser.ReadUInt32(stream);
-												}
-											}
-											else
-											{
-												instance.RateLimitSeconds = ProtocolParser.ReadUInt32(stream);
-											}
-										}
-										else
-										{
-											instance.VariableMultiplier = binaryReader.ReadSingle();
-										}
-									}
-									else
-									{
-										instance.FixedPacketSize = ProtocolParser.ReadUInt32(stream);
-									}
-								}
-								else
-								{
-									instance.FixedCallCost = ProtocolParser.ReadUInt32(stream);
-								}
-							}
-							else
-							{
-								instance.MethodName = ProtocolParser.ReadString(stream);
-							}
-						}
-						else
-						{
-							instance.ServiceName = ProtocolParser.ReadString(stream);
-						}
-						break;
-					case 56:
-						instance.RateLimitCount = ProtocolParser.ReadUInt32(stream);
-						break;
-					}
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			RPCMethodConfig.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, RPCMethodConfig instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			if (instance.HasServiceName)
-			{
-				stream.WriteByte(10);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.ServiceName));
-			}
-			if (instance.HasMethodName)
-			{
-				stream.WriteByte(18);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.MethodName));
-			}
-			if (instance.HasFixedCallCost)
-			{
-				stream.WriteByte(24);
-				ProtocolParser.WriteUInt32(stream, instance.FixedCallCost);
-			}
-			if (instance.HasFixedPacketSize)
-			{
-				stream.WriteByte(32);
-				ProtocolParser.WriteUInt32(stream, instance.FixedPacketSize);
-			}
-			if (instance.HasVariableMultiplier)
-			{
-				stream.WriteByte(45);
-				binaryWriter.Write(instance.VariableMultiplier);
-			}
-			if (instance.HasMultiplier)
-			{
-				stream.WriteByte(53);
-				binaryWriter.Write(instance.Multiplier);
-			}
-			if (instance.HasRateLimitCount)
-			{
-				stream.WriteByte(56);
-				ProtocolParser.WriteUInt32(stream, instance.RateLimitCount);
-			}
-			if (instance.HasRateLimitSeconds)
-			{
-				stream.WriteByte(64);
-				ProtocolParser.WriteUInt32(stream, instance.RateLimitSeconds);
-			}
-			if (instance.HasMaxPacketSize)
-			{
-				stream.WriteByte(72);
-				ProtocolParser.WriteUInt32(stream, instance.MaxPacketSize);
-			}
-			if (instance.HasMaxEncodedSize)
-			{
-				stream.WriteByte(80);
-				ProtocolParser.WriteUInt32(stream, instance.MaxEncodedSize);
-			}
-			if (instance.HasTimeout)
-			{
-				stream.WriteByte(93);
-				binaryWriter.Write(instance.Timeout);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasServiceName)
-			{
-				num += 1u;
-				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.ServiceName);
-				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-			}
-			if (this.HasMethodName)
-			{
-				num += 1u;
-				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.MethodName);
-				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
-			}
-			if (this.HasFixedCallCost)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.FixedCallCost);
-			}
-			if (this.HasFixedPacketSize)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.FixedPacketSize);
-			}
-			if (this.HasVariableMultiplier)
-			{
-				num += 1u;
-				num += 4u;
-			}
-			if (this.HasMultiplier)
-			{
-				num += 1u;
-				num += 4u;
-			}
-			if (this.HasRateLimitCount)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.RateLimitCount);
-			}
-			if (this.HasRateLimitSeconds)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.RateLimitSeconds);
-			}
-			if (this.HasMaxPacketSize)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MaxPacketSize);
-			}
-			if (this.HasMaxEncodedSize)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MaxEncodedSize);
-			}
-			if (this.HasTimeout)
-			{
-				num += 1u;
-				num += 4u;
-			}
-			return num;
-		}
-
 		public string ServiceName
 		{
 			get
@@ -533,6 +271,268 @@ namespace bnet.protocol.config
 		public static RPCMethodConfig ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<RPCMethodConfig>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			RPCMethodConfig.Deserialize(stream, this);
+		}
+
+		public static RPCMethodConfig Deserialize(Stream stream, RPCMethodConfig instance)
+		{
+			return RPCMethodConfig.Deserialize(stream, instance, -1L);
+		}
+
+		public static RPCMethodConfig DeserializeLengthDelimited(Stream stream)
+		{
+			RPCMethodConfig rpcmethodConfig = new RPCMethodConfig();
+			RPCMethodConfig.DeserializeLengthDelimited(stream, rpcmethodConfig);
+			return rpcmethodConfig;
+		}
+
+		public static RPCMethodConfig DeserializeLengthDelimited(Stream stream, RPCMethodConfig instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return RPCMethodConfig.Deserialize(stream, instance, num);
+		}
+
+		public static RPCMethodConfig Deserialize(Stream stream, RPCMethodConfig instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			instance.FixedCallCost = 1u;
+			instance.FixedPacketSize = 0u;
+			instance.VariableMultiplier = 0f;
+			instance.Multiplier = 1f;
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else
+				{
+					switch (num)
+					{
+					case 53:
+						instance.Multiplier = binaryReader.ReadSingle();
+						break;
+					default:
+						if (num != 10)
+						{
+							if (num != 18)
+							{
+								if (num != 24)
+								{
+									if (num != 32)
+									{
+										if (num != 45)
+										{
+											if (num != 64)
+											{
+												if (num != 72)
+												{
+													if (num != 80)
+													{
+														if (num != 93)
+														{
+															Key key = ProtocolParser.ReadKey((byte)num, stream);
+															uint field = key.Field;
+															if (field == 0u)
+															{
+																throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+															}
+															ProtocolParser.SkipKey(stream, key);
+														}
+														else
+														{
+															instance.Timeout = binaryReader.ReadSingle();
+														}
+													}
+													else
+													{
+														instance.MaxEncodedSize = ProtocolParser.ReadUInt32(stream);
+													}
+												}
+												else
+												{
+													instance.MaxPacketSize = ProtocolParser.ReadUInt32(stream);
+												}
+											}
+											else
+											{
+												instance.RateLimitSeconds = ProtocolParser.ReadUInt32(stream);
+											}
+										}
+										else
+										{
+											instance.VariableMultiplier = binaryReader.ReadSingle();
+										}
+									}
+									else
+									{
+										instance.FixedPacketSize = ProtocolParser.ReadUInt32(stream);
+									}
+								}
+								else
+								{
+									instance.FixedCallCost = ProtocolParser.ReadUInt32(stream);
+								}
+							}
+							else
+							{
+								instance.MethodName = ProtocolParser.ReadString(stream);
+							}
+						}
+						else
+						{
+							instance.ServiceName = ProtocolParser.ReadString(stream);
+						}
+						break;
+					case 56:
+						instance.RateLimitCount = ProtocolParser.ReadUInt32(stream);
+						break;
+					}
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			RPCMethodConfig.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, RPCMethodConfig instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			if (instance.HasServiceName)
+			{
+				stream.WriteByte(10);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.ServiceName));
+			}
+			if (instance.HasMethodName)
+			{
+				stream.WriteByte(18);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.MethodName));
+			}
+			if (instance.HasFixedCallCost)
+			{
+				stream.WriteByte(24);
+				ProtocolParser.WriteUInt32(stream, instance.FixedCallCost);
+			}
+			if (instance.HasFixedPacketSize)
+			{
+				stream.WriteByte(32);
+				ProtocolParser.WriteUInt32(stream, instance.FixedPacketSize);
+			}
+			if (instance.HasVariableMultiplier)
+			{
+				stream.WriteByte(45);
+				binaryWriter.Write(instance.VariableMultiplier);
+			}
+			if (instance.HasMultiplier)
+			{
+				stream.WriteByte(53);
+				binaryWriter.Write(instance.Multiplier);
+			}
+			if (instance.HasRateLimitCount)
+			{
+				stream.WriteByte(56);
+				ProtocolParser.WriteUInt32(stream, instance.RateLimitCount);
+			}
+			if (instance.HasRateLimitSeconds)
+			{
+				stream.WriteByte(64);
+				ProtocolParser.WriteUInt32(stream, instance.RateLimitSeconds);
+			}
+			if (instance.HasMaxPacketSize)
+			{
+				stream.WriteByte(72);
+				ProtocolParser.WriteUInt32(stream, instance.MaxPacketSize);
+			}
+			if (instance.HasMaxEncodedSize)
+			{
+				stream.WriteByte(80);
+				ProtocolParser.WriteUInt32(stream, instance.MaxEncodedSize);
+			}
+			if (instance.HasTimeout)
+			{
+				stream.WriteByte(93);
+				binaryWriter.Write(instance.Timeout);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasServiceName)
+			{
+				num += 1u;
+				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.ServiceName);
+				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+			}
+			if (this.HasMethodName)
+			{
+				num += 1u;
+				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.MethodName);
+				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
+			}
+			if (this.HasFixedCallCost)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.FixedCallCost);
+			}
+			if (this.HasFixedPacketSize)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.FixedPacketSize);
+			}
+			if (this.HasVariableMultiplier)
+			{
+				num += 1u;
+				num += 4u;
+			}
+			if (this.HasMultiplier)
+			{
+				num += 1u;
+				num += 4u;
+			}
+			if (this.HasRateLimitCount)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.RateLimitCount);
+			}
+			if (this.HasRateLimitSeconds)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.RateLimitSeconds);
+			}
+			if (this.HasMaxPacketSize)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MaxPacketSize);
+			}
+			if (this.HasMaxEncodedSize)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MaxEncodedSize);
+			}
+			if (this.HasTimeout)
+			{
+				num += 1u;
+				num += 4u;
+			}
+			return num;
 		}
 
 		public bool HasServiceName;

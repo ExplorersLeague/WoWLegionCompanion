@@ -5,6 +5,54 @@ namespace bnet.protocol.presence
 {
 	public class RichPresence : IProtoBuf
 	{
+		public uint ProgramId { get; set; }
+
+		public void SetProgramId(uint val)
+		{
+			this.ProgramId = val;
+		}
+
+		public uint StreamId { get; set; }
+
+		public void SetStreamId(uint val)
+		{
+			this.StreamId = val;
+		}
+
+		public uint Index { get; set; }
+
+		public void SetIndex(uint val)
+		{
+			this.Index = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ProgramId.GetHashCode();
+			num ^= this.StreamId.GetHashCode();
+			return num ^ this.Index.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			RichPresence richPresence = obj as RichPresence;
+			return richPresence != null && this.ProgramId.Equals(richPresence.ProgramId) && this.StreamId.Equals(richPresence.StreamId) && this.Index.Equals(richPresence.Index);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static RichPresence ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<RichPresence>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			RichPresence.Deserialize(stream, this);
@@ -102,54 +150,6 @@ namespace bnet.protocol.presence
 			num += 4u;
 			num += ProtocolParser.SizeOfUInt32(this.Index);
 			return num + 3u;
-		}
-
-		public uint ProgramId { get; set; }
-
-		public void SetProgramId(uint val)
-		{
-			this.ProgramId = val;
-		}
-
-		public uint StreamId { get; set; }
-
-		public void SetStreamId(uint val)
-		{
-			this.StreamId = val;
-		}
-
-		public uint Index { get; set; }
-
-		public void SetIndex(uint val)
-		{
-			this.Index = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ProgramId.GetHashCode();
-			num ^= this.StreamId.GetHashCode();
-			return num ^ this.Index.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			RichPresence richPresence = obj as RichPresence;
-			return richPresence != null && this.ProgramId.Equals(richPresence.ProgramId) && this.StreamId.Equals(richPresence.StreamId) && this.Index.Equals(richPresence.Index);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static RichPresence ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<RichPresence>(bs, 0, -1);
 		}
 	}
 }

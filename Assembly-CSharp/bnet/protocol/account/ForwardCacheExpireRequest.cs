@@ -5,6 +5,53 @@ namespace bnet.protocol.account
 {
 	public class ForwardCacheExpireRequest : IProtoBuf
 	{
+		public EntityId EntityId
+		{
+			get
+			{
+				return this._EntityId;
+			}
+			set
+			{
+				this._EntityId = value;
+				this.HasEntityId = (value != null);
+			}
+		}
+
+		public void SetEntityId(EntityId val)
+		{
+			this.EntityId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasEntityId)
+			{
+				num ^= this.EntityId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ForwardCacheExpireRequest forwardCacheExpireRequest = obj as ForwardCacheExpireRequest;
+			return forwardCacheExpireRequest != null && this.HasEntityId == forwardCacheExpireRequest.HasEntityId && (!this.HasEntityId || this.EntityId.Equals(forwardCacheExpireRequest.EntityId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ForwardCacheExpireRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ForwardCacheExpireRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ForwardCacheExpireRequest.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.account
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public EntityId EntityId
-		{
-			get
-			{
-				return this._EntityId;
-			}
-			set
-			{
-				this._EntityId = value;
-				this.HasEntityId = (value != null);
-			}
-		}
-
-		public void SetEntityId(EntityId val)
-		{
-			this.EntityId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasEntityId)
-			{
-				num ^= this.EntityId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ForwardCacheExpireRequest forwardCacheExpireRequest = obj as ForwardCacheExpireRequest;
-			return forwardCacheExpireRequest != null && this.HasEntityId == forwardCacheExpireRequest.HasEntityId && (!this.HasEntityId || this.EntityId.Equals(forwardCacheExpireRequest.EntityId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ForwardCacheExpireRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ForwardCacheExpireRequest>(bs, 0, -1);
 		}
 
 		public bool HasEntityId;

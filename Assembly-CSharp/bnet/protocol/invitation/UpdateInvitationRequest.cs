@@ -5,6 +5,68 @@ namespace bnet.protocol.invitation
 {
 	public class UpdateInvitationRequest : IProtoBuf
 	{
+		public Identity AgentIdentity
+		{
+			get
+			{
+				return this._AgentIdentity;
+			}
+			set
+			{
+				this._AgentIdentity = value;
+				this.HasAgentIdentity = (value != null);
+			}
+		}
+
+		public void SetAgentIdentity(Identity val)
+		{
+			this.AgentIdentity = val;
+		}
+
+		public ulong InvitationId { get; set; }
+
+		public void SetInvitationId(ulong val)
+		{
+			this.InvitationId = val;
+		}
+
+		public InvitationParams Params { get; set; }
+
+		public void SetParams(InvitationParams val)
+		{
+			this.Params = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentIdentity)
+			{
+				num ^= this.AgentIdentity.GetHashCode();
+			}
+			num ^= this.InvitationId.GetHashCode();
+			return num ^ this.Params.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			UpdateInvitationRequest updateInvitationRequest = obj as UpdateInvitationRequest;
+			return updateInvitationRequest != null && this.HasAgentIdentity == updateInvitationRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(updateInvitationRequest.AgentIdentity)) && this.InvitationId.Equals(updateInvitationRequest.InvitationId) && this.Params.Equals(updateInvitationRequest.Params);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UpdateInvitationRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UpdateInvitationRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UpdateInvitationRequest.Deserialize(stream, this);
@@ -125,68 +187,6 @@ namespace bnet.protocol.invitation
 			uint serializedSize2 = this.Params.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 2u;
-		}
-
-		public Identity AgentIdentity
-		{
-			get
-			{
-				return this._AgentIdentity;
-			}
-			set
-			{
-				this._AgentIdentity = value;
-				this.HasAgentIdentity = (value != null);
-			}
-		}
-
-		public void SetAgentIdentity(Identity val)
-		{
-			this.AgentIdentity = val;
-		}
-
-		public ulong InvitationId { get; set; }
-
-		public void SetInvitationId(ulong val)
-		{
-			this.InvitationId = val;
-		}
-
-		public InvitationParams Params { get; set; }
-
-		public void SetParams(InvitationParams val)
-		{
-			this.Params = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentIdentity)
-			{
-				num ^= this.AgentIdentity.GetHashCode();
-			}
-			num ^= this.InvitationId.GetHashCode();
-			return num ^ this.Params.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			UpdateInvitationRequest updateInvitationRequest = obj as UpdateInvitationRequest;
-			return updateInvitationRequest != null && this.HasAgentIdentity == updateInvitationRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(updateInvitationRequest.AgentIdentity)) && this.InvitationId.Equals(updateInvitationRequest.InvitationId) && this.Params.Equals(updateInvitationRequest.Params);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UpdateInvitationRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UpdateInvitationRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentIdentity;

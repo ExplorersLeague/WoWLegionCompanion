@@ -5,6 +5,53 @@ namespace bnet.protocol.account
 {
 	public class GetEBalanceRestrictionsRequest : IProtoBuf
 	{
+		public uint CurrencyHomeRegion
+		{
+			get
+			{
+				return this._CurrencyHomeRegion;
+			}
+			set
+			{
+				this._CurrencyHomeRegion = value;
+				this.HasCurrencyHomeRegion = true;
+			}
+		}
+
+		public void SetCurrencyHomeRegion(uint val)
+		{
+			this.CurrencyHomeRegion = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasCurrencyHomeRegion)
+			{
+				num ^= this.CurrencyHomeRegion.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetEBalanceRestrictionsRequest getEBalanceRestrictionsRequest = obj as GetEBalanceRestrictionsRequest;
+			return getEBalanceRestrictionsRequest != null && this.HasCurrencyHomeRegion == getEBalanceRestrictionsRequest.HasCurrencyHomeRegion && (!this.HasCurrencyHomeRegion || this.CurrencyHomeRegion.Equals(getEBalanceRestrictionsRequest.CurrencyHomeRegion));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetEBalanceRestrictionsRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetEBalanceRestrictionsRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetEBalanceRestrictionsRequest.Deserialize(stream, this);
@@ -87,53 +134,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(this.CurrencyHomeRegion);
 			}
 			return num;
-		}
-
-		public uint CurrencyHomeRegion
-		{
-			get
-			{
-				return this._CurrencyHomeRegion;
-			}
-			set
-			{
-				this._CurrencyHomeRegion = value;
-				this.HasCurrencyHomeRegion = true;
-			}
-		}
-
-		public void SetCurrencyHomeRegion(uint val)
-		{
-			this.CurrencyHomeRegion = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasCurrencyHomeRegion)
-			{
-				num ^= this.CurrencyHomeRegion.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetEBalanceRestrictionsRequest getEBalanceRestrictionsRequest = obj as GetEBalanceRestrictionsRequest;
-			return getEBalanceRestrictionsRequest != null && this.HasCurrencyHomeRegion == getEBalanceRestrictionsRequest.HasCurrencyHomeRegion && (!this.HasCurrencyHomeRegion || this.CurrencyHomeRegion.Equals(getEBalanceRestrictionsRequest.CurrencyHomeRegion));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetEBalanceRestrictionsRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetEBalanceRestrictionsRequest>(bs, 0, -1);
 		}
 
 		public bool HasCurrencyHomeRegion;

@@ -6,6 +6,97 @@ namespace bnet.protocol.challenge
 {
 	public class ChallengeExternalRequest : IProtoBuf
 	{
+		public string RequestToken
+		{
+			get
+			{
+				return this._RequestToken;
+			}
+			set
+			{
+				this._RequestToken = value;
+				this.HasRequestToken = (value != null);
+			}
+		}
+
+		public void SetRequestToken(string val)
+		{
+			this.RequestToken = val;
+		}
+
+		public string PayloadType
+		{
+			get
+			{
+				return this._PayloadType;
+			}
+			set
+			{
+				this._PayloadType = value;
+				this.HasPayloadType = (value != null);
+			}
+		}
+
+		public void SetPayloadType(string val)
+		{
+			this.PayloadType = val;
+		}
+
+		public byte[] Payload
+		{
+			get
+			{
+				return this._Payload;
+			}
+			set
+			{
+				this._Payload = value;
+				this.HasPayload = (value != null);
+			}
+		}
+
+		public void SetPayload(byte[] val)
+		{
+			this.Payload = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasRequestToken)
+			{
+				num ^= this.RequestToken.GetHashCode();
+			}
+			if (this.HasPayloadType)
+			{
+				num ^= this.PayloadType.GetHashCode();
+			}
+			if (this.HasPayload)
+			{
+				num ^= this.Payload.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChallengeExternalRequest challengeExternalRequest = obj as ChallengeExternalRequest;
+			return challengeExternalRequest != null && this.HasRequestToken == challengeExternalRequest.HasRequestToken && (!this.HasRequestToken || this.RequestToken.Equals(challengeExternalRequest.RequestToken)) && this.HasPayloadType == challengeExternalRequest.HasPayloadType && (!this.HasPayloadType || this.PayloadType.Equals(challengeExternalRequest.PayloadType)) && this.HasPayload == challengeExternalRequest.HasPayload && (!this.HasPayload || this.Payload.Equals(challengeExternalRequest.Payload));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChallengeExternalRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChallengeExternalRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChallengeExternalRequest.Deserialize(stream, this);
@@ -124,97 +215,6 @@ namespace bnet.protocol.challenge
 				num += ProtocolParser.SizeOfUInt32(this.Payload.Length) + (uint)this.Payload.Length;
 			}
 			return num;
-		}
-
-		public string RequestToken
-		{
-			get
-			{
-				return this._RequestToken;
-			}
-			set
-			{
-				this._RequestToken = value;
-				this.HasRequestToken = (value != null);
-			}
-		}
-
-		public void SetRequestToken(string val)
-		{
-			this.RequestToken = val;
-		}
-
-		public string PayloadType
-		{
-			get
-			{
-				return this._PayloadType;
-			}
-			set
-			{
-				this._PayloadType = value;
-				this.HasPayloadType = (value != null);
-			}
-		}
-
-		public void SetPayloadType(string val)
-		{
-			this.PayloadType = val;
-		}
-
-		public byte[] Payload
-		{
-			get
-			{
-				return this._Payload;
-			}
-			set
-			{
-				this._Payload = value;
-				this.HasPayload = (value != null);
-			}
-		}
-
-		public void SetPayload(byte[] val)
-		{
-			this.Payload = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasRequestToken)
-			{
-				num ^= this.RequestToken.GetHashCode();
-			}
-			if (this.HasPayloadType)
-			{
-				num ^= this.PayloadType.GetHashCode();
-			}
-			if (this.HasPayload)
-			{
-				num ^= this.Payload.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChallengeExternalRequest challengeExternalRequest = obj as ChallengeExternalRequest;
-			return challengeExternalRequest != null && this.HasRequestToken == challengeExternalRequest.HasRequestToken && (!this.HasRequestToken || this.RequestToken.Equals(challengeExternalRequest.RequestToken)) && this.HasPayloadType == challengeExternalRequest.HasPayloadType && (!this.HasPayloadType || this.PayloadType.Equals(challengeExternalRequest.PayloadType)) && this.HasPayload == challengeExternalRequest.HasPayload && (!this.HasPayload || this.Payload.Equals(challengeExternalRequest.Payload));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChallengeExternalRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChallengeExternalRequest>(bs, 0, -1);
 		}
 
 		public bool HasRequestToken;

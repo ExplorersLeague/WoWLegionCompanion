@@ -6,6 +6,157 @@ namespace bnet.protocol.channel_invitation
 {
 	public class AcceptInvitationRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public MemberState MemberState
+		{
+			get
+			{
+				return this._MemberState;
+			}
+			set
+			{
+				this._MemberState = value;
+				this.HasMemberState = (value != null);
+			}
+		}
+
+		public void SetMemberState(MemberState val)
+		{
+			this.MemberState = val;
+		}
+
+		public ulong InvitationId { get; set; }
+
+		public void SetInvitationId(ulong val)
+		{
+			this.InvitationId = val;
+		}
+
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public EntityId ChannelId
+		{
+			get
+			{
+				return this._ChannelId;
+			}
+			set
+			{
+				this._ChannelId = value;
+				this.HasChannelId = (value != null);
+			}
+		}
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public uint ServiceType
+		{
+			get
+			{
+				return this._ServiceType;
+			}
+			set
+			{
+				this._ServiceType = value;
+				this.HasServiceType = true;
+			}
+		}
+
+		public void SetServiceType(uint val)
+		{
+			this.ServiceType = val;
+		}
+
+		public bool LocalSubscriber
+		{
+			get
+			{
+				return this._LocalSubscriber;
+			}
+			set
+			{
+				this._LocalSubscriber = value;
+				this.HasLocalSubscriber = true;
+			}
+		}
+
+		public void SetLocalSubscriber(bool val)
+		{
+			this.LocalSubscriber = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			if (this.HasMemberState)
+			{
+				num ^= this.MemberState.GetHashCode();
+			}
+			num ^= this.InvitationId.GetHashCode();
+			num ^= this.ObjectId.GetHashCode();
+			if (this.HasChannelId)
+			{
+				num ^= this.ChannelId.GetHashCode();
+			}
+			if (this.HasServiceType)
+			{
+				num ^= this.ServiceType.GetHashCode();
+			}
+			if (this.HasLocalSubscriber)
+			{
+				num ^= this.LocalSubscriber.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AcceptInvitationRequest acceptInvitationRequest = obj as AcceptInvitationRequest;
+			return acceptInvitationRequest != null && this.HasAgentId == acceptInvitationRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(acceptInvitationRequest.AgentId)) && this.HasMemberState == acceptInvitationRequest.HasMemberState && (!this.HasMemberState || this.MemberState.Equals(acceptInvitationRequest.MemberState)) && this.InvitationId.Equals(acceptInvitationRequest.InvitationId) && this.ObjectId.Equals(acceptInvitationRequest.ObjectId) && this.HasChannelId == acceptInvitationRequest.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(acceptInvitationRequest.ChannelId)) && this.HasServiceType == acceptInvitationRequest.HasServiceType && (!this.HasServiceType || this.ServiceType.Equals(acceptInvitationRequest.ServiceType)) && this.HasLocalSubscriber == acceptInvitationRequest.HasLocalSubscriber && (!this.HasLocalSubscriber || this.LocalSubscriber.Equals(acceptInvitationRequest.LocalSubscriber));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AcceptInvitationRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AcceptInvitationRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AcceptInvitationRequest.Deserialize(stream, this);
@@ -197,157 +348,6 @@ namespace bnet.protocol.channel_invitation
 				num += 1u;
 			}
 			return num + 2u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public MemberState MemberState
-		{
-			get
-			{
-				return this._MemberState;
-			}
-			set
-			{
-				this._MemberState = value;
-				this.HasMemberState = (value != null);
-			}
-		}
-
-		public void SetMemberState(MemberState val)
-		{
-			this.MemberState = val;
-		}
-
-		public ulong InvitationId { get; set; }
-
-		public void SetInvitationId(ulong val)
-		{
-			this.InvitationId = val;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public EntityId ChannelId
-		{
-			get
-			{
-				return this._ChannelId;
-			}
-			set
-			{
-				this._ChannelId = value;
-				this.HasChannelId = (value != null);
-			}
-		}
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public uint ServiceType
-		{
-			get
-			{
-				return this._ServiceType;
-			}
-			set
-			{
-				this._ServiceType = value;
-				this.HasServiceType = true;
-			}
-		}
-
-		public void SetServiceType(uint val)
-		{
-			this.ServiceType = val;
-		}
-
-		public bool LocalSubscriber
-		{
-			get
-			{
-				return this._LocalSubscriber;
-			}
-			set
-			{
-				this._LocalSubscriber = value;
-				this.HasLocalSubscriber = true;
-			}
-		}
-
-		public void SetLocalSubscriber(bool val)
-		{
-			this.LocalSubscriber = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			if (this.HasMemberState)
-			{
-				num ^= this.MemberState.GetHashCode();
-			}
-			num ^= this.InvitationId.GetHashCode();
-			num ^= this.ObjectId.GetHashCode();
-			if (this.HasChannelId)
-			{
-				num ^= this.ChannelId.GetHashCode();
-			}
-			if (this.HasServiceType)
-			{
-				num ^= this.ServiceType.GetHashCode();
-			}
-			if (this.HasLocalSubscriber)
-			{
-				num ^= this.LocalSubscriber.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AcceptInvitationRequest acceptInvitationRequest = obj as AcceptInvitationRequest;
-			return acceptInvitationRequest != null && this.HasAgentId == acceptInvitationRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(acceptInvitationRequest.AgentId)) && this.HasMemberState == acceptInvitationRequest.HasMemberState && (!this.HasMemberState || this.MemberState.Equals(acceptInvitationRequest.MemberState)) && this.InvitationId.Equals(acceptInvitationRequest.InvitationId) && this.ObjectId.Equals(acceptInvitationRequest.ObjectId) && this.HasChannelId == acceptInvitationRequest.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(acceptInvitationRequest.ChannelId)) && this.HasServiceType == acceptInvitationRequest.HasServiceType && (!this.HasServiceType || this.ServiceType.Equals(acceptInvitationRequest.ServiceType)) && this.HasLocalSubscriber == acceptInvitationRequest.HasLocalSubscriber && (!this.HasLocalSubscriber || this.LocalSubscriber.Equals(acceptInvitationRequest.LocalSubscriber));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AcceptInvitationRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AcceptInvitationRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

@@ -5,6 +5,60 @@ namespace bnet.protocol.presence
 {
 	public class UnsubscribeRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId EntityId { get; set; }
+
+		public void SetEntityId(EntityId val)
+		{
+			this.EntityId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			return num ^ this.EntityId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			UnsubscribeRequest unsubscribeRequest = obj as UnsubscribeRequest;
+			return unsubscribeRequest != null && this.HasAgentId == unsubscribeRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(unsubscribeRequest.AgentId)) && this.EntityId.Equals(unsubscribeRequest.EntityId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UnsubscribeRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UnsubscribeRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UnsubscribeRequest.Deserialize(stream, this);
@@ -113,60 +167,6 @@ namespace bnet.protocol.presence
 			uint serializedSize2 = this.EntityId.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId EntityId { get; set; }
-
-		public void SetEntityId(EntityId val)
-		{
-			this.EntityId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			return num ^ this.EntityId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			UnsubscribeRequest unsubscribeRequest = obj as UnsubscribeRequest;
-			return unsubscribeRequest != null && this.HasAgentId == unsubscribeRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(unsubscribeRequest.AgentId)) && this.EntityId.Equals(unsubscribeRequest.EntityId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UnsubscribeRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UnsubscribeRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

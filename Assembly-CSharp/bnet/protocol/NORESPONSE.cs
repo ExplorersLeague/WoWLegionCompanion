@@ -5,6 +5,29 @@ namespace bnet.protocol
 {
 	public class NORESPONSE : IProtoBuf
 	{
+		public override int GetHashCode()
+		{
+			return base.GetType().GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is NORESPONSE;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static NORESPONSE ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<NORESPONSE>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			NORESPONSE.Deserialize(stream, this);
@@ -72,29 +95,6 @@ namespace bnet.protocol
 		public uint GetSerializedSize()
 		{
 			return 0u;
-		}
-
-		public override int GetHashCode()
-		{
-			return base.GetType().GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			return obj is NORESPONSE;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static NORESPONSE ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<NORESPONSE>(bs, 0, -1);
 		}
 	}
 }

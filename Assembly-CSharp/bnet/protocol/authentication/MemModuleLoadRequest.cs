@@ -5,6 +5,54 @@ namespace bnet.protocol.authentication
 {
 	public class MemModuleLoadRequest : IProtoBuf
 	{
+		public ContentHandle Handle { get; set; }
+
+		public void SetHandle(ContentHandle val)
+		{
+			this.Handle = val;
+		}
+
+		public byte[] Key { get; set; }
+
+		public void SetKey(byte[] val)
+		{
+			this.Key = val;
+		}
+
+		public byte[] Input { get; set; }
+
+		public void SetInput(byte[] val)
+		{
+			this.Input = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Handle.GetHashCode();
+			num ^= this.Key.GetHashCode();
+			return num ^ this.Input.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			MemModuleLoadRequest memModuleLoadRequest = obj as MemModuleLoadRequest;
+			return memModuleLoadRequest != null && this.Handle.Equals(memModuleLoadRequest.Handle) && this.Key.Equals(memModuleLoadRequest.Key) && this.Input.Equals(memModuleLoadRequest.Input);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static MemModuleLoadRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<MemModuleLoadRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			MemModuleLoadRequest.Deserialize(stream, this);
@@ -118,54 +166,6 @@ namespace bnet.protocol.authentication
 			num += ProtocolParser.SizeOfUInt32(this.Key.Length) + (uint)this.Key.Length;
 			num += ProtocolParser.SizeOfUInt32(this.Input.Length) + (uint)this.Input.Length;
 			return num + 3u;
-		}
-
-		public ContentHandle Handle { get; set; }
-
-		public void SetHandle(ContentHandle val)
-		{
-			this.Handle = val;
-		}
-
-		public byte[] Key { get; set; }
-
-		public void SetKey(byte[] val)
-		{
-			this.Key = val;
-		}
-
-		public byte[] Input { get; set; }
-
-		public void SetInput(byte[] val)
-		{
-			this.Input = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Handle.GetHashCode();
-			num ^= this.Key.GetHashCode();
-			return num ^ this.Input.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			MemModuleLoadRequest memModuleLoadRequest = obj as MemModuleLoadRequest;
-			return memModuleLoadRequest != null && this.Handle.Equals(memModuleLoadRequest.Handle) && this.Key.Equals(memModuleLoadRequest.Key) && this.Input.Equals(memModuleLoadRequest.Input);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static MemModuleLoadRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<MemModuleLoadRequest>(bs, 0, -1);
 		}
 	}
 }

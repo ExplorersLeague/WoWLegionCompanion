@@ -5,6 +5,68 @@ namespace bnet.protocol.channel_invitation
 {
 	public class UpdateChannelCountRequest : IProtoBuf
 	{
+		public EntityId AgentId { get; set; }
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public ulong ReservationToken
+		{
+			get
+			{
+				return this._ReservationToken;
+			}
+			set
+			{
+				this._ReservationToken = value;
+				this.HasReservationToken = true;
+			}
+		}
+
+		public void SetReservationToken(ulong val)
+		{
+			this.ReservationToken = val;
+		}
+
+		public EntityId ChannelId { get; set; }
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.AgentId.GetHashCode();
+			if (this.HasReservationToken)
+			{
+				num ^= this.ReservationToken.GetHashCode();
+			}
+			return num ^ this.ChannelId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			UpdateChannelCountRequest updateChannelCountRequest = obj as UpdateChannelCountRequest;
+			return updateChannelCountRequest != null && this.AgentId.Equals(updateChannelCountRequest.AgentId) && this.HasReservationToken == updateChannelCountRequest.HasReservationToken && (!this.HasReservationToken || this.ReservationToken.Equals(updateChannelCountRequest.ReservationToken)) && this.ChannelId.Equals(updateChannelCountRequest.ChannelId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UpdateChannelCountRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UpdateChannelCountRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UpdateChannelCountRequest.Deserialize(stream, this);
@@ -127,68 +189,6 @@ namespace bnet.protocol.channel_invitation
 			uint serializedSize2 = this.ChannelId.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 2u;
-		}
-
-		public EntityId AgentId { get; set; }
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public ulong ReservationToken
-		{
-			get
-			{
-				return this._ReservationToken;
-			}
-			set
-			{
-				this._ReservationToken = value;
-				this.HasReservationToken = true;
-			}
-		}
-
-		public void SetReservationToken(ulong val)
-		{
-			this.ReservationToken = val;
-		}
-
-		public EntityId ChannelId { get; set; }
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.AgentId.GetHashCode();
-			if (this.HasReservationToken)
-			{
-				num ^= this.ReservationToken.GetHashCode();
-			}
-			return num ^ this.ChannelId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			UpdateChannelCountRequest updateChannelCountRequest = obj as UpdateChannelCountRequest;
-			return updateChannelCountRequest != null && this.AgentId.Equals(updateChannelCountRequest.AgentId) && this.HasReservationToken == updateChannelCountRequest.HasReservationToken && (!this.HasReservationToken || this.ReservationToken.Equals(updateChannelCountRequest.ReservationToken)) && this.ChannelId.Equals(updateChannelCountRequest.ChannelId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UpdateChannelCountRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UpdateChannelCountRequest>(bs, 0, -1);
 		}
 
 		public bool HasReservationToken;

@@ -5,6 +5,76 @@ namespace bnet.protocol.account
 {
 	public class FlagUpdateRequest : IProtoBuf
 	{
+		public AccountId Account { get; set; }
+
+		public void SetAccount(AccountId val)
+		{
+			this.Account = val;
+		}
+
+		public uint Region
+		{
+			get
+			{
+				return this._Region;
+			}
+			set
+			{
+				this._Region = value;
+				this.HasRegion = true;
+			}
+		}
+
+		public void SetRegion(uint val)
+		{
+			this.Region = val;
+		}
+
+		public ulong Flag { get; set; }
+
+		public void SetFlag(ulong val)
+		{
+			this.Flag = val;
+		}
+
+		public bool Active { get; set; }
+
+		public void SetActive(bool val)
+		{
+			this.Active = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Account.GetHashCode();
+			if (this.HasRegion)
+			{
+				num ^= this.Region.GetHashCode();
+			}
+			num ^= this.Flag.GetHashCode();
+			return num ^ this.Active.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			FlagUpdateRequest flagUpdateRequest = obj as FlagUpdateRequest;
+			return flagUpdateRequest != null && this.Account.Equals(flagUpdateRequest.Account) && this.HasRegion == flagUpdateRequest.HasRegion && (!this.HasRegion || this.Region.Equals(flagUpdateRequest.Region)) && this.Flag.Equals(flagUpdateRequest.Flag) && this.Active.Equals(flagUpdateRequest.Active);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FlagUpdateRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FlagUpdateRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FlagUpdateRequest.Deserialize(stream, this);
@@ -127,76 +197,6 @@ namespace bnet.protocol.account
 			num += ProtocolParser.SizeOfUInt64(this.Flag);
 			num += 1u;
 			return num + 3u;
-		}
-
-		public AccountId Account { get; set; }
-
-		public void SetAccount(AccountId val)
-		{
-			this.Account = val;
-		}
-
-		public uint Region
-		{
-			get
-			{
-				return this._Region;
-			}
-			set
-			{
-				this._Region = value;
-				this.HasRegion = true;
-			}
-		}
-
-		public void SetRegion(uint val)
-		{
-			this.Region = val;
-		}
-
-		public ulong Flag { get; set; }
-
-		public void SetFlag(ulong val)
-		{
-			this.Flag = val;
-		}
-
-		public bool Active { get; set; }
-
-		public void SetActive(bool val)
-		{
-			this.Active = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Account.GetHashCode();
-			if (this.HasRegion)
-			{
-				num ^= this.Region.GetHashCode();
-			}
-			num ^= this.Flag.GetHashCode();
-			return num ^ this.Active.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			FlagUpdateRequest flagUpdateRequest = obj as FlagUpdateRequest;
-			return flagUpdateRequest != null && this.Account.Equals(flagUpdateRequest.Account) && this.HasRegion == flagUpdateRequest.HasRegion && (!this.HasRegion || this.Region.Equals(flagUpdateRequest.Region)) && this.Flag.Equals(flagUpdateRequest.Flag) && this.Active.Equals(flagUpdateRequest.Active);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FlagUpdateRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FlagUpdateRequest>(bs, 0, -1);
 		}
 
 		public bool HasRegion;

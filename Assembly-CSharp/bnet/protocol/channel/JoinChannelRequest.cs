@@ -6,6 +6,191 @@ namespace bnet.protocol.channel
 {
 	public class JoinChannelRequest : IProtoBuf
 	{
+		public Identity AgentIdentity
+		{
+			get
+			{
+				return this._AgentIdentity;
+			}
+			set
+			{
+				this._AgentIdentity = value;
+				this.HasAgentIdentity = (value != null);
+			}
+		}
+
+		public void SetAgentIdentity(Identity val)
+		{
+			this.AgentIdentity = val;
+		}
+
+		public MemberState MemberState
+		{
+			get
+			{
+				return this._MemberState;
+			}
+			set
+			{
+				this._MemberState = value;
+				this.HasMemberState = (value != null);
+			}
+		}
+
+		public void SetMemberState(MemberState val)
+		{
+			this.MemberState = val;
+		}
+
+		public EntityId ChannelId { get; set; }
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public List<EntityId> FriendAccountId
+		{
+			get
+			{
+				return this._FriendAccountId;
+			}
+			set
+			{
+				this._FriendAccountId = value;
+			}
+		}
+
+		public List<EntityId> FriendAccountIdList
+		{
+			get
+			{
+				return this._FriendAccountId;
+			}
+		}
+
+		public int FriendAccountIdCount
+		{
+			get
+			{
+				return this._FriendAccountId.Count;
+			}
+		}
+
+		public void AddFriendAccountId(EntityId val)
+		{
+			this._FriendAccountId.Add(val);
+		}
+
+		public void ClearFriendAccountId()
+		{
+			this._FriendAccountId.Clear();
+		}
+
+		public void SetFriendAccountId(List<EntityId> val)
+		{
+			this.FriendAccountId = val;
+		}
+
+		public bool LocalSubscriber
+		{
+			get
+			{
+				return this._LocalSubscriber;
+			}
+			set
+			{
+				this._LocalSubscriber = value;
+				this.HasLocalSubscriber = true;
+			}
+		}
+
+		public void SetLocalSubscriber(bool val)
+		{
+			this.LocalSubscriber = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentIdentity)
+			{
+				num ^= this.AgentIdentity.GetHashCode();
+			}
+			if (this.HasMemberState)
+			{
+				num ^= this.MemberState.GetHashCode();
+			}
+			num ^= this.ChannelId.GetHashCode();
+			num ^= this.ObjectId.GetHashCode();
+			foreach (EntityId entityId in this.FriendAccountId)
+			{
+				num ^= entityId.GetHashCode();
+			}
+			if (this.HasLocalSubscriber)
+			{
+				num ^= this.LocalSubscriber.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			JoinChannelRequest joinChannelRequest = obj as JoinChannelRequest;
+			if (joinChannelRequest == null)
+			{
+				return false;
+			}
+			if (this.HasAgentIdentity != joinChannelRequest.HasAgentIdentity || (this.HasAgentIdentity && !this.AgentIdentity.Equals(joinChannelRequest.AgentIdentity)))
+			{
+				return false;
+			}
+			if (this.HasMemberState != joinChannelRequest.HasMemberState || (this.HasMemberState && !this.MemberState.Equals(joinChannelRequest.MemberState)))
+			{
+				return false;
+			}
+			if (!this.ChannelId.Equals(joinChannelRequest.ChannelId))
+			{
+				return false;
+			}
+			if (!this.ObjectId.Equals(joinChannelRequest.ObjectId))
+			{
+				return false;
+			}
+			if (this.FriendAccountId.Count != joinChannelRequest.FriendAccountId.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.FriendAccountId.Count; i++)
+			{
+				if (!this.FriendAccountId[i].Equals(joinChannelRequest.FriendAccountId[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasLocalSubscriber == joinChannelRequest.HasLocalSubscriber && (!this.HasLocalSubscriber || this.LocalSubscriber.Equals(joinChannelRequest.LocalSubscriber));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static JoinChannelRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<JoinChannelRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			JoinChannelRequest.Deserialize(stream, this);
@@ -195,191 +380,6 @@ namespace bnet.protocol.channel
 			}
 			num += 2u;
 			return num;
-		}
-
-		public Identity AgentIdentity
-		{
-			get
-			{
-				return this._AgentIdentity;
-			}
-			set
-			{
-				this._AgentIdentity = value;
-				this.HasAgentIdentity = (value != null);
-			}
-		}
-
-		public void SetAgentIdentity(Identity val)
-		{
-			this.AgentIdentity = val;
-		}
-
-		public MemberState MemberState
-		{
-			get
-			{
-				return this._MemberState;
-			}
-			set
-			{
-				this._MemberState = value;
-				this.HasMemberState = (value != null);
-			}
-		}
-
-		public void SetMemberState(MemberState val)
-		{
-			this.MemberState = val;
-		}
-
-		public EntityId ChannelId { get; set; }
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public List<EntityId> FriendAccountId
-		{
-			get
-			{
-				return this._FriendAccountId;
-			}
-			set
-			{
-				this._FriendAccountId = value;
-			}
-		}
-
-		public List<EntityId> FriendAccountIdList
-		{
-			get
-			{
-				return this._FriendAccountId;
-			}
-		}
-
-		public int FriendAccountIdCount
-		{
-			get
-			{
-				return this._FriendAccountId.Count;
-			}
-		}
-
-		public void AddFriendAccountId(EntityId val)
-		{
-			this._FriendAccountId.Add(val);
-		}
-
-		public void ClearFriendAccountId()
-		{
-			this._FriendAccountId.Clear();
-		}
-
-		public void SetFriendAccountId(List<EntityId> val)
-		{
-			this.FriendAccountId = val;
-		}
-
-		public bool LocalSubscriber
-		{
-			get
-			{
-				return this._LocalSubscriber;
-			}
-			set
-			{
-				this._LocalSubscriber = value;
-				this.HasLocalSubscriber = true;
-			}
-		}
-
-		public void SetLocalSubscriber(bool val)
-		{
-			this.LocalSubscriber = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentIdentity)
-			{
-				num ^= this.AgentIdentity.GetHashCode();
-			}
-			if (this.HasMemberState)
-			{
-				num ^= this.MemberState.GetHashCode();
-			}
-			num ^= this.ChannelId.GetHashCode();
-			num ^= this.ObjectId.GetHashCode();
-			foreach (EntityId entityId in this.FriendAccountId)
-			{
-				num ^= entityId.GetHashCode();
-			}
-			if (this.HasLocalSubscriber)
-			{
-				num ^= this.LocalSubscriber.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			JoinChannelRequest joinChannelRequest = obj as JoinChannelRequest;
-			if (joinChannelRequest == null)
-			{
-				return false;
-			}
-			if (this.HasAgentIdentity != joinChannelRequest.HasAgentIdentity || (this.HasAgentIdentity && !this.AgentIdentity.Equals(joinChannelRequest.AgentIdentity)))
-			{
-				return false;
-			}
-			if (this.HasMemberState != joinChannelRequest.HasMemberState || (this.HasMemberState && !this.MemberState.Equals(joinChannelRequest.MemberState)))
-			{
-				return false;
-			}
-			if (!this.ChannelId.Equals(joinChannelRequest.ChannelId))
-			{
-				return false;
-			}
-			if (!this.ObjectId.Equals(joinChannelRequest.ObjectId))
-			{
-				return false;
-			}
-			if (this.FriendAccountId.Count != joinChannelRequest.FriendAccountId.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.FriendAccountId.Count; i++)
-			{
-				if (!this.FriendAccountId[i].Equals(joinChannelRequest.FriendAccountId[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasLocalSubscriber == joinChannelRequest.HasLocalSubscriber && (!this.HasLocalSubscriber || this.LocalSubscriber.Equals(joinChannelRequest.LocalSubscriber));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static JoinChannelRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<JoinChannelRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentIdentity;

@@ -5,6 +5,83 @@ namespace bnet.protocol.channel_invitation
 {
 	public class DecrementChannelCountRequest : IProtoBuf
 	{
+		public EntityId AgentId { get; set; }
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId ChannelId
+		{
+			get
+			{
+				return this._ChannelId;
+			}
+			set
+			{
+				this._ChannelId = value;
+				this.HasChannelId = (value != null);
+			}
+		}
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public ulong ReservationToken
+		{
+			get
+			{
+				return this._ReservationToken;
+			}
+			set
+			{
+				this._ReservationToken = value;
+				this.HasReservationToken = true;
+			}
+		}
+
+		public void SetReservationToken(ulong val)
+		{
+			this.ReservationToken = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.AgentId.GetHashCode();
+			if (this.HasChannelId)
+			{
+				num ^= this.ChannelId.GetHashCode();
+			}
+			if (this.HasReservationToken)
+			{
+				num ^= this.ReservationToken.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			DecrementChannelCountRequest decrementChannelCountRequest = obj as DecrementChannelCountRequest;
+			return decrementChannelCountRequest != null && this.AgentId.Equals(decrementChannelCountRequest.AgentId) && this.HasChannelId == decrementChannelCountRequest.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(decrementChannelCountRequest.ChannelId)) && this.HasReservationToken == decrementChannelCountRequest.HasReservationToken && (!this.HasReservationToken || this.ReservationToken.Equals(decrementChannelCountRequest.ReservationToken));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static DecrementChannelCountRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<DecrementChannelCountRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			DecrementChannelCountRequest.Deserialize(stream, this);
@@ -130,83 +207,6 @@ namespace bnet.protocol.channel_invitation
 				num += ProtocolParser.SizeOfUInt64(this.ReservationToken);
 			}
 			return num + 1u;
-		}
-
-		public EntityId AgentId { get; set; }
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId ChannelId
-		{
-			get
-			{
-				return this._ChannelId;
-			}
-			set
-			{
-				this._ChannelId = value;
-				this.HasChannelId = (value != null);
-			}
-		}
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public ulong ReservationToken
-		{
-			get
-			{
-				return this._ReservationToken;
-			}
-			set
-			{
-				this._ReservationToken = value;
-				this.HasReservationToken = true;
-			}
-		}
-
-		public void SetReservationToken(ulong val)
-		{
-			this.ReservationToken = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.AgentId.GetHashCode();
-			if (this.HasChannelId)
-			{
-				num ^= this.ChannelId.GetHashCode();
-			}
-			if (this.HasReservationToken)
-			{
-				num ^= this.ReservationToken.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			DecrementChannelCountRequest decrementChannelCountRequest = obj as DecrementChannelCountRequest;
-			return decrementChannelCountRequest != null && this.AgentId.Equals(decrementChannelCountRequest.AgentId) && this.HasChannelId == decrementChannelCountRequest.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(decrementChannelCountRequest.ChannelId)) && this.HasReservationToken == decrementChannelCountRequest.HasReservationToken && (!this.HasReservationToken || this.ReservationToken.Equals(decrementChannelCountRequest.ReservationToken));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static DecrementChannelCountRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<DecrementChannelCountRequest>(bs, 0, -1);
 		}
 
 		public bool HasChannelId;

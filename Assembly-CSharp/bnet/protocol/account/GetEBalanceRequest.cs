@@ -6,6 +6,69 @@ namespace bnet.protocol.account
 {
 	public class GetEBalanceRequest : IProtoBuf
 	{
+		public AccountId AccountId { get; set; }
+
+		public void SetAccountId(AccountId val)
+		{
+			this.AccountId = val;
+		}
+
+		public string Currency { get; set; }
+
+		public void SetCurrency(string val)
+		{
+			this.Currency = val;
+		}
+
+		public uint CurrencyHomeRegion
+		{
+			get
+			{
+				return this._CurrencyHomeRegion;
+			}
+			set
+			{
+				this._CurrencyHomeRegion = value;
+				this.HasCurrencyHomeRegion = true;
+			}
+		}
+
+		public void SetCurrencyHomeRegion(uint val)
+		{
+			this.CurrencyHomeRegion = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.AccountId.GetHashCode();
+			num ^= this.Currency.GetHashCode();
+			if (this.HasCurrencyHomeRegion)
+			{
+				num ^= this.CurrencyHomeRegion.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetEBalanceRequest getEBalanceRequest = obj as GetEBalanceRequest;
+			return getEBalanceRequest != null && this.AccountId.Equals(getEBalanceRequest.AccountId) && this.Currency.Equals(getEBalanceRequest.Currency) && this.HasCurrencyHomeRegion == getEBalanceRequest.HasCurrencyHomeRegion && (!this.HasCurrencyHomeRegion || this.CurrencyHomeRegion.Equals(getEBalanceRequest.CurrencyHomeRegion));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetEBalanceRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetEBalanceRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetEBalanceRequest.Deserialize(stream, this);
@@ -123,69 +186,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(this.CurrencyHomeRegion);
 			}
 			return num + 2u;
-		}
-
-		public AccountId AccountId { get; set; }
-
-		public void SetAccountId(AccountId val)
-		{
-			this.AccountId = val;
-		}
-
-		public string Currency { get; set; }
-
-		public void SetCurrency(string val)
-		{
-			this.Currency = val;
-		}
-
-		public uint CurrencyHomeRegion
-		{
-			get
-			{
-				return this._CurrencyHomeRegion;
-			}
-			set
-			{
-				this._CurrencyHomeRegion = value;
-				this.HasCurrencyHomeRegion = true;
-			}
-		}
-
-		public void SetCurrencyHomeRegion(uint val)
-		{
-			this.CurrencyHomeRegion = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.AccountId.GetHashCode();
-			num ^= this.Currency.GetHashCode();
-			if (this.HasCurrencyHomeRegion)
-			{
-				num ^= this.CurrencyHomeRegion.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetEBalanceRequest getEBalanceRequest = obj as GetEBalanceRequest;
-			return getEBalanceRequest != null && this.AccountId.Equals(getEBalanceRequest.AccountId) && this.Currency.Equals(getEBalanceRequest.Currency) && this.HasCurrencyHomeRegion == getEBalanceRequest.HasCurrencyHomeRegion && (!this.HasCurrencyHomeRegion || this.CurrencyHomeRegion.Equals(getEBalanceRequest.CurrencyHomeRegion));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetEBalanceRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetEBalanceRequest>(bs, 0, -1);
 		}
 
 		public bool HasCurrencyHomeRegion;

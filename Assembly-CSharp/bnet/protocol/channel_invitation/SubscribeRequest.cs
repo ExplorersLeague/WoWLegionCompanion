@@ -5,6 +5,60 @@ namespace bnet.protocol.channel_invitation
 {
 	public class SubscribeRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			return num ^ this.ObjectId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscribeRequest subscribeRequest = obj as SubscribeRequest;
+			return subscribeRequest != null && this.HasAgentId == subscribeRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(subscribeRequest.AgentId)) && this.ObjectId.Equals(subscribeRequest.ObjectId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscribeRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscribeRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscribeRequest.Deserialize(stream, this);
@@ -103,60 +157,6 @@ namespace bnet.protocol.channel_invitation
 			}
 			num += ProtocolParser.SizeOfUInt64(this.ObjectId);
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			return num ^ this.ObjectId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscribeRequest subscribeRequest = obj as SubscribeRequest;
-			return subscribeRequest != null && this.HasAgentId == subscribeRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(subscribeRequest.AgentId)) && this.ObjectId.Equals(subscribeRequest.ObjectId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscribeRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscribeRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

@@ -5,6 +5,105 @@ namespace bnet.protocol.channel
 {
 	public class GetChannelInfoRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId ChannelId { get; set; }
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public bool FetchState
+		{
+			get
+			{
+				return this._FetchState;
+			}
+			set
+			{
+				this._FetchState = value;
+				this.HasFetchState = true;
+			}
+		}
+
+		public void SetFetchState(bool val)
+		{
+			this.FetchState = val;
+		}
+
+		public bool FetchMembers
+		{
+			get
+			{
+				return this._FetchMembers;
+			}
+			set
+			{
+				this._FetchMembers = value;
+				this.HasFetchMembers = true;
+			}
+		}
+
+		public void SetFetchMembers(bool val)
+		{
+			this.FetchMembers = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.ChannelId.GetHashCode();
+			if (this.HasFetchState)
+			{
+				num ^= this.FetchState.GetHashCode();
+			}
+			if (this.HasFetchMembers)
+			{
+				num ^= this.FetchMembers.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetChannelInfoRequest getChannelInfoRequest = obj as GetChannelInfoRequest;
+			return getChannelInfoRequest != null && this.HasAgentId == getChannelInfoRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(getChannelInfoRequest.AgentId)) && this.ChannelId.Equals(getChannelInfoRequest.ChannelId) && this.HasFetchState == getChannelInfoRequest.HasFetchState && (!this.HasFetchState || this.FetchState.Equals(getChannelInfoRequest.FetchState)) && this.HasFetchMembers == getChannelInfoRequest.HasFetchMembers && (!this.HasFetchMembers || this.FetchMembers.Equals(getChannelInfoRequest.FetchMembers));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetChannelInfoRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetChannelInfoRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetChannelInfoRequest.Deserialize(stream, this);
@@ -149,105 +248,6 @@ namespace bnet.protocol.channel
 				num += 1u;
 			}
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId ChannelId { get; set; }
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public bool FetchState
-		{
-			get
-			{
-				return this._FetchState;
-			}
-			set
-			{
-				this._FetchState = value;
-				this.HasFetchState = true;
-			}
-		}
-
-		public void SetFetchState(bool val)
-		{
-			this.FetchState = val;
-		}
-
-		public bool FetchMembers
-		{
-			get
-			{
-				return this._FetchMembers;
-			}
-			set
-			{
-				this._FetchMembers = value;
-				this.HasFetchMembers = true;
-			}
-		}
-
-		public void SetFetchMembers(bool val)
-		{
-			this.FetchMembers = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.ChannelId.GetHashCode();
-			if (this.HasFetchState)
-			{
-				num ^= this.FetchState.GetHashCode();
-			}
-			if (this.HasFetchMembers)
-			{
-				num ^= this.FetchMembers.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetChannelInfoRequest getChannelInfoRequest = obj as GetChannelInfoRequest;
-			return getChannelInfoRequest != null && this.HasAgentId == getChannelInfoRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(getChannelInfoRequest.AgentId)) && this.ChannelId.Equals(getChannelInfoRequest.ChannelId) && this.HasFetchState == getChannelInfoRequest.HasFetchState && (!this.HasFetchState || this.FetchState.Equals(getChannelInfoRequest.FetchState)) && this.HasFetchMembers == getChannelInfoRequest.HasFetchMembers && (!this.HasFetchMembers || this.FetchMembers.Equals(getChannelInfoRequest.FetchMembers));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetChannelInfoRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetChannelInfoRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

@@ -6,6 +6,131 @@ namespace bnet.protocol.game_master
 {
 	public class CancelGameEntryRequest : IProtoBuf
 	{
+		public ulong RequestId { get; set; }
+
+		public void SetRequestId(ulong val)
+		{
+			this.RequestId = val;
+		}
+
+		public ulong FactoryId
+		{
+			get
+			{
+				return this._FactoryId;
+			}
+			set
+			{
+				this._FactoryId = value;
+				this.HasFactoryId = true;
+			}
+		}
+
+		public void SetFactoryId(ulong val)
+		{
+			this.FactoryId = val;
+		}
+
+		public List<Player> Player
+		{
+			get
+			{
+				return this._Player;
+			}
+			set
+			{
+				this._Player = value;
+			}
+		}
+
+		public List<Player> PlayerList
+		{
+			get
+			{
+				return this._Player;
+			}
+		}
+
+		public int PlayerCount
+		{
+			get
+			{
+				return this._Player.Count;
+			}
+		}
+
+		public void AddPlayer(Player val)
+		{
+			this._Player.Add(val);
+		}
+
+		public void ClearPlayer()
+		{
+			this._Player.Clear();
+		}
+
+		public void SetPlayer(List<Player> val)
+		{
+			this.Player = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.RequestId.GetHashCode();
+			if (this.HasFactoryId)
+			{
+				num ^= this.FactoryId.GetHashCode();
+			}
+			foreach (Player player in this.Player)
+			{
+				num ^= player.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			CancelGameEntryRequest cancelGameEntryRequest = obj as CancelGameEntryRequest;
+			if (cancelGameEntryRequest == null)
+			{
+				return false;
+			}
+			if (!this.RequestId.Equals(cancelGameEntryRequest.RequestId))
+			{
+				return false;
+			}
+			if (this.HasFactoryId != cancelGameEntryRequest.HasFactoryId || (this.HasFactoryId && !this.FactoryId.Equals(cancelGameEntryRequest.FactoryId)))
+			{
+				return false;
+			}
+			if (this.Player.Count != cancelGameEntryRequest.Player.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Player.Count; i++)
+			{
+				if (!this.Player[i].Equals(cancelGameEntryRequest.Player[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static CancelGameEntryRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<CancelGameEntryRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			CancelGameEntryRequest.Deserialize(stream, this);
@@ -130,131 +255,6 @@ namespace bnet.protocol.game_master
 			}
 			num += 1u;
 			return num;
-		}
-
-		public ulong RequestId { get; set; }
-
-		public void SetRequestId(ulong val)
-		{
-			this.RequestId = val;
-		}
-
-		public ulong FactoryId
-		{
-			get
-			{
-				return this._FactoryId;
-			}
-			set
-			{
-				this._FactoryId = value;
-				this.HasFactoryId = true;
-			}
-		}
-
-		public void SetFactoryId(ulong val)
-		{
-			this.FactoryId = val;
-		}
-
-		public List<Player> Player
-		{
-			get
-			{
-				return this._Player;
-			}
-			set
-			{
-				this._Player = value;
-			}
-		}
-
-		public List<Player> PlayerList
-		{
-			get
-			{
-				return this._Player;
-			}
-		}
-
-		public int PlayerCount
-		{
-			get
-			{
-				return this._Player.Count;
-			}
-		}
-
-		public void AddPlayer(Player val)
-		{
-			this._Player.Add(val);
-		}
-
-		public void ClearPlayer()
-		{
-			this._Player.Clear();
-		}
-
-		public void SetPlayer(List<Player> val)
-		{
-			this.Player = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.RequestId.GetHashCode();
-			if (this.HasFactoryId)
-			{
-				num ^= this.FactoryId.GetHashCode();
-			}
-			foreach (Player player in this.Player)
-			{
-				num ^= player.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			CancelGameEntryRequest cancelGameEntryRequest = obj as CancelGameEntryRequest;
-			if (cancelGameEntryRequest == null)
-			{
-				return false;
-			}
-			if (!this.RequestId.Equals(cancelGameEntryRequest.RequestId))
-			{
-				return false;
-			}
-			if (this.HasFactoryId != cancelGameEntryRequest.HasFactoryId || (this.HasFactoryId && !this.FactoryId.Equals(cancelGameEntryRequest.FactoryId)))
-			{
-				return false;
-			}
-			if (this.Player.Count != cancelGameEntryRequest.Player.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Player.Count; i++)
-			{
-				if (!this.Player[i].Equals(cancelGameEntryRequest.Player[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static CancelGameEntryRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<CancelGameEntryRequest>(bs, 0, -1);
 		}
 
 		public bool HasFactoryId;

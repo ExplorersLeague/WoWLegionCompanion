@@ -5,6 +5,69 @@ namespace bnet.protocol.resources
 {
 	public class ContentHandleRequest : IProtoBuf
 	{
+		public uint ProgramId { get; set; }
+
+		public void SetProgramId(uint val)
+		{
+			this.ProgramId = val;
+		}
+
+		public uint StreamId { get; set; }
+
+		public void SetStreamId(uint val)
+		{
+			this.StreamId = val;
+		}
+
+		public uint Locale
+		{
+			get
+			{
+				return this._Locale;
+			}
+			set
+			{
+				this._Locale = value;
+				this.HasLocale = true;
+			}
+		}
+
+		public void SetLocale(uint val)
+		{
+			this.Locale = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ProgramId.GetHashCode();
+			num ^= this.StreamId.GetHashCode();
+			if (this.HasLocale)
+			{
+				num ^= this.Locale.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ContentHandleRequest contentHandleRequest = obj as ContentHandleRequest;
+			return contentHandleRequest != null && this.ProgramId.Equals(contentHandleRequest.ProgramId) && this.StreamId.Equals(contentHandleRequest.StreamId) && this.HasLocale == contentHandleRequest.HasLocale && (!this.HasLocale || this.Locale.Equals(contentHandleRequest.Locale));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ContentHandleRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ContentHandleRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ContentHandleRequest.Deserialize(stream, this);
@@ -110,69 +173,6 @@ namespace bnet.protocol.resources
 				num += 4u;
 			}
 			return num + 2u;
-		}
-
-		public uint ProgramId { get; set; }
-
-		public void SetProgramId(uint val)
-		{
-			this.ProgramId = val;
-		}
-
-		public uint StreamId { get; set; }
-
-		public void SetStreamId(uint val)
-		{
-			this.StreamId = val;
-		}
-
-		public uint Locale
-		{
-			get
-			{
-				return this._Locale;
-			}
-			set
-			{
-				this._Locale = value;
-				this.HasLocale = true;
-			}
-		}
-
-		public void SetLocale(uint val)
-		{
-			this.Locale = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ProgramId.GetHashCode();
-			num ^= this.StreamId.GetHashCode();
-			if (this.HasLocale)
-			{
-				num ^= this.Locale.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ContentHandleRequest contentHandleRequest = obj as ContentHandleRequest;
-			return contentHandleRequest != null && this.ProgramId.Equals(contentHandleRequest.ProgramId) && this.StreamId.Equals(contentHandleRequest.StreamId) && this.HasLocale == contentHandleRequest.HasLocale && (!this.HasLocale || this.Locale.Equals(contentHandleRequest.Locale));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ContentHandleRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ContentHandleRequest>(bs, 0, -1);
 		}
 
 		public bool HasLocale;

@@ -5,6 +5,97 @@ namespace bnet.protocol.connection
 {
 	public class EchoRequest : IProtoBuf
 	{
+		public ulong Time
+		{
+			get
+			{
+				return this._Time;
+			}
+			set
+			{
+				this._Time = value;
+				this.HasTime = true;
+			}
+		}
+
+		public void SetTime(ulong val)
+		{
+			this.Time = val;
+		}
+
+		public bool NetworkOnly
+		{
+			get
+			{
+				return this._NetworkOnly;
+			}
+			set
+			{
+				this._NetworkOnly = value;
+				this.HasNetworkOnly = true;
+			}
+		}
+
+		public void SetNetworkOnly(bool val)
+		{
+			this.NetworkOnly = val;
+		}
+
+		public byte[] Payload
+		{
+			get
+			{
+				return this._Payload;
+			}
+			set
+			{
+				this._Payload = value;
+				this.HasPayload = (value != null);
+			}
+		}
+
+		public void SetPayload(byte[] val)
+		{
+			this.Payload = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasTime)
+			{
+				num ^= this.Time.GetHashCode();
+			}
+			if (this.HasNetworkOnly)
+			{
+				num ^= this.NetworkOnly.GetHashCode();
+			}
+			if (this.HasPayload)
+			{
+				num ^= this.Payload.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			EchoRequest echoRequest = obj as EchoRequest;
+			return echoRequest != null && this.HasTime == echoRequest.HasTime && (!this.HasTime || this.Time.Equals(echoRequest.Time)) && this.HasNetworkOnly == echoRequest.HasNetworkOnly && (!this.HasNetworkOnly || this.NetworkOnly.Equals(echoRequest.NetworkOnly)) && this.HasPayload == echoRequest.HasPayload && (!this.HasPayload || this.Payload.Equals(echoRequest.Payload));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static EchoRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<EchoRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			EchoRequest.Deserialize(stream, this);
@@ -124,97 +215,6 @@ namespace bnet.protocol.connection
 				num += ProtocolParser.SizeOfUInt32(this.Payload.Length) + (uint)this.Payload.Length;
 			}
 			return num;
-		}
-
-		public ulong Time
-		{
-			get
-			{
-				return this._Time;
-			}
-			set
-			{
-				this._Time = value;
-				this.HasTime = true;
-			}
-		}
-
-		public void SetTime(ulong val)
-		{
-			this.Time = val;
-		}
-
-		public bool NetworkOnly
-		{
-			get
-			{
-				return this._NetworkOnly;
-			}
-			set
-			{
-				this._NetworkOnly = value;
-				this.HasNetworkOnly = true;
-			}
-		}
-
-		public void SetNetworkOnly(bool val)
-		{
-			this.NetworkOnly = val;
-		}
-
-		public byte[] Payload
-		{
-			get
-			{
-				return this._Payload;
-			}
-			set
-			{
-				this._Payload = value;
-				this.HasPayload = (value != null);
-			}
-		}
-
-		public void SetPayload(byte[] val)
-		{
-			this.Payload = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasTime)
-			{
-				num ^= this.Time.GetHashCode();
-			}
-			if (this.HasNetworkOnly)
-			{
-				num ^= this.NetworkOnly.GetHashCode();
-			}
-			if (this.HasPayload)
-			{
-				num ^= this.Payload.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			EchoRequest echoRequest = obj as EchoRequest;
-			return echoRequest != null && this.HasTime == echoRequest.HasTime && (!this.HasTime || this.Time.Equals(echoRequest.Time)) && this.HasNetworkOnly == echoRequest.HasNetworkOnly && (!this.HasNetworkOnly || this.NetworkOnly.Equals(echoRequest.NetworkOnly)) && this.HasPayload == echoRequest.HasPayload && (!this.HasPayload || this.Payload.Equals(echoRequest.Payload));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static EchoRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<EchoRequest>(bs, 0, -1);
 		}
 
 		public bool HasTime;

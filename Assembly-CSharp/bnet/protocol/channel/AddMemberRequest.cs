@@ -5,6 +5,99 @@ namespace bnet.protocol.channel
 {
 	public class AddMemberRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public Identity MemberIdentity { get; set; }
+
+		public void SetMemberIdentity(Identity val)
+		{
+			this.MemberIdentity = val;
+		}
+
+		public MemberState MemberState { get; set; }
+
+		public void SetMemberState(MemberState val)
+		{
+			this.MemberState = val;
+		}
+
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public bool Subscribe
+		{
+			get
+			{
+				return this._Subscribe;
+			}
+			set
+			{
+				this._Subscribe = value;
+				this.HasSubscribe = true;
+			}
+		}
+
+		public void SetSubscribe(bool val)
+		{
+			this.Subscribe = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.MemberIdentity.GetHashCode();
+			num ^= this.MemberState.GetHashCode();
+			num ^= this.ObjectId.GetHashCode();
+			if (this.HasSubscribe)
+			{
+				num ^= this.Subscribe.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AddMemberRequest addMemberRequest = obj as AddMemberRequest;
+			return addMemberRequest != null && this.HasAgentId == addMemberRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(addMemberRequest.AgentId)) && this.MemberIdentity.Equals(addMemberRequest.MemberIdentity) && this.MemberState.Equals(addMemberRequest.MemberState) && this.ObjectId.Equals(addMemberRequest.ObjectId) && this.HasSubscribe == addMemberRequest.HasSubscribe && (!this.HasSubscribe || this.Subscribe.Equals(addMemberRequest.Subscribe));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AddMemberRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AddMemberRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AddMemberRequest.Deserialize(stream, this);
@@ -161,99 +254,6 @@ namespace bnet.protocol.channel
 				num += 1u;
 			}
 			return num + 3u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public Identity MemberIdentity { get; set; }
-
-		public void SetMemberIdentity(Identity val)
-		{
-			this.MemberIdentity = val;
-		}
-
-		public MemberState MemberState { get; set; }
-
-		public void SetMemberState(MemberState val)
-		{
-			this.MemberState = val;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public bool Subscribe
-		{
-			get
-			{
-				return this._Subscribe;
-			}
-			set
-			{
-				this._Subscribe = value;
-				this.HasSubscribe = true;
-			}
-		}
-
-		public void SetSubscribe(bool val)
-		{
-			this.Subscribe = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.MemberIdentity.GetHashCode();
-			num ^= this.MemberState.GetHashCode();
-			num ^= this.ObjectId.GetHashCode();
-			if (this.HasSubscribe)
-			{
-				num ^= this.Subscribe.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AddMemberRequest addMemberRequest = obj as AddMemberRequest;
-			return addMemberRequest != null && this.HasAgentId == addMemberRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(addMemberRequest.AgentId)) && this.MemberIdentity.Equals(addMemberRequest.MemberIdentity) && this.MemberState.Equals(addMemberRequest.MemberState) && this.ObjectId.Equals(addMemberRequest.ObjectId) && this.HasSubscribe == addMemberRequest.HasSubscribe && (!this.HasSubscribe || this.Subscribe.Equals(addMemberRequest.Subscribe));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AddMemberRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AddMemberRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

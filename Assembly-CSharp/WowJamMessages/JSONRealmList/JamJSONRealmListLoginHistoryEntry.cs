@@ -4,19 +4,19 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[System.Runtime.Serialization.DataContract]
-	[FlexJamStruct(Name = "JamJSONRealmListLoginHistoryEntry", Version = 28333852u)]
+	[DataContract]
+	[FlexJamStruct(Name = "JamJSONRealmListLoginHistoryEntry", Version = 47212487u)]
 	public class JamJSONRealmListLoginHistoryEntry
 	{
-		[System.Runtime.Serialization.DataMember(Name = "characterGUID")]
+		[DataMember(Name = "characterGUID")]
 		[FlexJamMember(Name = "characterGUID", Type = FlexJamType.WowGuid)]
 		public string CharacterGUID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
+		[DataMember(Name = "virtualRealmAddress")]
 		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "lastPlayedTime")]
+		[DataMember(Name = "lastPlayedTime")]
 		[FlexJamMember(Name = "lastPlayedTime", Type = FlexJamType.Int32)]
 		public int LastPlayedTime { get; set; }
 	}

@@ -10,7 +10,7 @@ public class FPSThrottler : MonoBehaviour
 
 	private void Update()
 	{
-		if (AllPanels.instance != null && (!AllPanels.instance.m_orderHallMultiPanel.gameObject.activeSelf || AllPanels.instance.m_missionResultsPanel.m_popupView.activeSelf))
+		if (FPSThrottler.m_forceNormalFPS)
 		{
 			this.m_timeSinceLastTouch = 0f;
 			Application.targetFrameRate = this.m_normalFPS;
@@ -39,6 +39,11 @@ public class FPSThrottler : MonoBehaviour
 		}
 	}
 
+	public static void SetForceNormalFPS(bool state)
+	{
+		FPSThrottler.m_forceNormalFPS = state;
+	}
+
 	public int m_normalFPS;
 
 	public int m_throttledFPS;
@@ -54,4 +59,6 @@ public class FPSThrottler : MonoBehaviour
 	public float m_hybernateDelay;
 
 	private float m_timeSinceLastTouch;
+
+	private static bool m_forceNormalFPS;
 }

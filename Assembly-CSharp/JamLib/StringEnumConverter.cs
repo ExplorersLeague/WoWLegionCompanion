@@ -11,7 +11,7 @@ namespace JamLib
 			Type type = (!objectType.IsGenericType || objectType.GetGenericTypeDefinition() != typeof(Nullable<>)) ? objectType : Nullable.GetUnderlyingType(objectType);
 			if (type.IsEnum)
 			{
-				object[] customAttributes = type.GetCustomAttributes(typeof(System.Runtime.Serialization.DataContractAttribute), false);
+				object[] customAttributes = type.GetCustomAttributes(typeof(DataContractAttribute), false);
 				return customAttributes != null && customAttributes.Length > 0;
 			}
 			return false;

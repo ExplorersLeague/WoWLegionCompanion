@@ -5,6 +5,77 @@ namespace bnet.protocol.presence
 {
 	public class FieldKey : IProtoBuf
 	{
+		public uint Program { get; set; }
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public uint Group { get; set; }
+
+		public void SetGroup(uint val)
+		{
+			this.Group = val;
+		}
+
+		public uint Field { get; set; }
+
+		public void SetField(uint val)
+		{
+			this.Field = val;
+		}
+
+		public ulong Index
+		{
+			get
+			{
+				return this._Index;
+			}
+			set
+			{
+				this._Index = value;
+				this.HasIndex = true;
+			}
+		}
+
+		public void SetIndex(ulong val)
+		{
+			this.Index = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Program.GetHashCode();
+			num ^= this.Group.GetHashCode();
+			num ^= this.Field.GetHashCode();
+			if (this.HasIndex)
+			{
+				num ^= this.Index.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FieldKey fieldKey = obj as FieldKey;
+			return fieldKey != null && this.Program.Equals(fieldKey.Program) && this.Group.Equals(fieldKey.Group) && this.Field.Equals(fieldKey.Field) && this.HasIndex == fieldKey.HasIndex && (!this.HasIndex || this.Index.Equals(fieldKey.Index));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FieldKey ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FieldKey>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FieldKey.Deserialize(stream, this);
@@ -118,77 +189,6 @@ namespace bnet.protocol.presence
 				num += ProtocolParser.SizeOfUInt64(this.Index);
 			}
 			return num + 3u;
-		}
-
-		public uint Program { get; set; }
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public uint Group { get; set; }
-
-		public void SetGroup(uint val)
-		{
-			this.Group = val;
-		}
-
-		public uint Field { get; set; }
-
-		public void SetField(uint val)
-		{
-			this.Field = val;
-		}
-
-		public ulong Index
-		{
-			get
-			{
-				return this._Index;
-			}
-			set
-			{
-				this._Index = value;
-				this.HasIndex = true;
-			}
-		}
-
-		public void SetIndex(ulong val)
-		{
-			this.Index = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Program.GetHashCode();
-			num ^= this.Group.GetHashCode();
-			num ^= this.Field.GetHashCode();
-			if (this.HasIndex)
-			{
-				num ^= this.Index.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FieldKey fieldKey = obj as FieldKey;
-			return fieldKey != null && this.Program.Equals(fieldKey.Program) && this.Group.Equals(fieldKey.Group) && this.Field.Equals(fieldKey.Field) && this.HasIndex == fieldKey.HasIndex && (!this.HasIndex || this.Index.Equals(fieldKey.Index));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FieldKey ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FieldKey>(bs, 0, -1);
 		}
 
 		public bool HasIndex;

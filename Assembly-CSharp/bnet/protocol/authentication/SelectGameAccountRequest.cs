@@ -5,6 +5,38 @@ namespace bnet.protocol.authentication
 {
 	public class SelectGameAccountRequest : IProtoBuf
 	{
+		public EntityId GameAccount { get; set; }
+
+		public void SetGameAccount(EntityId val)
+		{
+			this.GameAccount = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.GameAccount.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			SelectGameAccountRequest selectGameAccountRequest = obj as SelectGameAccountRequest;
+			return selectGameAccountRequest != null && this.GameAccount.Equals(selectGameAccountRequest.GameAccount);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SelectGameAccountRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SelectGameAccountRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SelectGameAccountRequest.Deserialize(stream, this);
@@ -90,38 +122,6 @@ namespace bnet.protocol.authentication
 			uint serializedSize = this.GameAccount.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 1u;
-		}
-
-		public EntityId GameAccount { get; set; }
-
-		public void SetGameAccount(EntityId val)
-		{
-			this.GameAccount = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.GameAccount.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			SelectGameAccountRequest selectGameAccountRequest = obj as SelectGameAccountRequest;
-			return selectGameAccountRequest != null && this.GameAccount.Equals(selectGameAccountRequest.GameAccount);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SelectGameAccountRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SelectGameAccountRequest>(bs, 0, -1);
 		}
 	}
 }

@@ -6,6 +6,141 @@ namespace bnet.protocol.chat
 {
 	public class ChannelState : IProtoBuf
 	{
+		public string Identity
+		{
+			get
+			{
+				return this._Identity;
+			}
+			set
+			{
+				this._Identity = value;
+				this.HasIdentity = (value != null);
+			}
+		}
+
+		public void SetIdentity(string val)
+		{
+			this.Identity = val;
+		}
+
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public uint Locale
+		{
+			get
+			{
+				return this._Locale;
+			}
+			set
+			{
+				this._Locale = value;
+				this.HasLocale = true;
+			}
+		}
+
+		public void SetLocale(uint val)
+		{
+			this.Locale = val;
+		}
+
+		public bool Public
+		{
+			get
+			{
+				return this._Public;
+			}
+			set
+			{
+				this._Public = value;
+				this.HasPublic = true;
+			}
+		}
+
+		public void SetPublic(bool val)
+		{
+			this.Public = val;
+		}
+
+		public uint BucketIndex
+		{
+			get
+			{
+				return this._BucketIndex;
+			}
+			set
+			{
+				this._BucketIndex = value;
+				this.HasBucketIndex = true;
+			}
+		}
+
+		public void SetBucketIndex(uint val)
+		{
+			this.BucketIndex = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasIdentity)
+			{
+				num ^= this.Identity.GetHashCode();
+			}
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			if (this.HasLocale)
+			{
+				num ^= this.Locale.GetHashCode();
+			}
+			if (this.HasPublic)
+			{
+				num ^= this.Public.GetHashCode();
+			}
+			if (this.HasBucketIndex)
+			{
+				num ^= this.BucketIndex.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChannelState channelState = obj as ChannelState;
+			return channelState != null && this.HasIdentity == channelState.HasIdentity && (!this.HasIdentity || this.Identity.Equals(channelState.Identity)) && this.HasProgram == channelState.HasProgram && (!this.HasProgram || this.Program.Equals(channelState.Program)) && this.HasLocale == channelState.HasLocale && (!this.HasLocale || this.Locale.Equals(channelState.Locale)) && this.HasPublic == channelState.HasPublic && (!this.HasPublic || this.Public.Equals(channelState.Public)) && this.HasBucketIndex == channelState.HasBucketIndex && (!this.HasBucketIndex || this.BucketIndex.Equals(channelState.BucketIndex));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChannelState ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChannelState>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChannelState.Deserialize(stream, this);
@@ -160,141 +295,6 @@ namespace bnet.protocol.chat
 				num += ProtocolParser.SizeOfUInt32(this.BucketIndex);
 			}
 			return num;
-		}
-
-		public string Identity
-		{
-			get
-			{
-				return this._Identity;
-			}
-			set
-			{
-				this._Identity = value;
-				this.HasIdentity = (value != null);
-			}
-		}
-
-		public void SetIdentity(string val)
-		{
-			this.Identity = val;
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public uint Locale
-		{
-			get
-			{
-				return this._Locale;
-			}
-			set
-			{
-				this._Locale = value;
-				this.HasLocale = true;
-			}
-		}
-
-		public void SetLocale(uint val)
-		{
-			this.Locale = val;
-		}
-
-		public bool Public
-		{
-			get
-			{
-				return this._Public;
-			}
-			set
-			{
-				this._Public = value;
-				this.HasPublic = true;
-			}
-		}
-
-		public void SetPublic(bool val)
-		{
-			this.Public = val;
-		}
-
-		public uint BucketIndex
-		{
-			get
-			{
-				return this._BucketIndex;
-			}
-			set
-			{
-				this._BucketIndex = value;
-				this.HasBucketIndex = true;
-			}
-		}
-
-		public void SetBucketIndex(uint val)
-		{
-			this.BucketIndex = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasIdentity)
-			{
-				num ^= this.Identity.GetHashCode();
-			}
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			if (this.HasLocale)
-			{
-				num ^= this.Locale.GetHashCode();
-			}
-			if (this.HasPublic)
-			{
-				num ^= this.Public.GetHashCode();
-			}
-			if (this.HasBucketIndex)
-			{
-				num ^= this.BucketIndex.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChannelState channelState = obj as ChannelState;
-			return channelState != null && this.HasIdentity == channelState.HasIdentity && (!this.HasIdentity || this.Identity.Equals(channelState.Identity)) && this.HasProgram == channelState.HasProgram && (!this.HasProgram || this.Program.Equals(channelState.Program)) && this.HasLocale == channelState.HasLocale && (!this.HasLocale || this.Locale.Equals(channelState.Locale)) && this.HasPublic == channelState.HasPublic && (!this.HasPublic || this.Public.Equals(channelState.Public)) && this.HasBucketIndex == channelState.HasBucketIndex && (!this.HasBucketIndex || this.BucketIndex.Equals(channelState.BucketIndex));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChannelState ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChannelState>(bs, 0, -1);
 		}
 
 		public bool HasIdentity;

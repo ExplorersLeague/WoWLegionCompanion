@@ -6,6 +6,105 @@ namespace bnet.protocol.channel
 {
 	public class ChannelInfo : IProtoBuf
 	{
+		public ChannelDescription Description { get; set; }
+
+		public void SetDescription(ChannelDescription val)
+		{
+			this.Description = val;
+		}
+
+		public List<Member> Member
+		{
+			get
+			{
+				return this._Member;
+			}
+			set
+			{
+				this._Member = value;
+			}
+		}
+
+		public List<Member> MemberList
+		{
+			get
+			{
+				return this._Member;
+			}
+		}
+
+		public int MemberCount
+		{
+			get
+			{
+				return this._Member.Count;
+			}
+		}
+
+		public void AddMember(Member val)
+		{
+			this._Member.Add(val);
+		}
+
+		public void ClearMember()
+		{
+			this._Member.Clear();
+		}
+
+		public void SetMember(List<Member> val)
+		{
+			this.Member = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Description.GetHashCode();
+			foreach (Member member in this.Member)
+			{
+				num ^= member.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChannelInfo channelInfo = obj as ChannelInfo;
+			if (channelInfo == null)
+			{
+				return false;
+			}
+			if (!this.Description.Equals(channelInfo.Description))
+			{
+				return false;
+			}
+			if (this.Member.Count != channelInfo.Member.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Member.Count; i++)
+			{
+				if (!this.Member[i].Equals(channelInfo.Member[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChannelInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChannelInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChannelInfo.Deserialize(stream, this);
@@ -121,105 +220,6 @@ namespace bnet.protocol.channel
 			}
 			num += 1u;
 			return num;
-		}
-
-		public ChannelDescription Description { get; set; }
-
-		public void SetDescription(ChannelDescription val)
-		{
-			this.Description = val;
-		}
-
-		public List<Member> Member
-		{
-			get
-			{
-				return this._Member;
-			}
-			set
-			{
-				this._Member = value;
-			}
-		}
-
-		public List<Member> MemberList
-		{
-			get
-			{
-				return this._Member;
-			}
-		}
-
-		public int MemberCount
-		{
-			get
-			{
-				return this._Member.Count;
-			}
-		}
-
-		public void AddMember(Member val)
-		{
-			this._Member.Add(val);
-		}
-
-		public void ClearMember()
-		{
-			this._Member.Clear();
-		}
-
-		public void SetMember(List<Member> val)
-		{
-			this.Member = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Description.GetHashCode();
-			foreach (Member member in this.Member)
-			{
-				num ^= member.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChannelInfo channelInfo = obj as ChannelInfo;
-			if (channelInfo == null)
-			{
-				return false;
-			}
-			if (!this.Description.Equals(channelInfo.Description))
-			{
-				return false;
-			}
-			if (this.Member.Count != channelInfo.Member.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Member.Count; i++)
-			{
-				if (!this.Member[i].Equals(channelInfo.Member[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChannelInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChannelInfo>(bs, 0, -1);
 		}
 
 		private List<Member> _Member = new List<Member>();

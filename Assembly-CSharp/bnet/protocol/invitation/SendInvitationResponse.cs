@@ -5,6 +5,53 @@ namespace bnet.protocol.invitation
 {
 	public class SendInvitationResponse : IProtoBuf
 	{
+		public Invitation Invitation
+		{
+			get
+			{
+				return this._Invitation;
+			}
+			set
+			{
+				this._Invitation = value;
+				this.HasInvitation = (value != null);
+			}
+		}
+
+		public void SetInvitation(Invitation val)
+		{
+			this.Invitation = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasInvitation)
+			{
+				num ^= this.Invitation.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SendInvitationResponse sendInvitationResponse = obj as SendInvitationResponse;
+			return sendInvitationResponse != null && this.HasInvitation == sendInvitationResponse.HasInvitation && (!this.HasInvitation || this.Invitation.Equals(sendInvitationResponse.Invitation));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SendInvitationResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SendInvitationResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SendInvitationResponse.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.invitation
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public Invitation Invitation
-		{
-			get
-			{
-				return this._Invitation;
-			}
-			set
-			{
-				this._Invitation = value;
-				this.HasInvitation = (value != null);
-			}
-		}
-
-		public void SetInvitation(Invitation val)
-		{
-			this.Invitation = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasInvitation)
-			{
-				num ^= this.Invitation.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SendInvitationResponse sendInvitationResponse = obj as SendInvitationResponse;
-			return sendInvitationResponse != null && this.HasInvitation == sendInvitationResponse.HasInvitation && (!this.HasInvitation || this.Invitation.Equals(sendInvitationResponse.Invitation));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SendInvitationResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SendInvitationResponse>(bs, 0, -1);
 		}
 
 		public bool HasInvitation;

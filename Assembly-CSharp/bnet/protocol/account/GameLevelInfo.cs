@@ -7,241 +7,6 @@ namespace bnet.protocol.account
 {
 	public class GameLevelInfo : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			GameLevelInfo.Deserialize(stream, this);
-		}
-
-		public static GameLevelInfo Deserialize(Stream stream, GameLevelInfo instance)
-		{
-			return GameLevelInfo.Deserialize(stream, instance, -1L);
-		}
-
-		public static GameLevelInfo DeserializeLengthDelimited(Stream stream)
-		{
-			GameLevelInfo gameLevelInfo = new GameLevelInfo();
-			GameLevelInfo.DeserializeLengthDelimited(stream, gameLevelInfo);
-			return gameLevelInfo;
-		}
-
-		public static GameLevelInfo DeserializeLengthDelimited(Stream stream, GameLevelInfo instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return GameLevelInfo.Deserialize(stream, instance, num);
-		}
-
-		public static GameLevelInfo Deserialize(Stream stream, GameLevelInfo instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			if (instance.Licenses == null)
-			{
-				instance.Licenses = new List<AccountLicense>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 24)
-				{
-					if (num != 32)
-					{
-						if (num != 40)
-						{
-							if (num != 48)
-							{
-								if (num != 56)
-								{
-									if (num != 66)
-									{
-										if (num != 77)
-										{
-											if (num != 82)
-											{
-												if (num != 88)
-												{
-													Key key = ProtocolParser.ReadKey((byte)num, stream);
-													uint field = key.Field;
-													if (field == 0u)
-													{
-														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-													}
-													ProtocolParser.SkipKey(stream, key);
-												}
-												else
-												{
-													instance.RealmPermissions = ProtocolParser.ReadUInt32(stream);
-												}
-											}
-											else
-											{
-												instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
-											}
-										}
-										else
-										{
-											instance.Program = binaryReader.ReadUInt32();
-										}
-									}
-									else
-									{
-										instance.Name = ProtocolParser.ReadString(stream);
-									}
-								}
-								else
-								{
-									instance.IsBeta = ProtocolParser.ReadBool(stream);
-								}
-							}
-							else
-							{
-								instance.IsRestricted = ProtocolParser.ReadBool(stream);
-							}
-						}
-						else
-						{
-							instance.IsLifetime = ProtocolParser.ReadBool(stream);
-						}
-					}
-					else
-					{
-						instance.IsTrial = ProtocolParser.ReadBool(stream);
-					}
-				}
-				else
-				{
-					instance.IsStarterEdition = ProtocolParser.ReadBool(stream);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			GameLevelInfo.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, GameLevelInfo instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			if (instance.HasIsStarterEdition)
-			{
-				stream.WriteByte(24);
-				ProtocolParser.WriteBool(stream, instance.IsStarterEdition);
-			}
-			if (instance.HasIsTrial)
-			{
-				stream.WriteByte(32);
-				ProtocolParser.WriteBool(stream, instance.IsTrial);
-			}
-			if (instance.HasIsLifetime)
-			{
-				stream.WriteByte(40);
-				ProtocolParser.WriteBool(stream, instance.IsLifetime);
-			}
-			if (instance.HasIsRestricted)
-			{
-				stream.WriteByte(48);
-				ProtocolParser.WriteBool(stream, instance.IsRestricted);
-			}
-			if (instance.HasIsBeta)
-			{
-				stream.WriteByte(56);
-				ProtocolParser.WriteBool(stream, instance.IsBeta);
-			}
-			if (instance.HasName)
-			{
-				stream.WriteByte(66);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Name));
-			}
-			if (instance.HasProgram)
-			{
-				stream.WriteByte(77);
-				binaryWriter.Write(instance.Program);
-			}
-			if (instance.Licenses.Count > 0)
-			{
-				foreach (AccountLicense accountLicense in instance.Licenses)
-				{
-					stream.WriteByte(82);
-					ProtocolParser.WriteUInt32(stream, accountLicense.GetSerializedSize());
-					AccountLicense.Serialize(stream, accountLicense);
-				}
-			}
-			if (instance.HasRealmPermissions)
-			{
-				stream.WriteByte(88);
-				ProtocolParser.WriteUInt32(stream, instance.RealmPermissions);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasIsStarterEdition)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasIsTrial)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasIsLifetime)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasIsRestricted)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasIsBeta)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasName)
-			{
-				num += 1u;
-				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Name);
-				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-			}
-			if (this.HasProgram)
-			{
-				num += 1u;
-				num += 4u;
-			}
-			if (this.Licenses.Count > 0)
-			{
-				foreach (AccountLicense accountLicense in this.Licenses)
-				{
-					num += 1u;
-					uint serializedSize = accountLicense.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.HasRealmPermissions)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.RealmPermissions);
-			}
-			return num;
-		}
-
 		public bool IsStarterEdition
 		{
 			get
@@ -531,6 +296,241 @@ namespace bnet.protocol.account
 		public static GameLevelInfo ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<GameLevelInfo>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			GameLevelInfo.Deserialize(stream, this);
+		}
+
+		public static GameLevelInfo Deserialize(Stream stream, GameLevelInfo instance)
+		{
+			return GameLevelInfo.Deserialize(stream, instance, -1L);
+		}
+
+		public static GameLevelInfo DeserializeLengthDelimited(Stream stream)
+		{
+			GameLevelInfo gameLevelInfo = new GameLevelInfo();
+			GameLevelInfo.DeserializeLengthDelimited(stream, gameLevelInfo);
+			return gameLevelInfo;
+		}
+
+		public static GameLevelInfo DeserializeLengthDelimited(Stream stream, GameLevelInfo instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return GameLevelInfo.Deserialize(stream, instance, num);
+		}
+
+		public static GameLevelInfo Deserialize(Stream stream, GameLevelInfo instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			if (instance.Licenses == null)
+			{
+				instance.Licenses = new List<AccountLicense>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 24)
+				{
+					if (num != 32)
+					{
+						if (num != 40)
+						{
+							if (num != 48)
+							{
+								if (num != 56)
+								{
+									if (num != 66)
+									{
+										if (num != 77)
+										{
+											if (num != 82)
+											{
+												if (num != 88)
+												{
+													Key key = ProtocolParser.ReadKey((byte)num, stream);
+													uint field = key.Field;
+													if (field == 0u)
+													{
+														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+													}
+													ProtocolParser.SkipKey(stream, key);
+												}
+												else
+												{
+													instance.RealmPermissions = ProtocolParser.ReadUInt32(stream);
+												}
+											}
+											else
+											{
+												instance.Licenses.Add(AccountLicense.DeserializeLengthDelimited(stream));
+											}
+										}
+										else
+										{
+											instance.Program = binaryReader.ReadUInt32();
+										}
+									}
+									else
+									{
+										instance.Name = ProtocolParser.ReadString(stream);
+									}
+								}
+								else
+								{
+									instance.IsBeta = ProtocolParser.ReadBool(stream);
+								}
+							}
+							else
+							{
+								instance.IsRestricted = ProtocolParser.ReadBool(stream);
+							}
+						}
+						else
+						{
+							instance.IsLifetime = ProtocolParser.ReadBool(stream);
+						}
+					}
+					else
+					{
+						instance.IsTrial = ProtocolParser.ReadBool(stream);
+					}
+				}
+				else
+				{
+					instance.IsStarterEdition = ProtocolParser.ReadBool(stream);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			GameLevelInfo.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, GameLevelInfo instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			if (instance.HasIsStarterEdition)
+			{
+				stream.WriteByte(24);
+				ProtocolParser.WriteBool(stream, instance.IsStarterEdition);
+			}
+			if (instance.HasIsTrial)
+			{
+				stream.WriteByte(32);
+				ProtocolParser.WriteBool(stream, instance.IsTrial);
+			}
+			if (instance.HasIsLifetime)
+			{
+				stream.WriteByte(40);
+				ProtocolParser.WriteBool(stream, instance.IsLifetime);
+			}
+			if (instance.HasIsRestricted)
+			{
+				stream.WriteByte(48);
+				ProtocolParser.WriteBool(stream, instance.IsRestricted);
+			}
+			if (instance.HasIsBeta)
+			{
+				stream.WriteByte(56);
+				ProtocolParser.WriteBool(stream, instance.IsBeta);
+			}
+			if (instance.HasName)
+			{
+				stream.WriteByte(66);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Name));
+			}
+			if (instance.HasProgram)
+			{
+				stream.WriteByte(77);
+				binaryWriter.Write(instance.Program);
+			}
+			if (instance.Licenses.Count > 0)
+			{
+				foreach (AccountLicense accountLicense in instance.Licenses)
+				{
+					stream.WriteByte(82);
+					ProtocolParser.WriteUInt32(stream, accountLicense.GetSerializedSize());
+					AccountLicense.Serialize(stream, accountLicense);
+				}
+			}
+			if (instance.HasRealmPermissions)
+			{
+				stream.WriteByte(88);
+				ProtocolParser.WriteUInt32(stream, instance.RealmPermissions);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasIsStarterEdition)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasIsTrial)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasIsLifetime)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasIsRestricted)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasIsBeta)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasName)
+			{
+				num += 1u;
+				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Name);
+				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+			}
+			if (this.HasProgram)
+			{
+				num += 1u;
+				num += 4u;
+			}
+			if (this.Licenses.Count > 0)
+			{
+				foreach (AccountLicense accountLicense in this.Licenses)
+				{
+					num += 1u;
+					uint serializedSize = accountLicense.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.HasRealmPermissions)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.RealmPermissions);
+			}
+			return num;
 		}
 
 		public bool HasIsStarterEdition;

@@ -6,6 +6,91 @@ namespace bnet.protocol.channel_invitation
 {
 	public class ChannelCountDescription : IProtoBuf
 	{
+		public uint ServiceType { get; set; }
+
+		public void SetServiceType(uint val)
+		{
+			this.ServiceType = val;
+		}
+
+		public uint Program { get; set; }
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public string ChannelType
+		{
+			get
+			{
+				return this._ChannelType;
+			}
+			set
+			{
+				this._ChannelType = value;
+				this.HasChannelType = (value != null);
+			}
+		}
+
+		public void SetChannelType(string val)
+		{
+			this.ChannelType = val;
+		}
+
+		public EntityId ChannelId
+		{
+			get
+			{
+				return this._ChannelId;
+			}
+			set
+			{
+				this._ChannelId = value;
+				this.HasChannelId = (value != null);
+			}
+		}
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ServiceType.GetHashCode();
+			num ^= this.Program.GetHashCode();
+			if (this.HasChannelType)
+			{
+				num ^= this.ChannelType.GetHashCode();
+			}
+			if (this.HasChannelId)
+			{
+				num ^= this.ChannelId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChannelCountDescription channelCountDescription = obj as ChannelCountDescription;
+			return channelCountDescription != null && this.ServiceType.Equals(channelCountDescription.ServiceType) && this.Program.Equals(channelCountDescription.Program) && this.HasChannelType == channelCountDescription.HasChannelType && (!this.HasChannelType || this.ChannelType.Equals(channelCountDescription.ChannelType)) && this.HasChannelId == channelCountDescription.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(channelCountDescription.ChannelId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChannelCountDescription ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChannelCountDescription>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChannelCountDescription.Deserialize(stream, this);
@@ -135,91 +220,6 @@ namespace bnet.protocol.channel_invitation
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num + 2u;
-		}
-
-		public uint ServiceType { get; set; }
-
-		public void SetServiceType(uint val)
-		{
-			this.ServiceType = val;
-		}
-
-		public uint Program { get; set; }
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public string ChannelType
-		{
-			get
-			{
-				return this._ChannelType;
-			}
-			set
-			{
-				this._ChannelType = value;
-				this.HasChannelType = (value != null);
-			}
-		}
-
-		public void SetChannelType(string val)
-		{
-			this.ChannelType = val;
-		}
-
-		public EntityId ChannelId
-		{
-			get
-			{
-				return this._ChannelId;
-			}
-			set
-			{
-				this._ChannelId = value;
-				this.HasChannelId = (value != null);
-			}
-		}
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ServiceType.GetHashCode();
-			num ^= this.Program.GetHashCode();
-			if (this.HasChannelType)
-			{
-				num ^= this.ChannelType.GetHashCode();
-			}
-			if (this.HasChannelId)
-			{
-				num ^= this.ChannelId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChannelCountDescription channelCountDescription = obj as ChannelCountDescription;
-			return channelCountDescription != null && this.ServiceType.Equals(channelCountDescription.ServiceType) && this.Program.Equals(channelCountDescription.Program) && this.HasChannelType == channelCountDescription.HasChannelType && (!this.HasChannelType || this.ChannelType.Equals(channelCountDescription.ChannelType)) && this.HasChannelId == channelCountDescription.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(channelCountDescription.ChannelId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChannelCountDescription ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChannelCountDescription>(bs, 0, -1);
 		}
 
 		public bool HasChannelType;

@@ -5,6 +5,60 @@ namespace bnet.protocol.friends
 {
 	public class SubscribeToFriendsRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			return num ^ this.ObjectId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscribeToFriendsRequest subscribeToFriendsRequest = obj as SubscribeToFriendsRequest;
+			return subscribeToFriendsRequest != null && this.HasAgentId == subscribeToFriendsRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(subscribeToFriendsRequest.AgentId)) && this.ObjectId.Equals(subscribeToFriendsRequest.ObjectId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscribeToFriendsRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscribeToFriendsRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscribeToFriendsRequest.Deserialize(stream, this);
@@ -103,60 +157,6 @@ namespace bnet.protocol.friends
 			}
 			num += ProtocolParser.SizeOfUInt64(this.ObjectId);
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			return num ^ this.ObjectId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscribeToFriendsRequest subscribeToFriendsRequest = obj as SubscribeToFriendsRequest;
-			return subscribeToFriendsRequest != null && this.HasAgentId == subscribeToFriendsRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(subscribeToFriendsRequest.AgentId)) && this.ObjectId.Equals(subscribeToFriendsRequest.ObjectId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscribeToFriendsRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscribeToFriendsRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

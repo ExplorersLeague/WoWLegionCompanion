@@ -7,159 +7,6 @@ namespace bnet.protocol.account
 {
 	public class CacheExpireRequest : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			CacheExpireRequest.Deserialize(stream, this);
-		}
-
-		public static CacheExpireRequest Deserialize(Stream stream, CacheExpireRequest instance)
-		{
-			return CacheExpireRequest.Deserialize(stream, instance, -1L);
-		}
-
-		public static CacheExpireRequest DeserializeLengthDelimited(Stream stream)
-		{
-			CacheExpireRequest cacheExpireRequest = new CacheExpireRequest();
-			CacheExpireRequest.DeserializeLengthDelimited(stream, cacheExpireRequest);
-			return cacheExpireRequest;
-		}
-
-		public static CacheExpireRequest DeserializeLengthDelimited(Stream stream, CacheExpireRequest instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return CacheExpireRequest.Deserialize(stream, instance, num);
-		}
-
-		public static CacheExpireRequest Deserialize(Stream stream, CacheExpireRequest instance, long limit)
-		{
-			if (instance.Account == null)
-			{
-				instance.Account = new List<AccountId>();
-			}
-			if (instance.GameAccount == null)
-			{
-				instance.GameAccount = new List<GameAccountHandle>();
-			}
-			if (instance.Email == null)
-			{
-				instance.Email = new List<string>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 10)
-				{
-					if (num != 18)
-					{
-						if (num != 26)
-						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
-						}
-						else
-						{
-							instance.Email.Add(ProtocolParser.ReadString(stream));
-						}
-					}
-					else
-					{
-						instance.GameAccount.Add(GameAccountHandle.DeserializeLengthDelimited(stream));
-					}
-				}
-				else
-				{
-					instance.Account.Add(AccountId.DeserializeLengthDelimited(stream));
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			CacheExpireRequest.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, CacheExpireRequest instance)
-		{
-			if (instance.Account.Count > 0)
-			{
-				foreach (AccountId accountId in instance.Account)
-				{
-					stream.WriteByte(10);
-					ProtocolParser.WriteUInt32(stream, accountId.GetSerializedSize());
-					AccountId.Serialize(stream, accountId);
-				}
-			}
-			if (instance.GameAccount.Count > 0)
-			{
-				foreach (GameAccountHandle gameAccountHandle in instance.GameAccount)
-				{
-					stream.WriteByte(18);
-					ProtocolParser.WriteUInt32(stream, gameAccountHandle.GetSerializedSize());
-					GameAccountHandle.Serialize(stream, gameAccountHandle);
-				}
-			}
-			if (instance.Email.Count > 0)
-			{
-				foreach (string s in instance.Email)
-				{
-					stream.WriteByte(26);
-					ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(s));
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.Account.Count > 0)
-			{
-				foreach (AccountId accountId in this.Account)
-				{
-					num += 1u;
-					uint serializedSize = accountId.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.GameAccount.Count > 0)
-			{
-				foreach (GameAccountHandle gameAccountHandle in this.GameAccount)
-				{
-					num += 1u;
-					uint serializedSize2 = gameAccountHandle.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			if (this.Email.Count > 0)
-			{
-				foreach (string s in this.Email)
-				{
-					num += 1u;
-					uint byteCount = (uint)Encoding.UTF8.GetByteCount(s);
-					num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-				}
-			}
-			return num;
-		}
-
 		public List<AccountId> Account
 		{
 			get
@@ -361,6 +208,159 @@ namespace bnet.protocol.account
 		public static CacheExpireRequest ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<CacheExpireRequest>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			CacheExpireRequest.Deserialize(stream, this);
+		}
+
+		public static CacheExpireRequest Deserialize(Stream stream, CacheExpireRequest instance)
+		{
+			return CacheExpireRequest.Deserialize(stream, instance, -1L);
+		}
+
+		public static CacheExpireRequest DeserializeLengthDelimited(Stream stream)
+		{
+			CacheExpireRequest cacheExpireRequest = new CacheExpireRequest();
+			CacheExpireRequest.DeserializeLengthDelimited(stream, cacheExpireRequest);
+			return cacheExpireRequest;
+		}
+
+		public static CacheExpireRequest DeserializeLengthDelimited(Stream stream, CacheExpireRequest instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return CacheExpireRequest.Deserialize(stream, instance, num);
+		}
+
+		public static CacheExpireRequest Deserialize(Stream stream, CacheExpireRequest instance, long limit)
+		{
+			if (instance.Account == null)
+			{
+				instance.Account = new List<AccountId>();
+			}
+			if (instance.GameAccount == null)
+			{
+				instance.GameAccount = new List<GameAccountHandle>();
+			}
+			if (instance.Email == null)
+			{
+				instance.Email = new List<string>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 10)
+				{
+					if (num != 18)
+					{
+						if (num != 26)
+						{
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
+							{
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+							}
+							ProtocolParser.SkipKey(stream, key);
+						}
+						else
+						{
+							instance.Email.Add(ProtocolParser.ReadString(stream));
+						}
+					}
+					else
+					{
+						instance.GameAccount.Add(GameAccountHandle.DeserializeLengthDelimited(stream));
+					}
+				}
+				else
+				{
+					instance.Account.Add(AccountId.DeserializeLengthDelimited(stream));
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			CacheExpireRequest.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, CacheExpireRequest instance)
+		{
+			if (instance.Account.Count > 0)
+			{
+				foreach (AccountId accountId in instance.Account)
+				{
+					stream.WriteByte(10);
+					ProtocolParser.WriteUInt32(stream, accountId.GetSerializedSize());
+					AccountId.Serialize(stream, accountId);
+				}
+			}
+			if (instance.GameAccount.Count > 0)
+			{
+				foreach (GameAccountHandle gameAccountHandle in instance.GameAccount)
+				{
+					stream.WriteByte(18);
+					ProtocolParser.WriteUInt32(stream, gameAccountHandle.GetSerializedSize());
+					GameAccountHandle.Serialize(stream, gameAccountHandle);
+				}
+			}
+			if (instance.Email.Count > 0)
+			{
+				foreach (string s in instance.Email)
+				{
+					stream.WriteByte(26);
+					ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(s));
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.Account.Count > 0)
+			{
+				foreach (AccountId accountId in this.Account)
+				{
+					num += 1u;
+					uint serializedSize = accountId.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.GameAccount.Count > 0)
+			{
+				foreach (GameAccountHandle gameAccountHandle in this.GameAccount)
+				{
+					num += 1u;
+					uint serializedSize2 = gameAccountHandle.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			if (this.Email.Count > 0)
+			{
+				foreach (string s in this.Email)
+				{
+					num += 1u;
+					uint byteCount = (uint)Encoding.UTF8.GetByteCount(s);
+					num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+				}
+			}
+			return num;
 		}
 
 		private List<AccountId> _Account = new List<AccountId>();

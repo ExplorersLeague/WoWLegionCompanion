@@ -5,6 +5,53 @@ namespace bnet.protocol.account
 {
 	public class GetGameTimeRemainingInfoResponse : IProtoBuf
 	{
+		public GameTimeRemainingInfo GameTimeRemainingInfo
+		{
+			get
+			{
+				return this._GameTimeRemainingInfo;
+			}
+			set
+			{
+				this._GameTimeRemainingInfo = value;
+				this.HasGameTimeRemainingInfo = (value != null);
+			}
+		}
+
+		public void SetGameTimeRemainingInfo(GameTimeRemainingInfo val)
+		{
+			this.GameTimeRemainingInfo = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasGameTimeRemainingInfo)
+			{
+				num ^= this.GameTimeRemainingInfo.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetGameTimeRemainingInfoResponse getGameTimeRemainingInfoResponse = obj as GetGameTimeRemainingInfoResponse;
+			return getGameTimeRemainingInfoResponse != null && this.HasGameTimeRemainingInfo == getGameTimeRemainingInfoResponse.HasGameTimeRemainingInfo && (!this.HasGameTimeRemainingInfo || this.GameTimeRemainingInfo.Equals(getGameTimeRemainingInfoResponse.GameTimeRemainingInfo));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetGameTimeRemainingInfoResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetGameTimeRemainingInfoResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetGameTimeRemainingInfoResponse.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.account
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public GameTimeRemainingInfo GameTimeRemainingInfo
-		{
-			get
-			{
-				return this._GameTimeRemainingInfo;
-			}
-			set
-			{
-				this._GameTimeRemainingInfo = value;
-				this.HasGameTimeRemainingInfo = (value != null);
-			}
-		}
-
-		public void SetGameTimeRemainingInfo(GameTimeRemainingInfo val)
-		{
-			this.GameTimeRemainingInfo = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasGameTimeRemainingInfo)
-			{
-				num ^= this.GameTimeRemainingInfo.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetGameTimeRemainingInfoResponse getGameTimeRemainingInfoResponse = obj as GetGameTimeRemainingInfoResponse;
-			return getGameTimeRemainingInfoResponse != null && this.HasGameTimeRemainingInfo == getGameTimeRemainingInfoResponse.HasGameTimeRemainingInfo && (!this.HasGameTimeRemainingInfo || this.GameTimeRemainingInfo.Equals(getGameTimeRemainingInfoResponse.GameTimeRemainingInfo));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetGameTimeRemainingInfoResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetGameTimeRemainingInfoResponse>(bs, 0, -1);
 		}
 
 		public bool HasGameTimeRemainingInfo;

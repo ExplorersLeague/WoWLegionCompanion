@@ -5,6 +5,53 @@ namespace bnet.protocol.challenge
 {
 	public class ChallengeCancelledRequest : IProtoBuf
 	{
+		public uint Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				this._Id = value;
+				this.HasId = true;
+			}
+		}
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasId)
+			{
+				num ^= this.Id.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChallengeCancelledRequest challengeCancelledRequest = obj as ChallengeCancelledRequest;
+			return challengeCancelledRequest != null && this.HasId == challengeCancelledRequest.HasId && (!this.HasId || this.Id.Equals(challengeCancelledRequest.Id));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChallengeCancelledRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChallengeCancelledRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChallengeCancelledRequest.Deserialize(stream, this);
@@ -87,53 +134,6 @@ namespace bnet.protocol.challenge
 				num += ProtocolParser.SizeOfUInt32(this.Id);
 			}
 			return num;
-		}
-
-		public uint Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				this._Id = value;
-				this.HasId = true;
-			}
-		}
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasId)
-			{
-				num ^= this.Id.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChallengeCancelledRequest challengeCancelledRequest = obj as ChallengeCancelledRequest;
-			return challengeCancelledRequest != null && this.HasId == challengeCancelledRequest.HasId && (!this.HasId || this.Id.Equals(challengeCancelledRequest.Id));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChallengeCancelledRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChallengeCancelledRequest>(bs, 0, -1);
 		}
 
 		public bool HasId;

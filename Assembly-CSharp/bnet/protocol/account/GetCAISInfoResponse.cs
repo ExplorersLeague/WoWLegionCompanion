@@ -5,6 +5,53 @@ namespace bnet.protocol.account
 {
 	public class GetCAISInfoResponse : IProtoBuf
 	{
+		public CAIS CaisInfo
+		{
+			get
+			{
+				return this._CaisInfo;
+			}
+			set
+			{
+				this._CaisInfo = value;
+				this.HasCaisInfo = (value != null);
+			}
+		}
+
+		public void SetCaisInfo(CAIS val)
+		{
+			this.CaisInfo = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasCaisInfo)
+			{
+				num ^= this.CaisInfo.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetCAISInfoResponse getCAISInfoResponse = obj as GetCAISInfoResponse;
+			return getCAISInfoResponse != null && this.HasCaisInfo == getCAISInfoResponse.HasCaisInfo && (!this.HasCaisInfo || this.CaisInfo.Equals(getCAISInfoResponse.CaisInfo));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetCAISInfoResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetCAISInfoResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetCAISInfoResponse.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.account
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public CAIS CaisInfo
-		{
-			get
-			{
-				return this._CaisInfo;
-			}
-			set
-			{
-				this._CaisInfo = value;
-				this.HasCaisInfo = (value != null);
-			}
-		}
-
-		public void SetCaisInfo(CAIS val)
-		{
-			this.CaisInfo = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasCaisInfo)
-			{
-				num ^= this.CaisInfo.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetCAISInfoResponse getCAISInfoResponse = obj as GetCAISInfoResponse;
-			return getCAISInfoResponse != null && this.HasCaisInfo == getCAISInfoResponse.HasCaisInfo && (!this.HasCaisInfo || this.CaisInfo.Equals(getCAISInfoResponse.CaisInfo));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetCAISInfoResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetCAISInfoResponse>(bs, 0, -1);
 		}
 
 		public bool HasCaisInfo;

@@ -5,6 +5,75 @@ namespace bnet.protocol.account
 {
 	public class RegionTag : IProtoBuf
 	{
+		public uint Region
+		{
+			get
+			{
+				return this._Region;
+			}
+			set
+			{
+				this._Region = value;
+				this.HasRegion = true;
+			}
+		}
+
+		public void SetRegion(uint val)
+		{
+			this.Region = val;
+		}
+
+		public uint Tag
+		{
+			get
+			{
+				return this._Tag;
+			}
+			set
+			{
+				this._Tag = value;
+				this.HasTag = true;
+			}
+		}
+
+		public void SetTag(uint val)
+		{
+			this.Tag = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasRegion)
+			{
+				num ^= this.Region.GetHashCode();
+			}
+			if (this.HasTag)
+			{
+				num ^= this.Tag.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			RegionTag regionTag = obj as RegionTag;
+			return regionTag != null && this.HasRegion == regionTag.HasRegion && (!this.HasRegion || this.Region.Equals(regionTag.Region)) && this.HasTag == regionTag.HasTag && (!this.HasTag || this.Tag.Equals(regionTag.Tag));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static RegionTag ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<RegionTag>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			RegionTag.Deserialize(stream, this);
@@ -106,75 +175,6 @@ namespace bnet.protocol.account
 				num += 4u;
 			}
 			return num;
-		}
-
-		public uint Region
-		{
-			get
-			{
-				return this._Region;
-			}
-			set
-			{
-				this._Region = value;
-				this.HasRegion = true;
-			}
-		}
-
-		public void SetRegion(uint val)
-		{
-			this.Region = val;
-		}
-
-		public uint Tag
-		{
-			get
-			{
-				return this._Tag;
-			}
-			set
-			{
-				this._Tag = value;
-				this.HasTag = true;
-			}
-		}
-
-		public void SetTag(uint val)
-		{
-			this.Tag = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasRegion)
-			{
-				num ^= this.Region.GetHashCode();
-			}
-			if (this.HasTag)
-			{
-				num ^= this.Tag.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			RegionTag regionTag = obj as RegionTag;
-			return regionTag != null && this.HasRegion == regionTag.HasRegion && (!this.HasRegion || this.Region.Equals(regionTag.Region)) && this.HasTag == regionTag.HasTag && (!this.HasTag || this.Tag.Equals(regionTag.Tag));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static RegionTag ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<RegionTag>(bs, 0, -1);
 		}
 
 		public bool HasRegion;

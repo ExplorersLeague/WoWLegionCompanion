@@ -5,6 +5,119 @@ namespace bnet.protocol.account
 {
 	public class GameStatus : IProtoBuf
 	{
+		public bool IsSuspended
+		{
+			get
+			{
+				return this._IsSuspended;
+			}
+			set
+			{
+				this._IsSuspended = value;
+				this.HasIsSuspended = true;
+			}
+		}
+
+		public void SetIsSuspended(bool val)
+		{
+			this.IsSuspended = val;
+		}
+
+		public bool IsBanned
+		{
+			get
+			{
+				return this._IsBanned;
+			}
+			set
+			{
+				this._IsBanned = value;
+				this.HasIsBanned = true;
+			}
+		}
+
+		public void SetIsBanned(bool val)
+		{
+			this.IsBanned = val;
+		}
+
+		public ulong SuspensionExpires
+		{
+			get
+			{
+				return this._SuspensionExpires;
+			}
+			set
+			{
+				this._SuspensionExpires = value;
+				this.HasSuspensionExpires = true;
+			}
+		}
+
+		public void SetSuspensionExpires(ulong val)
+		{
+			this.SuspensionExpires = val;
+		}
+
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasIsSuspended)
+			{
+				num ^= this.IsSuspended.GetHashCode();
+			}
+			if (this.HasIsBanned)
+			{
+				num ^= this.IsBanned.GetHashCode();
+			}
+			if (this.HasSuspensionExpires)
+			{
+				num ^= this.SuspensionExpires.GetHashCode();
+			}
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameStatus gameStatus = obj as GameStatus;
+			return gameStatus != null && this.HasIsSuspended == gameStatus.HasIsSuspended && (!this.HasIsSuspended || this.IsSuspended.Equals(gameStatus.IsSuspended)) && this.HasIsBanned == gameStatus.HasIsBanned && (!this.HasIsBanned || this.IsBanned.Equals(gameStatus.IsBanned)) && this.HasSuspensionExpires == gameStatus.HasSuspensionExpires && (!this.HasSuspensionExpires || this.SuspensionExpires.Equals(gameStatus.SuspensionExpires)) && this.HasProgram == gameStatus.HasProgram && (!this.HasProgram || this.Program.Equals(gameStatus.Program));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameStatus ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameStatus>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameStatus.Deserialize(stream, this);
@@ -140,119 +253,6 @@ namespace bnet.protocol.account
 				num += 4u;
 			}
 			return num;
-		}
-
-		public bool IsSuspended
-		{
-			get
-			{
-				return this._IsSuspended;
-			}
-			set
-			{
-				this._IsSuspended = value;
-				this.HasIsSuspended = true;
-			}
-		}
-
-		public void SetIsSuspended(bool val)
-		{
-			this.IsSuspended = val;
-		}
-
-		public bool IsBanned
-		{
-			get
-			{
-				return this._IsBanned;
-			}
-			set
-			{
-				this._IsBanned = value;
-				this.HasIsBanned = true;
-			}
-		}
-
-		public void SetIsBanned(bool val)
-		{
-			this.IsBanned = val;
-		}
-
-		public ulong SuspensionExpires
-		{
-			get
-			{
-				return this._SuspensionExpires;
-			}
-			set
-			{
-				this._SuspensionExpires = value;
-				this.HasSuspensionExpires = true;
-			}
-		}
-
-		public void SetSuspensionExpires(ulong val)
-		{
-			this.SuspensionExpires = val;
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasIsSuspended)
-			{
-				num ^= this.IsSuspended.GetHashCode();
-			}
-			if (this.HasIsBanned)
-			{
-				num ^= this.IsBanned.GetHashCode();
-			}
-			if (this.HasSuspensionExpires)
-			{
-				num ^= this.SuspensionExpires.GetHashCode();
-			}
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameStatus gameStatus = obj as GameStatus;
-			return gameStatus != null && this.HasIsSuspended == gameStatus.HasIsSuspended && (!this.HasIsSuspended || this.IsSuspended.Equals(gameStatus.IsSuspended)) && this.HasIsBanned == gameStatus.HasIsBanned && (!this.HasIsBanned || this.IsBanned.Equals(gameStatus.IsBanned)) && this.HasSuspensionExpires == gameStatus.HasSuspensionExpires && (!this.HasSuspensionExpires || this.SuspensionExpires.Equals(gameStatus.SuspensionExpires)) && this.HasProgram == gameStatus.HasProgram && (!this.HasProgram || this.Program.Equals(gameStatus.Program));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameStatus ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameStatus>(bs, 0, -1);
 		}
 
 		public bool HasIsSuspended;

@@ -7,6 +7,159 @@ namespace bnet.protocol.game_utilities
 {
 	public class ClientRequest : IProtoBuf
 	{
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public ProcessId Host
+		{
+			get
+			{
+				return this._Host;
+			}
+			set
+			{
+				this._Host = value;
+				this.HasHost = (value != null);
+			}
+		}
+
+		public void SetHost(ProcessId val)
+		{
+			this.Host = val;
+		}
+
+		public EntityId BnetAccountId
+		{
+			get
+			{
+				return this._BnetAccountId;
+			}
+			set
+			{
+				this._BnetAccountId = value;
+				this.HasBnetAccountId = (value != null);
+			}
+		}
+
+		public void SetBnetAccountId(EntityId val)
+		{
+			this.BnetAccountId = val;
+		}
+
+		public EntityId GameAccountId
+		{
+			get
+			{
+				return this._GameAccountId;
+			}
+			set
+			{
+				this._GameAccountId = value;
+				this.HasGameAccountId = (value != null);
+			}
+		}
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			if (this.HasHost)
+			{
+				num ^= this.Host.GetHashCode();
+			}
+			if (this.HasBnetAccountId)
+			{
+				num ^= this.BnetAccountId.GetHashCode();
+			}
+			if (this.HasGameAccountId)
+			{
+				num ^= this.GameAccountId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ClientRequest clientRequest = obj as ClientRequest;
+			if (clientRequest == null)
+			{
+				return false;
+			}
+			if (this.Attribute.Count != clientRequest.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(clientRequest.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasHost == clientRequest.HasHost && (!this.HasHost || this.Host.Equals(clientRequest.Host)) && this.HasBnetAccountId == clientRequest.HasBnetAccountId && (!this.HasBnetAccountId || this.BnetAccountId.Equals(clientRequest.BnetAccountId)) && this.HasGameAccountId == clientRequest.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(clientRequest.GameAccountId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ClientRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ClientRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ClientRequest.Deserialize(stream, this);
@@ -170,159 +323,6 @@ namespace bnet.protocol.game_utilities
 				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
 			}
 			return num;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public ProcessId Host
-		{
-			get
-			{
-				return this._Host;
-			}
-			set
-			{
-				this._Host = value;
-				this.HasHost = (value != null);
-			}
-		}
-
-		public void SetHost(ProcessId val)
-		{
-			this.Host = val;
-		}
-
-		public EntityId BnetAccountId
-		{
-			get
-			{
-				return this._BnetAccountId;
-			}
-			set
-			{
-				this._BnetAccountId = value;
-				this.HasBnetAccountId = (value != null);
-			}
-		}
-
-		public void SetBnetAccountId(EntityId val)
-		{
-			this.BnetAccountId = val;
-		}
-
-		public EntityId GameAccountId
-		{
-			get
-			{
-				return this._GameAccountId;
-			}
-			set
-			{
-				this._GameAccountId = value;
-				this.HasGameAccountId = (value != null);
-			}
-		}
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			if (this.HasHost)
-			{
-				num ^= this.Host.GetHashCode();
-			}
-			if (this.HasBnetAccountId)
-			{
-				num ^= this.BnetAccountId.GetHashCode();
-			}
-			if (this.HasGameAccountId)
-			{
-				num ^= this.GameAccountId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ClientRequest clientRequest = obj as ClientRequest;
-			if (clientRequest == null)
-			{
-				return false;
-			}
-			if (this.Attribute.Count != clientRequest.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(clientRequest.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasHost == clientRequest.HasHost && (!this.HasHost || this.Host.Equals(clientRequest.Host)) && this.HasBnetAccountId == clientRequest.HasBnetAccountId && (!this.HasBnetAccountId || this.BnetAccountId.Equals(clientRequest.BnetAccountId)) && this.HasGameAccountId == clientRequest.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(clientRequest.GameAccountId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ClientRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ClientRequest>(bs, 0, -1);
 		}
 
 		private List<bnet.protocol.attribute.Attribute> _Attribute = new List<bnet.protocol.attribute.Attribute>();

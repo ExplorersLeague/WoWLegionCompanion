@@ -5,6 +5,69 @@ namespace bnet.protocol.channel_invitation
 {
 	public class ListChannelCountRequest : IProtoBuf
 	{
+		public EntityId MemberId { get; set; }
+
+		public void SetMemberId(EntityId val)
+		{
+			this.MemberId = val;
+		}
+
+		public uint ServiceType { get; set; }
+
+		public void SetServiceType(uint val)
+		{
+			this.ServiceType = val;
+		}
+
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.MemberId.GetHashCode();
+			num ^= this.ServiceType.GetHashCode();
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ListChannelCountRequest listChannelCountRequest = obj as ListChannelCountRequest;
+			return listChannelCountRequest != null && this.MemberId.Equals(listChannelCountRequest.MemberId) && this.ServiceType.Equals(listChannelCountRequest.ServiceType) && this.HasProgram == listChannelCountRequest.HasProgram && (!this.HasProgram || this.Program.Equals(listChannelCountRequest.Program));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ListChannelCountRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ListChannelCountRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ListChannelCountRequest.Deserialize(stream, this);
@@ -119,69 +182,6 @@ namespace bnet.protocol.channel_invitation
 				num += 4u;
 			}
 			return num + 2u;
-		}
-
-		public EntityId MemberId { get; set; }
-
-		public void SetMemberId(EntityId val)
-		{
-			this.MemberId = val;
-		}
-
-		public uint ServiceType { get; set; }
-
-		public void SetServiceType(uint val)
-		{
-			this.ServiceType = val;
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.MemberId.GetHashCode();
-			num ^= this.ServiceType.GetHashCode();
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ListChannelCountRequest listChannelCountRequest = obj as ListChannelCountRequest;
-			return listChannelCountRequest != null && this.MemberId.Equals(listChannelCountRequest.MemberId) && this.ServiceType.Equals(listChannelCountRequest.ServiceType) && this.HasProgram == listChannelCountRequest.HasProgram && (!this.HasProgram || this.Program.Equals(listChannelCountRequest.Program));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ListChannelCountRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ListChannelCountRequest>(bs, 0, -1);
 		}
 
 		public bool HasProgram;

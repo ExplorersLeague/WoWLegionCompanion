@@ -5,6 +5,38 @@ namespace bnet.protocol.game_master
 {
 	public class GetFactoryInfoRequest : IProtoBuf
 	{
+		public ulong FactoryId { get; set; }
+
+		public void SetFactoryId(ulong val)
+		{
+			this.FactoryId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.FactoryId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetFactoryInfoRequest getFactoryInfoRequest = obj as GetFactoryInfoRequest;
+			return getFactoryInfoRequest != null && this.FactoryId.Equals(getFactoryInfoRequest.FactoryId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetFactoryInfoRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetFactoryInfoRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetFactoryInfoRequest.Deserialize(stream, this);
@@ -82,38 +114,6 @@ namespace bnet.protocol.game_master
 			uint num = 0u;
 			num += 8u;
 			return num + 1u;
-		}
-
-		public ulong FactoryId { get; set; }
-
-		public void SetFactoryId(ulong val)
-		{
-			this.FactoryId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.FactoryId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetFactoryInfoRequest getFactoryInfoRequest = obj as GetFactoryInfoRequest;
-			return getFactoryInfoRequest != null && this.FactoryId.Equals(getFactoryInfoRequest.FactoryId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetFactoryInfoRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetFactoryInfoRequest>(bs, 0, -1);
 		}
 	}
 }

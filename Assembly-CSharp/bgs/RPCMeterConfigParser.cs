@@ -25,9 +25,9 @@ namespace bgs
 				{
 					goto IL_1E7;
 				}
-				if (RPCMeterConfigParser.<>f__switch$map8 == null)
+				if (RPCMeterConfigParser.<>f__switch$map1 == null)
 				{
-					RPCMeterConfigParser.<>f__switch$map8 = new Dictionary<string, int>(11)
+					RPCMeterConfigParser.<>f__switch$map1 = new Dictionary<string, int>(11)
 					{
 						{
 							"service_name:",
@@ -76,7 +76,7 @@ namespace bgs
 					};
 				}
 				int num;
-				if (!RPCMeterConfigParser.<>f__switch$map8.TryGetValue(text, out num))
+				if (!RPCMeterConfigParser.<>f__switch$map1.TryGetValue(text, out num))
 				{
 					goto IL_1E7;
 				}

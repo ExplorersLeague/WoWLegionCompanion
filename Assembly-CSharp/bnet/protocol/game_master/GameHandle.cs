@@ -5,6 +5,46 @@ namespace bnet.protocol.game_master
 {
 	public class GameHandle : IProtoBuf
 	{
+		public ulong FactoryId { get; set; }
+
+		public void SetFactoryId(ulong val)
+		{
+			this.FactoryId = val;
+		}
+
+		public EntityId GameId { get; set; }
+
+		public void SetGameId(EntityId val)
+		{
+			this.GameId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.FactoryId.GetHashCode();
+			return num ^ this.GameId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameHandle gameHandle = obj as GameHandle;
+			return gameHandle != null && this.FactoryId.Equals(gameHandle.FactoryId) && this.GameId.Equals(gameHandle.GameId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameHandle ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameHandle>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameHandle.Deserialize(stream, this);
@@ -102,46 +142,6 @@ namespace bnet.protocol.game_master
 			uint serializedSize = this.GameId.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 2u;
-		}
-
-		public ulong FactoryId { get; set; }
-
-		public void SetFactoryId(ulong val)
-		{
-			this.FactoryId = val;
-		}
-
-		public EntityId GameId { get; set; }
-
-		public void SetGameId(EntityId val)
-		{
-			this.GameId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.FactoryId.GetHashCode();
-			return num ^ this.GameId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameHandle gameHandle = obj as GameHandle;
-			return gameHandle != null && this.FactoryId.Equals(gameHandle.FactoryId) && this.GameId.Equals(gameHandle.GameId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameHandle ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameHandle>(bs, 0, -1);
 		}
 	}
 }

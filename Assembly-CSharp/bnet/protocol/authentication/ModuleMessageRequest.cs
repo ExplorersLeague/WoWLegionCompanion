@@ -5,6 +5,61 @@ namespace bnet.protocol.authentication
 {
 	public class ModuleMessageRequest : IProtoBuf
 	{
+		public int ModuleId { get; set; }
+
+		public void SetModuleId(int val)
+		{
+			this.ModuleId = val;
+		}
+
+		public byte[] Message
+		{
+			get
+			{
+				return this._Message;
+			}
+			set
+			{
+				this._Message = value;
+				this.HasMessage = (value != null);
+			}
+		}
+
+		public void SetMessage(byte[] val)
+		{
+			this.Message = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ModuleId.GetHashCode();
+			if (this.HasMessage)
+			{
+				num ^= this.Message.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ModuleMessageRequest moduleMessageRequest = obj as ModuleMessageRequest;
+			return moduleMessageRequest != null && this.ModuleId.Equals(moduleMessageRequest.ModuleId) && this.HasMessage == moduleMessageRequest.HasMessage && (!this.HasMessage || this.Message.Equals(moduleMessageRequest.Message));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ModuleMessageRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ModuleMessageRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ModuleMessageRequest.Deserialize(stream, this);
@@ -97,61 +152,6 @@ namespace bnet.protocol.authentication
 				num += ProtocolParser.SizeOfUInt32(this.Message.Length) + (uint)this.Message.Length;
 			}
 			return num + 1u;
-		}
-
-		public int ModuleId { get; set; }
-
-		public void SetModuleId(int val)
-		{
-			this.ModuleId = val;
-		}
-
-		public byte[] Message
-		{
-			get
-			{
-				return this._Message;
-			}
-			set
-			{
-				this._Message = value;
-				this.HasMessage = (value != null);
-			}
-		}
-
-		public void SetMessage(byte[] val)
-		{
-			this.Message = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ModuleId.GetHashCode();
-			if (this.HasMessage)
-			{
-				num ^= this.Message.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ModuleMessageRequest moduleMessageRequest = obj as ModuleMessageRequest;
-			return moduleMessageRequest != null && this.ModuleId.Equals(moduleMessageRequest.ModuleId) && this.HasMessage == moduleMessageRequest.HasMessage && (!this.HasMessage || this.Message.Equals(moduleMessageRequest.Message));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ModuleMessageRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ModuleMessageRequest>(bs, 0, -1);
 		}
 
 		public bool HasMessage;

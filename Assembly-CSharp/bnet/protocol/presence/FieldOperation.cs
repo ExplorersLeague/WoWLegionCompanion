@@ -5,6 +5,61 @@ namespace bnet.protocol.presence
 {
 	public class FieldOperation : IProtoBuf
 	{
+		public Field Field { get; set; }
+
+		public void SetField(Field val)
+		{
+			this.Field = val;
+		}
+
+		public FieldOperation.Types.OperationType Operation
+		{
+			get
+			{
+				return this._Operation;
+			}
+			set
+			{
+				this._Operation = value;
+				this.HasOperation = true;
+			}
+		}
+
+		public void SetOperation(FieldOperation.Types.OperationType val)
+		{
+			this.Operation = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Field.GetHashCode();
+			if (this.HasOperation)
+			{
+				num ^= this.Operation.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FieldOperation fieldOperation = obj as FieldOperation;
+			return fieldOperation != null && this.Field.Equals(fieldOperation.Field) && this.HasOperation == fieldOperation.HasOperation && (!this.HasOperation || this.Operation.Equals(fieldOperation.Operation));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FieldOperation ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FieldOperation>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FieldOperation.Deserialize(stream, this);
@@ -108,61 +163,6 @@ namespace bnet.protocol.presence
 				num += ProtocolParser.SizeOfUInt64((ulong)((long)this.Operation));
 			}
 			return num + 1u;
-		}
-
-		public Field Field { get; set; }
-
-		public void SetField(Field val)
-		{
-			this.Field = val;
-		}
-
-		public FieldOperation.Types.OperationType Operation
-		{
-			get
-			{
-				return this._Operation;
-			}
-			set
-			{
-				this._Operation = value;
-				this.HasOperation = true;
-			}
-		}
-
-		public void SetOperation(FieldOperation.Types.OperationType val)
-		{
-			this.Operation = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Field.GetHashCode();
-			if (this.HasOperation)
-			{
-				num ^= this.Operation.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FieldOperation fieldOperation = obj as FieldOperation;
-			return fieldOperation != null && this.Field.Equals(fieldOperation.Field) && this.HasOperation == fieldOperation.HasOperation && (!this.HasOperation || this.Operation.Equals(fieldOperation.Operation));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FieldOperation ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FieldOperation>(bs, 0, -1);
 		}
 
 		public bool HasOperation;

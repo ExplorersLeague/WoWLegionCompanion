@@ -122,6 +122,11 @@ namespace bgs
 			return BattleNet.s_impl.GetMyGameAccountId();
 		}
 
+		public static string GetMyBattleTag()
+		{
+			return BattleNet.s_impl.GetMyBattleTag();
+		}
+
 		public static bgs.types.EntityId GetMyAccountId()
 		{
 			return BattleNet.s_impl.GetMyAccountId();

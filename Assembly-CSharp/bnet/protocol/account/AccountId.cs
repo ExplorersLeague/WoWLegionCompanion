@@ -5,6 +5,38 @@ namespace bnet.protocol.account
 {
 	public class AccountId : IProtoBuf
 	{
+		public uint Id { get; set; }
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.Id.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountId accountId = obj as AccountId;
+			return accountId != null && this.Id.Equals(accountId.Id);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountId ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountId>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountId.Deserialize(stream, this);
@@ -82,38 +114,6 @@ namespace bnet.protocol.account
 			uint num = 0u;
 			num += 4u;
 			return num + 1u;
-		}
-
-		public uint Id { get; set; }
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.Id.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountId accountId = obj as AccountId;
-			return accountId != null && this.Id.Equals(accountId.Id);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountId ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountId>(bs, 0, -1);
 		}
 	}
 }

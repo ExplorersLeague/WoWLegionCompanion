@@ -5,6 +5,46 @@ namespace bnet.protocol.authentication
 {
 	public class ServerStateChangeRequest : IProtoBuf
 	{
+		public uint State { get; set; }
+
+		public void SetState(uint val)
+		{
+			this.State = val;
+		}
+
+		public ulong EventTime { get; set; }
+
+		public void SetEventTime(ulong val)
+		{
+			this.EventTime = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.State.GetHashCode();
+			return num ^ this.EventTime.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			ServerStateChangeRequest serverStateChangeRequest = obj as ServerStateChangeRequest;
+			return serverStateChangeRequest != null && this.State.Equals(serverStateChangeRequest.State) && this.EventTime.Equals(serverStateChangeRequest.EventTime);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ServerStateChangeRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ServerStateChangeRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ServerStateChangeRequest.Deserialize(stream, this);
@@ -90,46 +130,6 @@ namespace bnet.protocol.authentication
 			num += ProtocolParser.SizeOfUInt32(this.State);
 			num += ProtocolParser.SizeOfUInt64(this.EventTime);
 			return num + 2u;
-		}
-
-		public uint State { get; set; }
-
-		public void SetState(uint val)
-		{
-			this.State = val;
-		}
-
-		public ulong EventTime { get; set; }
-
-		public void SetEventTime(ulong val)
-		{
-			this.EventTime = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.State.GetHashCode();
-			return num ^ this.EventTime.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			ServerStateChangeRequest serverStateChangeRequest = obj as ServerStateChangeRequest;
-			return serverStateChangeRequest != null && this.State.Equals(serverStateChangeRequest.State) && this.EventTime.Equals(serverStateChangeRequest.EventTime);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ServerStateChangeRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ServerStateChangeRequest>(bs, 0, -1);
 		}
 	}
 }

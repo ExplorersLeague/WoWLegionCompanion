@@ -6,6 +6,83 @@ namespace bnet.protocol.game_master
 {
 	public class ListFactoriesRequest : IProtoBuf
 	{
+		public AttributeFilter Filter { get; set; }
+
+		public void SetFilter(AttributeFilter val)
+		{
+			this.Filter = val;
+		}
+
+		public uint StartIndex
+		{
+			get
+			{
+				return this._StartIndex;
+			}
+			set
+			{
+				this._StartIndex = value;
+				this.HasStartIndex = true;
+			}
+		}
+
+		public void SetStartIndex(uint val)
+		{
+			this.StartIndex = val;
+		}
+
+		public uint MaxResults
+		{
+			get
+			{
+				return this._MaxResults;
+			}
+			set
+			{
+				this._MaxResults = value;
+				this.HasMaxResults = true;
+			}
+		}
+
+		public void SetMaxResults(uint val)
+		{
+			this.MaxResults = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Filter.GetHashCode();
+			if (this.HasStartIndex)
+			{
+				num ^= this.StartIndex.GetHashCode();
+			}
+			if (this.HasMaxResults)
+			{
+				num ^= this.MaxResults.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ListFactoriesRequest listFactoriesRequest = obj as ListFactoriesRequest;
+			return listFactoriesRequest != null && this.Filter.Equals(listFactoriesRequest.Filter) && this.HasStartIndex == listFactoriesRequest.HasStartIndex && (!this.HasStartIndex || this.StartIndex.Equals(listFactoriesRequest.StartIndex)) && this.HasMaxResults == listFactoriesRequest.HasMaxResults && (!this.HasMaxResults || this.MaxResults.Equals(listFactoriesRequest.MaxResults));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ListFactoriesRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ListFactoriesRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ListFactoriesRequest.Deserialize(stream, this);
@@ -127,83 +204,6 @@ namespace bnet.protocol.game_master
 				num += ProtocolParser.SizeOfUInt32(this.MaxResults);
 			}
 			return num + 1u;
-		}
-
-		public AttributeFilter Filter { get; set; }
-
-		public void SetFilter(AttributeFilter val)
-		{
-			this.Filter = val;
-		}
-
-		public uint StartIndex
-		{
-			get
-			{
-				return this._StartIndex;
-			}
-			set
-			{
-				this._StartIndex = value;
-				this.HasStartIndex = true;
-			}
-		}
-
-		public void SetStartIndex(uint val)
-		{
-			this.StartIndex = val;
-		}
-
-		public uint MaxResults
-		{
-			get
-			{
-				return this._MaxResults;
-			}
-			set
-			{
-				this._MaxResults = value;
-				this.HasMaxResults = true;
-			}
-		}
-
-		public void SetMaxResults(uint val)
-		{
-			this.MaxResults = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Filter.GetHashCode();
-			if (this.HasStartIndex)
-			{
-				num ^= this.StartIndex.GetHashCode();
-			}
-			if (this.HasMaxResults)
-			{
-				num ^= this.MaxResults.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ListFactoriesRequest listFactoriesRequest = obj as ListFactoriesRequest;
-			return listFactoriesRequest != null && this.Filter.Equals(listFactoriesRequest.Filter) && this.HasStartIndex == listFactoriesRequest.HasStartIndex && (!this.HasStartIndex || this.StartIndex.Equals(listFactoriesRequest.StartIndex)) && this.HasMaxResults == listFactoriesRequest.HasMaxResults && (!this.HasMaxResults || this.MaxResults.Equals(listFactoriesRequest.MaxResults));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ListFactoriesRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ListFactoriesRequest>(bs, 0, -1);
 		}
 
 		public bool HasStartIndex;

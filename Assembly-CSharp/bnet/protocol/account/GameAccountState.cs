@@ -5,6 +5,97 @@ namespace bnet.protocol.account
 {
 	public class GameAccountState : IProtoBuf
 	{
+		public GameLevelInfo GameLevelInfo
+		{
+			get
+			{
+				return this._GameLevelInfo;
+			}
+			set
+			{
+				this._GameLevelInfo = value;
+				this.HasGameLevelInfo = (value != null);
+			}
+		}
+
+		public void SetGameLevelInfo(GameLevelInfo val)
+		{
+			this.GameLevelInfo = val;
+		}
+
+		public GameTimeInfo GameTimeInfo
+		{
+			get
+			{
+				return this._GameTimeInfo;
+			}
+			set
+			{
+				this._GameTimeInfo = value;
+				this.HasGameTimeInfo = (value != null);
+			}
+		}
+
+		public void SetGameTimeInfo(GameTimeInfo val)
+		{
+			this.GameTimeInfo = val;
+		}
+
+		public GameStatus GameStatus
+		{
+			get
+			{
+				return this._GameStatus;
+			}
+			set
+			{
+				this._GameStatus = value;
+				this.HasGameStatus = (value != null);
+			}
+		}
+
+		public void SetGameStatus(GameStatus val)
+		{
+			this.GameStatus = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasGameLevelInfo)
+			{
+				num ^= this.GameLevelInfo.GetHashCode();
+			}
+			if (this.HasGameTimeInfo)
+			{
+				num ^= this.GameTimeInfo.GetHashCode();
+			}
+			if (this.HasGameStatus)
+			{
+				num ^= this.GameStatus.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountState gameAccountState = obj as GameAccountState;
+			return gameAccountState != null && this.HasGameLevelInfo == gameAccountState.HasGameLevelInfo && (!this.HasGameLevelInfo || this.GameLevelInfo.Equals(gameAccountState.GameLevelInfo)) && this.HasGameTimeInfo == gameAccountState.HasGameTimeInfo && (!this.HasGameTimeInfo || this.GameTimeInfo.Equals(gameAccountState.GameTimeInfo)) && this.HasGameStatus == gameAccountState.HasGameStatus && (!this.HasGameStatus || this.GameStatus.Equals(gameAccountState.GameStatus));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountState ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountState>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountState.Deserialize(stream, this);
@@ -139,97 +230,6 @@ namespace bnet.protocol.account
 				num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
 			}
 			return num;
-		}
-
-		public GameLevelInfo GameLevelInfo
-		{
-			get
-			{
-				return this._GameLevelInfo;
-			}
-			set
-			{
-				this._GameLevelInfo = value;
-				this.HasGameLevelInfo = (value != null);
-			}
-		}
-
-		public void SetGameLevelInfo(GameLevelInfo val)
-		{
-			this.GameLevelInfo = val;
-		}
-
-		public GameTimeInfo GameTimeInfo
-		{
-			get
-			{
-				return this._GameTimeInfo;
-			}
-			set
-			{
-				this._GameTimeInfo = value;
-				this.HasGameTimeInfo = (value != null);
-			}
-		}
-
-		public void SetGameTimeInfo(GameTimeInfo val)
-		{
-			this.GameTimeInfo = val;
-		}
-
-		public GameStatus GameStatus
-		{
-			get
-			{
-				return this._GameStatus;
-			}
-			set
-			{
-				this._GameStatus = value;
-				this.HasGameStatus = (value != null);
-			}
-		}
-
-		public void SetGameStatus(GameStatus val)
-		{
-			this.GameStatus = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasGameLevelInfo)
-			{
-				num ^= this.GameLevelInfo.GetHashCode();
-			}
-			if (this.HasGameTimeInfo)
-			{
-				num ^= this.GameTimeInfo.GetHashCode();
-			}
-			if (this.HasGameStatus)
-			{
-				num ^= this.GameStatus.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountState gameAccountState = obj as GameAccountState;
-			return gameAccountState != null && this.HasGameLevelInfo == gameAccountState.HasGameLevelInfo && (!this.HasGameLevelInfo || this.GameLevelInfo.Equals(gameAccountState.GameLevelInfo)) && this.HasGameTimeInfo == gameAccountState.HasGameTimeInfo && (!this.HasGameTimeInfo || this.GameTimeInfo.Equals(gameAccountState.GameTimeInfo)) && this.HasGameStatus == gameAccountState.HasGameStatus && (!this.HasGameStatus || this.GameStatus.Equals(gameAccountState.GameStatus));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountState ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountState>(bs, 0, -1);
 		}
 
 		public bool HasGameLevelInfo;

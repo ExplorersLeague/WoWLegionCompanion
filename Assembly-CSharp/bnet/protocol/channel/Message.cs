@@ -7,6 +7,115 @@ namespace bnet.protocol.channel
 {
 	public class Message : IProtoBuf
 	{
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public uint Role
+		{
+			get
+			{
+				return this._Role;
+			}
+			set
+			{
+				this._Role = value;
+				this.HasRole = true;
+			}
+		}
+
+		public void SetRole(uint val)
+		{
+			this.Role = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			if (this.HasRole)
+			{
+				num ^= this.Role.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Message message = obj as Message;
+			if (message == null)
+			{
+				return false;
+			}
+			if (this.Attribute.Count != message.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(message.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasRole == message.HasRole && (!this.HasRole || this.Role.Equals(message.Role));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Message ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Message>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Message.Deserialize(stream, this);
@@ -118,115 +227,6 @@ namespace bnet.protocol.channel
 				num += ProtocolParser.SizeOfUInt32(this.Role);
 			}
 			return num;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public uint Role
-		{
-			get
-			{
-				return this._Role;
-			}
-			set
-			{
-				this._Role = value;
-				this.HasRole = true;
-			}
-		}
-
-		public void SetRole(uint val)
-		{
-			this.Role = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			if (this.HasRole)
-			{
-				num ^= this.Role.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Message message = obj as Message;
-			if (message == null)
-			{
-				return false;
-			}
-			if (this.Attribute.Count != message.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(message.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasRole == message.HasRole && (!this.HasRole || this.Role.Equals(message.Role));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Message ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Message>(bs, 0, -1);
 		}
 
 		private List<bnet.protocol.attribute.Attribute> _Attribute = new List<bnet.protocol.attribute.Attribute>();

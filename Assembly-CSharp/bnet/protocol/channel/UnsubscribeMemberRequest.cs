@@ -5,6 +5,60 @@ namespace bnet.protocol.channel
 {
 	public class UnsubscribeMemberRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public EntityId MemberId { get; set; }
+
+		public void SetMemberId(EntityId val)
+		{
+			this.MemberId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			return num ^ this.MemberId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			UnsubscribeMemberRequest unsubscribeMemberRequest = obj as UnsubscribeMemberRequest;
+			return unsubscribeMemberRequest != null && this.HasAgentId == unsubscribeMemberRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(unsubscribeMemberRequest.AgentId)) && this.MemberId.Equals(unsubscribeMemberRequest.MemberId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UnsubscribeMemberRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UnsubscribeMemberRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UnsubscribeMemberRequest.Deserialize(stream, this);
@@ -113,60 +167,6 @@ namespace bnet.protocol.channel
 			uint serializedSize2 = this.MemberId.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public EntityId MemberId { get; set; }
-
-		public void SetMemberId(EntityId val)
-		{
-			this.MemberId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			return num ^ this.MemberId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			UnsubscribeMemberRequest unsubscribeMemberRequest = obj as UnsubscribeMemberRequest;
-			return unsubscribeMemberRequest != null && this.HasAgentId == unsubscribeMemberRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(unsubscribeMemberRequest.AgentId)) && this.MemberId.Equals(unsubscribeMemberRequest.MemberId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UnsubscribeMemberRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UnsubscribeMemberRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

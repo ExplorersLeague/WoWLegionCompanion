@@ -5,6 +5,83 @@ namespace bnet.protocol.channel
 {
 	public class SendMessageRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public Message Message { get; set; }
+
+		public void SetMessage(Message val)
+		{
+			this.Message = val;
+		}
+
+		public ulong RequiredPrivileges
+		{
+			get
+			{
+				return this._RequiredPrivileges;
+			}
+			set
+			{
+				this._RequiredPrivileges = value;
+				this.HasRequiredPrivileges = true;
+			}
+		}
+
+		public void SetRequiredPrivileges(ulong val)
+		{
+			this.RequiredPrivileges = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			num ^= this.Message.GetHashCode();
+			if (this.HasRequiredPrivileges)
+			{
+				num ^= this.RequiredPrivileges.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SendMessageRequest sendMessageRequest = obj as SendMessageRequest;
+			return sendMessageRequest != null && this.HasAgentId == sendMessageRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(sendMessageRequest.AgentId)) && this.Message.Equals(sendMessageRequest.Message) && this.HasRequiredPrivileges == sendMessageRequest.HasRequiredPrivileges && (!this.HasRequiredPrivileges || this.RequiredPrivileges.Equals(sendMessageRequest.RequiredPrivileges));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SendMessageRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SendMessageRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SendMessageRequest.Deserialize(stream, this);
@@ -131,83 +208,6 @@ namespace bnet.protocol.channel
 				num += ProtocolParser.SizeOfUInt64(this.RequiredPrivileges);
 			}
 			return num + 1u;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public Message Message { get; set; }
-
-		public void SetMessage(Message val)
-		{
-			this.Message = val;
-		}
-
-		public ulong RequiredPrivileges
-		{
-			get
-			{
-				return this._RequiredPrivileges;
-			}
-			set
-			{
-				this._RequiredPrivileges = value;
-				this.HasRequiredPrivileges = true;
-			}
-		}
-
-		public void SetRequiredPrivileges(ulong val)
-		{
-			this.RequiredPrivileges = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			num ^= this.Message.GetHashCode();
-			if (this.HasRequiredPrivileges)
-			{
-				num ^= this.RequiredPrivileges.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SendMessageRequest sendMessageRequest = obj as SendMessageRequest;
-			return sendMessageRequest != null && this.HasAgentId == sendMessageRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(sendMessageRequest.AgentId)) && this.Message.Equals(sendMessageRequest.Message) && this.HasRequiredPrivileges == sendMessageRequest.HasRequiredPrivileges && (!this.HasRequiredPrivileges || this.RequiredPrivileges.Equals(sendMessageRequest.RequiredPrivileges));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SendMessageRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SendMessageRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

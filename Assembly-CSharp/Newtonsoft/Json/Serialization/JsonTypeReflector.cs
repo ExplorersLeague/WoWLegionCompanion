@@ -26,26 +26,26 @@ namespace Newtonsoft.Json.Serialization
 			return JsonTypeReflector.GetJsonContainerAttribute(type) as JsonArrayAttribute;
 		}
 
-		public static System.Runtime.Serialization.DataContractAttribute GetDataContractAttribute(Type type)
+		public static DataContractAttribute GetDataContractAttribute(Type type)
 		{
-			System.Runtime.Serialization.DataContractAttribute dataContractAttribute = null;
+			DataContractAttribute dataContractAttribute = null;
 			Type type2 = type;
 			while (dataContractAttribute == null && type2 != null)
 			{
-				dataContractAttribute = CachedAttributeGetter<System.Runtime.Serialization.DataContractAttribute>.GetAttribute(type2);
+				dataContractAttribute = CachedAttributeGetter<DataContractAttribute>.GetAttribute(type2);
 				type2 = type2.BaseType;
 			}
 			return dataContractAttribute;
 		}
 
-		public static System.Runtime.Serialization.DataMemberAttribute GetDataMemberAttribute(MemberInfo memberInfo)
+		public static DataMemberAttribute GetDataMemberAttribute(MemberInfo memberInfo)
 		{
 			if (memberInfo.MemberType == MemberTypes.Field)
 			{
-				return CachedAttributeGetter<System.Runtime.Serialization.DataMemberAttribute>.GetAttribute(memberInfo);
+				return CachedAttributeGetter<DataMemberAttribute>.GetAttribute(memberInfo);
 			}
 			PropertyInfo propertyInfo = (PropertyInfo)memberInfo;
-			System.Runtime.Serialization.DataMemberAttribute attribute = CachedAttributeGetter<System.Runtime.Serialization.DataMemberAttribute>.GetAttribute(propertyInfo);
+			DataMemberAttribute attribute = CachedAttributeGetter<DataMemberAttribute>.GetAttribute(propertyInfo);
 			if (attribute == null && propertyInfo.IsVirtual())
 			{
 				Type type = propertyInfo.DeclaringType;
@@ -54,7 +54,7 @@ namespace Newtonsoft.Json.Serialization
 					PropertyInfo propertyInfo2 = (PropertyInfo)ReflectionUtils.GetMemberInfoFromType(type, propertyInfo);
 					if (propertyInfo2 != null && propertyInfo2.IsVirtual())
 					{
-						attribute = CachedAttributeGetter<System.Runtime.Serialization.DataMemberAttribute>.GetAttribute(propertyInfo2);
+						attribute = CachedAttributeGetter<DataMemberAttribute>.GetAttribute(propertyInfo2);
 					}
 					type = type.BaseType;
 				}
@@ -69,7 +69,7 @@ namespace Newtonsoft.Json.Serialization
 			{
 				return jsonObjectAttribute.MemberSerialization;
 			}
-			System.Runtime.Serialization.DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(objectType);
+			DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(objectType);
 			if (dataContractAttribute != null)
 			{
 				return MemberSerialization.OptIn;

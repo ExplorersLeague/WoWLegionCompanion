@@ -6,6 +6,46 @@ namespace bnet.protocol.account
 {
 	public class AccountServiceRegion : IProtoBuf
 	{
+		public uint Id { get; set; }
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public string Shard { get; set; }
+
+		public void SetShard(string val)
+		{
+			this.Shard = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Id.GetHashCode();
+			return num ^ this.Shard.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountServiceRegion accountServiceRegion = obj as AccountServiceRegion;
+			return accountServiceRegion != null && this.Id.Equals(accountServiceRegion.Id) && this.Shard.Equals(accountServiceRegion.Shard);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountServiceRegion ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountServiceRegion>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountServiceRegion.Deserialize(stream, this);
@@ -96,46 +136,6 @@ namespace bnet.protocol.account
 			uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Shard);
 			num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
 			return num + 2u;
-		}
-
-		public uint Id { get; set; }
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public string Shard { get; set; }
-
-		public void SetShard(string val)
-		{
-			this.Shard = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Id.GetHashCode();
-			return num ^ this.Shard.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountServiceRegion accountServiceRegion = obj as AccountServiceRegion;
-			return accountServiceRegion != null && this.Id.Equals(accountServiceRegion.Id) && this.Shard.Equals(accountServiceRegion.Shard);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountServiceRegion ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountServiceRegion>(bs, 0, -1);
 		}
 	}
 }

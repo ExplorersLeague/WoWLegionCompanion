@@ -5,6 +5,53 @@ namespace bnet.protocol.friends
 {
 	public class GenericFriendResponse : IProtoBuf
 	{
+		public Friend TargetFriend
+		{
+			get
+			{
+				return this._TargetFriend;
+			}
+			set
+			{
+				this._TargetFriend = value;
+				this.HasTargetFriend = (value != null);
+			}
+		}
+
+		public void SetTargetFriend(Friend val)
+		{
+			this.TargetFriend = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasTargetFriend)
+			{
+				num ^= this.TargetFriend.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GenericFriendResponse genericFriendResponse = obj as GenericFriendResponse;
+			return genericFriendResponse != null && this.HasTargetFriend == genericFriendResponse.HasTargetFriend && (!this.HasTargetFriend || this.TargetFriend.Equals(genericFriendResponse.TargetFriend));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GenericFriendResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GenericFriendResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GenericFriendResponse.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.friends
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public Friend TargetFriend
-		{
-			get
-			{
-				return this._TargetFriend;
-			}
-			set
-			{
-				this._TargetFriend = value;
-				this.HasTargetFriend = (value != null);
-			}
-		}
-
-		public void SetTargetFriend(Friend val)
-		{
-			this.TargetFriend = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasTargetFriend)
-			{
-				num ^= this.TargetFriend.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GenericFriendResponse genericFriendResponse = obj as GenericFriendResponse;
-			return genericFriendResponse != null && this.HasTargetFriend == genericFriendResponse.HasTargetFriend && (!this.HasTargetFriend || this.TargetFriend.Equals(genericFriendResponse.TargetFriend));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GenericFriendResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GenericFriendResponse>(bs, 0, -1);
 		}
 
 		public bool HasTargetFriend;

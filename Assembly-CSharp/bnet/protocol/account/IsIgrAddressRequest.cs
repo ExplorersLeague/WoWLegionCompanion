@@ -6,6 +6,75 @@ namespace bnet.protocol.account
 {
 	public class IsIgrAddressRequest : IProtoBuf
 	{
+		public string ClientAddress
+		{
+			get
+			{
+				return this._ClientAddress;
+			}
+			set
+			{
+				this._ClientAddress = value;
+				this.HasClientAddress = (value != null);
+			}
+		}
+
+		public void SetClientAddress(string val)
+		{
+			this.ClientAddress = val;
+		}
+
+		public uint Region
+		{
+			get
+			{
+				return this._Region;
+			}
+			set
+			{
+				this._Region = value;
+				this.HasRegion = true;
+			}
+		}
+
+		public void SetRegion(uint val)
+		{
+			this.Region = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasClientAddress)
+			{
+				num ^= this.ClientAddress.GetHashCode();
+			}
+			if (this.HasRegion)
+			{
+				num ^= this.Region.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			IsIgrAddressRequest isIgrAddressRequest = obj as IsIgrAddressRequest;
+			return isIgrAddressRequest != null && this.HasClientAddress == isIgrAddressRequest.HasClientAddress && (!this.HasClientAddress || this.ClientAddress.Equals(isIgrAddressRequest.ClientAddress)) && this.HasRegion == isIgrAddressRequest.HasRegion && (!this.HasRegion || this.Region.Equals(isIgrAddressRequest.Region));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static IsIgrAddressRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<IsIgrAddressRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			IsIgrAddressRequest.Deserialize(stream, this);
@@ -106,75 +175,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(this.Region);
 			}
 			return num;
-		}
-
-		public string ClientAddress
-		{
-			get
-			{
-				return this._ClientAddress;
-			}
-			set
-			{
-				this._ClientAddress = value;
-				this.HasClientAddress = (value != null);
-			}
-		}
-
-		public void SetClientAddress(string val)
-		{
-			this.ClientAddress = val;
-		}
-
-		public uint Region
-		{
-			get
-			{
-				return this._Region;
-			}
-			set
-			{
-				this._Region = value;
-				this.HasRegion = true;
-			}
-		}
-
-		public void SetRegion(uint val)
-		{
-			this.Region = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasClientAddress)
-			{
-				num ^= this.ClientAddress.GetHashCode();
-			}
-			if (this.HasRegion)
-			{
-				num ^= this.Region.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			IsIgrAddressRequest isIgrAddressRequest = obj as IsIgrAddressRequest;
-			return isIgrAddressRequest != null && this.HasClientAddress == isIgrAddressRequest.HasClientAddress && (!this.HasClientAddress || this.ClientAddress.Equals(isIgrAddressRequest.ClientAddress)) && this.HasRegion == isIgrAddressRequest.HasRegion && (!this.HasRegion || this.Region.Equals(isIgrAddressRequest.Region));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static IsIgrAddressRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<IsIgrAddressRequest>(bs, 0, -1);
 		}
 
 		public bool HasClientAddress;

@@ -5,6 +5,53 @@ namespace bnet.protocol.authentication
 {
 	public class GenerateSSOTokenRequest : IProtoBuf
 	{
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GenerateSSOTokenRequest generateSSOTokenRequest = obj as GenerateSSOTokenRequest;
+			return generateSSOTokenRequest != null && this.HasProgram == generateSSOTokenRequest.HasProgram && (!this.HasProgram || this.Program.Equals(generateSSOTokenRequest.Program));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GenerateSSOTokenRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GenerateSSOTokenRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GenerateSSOTokenRequest.Deserialize(stream, this);
@@ -89,53 +136,6 @@ namespace bnet.protocol.authentication
 				num += 4u;
 			}
 			return num;
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GenerateSSOTokenRequest generateSSOTokenRequest = obj as GenerateSSOTokenRequest;
-			return generateSSOTokenRequest != null && this.HasProgram == generateSSOTokenRequest.HasProgram && (!this.HasProgram || this.Program.Equals(generateSSOTokenRequest.Program));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GenerateSSOTokenRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GenerateSSOTokenRequest>(bs, 0, -1);
 		}
 
 		public bool HasProgram;

@@ -6,169 +6,6 @@ namespace bnet.protocol.account
 {
 	public class CredentialUpdateRequest : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			CredentialUpdateRequest.Deserialize(stream, this);
-		}
-
-		public static CredentialUpdateRequest Deserialize(Stream stream, CredentialUpdateRequest instance)
-		{
-			return CredentialUpdateRequest.Deserialize(stream, instance, -1L);
-		}
-
-		public static CredentialUpdateRequest DeserializeLengthDelimited(Stream stream)
-		{
-			CredentialUpdateRequest credentialUpdateRequest = new CredentialUpdateRequest();
-			CredentialUpdateRequest.DeserializeLengthDelimited(stream, credentialUpdateRequest);
-			return credentialUpdateRequest;
-		}
-
-		public static CredentialUpdateRequest DeserializeLengthDelimited(Stream stream, CredentialUpdateRequest instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return CredentialUpdateRequest.Deserialize(stream, instance, num);
-		}
-
-		public static CredentialUpdateRequest Deserialize(Stream stream, CredentialUpdateRequest instance, long limit)
-		{
-			if (instance.OldCredentials == null)
-			{
-				instance.OldCredentials = new List<AccountCredential>();
-			}
-			if (instance.NewCredentials == null)
-			{
-				instance.NewCredentials = new List<AccountCredential>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 10)
-				{
-					if (num != 18)
-					{
-						if (num != 26)
-						{
-							if (num != 32)
-							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
-							}
-							else
-							{
-								instance.Region = ProtocolParser.ReadUInt32(stream);
-							}
-						}
-						else
-						{
-							instance.NewCredentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
-						}
-					}
-					else
-					{
-						instance.OldCredentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
-					}
-				}
-				else if (instance.Account == null)
-				{
-					instance.Account = AccountId.DeserializeLengthDelimited(stream);
-				}
-				else
-				{
-					AccountId.DeserializeLengthDelimited(stream, instance.Account);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			CredentialUpdateRequest.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, CredentialUpdateRequest instance)
-		{
-			if (instance.Account == null)
-			{
-				throw new ArgumentNullException("Account", "Required by proto specification.");
-			}
-			stream.WriteByte(10);
-			ProtocolParser.WriteUInt32(stream, instance.Account.GetSerializedSize());
-			AccountId.Serialize(stream, instance.Account);
-			if (instance.OldCredentials.Count > 0)
-			{
-				foreach (AccountCredential accountCredential in instance.OldCredentials)
-				{
-					stream.WriteByte(18);
-					ProtocolParser.WriteUInt32(stream, accountCredential.GetSerializedSize());
-					AccountCredential.Serialize(stream, accountCredential);
-				}
-			}
-			if (instance.NewCredentials.Count > 0)
-			{
-				foreach (AccountCredential accountCredential2 in instance.NewCredentials)
-				{
-					stream.WriteByte(26);
-					ProtocolParser.WriteUInt32(stream, accountCredential2.GetSerializedSize());
-					AccountCredential.Serialize(stream, accountCredential2);
-				}
-			}
-			if (instance.HasRegion)
-			{
-				stream.WriteByte(32);
-				ProtocolParser.WriteUInt32(stream, instance.Region);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			uint serializedSize = this.Account.GetSerializedSize();
-			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-			if (this.OldCredentials.Count > 0)
-			{
-				foreach (AccountCredential accountCredential in this.OldCredentials)
-				{
-					num += 1u;
-					uint serializedSize2 = accountCredential.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			if (this.NewCredentials.Count > 0)
-			{
-				foreach (AccountCredential accountCredential2 in this.NewCredentials)
-				{
-					num += 1u;
-					uint serializedSize3 = accountCredential2.GetSerializedSize();
-					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
-				}
-			}
-			if (this.HasRegion)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.Region);
-			}
-			num += 1u;
-			return num;
-		}
-
 		public AccountId Account { get; set; }
 
 		public void SetAccount(AccountId val)
@@ -346,6 +183,169 @@ namespace bnet.protocol.account
 		public static CredentialUpdateRequest ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<CredentialUpdateRequest>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			CredentialUpdateRequest.Deserialize(stream, this);
+		}
+
+		public static CredentialUpdateRequest Deserialize(Stream stream, CredentialUpdateRequest instance)
+		{
+			return CredentialUpdateRequest.Deserialize(stream, instance, -1L);
+		}
+
+		public static CredentialUpdateRequest DeserializeLengthDelimited(Stream stream)
+		{
+			CredentialUpdateRequest credentialUpdateRequest = new CredentialUpdateRequest();
+			CredentialUpdateRequest.DeserializeLengthDelimited(stream, credentialUpdateRequest);
+			return credentialUpdateRequest;
+		}
+
+		public static CredentialUpdateRequest DeserializeLengthDelimited(Stream stream, CredentialUpdateRequest instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return CredentialUpdateRequest.Deserialize(stream, instance, num);
+		}
+
+		public static CredentialUpdateRequest Deserialize(Stream stream, CredentialUpdateRequest instance, long limit)
+		{
+			if (instance.OldCredentials == null)
+			{
+				instance.OldCredentials = new List<AccountCredential>();
+			}
+			if (instance.NewCredentials == null)
+			{
+				instance.NewCredentials = new List<AccountCredential>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 10)
+				{
+					if (num != 18)
+					{
+						if (num != 26)
+						{
+							if (num != 32)
+							{
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
+								{
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+								}
+								ProtocolParser.SkipKey(stream, key);
+							}
+							else
+							{
+								instance.Region = ProtocolParser.ReadUInt32(stream);
+							}
+						}
+						else
+						{
+							instance.NewCredentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
+						}
+					}
+					else
+					{
+						instance.OldCredentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
+					}
+				}
+				else if (instance.Account == null)
+				{
+					instance.Account = AccountId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					AccountId.DeserializeLengthDelimited(stream, instance.Account);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			CredentialUpdateRequest.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, CredentialUpdateRequest instance)
+		{
+			if (instance.Account == null)
+			{
+				throw new ArgumentNullException("Account", "Required by proto specification.");
+			}
+			stream.WriteByte(10);
+			ProtocolParser.WriteUInt32(stream, instance.Account.GetSerializedSize());
+			AccountId.Serialize(stream, instance.Account);
+			if (instance.OldCredentials.Count > 0)
+			{
+				foreach (AccountCredential accountCredential in instance.OldCredentials)
+				{
+					stream.WriteByte(18);
+					ProtocolParser.WriteUInt32(stream, accountCredential.GetSerializedSize());
+					AccountCredential.Serialize(stream, accountCredential);
+				}
+			}
+			if (instance.NewCredentials.Count > 0)
+			{
+				foreach (AccountCredential accountCredential2 in instance.NewCredentials)
+				{
+					stream.WriteByte(26);
+					ProtocolParser.WriteUInt32(stream, accountCredential2.GetSerializedSize());
+					AccountCredential.Serialize(stream, accountCredential2);
+				}
+			}
+			if (instance.HasRegion)
+			{
+				stream.WriteByte(32);
+				ProtocolParser.WriteUInt32(stream, instance.Region);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			uint serializedSize = this.Account.GetSerializedSize();
+			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+			if (this.OldCredentials.Count > 0)
+			{
+				foreach (AccountCredential accountCredential in this.OldCredentials)
+				{
+					num += 1u;
+					uint serializedSize2 = accountCredential.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			if (this.NewCredentials.Count > 0)
+			{
+				foreach (AccountCredential accountCredential2 in this.NewCredentials)
+				{
+					num += 1u;
+					uint serializedSize3 = accountCredential2.GetSerializedSize();
+					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
+				}
+			}
+			if (this.HasRegion)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.Region);
+			}
+			num += 1u;
+			return num;
 		}
 
 		private List<AccountCredential> _OldCredentials = new List<AccountCredential>();

@@ -5,6 +5,38 @@ namespace bnet.protocol.game_master
 {
 	public class UnsubscribeRequest : IProtoBuf
 	{
+		public ulong SubscriptionId { get; set; }
+
+		public void SetSubscriptionId(ulong val)
+		{
+			this.SubscriptionId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.SubscriptionId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			UnsubscribeRequest unsubscribeRequest = obj as UnsubscribeRequest;
+			return unsubscribeRequest != null && this.SubscriptionId.Equals(unsubscribeRequest.SubscriptionId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UnsubscribeRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UnsubscribeRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UnsubscribeRequest.Deserialize(stream, this);
@@ -80,38 +112,6 @@ namespace bnet.protocol.game_master
 			uint num = 0u;
 			num += ProtocolParser.SizeOfUInt64(this.SubscriptionId);
 			return num + 1u;
-		}
-
-		public ulong SubscriptionId { get; set; }
-
-		public void SetSubscriptionId(ulong val)
-		{
-			this.SubscriptionId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.SubscriptionId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			UnsubscribeRequest unsubscribeRequest = obj as UnsubscribeRequest;
-			return unsubscribeRequest != null && this.SubscriptionId.Equals(unsubscribeRequest.SubscriptionId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UnsubscribeRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UnsubscribeRequest>(bs, 0, -1);
 		}
 	}
 }

@@ -6,6 +6,46 @@ namespace bnet.protocol.account
 {
 	public class GameAccountLink : IProtoBuf
 	{
+		public GameAccountHandle GameAccount { get; set; }
+
+		public void SetGameAccount(GameAccountHandle val)
+		{
+			this.GameAccount = val;
+		}
+
+		public string Name { get; set; }
+
+		public void SetName(string val)
+		{
+			this.Name = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.GameAccount.GetHashCode();
+			return num ^ this.Name.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountLink gameAccountLink = obj as GameAccountLink;
+			return gameAccountLink != null && this.GameAccount.Equals(gameAccountLink.GameAccount) && this.Name.Equals(gameAccountLink.Name);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountLink ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountLink>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountLink.Deserialize(stream, this);
@@ -106,46 +146,6 @@ namespace bnet.protocol.account
 			uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Name);
 			num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
 			return num + 2u;
-		}
-
-		public GameAccountHandle GameAccount { get; set; }
-
-		public void SetGameAccount(GameAccountHandle val)
-		{
-			this.GameAccount = val;
-		}
-
-		public string Name { get; set; }
-
-		public void SetName(string val)
-		{
-			this.Name = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.GameAccount.GetHashCode();
-			return num ^ this.Name.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountLink gameAccountLink = obj as GameAccountLink;
-			return gameAccountLink != null && this.GameAccount.Equals(gameAccountLink.GameAccount) && this.Name.Equals(gameAccountLink.Name);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountLink ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountLink>(bs, 0, -1);
 		}
 	}
 }

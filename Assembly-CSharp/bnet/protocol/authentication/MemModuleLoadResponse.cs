@@ -5,6 +5,38 @@ namespace bnet.protocol.authentication
 {
 	public class MemModuleLoadResponse : IProtoBuf
 	{
+		public byte[] Data { get; set; }
+
+		public void SetData(byte[] val)
+		{
+			this.Data = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.Data.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			MemModuleLoadResponse memModuleLoadResponse = obj as MemModuleLoadResponse;
+			return memModuleLoadResponse != null && this.Data.Equals(memModuleLoadResponse.Data);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static MemModuleLoadResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<MemModuleLoadResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			MemModuleLoadResponse.Deserialize(stream, this);
@@ -84,38 +116,6 @@ namespace bnet.protocol.authentication
 			uint num = 0u;
 			num += ProtocolParser.SizeOfUInt32(this.Data.Length) + (uint)this.Data.Length;
 			return num + 1u;
-		}
-
-		public byte[] Data { get; set; }
-
-		public void SetData(byte[] val)
-		{
-			this.Data = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.Data.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			MemModuleLoadResponse memModuleLoadResponse = obj as MemModuleLoadResponse;
-			return memModuleLoadResponse != null && this.Data.Equals(memModuleLoadResponse.Data);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static MemModuleLoadResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<MemModuleLoadResponse>(bs, 0, -1);
 		}
 	}
 }

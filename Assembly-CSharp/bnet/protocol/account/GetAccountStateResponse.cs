@@ -5,6 +5,75 @@ namespace bnet.protocol.account
 {
 	public class GetAccountStateResponse : IProtoBuf
 	{
+		public AccountState State
+		{
+			get
+			{
+				return this._State;
+			}
+			set
+			{
+				this._State = value;
+				this.HasState = (value != null);
+			}
+		}
+
+		public void SetState(AccountState val)
+		{
+			this.State = val;
+		}
+
+		public AccountFieldTags Tags
+		{
+			get
+			{
+				return this._Tags;
+			}
+			set
+			{
+				this._Tags = value;
+				this.HasTags = (value != null);
+			}
+		}
+
+		public void SetTags(AccountFieldTags val)
+		{
+			this.Tags = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasState)
+			{
+				num ^= this.State.GetHashCode();
+			}
+			if (this.HasTags)
+			{
+				num ^= this.Tags.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetAccountStateResponse getAccountStateResponse = obj as GetAccountStateResponse;
+			return getAccountStateResponse != null && this.HasState == getAccountStateResponse.HasState && (!this.HasState || this.State.Equals(getAccountStateResponse.State)) && this.HasTags == getAccountStateResponse.HasTags && (!this.HasTags || this.Tags.Equals(getAccountStateResponse.Tags));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetAccountStateResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetAccountStateResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetAccountStateResponse.Deserialize(stream, this);
@@ -116,75 +185,6 @@ namespace bnet.protocol.account
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num;
-		}
-
-		public AccountState State
-		{
-			get
-			{
-				return this._State;
-			}
-			set
-			{
-				this._State = value;
-				this.HasState = (value != null);
-			}
-		}
-
-		public void SetState(AccountState val)
-		{
-			this.State = val;
-		}
-
-		public AccountFieldTags Tags
-		{
-			get
-			{
-				return this._Tags;
-			}
-			set
-			{
-				this._Tags = value;
-				this.HasTags = (value != null);
-			}
-		}
-
-		public void SetTags(AccountFieldTags val)
-		{
-			this.Tags = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasState)
-			{
-				num ^= this.State.GetHashCode();
-			}
-			if (this.HasTags)
-			{
-				num ^= this.Tags.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetAccountStateResponse getAccountStateResponse = obj as GetAccountStateResponse;
-			return getAccountStateResponse != null && this.HasState == getAccountStateResponse.HasState && (!this.HasState || this.State.Equals(getAccountStateResponse.State)) && this.HasTags == getAccountStateResponse.HasTags && (!this.HasTags || this.Tags.Equals(getAccountStateResponse.Tags));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetAccountStateResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetAccountStateResponse>(bs, 0, -1);
 		}
 
 		public bool HasState;

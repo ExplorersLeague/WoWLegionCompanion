@@ -5,6 +5,119 @@ namespace bnet.protocol.account
 {
 	public class CreateGameAccountRequest : IProtoBuf
 	{
+		public AccountId Account
+		{
+			get
+			{
+				return this._Account;
+			}
+			set
+			{
+				this._Account = value;
+				this.HasAccount = (value != null);
+			}
+		}
+
+		public void SetAccount(AccountId val)
+		{
+			this.Account = val;
+		}
+
+		public uint Region
+		{
+			get
+			{
+				return this._Region;
+			}
+			set
+			{
+				this._Region = value;
+				this.HasRegion = true;
+			}
+		}
+
+		public void SetRegion(uint val)
+		{
+			this.Region = val;
+		}
+
+		public uint Program
+		{
+			get
+			{
+				return this._Program;
+			}
+			set
+			{
+				this._Program = value;
+				this.HasProgram = true;
+			}
+		}
+
+		public void SetProgram(uint val)
+		{
+			this.Program = val;
+		}
+
+		public uint RealmPermissions
+		{
+			get
+			{
+				return this._RealmPermissions;
+			}
+			set
+			{
+				this._RealmPermissions = value;
+				this.HasRealmPermissions = true;
+			}
+		}
+
+		public void SetRealmPermissions(uint val)
+		{
+			this.RealmPermissions = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAccount)
+			{
+				num ^= this.Account.GetHashCode();
+			}
+			if (this.HasRegion)
+			{
+				num ^= this.Region.GetHashCode();
+			}
+			if (this.HasProgram)
+			{
+				num ^= this.Program.GetHashCode();
+			}
+			if (this.HasRealmPermissions)
+			{
+				num ^= this.RealmPermissions.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			CreateGameAccountRequest createGameAccountRequest = obj as CreateGameAccountRequest;
+			return createGameAccountRequest != null && this.HasAccount == createGameAccountRequest.HasAccount && (!this.HasAccount || this.Account.Equals(createGameAccountRequest.Account)) && this.HasRegion == createGameAccountRequest.HasRegion && (!this.HasRegion || this.Region.Equals(createGameAccountRequest.Region)) && this.HasProgram == createGameAccountRequest.HasProgram && (!this.HasProgram || this.Program.Equals(createGameAccountRequest.Program)) && this.HasRealmPermissions == createGameAccountRequest.HasRealmPermissions && (!this.HasRealmPermissions || this.RealmPermissions.Equals(createGameAccountRequest.RealmPermissions));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static CreateGameAccountRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<CreateGameAccountRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			CreateGameAccountRequest.Deserialize(stream, this);
@@ -147,119 +260,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(this.RealmPermissions);
 			}
 			return num;
-		}
-
-		public AccountId Account
-		{
-			get
-			{
-				return this._Account;
-			}
-			set
-			{
-				this._Account = value;
-				this.HasAccount = (value != null);
-			}
-		}
-
-		public void SetAccount(AccountId val)
-		{
-			this.Account = val;
-		}
-
-		public uint Region
-		{
-			get
-			{
-				return this._Region;
-			}
-			set
-			{
-				this._Region = value;
-				this.HasRegion = true;
-			}
-		}
-
-		public void SetRegion(uint val)
-		{
-			this.Region = val;
-		}
-
-		public uint Program
-		{
-			get
-			{
-				return this._Program;
-			}
-			set
-			{
-				this._Program = value;
-				this.HasProgram = true;
-			}
-		}
-
-		public void SetProgram(uint val)
-		{
-			this.Program = val;
-		}
-
-		public uint RealmPermissions
-		{
-			get
-			{
-				return this._RealmPermissions;
-			}
-			set
-			{
-				this._RealmPermissions = value;
-				this.HasRealmPermissions = true;
-			}
-		}
-
-		public void SetRealmPermissions(uint val)
-		{
-			this.RealmPermissions = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAccount)
-			{
-				num ^= this.Account.GetHashCode();
-			}
-			if (this.HasRegion)
-			{
-				num ^= this.Region.GetHashCode();
-			}
-			if (this.HasProgram)
-			{
-				num ^= this.Program.GetHashCode();
-			}
-			if (this.HasRealmPermissions)
-			{
-				num ^= this.RealmPermissions.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			CreateGameAccountRequest createGameAccountRequest = obj as CreateGameAccountRequest;
-			return createGameAccountRequest != null && this.HasAccount == createGameAccountRequest.HasAccount && (!this.HasAccount || this.Account.Equals(createGameAccountRequest.Account)) && this.HasRegion == createGameAccountRequest.HasRegion && (!this.HasRegion || this.Region.Equals(createGameAccountRequest.Region)) && this.HasProgram == createGameAccountRequest.HasProgram && (!this.HasProgram || this.Program.Equals(createGameAccountRequest.Program)) && this.HasRealmPermissions == createGameAccountRequest.HasRealmPermissions && (!this.HasRealmPermissions || this.RealmPermissions.Equals(createGameAccountRequest.RealmPermissions));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static CreateGameAccountRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<CreateGameAccountRequest>(bs, 0, -1);
 		}
 
 		public bool HasAccount;

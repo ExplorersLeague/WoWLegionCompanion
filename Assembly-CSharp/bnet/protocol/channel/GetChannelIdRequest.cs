@@ -5,6 +5,29 @@ namespace bnet.protocol.channel
 {
 	public class GetChannelIdRequest : IProtoBuf
 	{
+		public override int GetHashCode()
+		{
+			return base.GetType().GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is GetChannelIdRequest;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetChannelIdRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetChannelIdRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetChannelIdRequest.Deserialize(stream, this);
@@ -72,29 +95,6 @@ namespace bnet.protocol.channel
 		public uint GetSerializedSize()
 		{
 			return 0u;
-		}
-
-		public override int GetHashCode()
-		{
-			return base.GetType().GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			return obj is GetChannelIdRequest;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetChannelIdRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetChannelIdRequest>(bs, 0, -1);
 		}
 	}
 }

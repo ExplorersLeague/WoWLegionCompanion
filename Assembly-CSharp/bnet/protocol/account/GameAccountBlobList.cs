@@ -6,6 +6,93 @@ namespace bnet.protocol.account
 {
 	public class GameAccountBlobList : IProtoBuf
 	{
+		public List<GameAccountBlob> Blob
+		{
+			get
+			{
+				return this._Blob;
+			}
+			set
+			{
+				this._Blob = value;
+			}
+		}
+
+		public List<GameAccountBlob> BlobList
+		{
+			get
+			{
+				return this._Blob;
+			}
+		}
+
+		public int BlobCount
+		{
+			get
+			{
+				return this._Blob.Count;
+			}
+		}
+
+		public void AddBlob(GameAccountBlob val)
+		{
+			this._Blob.Add(val);
+		}
+
+		public void ClearBlob()
+		{
+			this._Blob.Clear();
+		}
+
+		public void SetBlob(List<GameAccountBlob> val)
+		{
+			this.Blob = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (GameAccountBlob gameAccountBlob in this.Blob)
+			{
+				num ^= gameAccountBlob.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountBlobList gameAccountBlobList = obj as GameAccountBlobList;
+			if (gameAccountBlobList == null)
+			{
+				return false;
+			}
+			if (this.Blob.Count != gameAccountBlobList.Blob.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Blob.Count; i++)
+			{
+				if (!this.Blob[i].Equals(gameAccountBlobList.Blob[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountBlobList ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountBlobList>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountBlobList.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.account
 				}
 			}
 			return num;
-		}
-
-		public List<GameAccountBlob> Blob
-		{
-			get
-			{
-				return this._Blob;
-			}
-			set
-			{
-				this._Blob = value;
-			}
-		}
-
-		public List<GameAccountBlob> BlobList
-		{
-			get
-			{
-				return this._Blob;
-			}
-		}
-
-		public int BlobCount
-		{
-			get
-			{
-				return this._Blob.Count;
-			}
-		}
-
-		public void AddBlob(GameAccountBlob val)
-		{
-			this._Blob.Add(val);
-		}
-
-		public void ClearBlob()
-		{
-			this._Blob.Clear();
-		}
-
-		public void SetBlob(List<GameAccountBlob> val)
-		{
-			this.Blob = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (GameAccountBlob gameAccountBlob in this.Blob)
-			{
-				num ^= gameAccountBlob.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountBlobList gameAccountBlobList = obj as GameAccountBlobList;
-			if (gameAccountBlobList == null)
-			{
-				return false;
-			}
-			if (this.Blob.Count != gameAccountBlobList.Blob.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Blob.Count; i++)
-			{
-				if (!this.Blob[i].Equals(gameAccountBlobList.Blob[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountBlobList ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountBlobList>(bs, 0, -1);
 		}
 
 		private List<GameAccountBlob> _Blob = new List<GameAccountBlob>();

@@ -5,6 +5,38 @@ namespace bnet.protocol.channel_invitation
 {
 	public class AcceptInvitationResponse : IProtoBuf
 	{
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.ObjectId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			AcceptInvitationResponse acceptInvitationResponse = obj as AcceptInvitationResponse;
+			return acceptInvitationResponse != null && this.ObjectId.Equals(acceptInvitationResponse.ObjectId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AcceptInvitationResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AcceptInvitationResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AcceptInvitationResponse.Deserialize(stream, this);
@@ -80,38 +112,6 @@ namespace bnet.protocol.channel_invitation
 			uint num = 0u;
 			num += ProtocolParser.SizeOfUInt64(this.ObjectId);
 			return num + 1u;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.ObjectId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			AcceptInvitationResponse acceptInvitationResponse = obj as AcceptInvitationResponse;
-			return acceptInvitationResponse != null && this.ObjectId.Equals(acceptInvitationResponse.ObjectId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AcceptInvitationResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AcceptInvitationResponse>(bs, 0, -1);
 		}
 	}
 }

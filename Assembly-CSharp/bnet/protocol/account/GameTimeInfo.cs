@@ -5,6 +5,119 @@ namespace bnet.protocol.account
 {
 	public class GameTimeInfo : IProtoBuf
 	{
+		public bool IsUnlimitedPlayTime
+		{
+			get
+			{
+				return this._IsUnlimitedPlayTime;
+			}
+			set
+			{
+				this._IsUnlimitedPlayTime = value;
+				this.HasIsUnlimitedPlayTime = true;
+			}
+		}
+
+		public void SetIsUnlimitedPlayTime(bool val)
+		{
+			this.IsUnlimitedPlayTime = val;
+		}
+
+		public ulong PlayTimeExpires
+		{
+			get
+			{
+				return this._PlayTimeExpires;
+			}
+			set
+			{
+				this._PlayTimeExpires = value;
+				this.HasPlayTimeExpires = true;
+			}
+		}
+
+		public void SetPlayTimeExpires(ulong val)
+		{
+			this.PlayTimeExpires = val;
+		}
+
+		public bool IsSubscription
+		{
+			get
+			{
+				return this._IsSubscription;
+			}
+			set
+			{
+				this._IsSubscription = value;
+				this.HasIsSubscription = true;
+			}
+		}
+
+		public void SetIsSubscription(bool val)
+		{
+			this.IsSubscription = val;
+		}
+
+		public bool IsRecurringSubscription
+		{
+			get
+			{
+				return this._IsRecurringSubscription;
+			}
+			set
+			{
+				this._IsRecurringSubscription = value;
+				this.HasIsRecurringSubscription = true;
+			}
+		}
+
+		public void SetIsRecurringSubscription(bool val)
+		{
+			this.IsRecurringSubscription = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasIsUnlimitedPlayTime)
+			{
+				num ^= this.IsUnlimitedPlayTime.GetHashCode();
+			}
+			if (this.HasPlayTimeExpires)
+			{
+				num ^= this.PlayTimeExpires.GetHashCode();
+			}
+			if (this.HasIsSubscription)
+			{
+				num ^= this.IsSubscription.GetHashCode();
+			}
+			if (this.HasIsRecurringSubscription)
+			{
+				num ^= this.IsRecurringSubscription.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameTimeInfo gameTimeInfo = obj as GameTimeInfo;
+			return gameTimeInfo != null && this.HasIsUnlimitedPlayTime == gameTimeInfo.HasIsUnlimitedPlayTime && (!this.HasIsUnlimitedPlayTime || this.IsUnlimitedPlayTime.Equals(gameTimeInfo.IsUnlimitedPlayTime)) && this.HasPlayTimeExpires == gameTimeInfo.HasPlayTimeExpires && (!this.HasPlayTimeExpires || this.PlayTimeExpires.Equals(gameTimeInfo.PlayTimeExpires)) && this.HasIsSubscription == gameTimeInfo.HasIsSubscription && (!this.HasIsSubscription || this.IsSubscription.Equals(gameTimeInfo.IsSubscription)) && this.HasIsRecurringSubscription == gameTimeInfo.HasIsRecurringSubscription && (!this.HasIsRecurringSubscription || this.IsRecurringSubscription.Equals(gameTimeInfo.IsRecurringSubscription));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameTimeInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameTimeInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameTimeInfo.Deserialize(stream, this);
@@ -138,119 +251,6 @@ namespace bnet.protocol.account
 				num += 1u;
 			}
 			return num;
-		}
-
-		public bool IsUnlimitedPlayTime
-		{
-			get
-			{
-				return this._IsUnlimitedPlayTime;
-			}
-			set
-			{
-				this._IsUnlimitedPlayTime = value;
-				this.HasIsUnlimitedPlayTime = true;
-			}
-		}
-
-		public void SetIsUnlimitedPlayTime(bool val)
-		{
-			this.IsUnlimitedPlayTime = val;
-		}
-
-		public ulong PlayTimeExpires
-		{
-			get
-			{
-				return this._PlayTimeExpires;
-			}
-			set
-			{
-				this._PlayTimeExpires = value;
-				this.HasPlayTimeExpires = true;
-			}
-		}
-
-		public void SetPlayTimeExpires(ulong val)
-		{
-			this.PlayTimeExpires = val;
-		}
-
-		public bool IsSubscription
-		{
-			get
-			{
-				return this._IsSubscription;
-			}
-			set
-			{
-				this._IsSubscription = value;
-				this.HasIsSubscription = true;
-			}
-		}
-
-		public void SetIsSubscription(bool val)
-		{
-			this.IsSubscription = val;
-		}
-
-		public bool IsRecurringSubscription
-		{
-			get
-			{
-				return this._IsRecurringSubscription;
-			}
-			set
-			{
-				this._IsRecurringSubscription = value;
-				this.HasIsRecurringSubscription = true;
-			}
-		}
-
-		public void SetIsRecurringSubscription(bool val)
-		{
-			this.IsRecurringSubscription = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasIsUnlimitedPlayTime)
-			{
-				num ^= this.IsUnlimitedPlayTime.GetHashCode();
-			}
-			if (this.HasPlayTimeExpires)
-			{
-				num ^= this.PlayTimeExpires.GetHashCode();
-			}
-			if (this.HasIsSubscription)
-			{
-				num ^= this.IsSubscription.GetHashCode();
-			}
-			if (this.HasIsRecurringSubscription)
-			{
-				num ^= this.IsRecurringSubscription.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameTimeInfo gameTimeInfo = obj as GameTimeInfo;
-			return gameTimeInfo != null && this.HasIsUnlimitedPlayTime == gameTimeInfo.HasIsUnlimitedPlayTime && (!this.HasIsUnlimitedPlayTime || this.IsUnlimitedPlayTime.Equals(gameTimeInfo.IsUnlimitedPlayTime)) && this.HasPlayTimeExpires == gameTimeInfo.HasPlayTimeExpires && (!this.HasPlayTimeExpires || this.PlayTimeExpires.Equals(gameTimeInfo.PlayTimeExpires)) && this.HasIsSubscription == gameTimeInfo.HasIsSubscription && (!this.HasIsSubscription || this.IsSubscription.Equals(gameTimeInfo.IsSubscription)) && this.HasIsRecurringSubscription == gameTimeInfo.HasIsRecurringSubscription && (!this.HasIsRecurringSubscription || this.IsRecurringSubscription.Equals(gameTimeInfo.IsRecurringSubscription));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameTimeInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameTimeInfo>(bs, 0, -1);
 		}
 
 		public bool HasIsUnlimitedPlayTime;

@@ -6,6 +6,101 @@ namespace bnet.protocol
 {
 	public class RoleSetConfig : IProtoBuf
 	{
+		public List<Privilege> Privilege
+		{
+			get
+			{
+				return this._Privilege;
+			}
+			set
+			{
+				this._Privilege = value;
+			}
+		}
+
+		public List<Privilege> PrivilegeList
+		{
+			get
+			{
+				return this._Privilege;
+			}
+		}
+
+		public int PrivilegeCount
+		{
+			get
+			{
+				return this._Privilege.Count;
+			}
+		}
+
+		public void AddPrivilege(Privilege val)
+		{
+			this._Privilege.Add(val);
+		}
+
+		public void ClearPrivilege()
+		{
+			this._Privilege.Clear();
+		}
+
+		public void SetPrivilege(List<Privilege> val)
+		{
+			this.Privilege = val;
+		}
+
+		public RoleSet RoleSet { get; set; }
+
+		public void SetRoleSet(RoleSet val)
+		{
+			this.RoleSet = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (Privilege privilege in this.Privilege)
+			{
+				num ^= privilege.GetHashCode();
+			}
+			num ^= this.RoleSet.GetHashCode();
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			RoleSetConfig roleSetConfig = obj as RoleSetConfig;
+			if (roleSetConfig == null)
+			{
+				return false;
+			}
+			if (this.Privilege.Count != roleSetConfig.Privilege.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Privilege.Count; i++)
+			{
+				if (!this.Privilege[i].Equals(roleSetConfig.Privilege[i]))
+				{
+					return false;
+				}
+			}
+			return this.RoleSet.Equals(roleSetConfig.RoleSet);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static RoleSetConfig ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<RoleSetConfig>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			RoleSetConfig.Deserialize(stream, this);
@@ -121,101 +216,6 @@ namespace bnet.protocol
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			num += 1u;
 			return num;
-		}
-
-		public List<Privilege> Privilege
-		{
-			get
-			{
-				return this._Privilege;
-			}
-			set
-			{
-				this._Privilege = value;
-			}
-		}
-
-		public List<Privilege> PrivilegeList
-		{
-			get
-			{
-				return this._Privilege;
-			}
-		}
-
-		public int PrivilegeCount
-		{
-			get
-			{
-				return this._Privilege.Count;
-			}
-		}
-
-		public void AddPrivilege(Privilege val)
-		{
-			this._Privilege.Add(val);
-		}
-
-		public void ClearPrivilege()
-		{
-			this._Privilege.Clear();
-		}
-
-		public void SetPrivilege(List<Privilege> val)
-		{
-			this.Privilege = val;
-		}
-
-		public RoleSet RoleSet { get; set; }
-
-		public void SetRoleSet(RoleSet val)
-		{
-			this.RoleSet = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (Privilege privilege in this.Privilege)
-			{
-				num ^= privilege.GetHashCode();
-			}
-			num ^= this.RoleSet.GetHashCode();
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			RoleSetConfig roleSetConfig = obj as RoleSetConfig;
-			if (roleSetConfig == null)
-			{
-				return false;
-			}
-			if (this.Privilege.Count != roleSetConfig.Privilege.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Privilege.Count; i++)
-			{
-				if (!this.Privilege[i].Equals(roleSetConfig.Privilege[i]))
-				{
-					return false;
-				}
-			}
-			return this.RoleSet.Equals(roleSetConfig.RoleSet);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static RoleSetConfig ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<RoleSetConfig>(bs, 0, -1);
 		}
 
 		private List<Privilege> _Privilege = new List<Privilege>();

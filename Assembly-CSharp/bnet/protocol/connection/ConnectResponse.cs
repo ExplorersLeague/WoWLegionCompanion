@@ -5,6 +5,149 @@ namespace bnet.protocol.connection
 {
 	public class ConnectResponse : IProtoBuf
 	{
+		public ProcessId ServerId { get; set; }
+
+		public void SetServerId(ProcessId val)
+		{
+			this.ServerId = val;
+		}
+
+		public ProcessId ClientId
+		{
+			get
+			{
+				return this._ClientId;
+			}
+			set
+			{
+				this._ClientId = value;
+				this.HasClientId = (value != null);
+			}
+		}
+
+		public void SetClientId(ProcessId val)
+		{
+			this.ClientId = val;
+		}
+
+		public uint BindResult
+		{
+			get
+			{
+				return this._BindResult;
+			}
+			set
+			{
+				this._BindResult = value;
+				this.HasBindResult = true;
+			}
+		}
+
+		public void SetBindResult(uint val)
+		{
+			this.BindResult = val;
+		}
+
+		public BindResponse BindResponse
+		{
+			get
+			{
+				return this._BindResponse;
+			}
+			set
+			{
+				this._BindResponse = value;
+				this.HasBindResponse = (value != null);
+			}
+		}
+
+		public void SetBindResponse(BindResponse val)
+		{
+			this.BindResponse = val;
+		}
+
+		public ConnectionMeteringContentHandles ContentHandleArray
+		{
+			get
+			{
+				return this._ContentHandleArray;
+			}
+			set
+			{
+				this._ContentHandleArray = value;
+				this.HasContentHandleArray = (value != null);
+			}
+		}
+
+		public void SetContentHandleArray(ConnectionMeteringContentHandles val)
+		{
+			this.ContentHandleArray = val;
+		}
+
+		public ulong ServerTime
+		{
+			get
+			{
+				return this._ServerTime;
+			}
+			set
+			{
+				this._ServerTime = value;
+				this.HasServerTime = true;
+			}
+		}
+
+		public void SetServerTime(ulong val)
+		{
+			this.ServerTime = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ServerId.GetHashCode();
+			if (this.HasClientId)
+			{
+				num ^= this.ClientId.GetHashCode();
+			}
+			if (this.HasBindResult)
+			{
+				num ^= this.BindResult.GetHashCode();
+			}
+			if (this.HasBindResponse)
+			{
+				num ^= this.BindResponse.GetHashCode();
+			}
+			if (this.HasContentHandleArray)
+			{
+				num ^= this.ContentHandleArray.GetHashCode();
+			}
+			if (this.HasServerTime)
+			{
+				num ^= this.ServerTime.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ConnectResponse connectResponse = obj as ConnectResponse;
+			return connectResponse != null && this.ServerId.Equals(connectResponse.ServerId) && this.HasClientId == connectResponse.HasClientId && (!this.HasClientId || this.ClientId.Equals(connectResponse.ClientId)) && this.HasBindResult == connectResponse.HasBindResult && (!this.HasBindResult || this.BindResult.Equals(connectResponse.BindResult)) && this.HasBindResponse == connectResponse.HasBindResponse && (!this.HasBindResponse || this.BindResponse.Equals(connectResponse.BindResponse)) && this.HasContentHandleArray == connectResponse.HasContentHandleArray && (!this.HasContentHandleArray || this.ContentHandleArray.Equals(connectResponse.ContentHandleArray)) && this.HasServerTime == connectResponse.HasServerTime && (!this.HasServerTime || this.ServerTime.Equals(connectResponse.ServerTime));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ConnectResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ConnectResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ConnectResponse.Deserialize(stream, this);
@@ -193,149 +336,6 @@ namespace bnet.protocol.connection
 				num += ProtocolParser.SizeOfUInt64(this.ServerTime);
 			}
 			return num + 1u;
-		}
-
-		public ProcessId ServerId { get; set; }
-
-		public void SetServerId(ProcessId val)
-		{
-			this.ServerId = val;
-		}
-
-		public ProcessId ClientId
-		{
-			get
-			{
-				return this._ClientId;
-			}
-			set
-			{
-				this._ClientId = value;
-				this.HasClientId = (value != null);
-			}
-		}
-
-		public void SetClientId(ProcessId val)
-		{
-			this.ClientId = val;
-		}
-
-		public uint BindResult
-		{
-			get
-			{
-				return this._BindResult;
-			}
-			set
-			{
-				this._BindResult = value;
-				this.HasBindResult = true;
-			}
-		}
-
-		public void SetBindResult(uint val)
-		{
-			this.BindResult = val;
-		}
-
-		public BindResponse BindResponse
-		{
-			get
-			{
-				return this._BindResponse;
-			}
-			set
-			{
-				this._BindResponse = value;
-				this.HasBindResponse = (value != null);
-			}
-		}
-
-		public void SetBindResponse(BindResponse val)
-		{
-			this.BindResponse = val;
-		}
-
-		public ConnectionMeteringContentHandles ContentHandleArray
-		{
-			get
-			{
-				return this._ContentHandleArray;
-			}
-			set
-			{
-				this._ContentHandleArray = value;
-				this.HasContentHandleArray = (value != null);
-			}
-		}
-
-		public void SetContentHandleArray(ConnectionMeteringContentHandles val)
-		{
-			this.ContentHandleArray = val;
-		}
-
-		public ulong ServerTime
-		{
-			get
-			{
-				return this._ServerTime;
-			}
-			set
-			{
-				this._ServerTime = value;
-				this.HasServerTime = true;
-			}
-		}
-
-		public void SetServerTime(ulong val)
-		{
-			this.ServerTime = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ServerId.GetHashCode();
-			if (this.HasClientId)
-			{
-				num ^= this.ClientId.GetHashCode();
-			}
-			if (this.HasBindResult)
-			{
-				num ^= this.BindResult.GetHashCode();
-			}
-			if (this.HasBindResponse)
-			{
-				num ^= this.BindResponse.GetHashCode();
-			}
-			if (this.HasContentHandleArray)
-			{
-				num ^= this.ContentHandleArray.GetHashCode();
-			}
-			if (this.HasServerTime)
-			{
-				num ^= this.ServerTime.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ConnectResponse connectResponse = obj as ConnectResponse;
-			return connectResponse != null && this.ServerId.Equals(connectResponse.ServerId) && this.HasClientId == connectResponse.HasClientId && (!this.HasClientId || this.ClientId.Equals(connectResponse.ClientId)) && this.HasBindResult == connectResponse.HasBindResult && (!this.HasBindResult || this.BindResult.Equals(connectResponse.BindResult)) && this.HasBindResponse == connectResponse.HasBindResponse && (!this.HasBindResponse || this.BindResponse.Equals(connectResponse.BindResponse)) && this.HasContentHandleArray == connectResponse.HasContentHandleArray && (!this.HasContentHandleArray || this.ContentHandleArray.Equals(connectResponse.ContentHandleArray)) && this.HasServerTime == connectResponse.HasServerTime && (!this.HasServerTime || this.ServerTime.Equals(connectResponse.ServerTime));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ConnectResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ConnectResponse>(bs, 0, -1);
 		}
 
 		public bool HasClientId;

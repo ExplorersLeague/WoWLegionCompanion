@@ -4,11 +4,11 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[System.Runtime.Serialization.DataContract]
-	[FlexJamMessage(Id = 15035, Name = "JSONRealmListTicketClientInformation", Version = 28333852u)]
+	[DataContract]
+	[FlexJamMessage(Id = 15035, Name = "JSONRealmListTicketClientInformation", Version = 47212487u)]
 	public class JSONRealmListTicketClientInformation
 	{
-		[System.Runtime.Serialization.DataMember(Name = "info")]
+		[DataMember(Name = "info")]
 		[FlexJamMember(Name = "info", Type = FlexJamType.Struct)]
 		public JamJSONRealmListTicketClientInformation Info { get; set; }
 	}

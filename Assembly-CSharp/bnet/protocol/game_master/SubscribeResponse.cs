@@ -5,6 +5,53 @@ namespace bnet.protocol.game_master
 {
 	public class SubscribeResponse : IProtoBuf
 	{
+		public ulong SubscriptionId
+		{
+			get
+			{
+				return this._SubscriptionId;
+			}
+			set
+			{
+				this._SubscriptionId = value;
+				this.HasSubscriptionId = true;
+			}
+		}
+
+		public void SetSubscriptionId(ulong val)
+		{
+			this.SubscriptionId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasSubscriptionId)
+			{
+				num ^= this.SubscriptionId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscribeResponse subscribeResponse = obj as SubscribeResponse;
+			return subscribeResponse != null && this.HasSubscriptionId == subscribeResponse.HasSubscriptionId && (!this.HasSubscriptionId || this.SubscriptionId.Equals(subscribeResponse.SubscriptionId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscribeResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscribeResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscribeResponse.Deserialize(stream, this);
@@ -87,53 +134,6 @@ namespace bnet.protocol.game_master
 				num += ProtocolParser.SizeOfUInt64(this.SubscriptionId);
 			}
 			return num;
-		}
-
-		public ulong SubscriptionId
-		{
-			get
-			{
-				return this._SubscriptionId;
-			}
-			set
-			{
-				this._SubscriptionId = value;
-				this.HasSubscriptionId = true;
-			}
-		}
-
-		public void SetSubscriptionId(ulong val)
-		{
-			this.SubscriptionId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasSubscriptionId)
-			{
-				num ^= this.SubscriptionId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscribeResponse subscribeResponse = obj as SubscribeResponse;
-			return subscribeResponse != null && this.HasSubscriptionId == subscribeResponse.HasSubscriptionId && (!this.HasSubscriptionId || this.SubscriptionId.Equals(subscribeResponse.SubscriptionId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscribeResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscribeResponse>(bs, 0, -1);
 		}
 
 		public bool HasSubscriptionId;

@@ -6,6 +6,93 @@ namespace bnet.protocol.connection
 {
 	public class ConnectionMeteringContentHandles : IProtoBuf
 	{
+		public List<ContentHandle> ContentHandle
+		{
+			get
+			{
+				return this._ContentHandle;
+			}
+			set
+			{
+				this._ContentHandle = value;
+			}
+		}
+
+		public List<ContentHandle> ContentHandleList
+		{
+			get
+			{
+				return this._ContentHandle;
+			}
+		}
+
+		public int ContentHandleCount
+		{
+			get
+			{
+				return this._ContentHandle.Count;
+			}
+		}
+
+		public void AddContentHandle(ContentHandle val)
+		{
+			this._ContentHandle.Add(val);
+		}
+
+		public void ClearContentHandle()
+		{
+			this._ContentHandle.Clear();
+		}
+
+		public void SetContentHandle(List<ContentHandle> val)
+		{
+			this.ContentHandle = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (ContentHandle contentHandle in this.ContentHandle)
+			{
+				num ^= contentHandle.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ConnectionMeteringContentHandles connectionMeteringContentHandles = obj as ConnectionMeteringContentHandles;
+			if (connectionMeteringContentHandles == null)
+			{
+				return false;
+			}
+			if (this.ContentHandle.Count != connectionMeteringContentHandles.ContentHandle.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.ContentHandle.Count; i++)
+			{
+				if (!this.ContentHandle[i].Equals(connectionMeteringContentHandles.ContentHandle[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ConnectionMeteringContentHandles ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ConnectionMeteringContentHandles>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ConnectionMeteringContentHandles.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.connection
 				}
 			}
 			return num;
-		}
-
-		public List<ContentHandle> ContentHandle
-		{
-			get
-			{
-				return this._ContentHandle;
-			}
-			set
-			{
-				this._ContentHandle = value;
-			}
-		}
-
-		public List<ContentHandle> ContentHandleList
-		{
-			get
-			{
-				return this._ContentHandle;
-			}
-		}
-
-		public int ContentHandleCount
-		{
-			get
-			{
-				return this._ContentHandle.Count;
-			}
-		}
-
-		public void AddContentHandle(ContentHandle val)
-		{
-			this._ContentHandle.Add(val);
-		}
-
-		public void ClearContentHandle()
-		{
-			this._ContentHandle.Clear();
-		}
-
-		public void SetContentHandle(List<ContentHandle> val)
-		{
-			this.ContentHandle = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (ContentHandle contentHandle in this.ContentHandle)
-			{
-				num ^= contentHandle.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ConnectionMeteringContentHandles connectionMeteringContentHandles = obj as ConnectionMeteringContentHandles;
-			if (connectionMeteringContentHandles == null)
-			{
-				return false;
-			}
-			if (this.ContentHandle.Count != connectionMeteringContentHandles.ContentHandle.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.ContentHandle.Count; i++)
-			{
-				if (!this.ContentHandle[i].Equals(connectionMeteringContentHandles.ContentHandle[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ConnectionMeteringContentHandles ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ConnectionMeteringContentHandles>(bs, 0, -1);
 		}
 
 		private List<ContentHandle> _ContentHandle = new List<ContentHandle>();

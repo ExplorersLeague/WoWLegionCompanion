@@ -6,6 +6,93 @@ namespace bnet.protocol.profanity
 {
 	public class WordFilters : IProtoBuf
 	{
+		public List<WordFilter> Filters
+		{
+			get
+			{
+				return this._Filters;
+			}
+			set
+			{
+				this._Filters = value;
+			}
+		}
+
+		public List<WordFilter> FiltersList
+		{
+			get
+			{
+				return this._Filters;
+			}
+		}
+
+		public int FiltersCount
+		{
+			get
+			{
+				return this._Filters.Count;
+			}
+		}
+
+		public void AddFilters(WordFilter val)
+		{
+			this._Filters.Add(val);
+		}
+
+		public void ClearFilters()
+		{
+			this._Filters.Clear();
+		}
+
+		public void SetFilters(List<WordFilter> val)
+		{
+			this.Filters = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (WordFilter wordFilter in this.Filters)
+			{
+				num ^= wordFilter.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			WordFilters wordFilters = obj as WordFilters;
+			if (wordFilters == null)
+			{
+				return false;
+			}
+			if (this.Filters.Count != wordFilters.Filters.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Filters.Count; i++)
+			{
+				if (!this.Filters[i].Equals(wordFilters.Filters[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static WordFilters ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<WordFilters>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			WordFilters.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.profanity
 				}
 			}
 			return num;
-		}
-
-		public List<WordFilter> Filters
-		{
-			get
-			{
-				return this._Filters;
-			}
-			set
-			{
-				this._Filters = value;
-			}
-		}
-
-		public List<WordFilter> FiltersList
-		{
-			get
-			{
-				return this._Filters;
-			}
-		}
-
-		public int FiltersCount
-		{
-			get
-			{
-				return this._Filters.Count;
-			}
-		}
-
-		public void AddFilters(WordFilter val)
-		{
-			this._Filters.Add(val);
-		}
-
-		public void ClearFilters()
-		{
-			this._Filters.Clear();
-		}
-
-		public void SetFilters(List<WordFilter> val)
-		{
-			this.Filters = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (WordFilter wordFilter in this.Filters)
-			{
-				num ^= wordFilter.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			WordFilters wordFilters = obj as WordFilters;
-			if (wordFilters == null)
-			{
-				return false;
-			}
-			if (this.Filters.Count != wordFilters.Filters.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Filters.Count; i++)
-			{
-				if (!this.Filters[i].Equals(wordFilters.Filters[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static WordFilters ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<WordFilters>(bs, 0, -1);
 		}
 
 		private List<WordFilter> _Filters = new List<WordFilter>();

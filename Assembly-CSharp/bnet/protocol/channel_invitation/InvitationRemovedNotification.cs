@@ -6,6 +6,61 @@ namespace bnet.protocol.channel_invitation
 {
 	public class InvitationRemovedNotification : IProtoBuf
 	{
+		public Invitation Invitation { get; set; }
+
+		public void SetInvitation(Invitation val)
+		{
+			this.Invitation = val;
+		}
+
+		public uint Reason
+		{
+			get
+			{
+				return this._Reason;
+			}
+			set
+			{
+				this._Reason = value;
+				this.HasReason = true;
+			}
+		}
+
+		public void SetReason(uint val)
+		{
+			this.Reason = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Invitation.GetHashCode();
+			if (this.HasReason)
+			{
+				num ^= this.Reason.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			InvitationRemovedNotification invitationRemovedNotification = obj as InvitationRemovedNotification;
+			return invitationRemovedNotification != null && this.Invitation.Equals(invitationRemovedNotification.Invitation) && this.HasReason == invitationRemovedNotification.HasReason && (!this.HasReason || this.Reason.Equals(invitationRemovedNotification.Reason));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static InvitationRemovedNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<InvitationRemovedNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			InvitationRemovedNotification.Deserialize(stream, this);
@@ -108,61 +163,6 @@ namespace bnet.protocol.channel_invitation
 				num += ProtocolParser.SizeOfUInt32(this.Reason);
 			}
 			return num + 1u;
-		}
-
-		public Invitation Invitation { get; set; }
-
-		public void SetInvitation(Invitation val)
-		{
-			this.Invitation = val;
-		}
-
-		public uint Reason
-		{
-			get
-			{
-				return this._Reason;
-			}
-			set
-			{
-				this._Reason = value;
-				this.HasReason = true;
-			}
-		}
-
-		public void SetReason(uint val)
-		{
-			this.Reason = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Invitation.GetHashCode();
-			if (this.HasReason)
-			{
-				num ^= this.Reason.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			InvitationRemovedNotification invitationRemovedNotification = obj as InvitationRemovedNotification;
-			return invitationRemovedNotification != null && this.Invitation.Equals(invitationRemovedNotification.Invitation) && this.HasReason == invitationRemovedNotification.HasReason && (!this.HasReason || this.Reason.Equals(invitationRemovedNotification.Reason));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static InvitationRemovedNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<InvitationRemovedNotification>(bs, 0, -1);
 		}
 
 		public bool HasReason;

@@ -5,6 +5,163 @@ namespace bnet.protocol.account
 {
 	public class GetLicensesRequest : IProtoBuf
 	{
+		public EntityId TargetId
+		{
+			get
+			{
+				return this._TargetId;
+			}
+			set
+			{
+				this._TargetId = value;
+				this.HasTargetId = (value != null);
+			}
+		}
+
+		public void SetTargetId(EntityId val)
+		{
+			this.TargetId = val;
+		}
+
+		public bool GetAccountLicenses
+		{
+			get
+			{
+				return this._GetAccountLicenses;
+			}
+			set
+			{
+				this._GetAccountLicenses = value;
+				this.HasGetAccountLicenses = true;
+			}
+		}
+
+		public void SetGetAccountLicenses(bool val)
+		{
+			this.GetAccountLicenses = val;
+		}
+
+		public bool GetGameAccountLicenses
+		{
+			get
+			{
+				return this._GetGameAccountLicenses;
+			}
+			set
+			{
+				this._GetGameAccountLicenses = value;
+				this.HasGetGameAccountLicenses = true;
+			}
+		}
+
+		public void SetGetGameAccountLicenses(bool val)
+		{
+			this.GetGameAccountLicenses = val;
+		}
+
+		public bool GetDynamicAccountLicenses
+		{
+			get
+			{
+				return this._GetDynamicAccountLicenses;
+			}
+			set
+			{
+				this._GetDynamicAccountLicenses = value;
+				this.HasGetDynamicAccountLicenses = true;
+			}
+		}
+
+		public void SetGetDynamicAccountLicenses(bool val)
+		{
+			this.GetDynamicAccountLicenses = val;
+		}
+
+		public uint ProgramId
+		{
+			get
+			{
+				return this._ProgramId;
+			}
+			set
+			{
+				this._ProgramId = value;
+				this.HasProgramId = true;
+			}
+		}
+
+		public void SetProgramId(uint val)
+		{
+			this.ProgramId = val;
+		}
+
+		public bool ExcludeUnknownProgram
+		{
+			get
+			{
+				return this._ExcludeUnknownProgram;
+			}
+			set
+			{
+				this._ExcludeUnknownProgram = value;
+				this.HasExcludeUnknownProgram = true;
+			}
+		}
+
+		public void SetExcludeUnknownProgram(bool val)
+		{
+			this.ExcludeUnknownProgram = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasTargetId)
+			{
+				num ^= this.TargetId.GetHashCode();
+			}
+			if (this.HasGetAccountLicenses)
+			{
+				num ^= this.GetAccountLicenses.GetHashCode();
+			}
+			if (this.HasGetGameAccountLicenses)
+			{
+				num ^= this.GetGameAccountLicenses.GetHashCode();
+			}
+			if (this.HasGetDynamicAccountLicenses)
+			{
+				num ^= this.GetDynamicAccountLicenses.GetHashCode();
+			}
+			if (this.HasProgramId)
+			{
+				num ^= this.ProgramId.GetHashCode();
+			}
+			if (this.HasExcludeUnknownProgram)
+			{
+				num ^= this.ExcludeUnknownProgram.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetLicensesRequest getLicensesRequest = obj as GetLicensesRequest;
+			return getLicensesRequest != null && this.HasTargetId == getLicensesRequest.HasTargetId && (!this.HasTargetId || this.TargetId.Equals(getLicensesRequest.TargetId)) && this.HasGetAccountLicenses == getLicensesRequest.HasGetAccountLicenses && (!this.HasGetAccountLicenses || this.GetAccountLicenses.Equals(getLicensesRequest.GetAccountLicenses)) && this.HasGetGameAccountLicenses == getLicensesRequest.HasGetGameAccountLicenses && (!this.HasGetGameAccountLicenses || this.GetGameAccountLicenses.Equals(getLicensesRequest.GetGameAccountLicenses)) && this.HasGetDynamicAccountLicenses == getLicensesRequest.HasGetDynamicAccountLicenses && (!this.HasGetDynamicAccountLicenses || this.GetDynamicAccountLicenses.Equals(getLicensesRequest.GetDynamicAccountLicenses)) && this.HasProgramId == getLicensesRequest.HasProgramId && (!this.HasProgramId || this.ProgramId.Equals(getLicensesRequest.ProgramId)) && this.HasExcludeUnknownProgram == getLicensesRequest.HasExcludeUnknownProgram && (!this.HasExcludeUnknownProgram || this.ExcludeUnknownProgram.Equals(getLicensesRequest.ExcludeUnknownProgram));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetLicensesRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetLicensesRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetLicensesRequest.Deserialize(stream, this);
@@ -181,163 +338,6 @@ namespace bnet.protocol.account
 				num += 1u;
 			}
 			return num;
-		}
-
-		public EntityId TargetId
-		{
-			get
-			{
-				return this._TargetId;
-			}
-			set
-			{
-				this._TargetId = value;
-				this.HasTargetId = (value != null);
-			}
-		}
-
-		public void SetTargetId(EntityId val)
-		{
-			this.TargetId = val;
-		}
-
-		public bool GetAccountLicenses
-		{
-			get
-			{
-				return this._GetAccountLicenses;
-			}
-			set
-			{
-				this._GetAccountLicenses = value;
-				this.HasGetAccountLicenses = true;
-			}
-		}
-
-		public void SetGetAccountLicenses(bool val)
-		{
-			this.GetAccountLicenses = val;
-		}
-
-		public bool GetGameAccountLicenses
-		{
-			get
-			{
-				return this._GetGameAccountLicenses;
-			}
-			set
-			{
-				this._GetGameAccountLicenses = value;
-				this.HasGetGameAccountLicenses = true;
-			}
-		}
-
-		public void SetGetGameAccountLicenses(bool val)
-		{
-			this.GetGameAccountLicenses = val;
-		}
-
-		public bool GetDynamicAccountLicenses
-		{
-			get
-			{
-				return this._GetDynamicAccountLicenses;
-			}
-			set
-			{
-				this._GetDynamicAccountLicenses = value;
-				this.HasGetDynamicAccountLicenses = true;
-			}
-		}
-
-		public void SetGetDynamicAccountLicenses(bool val)
-		{
-			this.GetDynamicAccountLicenses = val;
-		}
-
-		public uint ProgramId
-		{
-			get
-			{
-				return this._ProgramId;
-			}
-			set
-			{
-				this._ProgramId = value;
-				this.HasProgramId = true;
-			}
-		}
-
-		public void SetProgramId(uint val)
-		{
-			this.ProgramId = val;
-		}
-
-		public bool ExcludeUnknownProgram
-		{
-			get
-			{
-				return this._ExcludeUnknownProgram;
-			}
-			set
-			{
-				this._ExcludeUnknownProgram = value;
-				this.HasExcludeUnknownProgram = true;
-			}
-		}
-
-		public void SetExcludeUnknownProgram(bool val)
-		{
-			this.ExcludeUnknownProgram = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasTargetId)
-			{
-				num ^= this.TargetId.GetHashCode();
-			}
-			if (this.HasGetAccountLicenses)
-			{
-				num ^= this.GetAccountLicenses.GetHashCode();
-			}
-			if (this.HasGetGameAccountLicenses)
-			{
-				num ^= this.GetGameAccountLicenses.GetHashCode();
-			}
-			if (this.HasGetDynamicAccountLicenses)
-			{
-				num ^= this.GetDynamicAccountLicenses.GetHashCode();
-			}
-			if (this.HasProgramId)
-			{
-				num ^= this.ProgramId.GetHashCode();
-			}
-			if (this.HasExcludeUnknownProgram)
-			{
-				num ^= this.ExcludeUnknownProgram.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetLicensesRequest getLicensesRequest = obj as GetLicensesRequest;
-			return getLicensesRequest != null && this.HasTargetId == getLicensesRequest.HasTargetId && (!this.HasTargetId || this.TargetId.Equals(getLicensesRequest.TargetId)) && this.HasGetAccountLicenses == getLicensesRequest.HasGetAccountLicenses && (!this.HasGetAccountLicenses || this.GetAccountLicenses.Equals(getLicensesRequest.GetAccountLicenses)) && this.HasGetGameAccountLicenses == getLicensesRequest.HasGetGameAccountLicenses && (!this.HasGetGameAccountLicenses || this.GetGameAccountLicenses.Equals(getLicensesRequest.GetGameAccountLicenses)) && this.HasGetDynamicAccountLicenses == getLicensesRequest.HasGetDynamicAccountLicenses && (!this.HasGetDynamicAccountLicenses || this.GetDynamicAccountLicenses.Equals(getLicensesRequest.GetDynamicAccountLicenses)) && this.HasProgramId == getLicensesRequest.HasProgramId && (!this.HasProgramId || this.ProgramId.Equals(getLicensesRequest.ProgramId)) && this.HasExcludeUnknownProgram == getLicensesRequest.HasExcludeUnknownProgram && (!this.HasExcludeUnknownProgram || this.ExcludeUnknownProgram.Equals(getLicensesRequest.ExcludeUnknownProgram));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetLicensesRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetLicensesRequest>(bs, 0, -1);
 		}
 
 		public bool HasTargetId;

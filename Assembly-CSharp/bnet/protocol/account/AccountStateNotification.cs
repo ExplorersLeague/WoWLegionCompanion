@@ -5,6 +5,119 @@ namespace bnet.protocol.account
 {
 	public class AccountStateNotification : IProtoBuf
 	{
+		public AccountState State
+		{
+			get
+			{
+				return this._State;
+			}
+			set
+			{
+				this._State = value;
+				this.HasState = (value != null);
+			}
+		}
+
+		public void SetState(AccountState val)
+		{
+			this.State = val;
+		}
+
+		public ulong SubscriberId
+		{
+			get
+			{
+				return this._SubscriberId;
+			}
+			set
+			{
+				this._SubscriberId = value;
+				this.HasSubscriberId = true;
+			}
+		}
+
+		public void SetSubscriberId(ulong val)
+		{
+			this.SubscriberId = val;
+		}
+
+		public AccountFieldTags AccountTags
+		{
+			get
+			{
+				return this._AccountTags;
+			}
+			set
+			{
+				this._AccountTags = value;
+				this.HasAccountTags = (value != null);
+			}
+		}
+
+		public void SetAccountTags(AccountFieldTags val)
+		{
+			this.AccountTags = val;
+		}
+
+		public bool SubscriptionCompleted
+		{
+			get
+			{
+				return this._SubscriptionCompleted;
+			}
+			set
+			{
+				this._SubscriptionCompleted = value;
+				this.HasSubscriptionCompleted = true;
+			}
+		}
+
+		public void SetSubscriptionCompleted(bool val)
+		{
+			this.SubscriptionCompleted = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasState)
+			{
+				num ^= this.State.GetHashCode();
+			}
+			if (this.HasSubscriberId)
+			{
+				num ^= this.SubscriberId.GetHashCode();
+			}
+			if (this.HasAccountTags)
+			{
+				num ^= this.AccountTags.GetHashCode();
+			}
+			if (this.HasSubscriptionCompleted)
+			{
+				num ^= this.SubscriptionCompleted.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountStateNotification accountStateNotification = obj as AccountStateNotification;
+			return accountStateNotification != null && this.HasState == accountStateNotification.HasState && (!this.HasState || this.State.Equals(accountStateNotification.State)) && this.HasSubscriberId == accountStateNotification.HasSubscriberId && (!this.HasSubscriberId || this.SubscriberId.Equals(accountStateNotification.SubscriberId)) && this.HasAccountTags == accountStateNotification.HasAccountTags && (!this.HasAccountTags || this.AccountTags.Equals(accountStateNotification.AccountTags)) && this.HasSubscriptionCompleted == accountStateNotification.HasSubscriptionCompleted && (!this.HasSubscriptionCompleted || this.SubscriptionCompleted.Equals(accountStateNotification.SubscriptionCompleted));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountStateNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountStateNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountStateNotification.Deserialize(stream, this);
@@ -150,119 +263,6 @@ namespace bnet.protocol.account
 				num += 1u;
 			}
 			return num;
-		}
-
-		public AccountState State
-		{
-			get
-			{
-				return this._State;
-			}
-			set
-			{
-				this._State = value;
-				this.HasState = (value != null);
-			}
-		}
-
-		public void SetState(AccountState val)
-		{
-			this.State = val;
-		}
-
-		public ulong SubscriberId
-		{
-			get
-			{
-				return this._SubscriberId;
-			}
-			set
-			{
-				this._SubscriberId = value;
-				this.HasSubscriberId = true;
-			}
-		}
-
-		public void SetSubscriberId(ulong val)
-		{
-			this.SubscriberId = val;
-		}
-
-		public AccountFieldTags AccountTags
-		{
-			get
-			{
-				return this._AccountTags;
-			}
-			set
-			{
-				this._AccountTags = value;
-				this.HasAccountTags = (value != null);
-			}
-		}
-
-		public void SetAccountTags(AccountFieldTags val)
-		{
-			this.AccountTags = val;
-		}
-
-		public bool SubscriptionCompleted
-		{
-			get
-			{
-				return this._SubscriptionCompleted;
-			}
-			set
-			{
-				this._SubscriptionCompleted = value;
-				this.HasSubscriptionCompleted = true;
-			}
-		}
-
-		public void SetSubscriptionCompleted(bool val)
-		{
-			this.SubscriptionCompleted = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasState)
-			{
-				num ^= this.State.GetHashCode();
-			}
-			if (this.HasSubscriberId)
-			{
-				num ^= this.SubscriberId.GetHashCode();
-			}
-			if (this.HasAccountTags)
-			{
-				num ^= this.AccountTags.GetHashCode();
-			}
-			if (this.HasSubscriptionCompleted)
-			{
-				num ^= this.SubscriptionCompleted.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountStateNotification accountStateNotification = obj as AccountStateNotification;
-			return accountStateNotification != null && this.HasState == accountStateNotification.HasState && (!this.HasState || this.State.Equals(accountStateNotification.State)) && this.HasSubscriberId == accountStateNotification.HasSubscriberId && (!this.HasSubscriberId || this.SubscriberId.Equals(accountStateNotification.SubscriberId)) && this.HasAccountTags == accountStateNotification.HasAccountTags && (!this.HasAccountTags || this.AccountTags.Equals(accountStateNotification.AccountTags)) && this.HasSubscriptionCompleted == accountStateNotification.HasSubscriptionCompleted && (!this.HasSubscriptionCompleted || this.SubscriptionCompleted.Equals(accountStateNotification.SubscriptionCompleted));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountStateNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountStateNotification>(bs, 0, -1);
 		}
 
 		public bool HasState;

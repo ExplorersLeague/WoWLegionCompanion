@@ -7,6 +7,49 @@ namespace bnet.protocol.game_utilities
 {
 	public class GetAllValuesForAttributeResponse : IProtoBuf
 	{
+		public List<Variant> AttributeValue
+		{
+			get
+			{
+				return this._AttributeValue;
+			}
+			set
+			{
+				this._AttributeValue = value;
+			}
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (Variant variant in this.AttributeValue)
+			{
+				num ^= variant.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetAllValuesForAttributeResponse getAllValuesForAttributeResponse = obj as GetAllValuesForAttributeResponse;
+			if (getAllValuesForAttributeResponse == null)
+			{
+				return false;
+			}
+			if (this.AttributeValue.Count != getAllValuesForAttributeResponse.AttributeValue.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.AttributeValue.Count; i++)
+			{
+				if (!this.AttributeValue[i].Equals(getAllValuesForAttributeResponse.AttributeValue[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetAllValuesForAttributeResponse.Deserialize(stream, this);
@@ -101,49 +144,6 @@ namespace bnet.protocol.game_utilities
 				}
 			}
 			return num;
-		}
-
-		public List<Variant> AttributeValue
-		{
-			get
-			{
-				return this._AttributeValue;
-			}
-			set
-			{
-				this._AttributeValue = value;
-			}
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (Variant variant in this.AttributeValue)
-			{
-				num ^= variant.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetAllValuesForAttributeResponse getAllValuesForAttributeResponse = obj as GetAllValuesForAttributeResponse;
-			if (getAllValuesForAttributeResponse == null)
-			{
-				return false;
-			}
-			if (this.AttributeValue.Count != getAllValuesForAttributeResponse.AttributeValue.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.AttributeValue.Count; i++)
-			{
-				if (!this.AttributeValue[i].Equals(getAllValuesForAttributeResponse.AttributeValue[i]))
-				{
-					return false;
-				}
-			}
-			return true;
 		}
 
 		private List<Variant> _AttributeValue = new List<Variant>();

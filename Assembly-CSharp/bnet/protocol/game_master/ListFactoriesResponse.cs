@@ -6,6 +6,115 @@ namespace bnet.protocol.game_master
 {
 	public class ListFactoriesResponse : IProtoBuf
 	{
+		public List<GameFactoryDescription> Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				this._Description = value;
+			}
+		}
+
+		public List<GameFactoryDescription> DescriptionList
+		{
+			get
+			{
+				return this._Description;
+			}
+		}
+
+		public int DescriptionCount
+		{
+			get
+			{
+				return this._Description.Count;
+			}
+		}
+
+		public void AddDescription(GameFactoryDescription val)
+		{
+			this._Description.Add(val);
+		}
+
+		public void ClearDescription()
+		{
+			this._Description.Clear();
+		}
+
+		public void SetDescription(List<GameFactoryDescription> val)
+		{
+			this.Description = val;
+		}
+
+		public uint TotalResults
+		{
+			get
+			{
+				return this._TotalResults;
+			}
+			set
+			{
+				this._TotalResults = value;
+				this.HasTotalResults = true;
+			}
+		}
+
+		public void SetTotalResults(uint val)
+		{
+			this.TotalResults = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (GameFactoryDescription gameFactoryDescription in this.Description)
+			{
+				num ^= gameFactoryDescription.GetHashCode();
+			}
+			if (this.HasTotalResults)
+			{
+				num ^= this.TotalResults.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ListFactoriesResponse listFactoriesResponse = obj as ListFactoriesResponse;
+			if (listFactoriesResponse == null)
+			{
+				return false;
+			}
+			if (this.Description.Count != listFactoriesResponse.Description.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Description.Count; i++)
+			{
+				if (!this.Description[i].Equals(listFactoriesResponse.Description[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasTotalResults == listFactoriesResponse.HasTotalResults && (!this.HasTotalResults || this.TotalResults.Equals(listFactoriesResponse.TotalResults));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ListFactoriesResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ListFactoriesResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ListFactoriesResponse.Deserialize(stream, this);
@@ -117,115 +226,6 @@ namespace bnet.protocol.game_master
 				num += ProtocolParser.SizeOfUInt32(this.TotalResults);
 			}
 			return num;
-		}
-
-		public List<GameFactoryDescription> Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				this._Description = value;
-			}
-		}
-
-		public List<GameFactoryDescription> DescriptionList
-		{
-			get
-			{
-				return this._Description;
-			}
-		}
-
-		public int DescriptionCount
-		{
-			get
-			{
-				return this._Description.Count;
-			}
-		}
-
-		public void AddDescription(GameFactoryDescription val)
-		{
-			this._Description.Add(val);
-		}
-
-		public void ClearDescription()
-		{
-			this._Description.Clear();
-		}
-
-		public void SetDescription(List<GameFactoryDescription> val)
-		{
-			this.Description = val;
-		}
-
-		public uint TotalResults
-		{
-			get
-			{
-				return this._TotalResults;
-			}
-			set
-			{
-				this._TotalResults = value;
-				this.HasTotalResults = true;
-			}
-		}
-
-		public void SetTotalResults(uint val)
-		{
-			this.TotalResults = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (GameFactoryDescription gameFactoryDescription in this.Description)
-			{
-				num ^= gameFactoryDescription.GetHashCode();
-			}
-			if (this.HasTotalResults)
-			{
-				num ^= this.TotalResults.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ListFactoriesResponse listFactoriesResponse = obj as ListFactoriesResponse;
-			if (listFactoriesResponse == null)
-			{
-				return false;
-			}
-			if (this.Description.Count != listFactoriesResponse.Description.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Description.Count; i++)
-			{
-				if (!this.Description[i].Equals(listFactoriesResponse.Description[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasTotalResults == listFactoriesResponse.HasTotalResults && (!this.HasTotalResults || this.TotalResults.Equals(listFactoriesResponse.TotalResults));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ListFactoriesResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ListFactoriesResponse>(bs, 0, -1);
 		}
 
 		private List<GameFactoryDescription> _Description = new List<GameFactoryDescription>();

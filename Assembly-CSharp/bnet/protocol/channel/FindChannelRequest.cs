@@ -5,6 +5,60 @@ namespace bnet.protocol.channel
 {
 	public class FindChannelRequest : IProtoBuf
 	{
+		public Identity AgentIdentity
+		{
+			get
+			{
+				return this._AgentIdentity;
+			}
+			set
+			{
+				this._AgentIdentity = value;
+				this.HasAgentIdentity = (value != null);
+			}
+		}
+
+		public void SetAgentIdentity(Identity val)
+		{
+			this.AgentIdentity = val;
+		}
+
+		public FindChannelOptions Options { get; set; }
+
+		public void SetOptions(FindChannelOptions val)
+		{
+			this.Options = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentIdentity)
+			{
+				num ^= this.AgentIdentity.GetHashCode();
+			}
+			return num ^ this.Options.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			FindChannelRequest findChannelRequest = obj as FindChannelRequest;
+			return findChannelRequest != null && this.HasAgentIdentity == findChannelRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(findChannelRequest.AgentIdentity)) && this.Options.Equals(findChannelRequest.Options);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FindChannelRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FindChannelRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FindChannelRequest.Deserialize(stream, this);
@@ -113,60 +167,6 @@ namespace bnet.protocol.channel
 			uint serializedSize2 = this.Options.GetSerializedSize();
 			num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			return num + 1u;
-		}
-
-		public Identity AgentIdentity
-		{
-			get
-			{
-				return this._AgentIdentity;
-			}
-			set
-			{
-				this._AgentIdentity = value;
-				this.HasAgentIdentity = (value != null);
-			}
-		}
-
-		public void SetAgentIdentity(Identity val)
-		{
-			this.AgentIdentity = val;
-		}
-
-		public FindChannelOptions Options { get; set; }
-
-		public void SetOptions(FindChannelOptions val)
-		{
-			this.Options = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentIdentity)
-			{
-				num ^= this.AgentIdentity.GetHashCode();
-			}
-			return num ^ this.Options.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			FindChannelRequest findChannelRequest = obj as FindChannelRequest;
-			return findChannelRequest != null && this.HasAgentIdentity == findChannelRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(findChannelRequest.AgentIdentity)) && this.Options.Equals(findChannelRequest.Options);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FindChannelRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FindChannelRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentIdentity;

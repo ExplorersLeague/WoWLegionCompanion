@@ -6,6 +6,97 @@ namespace bnet.protocol.account
 {
 	public class GameSessionLocation : IProtoBuf
 	{
+		public string IpAddress
+		{
+			get
+			{
+				return this._IpAddress;
+			}
+			set
+			{
+				this._IpAddress = value;
+				this.HasIpAddress = (value != null);
+			}
+		}
+
+		public void SetIpAddress(string val)
+		{
+			this.IpAddress = val;
+		}
+
+		public uint Country
+		{
+			get
+			{
+				return this._Country;
+			}
+			set
+			{
+				this._Country = value;
+				this.HasCountry = true;
+			}
+		}
+
+		public void SetCountry(uint val)
+		{
+			this.Country = val;
+		}
+
+		public string City
+		{
+			get
+			{
+				return this._City;
+			}
+			set
+			{
+				this._City = value;
+				this.HasCity = (value != null);
+			}
+		}
+
+		public void SetCity(string val)
+		{
+			this.City = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasIpAddress)
+			{
+				num ^= this.IpAddress.GetHashCode();
+			}
+			if (this.HasCountry)
+			{
+				num ^= this.Country.GetHashCode();
+			}
+			if (this.HasCity)
+			{
+				num ^= this.City.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameSessionLocation gameSessionLocation = obj as GameSessionLocation;
+			return gameSessionLocation != null && this.HasIpAddress == gameSessionLocation.HasIpAddress && (!this.HasIpAddress || this.IpAddress.Equals(gameSessionLocation.IpAddress)) && this.HasCountry == gameSessionLocation.HasCountry && (!this.HasCountry || this.Country.Equals(gameSessionLocation.Country)) && this.HasCity == gameSessionLocation.HasCity && (!this.HasCity || this.City.Equals(gameSessionLocation.City));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameSessionLocation ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameSessionLocation>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameSessionLocation.Deserialize(stream, this);
@@ -124,97 +215,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
 			}
 			return num;
-		}
-
-		public string IpAddress
-		{
-			get
-			{
-				return this._IpAddress;
-			}
-			set
-			{
-				this._IpAddress = value;
-				this.HasIpAddress = (value != null);
-			}
-		}
-
-		public void SetIpAddress(string val)
-		{
-			this.IpAddress = val;
-		}
-
-		public uint Country
-		{
-			get
-			{
-				return this._Country;
-			}
-			set
-			{
-				this._Country = value;
-				this.HasCountry = true;
-			}
-		}
-
-		public void SetCountry(uint val)
-		{
-			this.Country = val;
-		}
-
-		public string City
-		{
-			get
-			{
-				return this._City;
-			}
-			set
-			{
-				this._City = value;
-				this.HasCity = (value != null);
-			}
-		}
-
-		public void SetCity(string val)
-		{
-			this.City = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasIpAddress)
-			{
-				num ^= this.IpAddress.GetHashCode();
-			}
-			if (this.HasCountry)
-			{
-				num ^= this.Country.GetHashCode();
-			}
-			if (this.HasCity)
-			{
-				num ^= this.City.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameSessionLocation gameSessionLocation = obj as GameSessionLocation;
-			return gameSessionLocation != null && this.HasIpAddress == gameSessionLocation.HasIpAddress && (!this.HasIpAddress || this.IpAddress.Equals(gameSessionLocation.IpAddress)) && this.HasCountry == gameSessionLocation.HasCountry && (!this.HasCountry || this.Country.Equals(gameSessionLocation.Country)) && this.HasCity == gameSessionLocation.HasCity && (!this.HasCity || this.City.Equals(gameSessionLocation.City));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameSessionLocation ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameSessionLocation>(bs, 0, -1);
 		}
 
 		public bool HasIpAddress;

@@ -5,6 +5,53 @@ namespace bnet.protocol.authentication
 {
 	public class VerifyWebCredentialsRequest : IProtoBuf
 	{
+		public byte[] WebCredentials
+		{
+			get
+			{
+				return this._WebCredentials;
+			}
+			set
+			{
+				this._WebCredentials = value;
+				this.HasWebCredentials = (value != null);
+			}
+		}
+
+		public void SetWebCredentials(byte[] val)
+		{
+			this.WebCredentials = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasWebCredentials)
+			{
+				num ^= this.WebCredentials.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			VerifyWebCredentialsRequest verifyWebCredentialsRequest = obj as VerifyWebCredentialsRequest;
+			return verifyWebCredentialsRequest != null && this.HasWebCredentials == verifyWebCredentialsRequest.HasWebCredentials && (!this.HasWebCredentials || this.WebCredentials.Equals(verifyWebCredentialsRequest.WebCredentials));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static VerifyWebCredentialsRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<VerifyWebCredentialsRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			VerifyWebCredentialsRequest.Deserialize(stream, this);
@@ -87,53 +134,6 @@ namespace bnet.protocol.authentication
 				num += ProtocolParser.SizeOfUInt32(this.WebCredentials.Length) + (uint)this.WebCredentials.Length;
 			}
 			return num;
-		}
-
-		public byte[] WebCredentials
-		{
-			get
-			{
-				return this._WebCredentials;
-			}
-			set
-			{
-				this._WebCredentials = value;
-				this.HasWebCredentials = (value != null);
-			}
-		}
-
-		public void SetWebCredentials(byte[] val)
-		{
-			this.WebCredentials = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasWebCredentials)
-			{
-				num ^= this.WebCredentials.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			VerifyWebCredentialsRequest verifyWebCredentialsRequest = obj as VerifyWebCredentialsRequest;
-			return verifyWebCredentialsRequest != null && this.HasWebCredentials == verifyWebCredentialsRequest.HasWebCredentials && (!this.HasWebCredentials || this.WebCredentials.Equals(verifyWebCredentialsRequest.WebCredentials));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static VerifyWebCredentialsRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<VerifyWebCredentialsRequest>(bs, 0, -1);
 		}
 
 		public bool HasWebCredentials;

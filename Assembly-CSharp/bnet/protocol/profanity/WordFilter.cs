@@ -6,6 +6,46 @@ namespace bnet.protocol.profanity
 {
 	public class WordFilter : IProtoBuf
 	{
+		public string Type { get; set; }
+
+		public void SetType(string val)
+		{
+			this.Type = val;
+		}
+
+		public string Regex { get; set; }
+
+		public void SetRegex(string val)
+		{
+			this.Regex = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Type.GetHashCode();
+			return num ^ this.Regex.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			WordFilter wordFilter = obj as WordFilter;
+			return wordFilter != null && this.Type.Equals(wordFilter.Type) && this.Regex.Equals(wordFilter.Regex);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static WordFilter ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<WordFilter>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			WordFilter.Deserialize(stream, this);
@@ -101,46 +141,6 @@ namespace bnet.protocol.profanity
 			uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.Regex);
 			num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
 			return num + 2u;
-		}
-
-		public string Type { get; set; }
-
-		public void SetType(string val)
-		{
-			this.Type = val;
-		}
-
-		public string Regex { get; set; }
-
-		public void SetRegex(string val)
-		{
-			this.Regex = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Type.GetHashCode();
-			return num ^ this.Regex.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			WordFilter wordFilter = obj as WordFilter;
-			return wordFilter != null && this.Type.Equals(wordFilter.Type) && this.Regex.Equals(wordFilter.Regex);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static WordFilter ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<WordFilter>(bs, 0, -1);
 		}
 	}
 }

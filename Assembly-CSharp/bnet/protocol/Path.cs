@@ -6,6 +6,93 @@ namespace bnet.protocol
 {
 	public class Path : IProtoBuf
 	{
+		public List<uint> Ordinal
+		{
+			get
+			{
+				return this._Ordinal;
+			}
+			set
+			{
+				this._Ordinal = value;
+			}
+		}
+
+		public List<uint> OrdinalList
+		{
+			get
+			{
+				return this._Ordinal;
+			}
+		}
+
+		public int OrdinalCount
+		{
+			get
+			{
+				return this._Ordinal.Count;
+			}
+		}
+
+		public void AddOrdinal(uint val)
+		{
+			this._Ordinal.Add(val);
+		}
+
+		public void ClearOrdinal()
+		{
+			this._Ordinal.Clear();
+		}
+
+		public void SetOrdinal(List<uint> val)
+		{
+			this.Ordinal = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (uint num2 in this.Ordinal)
+			{
+				num ^= num2.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Path path = obj as Path;
+			if (path == null)
+			{
+				return false;
+			}
+			if (this.Ordinal.Count != path.Ordinal.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Ordinal.Count; i++)
+			{
+				if (!this.Ordinal[i].Equals(path.Ordinal[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Path ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Path>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Path.Deserialize(stream, this);
@@ -115,93 +202,6 @@ namespace bnet.protocol
 				num += ProtocolParser.SizeOfUInt32(num - num2);
 			}
 			return num;
-		}
-
-		public List<uint> Ordinal
-		{
-			get
-			{
-				return this._Ordinal;
-			}
-			set
-			{
-				this._Ordinal = value;
-			}
-		}
-
-		public List<uint> OrdinalList
-		{
-			get
-			{
-				return this._Ordinal;
-			}
-		}
-
-		public int OrdinalCount
-		{
-			get
-			{
-				return this._Ordinal.Count;
-			}
-		}
-
-		public void AddOrdinal(uint val)
-		{
-			this._Ordinal.Add(val);
-		}
-
-		public void ClearOrdinal()
-		{
-			this._Ordinal.Clear();
-		}
-
-		public void SetOrdinal(List<uint> val)
-		{
-			this.Ordinal = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (uint num2 in this.Ordinal)
-			{
-				num ^= num2.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Path path = obj as Path;
-			if (path == null)
-			{
-				return false;
-			}
-			if (this.Ordinal.Count != path.Ordinal.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Ordinal.Count; i++)
-			{
-				if (!this.Ordinal[i].Equals(path.Ordinal[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Path ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Path>(bs, 0, -1);
 		}
 
 		private List<uint> _Ordinal = new List<uint>();

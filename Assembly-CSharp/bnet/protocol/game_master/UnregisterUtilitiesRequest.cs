@@ -5,6 +5,29 @@ namespace bnet.protocol.game_master
 {
 	public class UnregisterUtilitiesRequest : IProtoBuf
 	{
+		public override int GetHashCode()
+		{
+			return base.GetType().GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is UnregisterUtilitiesRequest;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UnregisterUtilitiesRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UnregisterUtilitiesRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UnregisterUtilitiesRequest.Deserialize(stream, this);
@@ -72,29 +95,6 @@ namespace bnet.protocol.game_master
 		public uint GetSerializedSize()
 		{
 			return 0u;
-		}
-
-		public override int GetHashCode()
-		{
-			return base.GetType().GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			return obj is UnregisterUtilitiesRequest;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UnregisterUtilitiesRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UnregisterUtilitiesRequest>(bs, 0, -1);
 		}
 	}
 }

@@ -5,6 +5,61 @@ namespace bnet.protocol.presence
 {
 	public class OwnershipRequest : IProtoBuf
 	{
+		public EntityId EntityId { get; set; }
+
+		public void SetEntityId(EntityId val)
+		{
+			this.EntityId = val;
+		}
+
+		public bool ReleaseOwnership
+		{
+			get
+			{
+				return this._ReleaseOwnership;
+			}
+			set
+			{
+				this._ReleaseOwnership = value;
+				this.HasReleaseOwnership = true;
+			}
+		}
+
+		public void SetReleaseOwnership(bool val)
+		{
+			this.ReleaseOwnership = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.EntityId.GetHashCode();
+			if (this.HasReleaseOwnership)
+			{
+				num ^= this.ReleaseOwnership.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			OwnershipRequest ownershipRequest = obj as OwnershipRequest;
+			return ownershipRequest != null && this.EntityId.Equals(ownershipRequest.EntityId) && this.HasReleaseOwnership == ownershipRequest.HasReleaseOwnership && (!this.HasReleaseOwnership || this.ReleaseOwnership.Equals(ownershipRequest.ReleaseOwnership));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static OwnershipRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<OwnershipRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			OwnershipRequest.Deserialize(stream, this);
@@ -108,61 +163,6 @@ namespace bnet.protocol.presence
 				num += 1u;
 			}
 			return num + 1u;
-		}
-
-		public EntityId EntityId { get; set; }
-
-		public void SetEntityId(EntityId val)
-		{
-			this.EntityId = val;
-		}
-
-		public bool ReleaseOwnership
-		{
-			get
-			{
-				return this._ReleaseOwnership;
-			}
-			set
-			{
-				this._ReleaseOwnership = value;
-				this.HasReleaseOwnership = true;
-			}
-		}
-
-		public void SetReleaseOwnership(bool val)
-		{
-			this.ReleaseOwnership = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.EntityId.GetHashCode();
-			if (this.HasReleaseOwnership)
-			{
-				num ^= this.ReleaseOwnership.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			OwnershipRequest ownershipRequest = obj as OwnershipRequest;
-			return ownershipRequest != null && this.EntityId.Equals(ownershipRequest.EntityId) && this.HasReleaseOwnership == ownershipRequest.HasReleaseOwnership && (!this.HasReleaseOwnership || this.ReleaseOwnership.Equals(ownershipRequest.ReleaseOwnership));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static OwnershipRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<OwnershipRequest>(bs, 0, -1);
 		}
 
 		public bool HasReleaseOwnership;

@@ -11,382 +11,6 @@ namespace bnet.protocol.channel
 {
 	public class ChannelState : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			bnet.protocol.channel.ChannelState.Deserialize(stream, this);
-		}
-
-		public static bnet.protocol.channel.ChannelState Deserialize(Stream stream, bnet.protocol.channel.ChannelState instance)
-		{
-			return bnet.protocol.channel.ChannelState.Deserialize(stream, instance, -1L);
-		}
-
-		public static bnet.protocol.channel.ChannelState DeserializeLengthDelimited(Stream stream)
-		{
-			bnet.protocol.channel.ChannelState channelState = new bnet.protocol.channel.ChannelState();
-			bnet.protocol.channel.ChannelState.DeserializeLengthDelimited(stream, channelState);
-			return channelState;
-		}
-
-		public static bnet.protocol.channel.ChannelState DeserializeLengthDelimited(Stream stream, bnet.protocol.channel.ChannelState instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return bnet.protocol.channel.ChannelState.Deserialize(stream, instance, num);
-		}
-
-		public static bnet.protocol.channel.ChannelState Deserialize(Stream stream, bnet.protocol.channel.ChannelState instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			if (instance.Attribute == null)
-			{
-				instance.Attribute = new List<bnet.protocol.attribute.Attribute>();
-			}
-			if (instance.Invitation == null)
-			{
-				instance.Invitation = new List<Invitation>();
-			}
-			instance.PrivacyLevel = bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN;
-			instance.ChannelType = "default";
-			instance.Program = 0u;
-			instance.AllowOfflineMembers = false;
-			instance.SubscribeToPresence = true;
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else
-				{
-					switch (num)
-					{
-					case 93:
-						instance.Program = binaryReader.ReadUInt32();
-						break;
-					default:
-						if (num != 8)
-						{
-							if (num != 16)
-							{
-								if (num != 26)
-								{
-									if (num != 34)
-									{
-										if (num != 40)
-										{
-											if (num != 48)
-											{
-												if (num != 56)
-												{
-													if (num != 66)
-													{
-														if (num != 74)
-														{
-															if (num != 82)
-															{
-																if (num != 104)
-																{
-																	Key key = ProtocolParser.ReadKey((byte)num, stream);
-																	uint field = key.Field;
-																	if (field != 100u)
-																	{
-																		if (field != 101u)
-																		{
-																			if (field == 0u)
-																			{
-																				throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-																			}
-																			ProtocolParser.SkipKey(stream, key);
-																		}
-																		else if (key.WireType == Wire.LengthDelimited)
-																		{
-																			if (instance.Presence == null)
-																			{
-																				instance.Presence = bnet.protocol.presence.ChannelState.DeserializeLengthDelimited(stream);
-																			}
-																			else
-																			{
-																				bnet.protocol.presence.ChannelState.DeserializeLengthDelimited(stream, instance.Presence);
-																			}
-																		}
-																	}
-																	else if (key.WireType == Wire.LengthDelimited)
-																	{
-																		if (instance.Chat == null)
-																		{
-																			instance.Chat = bnet.protocol.chat.ChannelState.DeserializeLengthDelimited(stream);
-																		}
-																		else
-																		{
-																			bnet.protocol.chat.ChannelState.DeserializeLengthDelimited(stream, instance.Chat);
-																		}
-																	}
-																}
-																else
-																{
-																	instance.SubscribeToPresence = ProtocolParser.ReadBool(stream);
-																}
-															}
-															else
-															{
-																instance.ChannelType = ProtocolParser.ReadString(stream);
-															}
-														}
-														else
-														{
-															instance.DelegateName = ProtocolParser.ReadString(stream);
-														}
-													}
-													else
-													{
-														instance.Name = ProtocolParser.ReadString(stream);
-													}
-												}
-												else
-												{
-													instance.PrivacyLevel = (bnet.protocol.channel.ChannelState.Types.PrivacyLevel)ProtocolParser.ReadUInt64(stream);
-												}
-											}
-											else
-											{
-												instance.Reason = ProtocolParser.ReadUInt32(stream);
-											}
-										}
-										else
-										{
-											instance.MaxInvitations = ProtocolParser.ReadUInt32(stream);
-										}
-									}
-									else
-									{
-										instance.Invitation.Add(bnet.protocol.invitation.Invitation.DeserializeLengthDelimited(stream));
-									}
-								}
-								else
-								{
-									instance.Attribute.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
-								}
-							}
-							else
-							{
-								instance.MinMembers = ProtocolParser.ReadUInt32(stream);
-							}
-						}
-						else
-						{
-							instance.MaxMembers = ProtocolParser.ReadUInt32(stream);
-						}
-						break;
-					case 96:
-						instance.AllowOfflineMembers = ProtocolParser.ReadBool(stream);
-						break;
-					}
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			bnet.protocol.channel.ChannelState.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, bnet.protocol.channel.ChannelState instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			if (instance.HasMaxMembers)
-			{
-				stream.WriteByte(8);
-				ProtocolParser.WriteUInt32(stream, instance.MaxMembers);
-			}
-			if (instance.HasMinMembers)
-			{
-				stream.WriteByte(16);
-				ProtocolParser.WriteUInt32(stream, instance.MinMembers);
-			}
-			if (instance.Attribute.Count > 0)
-			{
-				foreach (bnet.protocol.attribute.Attribute attribute in instance.Attribute)
-				{
-					stream.WriteByte(26);
-					ProtocolParser.WriteUInt32(stream, attribute.GetSerializedSize());
-					bnet.protocol.attribute.Attribute.Serialize(stream, attribute);
-				}
-			}
-			if (instance.Invitation.Count > 0)
-			{
-				foreach (Invitation invitation in instance.Invitation)
-				{
-					stream.WriteByte(34);
-					ProtocolParser.WriteUInt32(stream, invitation.GetSerializedSize());
-					bnet.protocol.invitation.Invitation.Serialize(stream, invitation);
-				}
-			}
-			if (instance.HasMaxInvitations)
-			{
-				stream.WriteByte(40);
-				ProtocolParser.WriteUInt32(stream, instance.MaxInvitations);
-			}
-			if (instance.HasReason)
-			{
-				stream.WriteByte(48);
-				ProtocolParser.WriteUInt32(stream, instance.Reason);
-			}
-			if (instance.HasPrivacyLevel)
-			{
-				stream.WriteByte(56);
-				ProtocolParser.WriteUInt64(stream, (ulong)((long)instance.PrivacyLevel));
-			}
-			if (instance.HasName)
-			{
-				stream.WriteByte(66);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Name));
-			}
-			if (instance.HasDelegateName)
-			{
-				stream.WriteByte(74);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.DelegateName));
-			}
-			if (instance.HasChannelType)
-			{
-				stream.WriteByte(82);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.ChannelType));
-			}
-			if (instance.HasProgram)
-			{
-				stream.WriteByte(93);
-				binaryWriter.Write(instance.Program);
-			}
-			if (instance.HasAllowOfflineMembers)
-			{
-				stream.WriteByte(96);
-				ProtocolParser.WriteBool(stream, instance.AllowOfflineMembers);
-			}
-			if (instance.HasSubscribeToPresence)
-			{
-				stream.WriteByte(104);
-				ProtocolParser.WriteBool(stream, instance.SubscribeToPresence);
-			}
-			if (instance.HasChat)
-			{
-				stream.WriteByte(162);
-				stream.WriteByte(6);
-				ProtocolParser.WriteUInt32(stream, instance.Chat.GetSerializedSize());
-				bnet.protocol.chat.ChannelState.Serialize(stream, instance.Chat);
-			}
-			if (instance.HasPresence)
-			{
-				stream.WriteByte(170);
-				stream.WriteByte(6);
-				ProtocolParser.WriteUInt32(stream, instance.Presence.GetSerializedSize());
-				bnet.protocol.presence.ChannelState.Serialize(stream, instance.Presence);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasMaxMembers)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MaxMembers);
-			}
-			if (this.HasMinMembers)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MinMembers);
-			}
-			if (this.Attribute.Count > 0)
-			{
-				foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-				{
-					num += 1u;
-					uint serializedSize = attribute.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.Invitation.Count > 0)
-			{
-				foreach (Invitation invitation in this.Invitation)
-				{
-					num += 1u;
-					uint serializedSize2 = invitation.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			if (this.HasMaxInvitations)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MaxInvitations);
-			}
-			if (this.HasReason)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.Reason);
-			}
-			if (this.HasPrivacyLevel)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64((ulong)((long)this.PrivacyLevel));
-			}
-			if (this.HasName)
-			{
-				num += 1u;
-				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Name);
-				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-			}
-			if (this.HasDelegateName)
-			{
-				num += 1u;
-				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.DelegateName);
-				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
-			}
-			if (this.HasChannelType)
-			{
-				num += 1u;
-				uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.ChannelType);
-				num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
-			}
-			if (this.HasProgram)
-			{
-				num += 1u;
-				num += 4u;
-			}
-			if (this.HasAllowOfflineMembers)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasSubscribeToPresence)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasChat)
-			{
-				num += 2u;
-				uint serializedSize3 = this.Chat.GetSerializedSize();
-				num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
-			}
-			if (this.HasPresence)
-			{
-				num += 2u;
-				uint serializedSize4 = this.Presence.GetSerializedSize();
-				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
-			}
-			return num;
-		}
-
 		public uint MaxMembers
 		{
 			get
@@ -824,6 +448,382 @@ namespace bnet.protocol.channel
 		public static bnet.protocol.channel.ChannelState ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<bnet.protocol.channel.ChannelState>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			bnet.protocol.channel.ChannelState.Deserialize(stream, this);
+		}
+
+		public static bnet.protocol.channel.ChannelState Deserialize(Stream stream, bnet.protocol.channel.ChannelState instance)
+		{
+			return bnet.protocol.channel.ChannelState.Deserialize(stream, instance, -1L);
+		}
+
+		public static bnet.protocol.channel.ChannelState DeserializeLengthDelimited(Stream stream)
+		{
+			bnet.protocol.channel.ChannelState channelState = new bnet.protocol.channel.ChannelState();
+			bnet.protocol.channel.ChannelState.DeserializeLengthDelimited(stream, channelState);
+			return channelState;
+		}
+
+		public static bnet.protocol.channel.ChannelState DeserializeLengthDelimited(Stream stream, bnet.protocol.channel.ChannelState instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return bnet.protocol.channel.ChannelState.Deserialize(stream, instance, num);
+		}
+
+		public static bnet.protocol.channel.ChannelState Deserialize(Stream stream, bnet.protocol.channel.ChannelState instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			if (instance.Attribute == null)
+			{
+				instance.Attribute = new List<bnet.protocol.attribute.Attribute>();
+			}
+			if (instance.Invitation == null)
+			{
+				instance.Invitation = new List<Invitation>();
+			}
+			instance.PrivacyLevel = bnet.protocol.channel.ChannelState.Types.PrivacyLevel.PRIVACY_LEVEL_OPEN;
+			instance.ChannelType = "default";
+			instance.Program = 0u;
+			instance.AllowOfflineMembers = false;
+			instance.SubscribeToPresence = true;
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else
+				{
+					switch (num)
+					{
+					case 93:
+						instance.Program = binaryReader.ReadUInt32();
+						break;
+					default:
+						if (num != 8)
+						{
+							if (num != 16)
+							{
+								if (num != 26)
+								{
+									if (num != 34)
+									{
+										if (num != 40)
+										{
+											if (num != 48)
+											{
+												if (num != 56)
+												{
+													if (num != 66)
+													{
+														if (num != 74)
+														{
+															if (num != 82)
+															{
+																if (num != 104)
+																{
+																	Key key = ProtocolParser.ReadKey((byte)num, stream);
+																	uint field = key.Field;
+																	if (field != 100u)
+																	{
+																		if (field != 101u)
+																		{
+																			if (field == 0u)
+																			{
+																				throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+																			}
+																			ProtocolParser.SkipKey(stream, key);
+																		}
+																		else if (key.WireType == Wire.LengthDelimited)
+																		{
+																			if (instance.Presence == null)
+																			{
+																				instance.Presence = bnet.protocol.presence.ChannelState.DeserializeLengthDelimited(stream);
+																			}
+																			else
+																			{
+																				bnet.protocol.presence.ChannelState.DeserializeLengthDelimited(stream, instance.Presence);
+																			}
+																		}
+																	}
+																	else if (key.WireType == Wire.LengthDelimited)
+																	{
+																		if (instance.Chat == null)
+																		{
+																			instance.Chat = bnet.protocol.chat.ChannelState.DeserializeLengthDelimited(stream);
+																		}
+																		else
+																		{
+																			bnet.protocol.chat.ChannelState.DeserializeLengthDelimited(stream, instance.Chat);
+																		}
+																	}
+																}
+																else
+																{
+																	instance.SubscribeToPresence = ProtocolParser.ReadBool(stream);
+																}
+															}
+															else
+															{
+																instance.ChannelType = ProtocolParser.ReadString(stream);
+															}
+														}
+														else
+														{
+															instance.DelegateName = ProtocolParser.ReadString(stream);
+														}
+													}
+													else
+													{
+														instance.Name = ProtocolParser.ReadString(stream);
+													}
+												}
+												else
+												{
+													instance.PrivacyLevel = (bnet.protocol.channel.ChannelState.Types.PrivacyLevel)ProtocolParser.ReadUInt64(stream);
+												}
+											}
+											else
+											{
+												instance.Reason = ProtocolParser.ReadUInt32(stream);
+											}
+										}
+										else
+										{
+											instance.MaxInvitations = ProtocolParser.ReadUInt32(stream);
+										}
+									}
+									else
+									{
+										instance.Invitation.Add(bnet.protocol.invitation.Invitation.DeserializeLengthDelimited(stream));
+									}
+								}
+								else
+								{
+									instance.Attribute.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
+								}
+							}
+							else
+							{
+								instance.MinMembers = ProtocolParser.ReadUInt32(stream);
+							}
+						}
+						else
+						{
+							instance.MaxMembers = ProtocolParser.ReadUInt32(stream);
+						}
+						break;
+					case 96:
+						instance.AllowOfflineMembers = ProtocolParser.ReadBool(stream);
+						break;
+					}
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			bnet.protocol.channel.ChannelState.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, bnet.protocol.channel.ChannelState instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			if (instance.HasMaxMembers)
+			{
+				stream.WriteByte(8);
+				ProtocolParser.WriteUInt32(stream, instance.MaxMembers);
+			}
+			if (instance.HasMinMembers)
+			{
+				stream.WriteByte(16);
+				ProtocolParser.WriteUInt32(stream, instance.MinMembers);
+			}
+			if (instance.Attribute.Count > 0)
+			{
+				foreach (bnet.protocol.attribute.Attribute attribute in instance.Attribute)
+				{
+					stream.WriteByte(26);
+					ProtocolParser.WriteUInt32(stream, attribute.GetSerializedSize());
+					bnet.protocol.attribute.Attribute.Serialize(stream, attribute);
+				}
+			}
+			if (instance.Invitation.Count > 0)
+			{
+				foreach (Invitation invitation in instance.Invitation)
+				{
+					stream.WriteByte(34);
+					ProtocolParser.WriteUInt32(stream, invitation.GetSerializedSize());
+					bnet.protocol.invitation.Invitation.Serialize(stream, invitation);
+				}
+			}
+			if (instance.HasMaxInvitations)
+			{
+				stream.WriteByte(40);
+				ProtocolParser.WriteUInt32(stream, instance.MaxInvitations);
+			}
+			if (instance.HasReason)
+			{
+				stream.WriteByte(48);
+				ProtocolParser.WriteUInt32(stream, instance.Reason);
+			}
+			if (instance.HasPrivacyLevel)
+			{
+				stream.WriteByte(56);
+				ProtocolParser.WriteUInt64(stream, (ulong)((long)instance.PrivacyLevel));
+			}
+			if (instance.HasName)
+			{
+				stream.WriteByte(66);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Name));
+			}
+			if (instance.HasDelegateName)
+			{
+				stream.WriteByte(74);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.DelegateName));
+			}
+			if (instance.HasChannelType)
+			{
+				stream.WriteByte(82);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.ChannelType));
+			}
+			if (instance.HasProgram)
+			{
+				stream.WriteByte(93);
+				binaryWriter.Write(instance.Program);
+			}
+			if (instance.HasAllowOfflineMembers)
+			{
+				stream.WriteByte(96);
+				ProtocolParser.WriteBool(stream, instance.AllowOfflineMembers);
+			}
+			if (instance.HasSubscribeToPresence)
+			{
+				stream.WriteByte(104);
+				ProtocolParser.WriteBool(stream, instance.SubscribeToPresence);
+			}
+			if (instance.HasChat)
+			{
+				stream.WriteByte(162);
+				stream.WriteByte(6);
+				ProtocolParser.WriteUInt32(stream, instance.Chat.GetSerializedSize());
+				bnet.protocol.chat.ChannelState.Serialize(stream, instance.Chat);
+			}
+			if (instance.HasPresence)
+			{
+				stream.WriteByte(170);
+				stream.WriteByte(6);
+				ProtocolParser.WriteUInt32(stream, instance.Presence.GetSerializedSize());
+				bnet.protocol.presence.ChannelState.Serialize(stream, instance.Presence);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasMaxMembers)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MaxMembers);
+			}
+			if (this.HasMinMembers)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MinMembers);
+			}
+			if (this.Attribute.Count > 0)
+			{
+				foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+				{
+					num += 1u;
+					uint serializedSize = attribute.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.Invitation.Count > 0)
+			{
+				foreach (Invitation invitation in this.Invitation)
+				{
+					num += 1u;
+					uint serializedSize2 = invitation.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			if (this.HasMaxInvitations)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MaxInvitations);
+			}
+			if (this.HasReason)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.Reason);
+			}
+			if (this.HasPrivacyLevel)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64((ulong)((long)this.PrivacyLevel));
+			}
+			if (this.HasName)
+			{
+				num += 1u;
+				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Name);
+				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+			}
+			if (this.HasDelegateName)
+			{
+				num += 1u;
+				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.DelegateName);
+				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
+			}
+			if (this.HasChannelType)
+			{
+				num += 1u;
+				uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.ChannelType);
+				num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
+			}
+			if (this.HasProgram)
+			{
+				num += 1u;
+				num += 4u;
+			}
+			if (this.HasAllowOfflineMembers)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasSubscribeToPresence)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasChat)
+			{
+				num += 2u;
+				uint serializedSize3 = this.Chat.GetSerializedSize();
+				num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
+			}
+			if (this.HasPresence)
+			{
+				num += 2u;
+				uint serializedSize4 = this.Presence.GetSerializedSize();
+				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
+			}
+			return num;
 		}
 
 		public bool HasMaxMembers;

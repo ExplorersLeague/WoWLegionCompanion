@@ -6,156 +6,6 @@ namespace bnet.protocol.game_master
 {
 	public class GameFoundNotification : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			GameFoundNotification.Deserialize(stream, this);
-		}
-
-		public static GameFoundNotification Deserialize(Stream stream, GameFoundNotification instance)
-		{
-			return GameFoundNotification.Deserialize(stream, instance, -1L);
-		}
-
-		public static GameFoundNotification DeserializeLengthDelimited(Stream stream)
-		{
-			GameFoundNotification gameFoundNotification = new GameFoundNotification();
-			GameFoundNotification.DeserializeLengthDelimited(stream, gameFoundNotification);
-			return gameFoundNotification;
-		}
-
-		public static GameFoundNotification DeserializeLengthDelimited(Stream stream, GameFoundNotification instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return GameFoundNotification.Deserialize(stream, instance, num);
-		}
-
-		public static GameFoundNotification Deserialize(Stream stream, GameFoundNotification instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			instance.ErrorCode = 0u;
-			if (instance.ConnectInfo == null)
-			{
-				instance.ConnectInfo = new List<ConnectInfo>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 9)
-				{
-					if (num != 16)
-					{
-						if (num != 26)
-						{
-							if (num != 34)
-							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
-							}
-							else
-							{
-								instance.ConnectInfo.Add(bnet.protocol.game_master.ConnectInfo.DeserializeLengthDelimited(stream));
-							}
-						}
-						else if (instance.GameHandle == null)
-						{
-							instance.GameHandle = GameHandle.DeserializeLengthDelimited(stream);
-						}
-						else
-						{
-							GameHandle.DeserializeLengthDelimited(stream, instance.GameHandle);
-						}
-					}
-					else
-					{
-						instance.ErrorCode = ProtocolParser.ReadUInt32(stream);
-					}
-				}
-				else
-				{
-					instance.RequestId = binaryReader.ReadUInt64();
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			GameFoundNotification.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, GameFoundNotification instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			stream.WriteByte(9);
-			binaryWriter.Write(instance.RequestId);
-			if (instance.HasErrorCode)
-			{
-				stream.WriteByte(16);
-				ProtocolParser.WriteUInt32(stream, instance.ErrorCode);
-			}
-			if (instance.HasGameHandle)
-			{
-				stream.WriteByte(26);
-				ProtocolParser.WriteUInt32(stream, instance.GameHandle.GetSerializedSize());
-				GameHandle.Serialize(stream, instance.GameHandle);
-			}
-			if (instance.ConnectInfo.Count > 0)
-			{
-				foreach (ConnectInfo connectInfo in instance.ConnectInfo)
-				{
-					stream.WriteByte(34);
-					ProtocolParser.WriteUInt32(stream, connectInfo.GetSerializedSize());
-					bnet.protocol.game_master.ConnectInfo.Serialize(stream, connectInfo);
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			num += 8u;
-			if (this.HasErrorCode)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.ErrorCode);
-			}
-			if (this.HasGameHandle)
-			{
-				num += 1u;
-				uint serializedSize = this.GameHandle.GetSerializedSize();
-				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-			}
-			if (this.ConnectInfo.Count > 0)
-			{
-				foreach (ConnectInfo connectInfo in this.ConnectInfo)
-				{
-					num += 1u;
-					uint serializedSize2 = connectInfo.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			num += 1u;
-			return num;
-		}
-
 		public ulong RequestId { get; set; }
 
 		public void SetRequestId(ulong val)
@@ -305,6 +155,156 @@ namespace bnet.protocol.game_master
 		public static GameFoundNotification ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<GameFoundNotification>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			GameFoundNotification.Deserialize(stream, this);
+		}
+
+		public static GameFoundNotification Deserialize(Stream stream, GameFoundNotification instance)
+		{
+			return GameFoundNotification.Deserialize(stream, instance, -1L);
+		}
+
+		public static GameFoundNotification DeserializeLengthDelimited(Stream stream)
+		{
+			GameFoundNotification gameFoundNotification = new GameFoundNotification();
+			GameFoundNotification.DeserializeLengthDelimited(stream, gameFoundNotification);
+			return gameFoundNotification;
+		}
+
+		public static GameFoundNotification DeserializeLengthDelimited(Stream stream, GameFoundNotification instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return GameFoundNotification.Deserialize(stream, instance, num);
+		}
+
+		public static GameFoundNotification Deserialize(Stream stream, GameFoundNotification instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			instance.ErrorCode = 0u;
+			if (instance.ConnectInfo == null)
+			{
+				instance.ConnectInfo = new List<ConnectInfo>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 9)
+				{
+					if (num != 16)
+					{
+						if (num != 26)
+						{
+							if (num != 34)
+							{
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
+								{
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+								}
+								ProtocolParser.SkipKey(stream, key);
+							}
+							else
+							{
+								instance.ConnectInfo.Add(bnet.protocol.game_master.ConnectInfo.DeserializeLengthDelimited(stream));
+							}
+						}
+						else if (instance.GameHandle == null)
+						{
+							instance.GameHandle = GameHandle.DeserializeLengthDelimited(stream);
+						}
+						else
+						{
+							GameHandle.DeserializeLengthDelimited(stream, instance.GameHandle);
+						}
+					}
+					else
+					{
+						instance.ErrorCode = ProtocolParser.ReadUInt32(stream);
+					}
+				}
+				else
+				{
+					instance.RequestId = binaryReader.ReadUInt64();
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			GameFoundNotification.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, GameFoundNotification instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			stream.WriteByte(9);
+			binaryWriter.Write(instance.RequestId);
+			if (instance.HasErrorCode)
+			{
+				stream.WriteByte(16);
+				ProtocolParser.WriteUInt32(stream, instance.ErrorCode);
+			}
+			if (instance.HasGameHandle)
+			{
+				stream.WriteByte(26);
+				ProtocolParser.WriteUInt32(stream, instance.GameHandle.GetSerializedSize());
+				GameHandle.Serialize(stream, instance.GameHandle);
+			}
+			if (instance.ConnectInfo.Count > 0)
+			{
+				foreach (ConnectInfo connectInfo in instance.ConnectInfo)
+				{
+					stream.WriteByte(34);
+					ProtocolParser.WriteUInt32(stream, connectInfo.GetSerializedSize());
+					bnet.protocol.game_master.ConnectInfo.Serialize(stream, connectInfo);
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			num += 8u;
+			if (this.HasErrorCode)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.ErrorCode);
+			}
+			if (this.HasGameHandle)
+			{
+				num += 1u;
+				uint serializedSize = this.GameHandle.GetSerializedSize();
+				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+			}
+			if (this.ConnectInfo.Count > 0)
+			{
+				foreach (ConnectInfo connectInfo in this.ConnectInfo)
+				{
+					num += 1u;
+					uint serializedSize2 = connectInfo.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			num += 1u;
+			return num;
 		}
 
 		public bool HasErrorCode;

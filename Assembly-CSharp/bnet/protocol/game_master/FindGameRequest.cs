@@ -6,196 +6,6 @@ namespace bnet.protocol.game_master
 {
 	public class FindGameRequest : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			FindGameRequest.Deserialize(stream, this);
-		}
-
-		public static FindGameRequest Deserialize(Stream stream, FindGameRequest instance)
-		{
-			return FindGameRequest.Deserialize(stream, instance, -1L);
-		}
-
-		public static FindGameRequest DeserializeLengthDelimited(Stream stream)
-		{
-			FindGameRequest findGameRequest = new FindGameRequest();
-			FindGameRequest.DeserializeLengthDelimited(stream, findGameRequest);
-			return findGameRequest;
-		}
-
-		public static FindGameRequest DeserializeLengthDelimited(Stream stream, FindGameRequest instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return FindGameRequest.Deserialize(stream, instance, num);
-		}
-
-		public static FindGameRequest Deserialize(Stream stream, FindGameRequest instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			if (instance.Player == null)
-			{
-				instance.Player = new List<Player>();
-			}
-			instance.AdvancedNotification = false;
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 10)
-				{
-					if (num != 17)
-					{
-						if (num != 26)
-						{
-							if (num != 32)
-							{
-								if (num != 41)
-								{
-									if (num != 48)
-									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
-									}
-									else
-									{
-										instance.AdvancedNotification = ProtocolParser.ReadBool(stream);
-									}
-								}
-								else
-								{
-									instance.RequestId = binaryReader.ReadUInt64();
-								}
-							}
-							else
-							{
-								instance.ObjectId = ProtocolParser.ReadUInt64(stream);
-							}
-						}
-						else if (instance.Properties == null)
-						{
-							instance.Properties = GameProperties.DeserializeLengthDelimited(stream);
-						}
-						else
-						{
-							GameProperties.DeserializeLengthDelimited(stream, instance.Properties);
-						}
-					}
-					else
-					{
-						instance.FactoryId = binaryReader.ReadUInt64();
-					}
-				}
-				else
-				{
-					instance.Player.Add(bnet.protocol.game_master.Player.DeserializeLengthDelimited(stream));
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			FindGameRequest.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, FindGameRequest instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			if (instance.Player.Count > 0)
-			{
-				foreach (Player player in instance.Player)
-				{
-					stream.WriteByte(10);
-					ProtocolParser.WriteUInt32(stream, player.GetSerializedSize());
-					bnet.protocol.game_master.Player.Serialize(stream, player);
-				}
-			}
-			if (instance.HasFactoryId)
-			{
-				stream.WriteByte(17);
-				binaryWriter.Write(instance.FactoryId);
-			}
-			if (instance.HasProperties)
-			{
-				stream.WriteByte(26);
-				ProtocolParser.WriteUInt32(stream, instance.Properties.GetSerializedSize());
-				GameProperties.Serialize(stream, instance.Properties);
-			}
-			if (instance.HasObjectId)
-			{
-				stream.WriteByte(32);
-				ProtocolParser.WriteUInt64(stream, instance.ObjectId);
-			}
-			if (instance.HasRequestId)
-			{
-				stream.WriteByte(41);
-				binaryWriter.Write(instance.RequestId);
-			}
-			if (instance.HasAdvancedNotification)
-			{
-				stream.WriteByte(48);
-				ProtocolParser.WriteBool(stream, instance.AdvancedNotification);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.Player.Count > 0)
-			{
-				foreach (Player player in this.Player)
-				{
-					num += 1u;
-					uint serializedSize = player.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.HasFactoryId)
-			{
-				num += 1u;
-				num += 8u;
-			}
-			if (this.HasProperties)
-			{
-				num += 1u;
-				uint serializedSize2 = this.Properties.GetSerializedSize();
-				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-			}
-			if (this.HasObjectId)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
-			}
-			if (this.HasRequestId)
-			{
-				num += 1u;
-				num += 8u;
-			}
-			if (this.HasAdvancedNotification)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			return num;
-		}
-
 		public List<Player> Player
 		{
 			get
@@ -391,6 +201,196 @@ namespace bnet.protocol.game_master
 		public static FindGameRequest ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<FindGameRequest>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			FindGameRequest.Deserialize(stream, this);
+		}
+
+		public static FindGameRequest Deserialize(Stream stream, FindGameRequest instance)
+		{
+			return FindGameRequest.Deserialize(stream, instance, -1L);
+		}
+
+		public static FindGameRequest DeserializeLengthDelimited(Stream stream)
+		{
+			FindGameRequest findGameRequest = new FindGameRequest();
+			FindGameRequest.DeserializeLengthDelimited(stream, findGameRequest);
+			return findGameRequest;
+		}
+
+		public static FindGameRequest DeserializeLengthDelimited(Stream stream, FindGameRequest instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return FindGameRequest.Deserialize(stream, instance, num);
+		}
+
+		public static FindGameRequest Deserialize(Stream stream, FindGameRequest instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			if (instance.Player == null)
+			{
+				instance.Player = new List<Player>();
+			}
+			instance.AdvancedNotification = false;
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 10)
+				{
+					if (num != 17)
+					{
+						if (num != 26)
+						{
+							if (num != 32)
+							{
+								if (num != 41)
+								{
+									if (num != 48)
+									{
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
+										{
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+										}
+										ProtocolParser.SkipKey(stream, key);
+									}
+									else
+									{
+										instance.AdvancedNotification = ProtocolParser.ReadBool(stream);
+									}
+								}
+								else
+								{
+									instance.RequestId = binaryReader.ReadUInt64();
+								}
+							}
+							else
+							{
+								instance.ObjectId = ProtocolParser.ReadUInt64(stream);
+							}
+						}
+						else if (instance.Properties == null)
+						{
+							instance.Properties = GameProperties.DeserializeLengthDelimited(stream);
+						}
+						else
+						{
+							GameProperties.DeserializeLengthDelimited(stream, instance.Properties);
+						}
+					}
+					else
+					{
+						instance.FactoryId = binaryReader.ReadUInt64();
+					}
+				}
+				else
+				{
+					instance.Player.Add(bnet.protocol.game_master.Player.DeserializeLengthDelimited(stream));
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			FindGameRequest.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, FindGameRequest instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			if (instance.Player.Count > 0)
+			{
+				foreach (Player player in instance.Player)
+				{
+					stream.WriteByte(10);
+					ProtocolParser.WriteUInt32(stream, player.GetSerializedSize());
+					bnet.protocol.game_master.Player.Serialize(stream, player);
+				}
+			}
+			if (instance.HasFactoryId)
+			{
+				stream.WriteByte(17);
+				binaryWriter.Write(instance.FactoryId);
+			}
+			if (instance.HasProperties)
+			{
+				stream.WriteByte(26);
+				ProtocolParser.WriteUInt32(stream, instance.Properties.GetSerializedSize());
+				GameProperties.Serialize(stream, instance.Properties);
+			}
+			if (instance.HasObjectId)
+			{
+				stream.WriteByte(32);
+				ProtocolParser.WriteUInt64(stream, instance.ObjectId);
+			}
+			if (instance.HasRequestId)
+			{
+				stream.WriteByte(41);
+				binaryWriter.Write(instance.RequestId);
+			}
+			if (instance.HasAdvancedNotification)
+			{
+				stream.WriteByte(48);
+				ProtocolParser.WriteBool(stream, instance.AdvancedNotification);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.Player.Count > 0)
+			{
+				foreach (Player player in this.Player)
+				{
+					num += 1u;
+					uint serializedSize = player.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.HasFactoryId)
+			{
+				num += 1u;
+				num += 8u;
+			}
+			if (this.HasProperties)
+			{
+				num += 1u;
+				uint serializedSize2 = this.Properties.GetSerializedSize();
+				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+			}
+			if (this.HasObjectId)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt64(this.ObjectId);
+			}
+			if (this.HasRequestId)
+			{
+				num += 1u;
+				num += 8u;
+			}
+			if (this.HasAdvancedNotification)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			return num;
 		}
 
 		private List<Player> _Player = new List<Player>();

@@ -5,6 +5,113 @@ namespace bnet.protocol.invitation
 {
 	public class SendInvitationRequest : IProtoBuf
 	{
+		public Identity AgentIdentity
+		{
+			get
+			{
+				return this._AgentIdentity;
+			}
+			set
+			{
+				this._AgentIdentity = value;
+				this.HasAgentIdentity = (value != null);
+			}
+		}
+
+		public void SetAgentIdentity(Identity val)
+		{
+			this.AgentIdentity = val;
+		}
+
+		public EntityId TargetId { get; set; }
+
+		public void SetTargetId(EntityId val)
+		{
+			this.TargetId = val;
+		}
+
+		public InvitationParams Params { get; set; }
+
+		public void SetParams(InvitationParams val)
+		{
+			this.Params = val;
+		}
+
+		public AccountInfo AgentInfo
+		{
+			get
+			{
+				return this._AgentInfo;
+			}
+			set
+			{
+				this._AgentInfo = value;
+				this.HasAgentInfo = (value != null);
+			}
+		}
+
+		public void SetAgentInfo(AccountInfo val)
+		{
+			this.AgentInfo = val;
+		}
+
+		public InvitationTarget Target
+		{
+			get
+			{
+				return this._Target;
+			}
+			set
+			{
+				this._Target = value;
+				this.HasTarget = (value != null);
+			}
+		}
+
+		public void SetTarget(InvitationTarget val)
+		{
+			this.Target = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentIdentity)
+			{
+				num ^= this.AgentIdentity.GetHashCode();
+			}
+			num ^= this.TargetId.GetHashCode();
+			num ^= this.Params.GetHashCode();
+			if (this.HasAgentInfo)
+			{
+				num ^= this.AgentInfo.GetHashCode();
+			}
+			if (this.HasTarget)
+			{
+				num ^= this.Target.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			SendInvitationRequest sendInvitationRequest = obj as SendInvitationRequest;
+			return sendInvitationRequest != null && this.HasAgentIdentity == sendInvitationRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(sendInvitationRequest.AgentIdentity)) && this.TargetId.Equals(sendInvitationRequest.TargetId) && this.Params.Equals(sendInvitationRequest.Params) && this.HasAgentInfo == sendInvitationRequest.HasAgentInfo && (!this.HasAgentInfo || this.AgentInfo.Equals(sendInvitationRequest.AgentInfo)) && this.HasTarget == sendInvitationRequest.HasTarget && (!this.HasTarget || this.Target.Equals(sendInvitationRequest.Target));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SendInvitationRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SendInvitationRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SendInvitationRequest.Deserialize(stream, this);
@@ -179,113 +286,6 @@ namespace bnet.protocol.invitation
 				num += serializedSize5 + ProtocolParser.SizeOfUInt32(serializedSize5);
 			}
 			return num + 2u;
-		}
-
-		public Identity AgentIdentity
-		{
-			get
-			{
-				return this._AgentIdentity;
-			}
-			set
-			{
-				this._AgentIdentity = value;
-				this.HasAgentIdentity = (value != null);
-			}
-		}
-
-		public void SetAgentIdentity(Identity val)
-		{
-			this.AgentIdentity = val;
-		}
-
-		public EntityId TargetId { get; set; }
-
-		public void SetTargetId(EntityId val)
-		{
-			this.TargetId = val;
-		}
-
-		public InvitationParams Params { get; set; }
-
-		public void SetParams(InvitationParams val)
-		{
-			this.Params = val;
-		}
-
-		public AccountInfo AgentInfo
-		{
-			get
-			{
-				return this._AgentInfo;
-			}
-			set
-			{
-				this._AgentInfo = value;
-				this.HasAgentInfo = (value != null);
-			}
-		}
-
-		public void SetAgentInfo(AccountInfo val)
-		{
-			this.AgentInfo = val;
-		}
-
-		public InvitationTarget Target
-		{
-			get
-			{
-				return this._Target;
-			}
-			set
-			{
-				this._Target = value;
-				this.HasTarget = (value != null);
-			}
-		}
-
-		public void SetTarget(InvitationTarget val)
-		{
-			this.Target = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentIdentity)
-			{
-				num ^= this.AgentIdentity.GetHashCode();
-			}
-			num ^= this.TargetId.GetHashCode();
-			num ^= this.Params.GetHashCode();
-			if (this.HasAgentInfo)
-			{
-				num ^= this.AgentInfo.GetHashCode();
-			}
-			if (this.HasTarget)
-			{
-				num ^= this.Target.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			SendInvitationRequest sendInvitationRequest = obj as SendInvitationRequest;
-			return sendInvitationRequest != null && this.HasAgentIdentity == sendInvitationRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(sendInvitationRequest.AgentIdentity)) && this.TargetId.Equals(sendInvitationRequest.TargetId) && this.Params.Equals(sendInvitationRequest.Params) && this.HasAgentInfo == sendInvitationRequest.HasAgentInfo && (!this.HasAgentInfo || this.AgentInfo.Equals(sendInvitationRequest.AgentInfo)) && this.HasTarget == sendInvitationRequest.HasTarget && (!this.HasTarget || this.Target.Equals(sendInvitationRequest.Target));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SendInvitationRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SendInvitationRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentIdentity;

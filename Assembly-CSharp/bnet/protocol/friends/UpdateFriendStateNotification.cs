@@ -5,6 +5,61 @@ namespace bnet.protocol.friends
 {
 	public class UpdateFriendStateNotification : IProtoBuf
 	{
+		public Friend ChangedFriend { get; set; }
+
+		public void SetChangedFriend(Friend val)
+		{
+			this.ChangedFriend = val;
+		}
+
+		public EntityId GameAccountId
+		{
+			get
+			{
+				return this._GameAccountId;
+			}
+			set
+			{
+				this._GameAccountId = value;
+				this.HasGameAccountId = (value != null);
+			}
+		}
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.ChangedFriend.GetHashCode();
+			if (this.HasGameAccountId)
+			{
+				num ^= this.GameAccountId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			UpdateFriendStateNotification updateFriendStateNotification = obj as UpdateFriendStateNotification;
+			return updateFriendStateNotification != null && this.ChangedFriend.Equals(updateFriendStateNotification.ChangedFriend) && this.HasGameAccountId == updateFriendStateNotification.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(updateFriendStateNotification.GameAccountId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static UpdateFriendStateNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<UpdateFriendStateNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			UpdateFriendStateNotification.Deserialize(stream, this);
@@ -113,61 +168,6 @@ namespace bnet.protocol.friends
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num + 1u;
-		}
-
-		public Friend ChangedFriend { get; set; }
-
-		public void SetChangedFriend(Friend val)
-		{
-			this.ChangedFriend = val;
-		}
-
-		public EntityId GameAccountId
-		{
-			get
-			{
-				return this._GameAccountId;
-			}
-			set
-			{
-				this._GameAccountId = value;
-				this.HasGameAccountId = (value != null);
-			}
-		}
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.ChangedFriend.GetHashCode();
-			if (this.HasGameAccountId)
-			{
-				num ^= this.GameAccountId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			UpdateFriendStateNotification updateFriendStateNotification = obj as UpdateFriendStateNotification;
-			return updateFriendStateNotification != null && this.ChangedFriend.Equals(updateFriendStateNotification.ChangedFriend) && this.HasGameAccountId == updateFriendStateNotification.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(updateFriendStateNotification.GameAccountId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static UpdateFriendStateNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<UpdateFriendStateNotification>(bs, 0, -1);
 		}
 
 		public bool HasGameAccountId;

@@ -8,198 +8,6 @@ namespace bnet.protocol.game_master
 {
 	public class GameFactoryDescription : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			GameFactoryDescription.Deserialize(stream, this);
-		}
-
-		public static GameFactoryDescription Deserialize(Stream stream, GameFactoryDescription instance)
-		{
-			return GameFactoryDescription.Deserialize(stream, instance, -1L);
-		}
-
-		public static GameFactoryDescription DeserializeLengthDelimited(Stream stream)
-		{
-			GameFactoryDescription gameFactoryDescription = new GameFactoryDescription();
-			GameFactoryDescription.DeserializeLengthDelimited(stream, gameFactoryDescription);
-			return gameFactoryDescription;
-		}
-
-		public static GameFactoryDescription DeserializeLengthDelimited(Stream stream, GameFactoryDescription instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return GameFactoryDescription.Deserialize(stream, instance, num);
-		}
-
-		public static GameFactoryDescription Deserialize(Stream stream, GameFactoryDescription instance, long limit)
-		{
-			BinaryReader binaryReader = new BinaryReader(stream);
-			if (instance.Attribute == null)
-			{
-				instance.Attribute = new List<bnet.protocol.attribute.Attribute>();
-			}
-			if (instance.StatsBucket == null)
-			{
-				instance.StatsBucket = new List<GameStatsBucket>();
-			}
-			instance.UnseededId = 0UL;
-			instance.AllowQueueing = true;
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 9)
-				{
-					if (num != 18)
-					{
-						if (num != 26)
-						{
-							if (num != 34)
-							{
-								if (num != 41)
-								{
-									if (num != 48)
-									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
-									}
-									else
-									{
-										instance.AllowQueueing = ProtocolParser.ReadBool(stream);
-									}
-								}
-								else
-								{
-									instance.UnseededId = binaryReader.ReadUInt64();
-								}
-							}
-							else
-							{
-								instance.StatsBucket.Add(GameStatsBucket.DeserializeLengthDelimited(stream));
-							}
-						}
-						else
-						{
-							instance.Attribute.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
-						}
-					}
-					else
-					{
-						instance.Name = ProtocolParser.ReadString(stream);
-					}
-				}
-				else
-				{
-					instance.Id = binaryReader.ReadUInt64();
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			GameFactoryDescription.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, GameFactoryDescription instance)
-		{
-			BinaryWriter binaryWriter = new BinaryWriter(stream);
-			stream.WriteByte(9);
-			binaryWriter.Write(instance.Id);
-			if (instance.HasName)
-			{
-				stream.WriteByte(18);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Name));
-			}
-			if (instance.Attribute.Count > 0)
-			{
-				foreach (bnet.protocol.attribute.Attribute attribute in instance.Attribute)
-				{
-					stream.WriteByte(26);
-					ProtocolParser.WriteUInt32(stream, attribute.GetSerializedSize());
-					bnet.protocol.attribute.Attribute.Serialize(stream, attribute);
-				}
-			}
-			if (instance.StatsBucket.Count > 0)
-			{
-				foreach (GameStatsBucket gameStatsBucket in instance.StatsBucket)
-				{
-					stream.WriteByte(34);
-					ProtocolParser.WriteUInt32(stream, gameStatsBucket.GetSerializedSize());
-					GameStatsBucket.Serialize(stream, gameStatsBucket);
-				}
-			}
-			if (instance.HasUnseededId)
-			{
-				stream.WriteByte(41);
-				binaryWriter.Write(instance.UnseededId);
-			}
-			if (instance.HasAllowQueueing)
-			{
-				stream.WriteByte(48);
-				ProtocolParser.WriteBool(stream, instance.AllowQueueing);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			num += 8u;
-			if (this.HasName)
-			{
-				num += 1u;
-				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Name);
-				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-			}
-			if (this.Attribute.Count > 0)
-			{
-				foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-				{
-					num += 1u;
-					uint serializedSize = attribute.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.StatsBucket.Count > 0)
-			{
-				foreach (GameStatsBucket gameStatsBucket in this.StatsBucket)
-				{
-					num += 1u;
-					uint serializedSize2 = gameStatsBucket.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			if (this.HasUnseededId)
-			{
-				num += 1u;
-				num += 8u;
-			}
-			if (this.HasAllowQueueing)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			num += 1u;
-			return num;
-		}
-
 		public ulong Id { get; set; }
 
 		public void SetId(ulong val)
@@ -425,6 +233,198 @@ namespace bnet.protocol.game_master
 		public static GameFactoryDescription ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<GameFactoryDescription>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			GameFactoryDescription.Deserialize(stream, this);
+		}
+
+		public static GameFactoryDescription Deserialize(Stream stream, GameFactoryDescription instance)
+		{
+			return GameFactoryDescription.Deserialize(stream, instance, -1L);
+		}
+
+		public static GameFactoryDescription DeserializeLengthDelimited(Stream stream)
+		{
+			GameFactoryDescription gameFactoryDescription = new GameFactoryDescription();
+			GameFactoryDescription.DeserializeLengthDelimited(stream, gameFactoryDescription);
+			return gameFactoryDescription;
+		}
+
+		public static GameFactoryDescription DeserializeLengthDelimited(Stream stream, GameFactoryDescription instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return GameFactoryDescription.Deserialize(stream, instance, num);
+		}
+
+		public static GameFactoryDescription Deserialize(Stream stream, GameFactoryDescription instance, long limit)
+		{
+			BinaryReader binaryReader = new BinaryReader(stream);
+			if (instance.Attribute == null)
+			{
+				instance.Attribute = new List<bnet.protocol.attribute.Attribute>();
+			}
+			if (instance.StatsBucket == null)
+			{
+				instance.StatsBucket = new List<GameStatsBucket>();
+			}
+			instance.UnseededId = 0UL;
+			instance.AllowQueueing = true;
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 9)
+				{
+					if (num != 18)
+					{
+						if (num != 26)
+						{
+							if (num != 34)
+							{
+								if (num != 41)
+								{
+									if (num != 48)
+									{
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
+										{
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+										}
+										ProtocolParser.SkipKey(stream, key);
+									}
+									else
+									{
+										instance.AllowQueueing = ProtocolParser.ReadBool(stream);
+									}
+								}
+								else
+								{
+									instance.UnseededId = binaryReader.ReadUInt64();
+								}
+							}
+							else
+							{
+								instance.StatsBucket.Add(GameStatsBucket.DeserializeLengthDelimited(stream));
+							}
+						}
+						else
+						{
+							instance.Attribute.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
+						}
+					}
+					else
+					{
+						instance.Name = ProtocolParser.ReadString(stream);
+					}
+				}
+				else
+				{
+					instance.Id = binaryReader.ReadUInt64();
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			GameFactoryDescription.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, GameFactoryDescription instance)
+		{
+			BinaryWriter binaryWriter = new BinaryWriter(stream);
+			stream.WriteByte(9);
+			binaryWriter.Write(instance.Id);
+			if (instance.HasName)
+			{
+				stream.WriteByte(18);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Name));
+			}
+			if (instance.Attribute.Count > 0)
+			{
+				foreach (bnet.protocol.attribute.Attribute attribute in instance.Attribute)
+				{
+					stream.WriteByte(26);
+					ProtocolParser.WriteUInt32(stream, attribute.GetSerializedSize());
+					bnet.protocol.attribute.Attribute.Serialize(stream, attribute);
+				}
+			}
+			if (instance.StatsBucket.Count > 0)
+			{
+				foreach (GameStatsBucket gameStatsBucket in instance.StatsBucket)
+				{
+					stream.WriteByte(34);
+					ProtocolParser.WriteUInt32(stream, gameStatsBucket.GetSerializedSize());
+					GameStatsBucket.Serialize(stream, gameStatsBucket);
+				}
+			}
+			if (instance.HasUnseededId)
+			{
+				stream.WriteByte(41);
+				binaryWriter.Write(instance.UnseededId);
+			}
+			if (instance.HasAllowQueueing)
+			{
+				stream.WriteByte(48);
+				ProtocolParser.WriteBool(stream, instance.AllowQueueing);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			num += 8u;
+			if (this.HasName)
+			{
+				num += 1u;
+				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Name);
+				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+			}
+			if (this.Attribute.Count > 0)
+			{
+				foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+				{
+					num += 1u;
+					uint serializedSize = attribute.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.StatsBucket.Count > 0)
+			{
+				foreach (GameStatsBucket gameStatsBucket in this.StatsBucket)
+				{
+					num += 1u;
+					uint serializedSize2 = gameStatsBucket.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			if (this.HasUnseededId)
+			{
+				num += 1u;
+				num += 8u;
+			}
+			if (this.HasAllowQueueing)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			num += 1u;
+			return num;
 		}
 
 		public bool HasName;

@@ -6,6 +6,141 @@ namespace bnet.protocol.account
 {
 	public class AccountReference : IProtoBuf
 	{
+		public uint Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				this._Id = value;
+				this.HasId = true;
+			}
+		}
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				this._Email = value;
+				this.HasEmail = (value != null);
+			}
+		}
+
+		public void SetEmail(string val)
+		{
+			this.Email = val;
+		}
+
+		public GameAccountHandle Handle
+		{
+			get
+			{
+				return this._Handle;
+			}
+			set
+			{
+				this._Handle = value;
+				this.HasHandle = (value != null);
+			}
+		}
+
+		public void SetHandle(GameAccountHandle val)
+		{
+			this.Handle = val;
+		}
+
+		public string BattleTag
+		{
+			get
+			{
+				return this._BattleTag;
+			}
+			set
+			{
+				this._BattleTag = value;
+				this.HasBattleTag = (value != null);
+			}
+		}
+
+		public void SetBattleTag(string val)
+		{
+			this.BattleTag = val;
+		}
+
+		public uint Region
+		{
+			get
+			{
+				return this._Region;
+			}
+			set
+			{
+				this._Region = value;
+				this.HasRegion = true;
+			}
+		}
+
+		public void SetRegion(uint val)
+		{
+			this.Region = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasId)
+			{
+				num ^= this.Id.GetHashCode();
+			}
+			if (this.HasEmail)
+			{
+				num ^= this.Email.GetHashCode();
+			}
+			if (this.HasHandle)
+			{
+				num ^= this.Handle.GetHashCode();
+			}
+			if (this.HasBattleTag)
+			{
+				num ^= this.BattleTag.GetHashCode();
+			}
+			if (this.HasRegion)
+			{
+				num ^= this.Region.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountReference accountReference = obj as AccountReference;
+			return accountReference != null && this.HasId == accountReference.HasId && (!this.HasId || this.Id.Equals(accountReference.Id)) && this.HasEmail == accountReference.HasEmail && (!this.HasEmail || this.Email.Equals(accountReference.Email)) && this.HasHandle == accountReference.HasHandle && (!this.HasHandle || this.Handle.Equals(accountReference.Handle)) && this.HasBattleTag == accountReference.HasBattleTag && (!this.HasBattleTag || this.BattleTag.Equals(accountReference.BattleTag)) && this.HasRegion == accountReference.HasRegion && (!this.HasRegion || this.Region.Equals(accountReference.Region));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountReference ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountReference>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountReference.Deserialize(stream, this);
@@ -167,141 +302,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(this.Region);
 			}
 			return num;
-		}
-
-		public uint Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				this._Id = value;
-				this.HasId = true;
-			}
-		}
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public string Email
-		{
-			get
-			{
-				return this._Email;
-			}
-			set
-			{
-				this._Email = value;
-				this.HasEmail = (value != null);
-			}
-		}
-
-		public void SetEmail(string val)
-		{
-			this.Email = val;
-		}
-
-		public GameAccountHandle Handle
-		{
-			get
-			{
-				return this._Handle;
-			}
-			set
-			{
-				this._Handle = value;
-				this.HasHandle = (value != null);
-			}
-		}
-
-		public void SetHandle(GameAccountHandle val)
-		{
-			this.Handle = val;
-		}
-
-		public string BattleTag
-		{
-			get
-			{
-				return this._BattleTag;
-			}
-			set
-			{
-				this._BattleTag = value;
-				this.HasBattleTag = (value != null);
-			}
-		}
-
-		public void SetBattleTag(string val)
-		{
-			this.BattleTag = val;
-		}
-
-		public uint Region
-		{
-			get
-			{
-				return this._Region;
-			}
-			set
-			{
-				this._Region = value;
-				this.HasRegion = true;
-			}
-		}
-
-		public void SetRegion(uint val)
-		{
-			this.Region = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasId)
-			{
-				num ^= this.Id.GetHashCode();
-			}
-			if (this.HasEmail)
-			{
-				num ^= this.Email.GetHashCode();
-			}
-			if (this.HasHandle)
-			{
-				num ^= this.Handle.GetHashCode();
-			}
-			if (this.HasBattleTag)
-			{
-				num ^= this.BattleTag.GetHashCode();
-			}
-			if (this.HasRegion)
-			{
-				num ^= this.Region.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountReference accountReference = obj as AccountReference;
-			return accountReference != null && this.HasId == accountReference.HasId && (!this.HasId || this.Id.Equals(accountReference.Id)) && this.HasEmail == accountReference.HasEmail && (!this.HasEmail || this.Email.Equals(accountReference.Email)) && this.HasHandle == accountReference.HasHandle && (!this.HasHandle || this.Handle.Equals(accountReference.Handle)) && this.HasBattleTag == accountReference.HasBattleTag && (!this.HasBattleTag || this.BattleTag.Equals(accountReference.BattleTag)) && this.HasRegion == accountReference.HasRegion && (!this.HasRegion || this.Region.Equals(accountReference.Region));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountReference ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountReference>(bs, 0, -1);
 		}
 
 		public bool HasId;

@@ -5,6 +5,75 @@ namespace bnet.protocol.channel
 {
 	public class DissolveRequest : IProtoBuf
 	{
+		public EntityId AgentId
+		{
+			get
+			{
+				return this._AgentId;
+			}
+			set
+			{
+				this._AgentId = value;
+				this.HasAgentId = (value != null);
+			}
+		}
+
+		public void SetAgentId(EntityId val)
+		{
+			this.AgentId = val;
+		}
+
+		public uint Reason
+		{
+			get
+			{
+				return this._Reason;
+			}
+			set
+			{
+				this._Reason = value;
+				this.HasReason = true;
+			}
+		}
+
+		public void SetReason(uint val)
+		{
+			this.Reason = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentId)
+			{
+				num ^= this.AgentId.GetHashCode();
+			}
+			if (this.HasReason)
+			{
+				num ^= this.Reason.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			DissolveRequest dissolveRequest = obj as DissolveRequest;
+			return dissolveRequest != null && this.HasAgentId == dissolveRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(dissolveRequest.AgentId)) && this.HasReason == dissolveRequest.HasReason && (!this.HasReason || this.Reason.Equals(dissolveRequest.Reason));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static DissolveRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<DissolveRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			DissolveRequest.Deserialize(stream, this);
@@ -110,75 +179,6 @@ namespace bnet.protocol.channel
 				num += ProtocolParser.SizeOfUInt32(this.Reason);
 			}
 			return num;
-		}
-
-		public EntityId AgentId
-		{
-			get
-			{
-				return this._AgentId;
-			}
-			set
-			{
-				this._AgentId = value;
-				this.HasAgentId = (value != null);
-			}
-		}
-
-		public void SetAgentId(EntityId val)
-		{
-			this.AgentId = val;
-		}
-
-		public uint Reason
-		{
-			get
-			{
-				return this._Reason;
-			}
-			set
-			{
-				this._Reason = value;
-				this.HasReason = true;
-			}
-		}
-
-		public void SetReason(uint val)
-		{
-			this.Reason = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentId)
-			{
-				num ^= this.AgentId.GetHashCode();
-			}
-			if (this.HasReason)
-			{
-				num ^= this.Reason.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			DissolveRequest dissolveRequest = obj as DissolveRequest;
-			return dissolveRequest != null && this.HasAgentId == dissolveRequest.HasAgentId && (!this.HasAgentId || this.AgentId.Equals(dissolveRequest.AgentId)) && this.HasReason == dissolveRequest.HasReason && (!this.HasReason || this.Reason.Equals(dissolveRequest.Reason));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static DissolveRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<DissolveRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentId;

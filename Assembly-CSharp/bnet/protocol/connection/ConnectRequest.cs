@@ -5,6 +5,75 @@ namespace bnet.protocol.connection
 {
 	public class ConnectRequest : IProtoBuf
 	{
+		public ProcessId ClientId
+		{
+			get
+			{
+				return this._ClientId;
+			}
+			set
+			{
+				this._ClientId = value;
+				this.HasClientId = (value != null);
+			}
+		}
+
+		public void SetClientId(ProcessId val)
+		{
+			this.ClientId = val;
+		}
+
+		public BindRequest BindRequest
+		{
+			get
+			{
+				return this._BindRequest;
+			}
+			set
+			{
+				this._BindRequest = value;
+				this.HasBindRequest = (value != null);
+			}
+		}
+
+		public void SetBindRequest(BindRequest val)
+		{
+			this.BindRequest = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasClientId)
+			{
+				num ^= this.ClientId.GetHashCode();
+			}
+			if (this.HasBindRequest)
+			{
+				num ^= this.BindRequest.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ConnectRequest connectRequest = obj as ConnectRequest;
+			return connectRequest != null && this.HasClientId == connectRequest.HasClientId && (!this.HasClientId || this.ClientId.Equals(connectRequest.ClientId)) && this.HasBindRequest == connectRequest.HasBindRequest && (!this.HasBindRequest || this.BindRequest.Equals(connectRequest.BindRequest));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ConnectRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ConnectRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ConnectRequest.Deserialize(stream, this);
@@ -116,75 +185,6 @@ namespace bnet.protocol.connection
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num;
-		}
-
-		public ProcessId ClientId
-		{
-			get
-			{
-				return this._ClientId;
-			}
-			set
-			{
-				this._ClientId = value;
-				this.HasClientId = (value != null);
-			}
-		}
-
-		public void SetClientId(ProcessId val)
-		{
-			this.ClientId = val;
-		}
-
-		public BindRequest BindRequest
-		{
-			get
-			{
-				return this._BindRequest;
-			}
-			set
-			{
-				this._BindRequest = value;
-				this.HasBindRequest = (value != null);
-			}
-		}
-
-		public void SetBindRequest(BindRequest val)
-		{
-			this.BindRequest = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasClientId)
-			{
-				num ^= this.ClientId.GetHashCode();
-			}
-			if (this.HasBindRequest)
-			{
-				num ^= this.BindRequest.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ConnectRequest connectRequest = obj as ConnectRequest;
-			return connectRequest != null && this.HasClientId == connectRequest.HasClientId && (!this.HasClientId || this.ClientId.Equals(connectRequest.ClientId)) && this.HasBindRequest == connectRequest.HasBindRequest && (!this.HasBindRequest || this.BindRequest.Equals(connectRequest.BindRequest));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ConnectRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ConnectRequest>(bs, 0, -1);
 		}
 
 		public bool HasClientId;

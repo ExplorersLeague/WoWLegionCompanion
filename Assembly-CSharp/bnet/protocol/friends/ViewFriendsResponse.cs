@@ -6,6 +6,93 @@ namespace bnet.protocol.friends
 {
 	public class ViewFriendsResponse : IProtoBuf
 	{
+		public List<Friend> Friends
+		{
+			get
+			{
+				return this._Friends;
+			}
+			set
+			{
+				this._Friends = value;
+			}
+		}
+
+		public List<Friend> FriendsList
+		{
+			get
+			{
+				return this._Friends;
+			}
+		}
+
+		public int FriendsCount
+		{
+			get
+			{
+				return this._Friends.Count;
+			}
+		}
+
+		public void AddFriends(Friend val)
+		{
+			this._Friends.Add(val);
+		}
+
+		public void ClearFriends()
+		{
+			this._Friends.Clear();
+		}
+
+		public void SetFriends(List<Friend> val)
+		{
+			this.Friends = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (Friend friend in this.Friends)
+			{
+				num ^= friend.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ViewFriendsResponse viewFriendsResponse = obj as ViewFriendsResponse;
+			if (viewFriendsResponse == null)
+			{
+				return false;
+			}
+			if (this.Friends.Count != viewFriendsResponse.Friends.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Friends.Count; i++)
+			{
+				if (!this.Friends[i].Equals(viewFriendsResponse.Friends[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ViewFriendsResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ViewFriendsResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ViewFriendsResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.friends
 				}
 			}
 			return num;
-		}
-
-		public List<Friend> Friends
-		{
-			get
-			{
-				return this._Friends;
-			}
-			set
-			{
-				this._Friends = value;
-			}
-		}
-
-		public List<Friend> FriendsList
-		{
-			get
-			{
-				return this._Friends;
-			}
-		}
-
-		public int FriendsCount
-		{
-			get
-			{
-				return this._Friends.Count;
-			}
-		}
-
-		public void AddFriends(Friend val)
-		{
-			this._Friends.Add(val);
-		}
-
-		public void ClearFriends()
-		{
-			this._Friends.Clear();
-		}
-
-		public void SetFriends(List<Friend> val)
-		{
-			this.Friends = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (Friend friend in this.Friends)
-			{
-				num ^= friend.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ViewFriendsResponse viewFriendsResponse = obj as ViewFriendsResponse;
-			if (viewFriendsResponse == null)
-			{
-				return false;
-			}
-			if (this.Friends.Count != viewFriendsResponse.Friends.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Friends.Count; i++)
-			{
-				if (!this.Friends[i].Equals(viewFriendsResponse.Friends[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ViewFriendsResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ViewFriendsResponse>(bs, 0, -1);
 		}
 
 		private List<Friend> _Friends = new List<Friend>();

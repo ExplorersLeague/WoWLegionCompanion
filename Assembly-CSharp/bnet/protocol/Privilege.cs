@@ -6,6 +6,46 @@ namespace bnet.protocol
 {
 	public class Privilege : IProtoBuf
 	{
+		public string Name { get; set; }
+
+		public void SetName(string val)
+		{
+			this.Name = val;
+		}
+
+		public uint Value { get; set; }
+
+		public void SetValue(uint val)
+		{
+			this.Value = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Name.GetHashCode();
+			return num ^ this.Value.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			Privilege privilege = obj as Privilege;
+			return privilege != null && this.Name.Equals(privilege.Name) && this.Value.Equals(privilege.Value);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Privilege ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Privilege>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Privilege.Deserialize(stream, this);
@@ -96,46 +136,6 @@ namespace bnet.protocol
 			num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
 			num += ProtocolParser.SizeOfUInt32(this.Value);
 			return num + 2u;
-		}
-
-		public string Name { get; set; }
-
-		public void SetName(string val)
-		{
-			this.Name = val;
-		}
-
-		public uint Value { get; set; }
-
-		public void SetValue(uint val)
-		{
-			this.Value = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Name.GetHashCode();
-			return num ^ this.Value.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			Privilege privilege = obj as Privilege;
-			return privilege != null && this.Name.Equals(privilege.Name) && this.Value.Equals(privilege.Value);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Privilege ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Privilege>(bs, 0, -1);
 		}
 	}
 }

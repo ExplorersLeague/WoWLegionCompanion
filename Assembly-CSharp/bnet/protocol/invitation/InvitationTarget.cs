@@ -6,6 +6,97 @@ namespace bnet.protocol.invitation
 {
 	public class InvitationTarget : IProtoBuf
 	{
+		public Identity Identity
+		{
+			get
+			{
+				return this._Identity;
+			}
+			set
+			{
+				this._Identity = value;
+				this.HasIdentity = (value != null);
+			}
+		}
+
+		public void SetIdentity(Identity val)
+		{
+			this.Identity = val;
+		}
+
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				this._Email = value;
+				this.HasEmail = (value != null);
+			}
+		}
+
+		public void SetEmail(string val)
+		{
+			this.Email = val;
+		}
+
+		public string BattleTag
+		{
+			get
+			{
+				return this._BattleTag;
+			}
+			set
+			{
+				this._BattleTag = value;
+				this.HasBattleTag = (value != null);
+			}
+		}
+
+		public void SetBattleTag(string val)
+		{
+			this.BattleTag = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasIdentity)
+			{
+				num ^= this.Identity.GetHashCode();
+			}
+			if (this.HasEmail)
+			{
+				num ^= this.Email.GetHashCode();
+			}
+			if (this.HasBattleTag)
+			{
+				num ^= this.BattleTag.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			InvitationTarget invitationTarget = obj as InvitationTarget;
+			return invitationTarget != null && this.HasIdentity == invitationTarget.HasIdentity && (!this.HasIdentity || this.Identity.Equals(invitationTarget.Identity)) && this.HasEmail == invitationTarget.HasEmail && (!this.HasEmail || this.Email.Equals(invitationTarget.Email)) && this.HasBattleTag == invitationTarget.HasBattleTag && (!this.HasBattleTag || this.BattleTag.Equals(invitationTarget.BattleTag));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static InvitationTarget ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<InvitationTarget>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			InvitationTarget.Deserialize(stream, this);
@@ -130,97 +221,6 @@ namespace bnet.protocol.invitation
 				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
 			}
 			return num;
-		}
-
-		public Identity Identity
-		{
-			get
-			{
-				return this._Identity;
-			}
-			set
-			{
-				this._Identity = value;
-				this.HasIdentity = (value != null);
-			}
-		}
-
-		public void SetIdentity(Identity val)
-		{
-			this.Identity = val;
-		}
-
-		public string Email
-		{
-			get
-			{
-				return this._Email;
-			}
-			set
-			{
-				this._Email = value;
-				this.HasEmail = (value != null);
-			}
-		}
-
-		public void SetEmail(string val)
-		{
-			this.Email = val;
-		}
-
-		public string BattleTag
-		{
-			get
-			{
-				return this._BattleTag;
-			}
-			set
-			{
-				this._BattleTag = value;
-				this.HasBattleTag = (value != null);
-			}
-		}
-
-		public void SetBattleTag(string val)
-		{
-			this.BattleTag = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasIdentity)
-			{
-				num ^= this.Identity.GetHashCode();
-			}
-			if (this.HasEmail)
-			{
-				num ^= this.Email.GetHashCode();
-			}
-			if (this.HasBattleTag)
-			{
-				num ^= this.BattleTag.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			InvitationTarget invitationTarget = obj as InvitationTarget;
-			return invitationTarget != null && this.HasIdentity == invitationTarget.HasIdentity && (!this.HasIdentity || this.Identity.Equals(invitationTarget.Identity)) && this.HasEmail == invitationTarget.HasEmail && (!this.HasEmail || this.Email.Equals(invitationTarget.Email)) && this.HasBattleTag == invitationTarget.HasBattleTag && (!this.HasBattleTag || this.BattleTag.Equals(invitationTarget.BattleTag));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static InvitationTarget ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<InvitationTarget>(bs, 0, -1);
 		}
 
 		public bool HasIdentity;

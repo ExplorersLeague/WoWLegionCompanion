@@ -7,186 +7,6 @@ namespace bnet.protocol.account
 {
 	public class ParentalControlInfo : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			ParentalControlInfo.Deserialize(stream, this);
-		}
-
-		public static ParentalControlInfo Deserialize(Stream stream, ParentalControlInfo instance)
-		{
-			return ParentalControlInfo.Deserialize(stream, instance, -1L);
-		}
-
-		public static ParentalControlInfo DeserializeLengthDelimited(Stream stream)
-		{
-			ParentalControlInfo parentalControlInfo = new ParentalControlInfo();
-			ParentalControlInfo.DeserializeLengthDelimited(stream, parentalControlInfo);
-			return parentalControlInfo;
-		}
-
-		public static ParentalControlInfo DeserializeLengthDelimited(Stream stream, ParentalControlInfo instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return ParentalControlInfo.Deserialize(stream, instance, num);
-		}
-
-		public static ParentalControlInfo Deserialize(Stream stream, ParentalControlInfo instance, long limit)
-		{
-			if (instance.PlaySchedule == null)
-			{
-				instance.PlaySchedule = new List<bool>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 26)
-				{
-					if (num != 32)
-					{
-						if (num != 40)
-						{
-							if (num != 48)
-							{
-								if (num != 56)
-								{
-									if (num != 64)
-									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
-									}
-									else
-									{
-										instance.PlaySchedule.Add(ProtocolParser.ReadBool(stream));
-									}
-								}
-								else
-								{
-									instance.CanSendVoice = ProtocolParser.ReadBool(stream);
-								}
-							}
-							else
-							{
-								instance.CanReceiveVoice = ProtocolParser.ReadBool(stream);
-							}
-						}
-						else
-						{
-							instance.MinutesPerWeek = ProtocolParser.ReadUInt32(stream);
-						}
-					}
-					else
-					{
-						instance.MinutesPerDay = ProtocolParser.ReadUInt32(stream);
-					}
-				}
-				else
-				{
-					instance.Timezone = ProtocolParser.ReadString(stream);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			ParentalControlInfo.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, ParentalControlInfo instance)
-		{
-			if (instance.HasTimezone)
-			{
-				stream.WriteByte(26);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Timezone));
-			}
-			if (instance.HasMinutesPerDay)
-			{
-				stream.WriteByte(32);
-				ProtocolParser.WriteUInt32(stream, instance.MinutesPerDay);
-			}
-			if (instance.HasMinutesPerWeek)
-			{
-				stream.WriteByte(40);
-				ProtocolParser.WriteUInt32(stream, instance.MinutesPerWeek);
-			}
-			if (instance.HasCanReceiveVoice)
-			{
-				stream.WriteByte(48);
-				ProtocolParser.WriteBool(stream, instance.CanReceiveVoice);
-			}
-			if (instance.HasCanSendVoice)
-			{
-				stream.WriteByte(56);
-				ProtocolParser.WriteBool(stream, instance.CanSendVoice);
-			}
-			if (instance.PlaySchedule.Count > 0)
-			{
-				foreach (bool val in instance.PlaySchedule)
-				{
-					stream.WriteByte(64);
-					ProtocolParser.WriteBool(stream, val);
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasTimezone)
-			{
-				num += 1u;
-				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Timezone);
-				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-			}
-			if (this.HasMinutesPerDay)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MinutesPerDay);
-			}
-			if (this.HasMinutesPerWeek)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MinutesPerWeek);
-			}
-			if (this.HasCanReceiveVoice)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.HasCanSendVoice)
-			{
-				num += 1u;
-				num += 1u;
-			}
-			if (this.PlaySchedule.Count > 0)
-			{
-				foreach (bool flag in this.PlaySchedule)
-				{
-					num += 1u;
-					num += 1u;
-				}
-			}
-			return num;
-		}
-
 		public string Timezone
 		{
 			get
@@ -402,6 +222,186 @@ namespace bnet.protocol.account
 		public static ParentalControlInfo ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<ParentalControlInfo>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			ParentalControlInfo.Deserialize(stream, this);
+		}
+
+		public static ParentalControlInfo Deserialize(Stream stream, ParentalControlInfo instance)
+		{
+			return ParentalControlInfo.Deserialize(stream, instance, -1L);
+		}
+
+		public static ParentalControlInfo DeserializeLengthDelimited(Stream stream)
+		{
+			ParentalControlInfo parentalControlInfo = new ParentalControlInfo();
+			ParentalControlInfo.DeserializeLengthDelimited(stream, parentalControlInfo);
+			return parentalControlInfo;
+		}
+
+		public static ParentalControlInfo DeserializeLengthDelimited(Stream stream, ParentalControlInfo instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return ParentalControlInfo.Deserialize(stream, instance, num);
+		}
+
+		public static ParentalControlInfo Deserialize(Stream stream, ParentalControlInfo instance, long limit)
+		{
+			if (instance.PlaySchedule == null)
+			{
+				instance.PlaySchedule = new List<bool>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 26)
+				{
+					if (num != 32)
+					{
+						if (num != 40)
+						{
+							if (num != 48)
+							{
+								if (num != 56)
+								{
+									if (num != 64)
+									{
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
+										{
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+										}
+										ProtocolParser.SkipKey(stream, key);
+									}
+									else
+									{
+										instance.PlaySchedule.Add(ProtocolParser.ReadBool(stream));
+									}
+								}
+								else
+								{
+									instance.CanSendVoice = ProtocolParser.ReadBool(stream);
+								}
+							}
+							else
+							{
+								instance.CanReceiveVoice = ProtocolParser.ReadBool(stream);
+							}
+						}
+						else
+						{
+							instance.MinutesPerWeek = ProtocolParser.ReadUInt32(stream);
+						}
+					}
+					else
+					{
+						instance.MinutesPerDay = ProtocolParser.ReadUInt32(stream);
+					}
+				}
+				else
+				{
+					instance.Timezone = ProtocolParser.ReadString(stream);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			ParentalControlInfo.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, ParentalControlInfo instance)
+		{
+			if (instance.HasTimezone)
+			{
+				stream.WriteByte(26);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.Timezone));
+			}
+			if (instance.HasMinutesPerDay)
+			{
+				stream.WriteByte(32);
+				ProtocolParser.WriteUInt32(stream, instance.MinutesPerDay);
+			}
+			if (instance.HasMinutesPerWeek)
+			{
+				stream.WriteByte(40);
+				ProtocolParser.WriteUInt32(stream, instance.MinutesPerWeek);
+			}
+			if (instance.HasCanReceiveVoice)
+			{
+				stream.WriteByte(48);
+				ProtocolParser.WriteBool(stream, instance.CanReceiveVoice);
+			}
+			if (instance.HasCanSendVoice)
+			{
+				stream.WriteByte(56);
+				ProtocolParser.WriteBool(stream, instance.CanSendVoice);
+			}
+			if (instance.PlaySchedule.Count > 0)
+			{
+				foreach (bool val in instance.PlaySchedule)
+				{
+					stream.WriteByte(64);
+					ProtocolParser.WriteBool(stream, val);
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasTimezone)
+			{
+				num += 1u;
+				uint byteCount = (uint)Encoding.UTF8.GetByteCount(this.Timezone);
+				num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+			}
+			if (this.HasMinutesPerDay)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MinutesPerDay);
+			}
+			if (this.HasMinutesPerWeek)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MinutesPerWeek);
+			}
+			if (this.HasCanReceiveVoice)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.HasCanSendVoice)
+			{
+				num += 1u;
+				num += 1u;
+			}
+			if (this.PlaySchedule.Count > 0)
+			{
+				foreach (bool flag in this.PlaySchedule)
+				{
+					num += 1u;
+					num += 1u;
+				}
+			}
+			return num;
 		}
 
 		public bool HasTimezone;

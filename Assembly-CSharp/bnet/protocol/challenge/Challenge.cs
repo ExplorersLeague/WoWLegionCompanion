@@ -6,6 +6,105 @@ namespace bnet.protocol.challenge
 {
 	public class Challenge : IProtoBuf
 	{
+		public uint Type { get; set; }
+
+		public void SetType(uint val)
+		{
+			this.Type = val;
+		}
+
+		public string Info
+		{
+			get
+			{
+				return this._Info;
+			}
+			set
+			{
+				this._Info = value;
+				this.HasInfo = (value != null);
+			}
+		}
+
+		public void SetInfo(string val)
+		{
+			this.Info = val;
+		}
+
+		public string Answer
+		{
+			get
+			{
+				return this._Answer;
+			}
+			set
+			{
+				this._Answer = value;
+				this.HasAnswer = (value != null);
+			}
+		}
+
+		public void SetAnswer(string val)
+		{
+			this.Answer = val;
+		}
+
+		public uint Retries
+		{
+			get
+			{
+				return this._Retries;
+			}
+			set
+			{
+				this._Retries = value;
+				this.HasRetries = true;
+			}
+		}
+
+		public void SetRetries(uint val)
+		{
+			this.Retries = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Type.GetHashCode();
+			if (this.HasInfo)
+			{
+				num ^= this.Info.GetHashCode();
+			}
+			if (this.HasAnswer)
+			{
+				num ^= this.Answer.GetHashCode();
+			}
+			if (this.HasRetries)
+			{
+				num ^= this.Retries.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Challenge challenge = obj as Challenge;
+			return challenge != null && this.Type.Equals(challenge.Type) && this.HasInfo == challenge.HasInfo && (!this.HasInfo || this.Info.Equals(challenge.Info)) && this.HasAnswer == challenge.HasAnswer && (!this.HasAnswer || this.Answer.Equals(challenge.Answer)) && this.HasRetries == challenge.HasRetries && (!this.HasRetries || this.Retries.Equals(challenge.Retries));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Challenge ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Challenge>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Challenge.Deserialize(stream, this);
@@ -136,105 +235,6 @@ namespace bnet.protocol.challenge
 				num += ProtocolParser.SizeOfUInt32(this.Retries);
 			}
 			return num + 1u;
-		}
-
-		public uint Type { get; set; }
-
-		public void SetType(uint val)
-		{
-			this.Type = val;
-		}
-
-		public string Info
-		{
-			get
-			{
-				return this._Info;
-			}
-			set
-			{
-				this._Info = value;
-				this.HasInfo = (value != null);
-			}
-		}
-
-		public void SetInfo(string val)
-		{
-			this.Info = val;
-		}
-
-		public string Answer
-		{
-			get
-			{
-				return this._Answer;
-			}
-			set
-			{
-				this._Answer = value;
-				this.HasAnswer = (value != null);
-			}
-		}
-
-		public void SetAnswer(string val)
-		{
-			this.Answer = val;
-		}
-
-		public uint Retries
-		{
-			get
-			{
-				return this._Retries;
-			}
-			set
-			{
-				this._Retries = value;
-				this.HasRetries = true;
-			}
-		}
-
-		public void SetRetries(uint val)
-		{
-			this.Retries = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Type.GetHashCode();
-			if (this.HasInfo)
-			{
-				num ^= this.Info.GetHashCode();
-			}
-			if (this.HasAnswer)
-			{
-				num ^= this.Answer.GetHashCode();
-			}
-			if (this.HasRetries)
-			{
-				num ^= this.Retries.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Challenge challenge = obj as Challenge;
-			return challenge != null && this.Type.Equals(challenge.Type) && this.HasInfo == challenge.HasInfo && (!this.HasInfo || this.Info.Equals(challenge.Info)) && this.HasAnswer == challenge.HasAnswer && (!this.HasAnswer || this.Answer.Equals(challenge.Answer)) && this.HasRetries == challenge.HasRetries && (!this.HasRetries || this.Retries.Equals(challenge.Retries));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Challenge ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Challenge>(bs, 0, -1);
 		}
 
 		public bool HasInfo;

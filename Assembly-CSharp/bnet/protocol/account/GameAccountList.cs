@@ -6,119 +6,6 @@ namespace bnet.protocol.account
 {
 	public class GameAccountList : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			GameAccountList.Deserialize(stream, this);
-		}
-
-		public static GameAccountList Deserialize(Stream stream, GameAccountList instance)
-		{
-			return GameAccountList.Deserialize(stream, instance, -1L);
-		}
-
-		public static GameAccountList DeserializeLengthDelimited(Stream stream)
-		{
-			GameAccountList gameAccountList = new GameAccountList();
-			GameAccountList.DeserializeLengthDelimited(stream, gameAccountList);
-			return gameAccountList;
-		}
-
-		public static GameAccountList DeserializeLengthDelimited(Stream stream, GameAccountList instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return GameAccountList.Deserialize(stream, instance, num);
-		}
-
-		public static GameAccountList Deserialize(Stream stream, GameAccountList instance, long limit)
-		{
-			if (instance.Handle == null)
-			{
-				instance.Handle = new List<GameAccountHandle>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 24)
-				{
-					if (num != 34)
-					{
-						Key key = ProtocolParser.ReadKey((byte)num, stream);
-						uint field = key.Field;
-						if (field == 0u)
-						{
-							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-						}
-						ProtocolParser.SkipKey(stream, key);
-					}
-					else
-					{
-						instance.Handle.Add(GameAccountHandle.DeserializeLengthDelimited(stream));
-					}
-				}
-				else
-				{
-					instance.Region = ProtocolParser.ReadUInt32(stream);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			GameAccountList.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, GameAccountList instance)
-		{
-			if (instance.HasRegion)
-			{
-				stream.WriteByte(24);
-				ProtocolParser.WriteUInt32(stream, instance.Region);
-			}
-			if (instance.Handle.Count > 0)
-			{
-				foreach (GameAccountHandle gameAccountHandle in instance.Handle)
-				{
-					stream.WriteByte(34);
-					ProtocolParser.WriteUInt32(stream, gameAccountHandle.GetSerializedSize());
-					GameAccountHandle.Serialize(stream, gameAccountHandle);
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasRegion)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.Region);
-			}
-			if (this.Handle.Count > 0)
-			{
-				foreach (GameAccountHandle gameAccountHandle in this.Handle)
-				{
-					num += 1u;
-					uint serializedSize = gameAccountHandle.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			return num;
-		}
-
 		public uint Region
 		{
 			get
@@ -230,6 +117,119 @@ namespace bnet.protocol.account
 		public static GameAccountList ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<GameAccountList>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			GameAccountList.Deserialize(stream, this);
+		}
+
+		public static GameAccountList Deserialize(Stream stream, GameAccountList instance)
+		{
+			return GameAccountList.Deserialize(stream, instance, -1L);
+		}
+
+		public static GameAccountList DeserializeLengthDelimited(Stream stream)
+		{
+			GameAccountList gameAccountList = new GameAccountList();
+			GameAccountList.DeserializeLengthDelimited(stream, gameAccountList);
+			return gameAccountList;
+		}
+
+		public static GameAccountList DeserializeLengthDelimited(Stream stream, GameAccountList instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return GameAccountList.Deserialize(stream, instance, num);
+		}
+
+		public static GameAccountList Deserialize(Stream stream, GameAccountList instance, long limit)
+		{
+			if (instance.Handle == null)
+			{
+				instance.Handle = new List<GameAccountHandle>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 24)
+				{
+					if (num != 34)
+					{
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
+						{
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+						}
+						ProtocolParser.SkipKey(stream, key);
+					}
+					else
+					{
+						instance.Handle.Add(GameAccountHandle.DeserializeLengthDelimited(stream));
+					}
+				}
+				else
+				{
+					instance.Region = ProtocolParser.ReadUInt32(stream);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			GameAccountList.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, GameAccountList instance)
+		{
+			if (instance.HasRegion)
+			{
+				stream.WriteByte(24);
+				ProtocolParser.WriteUInt32(stream, instance.Region);
+			}
+			if (instance.Handle.Count > 0)
+			{
+				foreach (GameAccountHandle gameAccountHandle in instance.Handle)
+				{
+					stream.WriteByte(34);
+					ProtocolParser.WriteUInt32(stream, gameAccountHandle.GetSerializedSize());
+					GameAccountHandle.Serialize(stream, gameAccountHandle);
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasRegion)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.Region);
+			}
+			if (this.Handle.Count > 0)
+			{
+				foreach (GameAccountHandle gameAccountHandle in this.Handle)
+				{
+					num += 1u;
+					uint serializedSize = gameAccountHandle.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			return num;
 		}
 
 		public bool HasRegion;

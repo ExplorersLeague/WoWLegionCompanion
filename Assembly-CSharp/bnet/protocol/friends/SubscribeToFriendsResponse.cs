@@ -7,240 +7,6 @@ namespace bnet.protocol.friends
 {
 	public class SubscribeToFriendsResponse : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			SubscribeToFriendsResponse.Deserialize(stream, this);
-		}
-
-		public static SubscribeToFriendsResponse Deserialize(Stream stream, SubscribeToFriendsResponse instance)
-		{
-			return SubscribeToFriendsResponse.Deserialize(stream, instance, -1L);
-		}
-
-		public static SubscribeToFriendsResponse DeserializeLengthDelimited(Stream stream)
-		{
-			SubscribeToFriendsResponse subscribeToFriendsResponse = new SubscribeToFriendsResponse();
-			SubscribeToFriendsResponse.DeserializeLengthDelimited(stream, subscribeToFriendsResponse);
-			return subscribeToFriendsResponse;
-		}
-
-		public static SubscribeToFriendsResponse DeserializeLengthDelimited(Stream stream, SubscribeToFriendsResponse instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return SubscribeToFriendsResponse.Deserialize(stream, instance, num);
-		}
-
-		public static SubscribeToFriendsResponse Deserialize(Stream stream, SubscribeToFriendsResponse instance, long limit)
-		{
-			if (instance.Role == null)
-			{
-				instance.Role = new List<Role>();
-			}
-			if (instance.Friends == null)
-			{
-				instance.Friends = new List<Friend>();
-			}
-			if (instance.SentInvitations == null)
-			{
-				instance.SentInvitations = new List<Invitation>();
-			}
-			if (instance.ReceivedInvitations == null)
-			{
-				instance.ReceivedInvitations = new List<Invitation>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 8)
-				{
-					if (num != 16)
-					{
-						if (num != 24)
-						{
-							if (num != 34)
-							{
-								if (num != 42)
-								{
-									if (num != 50)
-									{
-										if (num != 58)
-										{
-											Key key = ProtocolParser.ReadKey((byte)num, stream);
-											uint field = key.Field;
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
-										}
-										else
-										{
-											instance.ReceivedInvitations.Add(Invitation.DeserializeLengthDelimited(stream));
-										}
-									}
-									else
-									{
-										instance.SentInvitations.Add(Invitation.DeserializeLengthDelimited(stream));
-									}
-								}
-								else
-								{
-									instance.Friends.Add(Friend.DeserializeLengthDelimited(stream));
-								}
-							}
-							else
-							{
-								instance.Role.Add(bnet.protocol.Role.DeserializeLengthDelimited(stream));
-							}
-						}
-						else
-						{
-							instance.MaxSentInvitations = ProtocolParser.ReadUInt32(stream);
-						}
-					}
-					else
-					{
-						instance.MaxReceivedInvitations = ProtocolParser.ReadUInt32(stream);
-					}
-				}
-				else
-				{
-					instance.MaxFriends = ProtocolParser.ReadUInt32(stream);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			SubscribeToFriendsResponse.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, SubscribeToFriendsResponse instance)
-		{
-			if (instance.HasMaxFriends)
-			{
-				stream.WriteByte(8);
-				ProtocolParser.WriteUInt32(stream, instance.MaxFriends);
-			}
-			if (instance.HasMaxReceivedInvitations)
-			{
-				stream.WriteByte(16);
-				ProtocolParser.WriteUInt32(stream, instance.MaxReceivedInvitations);
-			}
-			if (instance.HasMaxSentInvitations)
-			{
-				stream.WriteByte(24);
-				ProtocolParser.WriteUInt32(stream, instance.MaxSentInvitations);
-			}
-			if (instance.Role.Count > 0)
-			{
-				foreach (Role role in instance.Role)
-				{
-					stream.WriteByte(34);
-					ProtocolParser.WriteUInt32(stream, role.GetSerializedSize());
-					bnet.protocol.Role.Serialize(stream, role);
-				}
-			}
-			if (instance.Friends.Count > 0)
-			{
-				foreach (Friend friend in instance.Friends)
-				{
-					stream.WriteByte(42);
-					ProtocolParser.WriteUInt32(stream, friend.GetSerializedSize());
-					Friend.Serialize(stream, friend);
-				}
-			}
-			if (instance.SentInvitations.Count > 0)
-			{
-				foreach (Invitation invitation in instance.SentInvitations)
-				{
-					stream.WriteByte(50);
-					ProtocolParser.WriteUInt32(stream, invitation.GetSerializedSize());
-					Invitation.Serialize(stream, invitation);
-				}
-			}
-			if (instance.ReceivedInvitations.Count > 0)
-			{
-				foreach (Invitation invitation2 in instance.ReceivedInvitations)
-				{
-					stream.WriteByte(58);
-					ProtocolParser.WriteUInt32(stream, invitation2.GetSerializedSize());
-					Invitation.Serialize(stream, invitation2);
-				}
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasMaxFriends)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MaxFriends);
-			}
-			if (this.HasMaxReceivedInvitations)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MaxReceivedInvitations);
-			}
-			if (this.HasMaxSentInvitations)
-			{
-				num += 1u;
-				num += ProtocolParser.SizeOfUInt32(this.MaxSentInvitations);
-			}
-			if (this.Role.Count > 0)
-			{
-				foreach (Role role in this.Role)
-				{
-					num += 1u;
-					uint serializedSize = role.GetSerializedSize();
-					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-				}
-			}
-			if (this.Friends.Count > 0)
-			{
-				foreach (Friend friend in this.Friends)
-				{
-					num += 1u;
-					uint serializedSize2 = friend.GetSerializedSize();
-					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-				}
-			}
-			if (this.SentInvitations.Count > 0)
-			{
-				foreach (Invitation invitation in this.SentInvitations)
-				{
-					num += 1u;
-					uint serializedSize3 = invitation.GetSerializedSize();
-					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
-				}
-			}
-			if (this.ReceivedInvitations.Count > 0)
-			{
-				foreach (Invitation invitation2 in this.ReceivedInvitations)
-				{
-					num += 1u;
-					uint serializedSize4 = invitation2.GetSerializedSize();
-					num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
-				}
-			}
-			return num;
-		}
-
 		public uint MaxFriends
 		{
 			get
@@ -578,6 +344,240 @@ namespace bnet.protocol.friends
 		public static SubscribeToFriendsResponse ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<SubscribeToFriendsResponse>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			SubscribeToFriendsResponse.Deserialize(stream, this);
+		}
+
+		public static SubscribeToFriendsResponse Deserialize(Stream stream, SubscribeToFriendsResponse instance)
+		{
+			return SubscribeToFriendsResponse.Deserialize(stream, instance, -1L);
+		}
+
+		public static SubscribeToFriendsResponse DeserializeLengthDelimited(Stream stream)
+		{
+			SubscribeToFriendsResponse subscribeToFriendsResponse = new SubscribeToFriendsResponse();
+			SubscribeToFriendsResponse.DeserializeLengthDelimited(stream, subscribeToFriendsResponse);
+			return subscribeToFriendsResponse;
+		}
+
+		public static SubscribeToFriendsResponse DeserializeLengthDelimited(Stream stream, SubscribeToFriendsResponse instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return SubscribeToFriendsResponse.Deserialize(stream, instance, num);
+		}
+
+		public static SubscribeToFriendsResponse Deserialize(Stream stream, SubscribeToFriendsResponse instance, long limit)
+		{
+			if (instance.Role == null)
+			{
+				instance.Role = new List<Role>();
+			}
+			if (instance.Friends == null)
+			{
+				instance.Friends = new List<Friend>();
+			}
+			if (instance.SentInvitations == null)
+			{
+				instance.SentInvitations = new List<Invitation>();
+			}
+			if (instance.ReceivedInvitations == null)
+			{
+				instance.ReceivedInvitations = new List<Invitation>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 8)
+				{
+					if (num != 16)
+					{
+						if (num != 24)
+						{
+							if (num != 34)
+							{
+								if (num != 42)
+								{
+									if (num != 50)
+									{
+										if (num != 58)
+										{
+											Key key = ProtocolParser.ReadKey((byte)num, stream);
+											uint field = key.Field;
+											if (field == 0u)
+											{
+												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+											}
+											ProtocolParser.SkipKey(stream, key);
+										}
+										else
+										{
+											instance.ReceivedInvitations.Add(Invitation.DeserializeLengthDelimited(stream));
+										}
+									}
+									else
+									{
+										instance.SentInvitations.Add(Invitation.DeserializeLengthDelimited(stream));
+									}
+								}
+								else
+								{
+									instance.Friends.Add(Friend.DeserializeLengthDelimited(stream));
+								}
+							}
+							else
+							{
+								instance.Role.Add(bnet.protocol.Role.DeserializeLengthDelimited(stream));
+							}
+						}
+						else
+						{
+							instance.MaxSentInvitations = ProtocolParser.ReadUInt32(stream);
+						}
+					}
+					else
+					{
+						instance.MaxReceivedInvitations = ProtocolParser.ReadUInt32(stream);
+					}
+				}
+				else
+				{
+					instance.MaxFriends = ProtocolParser.ReadUInt32(stream);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			SubscribeToFriendsResponse.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, SubscribeToFriendsResponse instance)
+		{
+			if (instance.HasMaxFriends)
+			{
+				stream.WriteByte(8);
+				ProtocolParser.WriteUInt32(stream, instance.MaxFriends);
+			}
+			if (instance.HasMaxReceivedInvitations)
+			{
+				stream.WriteByte(16);
+				ProtocolParser.WriteUInt32(stream, instance.MaxReceivedInvitations);
+			}
+			if (instance.HasMaxSentInvitations)
+			{
+				stream.WriteByte(24);
+				ProtocolParser.WriteUInt32(stream, instance.MaxSentInvitations);
+			}
+			if (instance.Role.Count > 0)
+			{
+				foreach (Role role in instance.Role)
+				{
+					stream.WriteByte(34);
+					ProtocolParser.WriteUInt32(stream, role.GetSerializedSize());
+					bnet.protocol.Role.Serialize(stream, role);
+				}
+			}
+			if (instance.Friends.Count > 0)
+			{
+				foreach (Friend friend in instance.Friends)
+				{
+					stream.WriteByte(42);
+					ProtocolParser.WriteUInt32(stream, friend.GetSerializedSize());
+					Friend.Serialize(stream, friend);
+				}
+			}
+			if (instance.SentInvitations.Count > 0)
+			{
+				foreach (Invitation invitation in instance.SentInvitations)
+				{
+					stream.WriteByte(50);
+					ProtocolParser.WriteUInt32(stream, invitation.GetSerializedSize());
+					Invitation.Serialize(stream, invitation);
+				}
+			}
+			if (instance.ReceivedInvitations.Count > 0)
+			{
+				foreach (Invitation invitation2 in instance.ReceivedInvitations)
+				{
+					stream.WriteByte(58);
+					ProtocolParser.WriteUInt32(stream, invitation2.GetSerializedSize());
+					Invitation.Serialize(stream, invitation2);
+				}
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasMaxFriends)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MaxFriends);
+			}
+			if (this.HasMaxReceivedInvitations)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MaxReceivedInvitations);
+			}
+			if (this.HasMaxSentInvitations)
+			{
+				num += 1u;
+				num += ProtocolParser.SizeOfUInt32(this.MaxSentInvitations);
+			}
+			if (this.Role.Count > 0)
+			{
+				foreach (Role role in this.Role)
+				{
+					num += 1u;
+					uint serializedSize = role.GetSerializedSize();
+					num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+				}
+			}
+			if (this.Friends.Count > 0)
+			{
+				foreach (Friend friend in this.Friends)
+				{
+					num += 1u;
+					uint serializedSize2 = friend.GetSerializedSize();
+					num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+				}
+			}
+			if (this.SentInvitations.Count > 0)
+			{
+				foreach (Invitation invitation in this.SentInvitations)
+				{
+					num += 1u;
+					uint serializedSize3 = invitation.GetSerializedSize();
+					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
+				}
+			}
+			if (this.ReceivedInvitations.Count > 0)
+			{
+				foreach (Invitation invitation2 in this.ReceivedInvitations)
+				{
+					num += 1u;
+					uint serializedSize4 = invitation2.GetSerializedSize();
+					num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
+				}
+			}
+			return num;
 		}
 
 		public bool HasMaxFriends;

@@ -5,6 +5,61 @@ namespace bnet.protocol.account
 {
 	public class AccountCredential : IProtoBuf
 	{
+		public uint Id { get; set; }
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public byte[] Data
+		{
+			get
+			{
+				return this._Data;
+			}
+			set
+			{
+				this._Data = value;
+				this.HasData = (value != null);
+			}
+		}
+
+		public void SetData(byte[] val)
+		{
+			this.Data = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Id.GetHashCode();
+			if (this.HasData)
+			{
+				num ^= this.Data.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountCredential accountCredential = obj as AccountCredential;
+			return accountCredential != null && this.Id.Equals(accountCredential.Id) && this.HasData == accountCredential.HasData && (!this.HasData || this.Data.Equals(accountCredential.Data));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountCredential ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountCredential>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountCredential.Deserialize(stream, this);
@@ -97,61 +152,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(this.Data.Length) + (uint)this.Data.Length;
 			}
 			return num + 1u;
-		}
-
-		public uint Id { get; set; }
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public byte[] Data
-		{
-			get
-			{
-				return this._Data;
-			}
-			set
-			{
-				this._Data = value;
-				this.HasData = (value != null);
-			}
-		}
-
-		public void SetData(byte[] val)
-		{
-			this.Data = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Id.GetHashCode();
-			if (this.HasData)
-			{
-				num ^= this.Data.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountCredential accountCredential = obj as AccountCredential;
-			return accountCredential != null && this.Id.Equals(accountCredential.Id) && this.HasData == accountCredential.HasData && (!this.HasData || this.Data.Equals(accountCredential.Data));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountCredential ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountCredential>(bs, 0, -1);
 		}
 
 		public bool HasData;

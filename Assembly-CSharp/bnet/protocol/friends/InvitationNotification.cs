@@ -6,6 +6,83 @@ namespace bnet.protocol.friends
 {
 	public class InvitationNotification : IProtoBuf
 	{
+		public Invitation Invitation { get; set; }
+
+		public void SetInvitation(Invitation val)
+		{
+			this.Invitation = val;
+		}
+
+		public EntityId GameAccountId
+		{
+			get
+			{
+				return this._GameAccountId;
+			}
+			set
+			{
+				this._GameAccountId = value;
+				this.HasGameAccountId = (value != null);
+			}
+		}
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public uint Reason
+		{
+			get
+			{
+				return this._Reason;
+			}
+			set
+			{
+				this._Reason = value;
+				this.HasReason = true;
+			}
+		}
+
+		public void SetReason(uint val)
+		{
+			this.Reason = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Invitation.GetHashCode();
+			if (this.HasGameAccountId)
+			{
+				num ^= this.GameAccountId.GetHashCode();
+			}
+			if (this.HasReason)
+			{
+				num ^= this.Reason.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			InvitationNotification invitationNotification = obj as InvitationNotification;
+			return invitationNotification != null && this.Invitation.Equals(invitationNotification.Invitation) && this.HasGameAccountId == invitationNotification.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(invitationNotification.GameAccountId)) && this.HasReason == invitationNotification.HasReason && (!this.HasReason || this.Reason.Equals(invitationNotification.Reason));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static InvitationNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<InvitationNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			InvitationNotification.Deserialize(stream, this);
@@ -132,83 +209,6 @@ namespace bnet.protocol.friends
 				num += ProtocolParser.SizeOfUInt32(this.Reason);
 			}
 			return num + 1u;
-		}
-
-		public Invitation Invitation { get; set; }
-
-		public void SetInvitation(Invitation val)
-		{
-			this.Invitation = val;
-		}
-
-		public EntityId GameAccountId
-		{
-			get
-			{
-				return this._GameAccountId;
-			}
-			set
-			{
-				this._GameAccountId = value;
-				this.HasGameAccountId = (value != null);
-			}
-		}
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public uint Reason
-		{
-			get
-			{
-				return this._Reason;
-			}
-			set
-			{
-				this._Reason = value;
-				this.HasReason = true;
-			}
-		}
-
-		public void SetReason(uint val)
-		{
-			this.Reason = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Invitation.GetHashCode();
-			if (this.HasGameAccountId)
-			{
-				num ^= this.GameAccountId.GetHashCode();
-			}
-			if (this.HasReason)
-			{
-				num ^= this.Reason.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			InvitationNotification invitationNotification = obj as InvitationNotification;
-			return invitationNotification != null && this.Invitation.Equals(invitationNotification.Invitation) && this.HasGameAccountId == invitationNotification.HasGameAccountId && (!this.HasGameAccountId || this.GameAccountId.Equals(invitationNotification.GameAccountId)) && this.HasReason == invitationNotification.HasReason && (!this.HasReason || this.Reason.Equals(invitationNotification.Reason));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static InvitationNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<InvitationNotification>(bs, 0, -1);
 		}
 
 		public bool HasGameAccountId;

@@ -7,6 +7,14 @@ namespace Assets.SimpleAndroidNotifications
 	{
 		public int Id;
 
+		public string GroupName;
+
+		public string GroupSummary = "{0} new notifications";
+
+		public string ChannelId;
+
+		public string ChannelName;
+
 		public TimeSpan Delay;
 
 		public string Title;
@@ -15,7 +23,11 @@ namespace Assets.SimpleAndroidNotifications
 
 		public string Ticker;
 
+		public bool Multiline;
+
 		public bool Sound = true;
+
+		public string CustomSound;
 
 		public bool Vibrate = true;
 
@@ -39,6 +51,12 @@ namespace Assets.SimpleAndroidNotifications
 
 		public string LargeIcon;
 
-		public NotificationExecuteMode Mode;
+		public NotificationExecuteMode ExecuteMode;
+
+		public string CallbackData;
+
+		public bool Repeat;
+
+		public TimeSpan RepeatInterval;
 	}
 }

@@ -5,6 +5,97 @@ namespace bnet.protocol.account
 {
 	public class GameAccountFieldTags : IProtoBuf
 	{
+		public uint GameLevelInfoTag
+		{
+			get
+			{
+				return this._GameLevelInfoTag;
+			}
+			set
+			{
+				this._GameLevelInfoTag = value;
+				this.HasGameLevelInfoTag = true;
+			}
+		}
+
+		public void SetGameLevelInfoTag(uint val)
+		{
+			this.GameLevelInfoTag = val;
+		}
+
+		public uint GameTimeInfoTag
+		{
+			get
+			{
+				return this._GameTimeInfoTag;
+			}
+			set
+			{
+				this._GameTimeInfoTag = value;
+				this.HasGameTimeInfoTag = true;
+			}
+		}
+
+		public void SetGameTimeInfoTag(uint val)
+		{
+			this.GameTimeInfoTag = val;
+		}
+
+		public uint GameStatusTag
+		{
+			get
+			{
+				return this._GameStatusTag;
+			}
+			set
+			{
+				this._GameStatusTag = value;
+				this.HasGameStatusTag = true;
+			}
+		}
+
+		public void SetGameStatusTag(uint val)
+		{
+			this.GameStatusTag = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasGameLevelInfoTag)
+			{
+				num ^= this.GameLevelInfoTag.GetHashCode();
+			}
+			if (this.HasGameTimeInfoTag)
+			{
+				num ^= this.GameTimeInfoTag.GetHashCode();
+			}
+			if (this.HasGameStatusTag)
+			{
+				num ^= this.GameStatusTag.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountFieldTags gameAccountFieldTags = obj as GameAccountFieldTags;
+			return gameAccountFieldTags != null && this.HasGameLevelInfoTag == gameAccountFieldTags.HasGameLevelInfoTag && (!this.HasGameLevelInfoTag || this.GameLevelInfoTag.Equals(gameAccountFieldTags.GameLevelInfoTag)) && this.HasGameTimeInfoTag == gameAccountFieldTags.HasGameTimeInfoTag && (!this.HasGameTimeInfoTag || this.GameTimeInfoTag.Equals(gameAccountFieldTags.GameTimeInfoTag)) && this.HasGameStatusTag == gameAccountFieldTags.HasGameStatusTag && (!this.HasGameStatusTag || this.GameStatusTag.Equals(gameAccountFieldTags.GameStatusTag));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountFieldTags ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountFieldTags>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountFieldTags.Deserialize(stream, this);
@@ -123,97 +214,6 @@ namespace bnet.protocol.account
 				num += 4u;
 			}
 			return num;
-		}
-
-		public uint GameLevelInfoTag
-		{
-			get
-			{
-				return this._GameLevelInfoTag;
-			}
-			set
-			{
-				this._GameLevelInfoTag = value;
-				this.HasGameLevelInfoTag = true;
-			}
-		}
-
-		public void SetGameLevelInfoTag(uint val)
-		{
-			this.GameLevelInfoTag = val;
-		}
-
-		public uint GameTimeInfoTag
-		{
-			get
-			{
-				return this._GameTimeInfoTag;
-			}
-			set
-			{
-				this._GameTimeInfoTag = value;
-				this.HasGameTimeInfoTag = true;
-			}
-		}
-
-		public void SetGameTimeInfoTag(uint val)
-		{
-			this.GameTimeInfoTag = val;
-		}
-
-		public uint GameStatusTag
-		{
-			get
-			{
-				return this._GameStatusTag;
-			}
-			set
-			{
-				this._GameStatusTag = value;
-				this.HasGameStatusTag = true;
-			}
-		}
-
-		public void SetGameStatusTag(uint val)
-		{
-			this.GameStatusTag = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasGameLevelInfoTag)
-			{
-				num ^= this.GameLevelInfoTag.GetHashCode();
-			}
-			if (this.HasGameTimeInfoTag)
-			{
-				num ^= this.GameTimeInfoTag.GetHashCode();
-			}
-			if (this.HasGameStatusTag)
-			{
-				num ^= this.GameStatusTag.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountFieldTags gameAccountFieldTags = obj as GameAccountFieldTags;
-			return gameAccountFieldTags != null && this.HasGameLevelInfoTag == gameAccountFieldTags.HasGameLevelInfoTag && (!this.HasGameLevelInfoTag || this.GameLevelInfoTag.Equals(gameAccountFieldTags.GameLevelInfoTag)) && this.HasGameTimeInfoTag == gameAccountFieldTags.HasGameTimeInfoTag && (!this.HasGameTimeInfoTag || this.GameTimeInfoTag.Equals(gameAccountFieldTags.GameTimeInfoTag)) && this.HasGameStatusTag == gameAccountFieldTags.HasGameStatusTag && (!this.HasGameStatusTag || this.GameStatusTag.Equals(gameAccountFieldTags.GameStatusTag));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountFieldTags ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountFieldTags>(bs, 0, -1);
 		}
 
 		public bool HasGameLevelInfoTag;

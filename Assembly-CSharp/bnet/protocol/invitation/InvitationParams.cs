@@ -8,6 +8,119 @@ namespace bnet.protocol.invitation
 {
 	public class InvitationParams : IProtoBuf
 	{
+		public string InvitationMessage
+		{
+			get
+			{
+				return this._InvitationMessage;
+			}
+			set
+			{
+				this._InvitationMessage = value;
+				this.HasInvitationMessage = (value != null);
+			}
+		}
+
+		public void SetInvitationMessage(string val)
+		{
+			this.InvitationMessage = val;
+		}
+
+		public ulong ExpirationTime
+		{
+			get
+			{
+				return this._ExpirationTime;
+			}
+			set
+			{
+				this._ExpirationTime = value;
+				this.HasExpirationTime = true;
+			}
+		}
+
+		public void SetExpirationTime(ulong val)
+		{
+			this.ExpirationTime = val;
+		}
+
+		public ChannelInvitationParams ChannelParams
+		{
+			get
+			{
+				return this._ChannelParams;
+			}
+			set
+			{
+				this._ChannelParams = value;
+				this.HasChannelParams = (value != null);
+			}
+		}
+
+		public void SetChannelParams(ChannelInvitationParams val)
+		{
+			this.ChannelParams = val;
+		}
+
+		public FriendInvitationParams FriendParams
+		{
+			get
+			{
+				return this._FriendParams;
+			}
+			set
+			{
+				this._FriendParams = value;
+				this.HasFriendParams = (value != null);
+			}
+		}
+
+		public void SetFriendParams(FriendInvitationParams val)
+		{
+			this.FriendParams = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasInvitationMessage)
+			{
+				num ^= this.InvitationMessage.GetHashCode();
+			}
+			if (this.HasExpirationTime)
+			{
+				num ^= this.ExpirationTime.GetHashCode();
+			}
+			if (this.HasChannelParams)
+			{
+				num ^= this.ChannelParams.GetHashCode();
+			}
+			if (this.HasFriendParams)
+			{
+				num ^= this.FriendParams.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			InvitationParams invitationParams = obj as InvitationParams;
+			return invitationParams != null && this.HasInvitationMessage == invitationParams.HasInvitationMessage && (!this.HasInvitationMessage || this.InvitationMessage.Equals(invitationParams.InvitationMessage)) && this.HasExpirationTime == invitationParams.HasExpirationTime && (!this.HasExpirationTime || this.ExpirationTime.Equals(invitationParams.ExpirationTime)) && this.HasChannelParams == invitationParams.HasChannelParams && (!this.HasChannelParams || this.ChannelParams.Equals(invitationParams.ChannelParams)) && this.HasFriendParams == invitationParams.HasFriendParams && (!this.HasFriendParams || this.FriendParams.Equals(invitationParams.FriendParams));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static InvitationParams ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<InvitationParams>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			InvitationParams.Deserialize(stream, this);
@@ -166,119 +279,6 @@ namespace bnet.protocol.invitation
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num;
-		}
-
-		public string InvitationMessage
-		{
-			get
-			{
-				return this._InvitationMessage;
-			}
-			set
-			{
-				this._InvitationMessage = value;
-				this.HasInvitationMessage = (value != null);
-			}
-		}
-
-		public void SetInvitationMessage(string val)
-		{
-			this.InvitationMessage = val;
-		}
-
-		public ulong ExpirationTime
-		{
-			get
-			{
-				return this._ExpirationTime;
-			}
-			set
-			{
-				this._ExpirationTime = value;
-				this.HasExpirationTime = true;
-			}
-		}
-
-		public void SetExpirationTime(ulong val)
-		{
-			this.ExpirationTime = val;
-		}
-
-		public ChannelInvitationParams ChannelParams
-		{
-			get
-			{
-				return this._ChannelParams;
-			}
-			set
-			{
-				this._ChannelParams = value;
-				this.HasChannelParams = (value != null);
-			}
-		}
-
-		public void SetChannelParams(ChannelInvitationParams val)
-		{
-			this.ChannelParams = val;
-		}
-
-		public FriendInvitationParams FriendParams
-		{
-			get
-			{
-				return this._FriendParams;
-			}
-			set
-			{
-				this._FriendParams = value;
-				this.HasFriendParams = (value != null);
-			}
-		}
-
-		public void SetFriendParams(FriendInvitationParams val)
-		{
-			this.FriendParams = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasInvitationMessage)
-			{
-				num ^= this.InvitationMessage.GetHashCode();
-			}
-			if (this.HasExpirationTime)
-			{
-				num ^= this.ExpirationTime.GetHashCode();
-			}
-			if (this.HasChannelParams)
-			{
-				num ^= this.ChannelParams.GetHashCode();
-			}
-			if (this.HasFriendParams)
-			{
-				num ^= this.FriendParams.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			InvitationParams invitationParams = obj as InvitationParams;
-			return invitationParams != null && this.HasInvitationMessage == invitationParams.HasInvitationMessage && (!this.HasInvitationMessage || this.InvitationMessage.Equals(invitationParams.InvitationMessage)) && this.HasExpirationTime == invitationParams.HasExpirationTime && (!this.HasExpirationTime || this.ExpirationTime.Equals(invitationParams.ExpirationTime)) && this.HasChannelParams == invitationParams.HasChannelParams && (!this.HasChannelParams || this.ChannelParams.Equals(invitationParams.ChannelParams)) && this.HasFriendParams == invitationParams.HasFriendParams && (!this.HasFriendParams || this.FriendParams.Equals(invitationParams.FriendParams));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static InvitationParams ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<InvitationParams>(bs, 0, -1);
 		}
 
 		public bool HasInvitationMessage;

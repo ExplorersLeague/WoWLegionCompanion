@@ -5,6 +5,75 @@ namespace bnet.protocol.account
 {
 	public class GameAccountSessionNotification : IProtoBuf
 	{
+		public GameAccountHandle GameAccount
+		{
+			get
+			{
+				return this._GameAccount;
+			}
+			set
+			{
+				this._GameAccount = value;
+				this.HasGameAccount = (value != null);
+			}
+		}
+
+		public void SetGameAccount(GameAccountHandle val)
+		{
+			this.GameAccount = val;
+		}
+
+		public GameSessionUpdateInfo SessionInfo
+		{
+			get
+			{
+				return this._SessionInfo;
+			}
+			set
+			{
+				this._SessionInfo = value;
+				this.HasSessionInfo = (value != null);
+			}
+		}
+
+		public void SetSessionInfo(GameSessionUpdateInfo val)
+		{
+			this.SessionInfo = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasGameAccount)
+			{
+				num ^= this.GameAccount.GetHashCode();
+			}
+			if (this.HasSessionInfo)
+			{
+				num ^= this.SessionInfo.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountSessionNotification gameAccountSessionNotification = obj as GameAccountSessionNotification;
+			return gameAccountSessionNotification != null && this.HasGameAccount == gameAccountSessionNotification.HasGameAccount && (!this.HasGameAccount || this.GameAccount.Equals(gameAccountSessionNotification.GameAccount)) && this.HasSessionInfo == gameAccountSessionNotification.HasSessionInfo && (!this.HasSessionInfo || this.SessionInfo.Equals(gameAccountSessionNotification.SessionInfo));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountSessionNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountSessionNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountSessionNotification.Deserialize(stream, this);
@@ -116,75 +185,6 @@ namespace bnet.protocol.account
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num;
-		}
-
-		public GameAccountHandle GameAccount
-		{
-			get
-			{
-				return this._GameAccount;
-			}
-			set
-			{
-				this._GameAccount = value;
-				this.HasGameAccount = (value != null);
-			}
-		}
-
-		public void SetGameAccount(GameAccountHandle val)
-		{
-			this.GameAccount = val;
-		}
-
-		public GameSessionUpdateInfo SessionInfo
-		{
-			get
-			{
-				return this._SessionInfo;
-			}
-			set
-			{
-				this._SessionInfo = value;
-				this.HasSessionInfo = (value != null);
-			}
-		}
-
-		public void SetSessionInfo(GameSessionUpdateInfo val)
-		{
-			this.SessionInfo = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasGameAccount)
-			{
-				num ^= this.GameAccount.GetHashCode();
-			}
-			if (this.HasSessionInfo)
-			{
-				num ^= this.SessionInfo.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountSessionNotification gameAccountSessionNotification = obj as GameAccountSessionNotification;
-			return gameAccountSessionNotification != null && this.HasGameAccount == gameAccountSessionNotification.HasGameAccount && (!this.HasGameAccount || this.GameAccount.Equals(gameAccountSessionNotification.GameAccount)) && this.HasSessionInfo == gameAccountSessionNotification.HasSessionInfo && (!this.HasSessionInfo || this.SessionInfo.Equals(gameAccountSessionNotification.SessionInfo));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountSessionNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountSessionNotification>(bs, 0, -1);
 		}
 
 		public bool HasGameAccount;

@@ -5,6 +5,75 @@ namespace bnet.protocol.authentication
 {
 	public class ModuleNotification : IProtoBuf
 	{
+		public int ModuleId
+		{
+			get
+			{
+				return this._ModuleId;
+			}
+			set
+			{
+				this._ModuleId = value;
+				this.HasModuleId = true;
+			}
+		}
+
+		public void SetModuleId(int val)
+		{
+			this.ModuleId = val;
+		}
+
+		public uint Result
+		{
+			get
+			{
+				return this._Result;
+			}
+			set
+			{
+				this._Result = value;
+				this.HasResult = true;
+			}
+		}
+
+		public void SetResult(uint val)
+		{
+			this.Result = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasModuleId)
+			{
+				num ^= this.ModuleId.GetHashCode();
+			}
+			if (this.HasResult)
+			{
+				num ^= this.Result.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ModuleNotification moduleNotification = obj as ModuleNotification;
+			return moduleNotification != null && this.HasModuleId == moduleNotification.HasModuleId && (!this.HasModuleId || this.ModuleId.Equals(moduleNotification.ModuleId)) && this.HasResult == moduleNotification.HasResult && (!this.HasResult || this.Result.Equals(moduleNotification.Result));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ModuleNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ModuleNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ModuleNotification.Deserialize(stream, this);
@@ -104,75 +173,6 @@ namespace bnet.protocol.authentication
 				num += ProtocolParser.SizeOfUInt32(this.Result);
 			}
 			return num;
-		}
-
-		public int ModuleId
-		{
-			get
-			{
-				return this._ModuleId;
-			}
-			set
-			{
-				this._ModuleId = value;
-				this.HasModuleId = true;
-			}
-		}
-
-		public void SetModuleId(int val)
-		{
-			this.ModuleId = val;
-		}
-
-		public uint Result
-		{
-			get
-			{
-				return this._Result;
-			}
-			set
-			{
-				this._Result = value;
-				this.HasResult = true;
-			}
-		}
-
-		public void SetResult(uint val)
-		{
-			this.Result = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasModuleId)
-			{
-				num ^= this.ModuleId.GetHashCode();
-			}
-			if (this.HasResult)
-			{
-				num ^= this.Result.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ModuleNotification moduleNotification = obj as ModuleNotification;
-			return moduleNotification != null && this.HasModuleId == moduleNotification.HasModuleId && (!this.HasModuleId || this.ModuleId.Equals(moduleNotification.ModuleId)) && this.HasResult == moduleNotification.HasResult && (!this.HasResult || this.Result.Equals(moduleNotification.Result));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ModuleNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ModuleNotification>(bs, 0, -1);
 		}
 
 		public bool HasModuleId;

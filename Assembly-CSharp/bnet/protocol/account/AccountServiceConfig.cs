@@ -6,6 +6,93 @@ namespace bnet.protocol.account
 {
 	public class AccountServiceConfig : IProtoBuf
 	{
+		public List<AccountServiceRegion> Region
+		{
+			get
+			{
+				return this._Region;
+			}
+			set
+			{
+				this._Region = value;
+			}
+		}
+
+		public List<AccountServiceRegion> RegionList
+		{
+			get
+			{
+				return this._Region;
+			}
+		}
+
+		public int RegionCount
+		{
+			get
+			{
+				return this._Region.Count;
+			}
+		}
+
+		public void AddRegion(AccountServiceRegion val)
+		{
+			this._Region.Add(val);
+		}
+
+		public void ClearRegion()
+		{
+			this._Region.Clear();
+		}
+
+		public void SetRegion(List<AccountServiceRegion> val)
+		{
+			this.Region = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (AccountServiceRegion accountServiceRegion in this.Region)
+			{
+				num ^= accountServiceRegion.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AccountServiceConfig accountServiceConfig = obj as AccountServiceConfig;
+			if (accountServiceConfig == null)
+			{
+				return false;
+			}
+			if (this.Region.Count != accountServiceConfig.Region.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Region.Count; i++)
+			{
+				if (!this.Region[i].Equals(accountServiceConfig.Region[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AccountServiceConfig ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AccountServiceConfig>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AccountServiceConfig.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.account
 				}
 			}
 			return num;
-		}
-
-		public List<AccountServiceRegion> Region
-		{
-			get
-			{
-				return this._Region;
-			}
-			set
-			{
-				this._Region = value;
-			}
-		}
-
-		public List<AccountServiceRegion> RegionList
-		{
-			get
-			{
-				return this._Region;
-			}
-		}
-
-		public int RegionCount
-		{
-			get
-			{
-				return this._Region.Count;
-			}
-		}
-
-		public void AddRegion(AccountServiceRegion val)
-		{
-			this._Region.Add(val);
-		}
-
-		public void ClearRegion()
-		{
-			this._Region.Clear();
-		}
-
-		public void SetRegion(List<AccountServiceRegion> val)
-		{
-			this.Region = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (AccountServiceRegion accountServiceRegion in this.Region)
-			{
-				num ^= accountServiceRegion.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AccountServiceConfig accountServiceConfig = obj as AccountServiceConfig;
-			if (accountServiceConfig == null)
-			{
-				return false;
-			}
-			if (this.Region.Count != accountServiceConfig.Region.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Region.Count; i++)
-			{
-				if (!this.Region[i].Equals(accountServiceConfig.Region[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AccountServiceConfig ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AccountServiceConfig>(bs, 0, -1);
 		}
 
 		private List<AccountServiceRegion> _Region = new List<AccountServiceRegion>();

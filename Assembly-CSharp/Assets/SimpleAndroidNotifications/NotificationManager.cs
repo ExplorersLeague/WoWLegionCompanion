@@ -6,7 +6,7 @@ namespace Assets.SimpleAndroidNotifications
 {
 	public static class NotificationManager
 	{
-		public static int Send(TimeSpan delay, string title, string message, Color smallIconColor, NotificationIcon smallIcon = NotificationIcon.Bell)
+		public static int Send(TimeSpan delay, string title, string message, Color smallIconColor, NotificationIcon smallIcon = NotificationIcon.Bell, bool silent = false)
 		{
 			return NotificationManager.SendCustom(new NotificationParams
 			{
@@ -15,17 +15,17 @@ namespace Assets.SimpleAndroidNotifications
 				Title = title,
 				Message = message,
 				Ticker = message,
-				Sound = true,
-				Vibrate = true,
+				Sound = !silent,
+				Vibrate = !silent,
 				Light = true,
 				SmallIcon = smallIcon,
 				SmallIconColor = smallIconColor,
 				LargeIcon = string.Empty,
-				Mode = NotificationExecuteMode.Schedule
+				ExecuteMode = NotificationExecuteMode.Inexact
 			});
 		}
 
-		public static int SendWithAppIcon(TimeSpan delay, string title, string message, Color smallIconColor, NotificationIcon smallIcon = NotificationIcon.Bell)
+		public static int SendWithAppIcon(TimeSpan delay, string title, string message, Color smallIconColor, NotificationIcon smallIcon = NotificationIcon.Bell, bool silent = false)
 		{
 			return NotificationManager.SendCustom(new NotificationParams
 			{
@@ -34,39 +34,49 @@ namespace Assets.SimpleAndroidNotifications
 				Title = title,
 				Message = message,
 				Ticker = message,
-				Sound = true,
-				Vibrate = true,
+				Sound = !silent,
+				Vibrate = !silent,
 				Light = true,
 				SmallIcon = smallIcon,
 				SmallIconColor = smallIconColor,
 				LargeIcon = "app_icon",
-				Mode = NotificationExecuteMode.Schedule
+				ExecuteMode = NotificationExecuteMode.Inexact
 			});
 		}
 
 		public static int SendCustom(NotificationParams notificationParams)
 		{
 			long num = (long)notificationParams.Delay.TotalMilliseconds;
+			long num2 = (!notificationParams.Repeat) ? 0L : ((long)notificationParams.RepeatInterval.TotalMilliseconds);
 			string text = string.Join(",", (from i in notificationParams.Vibration
 			select i.ToString()).ToArray<string>());
 			new AndroidJavaClass("com.hippogames.simpleandroidnotifications.Controller").CallStatic("SetNotification", new object[]
 			{
 				notificationParams.Id,
+				notificationParams.GroupName ?? string.Empty,
+				notificationParams.GroupSummary ?? string.Empty,
+				notificationParams.ChannelId,
+				notificationParams.ChannelName,
 				num,
+				Convert.ToInt32(notificationParams.Repeat),
+				num2,
 				notificationParams.Title,
 				notificationParams.Message,
 				notificationParams.Ticker,
-				(!notificationParams.Sound) ? 0 : 1,
-				(!notificationParams.Vibrate) ? 0 : 1,
+				Convert.ToInt32(notificationParams.Multiline),
+				Convert.ToInt32(notificationParams.Sound),
+				notificationParams.CustomSound ?? string.Empty,
+				Convert.ToInt32(notificationParams.Vibrate),
 				text,
-				(!notificationParams.Light) ? 0 : 1,
+				Convert.ToInt32(notificationParams.Light),
 				notificationParams.LightOnMs,
 				notificationParams.LightOffMs,
 				NotificationManager.ColotToInt(notificationParams.LightColor),
-				notificationParams.LargeIcon,
+				notificationParams.LargeIcon ?? string.Empty,
 				NotificationManager.GetSmallIconName(notificationParams.SmallIcon),
 				NotificationManager.ColotToInt(notificationParams.SmallIconColor),
-				(int)notificationParams.Mode,
+				(int)notificationParams.ExecuteMode,
+				notificationParams.CallbackData,
 				"com.blizzard.wowcompanion.CompanionNativeActivity"
 			});
 			NotificationIdHandler.AddScheduledNotificaion(notificationParams.Id);
@@ -85,6 +95,40 @@ namespace Assets.SimpleAndroidNotifications
 		public static void CancelAll()
 		{
 			new AndroidJavaClass("com.hippogames.simpleandroidnotifications.Controller").CallStatic("CancelAllNotifications", new object[0]);
+			NotificationIdHandler.RemoveAllScheduledNotificaions();
+		}
+
+		public static void CancelAllDisplayed()
+		{
+			new AndroidJavaClass("com.hippogames.simpleandroidnotifications.Controller").CallStatic("CancelAllDisplayedNotifications", new object[0]);
+			NotificationIdHandler.RemoveAllScheduledNotificaions();
+		}
+
+		public static NotificationCallback GetNotificationCallback()
+		{
+			AndroidJavaClass androidJavaClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+			AndroidJavaObject @static = androidJavaClass.GetStatic<AndroidJavaObject>("currentActivity");
+			AndroidJavaObject androidJavaObject = @static.Call<AndroidJavaObject>("getIntent", new object[0]);
+			bool flag = androidJavaObject.Call<bool>("hasExtra", new object[]
+			{
+				"Notification.Id"
+			});
+			if (flag)
+			{
+				AndroidJavaObject androidJavaObject2 = androidJavaObject.Call<AndroidJavaObject>("getExtras", new object[0]);
+				return new NotificationCallback
+				{
+					Id = androidJavaObject2.Call<int>("getInt", new object[]
+					{
+						"Notification.Id"
+					}),
+					Data = androidJavaObject2.Call<string>("getString", new object[]
+					{
+						"Notification.CallbackData"
+					})
+				};
+			}
+			return null;
 		}
 
 		private static int ColotToInt(Color color)
@@ -98,8 +142,8 @@ namespace Assets.SimpleAndroidNotifications
 			return "anp_" + icon.ToString().ToLower();
 		}
 
-		private const string FullClassName = "com.hippogames.simpleandroidnotifications.Controller";
+		public const string FullClassName = "com.hippogames.simpleandroidnotifications.Controller";
 
-		private const string MainActivityClassName = "com.blizzard.wowcompanion.CompanionNativeActivity";
+		public const string MainActivityClassName = "com.blizzard.wowcompanion.CompanionNativeActivity";
 	}
 }

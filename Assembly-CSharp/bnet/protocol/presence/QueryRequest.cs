@@ -6,6 +6,105 @@ namespace bnet.protocol.presence
 {
 	public class QueryRequest : IProtoBuf
 	{
+		public EntityId EntityId { get; set; }
+
+		public void SetEntityId(EntityId val)
+		{
+			this.EntityId = val;
+		}
+
+		public List<FieldKey> Key
+		{
+			get
+			{
+				return this._Key;
+			}
+			set
+			{
+				this._Key = value;
+			}
+		}
+
+		public List<FieldKey> KeyList
+		{
+			get
+			{
+				return this._Key;
+			}
+		}
+
+		public int KeyCount
+		{
+			get
+			{
+				return this._Key.Count;
+			}
+		}
+
+		public void AddKey(FieldKey val)
+		{
+			this._Key.Add(val);
+		}
+
+		public void ClearKey()
+		{
+			this._Key.Clear();
+		}
+
+		public void SetKey(List<FieldKey> val)
+		{
+			this.Key = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.EntityId.GetHashCode();
+			foreach (FieldKey fieldKey in this.Key)
+			{
+				num ^= fieldKey.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			QueryRequest queryRequest = obj as QueryRequest;
+			if (queryRequest == null)
+			{
+				return false;
+			}
+			if (!this.EntityId.Equals(queryRequest.EntityId))
+			{
+				return false;
+			}
+			if (this.Key.Count != queryRequest.Key.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Key.Count; i++)
+			{
+				if (!this.Key[i].Equals(queryRequest.Key[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static QueryRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<QueryRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			QueryRequest.Deserialize(stream, this);
@@ -121,105 +220,6 @@ namespace bnet.protocol.presence
 			}
 			num += 1u;
 			return num;
-		}
-
-		public EntityId EntityId { get; set; }
-
-		public void SetEntityId(EntityId val)
-		{
-			this.EntityId = val;
-		}
-
-		public List<FieldKey> Key
-		{
-			get
-			{
-				return this._Key;
-			}
-			set
-			{
-				this._Key = value;
-			}
-		}
-
-		public List<FieldKey> KeyList
-		{
-			get
-			{
-				return this._Key;
-			}
-		}
-
-		public int KeyCount
-		{
-			get
-			{
-				return this._Key.Count;
-			}
-		}
-
-		public void AddKey(FieldKey val)
-		{
-			this._Key.Add(val);
-		}
-
-		public void ClearKey()
-		{
-			this._Key.Clear();
-		}
-
-		public void SetKey(List<FieldKey> val)
-		{
-			this.Key = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.EntityId.GetHashCode();
-			foreach (FieldKey fieldKey in this.Key)
-			{
-				num ^= fieldKey.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			QueryRequest queryRequest = obj as QueryRequest;
-			if (queryRequest == null)
-			{
-				return false;
-			}
-			if (!this.EntityId.Equals(queryRequest.EntityId))
-			{
-				return false;
-			}
-			if (this.Key.Count != queryRequest.Key.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Key.Count; i++)
-			{
-				if (!this.Key[i].Equals(queryRequest.Key[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static QueryRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<QueryRequest>(bs, 0, -1);
 		}
 
 		private List<FieldKey> _Key = new List<FieldKey>();

@@ -5,6 +5,61 @@ namespace bnet.protocol.notification
 {
 	public class FindClientResponse : IProtoBuf
 	{
+		public uint Label { get; set; }
+
+		public void SetLabel(uint val)
+		{
+			this.Label = val;
+		}
+
+		public ProcessId ClientProcessId
+		{
+			get
+			{
+				return this._ClientProcessId;
+			}
+			set
+			{
+				this._ClientProcessId = value;
+				this.HasClientProcessId = (value != null);
+			}
+		}
+
+		public void SetClientProcessId(ProcessId val)
+		{
+			this.ClientProcessId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Label.GetHashCode();
+			if (this.HasClientProcessId)
+			{
+				num ^= this.ClientProcessId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FindClientResponse findClientResponse = obj as FindClientResponse;
+			return findClientResponse != null && this.Label.Equals(findClientResponse.Label) && this.HasClientProcessId == findClientResponse.HasClientProcessId && (!this.HasClientProcessId || this.ClientProcessId.Equals(findClientResponse.ClientProcessId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FindClientResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FindClientResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FindClientResponse.Deserialize(stream, this);
@@ -103,61 +158,6 @@ namespace bnet.protocol.notification
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num + 1u;
-		}
-
-		public uint Label { get; set; }
-
-		public void SetLabel(uint val)
-		{
-			this.Label = val;
-		}
-
-		public ProcessId ClientProcessId
-		{
-			get
-			{
-				return this._ClientProcessId;
-			}
-			set
-			{
-				this._ClientProcessId = value;
-				this.HasClientProcessId = (value != null);
-			}
-		}
-
-		public void SetClientProcessId(ProcessId val)
-		{
-			this.ClientProcessId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Label.GetHashCode();
-			if (this.HasClientProcessId)
-			{
-				num ^= this.ClientProcessId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FindClientResponse findClientResponse = obj as FindClientResponse;
-			return findClientResponse != null && this.Label.Equals(findClientResponse.Label) && this.HasClientProcessId == findClientResponse.HasClientProcessId && (!this.HasClientProcessId || this.ClientProcessId.Equals(findClientResponse.ClientProcessId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FindClientResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FindClientResponse>(bs, 0, -1);
 		}
 
 		public bool HasClientProcessId;

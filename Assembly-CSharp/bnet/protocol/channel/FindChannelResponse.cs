@@ -6,6 +6,93 @@ namespace bnet.protocol.channel
 {
 	public class FindChannelResponse : IProtoBuf
 	{
+		public List<ChannelDescription> Channel
+		{
+			get
+			{
+				return this._Channel;
+			}
+			set
+			{
+				this._Channel = value;
+			}
+		}
+
+		public List<ChannelDescription> ChannelList
+		{
+			get
+			{
+				return this._Channel;
+			}
+		}
+
+		public int ChannelCount
+		{
+			get
+			{
+				return this._Channel.Count;
+			}
+		}
+
+		public void AddChannel(ChannelDescription val)
+		{
+			this._Channel.Add(val);
+		}
+
+		public void ClearChannel()
+		{
+			this._Channel.Clear();
+		}
+
+		public void SetChannel(List<ChannelDescription> val)
+		{
+			this.Channel = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (ChannelDescription channelDescription in this.Channel)
+			{
+				num ^= channelDescription.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			FindChannelResponse findChannelResponse = obj as FindChannelResponse;
+			if (findChannelResponse == null)
+			{
+				return false;
+			}
+			if (this.Channel.Count != findChannelResponse.Channel.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Channel.Count; i++)
+			{
+				if (!this.Channel[i].Equals(findChannelResponse.Channel[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static FindChannelResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<FindChannelResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			FindChannelResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.channel
 				}
 			}
 			return num;
-		}
-
-		public List<ChannelDescription> Channel
-		{
-			get
-			{
-				return this._Channel;
-			}
-			set
-			{
-				this._Channel = value;
-			}
-		}
-
-		public List<ChannelDescription> ChannelList
-		{
-			get
-			{
-				return this._Channel;
-			}
-		}
-
-		public int ChannelCount
-		{
-			get
-			{
-				return this._Channel.Count;
-			}
-		}
-
-		public void AddChannel(ChannelDescription val)
-		{
-			this._Channel.Add(val);
-		}
-
-		public void ClearChannel()
-		{
-			this._Channel.Clear();
-		}
-
-		public void SetChannel(List<ChannelDescription> val)
-		{
-			this.Channel = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (ChannelDescription channelDescription in this.Channel)
-			{
-				num ^= channelDescription.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			FindChannelResponse findChannelResponse = obj as FindChannelResponse;
-			if (findChannelResponse == null)
-			{
-				return false;
-			}
-			if (this.Channel.Count != findChannelResponse.Channel.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Channel.Count; i++)
-			{
-				if (!this.Channel[i].Equals(findChannelResponse.Channel[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static FindChannelResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<FindChannelResponse>(bs, 0, -1);
 		}
 
 		private List<ChannelDescription> _Channel = new List<ChannelDescription>();

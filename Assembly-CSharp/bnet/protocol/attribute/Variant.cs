@@ -6,6 +6,229 @@ namespace bnet.protocol.attribute
 {
 	public class Variant : IProtoBuf
 	{
+		public bool BoolValue
+		{
+			get
+			{
+				return this._BoolValue;
+			}
+			set
+			{
+				this._BoolValue = value;
+				this.HasBoolValue = true;
+			}
+		}
+
+		public void SetBoolValue(bool val)
+		{
+			this.BoolValue = val;
+		}
+
+		public long IntValue
+		{
+			get
+			{
+				return this._IntValue;
+			}
+			set
+			{
+				this._IntValue = value;
+				this.HasIntValue = true;
+			}
+		}
+
+		public void SetIntValue(long val)
+		{
+			this.IntValue = val;
+		}
+
+		public double FloatValue
+		{
+			get
+			{
+				return this._FloatValue;
+			}
+			set
+			{
+				this._FloatValue = value;
+				this.HasFloatValue = true;
+			}
+		}
+
+		public void SetFloatValue(double val)
+		{
+			this.FloatValue = val;
+		}
+
+		public string StringValue
+		{
+			get
+			{
+				return this._StringValue;
+			}
+			set
+			{
+				this._StringValue = value;
+				this.HasStringValue = (value != null);
+			}
+		}
+
+		public void SetStringValue(string val)
+		{
+			this.StringValue = val;
+		}
+
+		public byte[] BlobValue
+		{
+			get
+			{
+				return this._BlobValue;
+			}
+			set
+			{
+				this._BlobValue = value;
+				this.HasBlobValue = (value != null);
+			}
+		}
+
+		public void SetBlobValue(byte[] val)
+		{
+			this.BlobValue = val;
+		}
+
+		public byte[] MessageValue
+		{
+			get
+			{
+				return this._MessageValue;
+			}
+			set
+			{
+				this._MessageValue = value;
+				this.HasMessageValue = (value != null);
+			}
+		}
+
+		public void SetMessageValue(byte[] val)
+		{
+			this.MessageValue = val;
+		}
+
+		public string FourccValue
+		{
+			get
+			{
+				return this._FourccValue;
+			}
+			set
+			{
+				this._FourccValue = value;
+				this.HasFourccValue = (value != null);
+			}
+		}
+
+		public void SetFourccValue(string val)
+		{
+			this.FourccValue = val;
+		}
+
+		public ulong UintValue
+		{
+			get
+			{
+				return this._UintValue;
+			}
+			set
+			{
+				this._UintValue = value;
+				this.HasUintValue = true;
+			}
+		}
+
+		public void SetUintValue(ulong val)
+		{
+			this.UintValue = val;
+		}
+
+		public EntityId EntityidValue
+		{
+			get
+			{
+				return this._EntityidValue;
+			}
+			set
+			{
+				this._EntityidValue = value;
+				this.HasEntityidValue = (value != null);
+			}
+		}
+
+		public void SetEntityidValue(EntityId val)
+		{
+			this.EntityidValue = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasBoolValue)
+			{
+				num ^= this.BoolValue.GetHashCode();
+			}
+			if (this.HasIntValue)
+			{
+				num ^= this.IntValue.GetHashCode();
+			}
+			if (this.HasFloatValue)
+			{
+				num ^= this.FloatValue.GetHashCode();
+			}
+			if (this.HasStringValue)
+			{
+				num ^= this.StringValue.GetHashCode();
+			}
+			if (this.HasBlobValue)
+			{
+				num ^= this.BlobValue.GetHashCode();
+			}
+			if (this.HasMessageValue)
+			{
+				num ^= this.MessageValue.GetHashCode();
+			}
+			if (this.HasFourccValue)
+			{
+				num ^= this.FourccValue.GetHashCode();
+			}
+			if (this.HasUintValue)
+			{
+				num ^= this.UintValue.GetHashCode();
+			}
+			if (this.HasEntityidValue)
+			{
+				num ^= this.EntityidValue.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Variant variant = obj as Variant;
+			return variant != null && this.HasBoolValue == variant.HasBoolValue && (!this.HasBoolValue || this.BoolValue.Equals(variant.BoolValue)) && this.HasIntValue == variant.HasIntValue && (!this.HasIntValue || this.IntValue.Equals(variant.IntValue)) && this.HasFloatValue == variant.HasFloatValue && (!this.HasFloatValue || this.FloatValue.Equals(variant.FloatValue)) && this.HasStringValue == variant.HasStringValue && (!this.HasStringValue || this.StringValue.Equals(variant.StringValue)) && this.HasBlobValue == variant.HasBlobValue && (!this.HasBlobValue || this.BlobValue.Equals(variant.BlobValue)) && this.HasMessageValue == variant.HasMessageValue && (!this.HasMessageValue || this.MessageValue.Equals(variant.MessageValue)) && this.HasFourccValue == variant.HasFourccValue && (!this.HasFourccValue || this.FourccValue.Equals(variant.FourccValue)) && this.HasUintValue == variant.HasUintValue && (!this.HasUintValue || this.UintValue.Equals(variant.UintValue)) && this.HasEntityidValue == variant.HasEntityidValue && (!this.HasEntityidValue || this.EntityidValue.Equals(variant.EntityidValue));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Variant ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Variant>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Variant.Deserialize(stream, this);
@@ -234,229 +457,6 @@ namespace bnet.protocol.attribute
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public bool BoolValue
-		{
-			get
-			{
-				return this._BoolValue;
-			}
-			set
-			{
-				this._BoolValue = value;
-				this.HasBoolValue = true;
-			}
-		}
-
-		public void SetBoolValue(bool val)
-		{
-			this.BoolValue = val;
-		}
-
-		public long IntValue
-		{
-			get
-			{
-				return this._IntValue;
-			}
-			set
-			{
-				this._IntValue = value;
-				this.HasIntValue = true;
-			}
-		}
-
-		public void SetIntValue(long val)
-		{
-			this.IntValue = val;
-		}
-
-		public double FloatValue
-		{
-			get
-			{
-				return this._FloatValue;
-			}
-			set
-			{
-				this._FloatValue = value;
-				this.HasFloatValue = true;
-			}
-		}
-
-		public void SetFloatValue(double val)
-		{
-			this.FloatValue = val;
-		}
-
-		public string StringValue
-		{
-			get
-			{
-				return this._StringValue;
-			}
-			set
-			{
-				this._StringValue = value;
-				this.HasStringValue = (value != null);
-			}
-		}
-
-		public void SetStringValue(string val)
-		{
-			this.StringValue = val;
-		}
-
-		public byte[] BlobValue
-		{
-			get
-			{
-				return this._BlobValue;
-			}
-			set
-			{
-				this._BlobValue = value;
-				this.HasBlobValue = (value != null);
-			}
-		}
-
-		public void SetBlobValue(byte[] val)
-		{
-			this.BlobValue = val;
-		}
-
-		public byte[] MessageValue
-		{
-			get
-			{
-				return this._MessageValue;
-			}
-			set
-			{
-				this._MessageValue = value;
-				this.HasMessageValue = (value != null);
-			}
-		}
-
-		public void SetMessageValue(byte[] val)
-		{
-			this.MessageValue = val;
-		}
-
-		public string FourccValue
-		{
-			get
-			{
-				return this._FourccValue;
-			}
-			set
-			{
-				this._FourccValue = value;
-				this.HasFourccValue = (value != null);
-			}
-		}
-
-		public void SetFourccValue(string val)
-		{
-			this.FourccValue = val;
-		}
-
-		public ulong UintValue
-		{
-			get
-			{
-				return this._UintValue;
-			}
-			set
-			{
-				this._UintValue = value;
-				this.HasUintValue = true;
-			}
-		}
-
-		public void SetUintValue(ulong val)
-		{
-			this.UintValue = val;
-		}
-
-		public EntityId EntityidValue
-		{
-			get
-			{
-				return this._EntityidValue;
-			}
-			set
-			{
-				this._EntityidValue = value;
-				this.HasEntityidValue = (value != null);
-			}
-		}
-
-		public void SetEntityidValue(EntityId val)
-		{
-			this.EntityidValue = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasBoolValue)
-			{
-				num ^= this.BoolValue.GetHashCode();
-			}
-			if (this.HasIntValue)
-			{
-				num ^= this.IntValue.GetHashCode();
-			}
-			if (this.HasFloatValue)
-			{
-				num ^= this.FloatValue.GetHashCode();
-			}
-			if (this.HasStringValue)
-			{
-				num ^= this.StringValue.GetHashCode();
-			}
-			if (this.HasBlobValue)
-			{
-				num ^= this.BlobValue.GetHashCode();
-			}
-			if (this.HasMessageValue)
-			{
-				num ^= this.MessageValue.GetHashCode();
-			}
-			if (this.HasFourccValue)
-			{
-				num ^= this.FourccValue.GetHashCode();
-			}
-			if (this.HasUintValue)
-			{
-				num ^= this.UintValue.GetHashCode();
-			}
-			if (this.HasEntityidValue)
-			{
-				num ^= this.EntityidValue.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Variant variant = obj as Variant;
-			return variant != null && this.HasBoolValue == variant.HasBoolValue && (!this.HasBoolValue || this.BoolValue.Equals(variant.BoolValue)) && this.HasIntValue == variant.HasIntValue && (!this.HasIntValue || this.IntValue.Equals(variant.IntValue)) && this.HasFloatValue == variant.HasFloatValue && (!this.HasFloatValue || this.FloatValue.Equals(variant.FloatValue)) && this.HasStringValue == variant.HasStringValue && (!this.HasStringValue || this.StringValue.Equals(variant.StringValue)) && this.HasBlobValue == variant.HasBlobValue && (!this.HasBlobValue || this.BlobValue.Equals(variant.BlobValue)) && this.HasMessageValue == variant.HasMessageValue && (!this.HasMessageValue || this.MessageValue.Equals(variant.MessageValue)) && this.HasFourccValue == variant.HasFourccValue && (!this.HasFourccValue || this.FourccValue.Equals(variant.FourccValue)) && this.HasUintValue == variant.HasUintValue && (!this.HasUintValue || this.UintValue.Equals(variant.UintValue)) && this.HasEntityidValue == variant.HasEntityidValue && (!this.HasEntityidValue || this.EntityidValue.Equals(variant.EntityidValue));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Variant ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Variant>(bs, 0, -1);
 		}
 
 		public bool HasBoolValue;

@@ -8,6 +8,209 @@ namespace bnet.protocol.invitation
 {
 	public class Invitation : IProtoBuf
 	{
+		public ulong Id { get; set; }
+
+		public void SetId(ulong val)
+		{
+			this.Id = val;
+		}
+
+		public Identity InviterIdentity { get; set; }
+
+		public void SetInviterIdentity(Identity val)
+		{
+			this.InviterIdentity = val;
+		}
+
+		public Identity InviteeIdentity { get; set; }
+
+		public void SetInviteeIdentity(Identity val)
+		{
+			this.InviteeIdentity = val;
+		}
+
+		public string InviterName
+		{
+			get
+			{
+				return this._InviterName;
+			}
+			set
+			{
+				this._InviterName = value;
+				this.HasInviterName = (value != null);
+			}
+		}
+
+		public void SetInviterName(string val)
+		{
+			this.InviterName = val;
+		}
+
+		public string InviteeName
+		{
+			get
+			{
+				return this._InviteeName;
+			}
+			set
+			{
+				this._InviteeName = value;
+				this.HasInviteeName = (value != null);
+			}
+		}
+
+		public void SetInviteeName(string val)
+		{
+			this.InviteeName = val;
+		}
+
+		public string InvitationMessage
+		{
+			get
+			{
+				return this._InvitationMessage;
+			}
+			set
+			{
+				this._InvitationMessage = value;
+				this.HasInvitationMessage = (value != null);
+			}
+		}
+
+		public void SetInvitationMessage(string val)
+		{
+			this.InvitationMessage = val;
+		}
+
+		public ulong CreationTime
+		{
+			get
+			{
+				return this._CreationTime;
+			}
+			set
+			{
+				this._CreationTime = value;
+				this.HasCreationTime = true;
+			}
+		}
+
+		public void SetCreationTime(ulong val)
+		{
+			this.CreationTime = val;
+		}
+
+		public ulong ExpirationTime
+		{
+			get
+			{
+				return this._ExpirationTime;
+			}
+			set
+			{
+				this._ExpirationTime = value;
+				this.HasExpirationTime = true;
+			}
+		}
+
+		public void SetExpirationTime(ulong val)
+		{
+			this.ExpirationTime = val;
+		}
+
+		public ChannelInvitation ChannelInvitation
+		{
+			get
+			{
+				return this._ChannelInvitation;
+			}
+			set
+			{
+				this._ChannelInvitation = value;
+				this.HasChannelInvitation = (value != null);
+			}
+		}
+
+		public void SetChannelInvitation(ChannelInvitation val)
+		{
+			this.ChannelInvitation = val;
+		}
+
+		public FriendInvitation FriendInvite
+		{
+			get
+			{
+				return this._FriendInvite;
+			}
+			set
+			{
+				this._FriendInvite = value;
+				this.HasFriendInvite = (value != null);
+			}
+		}
+
+		public void SetFriendInvite(FriendInvitation val)
+		{
+			this.FriendInvite = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Id.GetHashCode();
+			num ^= this.InviterIdentity.GetHashCode();
+			num ^= this.InviteeIdentity.GetHashCode();
+			if (this.HasInviterName)
+			{
+				num ^= this.InviterName.GetHashCode();
+			}
+			if (this.HasInviteeName)
+			{
+				num ^= this.InviteeName.GetHashCode();
+			}
+			if (this.HasInvitationMessage)
+			{
+				num ^= this.InvitationMessage.GetHashCode();
+			}
+			if (this.HasCreationTime)
+			{
+				num ^= this.CreationTime.GetHashCode();
+			}
+			if (this.HasExpirationTime)
+			{
+				num ^= this.ExpirationTime.GetHashCode();
+			}
+			if (this.HasChannelInvitation)
+			{
+				num ^= this.ChannelInvitation.GetHashCode();
+			}
+			if (this.HasFriendInvite)
+			{
+				num ^= this.FriendInvite.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Invitation invitation = obj as Invitation;
+			return invitation != null && this.Id.Equals(invitation.Id) && this.InviterIdentity.Equals(invitation.InviterIdentity) && this.InviteeIdentity.Equals(invitation.InviteeIdentity) && this.HasInviterName == invitation.HasInviterName && (!this.HasInviterName || this.InviterName.Equals(invitation.InviterName)) && this.HasInviteeName == invitation.HasInviteeName && (!this.HasInviteeName || this.InviteeName.Equals(invitation.InviteeName)) && this.HasInvitationMessage == invitation.HasInvitationMessage && (!this.HasInvitationMessage || this.InvitationMessage.Equals(invitation.InvitationMessage)) && this.HasCreationTime == invitation.HasCreationTime && (!this.HasCreationTime || this.CreationTime.Equals(invitation.CreationTime)) && this.HasExpirationTime == invitation.HasExpirationTime && (!this.HasExpirationTime || this.ExpirationTime.Equals(invitation.ExpirationTime)) && this.HasChannelInvitation == invitation.HasChannelInvitation && (!this.HasChannelInvitation || this.ChannelInvitation.Equals(invitation.ChannelInvitation)) && this.HasFriendInvite == invitation.HasFriendInvite && (!this.HasFriendInvite || this.FriendInvite.Equals(invitation.FriendInvite));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Invitation ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Invitation>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Invitation.Deserialize(stream, this);
@@ -270,209 +473,6 @@ namespace bnet.protocol.invitation
 				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
 			}
 			return num + 3u;
-		}
-
-		public ulong Id { get; set; }
-
-		public void SetId(ulong val)
-		{
-			this.Id = val;
-		}
-
-		public Identity InviterIdentity { get; set; }
-
-		public void SetInviterIdentity(Identity val)
-		{
-			this.InviterIdentity = val;
-		}
-
-		public Identity InviteeIdentity { get; set; }
-
-		public void SetInviteeIdentity(Identity val)
-		{
-			this.InviteeIdentity = val;
-		}
-
-		public string InviterName
-		{
-			get
-			{
-				return this._InviterName;
-			}
-			set
-			{
-				this._InviterName = value;
-				this.HasInviterName = (value != null);
-			}
-		}
-
-		public void SetInviterName(string val)
-		{
-			this.InviterName = val;
-		}
-
-		public string InviteeName
-		{
-			get
-			{
-				return this._InviteeName;
-			}
-			set
-			{
-				this._InviteeName = value;
-				this.HasInviteeName = (value != null);
-			}
-		}
-
-		public void SetInviteeName(string val)
-		{
-			this.InviteeName = val;
-		}
-
-		public string InvitationMessage
-		{
-			get
-			{
-				return this._InvitationMessage;
-			}
-			set
-			{
-				this._InvitationMessage = value;
-				this.HasInvitationMessage = (value != null);
-			}
-		}
-
-		public void SetInvitationMessage(string val)
-		{
-			this.InvitationMessage = val;
-		}
-
-		public ulong CreationTime
-		{
-			get
-			{
-				return this._CreationTime;
-			}
-			set
-			{
-				this._CreationTime = value;
-				this.HasCreationTime = true;
-			}
-		}
-
-		public void SetCreationTime(ulong val)
-		{
-			this.CreationTime = val;
-		}
-
-		public ulong ExpirationTime
-		{
-			get
-			{
-				return this._ExpirationTime;
-			}
-			set
-			{
-				this._ExpirationTime = value;
-				this.HasExpirationTime = true;
-			}
-		}
-
-		public void SetExpirationTime(ulong val)
-		{
-			this.ExpirationTime = val;
-		}
-
-		public ChannelInvitation ChannelInvitation
-		{
-			get
-			{
-				return this._ChannelInvitation;
-			}
-			set
-			{
-				this._ChannelInvitation = value;
-				this.HasChannelInvitation = (value != null);
-			}
-		}
-
-		public void SetChannelInvitation(ChannelInvitation val)
-		{
-			this.ChannelInvitation = val;
-		}
-
-		public FriendInvitation FriendInvite
-		{
-			get
-			{
-				return this._FriendInvite;
-			}
-			set
-			{
-				this._FriendInvite = value;
-				this.HasFriendInvite = (value != null);
-			}
-		}
-
-		public void SetFriendInvite(FriendInvitation val)
-		{
-			this.FriendInvite = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Id.GetHashCode();
-			num ^= this.InviterIdentity.GetHashCode();
-			num ^= this.InviteeIdentity.GetHashCode();
-			if (this.HasInviterName)
-			{
-				num ^= this.InviterName.GetHashCode();
-			}
-			if (this.HasInviteeName)
-			{
-				num ^= this.InviteeName.GetHashCode();
-			}
-			if (this.HasInvitationMessage)
-			{
-				num ^= this.InvitationMessage.GetHashCode();
-			}
-			if (this.HasCreationTime)
-			{
-				num ^= this.CreationTime.GetHashCode();
-			}
-			if (this.HasExpirationTime)
-			{
-				num ^= this.ExpirationTime.GetHashCode();
-			}
-			if (this.HasChannelInvitation)
-			{
-				num ^= this.ChannelInvitation.GetHashCode();
-			}
-			if (this.HasFriendInvite)
-			{
-				num ^= this.FriendInvite.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Invitation invitation = obj as Invitation;
-			return invitation != null && this.Id.Equals(invitation.Id) && this.InviterIdentity.Equals(invitation.InviterIdentity) && this.InviteeIdentity.Equals(invitation.InviteeIdentity) && this.HasInviterName == invitation.HasInviterName && (!this.HasInviterName || this.InviterName.Equals(invitation.InviterName)) && this.HasInviteeName == invitation.HasInviteeName && (!this.HasInviteeName || this.InviteeName.Equals(invitation.InviteeName)) && this.HasInvitationMessage == invitation.HasInvitationMessage && (!this.HasInvitationMessage || this.InvitationMessage.Equals(invitation.InvitationMessage)) && this.HasCreationTime == invitation.HasCreationTime && (!this.HasCreationTime || this.CreationTime.Equals(invitation.CreationTime)) && this.HasExpirationTime == invitation.HasExpirationTime && (!this.HasExpirationTime || this.ExpirationTime.Equals(invitation.ExpirationTime)) && this.HasChannelInvitation == invitation.HasChannelInvitation && (!this.HasChannelInvitation || this.ChannelInvitation.Equals(invitation.ChannelInvitation)) && this.HasFriendInvite == invitation.HasFriendInvite && (!this.HasFriendInvite || this.FriendInvite.Equals(invitation.FriendInvite));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Invitation ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Invitation>(bs, 0, -1);
 		}
 
 		public bool HasInviterName;

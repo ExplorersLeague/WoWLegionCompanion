@@ -6,6 +6,93 @@ namespace bnet.protocol.account
 {
 	public class GetWalletListResponse : IProtoBuf
 	{
+		public List<Wallet> Wallets
+		{
+			get
+			{
+				return this._Wallets;
+			}
+			set
+			{
+				this._Wallets = value;
+			}
+		}
+
+		public List<Wallet> WalletsList
+		{
+			get
+			{
+				return this._Wallets;
+			}
+		}
+
+		public int WalletsCount
+		{
+			get
+			{
+				return this._Wallets.Count;
+			}
+		}
+
+		public void AddWallets(Wallet val)
+		{
+			this._Wallets.Add(val);
+		}
+
+		public void ClearWallets()
+		{
+			this._Wallets.Clear();
+		}
+
+		public void SetWallets(List<Wallet> val)
+		{
+			this.Wallets = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (Wallet wallet in this.Wallets)
+			{
+				num ^= wallet.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetWalletListResponse getWalletListResponse = obj as GetWalletListResponse;
+			if (getWalletListResponse == null)
+			{
+				return false;
+			}
+			if (this.Wallets.Count != getWalletListResponse.Wallets.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Wallets.Count; i++)
+			{
+				if (!this.Wallets[i].Equals(getWalletListResponse.Wallets[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetWalletListResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetWalletListResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetWalletListResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.account
 				}
 			}
 			return num;
-		}
-
-		public List<Wallet> Wallets
-		{
-			get
-			{
-				return this._Wallets;
-			}
-			set
-			{
-				this._Wallets = value;
-			}
-		}
-
-		public List<Wallet> WalletsList
-		{
-			get
-			{
-				return this._Wallets;
-			}
-		}
-
-		public int WalletsCount
-		{
-			get
-			{
-				return this._Wallets.Count;
-			}
-		}
-
-		public void AddWallets(Wallet val)
-		{
-			this._Wallets.Add(val);
-		}
-
-		public void ClearWallets()
-		{
-			this._Wallets.Clear();
-		}
-
-		public void SetWallets(List<Wallet> val)
-		{
-			this.Wallets = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (Wallet wallet in this.Wallets)
-			{
-				num ^= wallet.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetWalletListResponse getWalletListResponse = obj as GetWalletListResponse;
-			if (getWalletListResponse == null)
-			{
-				return false;
-			}
-			if (this.Wallets.Count != getWalletListResponse.Wallets.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Wallets.Count; i++)
-			{
-				if (!this.Wallets[i].Equals(getWalletListResponse.Wallets[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetWalletListResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetWalletListResponse>(bs, 0, -1);
 		}
 
 		private List<Wallet> _Wallets = new List<Wallet>();

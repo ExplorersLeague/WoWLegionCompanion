@@ -6,6 +6,46 @@ namespace bnet.protocol.attribute
 {
 	public class Attribute : IProtoBuf
 	{
+		public string Name { get; set; }
+
+		public void SetName(string val)
+		{
+			this.Name = val;
+		}
+
+		public Variant Value { get; set; }
+
+		public void SetValue(Variant val)
+		{
+			this.Value = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Name.GetHashCode();
+			return num ^ this.Value.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			Attribute attribute = obj as Attribute;
+			return attribute != null && this.Name.Equals(attribute.Name) && this.Value.Equals(attribute.Value);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Attribute ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Attribute>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Attribute.Deserialize(stream, this);
@@ -106,46 +146,6 @@ namespace bnet.protocol.attribute
 			uint serializedSize = this.Value.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 2u;
-		}
-
-		public string Name { get; set; }
-
-		public void SetName(string val)
-		{
-			this.Name = val;
-		}
-
-		public Variant Value { get; set; }
-
-		public void SetValue(Variant val)
-		{
-			this.Value = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Name.GetHashCode();
-			return num ^ this.Value.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			Attribute attribute = obj as Attribute;
-			return attribute != null && this.Name.Equals(attribute.Name) && this.Value.Equals(attribute.Value);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Attribute ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Attribute>(bs, 0, -1);
 		}
 	}
 }

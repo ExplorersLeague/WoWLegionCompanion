@@ -6,6 +6,105 @@ namespace bnet.protocol.attribute
 {
 	public class AttributeFilter : IProtoBuf
 	{
+		public AttributeFilter.Types.Operation Op { get; set; }
+
+		public void SetOp(AttributeFilter.Types.Operation val)
+		{
+			this.Op = val;
+		}
+
+		public List<Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Op.GetHashCode();
+			foreach (Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			AttributeFilter attributeFilter = obj as AttributeFilter;
+			if (attributeFilter == null)
+			{
+				return false;
+			}
+			if (!this.Op.Equals(attributeFilter.Op))
+			{
+				return false;
+			}
+			if (this.Attribute.Count != attributeFilter.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(attributeFilter.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static AttributeFilter ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<AttributeFilter>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			AttributeFilter.Deserialize(stream, this);
@@ -111,105 +210,6 @@ namespace bnet.protocol.attribute
 			}
 			num += 1u;
 			return num;
-		}
-
-		public AttributeFilter.Types.Operation Op { get; set; }
-
-		public void SetOp(AttributeFilter.Types.Operation val)
-		{
-			this.Op = val;
-		}
-
-		public List<Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Op.GetHashCode();
-			foreach (Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			AttributeFilter attributeFilter = obj as AttributeFilter;
-			if (attributeFilter == null)
-			{
-				return false;
-			}
-			if (!this.Op.Equals(attributeFilter.Op))
-			{
-				return false;
-			}
-			if (this.Attribute.Count != attributeFilter.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(attributeFilter.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static AttributeFilter ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<AttributeFilter>(bs, 0, -1);
 		}
 
 		private List<Attribute> _Attribute = new List<Attribute>();

@@ -38,6 +38,14 @@ namespace bgs
 			}
 		}
 
+		public string BattleTag
+		{
+			get
+			{
+				return this.m_battleTag;
+			}
+		}
+
 		public byte[] SessionKey
 		{
 			get
@@ -125,6 +133,10 @@ namespace bgs
 				this.m_gameAccounts.Add(entityId);
 				this.m_battleNet.Presence.PresenceSubscribe(entityId);
 			}
+			if (logonResult.HasBattleTag)
+			{
+				this.m_battleTag = logonResult.BattleTag;
+			}
 			if (this.m_gameAccounts.Count > 0)
 			{
 				this.m_gameAccount = logonResult.GameAccountList[0];
@@ -192,6 +204,8 @@ namespace bgs
 		private bnet.protocol.EntityId m_accountEntity;
 
 		private bnet.protocol.EntityId m_gameAccount;
+
+		private string m_battleTag;
 
 		private byte[] m_sessionKey;
 

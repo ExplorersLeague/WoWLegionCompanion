@@ -5,6 +5,61 @@ namespace bnet.protocol.game_utilities
 {
 	public class GameAccountOfflineNotification : IProtoBuf
 	{
+		public EntityId GameAccountId { get; set; }
+
+		public void SetGameAccountId(EntityId val)
+		{
+			this.GameAccountId = val;
+		}
+
+		public ProcessId Host
+		{
+			get
+			{
+				return this._Host;
+			}
+			set
+			{
+				this._Host = value;
+				this.HasHost = (value != null);
+			}
+		}
+
+		public void SetHost(ProcessId val)
+		{
+			this.Host = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.GameAccountId.GetHashCode();
+			if (this.HasHost)
+			{
+				num ^= this.Host.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountOfflineNotification gameAccountOfflineNotification = obj as GameAccountOfflineNotification;
+			return gameAccountOfflineNotification != null && this.GameAccountId.Equals(gameAccountOfflineNotification.GameAccountId) && this.HasHost == gameAccountOfflineNotification.HasHost && (!this.HasHost || this.Host.Equals(gameAccountOfflineNotification.Host));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountOfflineNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountOfflineNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountOfflineNotification.Deserialize(stream, this);
@@ -113,61 +168,6 @@ namespace bnet.protocol.game_utilities
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num + 1u;
-		}
-
-		public EntityId GameAccountId { get; set; }
-
-		public void SetGameAccountId(EntityId val)
-		{
-			this.GameAccountId = val;
-		}
-
-		public ProcessId Host
-		{
-			get
-			{
-				return this._Host;
-			}
-			set
-			{
-				this._Host = value;
-				this.HasHost = (value != null);
-			}
-		}
-
-		public void SetHost(ProcessId val)
-		{
-			this.Host = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.GameAccountId.GetHashCode();
-			if (this.HasHost)
-			{
-				num ^= this.Host.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountOfflineNotification gameAccountOfflineNotification = obj as GameAccountOfflineNotification;
-			return gameAccountOfflineNotification != null && this.GameAccountId.Equals(gameAccountOfflineNotification.GameAccountId) && this.HasHost == gameAccountOfflineNotification.HasHost && (!this.HasHost || this.Host.Equals(gameAccountOfflineNotification.Host));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountOfflineNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountOfflineNotification>(bs, 0, -1);
 		}
 
 		public bool HasHost;

@@ -5,6 +5,53 @@ namespace bnet.protocol.account
 {
 	public class GetGameSessionInfoResponse : IProtoBuf
 	{
+		public GameSessionInfo SessionInfo
+		{
+			get
+			{
+				return this._SessionInfo;
+			}
+			set
+			{
+				this._SessionInfo = value;
+				this.HasSessionInfo = (value != null);
+			}
+		}
+
+		public void SetSessionInfo(GameSessionInfo val)
+		{
+			this.SessionInfo = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasSessionInfo)
+			{
+				num ^= this.SessionInfo.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetGameSessionInfoResponse getGameSessionInfoResponse = obj as GetGameSessionInfoResponse;
+			return getGameSessionInfoResponse != null && this.HasSessionInfo == getGameSessionInfoResponse.HasSessionInfo && (!this.HasSessionInfo || this.SessionInfo.Equals(getGameSessionInfoResponse.SessionInfo));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetGameSessionInfoResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetGameSessionInfoResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetGameSessionInfoResponse.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.account
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public GameSessionInfo SessionInfo
-		{
-			get
-			{
-				return this._SessionInfo;
-			}
-			set
-			{
-				this._SessionInfo = value;
-				this.HasSessionInfo = (value != null);
-			}
-		}
-
-		public void SetSessionInfo(GameSessionInfo val)
-		{
-			this.SessionInfo = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasSessionInfo)
-			{
-				num ^= this.SessionInfo.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetGameSessionInfoResponse getGameSessionInfoResponse = obj as GetGameSessionInfoResponse;
-			return getGameSessionInfoResponse != null && this.HasSessionInfo == getGameSessionInfoResponse.HasSessionInfo && (!this.HasSessionInfo || this.SessionInfo.Equals(getGameSessionInfoResponse.SessionInfo));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetGameSessionInfoResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetGameSessionInfoResponse>(bs, 0, -1);
 		}
 
 		public bool HasSessionInfo;

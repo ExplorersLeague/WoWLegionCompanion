@@ -5,6 +5,38 @@ namespace bnet.protocol.game_master
 {
 	public class SubscribeRequest : IProtoBuf
 	{
+		public ulong ObjectId { get; set; }
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.ObjectId.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			SubscribeRequest subscribeRequest = obj as SubscribeRequest;
+			return subscribeRequest != null && this.ObjectId.Equals(subscribeRequest.ObjectId);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static SubscribeRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<SubscribeRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			SubscribeRequest.Deserialize(stream, this);
@@ -80,38 +112,6 @@ namespace bnet.protocol.game_master
 			uint num = 0u;
 			num += ProtocolParser.SizeOfUInt64(this.ObjectId);
 			return num + 1u;
-		}
-
-		public ulong ObjectId { get; set; }
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.ObjectId.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			SubscribeRequest subscribeRequest = obj as SubscribeRequest;
-			return subscribeRequest != null && this.ObjectId.Equals(subscribeRequest.ObjectId);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static SubscribeRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<SubscribeRequest>(bs, 0, -1);
 		}
 	}
 }

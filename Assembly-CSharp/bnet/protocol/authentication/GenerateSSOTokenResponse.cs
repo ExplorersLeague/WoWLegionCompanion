@@ -5,6 +5,75 @@ namespace bnet.protocol.authentication
 {
 	public class GenerateSSOTokenResponse : IProtoBuf
 	{
+		public byte[] SsoId
+		{
+			get
+			{
+				return this._SsoId;
+			}
+			set
+			{
+				this._SsoId = value;
+				this.HasSsoId = (value != null);
+			}
+		}
+
+		public void SetSsoId(byte[] val)
+		{
+			this.SsoId = val;
+		}
+
+		public byte[] SsoSecret
+		{
+			get
+			{
+				return this._SsoSecret;
+			}
+			set
+			{
+				this._SsoSecret = value;
+				this.HasSsoSecret = (value != null);
+			}
+		}
+
+		public void SetSsoSecret(byte[] val)
+		{
+			this.SsoSecret = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasSsoId)
+			{
+				num ^= this.SsoId.GetHashCode();
+			}
+			if (this.HasSsoSecret)
+			{
+				num ^= this.SsoSecret.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GenerateSSOTokenResponse generateSSOTokenResponse = obj as GenerateSSOTokenResponse;
+			return generateSSOTokenResponse != null && this.HasSsoId == generateSSOTokenResponse.HasSsoId && (!this.HasSsoId || this.SsoId.Equals(generateSSOTokenResponse.SsoId)) && this.HasSsoSecret == generateSSOTokenResponse.HasSsoSecret && (!this.HasSsoSecret || this.SsoSecret.Equals(generateSSOTokenResponse.SsoSecret));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GenerateSSOTokenResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GenerateSSOTokenResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GenerateSSOTokenResponse.Deserialize(stream, this);
@@ -104,75 +173,6 @@ namespace bnet.protocol.authentication
 				num += ProtocolParser.SizeOfUInt32(this.SsoSecret.Length) + (uint)this.SsoSecret.Length;
 			}
 			return num;
-		}
-
-		public byte[] SsoId
-		{
-			get
-			{
-				return this._SsoId;
-			}
-			set
-			{
-				this._SsoId = value;
-				this.HasSsoId = (value != null);
-			}
-		}
-
-		public void SetSsoId(byte[] val)
-		{
-			this.SsoId = val;
-		}
-
-		public byte[] SsoSecret
-		{
-			get
-			{
-				return this._SsoSecret;
-			}
-			set
-			{
-				this._SsoSecret = value;
-				this.HasSsoSecret = (value != null);
-			}
-		}
-
-		public void SetSsoSecret(byte[] val)
-		{
-			this.SsoSecret = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasSsoId)
-			{
-				num ^= this.SsoId.GetHashCode();
-			}
-			if (this.HasSsoSecret)
-			{
-				num ^= this.SsoSecret.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GenerateSSOTokenResponse generateSSOTokenResponse = obj as GenerateSSOTokenResponse;
-			return generateSSOTokenResponse != null && this.HasSsoId == generateSSOTokenResponse.HasSsoId && (!this.HasSsoId || this.SsoId.Equals(generateSSOTokenResponse.SsoId)) && this.HasSsoSecret == generateSSOTokenResponse.HasSsoSecret && (!this.HasSsoSecret || this.SsoSecret.Equals(generateSSOTokenResponse.SsoSecret));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GenerateSSOTokenResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GenerateSSOTokenResponse>(bs, 0, -1);
 		}
 
 		public bool HasSsoId;

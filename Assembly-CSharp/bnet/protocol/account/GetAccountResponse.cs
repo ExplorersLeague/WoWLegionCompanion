@@ -7,240 +7,6 @@ namespace bnet.protocol.account
 {
 	public class GetAccountResponse : IProtoBuf
 	{
-		public void Deserialize(Stream stream)
-		{
-			GetAccountResponse.Deserialize(stream, this);
-		}
-
-		public static GetAccountResponse Deserialize(Stream stream, GetAccountResponse instance)
-		{
-			return GetAccountResponse.Deserialize(stream, instance, -1L);
-		}
-
-		public static GetAccountResponse DeserializeLengthDelimited(Stream stream)
-		{
-			GetAccountResponse getAccountResponse = new GetAccountResponse();
-			GetAccountResponse.DeserializeLengthDelimited(stream, getAccountResponse);
-			return getAccountResponse;
-		}
-
-		public static GetAccountResponse DeserializeLengthDelimited(Stream stream, GetAccountResponse instance)
-		{
-			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-			num += stream.Position;
-			return GetAccountResponse.Deserialize(stream, instance, num);
-		}
-
-		public static GetAccountResponse Deserialize(Stream stream, GetAccountResponse instance, long limit)
-		{
-			if (instance.Email == null)
-			{
-				instance.Email = new List<string>();
-			}
-			if (instance.Links == null)
-			{
-				instance.Links = new List<GameAccountLink>();
-			}
-			while (limit < 0L || stream.Position < limit)
-			{
-				int num = stream.ReadByte();
-				if (num == -1)
-				{
-					if (limit >= 0L)
-					{
-						throw new EndOfStreamException();
-					}
-					return instance;
-				}
-				else if (num != 90)
-				{
-					if (num != 98)
-					{
-						if (num != 106)
-						{
-							if (num != 114)
-							{
-								if (num != 122)
-								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field != 16u)
-									{
-										if (field != 17u)
-										{
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
-										}
-										else if (key.WireType == Wire.LengthDelimited)
-										{
-											if (instance.ParentalControlInfo == null)
-											{
-												instance.ParentalControlInfo = ParentalControlInfo.DeserializeLengthDelimited(stream);
-											}
-											else
-											{
-												ParentalControlInfo.DeserializeLengthDelimited(stream, instance.ParentalControlInfo);
-											}
-										}
-									}
-									else if (key.WireType == Wire.LengthDelimited)
-									{
-										instance.Links.Add(GameAccountLink.DeserializeLengthDelimited(stream));
-									}
-								}
-								else
-								{
-									instance.FullName = ProtocolParser.ReadString(stream);
-								}
-							}
-							else
-							{
-								instance.BattleTag = ProtocolParser.ReadString(stream);
-							}
-						}
-						else
-						{
-							instance.Email.Add(ProtocolParser.ReadString(stream));
-						}
-					}
-					else if (instance.Id == null)
-					{
-						instance.Id = AccountId.DeserializeLengthDelimited(stream);
-					}
-					else
-					{
-						AccountId.DeserializeLengthDelimited(stream, instance.Id);
-					}
-				}
-				else if (instance.Blob == null)
-				{
-					instance.Blob = AccountBlob.DeserializeLengthDelimited(stream);
-				}
-				else
-				{
-					AccountBlob.DeserializeLengthDelimited(stream, instance.Blob);
-				}
-			}
-			if (stream.Position == limit)
-			{
-				return instance;
-			}
-			throw new ProtocolBufferException("Read past max limit");
-		}
-
-		public void Serialize(Stream stream)
-		{
-			GetAccountResponse.Serialize(stream, this);
-		}
-
-		public static void Serialize(Stream stream, GetAccountResponse instance)
-		{
-			if (instance.HasBlob)
-			{
-				stream.WriteByte(90);
-				ProtocolParser.WriteUInt32(stream, instance.Blob.GetSerializedSize());
-				AccountBlob.Serialize(stream, instance.Blob);
-			}
-			if (instance.HasId)
-			{
-				stream.WriteByte(98);
-				ProtocolParser.WriteUInt32(stream, instance.Id.GetSerializedSize());
-				AccountId.Serialize(stream, instance.Id);
-			}
-			if (instance.Email.Count > 0)
-			{
-				foreach (string s in instance.Email)
-				{
-					stream.WriteByte(106);
-					ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(s));
-				}
-			}
-			if (instance.HasBattleTag)
-			{
-				stream.WriteByte(114);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.BattleTag));
-			}
-			if (instance.HasFullName)
-			{
-				stream.WriteByte(122);
-				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.FullName));
-			}
-			if (instance.Links.Count > 0)
-			{
-				foreach (GameAccountLink gameAccountLink in instance.Links)
-				{
-					stream.WriteByte(130);
-					stream.WriteByte(1);
-					ProtocolParser.WriteUInt32(stream, gameAccountLink.GetSerializedSize());
-					GameAccountLink.Serialize(stream, gameAccountLink);
-				}
-			}
-			if (instance.HasParentalControlInfo)
-			{
-				stream.WriteByte(138);
-				stream.WriteByte(1);
-				ProtocolParser.WriteUInt32(stream, instance.ParentalControlInfo.GetSerializedSize());
-				ParentalControlInfo.Serialize(stream, instance.ParentalControlInfo);
-			}
-		}
-
-		public uint GetSerializedSize()
-		{
-			uint num = 0u;
-			if (this.HasBlob)
-			{
-				num += 1u;
-				uint serializedSize = this.Blob.GetSerializedSize();
-				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
-			}
-			if (this.HasId)
-			{
-				num += 1u;
-				uint serializedSize2 = this.Id.GetSerializedSize();
-				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
-			}
-			if (this.Email.Count > 0)
-			{
-				foreach (string s in this.Email)
-				{
-					num += 1u;
-					uint byteCount = (uint)Encoding.UTF8.GetByteCount(s);
-					num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
-				}
-			}
-			if (this.HasBattleTag)
-			{
-				num += 1u;
-				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.BattleTag);
-				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
-			}
-			if (this.HasFullName)
-			{
-				num += 1u;
-				uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.FullName);
-				num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
-			}
-			if (this.Links.Count > 0)
-			{
-				foreach (GameAccountLink gameAccountLink in this.Links)
-				{
-					num += 2u;
-					uint serializedSize3 = gameAccountLink.GetSerializedSize();
-					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
-				}
-			}
-			if (this.HasParentalControlInfo)
-			{
-				num += 2u;
-				uint serializedSize4 = this.ParentalControlInfo.GetSerializedSize();
-				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
-			}
-			return num;
-		}
-
 		public AccountBlob Blob
 		{
 			get
@@ -510,6 +276,240 @@ namespace bnet.protocol.account
 		public static GetAccountResponse ParseFrom(byte[] bs)
 		{
 			return ProtobufUtil.ParseFrom<GetAccountResponse>(bs, 0, -1);
+		}
+
+		public void Deserialize(Stream stream)
+		{
+			GetAccountResponse.Deserialize(stream, this);
+		}
+
+		public static GetAccountResponse Deserialize(Stream stream, GetAccountResponse instance)
+		{
+			return GetAccountResponse.Deserialize(stream, instance, -1L);
+		}
+
+		public static GetAccountResponse DeserializeLengthDelimited(Stream stream)
+		{
+			GetAccountResponse getAccountResponse = new GetAccountResponse();
+			GetAccountResponse.DeserializeLengthDelimited(stream, getAccountResponse);
+			return getAccountResponse;
+		}
+
+		public static GetAccountResponse DeserializeLengthDelimited(Stream stream, GetAccountResponse instance)
+		{
+			long num = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+			num += stream.Position;
+			return GetAccountResponse.Deserialize(stream, instance, num);
+		}
+
+		public static GetAccountResponse Deserialize(Stream stream, GetAccountResponse instance, long limit)
+		{
+			if (instance.Email == null)
+			{
+				instance.Email = new List<string>();
+			}
+			if (instance.Links == null)
+			{
+				instance.Links = new List<GameAccountLink>();
+			}
+			while (limit < 0L || stream.Position < limit)
+			{
+				int num = stream.ReadByte();
+				if (num == -1)
+				{
+					if (limit >= 0L)
+					{
+						throw new EndOfStreamException();
+					}
+					return instance;
+				}
+				else if (num != 90)
+				{
+					if (num != 98)
+					{
+						if (num != 106)
+						{
+							if (num != 114)
+							{
+								if (num != 122)
+								{
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field != 16u)
+									{
+										if (field != 17u)
+										{
+											if (field == 0u)
+											{
+												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+											}
+											ProtocolParser.SkipKey(stream, key);
+										}
+										else if (key.WireType == Wire.LengthDelimited)
+										{
+											if (instance.ParentalControlInfo == null)
+											{
+												instance.ParentalControlInfo = ParentalControlInfo.DeserializeLengthDelimited(stream);
+											}
+											else
+											{
+												ParentalControlInfo.DeserializeLengthDelimited(stream, instance.ParentalControlInfo);
+											}
+										}
+									}
+									else if (key.WireType == Wire.LengthDelimited)
+									{
+										instance.Links.Add(GameAccountLink.DeserializeLengthDelimited(stream));
+									}
+								}
+								else
+								{
+									instance.FullName = ProtocolParser.ReadString(stream);
+								}
+							}
+							else
+							{
+								instance.BattleTag = ProtocolParser.ReadString(stream);
+							}
+						}
+						else
+						{
+							instance.Email.Add(ProtocolParser.ReadString(stream));
+						}
+					}
+					else if (instance.Id == null)
+					{
+						instance.Id = AccountId.DeserializeLengthDelimited(stream);
+					}
+					else
+					{
+						AccountId.DeserializeLengthDelimited(stream, instance.Id);
+					}
+				}
+				else if (instance.Blob == null)
+				{
+					instance.Blob = AccountBlob.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					AccountBlob.DeserializeLengthDelimited(stream, instance.Blob);
+				}
+			}
+			if (stream.Position == limit)
+			{
+				return instance;
+			}
+			throw new ProtocolBufferException("Read past max limit");
+		}
+
+		public void Serialize(Stream stream)
+		{
+			GetAccountResponse.Serialize(stream, this);
+		}
+
+		public static void Serialize(Stream stream, GetAccountResponse instance)
+		{
+			if (instance.HasBlob)
+			{
+				stream.WriteByte(90);
+				ProtocolParser.WriteUInt32(stream, instance.Blob.GetSerializedSize());
+				AccountBlob.Serialize(stream, instance.Blob);
+			}
+			if (instance.HasId)
+			{
+				stream.WriteByte(98);
+				ProtocolParser.WriteUInt32(stream, instance.Id.GetSerializedSize());
+				AccountId.Serialize(stream, instance.Id);
+			}
+			if (instance.Email.Count > 0)
+			{
+				foreach (string s in instance.Email)
+				{
+					stream.WriteByte(106);
+					ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(s));
+				}
+			}
+			if (instance.HasBattleTag)
+			{
+				stream.WriteByte(114);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.BattleTag));
+			}
+			if (instance.HasFullName)
+			{
+				stream.WriteByte(122);
+				ProtocolParser.WriteBytes(stream, Encoding.UTF8.GetBytes(instance.FullName));
+			}
+			if (instance.Links.Count > 0)
+			{
+				foreach (GameAccountLink gameAccountLink in instance.Links)
+				{
+					stream.WriteByte(130);
+					stream.WriteByte(1);
+					ProtocolParser.WriteUInt32(stream, gameAccountLink.GetSerializedSize());
+					GameAccountLink.Serialize(stream, gameAccountLink);
+				}
+			}
+			if (instance.HasParentalControlInfo)
+			{
+				stream.WriteByte(138);
+				stream.WriteByte(1);
+				ProtocolParser.WriteUInt32(stream, instance.ParentalControlInfo.GetSerializedSize());
+				ParentalControlInfo.Serialize(stream, instance.ParentalControlInfo);
+			}
+		}
+
+		public uint GetSerializedSize()
+		{
+			uint num = 0u;
+			if (this.HasBlob)
+			{
+				num += 1u;
+				uint serializedSize = this.Blob.GetSerializedSize();
+				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
+			}
+			if (this.HasId)
+			{
+				num += 1u;
+				uint serializedSize2 = this.Id.GetSerializedSize();
+				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
+			}
+			if (this.Email.Count > 0)
+			{
+				foreach (string s in this.Email)
+				{
+					num += 1u;
+					uint byteCount = (uint)Encoding.UTF8.GetByteCount(s);
+					num += ProtocolParser.SizeOfUInt32(byteCount) + byteCount;
+				}
+			}
+			if (this.HasBattleTag)
+			{
+				num += 1u;
+				uint byteCount2 = (uint)Encoding.UTF8.GetByteCount(this.BattleTag);
+				num += ProtocolParser.SizeOfUInt32(byteCount2) + byteCount2;
+			}
+			if (this.HasFullName)
+			{
+				num += 1u;
+				uint byteCount3 = (uint)Encoding.UTF8.GetByteCount(this.FullName);
+				num += ProtocolParser.SizeOfUInt32(byteCount3) + byteCount3;
+			}
+			if (this.Links.Count > 0)
+			{
+				foreach (GameAccountLink gameAccountLink in this.Links)
+				{
+					num += 2u;
+					uint serializedSize3 = gameAccountLink.GetSerializedSize();
+					num += serializedSize3 + ProtocolParser.SizeOfUInt32(serializedSize3);
+				}
+			}
+			if (this.HasParentalControlInfo)
+			{
+				num += 2u;
+				uint serializedSize4 = this.ParentalControlInfo.GetSerializedSize();
+				num += serializedSize4 + ProtocolParser.SizeOfUInt32(serializedSize4);
+			}
+			return num;
 		}
 
 		public bool HasBlob;

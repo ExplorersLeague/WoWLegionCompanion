@@ -4,7 +4,7 @@ namespace Assets.SimpleAndroidNotifications
 {
 	public enum NotificationExecuteMode
 	{
-		Schedule,
+		Inexact,
 		Exact,
 		ExactAndAllowWhileIdle
 	}

@@ -5,6 +5,185 @@ namespace bnet.protocol.channel
 {
 	public class CreateChannelRequest : IProtoBuf
 	{
+		public Identity AgentIdentity
+		{
+			get
+			{
+				return this._AgentIdentity;
+			}
+			set
+			{
+				this._AgentIdentity = value;
+				this.HasAgentIdentity = (value != null);
+			}
+		}
+
+		public void SetAgentIdentity(Identity val)
+		{
+			this.AgentIdentity = val;
+		}
+
+		public MemberState MemberState
+		{
+			get
+			{
+				return this._MemberState;
+			}
+			set
+			{
+				this._MemberState = value;
+				this.HasMemberState = (value != null);
+			}
+		}
+
+		public void SetMemberState(MemberState val)
+		{
+			this.MemberState = val;
+		}
+
+		public ChannelState ChannelState
+		{
+			get
+			{
+				return this._ChannelState;
+			}
+			set
+			{
+				this._ChannelState = value;
+				this.HasChannelState = (value != null);
+			}
+		}
+
+		public void SetChannelState(ChannelState val)
+		{
+			this.ChannelState = val;
+		}
+
+		public EntityId ChannelId
+		{
+			get
+			{
+				return this._ChannelId;
+			}
+			set
+			{
+				this._ChannelId = value;
+				this.HasChannelId = (value != null);
+			}
+		}
+
+		public void SetChannelId(EntityId val)
+		{
+			this.ChannelId = val;
+		}
+
+		public ulong ObjectId
+		{
+			get
+			{
+				return this._ObjectId;
+			}
+			set
+			{
+				this._ObjectId = value;
+				this.HasObjectId = true;
+			}
+		}
+
+		public void SetObjectId(ulong val)
+		{
+			this.ObjectId = val;
+		}
+
+		public EntityId LocalAgent
+		{
+			get
+			{
+				return this._LocalAgent;
+			}
+			set
+			{
+				this._LocalAgent = value;
+				this.HasLocalAgent = (value != null);
+			}
+		}
+
+		public void SetLocalAgent(EntityId val)
+		{
+			this.LocalAgent = val;
+		}
+
+		public MemberState LocalMemberState
+		{
+			get
+			{
+				return this._LocalMemberState;
+			}
+			set
+			{
+				this._LocalMemberState = value;
+				this.HasLocalMemberState = (value != null);
+			}
+		}
+
+		public void SetLocalMemberState(MemberState val)
+		{
+			this.LocalMemberState = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasAgentIdentity)
+			{
+				num ^= this.AgentIdentity.GetHashCode();
+			}
+			if (this.HasMemberState)
+			{
+				num ^= this.MemberState.GetHashCode();
+			}
+			if (this.HasChannelState)
+			{
+				num ^= this.ChannelState.GetHashCode();
+			}
+			if (this.HasChannelId)
+			{
+				num ^= this.ChannelId.GetHashCode();
+			}
+			if (this.HasObjectId)
+			{
+				num ^= this.ObjectId.GetHashCode();
+			}
+			if (this.HasLocalAgent)
+			{
+				num ^= this.LocalAgent.GetHashCode();
+			}
+			if (this.HasLocalMemberState)
+			{
+				num ^= this.LocalMemberState.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			CreateChannelRequest createChannelRequest = obj as CreateChannelRequest;
+			return createChannelRequest != null && this.HasAgentIdentity == createChannelRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(createChannelRequest.AgentIdentity)) && this.HasMemberState == createChannelRequest.HasMemberState && (!this.HasMemberState || this.MemberState.Equals(createChannelRequest.MemberState)) && this.HasChannelState == createChannelRequest.HasChannelState && (!this.HasChannelState || this.ChannelState.Equals(createChannelRequest.ChannelState)) && this.HasChannelId == createChannelRequest.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(createChannelRequest.ChannelId)) && this.HasObjectId == createChannelRequest.HasObjectId && (!this.HasObjectId || this.ObjectId.Equals(createChannelRequest.ObjectId)) && this.HasLocalAgent == createChannelRequest.HasLocalAgent && (!this.HasLocalAgent || this.LocalAgent.Equals(createChannelRequest.LocalAgent)) && this.HasLocalMemberState == createChannelRequest.HasLocalMemberState && (!this.HasLocalMemberState || this.LocalMemberState.Equals(createChannelRequest.LocalMemberState));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static CreateChannelRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<CreateChannelRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			CreateChannelRequest.Deserialize(stream, this);
@@ -225,185 +404,6 @@ namespace bnet.protocol.channel
 				num += serializedSize6 + ProtocolParser.SizeOfUInt32(serializedSize6);
 			}
 			return num;
-		}
-
-		public Identity AgentIdentity
-		{
-			get
-			{
-				return this._AgentIdentity;
-			}
-			set
-			{
-				this._AgentIdentity = value;
-				this.HasAgentIdentity = (value != null);
-			}
-		}
-
-		public void SetAgentIdentity(Identity val)
-		{
-			this.AgentIdentity = val;
-		}
-
-		public MemberState MemberState
-		{
-			get
-			{
-				return this._MemberState;
-			}
-			set
-			{
-				this._MemberState = value;
-				this.HasMemberState = (value != null);
-			}
-		}
-
-		public void SetMemberState(MemberState val)
-		{
-			this.MemberState = val;
-		}
-
-		public ChannelState ChannelState
-		{
-			get
-			{
-				return this._ChannelState;
-			}
-			set
-			{
-				this._ChannelState = value;
-				this.HasChannelState = (value != null);
-			}
-		}
-
-		public void SetChannelState(ChannelState val)
-		{
-			this.ChannelState = val;
-		}
-
-		public EntityId ChannelId
-		{
-			get
-			{
-				return this._ChannelId;
-			}
-			set
-			{
-				this._ChannelId = value;
-				this.HasChannelId = (value != null);
-			}
-		}
-
-		public void SetChannelId(EntityId val)
-		{
-			this.ChannelId = val;
-		}
-
-		public ulong ObjectId
-		{
-			get
-			{
-				return this._ObjectId;
-			}
-			set
-			{
-				this._ObjectId = value;
-				this.HasObjectId = true;
-			}
-		}
-
-		public void SetObjectId(ulong val)
-		{
-			this.ObjectId = val;
-		}
-
-		public EntityId LocalAgent
-		{
-			get
-			{
-				return this._LocalAgent;
-			}
-			set
-			{
-				this._LocalAgent = value;
-				this.HasLocalAgent = (value != null);
-			}
-		}
-
-		public void SetLocalAgent(EntityId val)
-		{
-			this.LocalAgent = val;
-		}
-
-		public MemberState LocalMemberState
-		{
-			get
-			{
-				return this._LocalMemberState;
-			}
-			set
-			{
-				this._LocalMemberState = value;
-				this.HasLocalMemberState = (value != null);
-			}
-		}
-
-		public void SetLocalMemberState(MemberState val)
-		{
-			this.LocalMemberState = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasAgentIdentity)
-			{
-				num ^= this.AgentIdentity.GetHashCode();
-			}
-			if (this.HasMemberState)
-			{
-				num ^= this.MemberState.GetHashCode();
-			}
-			if (this.HasChannelState)
-			{
-				num ^= this.ChannelState.GetHashCode();
-			}
-			if (this.HasChannelId)
-			{
-				num ^= this.ChannelId.GetHashCode();
-			}
-			if (this.HasObjectId)
-			{
-				num ^= this.ObjectId.GetHashCode();
-			}
-			if (this.HasLocalAgent)
-			{
-				num ^= this.LocalAgent.GetHashCode();
-			}
-			if (this.HasLocalMemberState)
-			{
-				num ^= this.LocalMemberState.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			CreateChannelRequest createChannelRequest = obj as CreateChannelRequest;
-			return createChannelRequest != null && this.HasAgentIdentity == createChannelRequest.HasAgentIdentity && (!this.HasAgentIdentity || this.AgentIdentity.Equals(createChannelRequest.AgentIdentity)) && this.HasMemberState == createChannelRequest.HasMemberState && (!this.HasMemberState || this.MemberState.Equals(createChannelRequest.MemberState)) && this.HasChannelState == createChannelRequest.HasChannelState && (!this.HasChannelState || this.ChannelState.Equals(createChannelRequest.ChannelState)) && this.HasChannelId == createChannelRequest.HasChannelId && (!this.HasChannelId || this.ChannelId.Equals(createChannelRequest.ChannelId)) && this.HasObjectId == createChannelRequest.HasObjectId && (!this.HasObjectId || this.ObjectId.Equals(createChannelRequest.ObjectId)) && this.HasLocalAgent == createChannelRequest.HasLocalAgent && (!this.HasLocalAgent || this.LocalAgent.Equals(createChannelRequest.LocalAgent)) && this.HasLocalMemberState == createChannelRequest.HasLocalMemberState && (!this.HasLocalMemberState || this.LocalMemberState.Equals(createChannelRequest.LocalMemberState));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static CreateChannelRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<CreateChannelRequest>(bs, 0, -1);
 		}
 
 		public bool HasAgentIdentity;

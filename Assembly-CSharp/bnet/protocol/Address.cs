@@ -6,6 +6,61 @@ namespace bnet.protocol
 {
 	public class Address : IProtoBuf
 	{
+		public string Address_ { get; set; }
+
+		public void SetAddress_(string val)
+		{
+			this.Address_ = val;
+		}
+
+		public uint Port
+		{
+			get
+			{
+				return this._Port;
+			}
+			set
+			{
+				this._Port = value;
+				this.HasPort = true;
+			}
+		}
+
+		public void SetPort(uint val)
+		{
+			this.Port = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Address_.GetHashCode();
+			if (this.HasPort)
+			{
+				num ^= this.Port.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			Address address = obj as Address;
+			return address != null && this.Address_.Equals(address.Address_) && this.HasPort == address.HasPort && (!this.HasPort || this.Port.Equals(address.Port));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static Address ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<Address>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			Address.Deserialize(stream, this);
@@ -103,61 +158,6 @@ namespace bnet.protocol
 				num += ProtocolParser.SizeOfUInt32(this.Port);
 			}
 			return num + 1u;
-		}
-
-		public string Address_ { get; set; }
-
-		public void SetAddress_(string val)
-		{
-			this.Address_ = val;
-		}
-
-		public uint Port
-		{
-			get
-			{
-				return this._Port;
-			}
-			set
-			{
-				this._Port = value;
-				this.HasPort = true;
-			}
-		}
-
-		public void SetPort(uint val)
-		{
-			this.Port = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Address_.GetHashCode();
-			if (this.HasPort)
-			{
-				num ^= this.Port.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			Address address = obj as Address;
-			return address != null && this.Address_.Equals(address.Address_) && this.HasPort == address.HasPort && (!this.HasPort || this.Port.Equals(address.Port));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static Address ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<Address>(bs, 0, -1);
 		}
 
 		public bool HasPort;

@@ -7,6 +7,179 @@ namespace bnet.protocol.server_pool
 {
 	public class ServerInfo : IProtoBuf
 	{
+		public ProcessId Host { get; set; }
+
+		public void SetHost(ProcessId val)
+		{
+			this.Host = val;
+		}
+
+		public bool Replace
+		{
+			get
+			{
+				return this._Replace;
+			}
+			set
+			{
+				this._Replace = value;
+				this.HasReplace = true;
+			}
+		}
+
+		public void SetReplace(bool val)
+		{
+			this.Replace = val;
+		}
+
+		public ServerState State
+		{
+			get
+			{
+				return this._State;
+			}
+			set
+			{
+				this._State = value;
+				this.HasState = (value != null);
+			}
+		}
+
+		public void SetState(ServerState val)
+		{
+			this.State = val;
+		}
+
+		public List<bnet.protocol.attribute.Attribute> Attribute
+		{
+			get
+			{
+				return this._Attribute;
+			}
+			set
+			{
+				this._Attribute = value;
+			}
+		}
+
+		public List<bnet.protocol.attribute.Attribute> AttributeList
+		{
+			get
+			{
+				return this._Attribute;
+			}
+		}
+
+		public int AttributeCount
+		{
+			get
+			{
+				return this._Attribute.Count;
+			}
+		}
+
+		public void AddAttribute(bnet.protocol.attribute.Attribute val)
+		{
+			this._Attribute.Add(val);
+		}
+
+		public void ClearAttribute()
+		{
+			this._Attribute.Clear();
+		}
+
+		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
+		{
+			this.Attribute = val;
+		}
+
+		public uint ProgramId
+		{
+			get
+			{
+				return this._ProgramId;
+			}
+			set
+			{
+				this._ProgramId = value;
+				this.HasProgramId = true;
+			}
+		}
+
+		public void SetProgramId(uint val)
+		{
+			this.ProgramId = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Host.GetHashCode();
+			if (this.HasReplace)
+			{
+				num ^= this.Replace.GetHashCode();
+			}
+			if (this.HasState)
+			{
+				num ^= this.State.GetHashCode();
+			}
+			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
+			{
+				num ^= attribute.GetHashCode();
+			}
+			if (this.HasProgramId)
+			{
+				num ^= this.ProgramId.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ServerInfo serverInfo = obj as ServerInfo;
+			if (serverInfo == null)
+			{
+				return false;
+			}
+			if (!this.Host.Equals(serverInfo.Host))
+			{
+				return false;
+			}
+			if (this.HasReplace != serverInfo.HasReplace || (this.HasReplace && !this.Replace.Equals(serverInfo.Replace)))
+			{
+				return false;
+			}
+			if (this.HasState != serverInfo.HasState || (this.HasState && !this.State.Equals(serverInfo.State)))
+			{
+				return false;
+			}
+			if (this.Attribute.Count != serverInfo.Attribute.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Attribute.Count; i++)
+			{
+				if (!this.Attribute[i].Equals(serverInfo.Attribute[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasProgramId == serverInfo.HasProgramId && (!this.HasProgramId || this.ProgramId.Equals(serverInfo.ProgramId));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ServerInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ServerInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ServerInfo.Deserialize(stream, this);
@@ -182,179 +355,6 @@ namespace bnet.protocol.server_pool
 			}
 			num += 1u;
 			return num;
-		}
-
-		public ProcessId Host { get; set; }
-
-		public void SetHost(ProcessId val)
-		{
-			this.Host = val;
-		}
-
-		public bool Replace
-		{
-			get
-			{
-				return this._Replace;
-			}
-			set
-			{
-				this._Replace = value;
-				this.HasReplace = true;
-			}
-		}
-
-		public void SetReplace(bool val)
-		{
-			this.Replace = val;
-		}
-
-		public ServerState State
-		{
-			get
-			{
-				return this._State;
-			}
-			set
-			{
-				this._State = value;
-				this.HasState = (value != null);
-			}
-		}
-
-		public void SetState(ServerState val)
-		{
-			this.State = val;
-		}
-
-		public List<bnet.protocol.attribute.Attribute> Attribute
-		{
-			get
-			{
-				return this._Attribute;
-			}
-			set
-			{
-				this._Attribute = value;
-			}
-		}
-
-		public List<bnet.protocol.attribute.Attribute> AttributeList
-		{
-			get
-			{
-				return this._Attribute;
-			}
-		}
-
-		public int AttributeCount
-		{
-			get
-			{
-				return this._Attribute.Count;
-			}
-		}
-
-		public void AddAttribute(bnet.protocol.attribute.Attribute val)
-		{
-			this._Attribute.Add(val);
-		}
-
-		public void ClearAttribute()
-		{
-			this._Attribute.Clear();
-		}
-
-		public void SetAttribute(List<bnet.protocol.attribute.Attribute> val)
-		{
-			this.Attribute = val;
-		}
-
-		public uint ProgramId
-		{
-			get
-			{
-				return this._ProgramId;
-			}
-			set
-			{
-				this._ProgramId = value;
-				this.HasProgramId = true;
-			}
-		}
-
-		public void SetProgramId(uint val)
-		{
-			this.ProgramId = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Host.GetHashCode();
-			if (this.HasReplace)
-			{
-				num ^= this.Replace.GetHashCode();
-			}
-			if (this.HasState)
-			{
-				num ^= this.State.GetHashCode();
-			}
-			foreach (bnet.protocol.attribute.Attribute attribute in this.Attribute)
-			{
-				num ^= attribute.GetHashCode();
-			}
-			if (this.HasProgramId)
-			{
-				num ^= this.ProgramId.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ServerInfo serverInfo = obj as ServerInfo;
-			if (serverInfo == null)
-			{
-				return false;
-			}
-			if (!this.Host.Equals(serverInfo.Host))
-			{
-				return false;
-			}
-			if (this.HasReplace != serverInfo.HasReplace || (this.HasReplace && !this.Replace.Equals(serverInfo.Replace)))
-			{
-				return false;
-			}
-			if (this.HasState != serverInfo.HasState || (this.HasState && !this.State.Equals(serverInfo.State)))
-			{
-				return false;
-			}
-			if (this.Attribute.Count != serverInfo.Attribute.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Attribute.Count; i++)
-			{
-				if (!this.Attribute[i].Equals(serverInfo.Attribute[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasProgramId == serverInfo.HasProgramId && (!this.HasProgramId || this.ProgramId.Equals(serverInfo.ProgramId));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ServerInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ServerInfo>(bs, 0, -1);
 		}
 
 		public bool HasReplace;

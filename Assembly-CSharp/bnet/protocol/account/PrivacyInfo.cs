@@ -5,6 +5,119 @@ namespace bnet.protocol.account
 {
 	public class PrivacyInfo : IProtoBuf
 	{
+		public bool IsUsingRid
+		{
+			get
+			{
+				return this._IsUsingRid;
+			}
+			set
+			{
+				this._IsUsingRid = value;
+				this.HasIsUsingRid = true;
+			}
+		}
+
+		public void SetIsUsingRid(bool val)
+		{
+			this.IsUsingRid = val;
+		}
+
+		public bool IsRealIdVisibleForViewFriends
+		{
+			get
+			{
+				return this._IsRealIdVisibleForViewFriends;
+			}
+			set
+			{
+				this._IsRealIdVisibleForViewFriends = value;
+				this.HasIsRealIdVisibleForViewFriends = true;
+			}
+		}
+
+		public void SetIsRealIdVisibleForViewFriends(bool val)
+		{
+			this.IsRealIdVisibleForViewFriends = val;
+		}
+
+		public bool IsHiddenFromFriendFinder
+		{
+			get
+			{
+				return this._IsHiddenFromFriendFinder;
+			}
+			set
+			{
+				this._IsHiddenFromFriendFinder = value;
+				this.HasIsHiddenFromFriendFinder = true;
+			}
+		}
+
+		public void SetIsHiddenFromFriendFinder(bool val)
+		{
+			this.IsHiddenFromFriendFinder = val;
+		}
+
+		public PrivacyInfo.Types.GameInfoPrivacy GameInfoPrivacy
+		{
+			get
+			{
+				return this._GameInfoPrivacy;
+			}
+			set
+			{
+				this._GameInfoPrivacy = value;
+				this.HasGameInfoPrivacy = true;
+			}
+		}
+
+		public void SetGameInfoPrivacy(PrivacyInfo.Types.GameInfoPrivacy val)
+		{
+			this.GameInfoPrivacy = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasIsUsingRid)
+			{
+				num ^= this.IsUsingRid.GetHashCode();
+			}
+			if (this.HasIsRealIdVisibleForViewFriends)
+			{
+				num ^= this.IsRealIdVisibleForViewFriends.GetHashCode();
+			}
+			if (this.HasIsHiddenFromFriendFinder)
+			{
+				num ^= this.IsHiddenFromFriendFinder.GetHashCode();
+			}
+			if (this.HasGameInfoPrivacy)
+			{
+				num ^= this.GameInfoPrivacy.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			PrivacyInfo privacyInfo = obj as PrivacyInfo;
+			return privacyInfo != null && this.HasIsUsingRid == privacyInfo.HasIsUsingRid && (!this.HasIsUsingRid || this.IsUsingRid.Equals(privacyInfo.IsUsingRid)) && this.HasIsRealIdVisibleForViewFriends == privacyInfo.HasIsRealIdVisibleForViewFriends && (!this.HasIsRealIdVisibleForViewFriends || this.IsRealIdVisibleForViewFriends.Equals(privacyInfo.IsRealIdVisibleForViewFriends)) && this.HasIsHiddenFromFriendFinder == privacyInfo.HasIsHiddenFromFriendFinder && (!this.HasIsHiddenFromFriendFinder || this.IsHiddenFromFriendFinder.Equals(privacyInfo.IsHiddenFromFriendFinder)) && this.HasGameInfoPrivacy == privacyInfo.HasGameInfoPrivacy && (!this.HasGameInfoPrivacy || this.GameInfoPrivacy.Equals(privacyInfo.GameInfoPrivacy));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static PrivacyInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<PrivacyInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			PrivacyInfo.Deserialize(stream, this);
@@ -139,119 +252,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt64((ulong)((long)this.GameInfoPrivacy));
 			}
 			return num;
-		}
-
-		public bool IsUsingRid
-		{
-			get
-			{
-				return this._IsUsingRid;
-			}
-			set
-			{
-				this._IsUsingRid = value;
-				this.HasIsUsingRid = true;
-			}
-		}
-
-		public void SetIsUsingRid(bool val)
-		{
-			this.IsUsingRid = val;
-		}
-
-		public bool IsRealIdVisibleForViewFriends
-		{
-			get
-			{
-				return this._IsRealIdVisibleForViewFriends;
-			}
-			set
-			{
-				this._IsRealIdVisibleForViewFriends = value;
-				this.HasIsRealIdVisibleForViewFriends = true;
-			}
-		}
-
-		public void SetIsRealIdVisibleForViewFriends(bool val)
-		{
-			this.IsRealIdVisibleForViewFriends = val;
-		}
-
-		public bool IsHiddenFromFriendFinder
-		{
-			get
-			{
-				return this._IsHiddenFromFriendFinder;
-			}
-			set
-			{
-				this._IsHiddenFromFriendFinder = value;
-				this.HasIsHiddenFromFriendFinder = true;
-			}
-		}
-
-		public void SetIsHiddenFromFriendFinder(bool val)
-		{
-			this.IsHiddenFromFriendFinder = val;
-		}
-
-		public PrivacyInfo.Types.GameInfoPrivacy GameInfoPrivacy
-		{
-			get
-			{
-				return this._GameInfoPrivacy;
-			}
-			set
-			{
-				this._GameInfoPrivacy = value;
-				this.HasGameInfoPrivacy = true;
-			}
-		}
-
-		public void SetGameInfoPrivacy(PrivacyInfo.Types.GameInfoPrivacy val)
-		{
-			this.GameInfoPrivacy = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasIsUsingRid)
-			{
-				num ^= this.IsUsingRid.GetHashCode();
-			}
-			if (this.HasIsRealIdVisibleForViewFriends)
-			{
-				num ^= this.IsRealIdVisibleForViewFriends.GetHashCode();
-			}
-			if (this.HasIsHiddenFromFriendFinder)
-			{
-				num ^= this.IsHiddenFromFriendFinder.GetHashCode();
-			}
-			if (this.HasGameInfoPrivacy)
-			{
-				num ^= this.GameInfoPrivacy.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			PrivacyInfo privacyInfo = obj as PrivacyInfo;
-			return privacyInfo != null && this.HasIsUsingRid == privacyInfo.HasIsUsingRid && (!this.HasIsUsingRid || this.IsUsingRid.Equals(privacyInfo.IsUsingRid)) && this.HasIsRealIdVisibleForViewFriends == privacyInfo.HasIsRealIdVisibleForViewFriends && (!this.HasIsRealIdVisibleForViewFriends || this.IsRealIdVisibleForViewFriends.Equals(privacyInfo.IsRealIdVisibleForViewFriends)) && this.HasIsHiddenFromFriendFinder == privacyInfo.HasIsHiddenFromFriendFinder && (!this.HasIsHiddenFromFriendFinder || this.IsHiddenFromFriendFinder.Equals(privacyInfo.IsHiddenFromFriendFinder)) && this.HasGameInfoPrivacy == privacyInfo.HasGameInfoPrivacy && (!this.HasGameInfoPrivacy || this.GameInfoPrivacy.Equals(privacyInfo.GameInfoPrivacy));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static PrivacyInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<PrivacyInfo>(bs, 0, -1);
 		}
 
 		public bool HasIsUsingRid;

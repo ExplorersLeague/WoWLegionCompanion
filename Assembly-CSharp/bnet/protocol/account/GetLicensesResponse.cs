@@ -6,6 +6,93 @@ namespace bnet.protocol.account
 {
 	public class GetLicensesResponse : IProtoBuf
 	{
+		public List<AccountLicense> Licenses
+		{
+			get
+			{
+				return this._Licenses;
+			}
+			set
+			{
+				this._Licenses = value;
+			}
+		}
+
+		public List<AccountLicense> LicensesList
+		{
+			get
+			{
+				return this._Licenses;
+			}
+		}
+
+		public int LicensesCount
+		{
+			get
+			{
+				return this._Licenses.Count;
+			}
+		}
+
+		public void AddLicenses(AccountLicense val)
+		{
+			this._Licenses.Add(val);
+		}
+
+		public void ClearLicenses()
+		{
+			this._Licenses.Clear();
+		}
+
+		public void SetLicenses(List<AccountLicense> val)
+		{
+			this.Licenses = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (AccountLicense accountLicense in this.Licenses)
+			{
+				num ^= accountLicense.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetLicensesResponse getLicensesResponse = obj as GetLicensesResponse;
+			if (getLicensesResponse == null)
+			{
+				return false;
+			}
+			if (this.Licenses.Count != getLicensesResponse.Licenses.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.Licenses.Count; i++)
+			{
+				if (!this.Licenses[i].Equals(getLicensesResponse.Licenses[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetLicensesResponse ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetLicensesResponse>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetLicensesResponse.Deserialize(stream, this);
@@ -100,93 +187,6 @@ namespace bnet.protocol.account
 				}
 			}
 			return num;
-		}
-
-		public List<AccountLicense> Licenses
-		{
-			get
-			{
-				return this._Licenses;
-			}
-			set
-			{
-				this._Licenses = value;
-			}
-		}
-
-		public List<AccountLicense> LicensesList
-		{
-			get
-			{
-				return this._Licenses;
-			}
-		}
-
-		public int LicensesCount
-		{
-			get
-			{
-				return this._Licenses.Count;
-			}
-		}
-
-		public void AddLicenses(AccountLicense val)
-		{
-			this._Licenses.Add(val);
-		}
-
-		public void ClearLicenses()
-		{
-			this._Licenses.Clear();
-		}
-
-		public void SetLicenses(List<AccountLicense> val)
-		{
-			this.Licenses = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (AccountLicense accountLicense in this.Licenses)
-			{
-				num ^= accountLicense.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetLicensesResponse getLicensesResponse = obj as GetLicensesResponse;
-			if (getLicensesResponse == null)
-			{
-				return false;
-			}
-			if (this.Licenses.Count != getLicensesResponse.Licenses.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.Licenses.Count; i++)
-			{
-				if (!this.Licenses[i].Equals(getLicensesResponse.Licenses[i]))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetLicensesResponse ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetLicensesResponse>(bs, 0, -1);
 		}
 
 		private List<AccountLicense> _Licenses = new List<AccountLicense>();

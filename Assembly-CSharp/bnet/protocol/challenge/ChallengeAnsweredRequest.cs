@@ -6,6 +6,83 @@ namespace bnet.protocol.challenge
 {
 	public class ChallengeAnsweredRequest : IProtoBuf
 	{
+		public string Answer { get; set; }
+
+		public void SetAnswer(string val)
+		{
+			this.Answer = val;
+		}
+
+		public byte[] Data
+		{
+			get
+			{
+				return this._Data;
+			}
+			set
+			{
+				this._Data = value;
+				this.HasData = (value != null);
+			}
+		}
+
+		public void SetData(byte[] val)
+		{
+			this.Data = val;
+		}
+
+		public uint Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				this._Id = value;
+				this.HasId = true;
+			}
+		}
+
+		public void SetId(uint val)
+		{
+			this.Id = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.Answer.GetHashCode();
+			if (this.HasData)
+			{
+				num ^= this.Data.GetHashCode();
+			}
+			if (this.HasId)
+			{
+				num ^= this.Id.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ChallengeAnsweredRequest challengeAnsweredRequest = obj as ChallengeAnsweredRequest;
+			return challengeAnsweredRequest != null && this.Answer.Equals(challengeAnsweredRequest.Answer) && this.HasData == challengeAnsweredRequest.HasData && (!this.HasData || this.Data.Equals(challengeAnsweredRequest.Data)) && this.HasId == challengeAnsweredRequest.HasId && (!this.HasId || this.Id.Equals(challengeAnsweredRequest.Id));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static ChallengeAnsweredRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<ChallengeAnsweredRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			ChallengeAnsweredRequest.Deserialize(stream, this);
@@ -120,83 +197,6 @@ namespace bnet.protocol.challenge
 				num += ProtocolParser.SizeOfUInt32(this.Id);
 			}
 			return num + 1u;
-		}
-
-		public string Answer { get; set; }
-
-		public void SetAnswer(string val)
-		{
-			this.Answer = val;
-		}
-
-		public byte[] Data
-		{
-			get
-			{
-				return this._Data;
-			}
-			set
-			{
-				this._Data = value;
-				this.HasData = (value != null);
-			}
-		}
-
-		public void SetData(byte[] val)
-		{
-			this.Data = val;
-		}
-
-		public uint Id
-		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				this._Id = value;
-				this.HasId = true;
-			}
-		}
-
-		public void SetId(uint val)
-		{
-			this.Id = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.Answer.GetHashCode();
-			if (this.HasData)
-			{
-				num ^= this.Data.GetHashCode();
-			}
-			if (this.HasId)
-			{
-				num ^= this.Id.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ChallengeAnsweredRequest challengeAnsweredRequest = obj as ChallengeAnsweredRequest;
-			return challengeAnsweredRequest != null && this.Answer.Equals(challengeAnsweredRequest.Answer) && this.HasData == challengeAnsweredRequest.HasData && (!this.HasData || this.Data.Equals(challengeAnsweredRequest.Data)) && this.HasId == challengeAnsweredRequest.HasId && (!this.HasId || this.Id.Equals(challengeAnsweredRequest.Id));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static ChallengeAnsweredRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<ChallengeAnsweredRequest>(bs, 0, -1);
 		}
 
 		public bool HasData;

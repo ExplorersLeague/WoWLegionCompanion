@@ -5,6 +5,53 @@ namespace bnet.protocol.account
 {
 	public class GameSessionUpdateInfo : IProtoBuf
 	{
+		public CAIS Cais
+		{
+			get
+			{
+				return this._Cais;
+			}
+			set
+			{
+				this._Cais = value;
+				this.HasCais = (value != null);
+			}
+		}
+
+		public void SetCais(CAIS val)
+		{
+			this.Cais = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasCais)
+			{
+				num ^= this.Cais.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameSessionUpdateInfo gameSessionUpdateInfo = obj as GameSessionUpdateInfo;
+			return gameSessionUpdateInfo != null && this.HasCais == gameSessionUpdateInfo.HasCais && (!this.HasCais || this.Cais.Equals(gameSessionUpdateInfo.Cais));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameSessionUpdateInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameSessionUpdateInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameSessionUpdateInfo.Deserialize(stream, this);
@@ -93,53 +140,6 @@ namespace bnet.protocol.account
 				num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			}
 			return num;
-		}
-
-		public CAIS Cais
-		{
-			get
-			{
-				return this._Cais;
-			}
-			set
-			{
-				this._Cais = value;
-				this.HasCais = (value != null);
-			}
-		}
-
-		public void SetCais(CAIS val)
-		{
-			this.Cais = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasCais)
-			{
-				num ^= this.Cais.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameSessionUpdateInfo gameSessionUpdateInfo = obj as GameSessionUpdateInfo;
-			return gameSessionUpdateInfo != null && this.HasCais == gameSessionUpdateInfo.HasCais && (!this.HasCais || this.Cais.Equals(gameSessionUpdateInfo.Cais));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameSessionUpdateInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameSessionUpdateInfo>(bs, 0, -1);
 		}
 
 		public bool HasCais;

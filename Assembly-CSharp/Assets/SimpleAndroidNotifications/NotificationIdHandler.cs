@@ -52,6 +52,11 @@ namespace Assets.SimpleAndroidNotifications
 			NotificationIdHandler.SetScheduledNotificaions(scheduledNotificaions);
 		}
 
+		public static void RemoveAllScheduledNotificaions()
+		{
+			NotificationIdHandler.SetScheduledNotificaions(new List<int>());
+		}
+
 		public static int GetNotificationId()
 		{
 			List<int> scheduledNotificaions = NotificationIdHandler.GetScheduledNotificaions();

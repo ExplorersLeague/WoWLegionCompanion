@@ -6,6 +6,115 @@ namespace bnet.protocol.game_utilities
 {
 	public class GetPlayerVariablesRequest : IProtoBuf
 	{
+		public List<PlayerVariables> PlayerVariables
+		{
+			get
+			{
+				return this._PlayerVariables;
+			}
+			set
+			{
+				this._PlayerVariables = value;
+			}
+		}
+
+		public List<PlayerVariables> PlayerVariablesList
+		{
+			get
+			{
+				return this._PlayerVariables;
+			}
+		}
+
+		public int PlayerVariablesCount
+		{
+			get
+			{
+				return this._PlayerVariables.Count;
+			}
+		}
+
+		public void AddPlayerVariables(PlayerVariables val)
+		{
+			this._PlayerVariables.Add(val);
+		}
+
+		public void ClearPlayerVariables()
+		{
+			this._PlayerVariables.Clear();
+		}
+
+		public void SetPlayerVariables(List<PlayerVariables> val)
+		{
+			this.PlayerVariables = val;
+		}
+
+		public ProcessId Host
+		{
+			get
+			{
+				return this._Host;
+			}
+			set
+			{
+				this._Host = value;
+				this.HasHost = (value != null);
+			}
+		}
+
+		public void SetHost(ProcessId val)
+		{
+			this.Host = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			foreach (PlayerVariables playerVariables in this.PlayerVariables)
+			{
+				num ^= playerVariables.GetHashCode();
+			}
+			if (this.HasHost)
+			{
+				num ^= this.Host.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetPlayerVariablesRequest getPlayerVariablesRequest = obj as GetPlayerVariablesRequest;
+			if (getPlayerVariablesRequest == null)
+			{
+				return false;
+			}
+			if (this.PlayerVariables.Count != getPlayerVariablesRequest.PlayerVariables.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < this.PlayerVariables.Count; i++)
+			{
+				if (!this.PlayerVariables[i].Equals(getPlayerVariablesRequest.PlayerVariables[i]))
+				{
+					return false;
+				}
+			}
+			return this.HasHost == getPlayerVariablesRequest.HasHost && (!this.HasHost || this.Host.Equals(getPlayerVariablesRequest.Host));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetPlayerVariablesRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetPlayerVariablesRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetPlayerVariablesRequest.Deserialize(stream, this);
@@ -123,115 +232,6 @@ namespace bnet.protocol.game_utilities
 				num += serializedSize2 + ProtocolParser.SizeOfUInt32(serializedSize2);
 			}
 			return num;
-		}
-
-		public List<PlayerVariables> PlayerVariables
-		{
-			get
-			{
-				return this._PlayerVariables;
-			}
-			set
-			{
-				this._PlayerVariables = value;
-			}
-		}
-
-		public List<PlayerVariables> PlayerVariablesList
-		{
-			get
-			{
-				return this._PlayerVariables;
-			}
-		}
-
-		public int PlayerVariablesCount
-		{
-			get
-			{
-				return this._PlayerVariables.Count;
-			}
-		}
-
-		public void AddPlayerVariables(PlayerVariables val)
-		{
-			this._PlayerVariables.Add(val);
-		}
-
-		public void ClearPlayerVariables()
-		{
-			this._PlayerVariables.Clear();
-		}
-
-		public void SetPlayerVariables(List<PlayerVariables> val)
-		{
-			this.PlayerVariables = val;
-		}
-
-		public ProcessId Host
-		{
-			get
-			{
-				return this._Host;
-			}
-			set
-			{
-				this._Host = value;
-				this.HasHost = (value != null);
-			}
-		}
-
-		public void SetHost(ProcessId val)
-		{
-			this.Host = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			foreach (PlayerVariables playerVariables in this.PlayerVariables)
-			{
-				num ^= playerVariables.GetHashCode();
-			}
-			if (this.HasHost)
-			{
-				num ^= this.Host.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetPlayerVariablesRequest getPlayerVariablesRequest = obj as GetPlayerVariablesRequest;
-			if (getPlayerVariablesRequest == null)
-			{
-				return false;
-			}
-			if (this.PlayerVariables.Count != getPlayerVariablesRequest.PlayerVariables.Count)
-			{
-				return false;
-			}
-			for (int i = 0; i < this.PlayerVariables.Count; i++)
-			{
-				if (!this.PlayerVariables[i].Equals(getPlayerVariablesRequest.PlayerVariables[i]))
-				{
-					return false;
-				}
-			}
-			return this.HasHost == getPlayerVariablesRequest.HasHost && (!this.HasHost || this.Host.Equals(getPlayerVariablesRequest.Host));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetPlayerVariablesRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetPlayerVariablesRequest>(bs, 0, -1);
 		}
 
 		private List<PlayerVariables> _PlayerVariables = new List<PlayerVariables>();

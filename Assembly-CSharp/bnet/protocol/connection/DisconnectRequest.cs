@@ -5,6 +5,38 @@ namespace bnet.protocol.connection
 {
 	public class DisconnectRequest : IProtoBuf
 	{
+		public uint ErrorCode { get; set; }
+
+		public void SetErrorCode(uint val)
+		{
+			this.ErrorCode = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.ErrorCode.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			DisconnectRequest disconnectRequest = obj as DisconnectRequest;
+			return disconnectRequest != null && this.ErrorCode.Equals(disconnectRequest.ErrorCode);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static DisconnectRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<DisconnectRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			DisconnectRequest.Deserialize(stream, this);
@@ -80,38 +112,6 @@ namespace bnet.protocol.connection
 			uint num = 0u;
 			num += ProtocolParser.SizeOfUInt32(this.ErrorCode);
 			return num + 1u;
-		}
-
-		public uint ErrorCode { get; set; }
-
-		public void SetErrorCode(uint val)
-		{
-			this.ErrorCode = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.ErrorCode.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			DisconnectRequest disconnectRequest = obj as DisconnectRequest;
-			return disconnectRequest != null && this.ErrorCode.Equals(disconnectRequest.ErrorCode);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static DisconnectRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<DisconnectRequest>(bs, 0, -1);
 		}
 	}
 }

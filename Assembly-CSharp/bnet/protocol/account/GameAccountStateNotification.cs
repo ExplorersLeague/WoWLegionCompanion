@@ -5,6 +5,119 @@ namespace bnet.protocol.account
 {
 	public class GameAccountStateNotification : IProtoBuf
 	{
+		public GameAccountState State
+		{
+			get
+			{
+				return this._State;
+			}
+			set
+			{
+				this._State = value;
+				this.HasState = (value != null);
+			}
+		}
+
+		public void SetState(GameAccountState val)
+		{
+			this.State = val;
+		}
+
+		public ulong SubscriberId
+		{
+			get
+			{
+				return this._SubscriberId;
+			}
+			set
+			{
+				this._SubscriberId = value;
+				this.HasSubscriberId = true;
+			}
+		}
+
+		public void SetSubscriberId(ulong val)
+		{
+			this.SubscriberId = val;
+		}
+
+		public GameAccountFieldTags GameAccountTags
+		{
+			get
+			{
+				return this._GameAccountTags;
+			}
+			set
+			{
+				this._GameAccountTags = value;
+				this.HasGameAccountTags = (value != null);
+			}
+		}
+
+		public void SetGameAccountTags(GameAccountFieldTags val)
+		{
+			this.GameAccountTags = val;
+		}
+
+		public bool SubscriptionCompleted
+		{
+			get
+			{
+				return this._SubscriptionCompleted;
+			}
+			set
+			{
+				this._SubscriptionCompleted = value;
+				this.HasSubscriptionCompleted = true;
+			}
+		}
+
+		public void SetSubscriptionCompleted(bool val)
+		{
+			this.SubscriptionCompleted = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasState)
+			{
+				num ^= this.State.GetHashCode();
+			}
+			if (this.HasSubscriberId)
+			{
+				num ^= this.SubscriberId.GetHashCode();
+			}
+			if (this.HasGameAccountTags)
+			{
+				num ^= this.GameAccountTags.GetHashCode();
+			}
+			if (this.HasSubscriptionCompleted)
+			{
+				num ^= this.SubscriptionCompleted.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameAccountStateNotification gameAccountStateNotification = obj as GameAccountStateNotification;
+			return gameAccountStateNotification != null && this.HasState == gameAccountStateNotification.HasState && (!this.HasState || this.State.Equals(gameAccountStateNotification.State)) && this.HasSubscriberId == gameAccountStateNotification.HasSubscriberId && (!this.HasSubscriberId || this.SubscriberId.Equals(gameAccountStateNotification.SubscriberId)) && this.HasGameAccountTags == gameAccountStateNotification.HasGameAccountTags && (!this.HasGameAccountTags || this.GameAccountTags.Equals(gameAccountStateNotification.GameAccountTags)) && this.HasSubscriptionCompleted == gameAccountStateNotification.HasSubscriptionCompleted && (!this.HasSubscriptionCompleted || this.SubscriptionCompleted.Equals(gameAccountStateNotification.SubscriptionCompleted));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameAccountStateNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameAccountStateNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameAccountStateNotification.Deserialize(stream, this);
@@ -150,119 +263,6 @@ namespace bnet.protocol.account
 				num += 1u;
 			}
 			return num;
-		}
-
-		public GameAccountState State
-		{
-			get
-			{
-				return this._State;
-			}
-			set
-			{
-				this._State = value;
-				this.HasState = (value != null);
-			}
-		}
-
-		public void SetState(GameAccountState val)
-		{
-			this.State = val;
-		}
-
-		public ulong SubscriberId
-		{
-			get
-			{
-				return this._SubscriberId;
-			}
-			set
-			{
-				this._SubscriberId = value;
-				this.HasSubscriberId = true;
-			}
-		}
-
-		public void SetSubscriberId(ulong val)
-		{
-			this.SubscriberId = val;
-		}
-
-		public GameAccountFieldTags GameAccountTags
-		{
-			get
-			{
-				return this._GameAccountTags;
-			}
-			set
-			{
-				this._GameAccountTags = value;
-				this.HasGameAccountTags = (value != null);
-			}
-		}
-
-		public void SetGameAccountTags(GameAccountFieldTags val)
-		{
-			this.GameAccountTags = val;
-		}
-
-		public bool SubscriptionCompleted
-		{
-			get
-			{
-				return this._SubscriptionCompleted;
-			}
-			set
-			{
-				this._SubscriptionCompleted = value;
-				this.HasSubscriptionCompleted = true;
-			}
-		}
-
-		public void SetSubscriptionCompleted(bool val)
-		{
-			this.SubscriptionCompleted = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasState)
-			{
-				num ^= this.State.GetHashCode();
-			}
-			if (this.HasSubscriberId)
-			{
-				num ^= this.SubscriberId.GetHashCode();
-			}
-			if (this.HasGameAccountTags)
-			{
-				num ^= this.GameAccountTags.GetHashCode();
-			}
-			if (this.HasSubscriptionCompleted)
-			{
-				num ^= this.SubscriptionCompleted.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameAccountStateNotification gameAccountStateNotification = obj as GameAccountStateNotification;
-			return gameAccountStateNotification != null && this.HasState == gameAccountStateNotification.HasState && (!this.HasState || this.State.Equals(gameAccountStateNotification.State)) && this.HasSubscriberId == gameAccountStateNotification.HasSubscriberId && (!this.HasSubscriberId || this.SubscriberId.Equals(gameAccountStateNotification.SubscriberId)) && this.HasGameAccountTags == gameAccountStateNotification.HasGameAccountTags && (!this.HasGameAccountTags || this.GameAccountTags.Equals(gameAccountStateNotification.GameAccountTags)) && this.HasSubscriptionCompleted == gameAccountStateNotification.HasSubscriptionCompleted && (!this.HasSubscriptionCompleted || this.SubscriptionCompleted.Equals(gameAccountStateNotification.SubscriptionCompleted));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameAccountStateNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameAccountStateNotification>(bs, 0, -1);
 		}
 
 		public bool HasState;

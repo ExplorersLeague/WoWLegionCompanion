@@ -6,6 +6,46 @@ namespace bnet.protocol.game_master
 {
 	public class GetGameStatsRequest : IProtoBuf
 	{
+		public ulong FactoryId { get; set; }
+
+		public void SetFactoryId(ulong val)
+		{
+			this.FactoryId = val;
+		}
+
+		public AttributeFilter Filter { get; set; }
+
+		public void SetFilter(AttributeFilter val)
+		{
+			this.Filter = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			num ^= this.FactoryId.GetHashCode();
+			return num ^ this.Filter.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			GetGameStatsRequest getGameStatsRequest = obj as GetGameStatsRequest;
+			return getGameStatsRequest != null && this.FactoryId.Equals(getGameStatsRequest.FactoryId) && this.Filter.Equals(getGameStatsRequest.Filter);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GetGameStatsRequest ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GetGameStatsRequest>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GetGameStatsRequest.Deserialize(stream, this);
@@ -103,46 +143,6 @@ namespace bnet.protocol.game_master
 			uint serializedSize = this.Filter.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 2u;
-		}
-
-		public ulong FactoryId { get; set; }
-
-		public void SetFactoryId(ulong val)
-		{
-			this.FactoryId = val;
-		}
-
-		public AttributeFilter Filter { get; set; }
-
-		public void SetFilter(AttributeFilter val)
-		{
-			this.Filter = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			num ^= this.FactoryId.GetHashCode();
-			return num ^ this.Filter.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			GetGameStatsRequest getGameStatsRequest = obj as GetGameStatsRequest;
-			return getGameStatsRequest != null && this.FactoryId.Equals(getGameStatsRequest.FactoryId) && this.Filter.Equals(getGameStatsRequest.Filter);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GetGameStatsRequest ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GetGameStatsRequest>(bs, 0, -1);
 		}
 	}
 }

@@ -5,6 +5,97 @@ namespace bnet.protocol.account
 {
 	public class GameTimeRemainingInfo : IProtoBuf
 	{
+		public uint MinutesRemaining
+		{
+			get
+			{
+				return this._MinutesRemaining;
+			}
+			set
+			{
+				this._MinutesRemaining = value;
+				this.HasMinutesRemaining = true;
+			}
+		}
+
+		public void SetMinutesRemaining(uint val)
+		{
+			this.MinutesRemaining = val;
+		}
+
+		public uint ParentalDailyMinutesRemaining
+		{
+			get
+			{
+				return this._ParentalDailyMinutesRemaining;
+			}
+			set
+			{
+				this._ParentalDailyMinutesRemaining = value;
+				this.HasParentalDailyMinutesRemaining = true;
+			}
+		}
+
+		public void SetParentalDailyMinutesRemaining(uint val)
+		{
+			this.ParentalDailyMinutesRemaining = val;
+		}
+
+		public uint ParentalWeeklyMinutesRemaining
+		{
+			get
+			{
+				return this._ParentalWeeklyMinutesRemaining;
+			}
+			set
+			{
+				this._ParentalWeeklyMinutesRemaining = value;
+				this.HasParentalWeeklyMinutesRemaining = true;
+			}
+		}
+
+		public void SetParentalWeeklyMinutesRemaining(uint val)
+		{
+			this.ParentalWeeklyMinutesRemaining = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int num = base.GetType().GetHashCode();
+			if (this.HasMinutesRemaining)
+			{
+				num ^= this.MinutesRemaining.GetHashCode();
+			}
+			if (this.HasParentalDailyMinutesRemaining)
+			{
+				num ^= this.ParentalDailyMinutesRemaining.GetHashCode();
+			}
+			if (this.HasParentalWeeklyMinutesRemaining)
+			{
+				num ^= this.ParentalWeeklyMinutesRemaining.GetHashCode();
+			}
+			return num;
+		}
+
+		public override bool Equals(object obj)
+		{
+			GameTimeRemainingInfo gameTimeRemainingInfo = obj as GameTimeRemainingInfo;
+			return gameTimeRemainingInfo != null && this.HasMinutesRemaining == gameTimeRemainingInfo.HasMinutesRemaining && (!this.HasMinutesRemaining || this.MinutesRemaining.Equals(gameTimeRemainingInfo.MinutesRemaining)) && this.HasParentalDailyMinutesRemaining == gameTimeRemainingInfo.HasParentalDailyMinutesRemaining && (!this.HasParentalDailyMinutesRemaining || this.ParentalDailyMinutesRemaining.Equals(gameTimeRemainingInfo.ParentalDailyMinutesRemaining)) && this.HasParentalWeeklyMinutesRemaining == gameTimeRemainingInfo.HasParentalWeeklyMinutesRemaining && (!this.HasParentalWeeklyMinutesRemaining || this.ParentalWeeklyMinutesRemaining.Equals(gameTimeRemainingInfo.ParentalWeeklyMinutesRemaining));
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static GameTimeRemainingInfo ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<GameTimeRemainingInfo>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			GameTimeRemainingInfo.Deserialize(stream, this);
@@ -121,97 +212,6 @@ namespace bnet.protocol.account
 				num += ProtocolParser.SizeOfUInt32(this.ParentalWeeklyMinutesRemaining);
 			}
 			return num;
-		}
-
-		public uint MinutesRemaining
-		{
-			get
-			{
-				return this._MinutesRemaining;
-			}
-			set
-			{
-				this._MinutesRemaining = value;
-				this.HasMinutesRemaining = true;
-			}
-		}
-
-		public void SetMinutesRemaining(uint val)
-		{
-			this.MinutesRemaining = val;
-		}
-
-		public uint ParentalDailyMinutesRemaining
-		{
-			get
-			{
-				return this._ParentalDailyMinutesRemaining;
-			}
-			set
-			{
-				this._ParentalDailyMinutesRemaining = value;
-				this.HasParentalDailyMinutesRemaining = true;
-			}
-		}
-
-		public void SetParentalDailyMinutesRemaining(uint val)
-		{
-			this.ParentalDailyMinutesRemaining = val;
-		}
-
-		public uint ParentalWeeklyMinutesRemaining
-		{
-			get
-			{
-				return this._ParentalWeeklyMinutesRemaining;
-			}
-			set
-			{
-				this._ParentalWeeklyMinutesRemaining = value;
-				this.HasParentalWeeklyMinutesRemaining = true;
-			}
-		}
-
-		public void SetParentalWeeklyMinutesRemaining(uint val)
-		{
-			this.ParentalWeeklyMinutesRemaining = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int num = base.GetType().GetHashCode();
-			if (this.HasMinutesRemaining)
-			{
-				num ^= this.MinutesRemaining.GetHashCode();
-			}
-			if (this.HasParentalDailyMinutesRemaining)
-			{
-				num ^= this.ParentalDailyMinutesRemaining.GetHashCode();
-			}
-			if (this.HasParentalWeeklyMinutesRemaining)
-			{
-				num ^= this.ParentalWeeklyMinutesRemaining.GetHashCode();
-			}
-			return num;
-		}
-
-		public override bool Equals(object obj)
-		{
-			GameTimeRemainingInfo gameTimeRemainingInfo = obj as GameTimeRemainingInfo;
-			return gameTimeRemainingInfo != null && this.HasMinutesRemaining == gameTimeRemainingInfo.HasMinutesRemaining && (!this.HasMinutesRemaining || this.MinutesRemaining.Equals(gameTimeRemainingInfo.MinutesRemaining)) && this.HasParentalDailyMinutesRemaining == gameTimeRemainingInfo.HasParentalDailyMinutesRemaining && (!this.HasParentalDailyMinutesRemaining || this.ParentalDailyMinutesRemaining.Equals(gameTimeRemainingInfo.ParentalDailyMinutesRemaining)) && this.HasParentalWeeklyMinutesRemaining == gameTimeRemainingInfo.HasParentalWeeklyMinutesRemaining && (!this.HasParentalWeeklyMinutesRemaining || this.ParentalWeeklyMinutesRemaining.Equals(gameTimeRemainingInfo.ParentalWeeklyMinutesRemaining));
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static GameTimeRemainingInfo ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<GameTimeRemainingInfo>(bs, 0, -1);
 		}
 
 		public bool HasMinutesRemaining;

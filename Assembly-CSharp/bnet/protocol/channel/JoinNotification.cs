@@ -5,6 +5,38 @@ namespace bnet.protocol.channel
 {
 	public class JoinNotification : IProtoBuf
 	{
+		public Member Member { get; set; }
+
+		public void SetMember(Member val)
+		{
+			this.Member = val;
+		}
+
+		public override int GetHashCode()
+		{
+			int hashCode = base.GetType().GetHashCode();
+			return hashCode ^ this.Member.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			JoinNotification joinNotification = obj as JoinNotification;
+			return joinNotification != null && this.Member.Equals(joinNotification.Member);
+		}
+
+		public bool IsInitialized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public static JoinNotification ParseFrom(byte[] bs)
+		{
+			return ProtobufUtil.ParseFrom<JoinNotification>(bs, 0, -1);
+		}
+
 		public void Deserialize(Stream stream)
 		{
 			JoinNotification.Deserialize(stream, this);
@@ -90,38 +122,6 @@ namespace bnet.protocol.channel
 			uint serializedSize = this.Member.GetSerializedSize();
 			num += serializedSize + ProtocolParser.SizeOfUInt32(serializedSize);
 			return num + 1u;
-		}
-
-		public Member Member { get; set; }
-
-		public void SetMember(Member val)
-		{
-			this.Member = val;
-		}
-
-		public override int GetHashCode()
-		{
-			int hashCode = base.GetType().GetHashCode();
-			return hashCode ^ this.Member.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			JoinNotification joinNotification = obj as JoinNotification;
-			return joinNotification != null && this.Member.Equals(joinNotification.Member);
-		}
-
-		public bool IsInitialized
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static JoinNotification ParseFrom(byte[] bs)
-		{
-			return ProtobufUtil.ParseFrom<JoinNotification>(bs, 0, -1);
 		}
 	}
 }
