@@ -1,11 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using UnityEngine;
 
 namespace WoWCompanionApp
 {
 	public class MobileDeviceLocale
 	{
+		static MobileDeviceLocale()
+		{
+			List<string> list = new List<string>
+			{
+				"en-US",
+				"fr-FR",
+				"de-DE",
+				"ko-KR",
+				"ru-RU",
+				"it-IT",
+				"pt-BR",
+				"es-ES",
+				"es-MX",
+				"zh-CN",
+				"zh-TW"
+			};
+			Dictionary<string, CultureInfo> dictionary = CultureInfo.GetCultures(CultureTypes.AllCultures).ToDictionary((CultureInfo culture) => culture.Name, (CultureInfo culture) => culture);
+			foreach (string text in list)
+			{
+				if (dictionary.ContainsKey(text))
+				{
+					MobileDeviceLocale.s_localeToCultureInfo.Add(text.Replace("-", string.Empty), dictionary[text]);
+				}
+			}
+		}
+
 		public static IEnumerable<string> SupportedLocales
 		{
 			get
@@ -16,28 +44,38 @@ namespace WoWCompanionApp
 
 		public static string GetBestGuessForLocale()
 		{
-			string result = "enUS";
+			if (!string.IsNullOrEmpty(MobileDeviceLocale.s_bestGuessLocale))
+			{
+				return MobileDeviceLocale.s_bestGuessLocale;
+			}
+			string @string = SecurePlayerPrefs.GetString(MobileDeviceLocale.LocaleKey, Main.uniqueIdentifier);
+			if (!string.IsNullOrEmpty(@string))
+			{
+				MobileDeviceLocale.s_bestGuessLocale = @string;
+				return MobileDeviceLocale.s_bestGuessLocale;
+			}
+			string text = "enUS";
 			bool flag = false;
-			string text = MobileDeviceLocale.GetLanguageCode();
+			string text2 = MobileDeviceLocale.GetLanguageCode();
 			try
 			{
-				flag = MobileDeviceLocale.s_languageCodeToLocale.TryGetValue(text, out result);
+				flag = MobileDeviceLocale.s_languageCodeToLocale.TryGetValue(text2, out text);
 			}
 			catch (Exception)
 			{
 			}
 			if (!flag)
 			{
-				text = text.Substring(0, 2);
+				text2 = text2.Substring(0, 2);
 				try
 				{
-					flag = MobileDeviceLocale.s_languageCodeToLocale.TryGetValue(text, out result);
+					flag = MobileDeviceLocale.s_languageCodeToLocale.TryGetValue(text2, out text);
 				}
 				catch (Exception)
 				{
 				}
 			}
-			if (!flag || text == "es")
+			if (!flag || text2 == "es")
 			{
 				int num = 1;
 				string countryCode = MobileDeviceLocale.GetCountryCode();
@@ -48,36 +86,38 @@ namespace WoWCompanionApp
 				catch (Exception)
 				{
 				}
-				if (text != null)
+				if (text2 != null)
 				{
-					if (text == "es")
+					if (text2 == "es")
 					{
 						if (num == 1)
 						{
-							result = "esMX";
+							text = "esMX";
 						}
 						else
 						{
-							result = "esES";
+							text = "esES";
 						}
-						return result;
+						goto IL_140;
 					}
-					if (text == "zh")
+					if (text2 == "zh")
 					{
 						if (countryCode == "CN")
 						{
-							result = "zhCN";
+							text = "zhCN";
 						}
 						else
 						{
-							result = "zhTW";
+							text = "zhTW";
 						}
-						return result;
+						goto IL_140;
 					}
 				}
-				result = "enUS";
+				text = "enUS";
 			}
-			return result;
+			IL_140:
+			MobileDeviceLocale.s_bestGuessLocale = text;
+			return MobileDeviceLocale.s_bestGuessLocale;
 		}
 
 		public static string GetCountryCode()
@@ -90,17 +130,122 @@ namespace WoWCompanionApp
 			return MobileDeviceLocale.GetLocaleLanguageCode();
 		}
 
+		public static CultureInfo GetCultureInfoLocale()
+		{
+			string bestGuessForLocale = MobileDeviceLocale.GetBestGuessForLocale();
+			if (MobileDeviceLocale.s_localeToCultureInfo.ContainsKey(bestGuessForLocale))
+			{
+				return MobileDeviceLocale.s_localeToCultureInfo[bestGuessForLocale];
+			}
+			return CultureInfo.CurrentCulture;
+		}
+
 		private static string GetLocaleCountryCode()
 		{
-			AndroidJavaClass androidJavaClass = new AndroidJavaClass("com.blizzard.wowcompanion.DeviceSettings");
-			return androidJavaClass.CallStatic<string>("GetLocaleCountryCode", new object[0]);
+			string result;
+			using (AndroidJavaClass androidJavaClass = new AndroidJavaClass("android.os.Build$VERSION"))
+			{
+				if (androidJavaClass != null)
+				{
+					int @static = androidJavaClass.GetStatic<int>("SDK_INT");
+					AndroidJavaObject androidJavaObject = null;
+					if (@static >= 24)
+					{
+						using (AndroidJavaClass androidJavaClass2 = new AndroidJavaClass("android.os.LocaleList"))
+						{
+							if (androidJavaClass2 != null)
+							{
+								androidJavaObject = androidJavaClass2.CallStatic<AndroidJavaObject>("getDefault", new object[0]).Call<AndroidJavaObject>("get", new object[]
+								{
+									0
+								});
+							}
+						}
+					}
+					else
+					{
+						using (AndroidJavaClass androidJavaClass3 = new AndroidJavaClass("java.util.Locale"))
+						{
+							if (androidJavaClass3 != null)
+							{
+								androidJavaObject = androidJavaClass3.CallStatic<AndroidJavaObject>("getDefault", new object[0]);
+							}
+						}
+					}
+					if (androidJavaObject != null)
+					{
+						result = androidJavaObject.Call<string>("getCountry", new object[0]);
+					}
+					else
+					{
+						result = "US";
+					}
+				}
+				else
+				{
+					result = "US";
+				}
+			}
+			return result;
 		}
 
 		private static string GetLocaleLanguageCode()
 		{
-			AndroidJavaClass androidJavaClass = new AndroidJavaClass("com.blizzard.wowcompanion.DeviceSettings");
-			return androidJavaClass.CallStatic<string>("GetLocaleLanguageCode", new object[0]);
+			string result;
+			using (AndroidJavaClass androidJavaClass = new AndroidJavaClass("android.os.Build$VERSION"))
+			{
+				if (androidJavaClass != null)
+				{
+					int @static = androidJavaClass.GetStatic<int>("SDK_INT");
+					AndroidJavaObject androidJavaObject = null;
+					if (@static >= 24)
+					{
+						using (AndroidJavaClass androidJavaClass2 = new AndroidJavaClass("android.os.LocaleList"))
+						{
+							if (androidJavaClass2 != null)
+							{
+								androidJavaObject = androidJavaClass2.CallStatic<AndroidJavaObject>("getDefault", new object[0]).Call<AndroidJavaObject>("get", new object[]
+								{
+									0
+								});
+							}
+						}
+					}
+					else
+					{
+						using (AndroidJavaClass androidJavaClass3 = new AndroidJavaClass("java.util.Locale"))
+						{
+							if (androidJavaClass3 != null)
+							{
+								androidJavaObject = androidJavaClass3.CallStatic<AndroidJavaObject>("getDefault", new object[0]);
+							}
+						}
+					}
+					if (androidJavaObject != null)
+					{
+						result = androidJavaObject.Call<string>("getLanguage", new object[0]) + androidJavaObject.Call<string>("getCountry", new object[0]);
+					}
+					else
+					{
+						result = "enUS";
+					}
+				}
+				else
+				{
+					result = "enUS";
+				}
+			}
+			return result;
 		}
+
+		public static bool IsChineseDevice()
+		{
+			return MobileDeviceLocale.GetCountryCode().Equals("CN", StringComparison.OrdinalIgnoreCase);
+		}
+
+		public static readonly string LocaleKey = "WoWCompanion:Locale";
+
+		private static string s_bestGuessLocale = null;
 
 		private static Dictionary<string, string> s_languageCodeToLocale = new Dictionary<string, string>
 		{
@@ -165,6 +310,8 @@ namespace WoWCompanionApp
 				"ptBR"
 			}
 		};
+
+		private static Dictionary<string, CultureInfo> s_localeToCultureInfo = new Dictionary<string, CultureInfo>();
 
 		private static Dictionary<string, int> s_countryCodeToRegionId = new Dictionary<string, int>
 		{
@@ -969,18 +1116,5 @@ namespace WoWCompanionApp
 				2
 			}
 		};
-
-		public struct ConnectionData
-		{
-			public string address;
-
-			public int port;
-
-			public string version;
-
-			public string name;
-
-			public int tutorialPort;
-		}
 	}
 }

@@ -13,17 +13,12 @@ namespace WoWCompanionApp
 		{
 			AdventureMapPanel.instance = this;
 			this.MapFiltersChanged = (Action)Delegate.Combine(this.MapFiltersChanged, new Action(this.UpdateWorldQuests));
-			this.HandleInvasionPOIChanged();
-			Main main = Main.instance;
-			main.InvasionPOIChangedAction = (Action)Delegate.Combine(main.InvasionPOIChangedAction, new Action(this.HandleInvasionPOIChanged));
 		}
 
 		private void OnDisable()
 		{
 			AdventureMapPanel.instance = this;
 			this.MapFiltersChanged = (Action)Delegate.Remove(this.MapFiltersChanged, new Action(this.UpdateWorldQuests));
-			Main main = Main.instance;
-			main.InvasionPOIChangedAction = (Action)Delegate.Remove(main.InvasionPOIChangedAction, new Action(this.HandleInvasionPOIChanged));
 		}
 
 		public void DeselectAllFollowerListItems()
@@ -177,7 +172,7 @@ namespace WoWCompanionApp
 			AdventureMapPanel.instance = this;
 			this.m_zoneID = AdventureMapPanel.eZone.None;
 			this.m_testMissionIconScale = 1f;
-			this.m_mapFilters = new bool[14];
+			this.m_mapFilters = new bool[18];
 			for (int i = 0; i < this.m_mapFilters.Length; i++)
 			{
 				this.m_mapFilters[i] = false;
@@ -220,7 +215,7 @@ namespace WoWCompanionApp
 				Debug.LogWarning("Mission Not Found: ID " + garrMissionID);
 				return;
 			}
-			if (record.GarrFollowerTypeID != 4u)
+			if (record.GarrFollowerTypeID != (uint)GarrisonStatus.GarrisonFollowerType)
 			{
 				return;
 			}
@@ -245,9 +240,9 @@ namespace WoWCompanionApp
 			float num5 = 1318.388f;
 			num2 += num4;
 			num3 += num5;
-			float width = this.m_worldMapLowDetail_BrokenIsles.sprite.textureRect.width;
-			float height = this.m_worldMapLowDetail_BrokenIsles.sprite.textureRect.height;
-			Vector2 vector = new Vector3(num2 / width, num3 / height);
+			float num6 = 1f;
+			float num7 = 1f;
+			Vector2 vector = new Vector3(num2 / num6, num3 / num7);
 			RectTransform component = gameObject.GetComponent<RectTransform>();
 			component.anchorMin = vector;
 			component.anchorMax = vector;
@@ -284,23 +279,6 @@ namespace WoWCompanionApp
 					}
 				}
 			}
-			componentsInChildren = this.m_missionAndWorldQuestArea_Argus.transform.GetComponentsInChildren<AdventureMapMissionSite>(true);
-			foreach (AdventureMapMissionSite adventureMapMissionSite2 in componentsInChildren)
-			{
-				if (adventureMapMissionSite2 != null)
-				{
-					StackableMapIcon component2 = adventureMapMissionSite2.GetComponent<StackableMapIcon>();
-					GameObject gameObject2 = adventureMapMissionSite2.gameObject;
-					if (component2 != null)
-					{
-						component2.RemoveFromContainer();
-					}
-					if (gameObject2 != null)
-					{
-						Object.Destroy(adventureMapMissionSite2.gameObject);
-					}
-				}
-			}
 			foreach (WrapperGarrisonMission wrapperGarrisonMission in PersistentMissionData.missionDictionary.Values)
 			{
 				this.CreateMissionSite(wrapperGarrisonMission.MissionRecID);
@@ -327,257 +305,233 @@ namespace WoWCompanionApp
 
 		public void UpdateWorldQuests()
 		{
-			AdventureMapPanel.ClearWorldQuestArea(this.m_missionAndWorldQuestArea_BrokenIsles);
-			AdventureMapPanel.ClearWorldQuestArea(this.m_missionAndWorldQuestArea_Argus);
 			AdventureMapPanel.ClearWorldQuestArea(this.m_missionAndWorldQuestArea_KulTiras);
 			AdventureMapPanel.ClearWorldQuestArea(this.m_missionAndWorldQuestArea_Zandalar);
 			foreach (WrapperWorldQuest worldQuest in WorldQuestData.WorldQuestDictionary.Values)
 			{
-				if (!this.IsFilterEnabled(MapFilterType.All))
+				if (worldQuest.StartLocationMapID != 1220 && worldQuest.StartLocationMapID != 1669)
 				{
-					bool flag = false;
-					if (!flag && this.IsFilterEnabled(MapFilterType.OrderResources))
+					if (!this.IsFilterEnabled(MapFilterType.All))
 					{
-						flag |= worldQuest.Currencies.Any((WrapperWorldQuestReward reward) => reward.RecordID == 1220);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Gold) && worldQuest.Money > 0)
-					{
-						flag = true;
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Gear))
-					{
-						flag |= worldQuest.Items.Any(delegate(WrapperWorldQuestReward reward)
+						bool flag = false;
+						if (!flag && this.IsFilterEnabled(MapFilterType.Azerite))
 						{
-							ItemRec record2 = StaticDB.itemDB.GetRecord(reward.RecordID);
-							return record2 != null && (record2.ClassID == 2 || record2.ClassID == 3 || record2.ClassID == 4 || record2.ClassID == 6);
-						});
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.ProfessionMats))
-					{
-						flag |= worldQuest.Items.Any(delegate(WrapperWorldQuestReward reward)
-						{
-							ItemRec record2 = StaticDB.itemDB.GetRecord(reward.RecordID);
-							return record2 != null && record2.ClassID == 7;
-						});
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.PetCharms))
-					{
-						flag |= worldQuest.Items.Any((WrapperWorldQuestReward reward) => reward.RecordID == 116415);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_HighmountainTribes))
-					{
-						bool flag2 = flag;
-						bool flag3;
-						if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
-						{
-							flag3 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 42233);
+							flag |= worldQuest.Currencies.Any((WrapperWorldQuestReward reward) => reward.RecordID == 1553);
 						}
-						else
+						if (!flag && this.IsFilterEnabled(MapFilterType.OrderResources))
 						{
-							flag3 = false;
+							flag |= worldQuest.Currencies.Any((WrapperWorldQuestReward reward) => reward.RecordID == 1560);
 						}
-						flag = (flag2 || flag3);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_CourtOfFarondis))
-					{
-						bool flag4 = flag;
-						bool flag5;
-						if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
-						{
-							flag5 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 42420);
-						}
-						else
-						{
-							flag5 = false;
-						}
-						flag = (flag4 || flag5);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_Dreamweavers))
-					{
-						bool flag6 = flag;
-						bool flag7;
-						if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
-						{
-							flag7 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 42170);
-						}
-						else
-						{
-							flag7 = false;
-						}
-						flag = (flag6 || flag7);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_Wardens))
-					{
-						bool flag8 = flag;
-						bool flag9;
-						if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
-						{
-							flag9 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 42422);
-						}
-						else
-						{
-							flag9 = false;
-						}
-						flag = (flag8 || flag9);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_Nightfallen))
-					{
-						bool flag10 = flag;
-						bool flag11;
-						if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
-						{
-							flag11 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 42421);
-						}
-						else
-						{
-							flag11 = false;
-						}
-						flag = (flag10 || flag11);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_Valarjar))
-					{
-						bool flag12 = flag;
-						bool flag13;
-						if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
-						{
-							flag13 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 42234);
-						}
-						else
-						{
-							flag13 = false;
-						}
-						flag = (flag12 || flag13);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_KirinTor))
-					{
-						bool flag14 = flag;
-						bool flag15;
-						if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
-						{
-							flag15 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 43179);
-						}
-						else
-						{
-							flag15 = false;
-						}
-						flag = (flag14 || flag15);
-					}
-					if (!flag && this.IsFilterEnabled(MapFilterType.Invasion))
-					{
-						QuestInfoRec record = StaticDB.questInfoDB.GetRecord(worldQuest.QuestInfoID);
-						if (record == null)
-						{
-							break;
-						}
-						bool flag16 = record.Type == 7;
-						if (flag16)
+						if (!flag && this.IsFilterEnabled(MapFilterType.Gold) && worldQuest.Money > 0)
 						{
 							flag = true;
 						}
-					}
-					if (!flag)
-					{
-						continue;
-					}
-				}
-				GameObject gameObject = Object.Instantiate<GameObject>(AdventureMapPanel.instance.m_AdvMapWorldQuestPrefab);
-				if (worldQuest.StartLocationMapID == 1220)
-				{
-					gameObject.transform.SetParent(this.m_missionAndWorldQuestArea_BrokenIsles.transform, false);
-					float mapScale = 0.10271506f;
-					float mapOffsetX = 1036.88025f;
-					float mapOffsetY = 597.2115f;
-					this.SetupWorldQuestIcon(worldQuest, gameObject, mapOffsetX, mapOffsetY, mapScale);
-				}
-				else if (worldQuest.StartLocationMapID == 1669)
-				{
-					gameObject.transform.localScale = new Vector3(1.33f, 1.33f, 1.33f);
-					gameObject.transform.SetParent(this.m_missionAndWorldQuestArea_Argus.transform, false);
-					int worldMapAreaID = worldQuest.WorldMapAreaID;
-					float mapScale2;
-					float mapOffsetX2;
-					float mapOffsetY2;
-					switch (worldMapAreaID)
-					{
-					case 882:
-						goto IL_5EF;
-					default:
-						if (worldMapAreaID == 1170)
+						if (!flag && this.IsFilterEnabled(MapFilterType.Gear))
 						{
-							goto IL_5EF;
-						}
-						if (worldMapAreaID == 1171)
-						{
-							goto IL_618;
-						}
-						if (worldMapAreaID != 830 && worldMapAreaID != 1135)
-						{
-							Debug.LogError(string.Concat(new object[]
+							flag |= worldQuest.Items.Any(delegate(WrapperWorldQuestReward reward)
 							{
-								"UNHANDLED WORLD QUEST AREA ID ",
-								worldQuest.QuestTitle,
-								" ",
-								worldQuest.WorldMapAreaID
-							}));
+								ItemRec record = StaticDB.itemDB.GetRecord(reward.RecordID);
+								return record != null && (record.ClassID == 2 || record.ClassID == 3 || record.ClassID == 4 || record.ClassID == 6);
+							});
 						}
-						else
+						if (!flag && this.IsFilterEnabled(MapFilterType.ProfessionMats))
 						{
-							mapScale2 = 0.3132809f;
-							mapOffsetX2 = 2115.88f;
-							mapOffsetY2 = -7.788513f;
-							this.SetupWorldQuestIcon(worldQuest, gameObject, mapOffsetX2, mapOffsetY2, mapScale2);
+							flag |= worldQuest.Items.Any(delegate(WrapperWorldQuestReward reward)
+							{
+								ItemRec record = StaticDB.itemDB.GetRecord(reward.RecordID);
+								return record != null && record.ClassID == 7;
+							});
 						}
-						break;
-					case 885:
-						goto IL_618;
+						if (!flag && this.IsFilterEnabled(MapFilterType.PetBattles))
+						{
+							flag |= (worldQuest.QuestInfoID == 115);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Reputation))
+						{
+							flag |= worldQuest.Currencies.Any(delegate(WrapperWorldQuestReward reward)
+							{
+								CurrencyTypesRec record = StaticDB.currencyTypesDB.GetRecord(reward.RecordID);
+								return record != null && record.FactionID != 0u;
+							});
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_ChampionsOfAzeroth))
+						{
+							bool flag2 = flag;
+							bool flag3;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag3 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50562);
+							}
+							else
+							{
+								flag3 = false;
+							}
+							flag = (flag2 || flag3);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_ZandalariEmpire))
+						{
+							bool flag4 = flag;
+							bool flag5;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag5 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50598);
+							}
+							else
+							{
+								flag5 = false;
+							}
+							flag = (flag4 || flag5);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_ProudmooreAdmiralty))
+						{
+							bool flag6 = flag;
+							bool flag7;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag7 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50599);
+							}
+							else
+							{
+								flag7 = false;
+							}
+							flag = (flag6 || flag7);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_OrderOfEmbers))
+						{
+							bool flag8 = flag;
+							bool flag9;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag9 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50600);
+							}
+							else
+							{
+								flag9 = false;
+							}
+							flag = (flag8 || flag9);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_StormsWake))
+						{
+							bool flag10 = flag;
+							bool flag11;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag11 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50601);
+							}
+							else
+							{
+								flag11 = false;
+							}
+							flag = (flag10 || flag11);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_TalanjisExpedition))
+						{
+							bool flag12 = flag;
+							bool flag13;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag13 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50602);
+							}
+							else
+							{
+								flag13 = false;
+							}
+							flag = (flag12 || flag13);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_Voldunai))
+						{
+							bool flag14 = flag;
+							bool flag15;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag15 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50603);
+							}
+							else
+							{
+								flag15 = false;
+							}
+							flag = (flag14 || flag15);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_TortollanSeekers))
+						{
+							bool flag16 = flag;
+							bool flag17;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag17 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50604);
+							}
+							else
+							{
+								flag17 = false;
+							}
+							flag = (flag16 || flag17);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_AllianceWarEffort))
+						{
+							bool flag18 = flag;
+							bool flag19;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag19 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50605);
+							}
+							else
+							{
+								flag19 = false;
+							}
+							flag = (flag18 || flag19);
+						}
+						if (!flag && this.IsFilterEnabled(MapFilterType.Bounty_HordeWarEffort))
+						{
+							bool flag20 = flag;
+							bool flag21;
+							if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
+							{
+								flag21 = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID].BountyQuestIDs.Any((int questID) => questID == 50606);
+							}
+							else
+							{
+								flag21 = false;
+							}
+							flag = (flag20 || flag21);
+						}
+						if (!flag)
+						{
+							continue;
+						}
 					}
-					IL_67F:
-					goto IL_761;
-					IL_5EF:
-					mapScale2 = 0.39f;
-					mapOffsetX2 = 4832.76f;
-					mapOffsetY2 = -1232f;
-					this.SetupWorldQuestIcon(worldQuest, gameObject, mapOffsetX2, mapOffsetY2, mapScale2);
-					goto IL_67F;
-					IL_618:
-					mapScale2 = 0.38f;
-					mapOffsetX2 = 3981f;
-					mapOffsetY2 = 1520f;
-					this.SetupWorldQuestIcon(worldQuest, gameObject, mapOffsetX2, mapOffsetY2, mapScale2);
-				}
-				else if (worldQuest.StartLocationMapID == 1642)
-				{
-					gameObject.transform.SetParent(this.m_missionAndWorldQuestArea_Zandalar.transform, false);
-					float mapScale3 = 0.10271506f;
-					float mapOffsetX3 = 1036.88025f;
-					float mapOffsetY3 = 597.2115f;
-					this.SetupWorldQuestIcon(worldQuest, gameObject, mapOffsetX3, mapOffsetY3, mapScale3);
-				}
-				else if (worldQuest.StartLocationMapID == 1643)
-				{
-					gameObject.transform.SetParent(this.m_missionAndWorldQuestArea_KulTiras.transform, false);
-					float mapScale4 = 0.10271506f;
-					float mapOffsetX4 = 1036.88025f;
-					float mapOffsetY4 = 597.2115f;
-					this.SetupWorldQuestIcon(worldQuest, gameObject, mapOffsetX4, mapOffsetY4, mapScale4);
-				}
-				else
-				{
-					Debug.LogError(string.Concat(new object[]
+					GameObject gameObject = Object.Instantiate<GameObject>(AdventureMapPanel.instance.m_AdvMapWorldQuestPrefab);
+					if (worldQuest.StartLocationMapID == 1642)
 					{
-						"UNHANDLED WORLD QUEST AREA ID ",
-						worldQuest.QuestTitle,
-						" ",
-						worldQuest.WorldMapAreaID
-					}));
-				}
-				IL_761:
-				AdventureMapWorldQuest component = gameObject.GetComponent<AdventureMapWorldQuest>();
-				component.SetQuestID(worldQuest.QuestID);
-				StackableMapIcon component2 = gameObject.GetComponent<StackableMapIcon>();
-				if (component2 != null)
-				{
-					component2.RegisterWithManager(worldQuest.StartLocationMapID);
+						gameObject.transform.SetParent(this.m_missionAndWorldQuestArea_Zandalar.transform, false);
+						float num = 0.152715057f;
+						float num2 = 1250.88025f;
+						float num3 = 697.2115f;
+						if (worldQuest.WorldMapAreaID == 863)
+						{
+							num -= 0.02f;
+						}
+						else if (worldQuest.WorldMapAreaID == 864)
+						{
+							num2 += 60f;
+							num3 -= 20f;
+						}
+						this.SetupWorldQuestIcon(worldQuest, gameObject, num2, num3, num);
+					}
+					else if (worldQuest.StartLocationMapID == 1643)
+					{
+						gameObject.transform.SetParent(this.m_missionAndWorldQuestArea_KulTiras.transform, false);
+						float mapScale = 0.152715057f;
+						float mapOffsetX = 1150.88025f;
+						float mapOffsetY = 497.2115f;
+						this.SetupWorldQuestIcon(worldQuest, gameObject, mapOffsetX, mapOffsetY, mapScale);
+					}
+					AdventureMapWorldQuest component = gameObject.GetComponent<AdventureMapWorldQuest>();
+					component.SetQuestID(worldQuest.QuestID);
+					StackableMapIcon component2 = gameObject.GetComponent<StackableMapIcon>();
+					if (component2 != null)
+					{
+						component2.RegisterWithManager(worldQuest.StartLocationMapID);
+					}
 				}
 			}
 			this.m_pinchZoomContentManager.ForceZoomFactorChanged();
@@ -587,21 +541,13 @@ namespace WoWCompanionApp
 		{
 			if (startLocationMapId == 1642)
 			{
-				return 1201;
+				return 1985;
 			}
-			if (startLocationMapId == 1643)
-			{
-				return 1201;
-			}
-			if (startLocationMapId == 1220)
-			{
-				return 1201;
-			}
-			if (startLocationMapId != 1669)
+			if (startLocationMapId != 1643)
 			{
 				return 0;
 			}
-			return 2001;
+			return 1985;
 		}
 
 		private void SetupWorldQuestIcon(WrapperWorldQuest worldQuest, GameObject worldQuestObj, float mapOffsetX, float mapOffsetY, float mapScale)
@@ -625,21 +571,6 @@ namespace WoWCompanionApp
 			if (this.m_currentMapMission > 0)
 			{
 				this.m_secondsMissionHasBeenSelected += Time.deltaTime;
-			}
-			if (this.m_invasionNotification.gameObject.activeSelf)
-			{
-				TimeSpan timeSpan = LegionfallData.GetCurrentInvasionExpirationTime() - GarrisonStatus.CurrentTime();
-				timeSpan = ((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan);
-				if (timeSpan.TotalSeconds > 0.0)
-				{
-					this.m_invasionTimeRemaining.text = timeSpan.GetDurationString(false);
-				}
-				else
-				{
-					this.m_invasionNotification.gameObject.SetActive(false);
-					this.SetActiveMapViewSize();
-					Main.instance.RequestWorldQuests();
-				}
 			}
 			this.UpdateCompletedMissionsDisplay();
 		}
@@ -743,6 +674,7 @@ namespace WoWCompanionApp
 			{
 				if (this.OnZoomOutMap != null)
 				{
+					Main.instance.m_UISound.Play_MapZoomOut();
 					this.OnZoomOutMap();
 				}
 				iTween.ValueTo(base.gameObject, iTween.Hash(new object[]
@@ -813,147 +745,48 @@ namespace WoWCompanionApp
 					}
 				}
 			}
-			if (PersistentBountyData.bountyDictionary == null)
+			if (PersistentBountyData.bountyDictionary == null || this.m_emissaryCollection == null)
 			{
 				return;
 			}
+			this.m_emissaryCollection.ClearCollection();
 			foreach (WrapperWorldQuestBounty bounty in PersistentBountyData.bountyDictionary.Values)
 			{
-				GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_bountySitePrefab);
-				if (!(gameObject2 == null))
+				QuestV2Rec record = StaticDB.questDB.GetRecord(bounty.QuestID);
+				int num = (record == null) ? 0 : record.QuestSortID;
+				if (record == null)
 				{
-					BountySite component2 = gameObject2.GetComponent<BountySite>();
-					if (!(component2 == null))
+					Debug.LogWarning("HandleBountyInfoUpdated Warning: Failed to get Bounty quest with ID " + bounty.QuestID.ToString());
+				}
+				else if (num != 7502 && num != 7503)
+				{
+					switch (num)
 					{
-						component2.SetBounty(bounty);
-						gameObject2.name = "BountySite " + bounty.QuestID;
-						RectTransform component3 = gameObject2.GetComponent<RectTransform>();
-						if (!(component3 == null))
+					case 7541:
+					case 7543:
+						break;
+					default:
+						if (num != 7334 && num != 7558 && num != 7637 && num != 8147 && num != 8574 && num != 8701)
 						{
-							component3.anchorMin = new Vector2(0.5f, 0.5f);
-							component3.anchorMax = new Vector2(0.5f, 0.5f);
-							QuestV2Rec record = StaticDB.questDB.GetRecord(bounty.QuestID);
-							int num = (record == null) ? 0 : record.QuestSortID;
-							bool flag = true;
-							ZoneMissionOverview zoneMissionOverview = null;
-							int startLocationMapID = 1220;
-							switch (num)
+							GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_bountySitePrefab);
+							if (!(gameObject2 == null))
 							{
-							case 8499:
-								break;
-							case 8500:
-								break;
-							case 8501:
-								break;
-							default:
-								if (num != 7502)
+								BountySite component2 = gameObject2.GetComponent<BountySite>();
+								if (!(component2 == null))
 								{
-									if (num == 7503)
+									component2.SetBounty(bounty);
+									gameObject2.name = "BountySite " + bounty.QuestID;
+									RectTransform component3 = gameObject2.GetComponent<RectTransform>();
+									if (!(component3 == null))
 									{
-										zoneMissionOverview = this.m_allZoneMissionOverviews[2];
-										break;
-									}
-									switch (num)
-									{
-									case 7541:
-										zoneMissionOverview = this.m_allZoneMissionOverviews[3];
-										goto IL_31F;
-									default:
-										if (num == 7334)
-										{
-											zoneMissionOverview = this.m_allZoneMissionOverviews[0];
-											goto IL_31F;
-										}
-										if (num == 7558)
-										{
-											zoneMissionOverview = this.m_allZoneMissionOverviews[5];
-											goto IL_31F;
-										}
-										if (num == 7637)
-										{
-											zoneMissionOverview = this.m_allZoneMissionOverviews[4];
-											goto IL_31F;
-										}
-										if (num != 8147)
-										{
-											if (num == 8567)
-											{
-												goto IL_31F;
-											}
-											if (num == 8574)
-											{
-												zoneMissionOverview = this.m_allZoneMissionOverviews[7];
-												goto IL_31F;
-											}
-											if (num == 8701)
-											{
-												zoneMissionOverview = this.m_allZoneMissionOverviews[9];
-												goto IL_31F;
-											}
-											if (num == 8721)
-											{
-												goto IL_31F;
-											}
-											if (num != 9042)
-											{
-												Debug.LogError(string.Concat(new object[]
-												{
-													"INVALID QUESTSORTID ",
-													num,
-													" for quest ID:",
-													bounty.QuestID
-												}));
-												flag = false;
-												goto IL_31F;
-											}
-											goto IL_31F;
-										}
-										break;
-									case 7543:
-										zoneMissionOverview = this.m_allZoneMissionOverviews[1];
-										goto IL_31F;
+										component3.anchorMin = new Vector2(0.5f, 0.5f);
+										component3.anchorMax = new Vector2(0.5f, 0.5f);
+										this.m_emissaryCollection.AddBountyObjectToCollection(gameObject2);
 									}
 								}
-								zoneMissionOverview = this.m_allZoneMissionOverviews[6];
-								break;
-							}
-							IL_31F:
-							if (flag)
-							{
-								if (zoneMissionOverview != null)
-								{
-									if (zoneMissionOverview.zoneNameTag != null && zoneMissionOverview.zoneNameTag.Length > 0)
-									{
-										if (zoneMissionOverview.m_bountyButtonRoot != null)
-										{
-											gameObject2.transform.SetParent(zoneMissionOverview.m_bountyButtonRoot.transform, false);
-										}
-									}
-									else if (zoneMissionOverview.m_anonymousBountyButtonRoot != null)
-									{
-										gameObject2.transform.SetParent(zoneMissionOverview.m_anonymousBountyButtonRoot.transform, false);
-									}
-								}
-								gameObject2.transform.localPosition = Vector3.zero;
-								if (component2.m_errorImage != null)
-								{
-									component2.m_errorImage.gameObject.SetActive(false);
-								}
-							}
-							else
-							{
-								gameObject2.transform.localPosition = new Vector3(0f, 0f, 0f);
-								if (component2.m_errorImage != null)
-								{
-									component2.m_errorImage.gameObject.SetActive(true);
-								}
-							}
-							StackableMapIcon component4 = gameObject2.GetComponent<StackableMapIcon>();
-							if (component4 != null)
-							{
-								component4.RegisterWithManager(startLocationMapID);
 							}
 						}
+						break;
 					}
 				}
 			}
@@ -964,39 +797,13 @@ namespace WoWCompanionApp
 			this.m_playerInfoDisplay.HideRecentCharacterPanel();
 		}
 
-		private void HandleInvasionPOIChanged()
-		{
-			if (!LegionfallData.HasCurrentInvasionPOI())
-			{
-				this.m_invasionNotification.gameObject.SetActive(false);
-			}
-			else
-			{
-				WrapperAreaPoi currentInvasionPOI = LegionfallData.GetCurrentInvasionPOI();
-				this.m_invasionNotification.gameObject.SetActive(true);
-				this.m_invasionTitle.text = currentInvasionPOI.Description;
-				TimeSpan timeSpan = LegionfallData.GetCurrentInvasionExpirationTime() - GarrisonStatus.CurrentTime();
-				timeSpan = ((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan);
-				this.m_invasionTimeRemaining.text = timeSpan.GetDurationString(false);
-			}
-			this.SetActiveMapViewSize();
-		}
-
 		private void SetActiveMapViewSize()
 		{
-			if (this.m_mapInfo_BrokenIsles.gameObject.activeSelf)
-			{
-				this.SetMapViewSize_BrokenIsles();
-			}
-			else if (this.m_mapInfo_Argus.gameObject.activeSelf)
-			{
-				this.SetMapViewSize_Argus();
-			}
-			else if (this.m_mapInfo_KulTiras.gameObject.activeSelf)
+			if (this.m_zoneID == AdventureMapPanel.eZone.Kultiras)
 			{
 				this.SetMapViewSize_KulTiras();
 			}
-			else if (this.m_mapInfo_Zandalar.gameObject.activeSelf)
+			else if (this.m_zoneID == AdventureMapPanel.eZone.Zandalar)
 			{
 				this.SetMapViewSize_Zandalar();
 			}
@@ -1004,7 +811,7 @@ namespace WoWCompanionApp
 
 		private void SetMapViewSize_BrokenIsles()
 		{
-			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 820f + ((!this.m_invasionNotification.gameObject.activeSelf) ? 0f : -60f));
+			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 720f);
 			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 0f);
 			this.m_pinchZoomContentManager.SetZoom(1f, false);
 			this.CenterAndZoomOut();
@@ -1012,23 +819,23 @@ namespace WoWCompanionApp
 
 		private void SetMapViewSize_KulTiras()
 		{
-			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 820f + ((!this.m_invasionNotification.gameObject.activeSelf) ? 0f : -60f));
-			this.m_mapViewRT.anchoredPosition = new Vector2(25f, 75f);
+			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 660f);
+			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 110f);
 			this.m_pinchZoomContentManager.SetZoom(1f, false);
 			this.CenterAndZoomOut();
 		}
 
 		private void SetMapViewSize_Zandalar()
 		{
-			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 720f + ((!this.m_invasionNotification.gameObject.activeSelf) ? 0f : -60f));
-			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 100f);
+			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 660f);
+			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 110f);
 			this.m_pinchZoomContentManager.SetZoom(1f, false);
 			this.CenterAndZoomOut();
 		}
 
 		private void SetMapViewSize_Argus()
 		{
-			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 720f + ((!this.m_invasionNotification.gameObject.activeSelf) ? 0f : -60f));
+			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 720f);
 			this.m_mapViewRT.anchoredPosition = new Vector2(0f, 100f);
 			this.m_pinchZoomContentManager.SetZoom(1f, false);
 			this.CenterAndZoomOut();
@@ -1046,6 +853,47 @@ namespace WoWCompanionApp
 			{
 				this.m_nextCompletedMissionButton.gameObject.SetActive(true);
 			}
+		}
+
+		public void SetStartingMapByFaction()
+		{
+			if (GarrisonStatus.Faction() == PVP_FACTION.HORDE)
+			{
+				this.m_zoneID = AdventureMapPanel.eZone.Zandalar;
+			}
+			else if (GarrisonStatus.Faction() == PVP_FACTION.ALLIANCE)
+			{
+				this.m_zoneID = AdventureMapPanel.eZone.Kultiras;
+			}
+			this.SetMapByActiveZoneID();
+		}
+
+		public void SwapMaps()
+		{
+			this.m_zoneID = ((this.m_zoneID != AdventureMapPanel.eZone.Zandalar) ? AdventureMapPanel.eZone.Zandalar : AdventureMapPanel.eZone.Kultiras);
+			this.SetMapByActiveZoneID();
+		}
+
+		private void SetMapByActiveZoneID()
+		{
+			if (this.m_zoneID == AdventureMapPanel.eZone.Zandalar)
+			{
+				this.m_mapInfo_Zandalar.gameObject.SetActive(true);
+				this.m_mapInfo_KulTiras.gameObject.SetActive(false);
+				this.m_selectedMapImage.sprite = this.m_zandalarNavButtonImage;
+				this.m_notSelectedMapImage.sprite = this.m_zandalarNavButtonImage;
+			}
+			if (this.m_zoneID == AdventureMapPanel.eZone.Kultiras)
+			{
+				this.m_mapInfo_Zandalar.gameObject.SetActive(false);
+				this.m_mapInfo_KulTiras.gameObject.SetActive(true);
+				this.m_selectedMapImage.sprite = this.m_kultirasNavButtonImage;
+				this.m_notSelectedMapImage.sprite = this.m_kultirasNavButtonImage;
+			}
+			string text = (this.m_zoneID != AdventureMapPanel.eZone.Zandalar) ? "KUL_TIRAS_CAPS" : "ZANDALAR_CAPS";
+			string str = text;
+			this.m_zoneLabelText.text = StaticDB.GetString(text, "[PH] " + str);
+			this.SetActiveMapViewSize();
 		}
 
 		public bool m_testEnableDetailedZoneMaps;
@@ -1068,10 +916,6 @@ namespace WoWCompanionApp
 
 		public RectTransform m_mapViewContentsRT;
 
-		public Image m_worldMapLowDetail_BrokenIsles;
-
-		public Image m_worldMapLowDetail_Argus;
-
 		public MapInfo m_mainMapInfo;
 
 		public GameObject m_AdvMapMissionSitePrefab;
@@ -1080,21 +924,15 @@ namespace WoWCompanionApp
 
 		public GameObject m_bountySitePrefab;
 
-		public MapInfo m_mapInfo_BrokenIsles;
-
-		public MapInfo m_mapInfo_Argus;
-
 		public MapInfo m_mapInfo_KulTiras;
 
 		public MapInfo m_mapInfo_Zandalar;
 
-		public GameObject m_missionAndWorldQuestArea_BrokenIsles;
-
-		public GameObject m_missionAndWorldQuestArea_Argus;
-
 		public GameObject m_missionAndWorldQuestArea_KulTiras;
 
 		public GameObject m_missionAndWorldQuestArea_Zandalar;
+
+		public EmissaryCollection m_emissaryCollection;
 
 		public ZoneMissionOverview[] m_allZoneMissionOverviews;
 
@@ -1113,6 +951,14 @@ namespace WoWCompanionApp
 		public ZoneButton m_currentVisibleZone;
 
 		public OrderHallNavButton m_adventureMapOrderHallNavButton;
+
+		public Image m_selectedMapImage;
+
+		public Image m_notSelectedMapImage;
+
+		public Sprite m_kultirasNavButtonImage;
+
+		public Sprite m_zandalarNavButtonImage;
 
 		private int m_currentMapMission;
 
@@ -1162,12 +1008,6 @@ namespace WoWCompanionApp
 
 		private bool[] m_mapFilters;
 
-		public RectTransform m_invasionNotification;
-
-		public Text m_invasionTitle;
-
-		public Text m_invasionTimeRemaining;
-
 		public MissionResultsPanel m_missionResultsPanel;
 
 		public NextCompletedMissionButton m_nextCompletedMissionButton;
@@ -1189,6 +1029,8 @@ namespace WoWCompanionApp
 			Zuldazar,
 			VolDun,
 			Nazmir,
+			Zandalar,
+			Kultiras,
 			None,
 			NumZones
 		}

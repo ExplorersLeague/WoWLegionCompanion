@@ -16,6 +16,11 @@ namespace WoWCompanionApp
 			}
 			string path = "Assets/BundleAssets/StaticDB/";
 			string locale = Main.instance.GetLocale();
+			this.m_azeriteEmpoweredItemDB = new AzeriteEmpoweredItemDB();
+			if (!this.m_azeriteEmpoweredItemDB.Load(path, nonLocalizedBundle, localizedBundle, locale))
+			{
+				Debug.Log("Failed to load AzeriteEmpoweredItem static DB");
+			}
 			this.m_charShipmentDB = new CharShipmentDB();
 			if (!this.m_charShipmentDB.Load(path, nonLocalizedBundle, localizedBundle, locale))
 			{
@@ -31,6 +36,11 @@ namespace WoWCompanionApp
 			{
 				Debug.Log("Failed to load chrClasses static DB");
 			}
+			this.m_communityIconDB = new CommunityIconDB();
+			if (!this.m_communityIconDB.Load(path, nonLocalizedBundle, localizedBundle, locale))
+			{
+				Debug.Log("Failed to load CommunityIcon static DB");
+			}
 			this.m_creatureDB = new CreatureDB();
 			if (!this.m_creatureDB.Load(path, nonLocalizedBundle, localizedBundle, locale))
 			{
@@ -40,6 +50,11 @@ namespace WoWCompanionApp
 			if (!this.m_currencyTypesDB.Load(path, nonLocalizedBundle, localizedBundle, locale))
 			{
 				Debug.Log("Failed to load currencyTypes static DB");
+			}
+			this.m_currencyContainerDB = new CurrencyContainerDB();
+			if (!this.m_currencyContainerDB.Load(path, nonLocalizedBundle, localizedBundle, locale))
+			{
+				Debug.Log("Failed to load currencyContainer static DB");
 			}
 			this.m_factionDB = new FactionDB();
 			if (!this.m_factionDB.Load(path, nonLocalizedBundle, localizedBundle, locale))
@@ -247,6 +262,14 @@ namespace WoWCompanionApp
 			StaticDB.s_initialized = true;
 		}
 
+		public static AzeriteEmpoweredItemDB azeriteEmpoweredItemDB
+		{
+			get
+			{
+				return Singleton<StaticDB>.instance.m_azeriteEmpoweredItemDB;
+			}
+		}
+
 		public static CharShipmentDB charShipmentDB
 		{
 			get
@@ -271,6 +294,14 @@ namespace WoWCompanionApp
 			}
 		}
 
+		public static CommunityIconDB communityIconDB
+		{
+			get
+			{
+				return Singleton<StaticDB>.instance.m_communityIconDB;
+			}
+		}
+
 		public static CreatureDB creatureDB
 		{
 			get
@@ -284,6 +315,14 @@ namespace WoWCompanionApp
 			get
 			{
 				return Singleton<StaticDB>.instance.m_currencyTypesDB;
+			}
+		}
+
+		public static CurrencyContainerDB currencyContainerDB
+		{
+			get
+			{
+				return Singleton<StaticDB>.instance.m_currencyContainerDB;
 			}
 		}
 
@@ -626,15 +665,21 @@ namespace WoWCompanionApp
 
 		private static bool s_initialized;
 
+		private AzeriteEmpoweredItemDB m_azeriteEmpoweredItemDB;
+
 		private CharShipmentDB m_charShipmentDB;
 
 		private CharShipmentContainerDB m_charShipmentContainerDB;
 
 		private ChrClassesDB m_chrClassesDB;
 
+		private CommunityIconDB m_communityIconDB;
+
 		private CreatureDB m_creatureDB;
 
 		private CurrencyTypesDB m_currencyTypesDB;
+
+		private CurrencyContainerDB m_currencyContainerDB;
 
 		private FactionDB m_factionDB;
 

@@ -28,12 +28,24 @@ namespace WoWCompanionApp
 			{
 				this.m_currentPanel = this.m_troopsPanel.gameObject;
 			}
-			if (Main.instance.IsNarrowScreen() && this.m_navBarLayout != null)
+			if (Main.instance.IsIphoneX() && this.m_navBarLayout != null)
 			{
 				HorizontalLayoutGroup component = this.m_navBarLayout.GetComponent<HorizontalLayoutGroup>();
 				if (component != null)
 				{
-					component.spacing = 0f;
+					component.padding.bottom += 15;
+				}
+			}
+			if (this.m_birdEagleThings != null)
+			{
+				this.m_birdEagleThings.SetActive(!Main.instance.IsNarrowScreen());
+			}
+			if (this.m_mapPanel != null)
+			{
+				AdventureMapPanel component2 = this.m_mapPanel.GetComponent<AdventureMapPanel>();
+				if (component2 != null)
+				{
+					component2.SetStartingMapByFaction();
 				}
 			}
 		}
@@ -80,5 +92,7 @@ namespace WoWCompanionApp
 		public Action<OrderHallNavButton> OrderHallNavButtonSelectedAction;
 
 		public GameObject m_navBarLayout;
+
+		public GameObject m_birdEagleThings;
 	}
 }

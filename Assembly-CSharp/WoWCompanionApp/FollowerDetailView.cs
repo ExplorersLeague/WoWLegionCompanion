@@ -11,7 +11,7 @@ namespace WoWCompanionApp
 		private void Start()
 		{
 			this.m_equipmentSlotsText.font = GeneralHelpers.LoadStandardFont();
-			this.m_equipmentSlotsText.text = StaticDB.GetString("EQUIPMENT_AND_ARMAMENTS", "Equipment and Armaments PH");
+			this.m_equipmentSlotsText.text = StaticDB.GetString("EQUIPMENT", "Equipment PH");
 			Text componentInChildren = this.m_activateChampionButton.GetComponentInChildren<Text>();
 			if (componentInChildren != null)
 			{
@@ -95,7 +95,7 @@ namespace WoWCompanionApp
 								}));
 								abilityDisplay.SetAbility(num, true, true, this);
 								Main.instance.m_UISound.Play_UpgradeEquipment();
-								UiAnimMgr.instance.PlayAnim("FlameGlowPulse", abilityDisplay.transform, Vector3.zero, 2f, 0f);
+								UiAnimMgr.instance.PlayAnim("FlameGlowPulse", abilityDisplay.transform, Vector3.zero, 1f, 0f);
 							}
 						}
 					}
@@ -115,27 +115,20 @@ namespace WoWCompanionApp
 			{
 				Object.Destroy(componentsInChildren[i].gameObject);
 			}
-			bool flag = false;
-			bool flag2 = true;
+			bool active = false;
 			for (int j = 0; j < follower.AbilityIDs.Count; j++)
 			{
 				GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(follower.AbilityIDs[j]);
 				if ((record.Flags & 1u) != 0u)
 				{
-					flag = true;
+					active = true;
 					GameObject gameObject = Object.Instantiate<GameObject>(this.m_equipmentSlotPrefab);
 					gameObject.transform.SetParent(this.m_equipmentSlotsRootObject.transform, false);
 					AbilityDisplay component = gameObject.GetComponent<AbilityDisplay>();
 					component.SetAbility(follower.AbilityIDs[j], true, true, this);
 				}
 			}
-			bool flag3 = (follower.Flags & 8) != 0;
-			GarrFollowerRec record2 = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
-			if (flag3 || follower.FollowerLevel < MissionDetailView.GarrisonFollower_GetMaxFollowerLevel((int)record2.GarrFollowerTypeID))
-			{
-				flag2 = false;
-			}
-			this.m_equipmentSlotsText.gameObject.SetActive(flag || flag2);
+			this.m_equipmentSlotsText.gameObject.SetActive(active);
 		}
 
 		public void SetFollower(int followerID)

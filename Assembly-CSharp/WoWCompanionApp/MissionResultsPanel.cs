@@ -207,8 +207,6 @@ namespace WoWCompanionApp
 				this.missionPercentChanceText.text = chance + "%";
 				this.m_missionChanceSpinner.SetActive(false);
 			}
-			this.m_lootBorderNormal.SetActive(chance < 100);
-			this.m_lootBorderLitUp.SetActive(chance >= 100);
 			GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(this.m_garrMissionID);
 			if (record == null)
 			{
@@ -294,7 +292,6 @@ namespace WoWCompanionApp
 			}
 			this.missionNameText.text = record.Name;
 			this.missionLocationText.text = record.Location;
-			this.missioniLevelText.text = StaticDB.GetString("ITEM_LEVEL_ABBREVIATION", null) + " " + record.TargetItemLevel;
 			GarrMissionTypeRec record2 = StaticDB.garrMissionTypeDB.GetRecord((int)record.GarrMissionTypeID);
 			this.missionTypeImage.overrideSprite = TextureAtlas.instance.GetAtlasSprite((int)record2.UiTextureAtlasMemberID);
 			if (this.missionFollowerSlotGroup != null)
@@ -324,6 +321,10 @@ namespace WoWCompanionApp
 						this.m_scrollingEnvironment_Back.enabled = true;
 						this.m_scrollingEnvironment_Back.sprite = atlasSprite;
 					}
+					else
+					{
+						Debug.Log("Missing expected Back sprite from UiTextureKitID: [" + record.UiTextureKitID.ToString() + "]");
+					}
 				}
 				int uitextureAtlasMemberID2 = TextureAtlas.GetUITextureAtlasMemberID("_" + record3.KitPrefix + "-Mid");
 				if (uitextureAtlasMemberID2 > 0)
@@ -334,6 +335,10 @@ namespace WoWCompanionApp
 						this.m_scrollingEnvironment_Mid.enabled = true;
 						this.m_scrollingEnvironment_Mid.sprite = atlasSprite2;
 					}
+					else
+					{
+						Debug.Log("Missing expected Mid sprite from UiTextureKitID: [" + record.UiTextureKitID.ToString() + "]");
+					}
 				}
 				int uitextureAtlasMemberID3 = TextureAtlas.GetUITextureAtlasMemberID("_" + record3.KitPrefix + "-Fore");
 				if (uitextureAtlasMemberID3 > 0)
@@ -343,6 +348,10 @@ namespace WoWCompanionApp
 					{
 						this.m_scrollingEnvironment_Fore.enabled = true;
 						this.m_scrollingEnvironment_Fore.sprite = atlasSprite3;
+					}
+					else
+					{
+						Debug.Log("Missing expected Fore sprite from UiTextureKitID: [" + record.UiTextureKitID.ToString() + "]");
 					}
 				}
 			}
@@ -366,7 +375,6 @@ namespace WoWCompanionApp
 			{
 				if (componentsInChildren3[l] != null)
 				{
-					componentsInChildren3[l].gameObject.transform.SetParent(null);
 					Object.Destroy(componentsInChildren3[l].gameObject);
 				}
 			}
@@ -531,7 +539,6 @@ namespace WoWCompanionApp
 				FollowerExperienceDisplay[] componentsInChildren7 = this.m_followerExperienceDisplayArea.GetComponentsInChildren<FollowerExperienceDisplay>(true);
 				foreach (FollowerExperienceDisplay followerExperienceDisplay in componentsInChildren7)
 				{
-					followerExperienceDisplay.gameObject.transform.SetParent(null);
 					Object.Destroy(followerExperienceDisplay.gameObject);
 				}
 			}
@@ -542,7 +549,6 @@ namespace WoWCompanionApp
 			AbilityDisplay[] componentsInChildren8 = this.m_partyBuffGroup.GetComponentsInChildren<AbilityDisplay>(true);
 			foreach (AbilityDisplay abilityDisplay in componentsInChildren8)
 			{
-				abilityDisplay.gameObject.transform.SetParent(null);
 				Object.Destroy(abilityDisplay.gameObject);
 			}
 			int adjustedMissionDuration = GeneralHelpers.GetAdjustedMissionDuration(record, list, this.enemyPortraitsGroup);
@@ -705,14 +711,14 @@ namespace WoWCompanionApp
 			if (component != null)
 			{
 				Vector2 spacing = component.spacing;
-				spacing.x = 40f;
+				spacing.x = 30f;
 				component.spacing = spacing;
 			}
 			component = this.m_FollowerSlotGroup.GetComponent<GridLayoutGroup>();
 			if (component != null)
 			{
 				Vector2 spacing2 = component.spacing;
-				spacing2.x = 40f;
+				spacing2.x = 30f;
 				component.spacing = spacing2;
 			}
 		}
@@ -734,8 +740,6 @@ namespace WoWCompanionApp
 		public Text missionNameText;
 
 		public Text missionLocationText;
-
-		public Text missioniLevelText;
 
 		public Image missionTypeImage;
 
@@ -760,10 +764,6 @@ namespace WoWCompanionApp
 		public GameObject m_partyBuffGroup;
 
 		public Text m_partyBuffsText;
-
-		public GameObject m_lootBorderNormal;
-
-		public GameObject m_lootBorderLitUp;
 
 		public GameObject m_missionSuccessMessage;
 

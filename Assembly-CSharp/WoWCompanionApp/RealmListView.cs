@@ -31,13 +31,11 @@ namespace WoWCompanionApp
 			BnLoginButton[] componentsInChildren = this.loginListContents.transform.GetComponentsInChildren<BnLoginButton>(true);
 			for (int i = 0; i < componentsInChildren.Length; i++)
 			{
-				componentsInChildren[i].gameObject.transform.SetParent(null);
 				Object.Destroy(componentsInChildren[i].gameObject);
 			}
 			BnGameAccountButton[] componentsInChildren2 = this.loginListContents.transform.GetComponentsInChildren<BnGameAccountButton>(true);
 			for (int j = 0; j < componentsInChildren2.Length; j++)
 			{
-				componentsInChildren2[j].gameObject.transform.SetParent(null);
 				Object.Destroy(componentsInChildren2[j].gameObject);
 			}
 		}

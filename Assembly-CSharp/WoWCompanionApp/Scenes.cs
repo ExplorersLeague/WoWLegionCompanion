@@ -10,6 +10,6 @@ namespace WoWCompanionApp
 
 		public static readonly string TitleSceneName = "TitleScene";
 
-		public static readonly string MainSceneName = "LegionMainScene";
+		public static readonly string MainSceneName = "CompanionMainScene";
 	}
 }

@@ -43,11 +43,27 @@ namespace WoWCompanionApp
 		{
 		}
 
+		public void PlayComingSoonEffect()
+		{
+			if (this.m_currentComingSoonEffect == null && this.m_comingSoonEffectPrefab != null && this.m_comingSoonPivot != null)
+			{
+				this.m_currentComingSoonEffect = Object.Instantiate<GameObject>(this.m_comingSoonEffectPrefab);
+				this.m_currentComingSoonEffect.transform.SetParent(this.m_comingSoonPivot.transform, false);
+				this.m_currentComingSoonEffect.transform.localPosition = Vector3.zero;
+			}
+		}
+
 		public GameObject m_selectedImage;
 
 		public GameObject m_notSelectedImage;
 
 		public GameObject m_notificationImage;
+
+		public GameObject m_comingSoonEffectPrefab;
+
+		public GameObject m_comingSoonPivot;
+
+		private GameObject m_currentComingSoonEffect;
 
 		private bool m_isSelected;
 	}

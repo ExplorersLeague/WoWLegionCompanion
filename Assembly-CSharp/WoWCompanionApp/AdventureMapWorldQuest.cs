@@ -143,7 +143,12 @@ namespace WoWCompanionApp
 						CurrencyTypesRec record2 = StaticDB.currencyTypesDB.GetRecord(wrapperWorldQuestReward2.RecordID);
 						if (record2 != null)
 						{
-							this.m_main.sprite = GeneralHelpers.LoadCurrencyIcon(wrapperWorldQuestReward2.RecordID);
+							this.m_main.sprite = CurrencyContainerDB.LoadCurrencyContainerIcon(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+							CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+							if (currencyContainerRec != null)
+							{
+								this.m_lootQuality = (ITEM_QUALITY)currencyContainerRec.ContainerQuality;
+							}
 						}
 						if (AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.OrderResources))
 						{
@@ -183,6 +188,19 @@ namespace WoWCompanionApp
 			this.m_dragonFrame.gameObject.SetActive(active);
 			bool flag2 = record4.Type == 7;
 			this.m_normalGlow.gameObject.SetActive(!flag2);
+			if (this.m_lootQuality < ITEM_QUALITY.STANDARD)
+			{
+				this.m_normalGlow.color = this.WORLD_QUEST_GLOW_COLOR_DEFAULT;
+			}
+			if (this.m_lootQuality > ITEM_QUALITY.STANDARD)
+			{
+				string text = "#" + GeneralHelpers.GetItemQualityColor((int)this.m_lootQuality);
+				Color color;
+				if (ColorUtility.TryParseHtmlString(text, ref color))
+				{
+					this.m_normalGlow.color = color;
+				}
+			}
 			this.m_legionAssaultGlow.gameObject.SetActive(flag2);
 			bool flag3 = (record4.Modifiers & 1) != 0;
 			if (flag3 && record4.Type != 3)
@@ -195,7 +213,7 @@ namespace WoWCompanionApp
 				this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-EpicQuest");
 			}
 			int uitextureAtlasMemberID;
-			string text;
+			string text2;
 			switch (record4.Type)
 			{
 			case 1:
@@ -205,7 +223,7 @@ namespace WoWCompanionApp
 				{
 				case 182:
 					uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-herbalism");
-					text = "Mobile-Herbalism";
+					text2 = "Mobile-Herbalism";
 					break;
 				default:
 					if (profession != 164)
@@ -233,108 +251,108 @@ namespace WoWCompanionApp
 																if (profession != 794)
 																{
 																	uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
-																	text = "Mobile-QuestExclamationIcon";
+																	text2 = "Mobile-QuestExclamationIcon";
 																}
 																else
 																{
 																	uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-archaeology");
-																	text = "Mobile-Archaeology";
+																	text2 = "Mobile-Archaeology";
 																}
 															}
 															else
 															{
 																uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-inscription");
-																text = "Mobile-Inscription";
+																text2 = "Mobile-Inscription";
 															}
 														}
 														else
 														{
 															uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-jewelcrafting");
-															text = "Mobile-Jewelcrafting";
+															text2 = "Mobile-Jewelcrafting";
 														}
 													}
 													else
 													{
 														uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-skinning");
-														text = "Mobile-Skinning";
+														text2 = "Mobile-Skinning";
 													}
 												}
 												else
 												{
 													uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-fishing");
-													text = "Mobile-Fishing";
+													text2 = "Mobile-Fishing";
 												}
 											}
 											else
 											{
 												uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-enchanting");
-												text = "Mobile-Enchanting";
+												text2 = "Mobile-Enchanting";
 											}
 										}
 										else
 										{
 											uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-engineering");
-											text = "Mobile-Engineering";
+											text2 = "Mobile-Engineering";
 										}
 									}
 									else
 									{
 										uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-tailoring");
-										text = "Mobile-Tailoring";
+										text2 = "Mobile-Tailoring";
 									}
 								}
 								else
 								{
 									uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-alchemy");
-									text = "Mobile-Alchemy";
+									text2 = "Mobile-Alchemy";
 								}
 							}
 							else
 							{
 								uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-firstaid");
-								text = "Mobile-FirstAid";
+								text2 = "Mobile-FirstAid";
 							}
 						}
 						else
 						{
 							uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-leatherworking");
-							text = "Mobile-Leatherworking";
+							text2 = "Mobile-Leatherworking";
 						}
 					}
 					else
 					{
 						uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-blacksmithing");
-						text = "Mobile-Blacksmithing";
+						text2 = "Mobile-Blacksmithing";
 					}
 					break;
 				case 185:
 					uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-cooking");
-					text = "Mobile-Cooking";
+					text2 = "Mobile-Cooking";
 					break;
 				case 186:
 					uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-mining");
-					text = "Mobile-Mining";
+					text2 = "Mobile-Mining";
 					break;
 				}
-				goto IL_6FD;
+				goto IL_788;
 			}
 			case 3:
 				uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
-				text = "Mobile-PVP";
-				goto IL_6FD;
+				text2 = "Mobile-PVP";
+				goto IL_788;
 			case 4:
 				uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
-				text = "Mobile-Pets";
-				goto IL_6FD;
+				text2 = "Mobile-Pets";
+				goto IL_788;
 			}
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
-			text = "Mobile-QuestExclamationIcon";
-			IL_6FD:
+			text2 = "Mobile-QuestExclamationIcon";
+			IL_788:
 			if (!this.m_showLootIconInsteadOfMain)
 			{
-				if (text != null)
+				if (text2 != null)
 				{
-					this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/" + text);
+					this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/" + text2);
 				}
 				else if (uitextureAtlasMemberID > 0)
 				{
@@ -426,6 +444,8 @@ namespace WoWCompanionApp
 		private int m_itemID;
 
 		private int m_itemContext;
+
+		private Color WORLD_QUEST_GLOW_COLOR_DEFAULT = new Color(255f, 210f, 0f);
 
 		public bool m_showLootIconInsteadOfMain;
 	}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using WowStatConstants;
 using WowStaticData;
 
 namespace WoWCompanionApp
@@ -102,23 +103,31 @@ namespace WoWCompanionApp
 		private void InitTalentTree()
 		{
 			this.m_needsFullInit = false;
-			Sprite sprite = this.LoadTalengBGForClass(GarrisonStatus.CharacterClassID());
-			if (sprite != null)
+			if (GarrisonStatus.Faction() == PVP_FACTION.HORDE)
 			{
-				this.m_classBG.sprite = sprite;
+				this.m_hordeBG.gameObject.SetActive(true);
+				this.m_allianceBG.gameObject.SetActive(false);
+			}
+			else if (GarrisonStatus.Faction() == PVP_FACTION.ALLIANCE)
+			{
+				this.m_hordeBG.gameObject.SetActive(false);
+				this.m_allianceBG.gameObject.SetActive(true);
 			}
 			TalentTreeItem[] componentsInChildren = this.m_talentTreeItemRoot.GetComponentsInChildren<TalentTreeItem>(true);
 			foreach (TalentTreeItem talentTreeItem in componentsInChildren)
 			{
+				talentTreeItem.transform.SetParent(null);
 				Object.Destroy(talentTreeItem.gameObject);
 			}
 			Image[] componentsInChildren2 = this.m_romanNumeralRoot.GetComponentsInChildren<Image>(true);
 			foreach (Image image in componentsInChildren2)
 			{
+				image.transform.SetParent(null);
 				Object.Destroy(image.gameObject);
 			}
 			this.m_talentTreeItems.Clear();
-			GarrTalentTreeRec recordFirstOrDefault = StaticDB.garrTalentTreeDB.GetRecordFirstOrDefault((GarrTalentTreeRec garrTalentTreeRec) => garrTalentTreeRec.ClassID == GarrisonStatus.CharacterClassID());
+			int lookupId = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? 153 : 152;
+			GarrTalentTreeRec recordFirstOrDefault = StaticDB.garrTalentTreeDB.GetRecordFirstOrDefault((GarrTalentTreeRec garrTalentTreeRec) => garrTalentTreeRec.ID == lookupId);
 			if (recordFirstOrDefault == null)
 			{
 				Debug.LogError("No GarrTalentTree record found for class " + GarrisonStatus.CharacterClassID());
@@ -198,13 +207,17 @@ namespace WoWCompanionApp
 			return false;
 		}
 
-		public Image m_classBG;
+		public Image m_allianceBG;
+
+		public Image m_hordeBG;
 
 		public GameObject m_talentTreeItemRoot;
 
 		public GameObject m_talentTreeItemPrefab;
 
 		public GameObject m_romanNumeralRoot;
+
+		public OrderHallNavButton m_talentNavButton;
 
 		private Vector2 m_multiPanelViewSizeDelta;
 

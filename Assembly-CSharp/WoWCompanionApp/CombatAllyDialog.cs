@@ -62,7 +62,7 @@ namespace WoWCompanionApp
 					}
 				}
 			}
-			if (num <= GarrisonStatus.Resources())
+			if (num <= GarrisonStatus.WarResources())
 			{
 				this.m_combatAllyCost.text = string.Concat(new object[]
 				{
@@ -82,7 +82,7 @@ namespace WoWCompanionApp
 					"</color>"
 				});
 			}
-			Sprite sprite = GeneralHelpers.LoadCurrencyIcon(1220);
+			Sprite sprite = GeneralHelpers.LoadCurrencyIcon(1560);
 			if (sprite != null)
 			{
 				this.m_combatAllyCostResourceIcon.sprite = sprite;

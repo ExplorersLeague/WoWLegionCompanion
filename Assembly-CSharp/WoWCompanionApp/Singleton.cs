@@ -32,7 +32,7 @@ namespace WoWCompanionApp
 
 		protected bool IsCloneGettingRemoved { get; private set; }
 
-		private void Awake()
+		protected void Awake()
 		{
 			if (Singleton<T>.s_instance != null && Singleton<T>.s_instance != this)
 			{

@@ -10,7 +10,7 @@ namespace WoWCompanionApp
 		{
 			if (this.m_initialPanel == null)
 			{
-				this.m_initialPanel = this.m_characterCanvasGroup;
+				this.m_initialPanel = this.m_gameCanvasGroup;
 			}
 			this.m_currentPanel = this.m_initialPanel;
 		}

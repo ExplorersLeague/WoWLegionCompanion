@@ -26,6 +26,8 @@ namespace WoWCompanionApp
 	{
 		public bool ReturnToRecentCharacter { get; private set; }
 
+		public bool ReturnToCharacterList { get; set; }
+
 		public LoginUI LoginUI
 		{
 			get
@@ -36,6 +38,32 @@ namespace WoWCompanionApp
 				}
 				return this.m_loginUI;
 			}
+		}
+
+		public bool CanCancelNow()
+		{
+			switch (this.GetLoginState())
+			{
+			case Login.eLoginState.IDLE:
+			case Login.eLoginState.WAIT_FOR_ASSET_BUNDLES:
+			case Login.eLoginState.WEB_AUTH_START:
+			case Login.eLoginState.WEB_AUTH_LOADING:
+			case Login.eLoginState.WEB_AUTH_IN_PROGRESS:
+			case Login.eLoginState.WEB_AUTH_FAILED:
+			case Login.eLoginState.BN_LOGIN_START:
+			case Login.eLoginState.BN_LOGIN_WAIT_FOR_LOGON:
+			case Login.eLoginState.BN_LOGIN_PROVIDE_TOKEN:
+			case Login.eLoginState.BN_LOGGING_IN:
+			case Login.eLoginState.BN_ACCOUNT_NAME_WAIT:
+			case Login.eLoginState.BN_TICKET_WAIT:
+			case Login.eLoginState.BN_SUBREGION_LIST_WAIT:
+			case Login.eLoginState.BN_CHARACTER_LIST_WAIT:
+			case Login.eLoginState.BN_LOGIN_UNKNOWN:
+			case Login.eLoginState.UPDATE_REQUIRED_START:
+			case Login.eLoginState.UPDATE_REQUIRED_IDLE:
+				return true;
+			}
+			return false;
 		}
 
 		private void OnReturnToTitleScene(Scene scene, LoadSceneMode loadSceneMode)
@@ -93,6 +121,11 @@ namespace WoWCompanionApp
 			if (goToWebAuth)
 			{
 				this.StartNewLogin();
+			}
+			else if (this.ReturnToCharacterList)
+			{
+				this.StartCachedLogin(true, false);
+				this.ReturnToCharacterList = false;
 			}
 			else
 			{
@@ -677,6 +710,7 @@ namespace WoWCompanionApp
 
 		public void LoginLog(string message)
 		{
+			DebugPrinter.Log(">>>>>> " + message, null, DebugPrinter.LogLevel.Info);
 		}
 
 		public void StartNewLogin()
@@ -909,8 +943,16 @@ namespace WoWCompanionApp
 			this.BnErrorsUpdate();
 			if (BattleNet.CheckWebAuth(out this.m_webAuthUrl))
 			{
-				this.LoginLog("CheckWebAuth was true in BnLoginUpdate, starting WebAuth.");
-				this.SetLoginState(Login.eLoginState.WEB_AUTH_START);
+				if (!this.m_retryWebAuthOnce)
+				{
+					this.LoginLog("CheckWebAuth was true in BnLoginUpdate, starting WebAuth.");
+					this.SetLoginState(Login.eLoginState.WEB_AUTH_START);
+				}
+				else
+				{
+					this.LoginLog("Retrying cached web token!");
+					this.m_retryWebAuthOnce = false;
+				}
 				return;
 			}
 			switch (BattleNet.BattleNetStatus())
@@ -2081,6 +2123,11 @@ namespace WoWCompanionApp
 			}
 		}
 
+		public string GetRealmName(uint virtualAddress)
+		{
+			return (!this.m_realmNames.ContainsKey(virtualAddress)) ? string.Empty : this.m_realmNames[virtualAddress];
+		}
+
 		private string m_webToken;
 
 		private Login.eLoginState m_loginState = Login.eLoginState.WAIT_FOR_ASSET_BUNDLES;
@@ -2161,11 +2208,15 @@ namespace WoWCompanionApp
 
 		private float m_bnLoginStartTime;
 
+		private bool m_retryWebAuthOnce;
+
 		private int m_battlenetFailures;
 
 		private bool m_initialUnpause = true;
 
 		private bool m_loggingIn;
+
+		private Dictionary<uint, string> m_realmNames = new Dictionary<uint, string>();
 
 		private LoginUI m_loginUI;
 
@@ -2347,6 +2398,13 @@ namespace WoWCompanionApp
 									Singleton<Login>.instance.LoginUI.AddCharacterButton(jamJSONCharacterEntry, this.SubRegion, name, online);
 									flag = true;
 									break;
+								}
+							}
+							foreach (JamJSONRealmListUpdatePart jamJSONRealmListUpdatePart2 in this.m_updates.Updates)
+							{
+								if (!Singleton<Login>.Instance.m_realmNames.ContainsKey(jamJSONRealmListUpdatePart2.Update.WowRealmAddress))
+								{
+									Singleton<Login>.Instance.m_realmNames.Add(jamJSONRealmListUpdatePart2.Update.WowRealmAddress, jamJSONRealmListUpdatePart2.Update.Name);
 								}
 							}
 							if (!flag)

@@ -134,7 +134,6 @@ namespace WoWCompanionApp
 		{
 			this.HideAllPopups();
 			this.m_emissaryPopup.gameObject.SetActive(true);
-			Main.instance.RequestEmissaryFactions();
 		}
 
 		public void EmissaryFactionUpdate(IEnumerable<WrapperEmissaryFaction> factions)

@@ -21,7 +21,7 @@ namespace WoWCompanionApp
 				"/",
 				utcNow.Year
 			}));
-			DateTime t = new DateTime(2018, 7, 17, 7, 0, 0, DateTimeKind.Utc);
+			DateTime t = new DateTime(2018, 9, 14, 7, 0, 0, DateTimeKind.Utc);
 			if (utcNow > t)
 			{
 				this.m_showPTR = false;
@@ -241,15 +241,15 @@ namespace WoWCompanionApp
 				if (componentInChildren != null)
 				{
 					componentInChildren.font = GeneralHelpers.LoadStandardFont();
-					componentInChildren.text = StaticDB.GetString("LOGIN", null);
+					componentInChildren.text = StaticDB.GetString("LOGIN_CAPS", null);
 					this.m_loginButtonText.font = GeneralHelpers.LoadStandardFont();
-					this.m_loginButtonText.text = StaticDB.GetString("ACCOUNT_SELECTION", null);
+					this.m_loginButtonText.text = StaticDB.GetString("ACCOUNT_SELECTION_CAPS", null);
 				}
 			}
 			else
 			{
 				this.m_loginButtonText.font = GeneralHelpers.LoadStandardFont();
-				this.m_loginButtonText.text = StaticDB.GetString("LOGIN", null);
+				this.m_loginButtonText.text = StaticDB.GetString("LOGIN_CAPS", null);
 			}
 		}
 

@@ -171,7 +171,7 @@ namespace WoWCompanionApp
 				Main.instance.m_UISound.Play_BeginResearch();
 			}
 			this.m_talentTreePanel.SetNeedsFullInit();
-			LegionCompanionWrapper.RequestGarrisonData(3);
+			LegionCompanionWrapper.RequestGarrisonData((int)GarrisonStatus.GarrisonType);
 		}
 
 		public void SetTalent(GarrTalentRec garrTalentRec)

@@ -16,10 +16,6 @@ namespace WoWCompanionApp
 			{
 				this.m_collectingSpinner.SetActive(false);
 			}
-			if (this.m_rewardName != null)
-			{
-				this.m_rewardName.font = GeneralHelpers.LoadStandardFont();
-			}
 			if (this.m_useItemMessage != null)
 			{
 				this.m_useItemMessage.font = GeneralHelpers.LoadStandardFont();
@@ -292,7 +288,7 @@ namespace WoWCompanionApp
 				break;
 			case MissionRewardDisplay.RewardType.currency:
 			{
-				Sprite sprite2 = GeneralHelpers.LoadCurrencyIcon(this.m_rewardID);
+				Sprite sprite2 = CurrencyContainerDB.LoadCurrencyContainerIcon(this.m_rewardID, this.m_rewardQuantity);
 				if (sprite2 != null)
 				{
 					this.m_rewardIcon.sprite = sprite2;
@@ -307,20 +303,51 @@ namespace WoWCompanionApp
 					CurrencyTypesRec record2 = StaticDB.currencyTypesDB.GetRecord(rewardID);
 					if (record2 != null)
 					{
-						this.m_rewardName.text = record2.Name;
+						CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(this.m_rewardID, this.m_rewardQuantity);
+						if (currencyContainerRec != null)
+						{
+							this.m_rewardName.text = currencyContainerRec.ContainerName;
+							this.m_rewardName.color = GeneralHelpers.GetQualityColor(currencyContainerRec.ContainerQuality);
+							this.m_rewardQuantityText.text = string.Empty;
+						}
+						else
+						{
+							this.m_rewardName.text = record2.Name;
+							this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+						}
 					}
 					else
 					{
 						this.m_rewardName.text = string.Empty;
+						this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
 					}
-					this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+				}
+				else
+				{
+					CurrencyTypesRec record3 = StaticDB.currencyTypesDB.GetRecord(rewardID);
+					if (record3 != null)
+					{
+						CurrencyContainerRec currencyContainerRec2 = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(this.m_rewardID, this.m_rewardQuantity);
+						if (currencyContainerRec2 != null && currencyContainerRec2.ContainerQuality > 0 && this.m_qualityBorder != null)
+						{
+							this.m_qualityBorder.color = GeneralHelpers.GetQualityColor(currencyContainerRec2.ContainerQuality);
+						}
+					}
 				}
 				break;
 			}
 			}
 			if (!this.m_isExpandedDisplay)
 			{
-				this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+				CurrencyContainerRec currencyContainerRec3 = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(this.m_rewardID, rewardQuantity);
+				if (currencyContainerRec3 != null)
+				{
+					this.m_rewardQuantityText.text = string.Empty;
+				}
+				else
+				{
+					this.m_rewardQuantityText.text = ((this.m_rewardQuantity <= 1) ? string.Empty : this.m_rewardQuantity.ToString("N0"));
+				}
 			}
 		}
 
@@ -390,6 +417,8 @@ namespace WoWCompanionApp
 		public Image m_greenCheck;
 
 		public Image m_redX;
+
+		public Image m_qualityBorder;
 
 		public Transform m_greenCheckEffectRootTransform;
 

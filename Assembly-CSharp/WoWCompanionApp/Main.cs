@@ -30,6 +30,7 @@ namespace WoWCompanionApp
 			GarrisonStatus.ArtifactXpMultiplier = 1f;
 			MobileClient.RegisterHandlers();
 			this.SubscribeToEvents();
+			this.LoadPreferences();
 		}
 
 		private void Update()
@@ -112,6 +113,14 @@ namespace WoWCompanionApp
 			LegionCompanionWrapper.OnQuestCompleted -= new LegionCompanionWrapper.QuestCompletedHandler(this.QuestCompletedHandler);
 		}
 
+		private void LoadPreferences()
+		{
+			bool enable = this.m_UISound.IsSFXEnabled();
+			bool.TryParse(SecurePlayerPrefs.GetString("EnableSFX", Main.uniqueIdentifier), out enable);
+			this.m_UISound.EnableSFX(enable);
+			bool.TryParse(SecurePlayerPrefs.GetString("EnableNotifications", Main.uniqueIdentifier), out this.m_enableNotifications);
+		}
+
 		private void UpdateCanvasOrientation()
 		{
 			if (Screen.width > Screen.height)
@@ -129,7 +138,7 @@ namespace WoWCompanionApp
 			foreach (WrapperGarrisonMission wrapperGarrisonMission in PersistentMissionData.missionDictionary.Values)
 			{
 				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(wrapperGarrisonMission.MissionRecID);
-				if (record != null && record.GarrFollowerTypeID == 4u)
+				if (record != null && record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
 				{
 					if (wrapperGarrisonMission.MissionState == 1)
 					{
@@ -187,7 +196,7 @@ namespace WoWCompanionApp
 			}
 			GarrisonStatus.SetFaction(eventArgs.Data.PvpFaction);
 			GarrisonStatus.SetGarrisonServerConnectTime(eventArgs.Data.ServerTime);
-			GarrisonStatus.SetCurrencies(eventArgs.Data.GoldCurrency, 0, eventArgs.Data.OrderhallResourcesCurrency);
+			GarrisonStatus.SetCurrencies(eventArgs.Data.GoldCurrency, eventArgs.Data.OrderhallResourcesCurrency, eventArgs.Data.WarResourcesCurrency);
 			GarrisonStatus.SetCharacterName(eventArgs.Data.CharacterName);
 			GarrisonStatus.SetCharacterLevel(eventArgs.Data.CharacterLevel);
 			GarrisonStatus.SetCharacterClass(eventArgs.Data.CharacterClassID);
@@ -273,26 +282,10 @@ namespace WoWCompanionApp
 					}
 				}
 			}
-			componentsInChildren = AdventureMapPanel.instance.m_missionAndWorldQuestArea_Argus.GetComponentsInChildren<AdventureMapMissionSite>(true);
-			foreach (AdventureMapMissionSite adventureMapMissionSite2 in componentsInChildren)
-			{
-				if (!adventureMapMissionSite2.m_isStackablePreview)
-				{
-					if (adventureMapMissionSite2.GetGarrMissionID() == eventArgs.Result.GarrMissionID)
-					{
-						if (!adventureMapMissionSite2.gameObject.activeSelf)
-						{
-							adventureMapMissionSite2.gameObject.SetActive(true);
-						}
-						adventureMapMissionSite2.HandleCompleteMissionResult(eventArgs.Result.GarrMissionID, eventArgs.Result.BonusRollSucceeded);
-						break;
-					}
-				}
-			}
 			LegionCompanionWrapper.RequestShipmentTypes((int)GarrisonStatus.GarrisonType);
 			LegionCompanionWrapper.RequestShipments((int)GarrisonStatus.GarrisonType);
-			LegionCompanionWrapper.RequestFollowerEquipment(4);
-			LegionCompanionWrapper.RequestGarrisonData(3);
+			LegionCompanionWrapper.RequestFollowerEquipment((int)GarrisonStatus.GarrisonFollowerType);
+			LegionCompanionWrapper.RequestGarrisonData((int)GarrisonStatus.GarrisonType);
 		}
 
 		private void ClaimMissionBonusResultHandler(LegionCompanionWrapper.ClaimMissionBonusResultEvent msg)
@@ -310,22 +303,6 @@ namespace WoWCompanionApp
 							adventureMapMissionSite.gameObject.SetActive(true);
 						}
 						adventureMapMissionSite.HandleClaimMissionBonusResult(msg.Result.GarrMissionID, msg.Result.AwardOvermax, msg.Result.Result);
-						break;
-					}
-				}
-			}
-			componentsInChildren = AdventureMapPanel.instance.m_missionAndWorldQuestArea_Argus.GetComponentsInChildren<AdventureMapMissionSite>(true);
-			foreach (AdventureMapMissionSite adventureMapMissionSite2 in componentsInChildren)
-			{
-				if (!adventureMapMissionSite2.m_isStackablePreview)
-				{
-					if (adventureMapMissionSite2.GetGarrMissionID() == msg.Result.GarrMissionID)
-					{
-						if (!adventureMapMissionSite2.gameObject.activeSelf)
-						{
-							adventureMapMissionSite2.gameObject.SetActive(true);
-						}
-						adventureMapMissionSite2.HandleClaimMissionBonusResult(msg.Result.GarrMissionID, msg.Result.AwardOvermax, msg.Result.Result);
 						break;
 					}
 				}
@@ -367,7 +344,7 @@ namespace WoWCompanionApp
 			if (eventArgs.Result == 0)
 			{
 				Debug.Log("Expedited completion of mission " + eventArgs.MissionRecID);
-				LegionCompanionWrapper.RequestGarrisonData(3);
+				LegionCompanionWrapper.RequestGarrisonData((int)GarrisonStatus.GarrisonType);
 			}
 			else
 			{
@@ -396,7 +373,7 @@ namespace WoWCompanionApp
 		{
 			LegionCompanionWrapper.RequestShipmentTypes((int)GarrisonStatus.GarrisonType);
 			LegionCompanionWrapper.RequestShipments((int)GarrisonStatus.GarrisonType);
-			LegionCompanionWrapper.RequestWorldQuestBounties(4);
+			LegionCompanionWrapper.RequestWorldQuestBounties(10);
 			this.RequestWorldQuests();
 			LegionCompanionWrapper.RequestFollowerEquipment((int)GarrisonStatus.GarrisonFollowerType);
 			LegionCompanionWrapper.RequestFollowerArmamentsExtended((int)GarrisonStatus.GarrisonFollowerType);
@@ -606,7 +583,7 @@ namespace WoWCompanionApp
 			foreach (WrapperGarrisonMission wrapperGarrisonMission in PersistentMissionData.missionDictionary.Values)
 			{
 				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(wrapperGarrisonMission.MissionRecID);
-				if (record != null && record.GarrFollowerTypeID == 4u)
+				if (record != null && record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
 				{
 					if (wrapperGarrisonMission.MissionState == 1)
 					{
@@ -629,9 +606,9 @@ namespace WoWCompanionApp
 			return this.m_locale;
 		}
 
-		public void RequestEmissaryFactions()
+		public void RequestEmissaryFactions(int factionID)
 		{
-			LegionCompanionWrapper.RequestEmissaryFactions(1895);
+			LegionCompanionWrapper.RequestEmissaryFactions(factionID);
 		}
 
 		public void RequestWorldQuests()
@@ -658,7 +635,7 @@ namespace WoWCompanionApp
 			{
 				LegionCompanionWrapper.RequestShipmentTypes((int)GarrisonStatus.GarrisonType);
 				LegionCompanionWrapper.RequestShipments((int)GarrisonStatus.GarrisonType);
-				LegionCompanionWrapper.RequestGarrisonData(3);
+				LegionCompanionWrapper.RequestGarrisonData((int)GarrisonStatus.GarrisonType);
 			}
 		}
 
@@ -739,7 +716,7 @@ namespace WoWCompanionApp
 			}
 			else
 			{
-				Debug.Log("MobileClientEvaluateMissionResult failed with error " + ((GARRISON_RESULT)eventArgs.Result).ToString());
+				GARRISON_RESULT result = (GARRISON_RESULT)eventArgs.Result;
 			}
 		}
 
@@ -800,7 +777,7 @@ namespace WoWCompanionApp
 			{
 				this.UseEquipmentResultAction(eventArgs.OldFollower, eventArgs.Follower);
 			}
-			LegionCompanionWrapper.RequestFollowerEquipment(4);
+			LegionCompanionWrapper.RequestFollowerEquipment((int)GarrisonStatus.GarrisonFollowerType);
 		}
 
 		private void FollowerArmamentsExtendedResultHandler(LegionCompanionWrapper.FollowerArmamentsExtendedResultEvent eventArgs)
@@ -821,7 +798,7 @@ namespace WoWCompanionApp
 			if (eventArgs.Result == 0)
 			{
 				PersistentFollowerData.AddOrUpdateFollower(eventArgs.Follower);
-				LegionCompanionWrapper.RequestFollowerArmamentsExtended(4);
+				LegionCompanionWrapper.RequestFollowerArmamentsExtended((int)GarrisonStatus.GarrisonFollowerType);
 			}
 			else
 			{
@@ -1113,8 +1090,8 @@ namespace WoWCompanionApp
 		private void SetNarrowScreen()
 		{
 			float num = 1f;
-			float num2 = (float)Screen.currentResolution.height;
-			float num3 = (float)Screen.currentResolution.width;
+			float num2 = (float)Screen.height;
+			float num3 = (float)Screen.width;
 			if (num3 > 0f && num2 > 0f)
 			{
 				if (num2 > num3)
@@ -1135,6 +1112,11 @@ namespace WoWCompanionApp
 		public bool IsNarrowScreen()
 		{
 			return this.m_narrowScreen;
+		}
+
+		public bool IsIphoneX()
+		{
+			return false;
 		}
 
 		public void NudgeX(ref GameObject gameObj, float amount)

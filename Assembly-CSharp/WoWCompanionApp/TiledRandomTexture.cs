@@ -26,6 +26,7 @@ namespace WoWCompanionApp
 				}
 				LayoutGroup layoutGroup = base.gameObject.GetComponent<LayoutGroup>() ?? base.gameObject.AddComponent<HorizontalLayoutGroup>();
 				layoutGroup.childAlignment = 3;
+				layoutGroup.enabled = true;
 			}
 			else
 			{
@@ -39,12 +40,18 @@ namespace WoWCompanionApp
 				}
 				LayoutGroup layoutGroup2 = base.gameObject.GetComponent<LayoutGroup>() ?? base.gameObject.AddComponent<VerticalLayoutGroup>();
 				layoutGroup2.childAlignment = 1;
+				layoutGroup2.enabled = true;
 			}
 			(base.transform as RectTransform).sizeDelta = sizeDelta;
 		}
 
 		private void Update()
 		{
+			if (this.updateCounter < 5)
+			{
+				this.OnRectTransformDimensionsChange();
+				this.updateCounter++;
+			}
 		}
 
 		protected override void OnRectTransformDimensionsChange()
@@ -74,18 +81,20 @@ namespace WoWCompanionApp
 			}
 			int num3 = Mathf.CeilToInt(num / num2);
 			this.textures = base.GetComponentsInChildren<RandomTexture>().ToList<RandomTexture>();
-			for (int i = num3; i < this.textures.Count; i++)
+			int num4 = this.textures.Count - 1;
+			while (num4 >= num3 && num4 >= 0)
 			{
-				Object.Destroy(this.textures[i].gameObject);
+				Object.Destroy(this.textures[num4].gameObject);
+				num4--;
 			}
-			for (int j = this.textures.Count; j < num3; j++)
+			for (int i = this.textures.Count; i < num3; i++)
 			{
 				Object @object = Object.Instantiate(this.randomTexturePrefab, base.transform, false);
-				@object.name = this.randomTexturePrefab.GetType().Name + " " + j;
+				@object.name = this.randomTexturePrefab.GetType().Name + " " + i;
 			}
-			for (int k = 0; k < this.textures.Count; k++)
+			for (int j = 0; j < this.textures.Count; j++)
 			{
-				this.textures[k].RotateImage((float)this.rotation);
+				this.textures[j].RotateImage((float)this.rotation);
 			}
 		}
 
@@ -96,6 +105,8 @@ namespace WoWCompanionApp
 		public TiledRandomTexture.Rotation rotation;
 
 		private List<RandomTexture> textures;
+
+		private int updateCounter;
 
 		public enum TilingDirection
 		{

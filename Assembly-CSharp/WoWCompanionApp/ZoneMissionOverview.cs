@@ -14,16 +14,12 @@ namespace WoWCompanionApp
 			}
 			PinchZoomContentManager pinchZoomManager = ZoneMissionOverview.m_pinchZoomManager;
 			pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
-			Main instance = Main.instance;
-			instance.InvasionPOIChangedAction = (Action)Delegate.Combine(instance.InvasionPOIChangedAction, new Action(this.HandleInvasionPOIChanged));
 		}
 
 		private void OnDisable()
 		{
 			PinchZoomContentManager pinchZoomManager = ZoneMissionOverview.m_pinchZoomManager;
 			pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
-			Main instance = Main.instance;
-			instance.InvasionPOIChangedAction = (Action)Delegate.Remove(instance.InvasionPOIChangedAction, new Action(this.HandleInvasionPOIChanged));
 		}
 
 		private void Start()
@@ -33,7 +29,8 @@ namespace WoWCompanionApp
 				this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
 				this.zoneNameText.text = StaticDB.GetString(this.zoneNameTag, null);
 				this.m_invasionZoneNameText.text = StaticDB.GetString(this.zoneNameTag, null);
-				this.HandleInvasionPOIChanged();
+				this.m_invasionZoneNameArea.SetActive(false);
+				this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
 			}
 			else
 			{
@@ -51,7 +48,7 @@ namespace WoWCompanionApp
 				if (((timeSpan.TotalSeconds <= 0.0) ? TimeSpan.Zero : timeSpan).TotalSeconds <= 0.0)
 				{
 					this.m_invasionZoneNameArea.SetActive(false);
-					this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
+					this.m_zoneNameArea.SetActive(!string.IsNullOrEmpty(this.zoneNameTag));
 				}
 			}
 		}
@@ -68,20 +65,6 @@ namespace WoWCompanionApp
 			else
 			{
 				component.interactable = true;
-			}
-		}
-
-		private void HandleInvasionPOIChanged()
-		{
-			if (LegionfallData.HasCurrentInvasionPOI() && LegionfallData.GetCurrentInvasionPOI().AreaPoiID == this.m_invasionPOIID)
-			{
-				this.m_invasionZoneNameArea.SetActive(true);
-				this.m_zoneNameArea.SetActive(false);
-			}
-			else
-			{
-				this.m_invasionZoneNameArea.SetActive(false);
-				this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
 			}
 		}
 

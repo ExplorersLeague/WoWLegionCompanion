@@ -33,10 +33,6 @@ namespace WoWCompanionApp
 			this.m_levelText.font = GeneralHelpers.LoadStandardFont();
 			this.m_statusText.font = GeneralHelpers.LoadStandardFont();
 			this.m_xpAmountText.font = GeneralHelpers.LoadStandardFont();
-			if (this.m_useArmamentsButtonText != null)
-			{
-				this.m_useArmamentsButtonText.font = GeneralHelpers.LoadStandardFont();
-			}
 			this.m_statusTextSB = new StringBuilder(16);
 		}
 
@@ -96,10 +92,6 @@ namespace WoWCompanionApp
 
 		public void OnAssetBundleManagerInitialized()
 		{
-			if (FollowerListItem.m_iLvlString == null)
-			{
-				FollowerListItem.m_iLvlString = StaticDB.GetString("ITEM_LEVEL_ABBREVIATION", null);
-			}
 			if (FollowerListItem.m_inactiveString == null)
 			{
 				FollowerListItem.m_inactiveString = StaticDB.GetString("INACTIVE", null);
@@ -173,12 +165,6 @@ namespace WoWCompanionApp
 				this.portraitErrorText.text = string.Empty + num;
 				this.portraitErrorText.gameObject.SetActive(true);
 			}
-			GarrClassSpecRec record3 = StaticDB.garrClassSpecDB.GetRecord((int)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID));
-			Sprite atlasSprite = TextureAtlas.instance.GetAtlasSprite((int)record3.UiTextureAtlasMemberID);
-			if (atlasSprite != null)
-			{
-				this.m_classIcon.sprite = atlasSprite;
-			}
 			Transform[] componentsInChildren = this.m_troopHeartContainer.GetComponentsInChildren<Transform>(true);
 			foreach (Transform transform in componentsInChildren)
 			{
@@ -190,8 +176,6 @@ namespace WoWCompanionApp
 			bool flag = (follower.Flags & 8) != 0;
 			if (flag)
 			{
-				this.m_portraitQualityRing.color = Color.white;
-				this.m_levelBorder.color = Color.white;
 				this.nameText.color = Color.white;
 				int j;
 				for (j = 0; j < follower.Durability; j++)
@@ -204,64 +188,33 @@ namespace WoWCompanionApp
 					GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_troopEmptyHeartPrefab);
 					gameObject2.transform.SetParent(this.m_troopHeartContainer.transform, false);
 				}
-				this.m_portraitQualityRing.gameObject.SetActive(false);
-				this.m_portraitQualityRing_TitleQuality.gameObject.SetActive(false);
-				this.m_levelBorder.gameObject.SetActive(false);
-				this.m_levelBorder_TitleQuality.gameObject.SetActive(false);
-				this.followerPortraitFrame.enabled = false;
 				this.m_progressBarObj.SetActive(false);
-				this.m_levelText.gameObject.SetActive(false);
+				this.m_LevelBorderArea.gameObject.SetActive(false);
+				this.m_followerBG.SetActive(false);
+				this.m_troopBG.SetActive(true);
+				this.m_listItem.targetGraphic = this.m_troopBG.GetComponent<Graphic>();
 			}
 			else
 			{
-				this.m_levelText.gameObject.SetActive(true);
-				if (follower.Quality == 6)
-				{
-					this.m_portraitQualityRing.gameObject.SetActive(false);
-					this.m_portraitQualityRing_TitleQuality.gameObject.SetActive(true);
-					this.m_levelBorder.gameObject.SetActive(false);
-					this.m_levelBorder_TitleQuality.gameObject.SetActive(true);
-				}
-				else
-				{
-					this.m_portraitQualityRing.gameObject.SetActive(true);
-					this.m_portraitQualityRing_TitleQuality.gameObject.SetActive(false);
-					this.m_levelBorder.gameObject.SetActive(true);
-					this.m_levelBorder_TitleQuality.gameObject.SetActive(false);
-				}
+				this.m_LevelBorderArea.gameObject.SetActive(true);
+				this.m_followerBG.SetActive(true);
+				this.m_troopBG.SetActive(false);
+				this.m_listItem.targetGraphic = this.m_followerBG.GetComponent<Graphic>();
+			}
+			if (follower.Quality == 6)
+			{
+				this.m_portraitQualityRing.gameObject.SetActive(false);
+			}
+			else
+			{
+				this.m_portraitQualityRing.gameObject.SetActive(true);
+			}
+			if (follower.Quality >= 2)
+			{
 				Color qualityColor = GeneralHelpers.GetQualityColor(follower.Quality);
 				this.m_portraitQualityRing.color = qualityColor;
-				this.m_levelBorder.color = qualityColor;
-				if (follower.Quality <= 1)
-				{
-					this.nameText.color = Color.white;
-				}
-				else
-				{
-					this.nameText.color = qualityColor;
-				}
-				uint num2;
-				bool flag2;
-				bool flag3;
-				GeneralHelpers.GetXpCapInfo(follower.FollowerLevel, follower.Quality, out num2, out flag2, out flag3);
-				if (flag3)
-				{
-					this.m_progressBarObj.SetActive(false);
-				}
-				else
-				{
-					this.m_progressBarObj.SetActive(true);
-					float fillAmount = Mathf.Clamp01((float)follower.Xp / num2);
-					this.m_progressBarFillImage.fillAmount = fillAmount;
-					this.m_xpAmountText.text = string.Concat(new object[]
-					{
-						string.Empty,
-						follower.Xp,
-						"/",
-						num2
-					});
-				}
 			}
+			this.m_portraitQualityRing.gameObject.SetActive(follower.Quality >= 2);
 		}
 
 		private void Update()
@@ -280,13 +233,13 @@ namespace WoWCompanionApp
 			if (timeSpan.TotalSeconds > 0.0)
 			{
 				this.m_statusTextSB.Length = 0;
-				this.m_statusTextSB.ConcatFormat("{0} {1} - {2} - {3}", FollowerListItem.m_iLvlString, this.m_itemLevel, FollowerListItem.m_onMissionString, timeSpan.GetDurationString(false));
+				this.m_statusTextSB.ConcatFormat("{0} - {1}", FollowerListItem.m_onMissionString, timeSpan.GetDurationString(false));
 				this.m_statusText.text = this.m_statusTextSB.ToString();
 			}
 			else
 			{
 				this.m_statusTextSB.Length = 0;
-				this.m_statusTextSB.ConcatFormat("{0} {1} - {2} - {3}", FollowerListItem.m_iLvlString, this.m_itemLevel, FollowerListItem.m_onMissionString, FollowerListItem.m_missionCompleteString);
+				this.m_statusTextSB.ConcatFormat("{0} - {1}", FollowerListItem.m_onMissionString, FollowerListItem.m_missionCompleteString);
 				this.m_statusText.text = this.m_statusTextSB.ToString();
 			}
 		}
@@ -332,7 +285,7 @@ namespace WoWCompanionApp
 		{
 			if (this.m_availableForMission)
 			{
-				MissionFollowerSlotGroup componentInChildren = base.gameObject.transform.parent.parent.parent.parent.gameObject.GetComponentInChildren<MissionFollowerSlotGroup>();
+				MissionFollowerSlotGroup componentInChildren = base.gameObject.GetComponentInParent<MissionDialog>().GetComponentInChildren<MissionFollowerSlotGroup>();
 				if (componentInChildren != null && componentInChildren.gameObject.activeSelf)
 				{
 					this.m_inParty = componentInChildren.SetFollower(this.m_followerID, this.followerPortrait.overrideSprite, this.m_portraitQualityRing.color, forceReplaceFirstSlot);
@@ -410,7 +363,6 @@ namespace WoWCompanionApp
 				this.m_missionStartedTime = wrapperGarrisonMission.StartTime;
 				this.m_missionDuration = wrapperGarrisonMission.MissionDuration;
 			}
-			this.m_itemLevel = (follower.ItemLevelWeapon + follower.ItemLevelArmor) / 2;
 			bool flag = (follower.Flags & 4) != 0;
 			bool flag2 = (follower.Flags & 2) != 0;
 			this.m_onMission = (follower.CurrentMissionID != 0);
@@ -421,95 +373,54 @@ namespace WoWCompanionApp
 			{
 				this.m_isCombatAlly = true;
 			}
+			this.m_statusText.gameObject.SetActive(true);
 			this.darkeningImage.gameObject.SetActive(true);
-			this.darkeningImage.color = new Color(0f, 0f, 0.28f, 0.3f);
 			this.m_statusText.color = Color.white;
 			this.m_troopHeartContainer.SetActive(false);
 			if (flag)
 			{
 				this.m_statusText.color = Color.red;
-				if (follower.FollowerLevel == 110)
-				{
-					this.m_statusText.text = string.Concat(new object[]
-					{
-						FollowerListItem.m_iLvlString,
-						" ",
-						this.m_itemLevel,
-						" - ",
-						FollowerListItem.m_inactiveString
-					});
-				}
-				else
+				if (follower.FollowerLevel != 110)
 				{
 					this.m_statusText.text = FollowerListItem.m_inactiveString;
 				}
-				this.darkeningImage.color = new Color(0.28f, 0f, 0f, 0.196f);
 			}
 			else if (flag2)
 			{
-				this.m_statusText.text = string.Concat(new object[]
-				{
-					FollowerListItem.m_iLvlString,
-					" ",
-					this.m_itemLevel,
-					" - ",
-					FollowerListItem.m_fatiguedString
-				});
+				this.m_statusText.text = FollowerListItem.m_fatiguedString;
 			}
 			else if (this.m_isCombatAlly)
 			{
-				this.m_statusText.text = string.Concat(new object[]
-				{
-					FollowerListItem.m_iLvlString,
-					" ",
-					this.m_itemLevel,
-					" - ",
-					FollowerListItem.m_combatAllyString
-				});
+				this.m_statusText.text = FollowerListItem.m_combatAllyString;
 			}
 			else if (this.m_onMission)
 			{
-				this.m_statusText.text = string.Concat(new object[]
-				{
-					FollowerListItem.m_iLvlString,
-					" ",
-					this.m_itemLevel,
-					" - ",
-					FollowerListItem.m_onMissionString
-				});
+				this.m_statusText.text = FollowerListItem.m_onMissionString;
 			}
 			else if (flag3)
 			{
-				this.m_statusText.text = string.Concat(new object[]
-				{
-					FollowerListItem.m_iLvlString,
-					" ",
-					this.m_itemLevel,
-					" - ",
-					FollowerListItem.m_inBuildingString
-				});
+				this.m_statusText.text = FollowerListItem.m_inBuildingString;
 			}
 			else if (this.m_inParty)
 			{
 				this.m_statusText.text = FollowerListItem.m_inPartyString;
-				this.darkeningImage.color = new Color(0.1f, 0.6f, 0.1f, 0.3f);
 			}
 			else
 			{
-				if (!flag4 && follower.FollowerLevel == 110)
+				GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
+				int id = (int)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID);
+				GarrClassSpecRec record2 = StaticDB.garrClassSpecDB.GetRecord(id);
+				if (!flag4)
 				{
-					this.m_statusText.text = FollowerListItem.m_iLvlString + " " + this.m_itemLevel;
+					this.m_statusText.text = record2.ClassSpec;
 				}
 				else
 				{
 					this.m_statusText.text = string.Empty;
+					this.m_statusText.gameObject.SetActive(false);
+					this.m_troopHeartContainer.SetActive(true);
 				}
 				this.darkeningImage.gameObject.SetActive(false);
-				this.m_troopHeartContainer.SetActive(true);
-			}
-			if (this.m_useArmamentsButtonText != null)
-			{
-				this.m_useArmamentsButtonText.text = FollowerListItem.m_iLvlString + " " + this.m_itemLevel;
 			}
 			this.m_availableForMission = (!flag && !flag2 && !this.m_onMission && !flag3);
 		}
@@ -595,7 +506,15 @@ namespace WoWCompanionApp
 		public void ExpandDetailViewComplete()
 		{
 			RectTransform component = this.m_followerDetailView.traitsAndAbilitiesRootObject.GetComponent<RectTransform>();
-			this.m_followerDetailViewLayoutElement.minHeight = component.rect.height + (float)this.m_followerDetailViewExtraHeight;
+			bool flag = (PersistentFollowerData.followerDictionary[this.m_followerID].Flags & 8) != 0;
+			if (flag)
+			{
+				this.m_followerDetailViewLayoutElement.minHeight = component.rect.height;
+			}
+			else
+			{
+				this.m_followerDetailViewLayoutElement.minHeight = component.rect.height + (float)this.m_followerDetailViewExtraHeight;
+			}
 		}
 
 		public void ContractDetailViewComplete()
@@ -654,15 +573,12 @@ namespace WoWCompanionApp
 				}
 				RectTransform component = this.m_followerDetailView.traitsAndAbilitiesRootObject.GetComponent<RectTransform>();
 				OrderHallFollowersPanel.instance.ScrollListTo(-base.transform.localPosition.y - ((!flag2) ? 0f : num) - 56f);
-				bool active = true;
 				WrapperGarrisonFollower wrapperGarrisonFollower = PersistentFollowerData.followerDictionary[this.m_followerID];
 				bool flag3 = (wrapperGarrisonFollower.Flags & 8) != 0;
 				GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(wrapperGarrisonFollower.GarrFollowerID);
 				if (flag3 || wrapperGarrisonFollower.FollowerLevel < MissionDetailView.GarrisonFollower_GetMaxFollowerLevel((int)record.GarrFollowerTypeID))
 				{
-					active = false;
 				}
-				this.m_useArmamentsButton.SetActive(active);
 				iTween.ValueTo(base.gameObject, iTween.Hash(new object[]
 				{
 					"name",
@@ -670,7 +586,7 @@ namespace WoWCompanionApp
 					"from",
 					this.m_followerDetailViewLayoutElement.minHeight,
 					"to",
-					component.rect.height + (float)this.m_followerDetailViewExtraHeight,
+					component.rect.height + (float)((!flag3) ? this.m_followerDetailViewExtraHeight : 0),
 					"time",
 					0.25f,
 					"easetype",
@@ -764,6 +680,8 @@ namespace WoWCompanionApp
 
 		public Text nameText;
 
+		public GameObject m_LevelBorderArea;
+
 		public Text m_levelText;
 
 		public Text m_statusText;
@@ -772,15 +690,7 @@ namespace WoWCompanionApp
 
 		public Image m_portraitQualityRing;
 
-		public Image m_portraitQualityRing_TitleQuality;
-
-		public Image m_levelBorder;
-
-		public Image m_levelBorder_TitleQuality;
-
 		public Image darkeningImage;
-
-		public Image m_classIcon;
 
 		public GameObject usefulAbilitiesGroup;
 
@@ -793,6 +703,12 @@ namespace WoWCompanionApp
 		public GameObject m_troopHeartPrefab;
 
 		public GameObject m_troopEmptyHeartPrefab;
+
+		public GameObject m_followerBG;
+
+		public GameObject m_troopBG;
+
+		public Button m_listItem;
 
 		public bool m_inParty;
 
@@ -826,19 +742,9 @@ namespace WoWCompanionApp
 
 		public GameObject m_selectionGlowRoot;
 
-		public GameObject m_useArmamentsButton;
-
-		public Text m_useArmamentsButtonText;
-
-		public Image m_useArmamentsButtonUpArrowGreen;
-
 		private bool m_isCombatAlly;
 
-		private int m_itemLevel;
-
 		private StringBuilder m_statusTextSB;
-
-		private static string m_iLvlString;
 
 		private static string m_inactiveString;
 

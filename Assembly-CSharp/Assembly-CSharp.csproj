@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A51B2700-0754-4FEC-B2D1-E2D3D345E0A8}</ProjectGuid>
+    <ProjectGuid>{CFD57480-17C9-4923-A9CF-632CDB532EBB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -46,9 +46,9 @@
     <Reference Include="UnityEngine.UnityWebRequestModule" />
     <Reference Include="SampleClassLibrary" />
     <Reference Include="ICSharpCode.SharpZipLib" />
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule" />
     <Reference Include="UnityEngine.PhysicsModule" />
     <Reference Include="UnityEngine.IMGUIModule" />
-    <Reference Include="UnityEngine.UnityWebRequestWWWModule" />
   </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
@@ -501,7 +501,7 @@
     <Compile Include="BountyLogo.cs" />
     <Compile Include="ButtonSwipe.cs" />
     <Compile Include="CanvasBlurManager.cs" />
-    <Compile Include="CharacterViewPanel.cs" />
+    <Compile Include="CogRotationConnectingScreen.cs" />
     <Compile Include="CombatAllyChampionListItem.cs" />
     <Compile Include="ConfigFile.cs" />
     <Compile Include="ConnectionPopup.cs" />
@@ -780,6 +780,7 @@
     <Compile Include="WoWCompanionApp\AdventureMapWorldQuest.cs" />
     <Compile Include="WoWCompanionApp\AllPanels.cs" />
     <Compile Include="WoWCompanionApp\AllPopups.cs" />
+    <Compile Include="WoWCompanionApp\AppSettingsDialog.cs" />
     <Compile Include="WoWCompanionApp\ArmamentDialog.cs" />
     <Compile Include="WoWCompanionApp\ArmamentPopup.cs" />
     <Compile Include="WoWCompanionApp\ArticleView.cs" />
@@ -796,6 +797,8 @@
     <Compile Include="WoWCompanionApp\CharacterListButton.cs" />
     <Compile Include="WoWCompanionApp\CharacterListPanel.cs" />
     <Compile Include="WoWCompanionApp\CharacterListView.cs" />
+    <Compile Include="WoWCompanionApp\CharacterViewPanel.cs" />
+    <Compile Include="WoWCompanionApp\CharacterWebView.cs" />
     <Compile Include="WoWCompanionApp\CollectLootListItem.cs" />
     <Compile Include="WoWCompanionApp\CombatAllyDialog.cs" />
     <Compile Include="WoWCompanionApp\CombatAllyListItem.cs" />
@@ -835,6 +838,7 @@
     <Compile Include="WoWCompanionApp\DialogFactory.cs" />
     <Compile Include="WoWCompanionApp\DownloadingPanel.cs" />
     <Compile Include="WoWCompanionApp\Duration.cs" />
+    <Compile Include="WoWCompanionApp\EmissaryCollection.cs" />
     <Compile Include="WoWCompanionApp\EmissaryPopup.cs" />
     <Compile Include="WoWCompanionApp\EncounterPopup.cs" />
     <Compile Include="WoWCompanionApp\EquipmentDialog.cs" />
@@ -863,6 +867,7 @@
     <Compile Include="WoWCompanionApp\HamburgerMenu.cs" />
     <Compile Include="WoWCompanionApp\InviteLinkDialog.cs" />
     <Compile Include="WoWCompanionApp\ItemStatCache.cs" />
+    <Compile Include="WoWCompanionApp\LanguageDropdown.cs" />
     <Compile Include="WoWCompanionApp\LegionfallBuildingPanel.cs" />
     <Compile Include="WoWCompanionApp\LegionfallButton.cs" />
     <Compile Include="WoWCompanionApp\LegionfallData.cs" />
@@ -874,7 +879,6 @@
     <Compile Include="WoWCompanionApp\Login.cs" />
     <Compile Include="WoWCompanionApp\LoginButton.cs" />
     <Compile Include="WoWCompanionApp\LoginUI.cs" />
-    <Compile Include="WoWCompanionApp\LogoutConfirmation.cs" />
     <Compile Include="WoWCompanionApp\LogPanel.cs" />
     <Compile Include="WoWCompanionApp\Main.cs" />
     <Compile Include="WoWCompanionApp\MapInfo.cs" />
@@ -901,8 +905,10 @@
     <Compile Include="WoWCompanionApp\MissionRewardDisplay.cs" />
     <Compile Include="WoWCompanionApp\MissionStartedEffect.cs" />
     <Compile Include="WoWCompanionApp\MissionTreasureView.cs" />
+    <Compile Include="WoWCompanionApp\MissionTypeDialog.cs" />
     <Compile Include="WoWCompanionApp\MobileDeviceLocale.cs" />
     <Compile Include="WoWCompanionApp\MyClientInterface.cs" />
+    <Compile Include="WoWCompanionApp\NarrowWideScreenTexture.cs" />
     <Compile Include="WoWCompanionApp\NewsArticle.cs" />
     <Compile Include="WoWCompanionApp\NewsList.cs" />
     <Compile Include="WoWCompanionApp\NewsListItem.cs" />
@@ -911,6 +917,8 @@
     <Compile Include="WoWCompanionApp\NextCompletedMissionButton.cs" />
     <Compile Include="WoWCompanionApp\NotificationData.cs" />
     <Compile Include="WoWCompanionApp\NotificationType.cs" />
+    <Compile Include="WoWCompanionApp\OKCancelDialog.cs" />
+    <Compile Include="WoWCompanionApp\OnRedButtonClick.cs" />
     <Compile Include="WoWCompanionApp\OptionsDialog.cs" />
     <Compile Include="WoWCompanionApp\OrderHallButton.cs" />
     <Compile Include="WoWCompanionApp\OrderHallFilterOptionsButton.cs" />
@@ -935,11 +943,13 @@
     <Compile Include="WoWCompanionApp\RecentCharacterArea.cs" />
     <Compile Include="WoWCompanionApp\RecentCharacterButton.cs" />
     <Compile Include="WoWCompanionApp\RecruitTroopsButton.cs" />
-    <Compile Include="WoWCompanionApp\RegionConfirmation.cs" />
+    <Compile Include="WoWCompanionApp\RedCloseButton.cs" />
     <Compile Include="WoWCompanionApp\ResourcesDisplay.cs" />
     <Compile Include="WoWCompanionApp\RewardInfoPopup.cs" />
     <Compile Include="WoWCompanionApp\RewardPanelSlider.cs" />
     <Compile Include="WoWCompanionApp\Scenes.cs" />
+    <Compile Include="WoWCompanionApp\SetHordeOrAllianceBanner.cs" />
+    <Compile Include="WoWCompanionApp\SettingsButton.cs" />
     <Compile Include="WoWCompanionApp\Singleton.cs" />
     <Compile Include="WoWCompanionApp\SliderPanel.cs" />
     <Compile Include="WoWCompanionApp\SocialNavButton.cs" />
@@ -1000,6 +1010,7 @@
     <Compile Include="WowStatConstants\AssetBundleType.cs" />
     <Compile Include="WowStatConstants\BackActionType.cs" />
     <Compile Include="WowStatConstants\BonusStatIndex.cs" />
+    <Compile Include="WowStatConstants\BOUNTY_SET.cs" />
     <Compile Include="WowStatConstants\CombatAllyMissionState.cs" />
     <Compile Include="WowStatConstants\Constants.cs" />
     <Compile Include="WowStatConstants\CURRENCY_FLAGS.cs" />
@@ -1036,14 +1047,20 @@
     <Compile Include="WowStatConstants\QUEST_TAG_TYPE.cs" />
     <Compile Include="WowStatConstants\SHIPMENT_RESULT.cs" />
     <Compile Include="WowStatConstants\TalentVisualState.cs" />
+    <Compile Include="WowStaticData\AzeriteEmpoweredItemDB.cs" />
+    <Compile Include="WowStaticData\AzeriteEmpoweredItemRec.cs" />
     <Compile Include="WowStaticData\CharShipmentContainerDB.cs" />
     <Compile Include="WowStaticData\CharShipmentContainerRec.cs" />
     <Compile Include="WowStaticData\CharShipmentDB.cs" />
     <Compile Include="WowStaticData\CharShipmentRec.cs" />
     <Compile Include="WowStaticData\ChrClassesDB.cs" />
     <Compile Include="WowStaticData\ChrClassesRec.cs" />
+    <Compile Include="WowStaticData\CommunityIconDB.cs" />
+    <Compile Include="WowStaticData\CommunityIconRec.cs" />
     <Compile Include="WowStaticData\CreatureDB.cs" />
     <Compile Include="WowStaticData\CreatureRec.cs" />
+    <Compile Include="WowStaticData\CurrencyContainerDB.cs" />
+    <Compile Include="WowStaticData\CurrencyContainerRec.cs" />
     <Compile Include="WowStaticData\CurrencyTypesDB.cs" />
     <Compile Include="WowStaticData\CurrencyTypesRec.cs" />
     <Compile Include="WowStaticData\FactionDB.cs" />

@@ -271,7 +271,7 @@ namespace WoWCompanionApp
 				this.m_combatAllyName.text = record2.Name;
 			}
 			this.m_combatAllyName.color = GeneralHelpers.GetQualityColor(this.m_combatAllyChampion.Value.Quality);
-			if (missionCost <= GarrisonStatus.Resources())
+			if (missionCost <= GarrisonStatus.WarResources())
 			{
 				this.m_useItemButtonLabel.text = StaticDB.GetString("ASSIGN_CHAMPION", null);
 			}
@@ -289,7 +289,7 @@ namespace WoWCompanionApp
 			{
 				this.m_isOverMaxChampionSoftCap = true;
 			}
-			if (GarrisonStatus.Resources() < missionCost)
+			if (GarrisonStatus.WarResources() < missionCost)
 			{
 				this.m_needMoreResources = true;
 			}

@@ -9,7 +9,10 @@ namespace WoWCompanionApp
 	{
 		protected override void Awake()
 		{
-			base.font = FontLoader.LoadFont(this.fontType);
+			if (!this.overrideFont)
+			{
+				base.font = FontLoader.LoadFont(this.fontType);
+			}
 			this.waitingForDB = !StaticDB.StringsAvailable();
 			this.LoadStringFromDB();
 		}
@@ -45,6 +48,8 @@ namespace WoWCompanionApp
 		public FontType fontType;
 
 		public bool dynamic;
+
+		public bool overrideFont;
 
 		private bool waitingForDB;
 	}

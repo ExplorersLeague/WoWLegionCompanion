@@ -26,14 +26,9 @@ namespace WoWCompanionApp
 			this.UpdateRecruitButtonState();
 		}
 
-		private void OnEnable()
-		{
-			this.HandleFollowerDataChanged();
-		}
-
 		private void UpdateRecruitButtonState()
 		{
-			bool flag = GarrisonStatus.Resources() >= this.m_shipmentCost;
+			bool flag = GarrisonStatus.WarResources() >= this.m_shipmentCost;
 			this.m_itemResourceCostText.color = ((!flag) ? Color.red : Color.white);
 			bool flag2 = true;
 			if (this.m_charShipmentRec != null && !PersistentShipmentData.CanOrderShipmentType(this.m_charShipmentRec.ID))
@@ -41,6 +36,14 @@ namespace WoWCompanionApp
 				flag2 = false;
 			}
 			TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
+			if (componentsInChildren.Length < 6)
+			{
+				this.m_troopSlotsRootObject.GetComponent<GridLayoutGroup>().constraintCount = 2;
+			}
+			else
+			{
+				this.m_troopSlotsRootObject.GetComponent<GridLayoutGroup>().constraintCount = 3;
+			}
 			bool flag3 = false;
 			foreach (TroopSlot troopSlot in componentsInChildren)
 			{
@@ -104,14 +107,23 @@ namespace WoWCompanionApp
 					if (component != null)
 					{
 						Vector2 spacing = component.spacing;
-						spacing.x = 10f;
+						spacing.x = 20f;
 						component.spacing = spacing;
 					}
 				}
 			}
+			if (GarrisonStatus.Faction() == PVP_FACTION.HORDE)
+			{
+				this.m_hordeBanner.SetActive(true);
+				this.m_allianceBanner.SetActive(false);
+			}
+			else if (GarrisonStatus.Faction() == PVP_FACTION.ALLIANCE)
+			{
+				this.m_hordeBanner.SetActive(false);
+				this.m_allianceBanner.SetActive(true);
+			}
 			Main instance = Main.instance;
 			instance.ShipmentAddedAction = (Action<int, ulong>)Delegate.Combine(instance.ShipmentAddedAction, new Action<int, ulong>(this.HandleShipmentAdded));
-			this.m_troopName.font = GeneralHelpers.LoadStandardFont();
 			this.m_troopResourceCostText.font = GeneralHelpers.LoadStandardFont();
 			this.m_itemResourceCostText.font = GeneralHelpers.LoadStandardFont();
 			this.m_recruitButtonText.font = GeneralHelpers.LoadStandardFont();
@@ -123,7 +135,12 @@ namespace WoWCompanionApp
 			this.m_artifactKnowledgeLevelIncreasedLabel.gameObject.SetActive(false);
 		}
 
-		private void OnDestroy()
+		private void OnEnable()
+		{
+			this.HandleFollowerDataChanged();
+		}
+
+		private void OnDisable()
 		{
 			Main instance = Main.instance;
 			instance.ShipmentAddedAction = (Action<int, ulong>)Delegate.Remove(instance.ShipmentAddedAction, new Action<int, ulong>(this.HandleShipmentAdded));
@@ -164,6 +181,7 @@ namespace WoWCompanionApp
 			CharShipmentRec charShipmentRec = (!isSealOfFateHack) ? StaticDB.charShipmentDB.GetRecord(shipmentType.Value.CharShipmentID) : sealOfFateHackCharShipmentRec;
 			if (charShipmentRec == null)
 			{
+				Debug.LogError("Invalid Shipment ID: " + shipmentType.Value.CharShipmentID);
 				this.m_troopName.text = "Invalid Shipment ID: " + shipmentType.Value.CharShipmentID;
 				return;
 			}
@@ -184,7 +202,6 @@ namespace WoWCompanionApp
 				TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
 				for (int i = 0; i < componentsInChildren.Length; i++)
 				{
-					componentsInChildren[i].gameObject.transform.SetParent(null);
 					Object.Destroy(componentsInChildren[i].gameObject);
 				}
 				return;
@@ -231,7 +248,6 @@ namespace WoWCompanionApp
 			{
 				for (int k = maxShipments; k < componentsInChildren2.Length; k++)
 				{
-					componentsInChildren2[k].gameObject.transform.SetParent(null);
 					Object.Destroy(componentsInChildren2[k].gameObject);
 				}
 			}
@@ -254,7 +270,6 @@ namespace WoWCompanionApp
 
 		private void SetCharShipmentItem(WrapperShipmentType shipmentType, CharShipmentRec charShipmentRec, bool isSealOfFateHack = false)
 		{
-			this.m_rightStackLayoutElement.minHeight = 120f;
 			this.m_isTroop = false;
 			this.m_charShipmentRec = charShipmentRec;
 			this.m_troopSpecificArea.SetActive(false);
@@ -264,16 +279,13 @@ namespace WoWCompanionApp
 			ItemRec record = StaticDB.itemDB.GetRecord(charShipmentRec.DummyItemID);
 			if (record == null)
 			{
+				Debug.LogError("Invalid Item ID: " + charShipmentRec.DummyItemID);
 				this.m_troopName.text = "Invalid Item ID: " + charShipmentRec.DummyItemID;
 				return;
 			}
 			this.m_itemDisplay.InitReward(MissionRewardDisplay.RewardType.item, charShipmentRec.DummyItemID, 1, 0, record.IconFileDataID);
 			this.m_itemName.text = record.Display;
 			Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record.IconFileDataID);
-			if (sprite != null)
-			{
-				this.m_troopSnapshotImage.sprite = sprite;
-			}
 			this.m_itemResourceCostText.gameObject.SetActive(!isSealOfFateHack);
 			this.m_itemResourceIcon.gameObject.SetActive(!isSealOfFateHack);
 			if (!isSealOfFateHack)
@@ -426,7 +438,6 @@ namespace WoWCompanionApp
 
 		private void SetCharShipmentTroop(WrapperShipmentType shipmentType, CharShipmentRec charShipmentRec)
 		{
-			this.m_rightStackLayoutElement.minHeight = 170f;
 			this.m_isTroop = true;
 			this.m_charShipmentRec = charShipmentRec;
 			this.m_troopSpecificArea.SetActive(true);
@@ -436,6 +447,7 @@ namespace WoWCompanionApp
 			GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord((int)charShipmentRec.GarrFollowerID);
 			if (record == null)
 			{
+				Debug.LogError("Invalid Follower ID: " + charShipmentRec.GarrFollowerID);
 				this.m_troopName.text = "Invalid Follower ID: " + charShipmentRec.GarrFollowerID;
 				return;
 			}
@@ -444,15 +456,12 @@ namespace WoWCompanionApp
 			CreatureRec record2 = StaticDB.creatureDB.GetRecord(num);
 			if (record2 == null)
 			{
+				Debug.LogError("Invalid Creature ID: " + num);
 				this.m_troopName.text = "Invalid Creature ID: " + num;
 				return;
 			}
 			string text = "Assets/BundleAssets/PortraitIcons/cid_" + record2.ID.ToString("D8") + ".png";
 			Sprite sprite = AssetBundleManager.PortraitIcons.LoadAsset<Sprite>(text);
-			if (sprite != null)
-			{
-				this.m_troopSnapshotImage.sprite = sprite;
-			}
 			for (int i = 0; i < record.Vitality; i++)
 			{
 				GameObject gameObject = Object.Instantiate<GameObject>(this.m_troopHeartPrefab);
@@ -621,11 +630,7 @@ namespace WoWCompanionApp
 
 		public GameObject m_itemSpecificArea;
 
-		public LayoutElement m_rightStackLayoutElement;
-
 		public Text m_akHintText;
-
-		public Image m_troopSnapshotImage;
 
 		public GameObject m_troopHeartContainer;
 
@@ -670,6 +675,10 @@ namespace WoWCompanionApp
 		public Text m_artifactKnowledgeLevelIncreasedLabel;
 
 		public MissionRewardDisplay m_artifactResearchNotesDisplayPrefab;
+
+		public GameObject m_allianceBanner;
+
+		public GameObject m_hordeBanner;
 
 		private bool m_isTroop;
 

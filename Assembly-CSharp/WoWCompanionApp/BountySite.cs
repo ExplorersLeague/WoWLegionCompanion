@@ -31,6 +31,7 @@ namespace WoWCompanionApp
 		{
 			UiAnimMgr.instance.PlayAnim("MinimapPulseAnim", base.transform, Vector3.zero, 3f, 0f);
 			AllPopups.instance.ShowBountyInfoTooltip(this.m_bounty);
+			Main.instance.m_UISound.Play_SelectWorldQuest();
 		}
 
 		private void Update()

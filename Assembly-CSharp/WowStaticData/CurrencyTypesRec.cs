@@ -12,6 +12,8 @@ namespace WowStaticData
 
 		public string Description { get; private set; }
 
+		public uint FactionID { get; private set; }
+
 		public void Deserialize(string valueLine)
 		{
 			int num = 0;
@@ -46,6 +48,9 @@ namespace WowStaticData
 				break;
 			case 3:
 				this.Description = valueText;
+				break;
+			case 4:
+				this.FactionID = Convert.ToUInt32(valueText);
 				break;
 			}
 		}

@@ -43,6 +43,19 @@ namespace WoWCompanionApp
 			}
 		}
 
+		public uint AvatarId
+		{
+			get
+			{
+				return this.m_clubInfo.avatarId;
+			}
+		}
+
+		public bool IsGuild()
+		{
+			return this.m_clubInfo.clubType == 2;
+		}
+
 		public void EditCommunity(string name, string description, uint? avatarId)
 		{
 			Club.EditClub(this.ClubId, name, this.m_clubInfo.shortName, description, avatarId, string.Empty);

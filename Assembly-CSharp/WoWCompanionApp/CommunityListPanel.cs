@@ -23,8 +23,8 @@ namespace WoWCompanionApp
 				GameObject gameObject = this.m_scrollContent.AddAsChildObject(this.m_scrollSectionHeaderPrefab);
 				gameObject.GetComponentInChildren<Text>().text = "PENDING INVITATIONS";
 				GameObject gameObject2 = this.m_scrollContent.AddAsChildObject(this.m_inviteButtonPrefab);
-				string text = (pendingInvites.Count <= 1) ? "1 INVITE" : "%s INVITATIONS";
-				text = MobileClient.FormatString(text, pendingInvites.Count.ToString());
+				string text = StaticDB.GetString("COMMUNITIES_MULTIPLE_INVITATIONS", null);
+				text = GeneralHelpers.QuantityRule(text, pendingInvites.Count);
 				gameObject2.GetComponentInChildren<Text>().text = text;
 				gameObject2.GetComponentInChildren<Button>().onClick.AddListener(new UnityAction(this.OpenPendingInvitesDialog));
 			}
@@ -32,14 +32,30 @@ namespace WoWCompanionApp
 
 		private void AddCommunitiesToContent()
 		{
-			GameObject gameObject = this.m_scrollContent.AddAsChildObject(this.m_scrollSectionHeaderPrefab);
-			string text = MobileClient.FormatString("%s'S COMMUNITIES", Singleton<CharacterData>.Instance.CharacterName.ToUpper());
-			gameObject.GetComponentInChildren<Text>().text = text;
-			CommunityData.Instance.ForEachCommunity(delegate(Community community)
+			if (CommunityData.Instance.HasGuild())
 			{
-				GameObject gameObject2 = this.m_scrollContent.AddAsChildObject(this.m_communityButtonPrefab);
-				gameObject2.GetComponent<CommunityButton>().SetCommunity(community);
-			});
+				GameObject gameObject = this.m_scrollContent.AddAsChildObject(this.m_scrollSectionHeaderPrefab);
+				string @string = StaticDB.GetString("SOCIAL_CHARACTERS_GUILD", "%s'S GUILD");
+				string text = MobileClient.FormatString(@string, Singleton<CharacterData>.Instance.CharacterName.ToUpper());
+				gameObject.GetComponentInChildren<Text>().text = text;
+				CommunityData.Instance.ForGuild(delegate(Community guild)
+				{
+					GameObject gameObject3 = this.m_scrollContent.AddAsChildObject(this.m_communityButtonPrefab);
+					gameObject3.GetComponent<CommunityButton>().SetCommunity(guild);
+				});
+			}
+			if (CommunityData.Instance.HasCommunities())
+			{
+				GameObject gameObject2 = this.m_scrollContent.AddAsChildObject(this.m_scrollSectionHeaderPrefab);
+				string string2 = StaticDB.GetString("SOCIAL_CHARACTERS_COMMUNITIES", "%s'S COMMUNITIES");
+				string text2 = MobileClient.FormatString(string2, Singleton<CharacterData>.Instance.CharacterName.ToUpper());
+				gameObject2.GetComponentInChildren<Text>().text = text2;
+				CommunityData.Instance.ForEachCommunity(delegate(Community community)
+				{
+					GameObject gameObject3 = this.m_scrollContent.AddAsChildObject(this.m_communityButtonPrefab);
+					gameObject3.GetComponent<CommunityButton>().SetCommunity(community);
+				});
+			}
 		}
 
 		private void OpenPendingInvitesDialog()

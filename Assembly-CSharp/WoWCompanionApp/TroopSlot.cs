@@ -15,11 +15,6 @@ namespace WoWCompanionApp
 			this.m_collectingSpinner.SetActive(false);
 		}
 
-		private void Start()
-		{
-			this.m_timeRemainingText.font = GeneralHelpers.LoadStandardFont();
-		}
-
 		private void OnEnable()
 		{
 			if (Main.instance != null)
@@ -43,6 +38,7 @@ namespace WoWCompanionApp
 			CharShipmentRec record = StaticDB.charShipmentDB.GetRecord(charShipmentID);
 			if (record == null)
 			{
+				Debug.LogError("Invalid Shipment ID: " + charShipmentID);
 				return;
 			}
 			if (this.m_glowLoopHandle != null)
@@ -65,6 +61,7 @@ namespace WoWCompanionApp
 				if (!PersistentShipmentData.shipmentDictionary.ContainsKey(shipmentDBID))
 				{
 					training = false;
+					Debug.LogWarning("Shipment not found in Persistent: " + charShipmentID);
 				}
 				else
 				{
@@ -83,9 +80,7 @@ namespace WoWCompanionApp
 			}
 			if (ownedGarrFollowerID != 0)
 			{
-				this.m_troopBuildProgressRing.gameObject.SetActive(false);
 				this.m_troopBuildEmptyRing.gameObject.SetActive(false);
-				this.m_troopBuildProgressFill.gameObject.SetActive(false);
 				this.m_troopOwnedCheckmark.gameObject.SetActive(true);
 				this.m_troopPortraitImage.gameObject.SetActive(true);
 				this.m_timeRemainingText.gameObject.SetActive(false);
@@ -94,10 +89,6 @@ namespace WoWCompanionApp
 			if (training)
 			{
 				this.m_troopBuildEmptyRing.gameObject.SetActive(true);
-				this.m_troopBuildProgressRing.gameObject.SetActive(true);
-				this.m_troopBuildProgressRing.fillAmount = 0f;
-				this.m_troopBuildProgressFill.gameObject.SetActive(true);
-				this.m_troopBuildProgressFill.fillAmount = 0f;
 				this.m_troopOwnedCheckmark.gameObject.SetActive(false);
 				this.m_troopPortraitImage.gameObject.SetActive(true);
 				this.m_timeRemainingText.gameObject.SetActive(true);
@@ -111,8 +102,6 @@ namespace WoWCompanionApp
 			else
 			{
 				this.m_troopBuildEmptyRing.gameObject.SetActive(false);
-				this.m_troopBuildProgressRing.gameObject.SetActive(false);
-				this.m_troopBuildProgressFill.gameObject.SetActive(false);
 				this.m_troopOwnedCheckmark.gameObject.SetActive(false);
 				this.m_troopPortraitImage.gameObject.SetActive(false);
 				this.m_timeRemainingText.gameObject.SetActive(false);
@@ -124,6 +113,7 @@ namespace WoWCompanionApp
 			ItemRec record = StaticDB.itemDB.GetRecord(charShipmentRec.DummyItemID);
 			if (record == null)
 			{
+				Debug.LogError("Invalid Item ID: " + charShipmentRec.DummyItemID);
 				return;
 			}
 			Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record.IconFileDataID);
@@ -138,6 +128,7 @@ namespace WoWCompanionApp
 			GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord((int)charShipmentRec.GarrFollowerID);
 			if (record == null)
 			{
+				Debug.LogError("Invalid Follower ID: " + charShipmentRec.GarrFollowerID);
 				return;
 			}
 			if (iconFileDataID <= 0)
@@ -156,9 +147,7 @@ namespace WoWCompanionApp
 			if (this.m_training)
 			{
 				TimeSpan t = GarrisonStatus.CurrentTime() - this.m_shipmentCreationTime;
-				float fillAmount = Mathf.Clamp((float)t.TotalSeconds / (float)this.m_shipmentDuration.TotalSeconds, 0f, 1f);
-				this.m_troopBuildProgressRing.fillAmount = fillAmount;
-				this.m_troopBuildProgressFill.fillAmount = fillAmount;
+				float num = Mathf.Clamp((float)t.TotalSeconds / (float)this.m_shipmentDuration.TotalSeconds, 0f, 1f);
 				TimeSpan timeSpan = this.m_shipmentDuration - t;
 				if (timeSpan.TotalSeconds < 0.0)
 				{
@@ -251,8 +240,6 @@ namespace WoWCompanionApp
 				UiAnimMgr.instance.PlayAnim("GreenCheckRound", this.m_greenCheckEffectRoot, Vector3.zero, 1.8f, 0f);
 				Main.instance.m_UISound.Play_GreenCheck();
 				this.m_training = false;
-				this.m_troopBuildProgressRing.gameObject.SetActive(false);
-				this.m_troopBuildProgressFill.gameObject.SetActive(false);
 				this.m_troopOwnedCheckmark.gameObject.SetActive(true);
 				this.m_troopPortraitImage.gameObject.SetActive(true);
 				this.m_timeRemainingText.gameObject.SetActive(false);
@@ -267,10 +254,6 @@ namespace WoWCompanionApp
 		public Image m_troopPortraitImage;
 
 		public Image m_troopBuildEmptyRing;
-
-		public Image m_troopBuildProgressRing;
-
-		public Image m_troopBuildProgressFill;
 
 		public Image m_troopOwnedCheckmark;
 

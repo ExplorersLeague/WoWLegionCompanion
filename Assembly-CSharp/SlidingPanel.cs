@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class SlidingPanel : MonoBehaviour
 {
+	public bool IsSliding()
+	{
+		return this.m_sliding;
+	}
+
 	private bool IsVerticalSlide()
 	{
 		return this.m_slideDirection == SlidingPanel.SlideDirection.FromTop || this.m_slideDirection == SlidingPanel.SlideDirection.FromBottom;

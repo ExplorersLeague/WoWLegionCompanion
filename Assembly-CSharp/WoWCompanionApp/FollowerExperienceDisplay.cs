@@ -113,33 +113,28 @@ namespace WoWCompanionApp
 			}
 			if (isTroop)
 			{
-				this.m_qualityBorder_TitleQuality.gameObject.SetActive(false);
-				this.m_levelBorder_TitleQuality.gameObject.SetActive(false);
 				this.m_qualityBorder.gameObject.SetActive(false);
 				this.m_levelBorder.gameObject.SetActive(false);
-				this.m_followerNameText.color = Color.white;
+				this.m_troopBackground.SetActive(true);
+				this.m_followerBackground.SetActive(false);
 				this.m_iLevelText.gameObject.SetActive(false);
 			}
 			else
 			{
 				if (follower.Quality == 6)
 				{
-					this.m_qualityBorder_TitleQuality.gameObject.SetActive(true);
-					this.m_levelBorder_TitleQuality.gameObject.SetActive(true);
 					this.m_qualityBorder.gameObject.SetActive(false);
 					this.m_levelBorder.gameObject.SetActive(false);
 				}
 				else
 				{
-					this.m_qualityBorder_TitleQuality.gameObject.SetActive(false);
-					this.m_levelBorder_TitleQuality.gameObject.SetActive(false);
 					this.m_qualityBorder.gameObject.SetActive(true);
 					this.m_levelBorder.gameObject.SetActive(true);
 				}
 				Color qualityColor = GeneralHelpers.GetQualityColor(follower.Quality);
 				this.m_qualityBorder.color = qualityColor;
-				this.m_levelBorder.color = qualityColor;
-				this.m_followerNameText.color = qualityColor;
+				this.m_troopBackground.SetActive(false);
+				this.m_followerBackground.SetActive(true);
 			}
 			CreatureRec record2 = StaticDB.creatureDB.GetRecord((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceCreatureID : record.HordeCreatureID);
 			if (follower.Quality == 6 && record.TitleName != null && record.TitleName.Length > 0)
@@ -150,21 +145,9 @@ namespace WoWCompanionApp
 			{
 				this.m_followerNameText.text = record2.Name;
 			}
-			if (follower.FollowerLevel < 110)
-			{
-				this.m_iLevelText.text = GeneralHelpers.TextOrderString(StaticDB.GetString("LEVEL", null), follower.FollowerLevel.ToString());
-			}
-			else
-			{
-				this.m_iLevelText.text = StaticDB.GetString("ILVL", null) + " " + ((follower.ItemLevelArmor + follower.ItemLevelWeapon) / 2).ToString();
-			}
+			this.m_iLevelText.text = follower.FollowerLevel.ToString();
 			GarrClassSpecRec record3 = StaticDB.garrClassSpecDB.GetRecord((int)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID));
 			this.m_classText.text = record3.ClassSpec;
-			Sprite atlasSprite = TextureAtlas.instance.GetAtlasSprite((int)record3.UiTextureAtlasMemberID);
-			if (atlasSprite != null)
-			{
-				this.m_classIcon.sprite = atlasSprite;
-			}
 			if (!isTroop)
 			{
 				if (isMaxLevelAndMaxQuality)
@@ -252,19 +235,17 @@ namespace WoWCompanionApp
 
 		public Image m_qualityBorder;
 
-		public Image m_qualityBorder_TitleQuality;
-
 		public Image m_levelBorder;
-
-		public Image m_levelBorder_TitleQuality;
 
 		public Text m_followerNameText;
 
 		public Text m_iLevelText;
 
-		public Image m_classIcon;
-
 		public Text m_classText;
+
+		public GameObject m_troopBackground;
+
+		public GameObject m_followerBackground;
 
 		[Header("Troop Specific")]
 		public GameObject m_troopHeartContainerEmpty;

@@ -181,9 +181,20 @@ namespace WoWCompanionApp
 
 		public void ForEachCommunity(Action<Community> action)
 		{
-			foreach (Community obj in CommunityData.m_communityDictionary.Values)
+			foreach (Community community in CommunityData.m_communityDictionary.Values)
 			{
-				action(obj);
+				if (!community.IsGuild())
+				{
+					action(community);
+				}
+			}
+		}
+
+		public void ForGuild(Action<Community> action)
+		{
+			if (CommunityData.m_guildCommunity != null)
+			{
+				action(CommunityData.m_guildCommunity);
 			}
 		}
 
@@ -193,6 +204,10 @@ namespace WoWCompanionApp
 			foreach (ClubInfo community in subscribedClubs)
 			{
 				CommunityData.Instance.AddCommunity(community);
+				if (community.clubType == 2)
+				{
+					CommunityData.m_guildCommunity = CommunityData.m_communityDictionary[community.clubId];
+				}
 			}
 		}
 
@@ -263,11 +278,24 @@ namespace WoWCompanionApp
 			}
 		}
 
+		public bool HasCommunities()
+		{
+			int num = (CommunityData.m_guildCommunity != null) ? 1 : 0;
+			return CommunityData.m_communityDictionary.Count > num;
+		}
+
+		public bool HasGuild()
+		{
+			return CommunityData.m_guildCommunity != null;
+		}
+
 		private static CommunityData m_instance = null;
 
 		private static Dictionary<ulong, Community> m_communityDictionary = new Dictionary<ulong, Community>();
 
 		private static List<CommunityPendingInvite> m_pendingInvites = new List<CommunityPendingInvite>();
+
+		private static Community m_guildCommunity = null;
 
 		public delegate void RefreshHandler();
 

@@ -76,32 +76,32 @@ namespace WoWCompanionApp
 
 		public void Play_OrderHallTalentSelect()
 		{
-			this.PlayUISound("SFX/UI_OrderHall_Talent_Select_V2", 1f, 3);
+			this.PlayUISound("SFX/UI_OrderHall_Talent_Select_V2", 0.7f, 3);
 		}
 
 		public void Play_MapZoomIn()
 		{
-			this.PlayUISound("SFX/UI_Mission_Map_Zoom_ALT", 0.3f, 3);
+			this.PlayUISound("SFX/UI_Mission_Map_Zoom_ALT", 0.6f, 3);
 		}
 
 		public void Play_SlotChampion()
 		{
-			this.PlayUISound("SFX/UI_Mission_SlotChampion", 1f, 3);
+			this.PlayUISound("SFX/UI_Mission_SlotChampion", 0.5f, 3);
 		}
 
 		public void Play_SlotTroop()
 		{
-			this.PlayUISound("SFX/UI_Mission_SlotTroop", 0.6f, 3);
+			this.PlayUISound("SFX/UI_Mission_SlotTroop", 0.3f, 3);
 		}
 
 		public void Play_100Percent()
 		{
-			this.PlayUISound("SFX/UI_Misison_100Percent", 1f, 3);
+			this.PlayUISound("SFX/UI_Misison_100Percent", 0.5f, 3);
 		}
 
 		public void Play_200Percent()
 		{
-			this.PlayUISound("SFX/UI_Mission_200Percent", 1f, 3);
+			this.PlayUISound("SFX/UI_Mission_200Percent", 0.5f, 3);
 		}
 
 		public void Play_IncreasePercent()
@@ -111,42 +111,42 @@ namespace WoWCompanionApp
 
 		public void Play_LootReady()
 		{
-			this.PlayUISound("SFX/UI_Mission_Loot_Ready", 0.8f, 3);
+			this.PlayUISound("SFX/UI_Mission_Loot_Ready", 0.3f, 3);
 		}
 
 		public void Play_StartMission()
 		{
-			this.PlayUISound("SFX/UI_Mission_Start_V2", 1f, 3);
+			this.PlayUISound("SFX/UI_Mission_Start_V2", 0.6f, 3);
 		}
 
 		public void Play_MissionFailure()
 		{
-			this.PlayUISound("SFX/UI_Mission_Fail", 1f, 3);
+			this.PlayUISound("SFX/UI_Mission_Fail", 0.5f, 3);
 		}
 
 		public void Play_MissionSuccess()
 		{
-			this.PlayUISound("SFX/UI_Mission_Loot_Open_V2", 1f, 3);
+			this.PlayUISound("SFX/UI_Mission_Loot_Open_V2", 0.4f, 3);
 		}
 
 		public void Play_RecruitTroop()
 		{
-			this.PlayUISound("SFX/UI_Recruit_Troop", 1f, 3);
+			this.PlayUISound("SFX/UI_Recruit_Troop", 0.7f, 3);
 		}
 
 		public void Play_TroopsReadyToast()
 		{
-			this.PlayUISound("SFX/UI_Mission_Troops_Ready_Toast", 0.8f, 1);
+			this.PlayUISound("SFX/UI_Mission_Troops_Ready_Toast", 0.6f, 1);
 		}
 
 		public void Play_CollectTroop()
 		{
-			this.PlayUISound("SFX/UI_Mobile_Collect_Troop", 1f, 3);
+			this.PlayUISound("SFX/UI_Mobile_Collect_Troop", 0.7f, 3);
 		}
 
 		public void Play_GreenCheck()
 		{
-			this.PlayUISound("SFX/UI_Mission_GreenCheck", 1f, 3);
+			this.PlayUISound("SFX/UI_Mission_GreenCheck", 0.5f, 3);
 		}
 
 		public void Play_SelectMission()
@@ -166,12 +166,12 @@ namespace WoWCompanionApp
 
 		public void Play_ShowGenericTooltip()
 		{
-			this.PlayUISound("SFX/UI_InfoWindow_Popup", 0.25f, 3);
+			this.PlayUISound("SFX/UI_InfoWindow_Popup", 0.1f, 3);
 		}
 
 		public void Play_BeginResearch()
 		{
-			this.PlayUISound("SFX/UI_OrderHall_Talent_BeginResearch", 1f, 3);
+			this.PlayUISound("SFX/UI_OrderHall_Talent_BeginResearch", 0.7f, 3);
 		}
 
 		public void Play_TalentReadyCheck()
@@ -191,12 +191,12 @@ namespace WoWCompanionApp
 
 		public void Play_UpgradeEquipment()
 		{
-			this.PlayUISound("SFX/UI_Upgrade_Equipment_Slot", 0.8f, 3);
+			this.PlayUISound("SFX/UI_Upgrade_Equipment_Slot", 0.7f, 3);
 		}
 
 		public void Play_UpgradeArmament()
 		{
-			this.PlayUISound("SFX/UI_Upgrade_Follower", 0.8f, 3);
+			this.PlayUISound("SFX/UI_Upgrade_Follower", 0.7f, 3);
 		}
 
 		public void Play_PlayerLevelUp()
@@ -206,12 +206,12 @@ namespace WoWCompanionApp
 
 		public void Play_RedFailX()
 		{
-			this.PlayUISound("SFX/UI_Mission_Fail_Red_X", 0.3f, 3);
+			this.PlayUISound("SFX/UI_Mission_Fail_Red_X", 0.1f, 3);
 		}
 
 		public void Play_ChampionLevelUp()
 		{
-			this.PlayUISound("SFX/UI_Upgrade_Follower", 1f, 3);
+			this.PlayUISound("SFX/UI_Upgrade_Follower", 0.7f, 3);
 		}
 
 		public void Play_CloseButton()
@@ -232,6 +232,16 @@ namespace WoWCompanionApp
 		public void Play_ArtifactClick()
 		{
 			this.PlayUISound("SFX/UI_72_ArtifactNote_Click", 1f, 3);
+		}
+
+		public void Play_RewardChestClick()
+		{
+			this.PlayUISound("SFX/UI_Mission_Loot_Chest_Click_01", 0.5f, 3);
+		}
+
+		public void Play_MapZoomOut()
+		{
+			this.PlayUISound("SFX/UI_Mission_Map_Zoom_Out_01", 0.5f, 3);
 		}
 
 		public AudioSource[] m_oneShotAudioSources;

@@ -9,20 +9,10 @@ namespace WoWCompanionApp
 	{
 		private void Awake()
 		{
-			this.m_availableMissionsTabLabel.font = GeneralHelpers.LoadFancyFont();
-			this.m_inProgressMissionsTabLabel.font = GeneralHelpers.LoadFancyFont();
 			this.m_noMissionsAvailableLabel.font = GeneralHelpers.LoadStandardFont();
 			this.m_noMissionsAvailableLabel.text = StaticDB.GetString("NO_MISSIONS_AVAILABLE", "No missions are currently available.");
 			this.m_noMissionsInProgressLabel.font = GeneralHelpers.LoadStandardFont();
 			this.m_noMissionsInProgressLabel.text = StaticDB.GetString("NO_MISSIONS_IN_PROGRESS", "No missions are currently in progress.");
-		}
-
-		private void Start()
-		{
-			if (Main.instance.IsNarrowScreen())
-			{
-				this.NarrowScreenAdjust();
-			}
 		}
 
 		public void OnEnable()
@@ -48,16 +38,16 @@ namespace WoWCompanionApp
 		{
 			this.m_availableMissionListScrollView.SetActive(true);
 			this.m_inProgressMissionListScrollView.SetActive(false);
-			this.m_availableMissionsTabSelectedImage.gameObject.SetActive(true);
-			this.m_inProgressMissionsTabSelectedImage.gameObject.SetActive(false);
+			this.m_availableMissionNotSelectedImage.gameObject.SetActive(false);
+			this.m_inProgressMissionNotSelectedImage.gameObject.SetActive(true);
 		}
 
 		public void ShowInProgressMissionList()
 		{
 			this.m_availableMissionListScrollView.SetActive(false);
 			this.m_inProgressMissionListScrollView.SetActive(true);
-			this.m_availableMissionsTabSelectedImage.gameObject.SetActive(false);
-			this.m_inProgressMissionsTabSelectedImage.gameObject.SetActive(true);
+			this.m_availableMissionNotSelectedImage.gameObject.SetActive(true);
+			this.m_inProgressMissionNotSelectedImage.gameObject.SetActive(false);
 		}
 
 		private void HandleGarrisonDataResetFinished()
@@ -137,7 +127,7 @@ namespace WoWCompanionApp
 					{
 						Debug.LogWarning("Mission Not Found: ID " + mission2.MissionRecID);
 					}
-					else if (record.GarrFollowerTypeID == 4u)
+					else if (record.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType)
 					{
 						if ((record.Flags & 16u) != 0u)
 						{
@@ -181,14 +171,6 @@ namespace WoWCompanionApp
 			this.m_currentMissionStartedEffectObj.transform.localPosition = Vector3.zero;
 		}
 
-		private void Update()
-		{
-		}
-
-		private void NarrowScreenAdjust()
-		{
-		}
-
 		public MiniMissionListItem m_miniMissionListItemPrefab;
 
 		public GameObject m_availableMissionListScrollView;
@@ -203,13 +185,13 @@ namespace WoWCompanionApp
 
 		public Text m_availableMissionsTabLabel;
 
-		public Image m_availableMissionsTabSelectedImage;
+		public Image m_availableMissionNotSelectedImage;
 
 		public Button m_inProgressMissionsTabButton;
 
 		public Text m_inProgressMissionsTabLabel;
 
-		public Image m_inProgressMissionsTabSelectedImage;
+		public Image m_inProgressMissionNotSelectedImage;
 
 		public Text m_noMissionsAvailableLabel;
 
@@ -224,10 +206,5 @@ namespace WoWCompanionApp
 		public OrderHallNavButton m_missionListOrderHallNavButton;
 
 		private GameObject m_currentMissionStartedEffectObj;
-
-		[Header("Notched Screen")]
-		public GameObject m_missionScrollViewport;
-
-		public GameObject m_tabsArea;
 	}
 }

@@ -134,16 +134,16 @@ namespace WoWCompanionApp
 				if (!this.m_requestedUpdate && num >= 1f)
 				{
 					this.m_requestedUpdate = true;
-					LegionCompanionWrapper.RequestGarrisonData(3);
+					LegionCompanionWrapper.RequestGarrisonData((int)GarrisonStatus.GarrisonType);
 					this.m_shouldShowCheckAnim = true;
-					if (!AllPanels.instance.m_orderHallMultiPanel.m_talentNavButton.IsSelected() && !this.m_playedTalentToast)
+					if (!base.GetComponentInParent<TalentTreePanel>().m_talentNavButton.IsSelected() && !this.m_playedTalentToast)
 					{
 						Main.instance.m_UISound.Play_TalentReadyToast();
 						this.m_playedTalentToast = true;
 					}
 				}
 			}
-			if (this.m_shouldShowCheckAnim && !this.m_playedShowCheckAnim && AllPanels.instance.m_orderHallMultiPanel.m_talentNavButton.IsSelected())
+			if (this.m_shouldShowCheckAnim && !this.m_playedShowCheckAnim && base.GetComponentInParent<TalentTreePanel>().m_talentNavButton.IsSelected())
 			{
 				UiAnimMgr.instance.PlayAnim("TalentDoneAnim", base.transform, Vector3.zero, 1f, 0f);
 				Main.instance.m_UISound.Play_TalentReadyCheck();

@@ -15,7 +15,7 @@ namespace WoWCompanionApp
 		{
 			if (Main.instance.IsNarrowScreen())
 			{
-				this.m_selectedSize = 100f;
+				this.m_selectedSize = 90f;
 			}
 			if (this.m_navButtonType == OrderHallNavButton.NavButtonType.map)
 			{
@@ -124,10 +124,6 @@ namespace WoWCompanionApp
 					this.m_normalImage.enabled = false;
 					this.m_selectedImage.enabled = true;
 					this.StopGlowEffect();
-					this.m_greenSelectionGlow.gameObject.SetActive(true);
-					this.m_glowSpinHandle = UiAnimMgr.instance.PlayAnim("PrestigeSpin", this.m_selectionGlowRoot.transform, Vector3.zero, 1.66f, 0f);
-					this.m_glowPulseHandle = UiAnimMgr.instance.PlayAnim("PrestigePulse", this.m_selectionGlowRoot.transform, Vector3.zero, 1.66f, 0f);
-					UiAnimMgr.instance.PlayAnim("MinimapPulseAnim", base.transform, Vector3.zero, 2f, 0f);
 					this.m_label.SetActive(true);
 					this.ResizeForSelect();
 					this.m_isSelected = true;
@@ -178,10 +174,6 @@ namespace WoWCompanionApp
 					{
 						this.m_notificationPulseHandle = UiAnimMgr.instance.PlayAnim("MinimapLoopPulseAnim", this.m_notificationBadgeRoot.transform, Vector3.zero, 1f, 0f);
 					}
-					else
-					{
-						this.RealignNotificationPulse();
-					}
 					this.m_notificationBadgeText.text = string.Empty + numCompletedMissions;
 				}
 				break;
@@ -203,10 +195,6 @@ namespace WoWCompanionApp
 					{
 						this.m_notificationPulseHandle = UiAnimMgr.instance.PlayAnim("MinimapLoopPulseAnim", this.m_notificationBadgeRoot.transform, Vector3.zero, 1f, 0f);
 					}
-					else
-					{
-						this.RealignNotificationPulse();
-					}
 					this.m_notificationBadgeText.text = string.Empty + numReadyShipments;
 				}
 				break;
@@ -226,22 +214,10 @@ namespace WoWCompanionApp
 					{
 						this.m_notificationPulseHandle = UiAnimMgr.instance.PlayAnim("MinimapLoopPulseAnim", this.m_notificationBadgeRoot.transform, Vector3.zero, 1f, 0f);
 					}
-					else
-					{
-						this.RealignNotificationPulse();
-					}
 				}
 				break;
 			}
 			}
-		}
-
-		private void RealignNotificationPulse()
-		{
-			this.m_notificationPulseHandle.GetAnim().gameObject.transform.SetParent(this.m_notificationBadgeRoot.transform);
-			this.m_notificationPulseHandle.GetAnim().gameObject.transform.localPosition = Vector3.zero;
-			this.m_notificationPulseHandle.GetAnim().gameObject.transform.rotation = Quaternion.identity;
-			this.m_notificationPulseHandle.GetAnim().gameObject.transform.localScale = Vector3.one;
 		}
 
 		public Image m_normalImage;
@@ -258,9 +234,9 @@ namespace WoWCompanionApp
 
 		public Text m_notificationBadgeText;
 
-		private float m_selectedSize = 106f;
+		private float m_selectedSize = 90f;
 
-		private float m_normalSize = 80f;
+		private float m_normalSize = 70f;
 
 		public float m_resizeDuration;
 

@@ -47,6 +47,7 @@ namespace WoWCompanionApp
 			{
 				if (rectTransform != null && rectTransform.gameObject != this.m_bountyQuestIconArea.gameObject)
 				{
+					rectTransform.SetParent(null);
 					Object.Destroy(rectTransform.gameObject);
 				}
 			}
@@ -61,34 +62,49 @@ namespace WoWCompanionApp
 				gameObject2.transform.SetParent(this.m_bountyQuestIconArea.transform, false);
 			}
 			this.UpdateTimeRemaining();
-			if (bounty.Items.Count > 0)
+			bounty.Items.RemoveAll((WrapperWorldQuestReward item) => item.RecordID == 157831 || item.RecordID == 1500);
+			if (bounty.Items.Count > 0 && StaticDB.itemDB.GetRecord(bounty.Items[0].RecordID) != null)
 			{
-				ItemRec record2 = StaticDB.itemDB.GetRecord(bounty.Items[0].RecordID);
-				if (record2 != null)
-				{
-					this.m_lootName.text = record2.Display;
-					this.m_lootDescription.text = GeneralHelpers.GetItemDescription(record2);
-					Sprite sprite2 = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record2.IconFileDataID);
-					if (sprite2 != null)
-					{
-						this.m_lootIcon.sprite = sprite2;
-					}
-					else if (this.m_lootIconInvalidFileDataID != null)
-					{
-						this.m_lootIconInvalidFileDataID.gameObject.SetActive(true);
-						this.m_lootIconInvalidFileDataID.text = string.Empty + record2.IconFileDataID;
-					}
-				}
-				else
-				{
-					this.m_lootName.text = "Unknown item " + bounty.Items[0].RecordID;
-					this.m_lootDescription.text = "Unknown item " + bounty.Items[0].RecordID;
-				}
+				WrapperWorldQuestReward wrapperWorldQuestReward = bounty.Items[0];
+				Sprite rewardSprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, wrapperWorldQuestReward.FileDataID);
+				this.m_rewardInfo.SetReward(MissionRewardDisplay.RewardType.item, wrapperWorldQuestReward.RecordID, wrapperWorldQuestReward.Quantity, rewardSprite, wrapperWorldQuestReward.ItemContext);
 			}
-			else
+			else if (bounty.Money > 1000000)
 			{
-				this.m_lootName.text = "ERROR: Loot Not Specified";
-				this.m_lootDescription.text = "ERROR: Loot Not Specified";
+				Sprite iconSprite = Resources.Load<Sprite>("MiscIcons/INV_Misc_Coin_01");
+				this.m_rewardInfo.SetGold(bounty.Money / 10000, iconSprite);
+			}
+			else if (bounty.Currencies.Count > 1)
+			{
+				int num = 0;
+				foreach (WrapperWorldQuestReward wrapperWorldQuestReward2 in bounty.Currencies)
+				{
+					CurrencyTypesRec record2 = StaticDB.currencyTypesDB.GetRecord(wrapperWorldQuestReward2.RecordID);
+					if (wrapperWorldQuestReward2.RecordID == 1553 && record2 != null)
+					{
+						CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+						if (currencyContainerRec != null)
+						{
+							Sprite iconSprite2 = CurrencyContainerDB.LoadCurrencyContainerIcon(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+							int num2 = wrapperWorldQuestReward2.Quantity / (((record2.Flags & 8u) == 0u) ? 1 : 100);
+							if (num2 > num)
+							{
+								num = num2;
+								this.m_rewardInfo.SetCurrency(wrapperWorldQuestReward2.RecordID, num, iconSprite2);
+							}
+						}
+						else
+						{
+							Sprite iconSprite2 = GeneralHelpers.LoadCurrencyIcon(wrapperWorldQuestReward2.RecordID);
+							int num3 = wrapperWorldQuestReward2.Quantity / (((record2.Flags & 8u) == 0u) ? 1 : 100);
+							if (num3 > num)
+							{
+								num = num3;
+								this.m_rewardInfo.SetCurrency(wrapperWorldQuestReward2.RecordID, num, iconSprite2);
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -120,15 +136,7 @@ namespace WoWCompanionApp
 
 		public Transform m_bountyQuestIconArea;
 
-		public Image m_lootIcon;
-
-		public Text m_lootIconInvalidFileDataID;
-
-		public Text m_lootName;
-
-		public Text m_lootDescription;
-
-		public Text m_rewardsLabel;
+		public RewardInfoPopup m_rewardInfo;
 
 		private WrapperWorldQuestBounty m_bounty;
 	}

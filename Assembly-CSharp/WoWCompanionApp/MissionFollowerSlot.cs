@@ -109,8 +109,6 @@ namespace WoWCompanionApp
 				this.m_levelBorderImage_TitleQuality.gameObject.SetActive(false);
 				this.m_portraitImage.gameObject.SetActive(false);
 				this.m_qualityColorImage.gameObject.SetActive(false);
-				this.m_qualityColorImage_TitleQuality.gameObject.SetActive(false);
-				this.m_levelBorderImage.color = Color.white;
 				this.m_levelText.gameObject.SetActive(false);
 				this.isOccupied = false;
 				this.m_portraitFrameImage.enabled = true;
@@ -141,7 +139,7 @@ namespace WoWCompanionApp
 			{
 				return;
 			}
-			if (record.GarrFollowerTypeID != 4u)
+			if (record.GarrFollowerTypeID != (uint)GarrisonStatus.GarrisonFollowerType)
 			{
 				return;
 			}
@@ -200,14 +198,7 @@ namespace WoWCompanionApp
 				}
 			}
 			this.m_levelText.gameObject.SetActive(true);
-			if (follower.FollowerLevel < 110)
-			{
-				this.m_levelText.text = GeneralHelpers.TextOrderString(StaticDB.GetString("LEVEL", null), follower.FollowerLevel.ToString());
-			}
-			else
-			{
-				this.m_levelText.text = GeneralHelpers.TextOrderString(StaticDB.GetString("ILVL", null), ((follower.ItemLevelArmor + follower.ItemLevelWeapon) / 2).ToString());
-			}
+			this.m_levelText.text = follower.FollowerLevel.ToString();
 			this.m_portraitImage.gameObject.SetActive(true);
 			Sprite sprite2 = GeneralHelpers.LoadIconAsset(AssetBundleType.PortraitIcons, (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceIconFileDataID : record.HordeIconFileDataID);
 			if (sprite2 != null)
@@ -216,20 +207,17 @@ namespace WoWCompanionApp
 			}
 			if (follower.Quality == 6)
 			{
-				this.m_qualityColorImage_TitleQuality.gameObject.SetActive(true);
 				this.m_levelBorderImage_TitleQuality.gameObject.SetActive(true);
 				this.m_qualityColorImage.gameObject.SetActive(false);
 				this.m_levelBorderImage.gameObject.SetActive(false);
 			}
 			else
 			{
-				this.m_qualityColorImage_TitleQuality.gameObject.SetActive(false);
 				this.m_levelBorderImage_TitleQuality.gameObject.SetActive(false);
 				this.m_qualityColorImage.gameObject.SetActive(true);
 				this.m_levelBorderImage.gameObject.SetActive(true);
 				Color qualityColor = GeneralHelpers.GetQualityColor(follower.Quality);
 				this.m_qualityColorImage.color = qualityColor;
-				this.m_levelBorderImage.color = qualityColor;
 			}
 			this.isOccupied = true;
 			bool flag2 = (follower.Flags & 8) != 0;
@@ -268,6 +256,7 @@ namespace WoWCompanionApp
 			{
 				if (image != null && image.gameObject != this.m_heartArea)
 				{
+					image.transform.SetParent(null);
 					Object.Destroy(image.gameObject);
 				}
 			}
@@ -303,8 +292,6 @@ namespace WoWCompanionApp
 		public Image m_portraitImage;
 
 		public Image m_qualityColorImage;
-
-		public Image m_qualityColorImage_TitleQuality;
 
 		public Image m_portraitRingImage;
 

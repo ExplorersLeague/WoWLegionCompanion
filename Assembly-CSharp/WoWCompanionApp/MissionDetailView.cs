@@ -340,27 +340,29 @@ namespace WoWCompanionApp
 					}
 				}
 			}
+			this.missionTypeText.gameObject.SetActive(false);
 			if (this.missionTypeText != null)
 			{
-				GarrMechanicTypeRec record5 = StaticDB.garrMechanicTypeDB.GetRecord((int)record.EnvGarrMechanicTypeID);
+				GarrMechanicRec record5 = StaticDB.garrMechanicDB.GetRecord(record.EnvGarrMechanicID);
 				if (record5 != null)
 				{
-					this.missionTypeText.gameObject.SetActive(true);
-					this.missionTypeText.text = string.Concat(new string[]
+					GarrAbilityRec record6 = StaticDB.garrAbilityDB.GetRecord(record5.GarrAbilityID);
+					if (record6 != null)
 					{
-						"<color=#ffff00ff>",
-						MissionDetailView.m_typeText,
-						": </color><color=#ffffffff>",
-						record5.Name,
-						"</color>"
-					});
-				}
-				else
-				{
-					this.missionTypeText.gameObject.SetActive(false);
+						this.missionTypeText.gameObject.SetActive(true);
+						this.m_missionTypeIcon.sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record6.IconFileDataID);
+						this.missionTypeText.text = string.Concat(new string[]
+						{
+							"<color=#ffff00ff>",
+							MissionDetailView.m_typeText,
+							": </color><color=#ffffffff>",
+							record6.Name,
+							"</color>"
+						});
+					}
 				}
 			}
-			Sprite sprite = GeneralHelpers.LoadCurrencyIcon(1220);
+			Sprite sprite = GeneralHelpers.LoadCurrencyIcon(1560);
 			if (sprite != null)
 			{
 				this.m_resourceIcon_MissionCost.sprite = sprite;
@@ -380,11 +382,11 @@ namespace WoWCompanionApp
 			}
 			if (!this.m_isCombatAlly && record.UiTextureKitID > 0u)
 			{
-				UiTextureKitRec record6 = StaticDB.uiTextureKitDB.GetRecord((int)record.UiTextureKitID);
+				UiTextureKitRec record7 = StaticDB.uiTextureKitDB.GetRecord((int)record.UiTextureKitID);
 				this.m_scrollingEnvironment_Back.enabled = false;
 				this.m_scrollingEnvironment_Mid.enabled = false;
 				this.m_scrollingEnvironment_Fore.enabled = false;
-				int uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("_" + record6.KitPrefix + "-Back");
+				int uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("_" + record7.KitPrefix + "-Back");
 				if (uitextureAtlasMemberID > 0)
 				{
 					Sprite atlasSprite = TextureAtlas.instance.GetAtlasSprite(uitextureAtlasMemberID);
@@ -393,8 +395,12 @@ namespace WoWCompanionApp
 						this.m_scrollingEnvironment_Back.enabled = true;
 						this.m_scrollingEnvironment_Back.sprite = atlasSprite;
 					}
+					else
+					{
+						Debug.Log("Missing expected Back sprite from UiTextureKitID: [" + record.UiTextureKitID.ToString() + "]");
+					}
 				}
-				int uitextureAtlasMemberID2 = TextureAtlas.GetUITextureAtlasMemberID("_" + record6.KitPrefix + "-Mid");
+				int uitextureAtlasMemberID2 = TextureAtlas.GetUITextureAtlasMemberID("_" + record7.KitPrefix + "-Mid");
 				if (uitextureAtlasMemberID2 > 0)
 				{
 					Sprite atlasSprite2 = TextureAtlas.instance.GetAtlasSprite(uitextureAtlasMemberID2);
@@ -403,8 +409,12 @@ namespace WoWCompanionApp
 						this.m_scrollingEnvironment_Mid.enabled = true;
 						this.m_scrollingEnvironment_Mid.sprite = atlasSprite2;
 					}
+					else
+					{
+						Debug.Log("Missing expected Mid sprite from UiTextureKitID: [" + record.UiTextureKitID.ToString() + "]");
+					}
 				}
-				int uitextureAtlasMemberID3 = TextureAtlas.GetUITextureAtlasMemberID("_" + record6.KitPrefix + "-Fore");
+				int uitextureAtlasMemberID3 = TextureAtlas.GetUITextureAtlasMemberID("_" + record7.KitPrefix + "-Fore");
 				if (uitextureAtlasMemberID3 > 0)
 				{
 					Sprite atlasSprite3 = TextureAtlas.instance.GetAtlasSprite(uitextureAtlasMemberID3);
@@ -412,6 +422,10 @@ namespace WoWCompanionApp
 					{
 						this.m_scrollingEnvironment_Fore.enabled = true;
 						this.m_scrollingEnvironment_Fore.sprite = atlasSprite3;
+					}
+					else
+					{
+						Debug.Log("Missing expected Fore sprite from UiTextureKitID: [" + record.UiTextureKitID.ToString() + "]");
 					}
 				}
 			}
@@ -596,7 +610,7 @@ namespace WoWCompanionApp
 					this.m_partyDebuffGroup.SetActive(num3 > 0);
 				}
 				int trueMissionCost = this.GetTrueMissionCost(record, list2);
-				this.missionCostText.text = GarrisonStatus.Resources().ToString("N0") + " / " + trueMissionCost.ToString("N0");
+				this.missionCostText.text = GarrisonStatus.WarResources().ToString("N0", MobileDeviceLocale.GetCultureInfoLocale()) + " / " + trueMissionCost.ToString("N0", MobileDeviceLocale.GetCultureInfoLocale());
 				int numActiveChampions = GeneralHelpers.GetNumActiveChampions();
 				int maxActiveFollowers = GarrisonStatus.GetMaxActiveFollowers();
 				this.m_isOverMaxChampionSoftCap = false;
@@ -606,7 +620,7 @@ namespace WoWCompanionApp
 				{
 					this.m_isOverMaxChampionSoftCap = true;
 				}
-				if (GarrisonStatus.Resources() < trueMissionCost)
+				if (GarrisonStatus.WarResources() < trueMissionCost)
 				{
 					this.m_needMoreResources = true;
 				}
@@ -627,14 +641,14 @@ namespace WoWCompanionApp
 				{
 					this.m_startMissionButton.material.SetFloat("_GrayscaleAmount", 0f);
 					this.m_startMissionButtonText.color = new Color(1f, 0.8588f, 0f, 1f);
-					Shadow component3 = this.m_startMissionButtonText.GetComponent<Shadow>();
+					MeshGradient component3 = this.m_startMissionButtonText.GetComponent<MeshGradient>();
 					component3.enabled = true;
 				}
 				else
 				{
 					this.m_startMissionButton.material.SetFloat("_GrayscaleAmount", 1f);
 					this.m_startMissionButtonText.color = Color.gray;
-					Shadow component4 = this.m_startMissionButtonText.GetComponent<Shadow>();
+					MeshGradient component4 = this.m_startMissionButtonText.GetComponent<MeshGradient>();
 					component4.enabled = false;
 				}
 				TimeSpan timeSpan = TimeSpan.FromSeconds((double)adjustedMissionDuration);
@@ -739,17 +753,15 @@ namespace WoWCompanionApp
 			}
 			this.m_missionChanceSpinner.SetActive(false);
 			this.missionPercentChanceText.text = newChance + "%";
-			this.m_lootBorderNormal.SetActive(newChance < 100);
-			this.m_lootBorderLitUp.SetActive(newChance >= 100);
 			if (newChance < 0)
 			{
 				this.missionPercentChanceText.color = Color.red;
-				this.missionPercentChanceLabel.color = Color.red;
+				this.missionPercentChanceText.GetComponentInParent<MeshGradient>().enabled = false;
 			}
 			else
 			{
 				this.missionPercentChanceText.color = Color.green;
-				this.missionPercentChanceLabel.color = Color.green;
+				this.missionPercentChanceText.GetComponentInParent<MeshGradient>().enabled = true;
 			}
 			if (this.m_percentChance < 100 && newChance >= 100)
 			{
@@ -1004,16 +1016,22 @@ namespace WoWCompanionApp
 			if (component != null)
 			{
 				Vector2 spacing = component.spacing;
-				spacing.x = 40f;
+				spacing.x = 20f;
 				component.spacing = spacing;
 			}
 			component = this.m_FollowerSlotGroup.GetComponent<GridLayoutGroup>();
 			if (component != null)
 			{
 				Vector2 spacing2 = component.spacing;
-				spacing2.x = 40f;
+				spacing2.x = 20f;
 				component.spacing = spacing2;
 			}
+		}
+
+		public void OpenMissionTypeDialog()
+		{
+			MissionTypeDialog missionTypeDialog = Singleton<DialogFactory>.instance.CreateMissionTypeDialog();
+			missionTypeDialog.InitializeMissionDialog(this.m_currentGarrMissionID);
 		}
 
 		[Header("Main Mission Display")]
@@ -1026,6 +1044,8 @@ namespace WoWCompanionApp
 		public Text missioniLevelText;
 
 		public Text missionTypeText;
+
+		public Image m_missionTypeIcon;
 
 		public Text missionDescriptionText;
 
@@ -1044,8 +1064,6 @@ namespace WoWCompanionApp
 		public GameObject treasureChestHorde;
 
 		public GameObject treasureChestAlliance;
-
-		public Text missionPercentChanceLabel;
 
 		public Text missionPercentChanceText;
 
@@ -1076,10 +1094,6 @@ namespace WoWCompanionApp
 		public GameObject m_partyBuffGroup;
 
 		public GameObject m_partyDebuffGroup;
-
-		public GameObject m_lootBorderNormal;
-
-		public GameObject m_lootBorderLitUp;
 
 		public Image m_resourceIcon_MissionCost;
 
@@ -1160,7 +1174,7 @@ namespace WoWCompanionApp
 		public Action FollowerSlotsChangedAction;
 
 		[Header("Notched Screen")]
-		public GameObject m_DarkBG;
+		public RectTransform m_DarkBG;
 
 		public GameObject m_LevelBG;
 
@@ -1171,6 +1185,8 @@ namespace WoWCompanionApp
 		public GameObject m_MissionLocationText;
 
 		public GameObject m_CloseButton;
+
+		public GameObject m_bottomBar;
 
 		[Header("Narrow Screen")]
 		public GameObject m_EnemiesGroup;

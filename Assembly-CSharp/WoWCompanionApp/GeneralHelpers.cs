@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using WowStatConstants;
 using WowStaticData;
@@ -12,7 +13,7 @@ namespace WoWCompanionApp
 	{
 		public static Color GetQualityColor(int quality)
 		{
-			Color gray = Color.gray;
+			Color white = Color.white;
 			Color green = Color.green;
 			Color result;
 			result..ctor(0.34f, 0.49f, 1f, 1f);
@@ -23,7 +24,7 @@ namespace WoWCompanionApp
 			switch (quality)
 			{
 			case 1:
-				return gray;
+				return white;
 			case 2:
 				return green;
 			case 3:
@@ -133,14 +134,14 @@ namespace WoWCompanionApp
 		{
 			isMaxLevelAndMaxQuality = false;
 			isQuality = false;
-			GarrFollowerLevelXPRec garrFollowerLevelXPRec = StaticDB.garrFollowerLevelXPDB.GetRecordsByParentID(followerLevel).First((GarrFollowerLevelXPRec rec) => StaticDB.garrFollowerTypeDB.GetRecord((int)rec.GarrFollowerTypeID).GarrTypeID == 3u);
+			GarrFollowerLevelXPRec garrFollowerLevelXPRec = StaticDB.garrFollowerLevelXPDB.GetRecordsByParentID(followerLevel).First((GarrFollowerLevelXPRec rec) => StaticDB.garrFollowerTypeDB.GetRecord((int)rec.GarrFollowerTypeID).GarrTypeID == (uint)GarrisonStatus.GarrisonType);
 			if (garrFollowerLevelXPRec.XpToNextLevel > 0u)
 			{
 				xpToNextLevelOrQuality = garrFollowerLevelXPRec.XpToNextLevel;
 				return;
 			}
 			isQuality = true;
-			GarrFollowerQualityRec garrFollowerQualityRec = StaticDB.garrFollowerQualityDB.GetRecordsByParentID(followerQuality).First((GarrFollowerQualityRec rec) => rec.GarrFollowerTypeID == 4u);
+			GarrFollowerQualityRec garrFollowerQualityRec = StaticDB.garrFollowerQualityDB.GetRecordsByParentID(followerQuality).First((GarrFollowerQualityRec rec) => rec.GarrFollowerTypeID == (uint)GarrisonStatus.GarrisonFollowerType);
 			xpToNextLevelOrQuality = garrFollowerQualityRec.XpToNextQuality;
 			if (garrFollowerQualityRec.XpToNextQuality == 0u)
 			{
@@ -150,7 +151,7 @@ namespace WoWCompanionApp
 
 		public static uint GetMaxFollowerItemLevel()
 		{
-			GarrFollowerTypeRec record = StaticDB.garrFollowerTypeDB.GetRecord(4);
+			GarrFollowerTypeRec record = StaticDB.garrFollowerTypeDB.GetRecord((int)GarrisonStatus.GarrisonFollowerType);
 			return record.MaxItemLevel;
 		}
 
@@ -861,6 +862,47 @@ namespace WoWCompanionApp
 				}
 			}
 			return num;
+		}
+
+		public static string QuantityRule(string formatString, int quantity)
+		{
+			formatString = formatString.Replace("%d", quantity.ToString());
+			Regex regex = new Regex("\\|4(?<singular>[\\p{L}\\d\\s]+):(?<plural>[\\p{L}\\d\\s]+);");
+			Match match = regex.Match(formatString);
+			if (match.Success)
+			{
+				return regex.Replace(formatString, (Match m) => (quantity <= 1) ? m.Groups["singular"].Value : m.Groups["plural"].Value);
+			}
+			if (formatString.Contains("|4"))
+			{
+				Debug.LogError("Error parsing string for quantity rule: " + formatString);
+			}
+			return formatString;
+		}
+
+		public static int GetRussianPluralIndex(int quantity)
+		{
+			switch (quantity % 100)
+			{
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+				return 2;
+			default:
+				switch (quantity % 10)
+				{
+				case 1:
+					return 0;
+				case 2:
+				case 3:
+				case 4:
+					return 1;
+				default:
+					return 2;
+				}
+				break;
+			}
 		}
 
 		public static string s_defaultColor = "ffd200ff";

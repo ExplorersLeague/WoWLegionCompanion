@@ -86,7 +86,7 @@ namespace WoWCompanionApp
 			{
 				return null;
 			}
-			if (record.GarrFollowerTypeID != 4u)
+			if (record.GarrFollowerTypeID != (uint)GarrisonStatus.GarrisonFollowerType)
 			{
 				return null;
 			}

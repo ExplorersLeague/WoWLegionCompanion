@@ -62,6 +62,8 @@ namespace WowStaticData
 
 		public int OvermaxRewardPackID { get; private set; }
 
+		public int EnvGarrMechanicID { get; private set; }
+
 		public void Deserialize(string valueLine)
 		{
 			int num = 0;
@@ -171,6 +173,9 @@ namespace WowStaticData
 				break;
 			case 28:
 				this.OvermaxRewardPackID = Convert.ToInt32(valueText);
+				break;
+			case 29:
+				this.EnvGarrMechanicID = Convert.ToInt32(valueText);
 				break;
 			}
 		}

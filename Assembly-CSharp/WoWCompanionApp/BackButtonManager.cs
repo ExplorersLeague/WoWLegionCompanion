@@ -42,10 +42,7 @@ namespace WoWCompanionApp
 				};
 				break;
 			case BackActionType.hideMissionDialog:
-				action = delegate
-				{
-					AllPopups.instance.m_missionDialog.m_missionDetailView.HideMissionDetailView();
-				};
+				action = new BackButtonManager.BackAction(Singleton<DialogFactory>.Instance.CloseMissionDialog);
 				break;
 			case BackActionType.hideHamburgerMenu:
 				action = delegate

@@ -30,7 +30,7 @@ namespace WoWCompanionApp
 				{
 					GarrisonStatus.LoadGarrisonConfig();
 				}
-				return GarrisonStatus.s_garrisonConfig.m_garrrisonFollowerType;
+				return GarrisonStatus.s_garrisonConfig.m_garrisonFollowerType;
 			}
 		}
 
@@ -62,11 +62,11 @@ namespace WoWCompanionApp
 			GarrisonStatus.s_serverConnectTime = GarrisonStatus.s_serverConnectTime.AddHours(1.0);
 		}
 
-		public static void SetCurrencies(int gold, int oil, int resources)
+		public static void SetCurrencies(int gold, int resources, int warResources)
 		{
 			GarrisonStatus.s_gold = gold;
-			GarrisonStatus.s_oil = oil;
 			GarrisonStatus.s_resources = resources;
+			GarrisonStatus.s_warResources = warResources;
 		}
 
 		public static void SetCharacterName(string name)
@@ -98,14 +98,14 @@ namespace WoWCompanionApp
 			return GarrisonStatus.s_gold;
 		}
 
-		public static int Oil()
-		{
-			return GarrisonStatus.s_oil;
-		}
-
 		public static int Resources()
 		{
 			return GarrisonStatus.s_resources;
+		}
+
+		public static int WarResources()
+		{
+			return GarrisonStatus.s_warResources;
 		}
 
 		public static string CharacterName()
@@ -167,9 +167,9 @@ namespace WoWCompanionApp
 
 		private static int s_gold;
 
-		private static int s_oil;
-
 		private static int s_resources;
+
+		private static int s_warResources;
 
 		private static int s_characterLevel;
 

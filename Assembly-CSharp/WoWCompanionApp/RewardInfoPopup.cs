@@ -27,6 +27,10 @@ namespace WoWCompanionApp
 				Main.instance.m_canvasBlurManager.AddBlurRef_Level2Canvas();
 			}
 			Main.instance.m_backButtonManager.PushBackAction(BackActionType.hideAllPopups, null);
+			if (this.m_azeriteFrame != null)
+			{
+				this.m_azeriteFrame.SetActive(false);
+			}
 		}
 
 		private void OnDisable()
@@ -86,22 +90,22 @@ namespace WoWCompanionApp
 			this.m_rewardName.text = string.Empty;
 			this.m_rewardDescription.text = string.Empty;
 			this.m_rewardIcon.sprite = iconSprite;
-			ItemRec record = StaticDB.itemDB.GetRecord(itemID);
-			if (record != null)
+			ItemRec record3 = StaticDB.itemDB.GetRecord(itemID);
+			if (record3 != null)
 			{
 				WrapperItemStats? itemStats = ItemStatCache.instance.GetItemStats(itemID, itemContext);
 				if (itemStats != null)
 				{
-					this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag(itemStats.Value.Quality) + record.Display + "</color>";
+					this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag(itemStats.Value.Quality) + record3.Display + "</color>";
 				}
 				else
 				{
-					this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag(record.OverallQualityID) + record.Display + "</color>";
+					this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag(record3.OverallQualityID) + record3.Display + "</color>";
 				}
 				this.m_rewardName.supportRichText = true;
-				if (record.ItemNameDescriptionID > 0)
+				if (record3.ItemNameDescriptionID > 0)
 				{
-					ItemNameDescriptionRec record2 = StaticDB.itemNameDescriptionDB.GetRecord(record.ItemNameDescriptionID);
+					ItemNameDescriptionRec record2 = StaticDB.itemNameDescriptionDB.GetRecord(record3.ItemNameDescriptionID);
 					if (record2 != null)
 					{
 						Text rewardName = this.m_rewardName;
@@ -117,9 +121,13 @@ namespace WoWCompanionApp
 						});
 					}
 				}
-				if (record.ClassID == 2 || record.ClassID == 3 || record.ClassID == 4 || record.ClassID == 5 || record.ClassID == 6)
+				if (this.m_azeriteFrame != null)
 				{
-					int itemLevel = record.ItemLevel;
+					this.m_azeriteFrame.SetActive(StaticDB.azeriteEmpoweredItemDB.GetRecordFirstOrDefault((AzeriteEmpoweredItemRec record) => record.ItemID == itemID) != null);
+				}
+				if (record3.ClassID == 2 || record3.ClassID == 3 || record3.ClassID == 4 || record3.ClassID == 5 || record3.ClassID == 6)
+				{
+					int itemLevel = record3.ItemLevel;
 					if (itemStats != null)
 					{
 						itemLevel = itemStats.Value.ItemLevel;
@@ -138,12 +146,12 @@ namespace WoWCompanionApp
 						"</color>"
 					});
 				}
-				if (record.Bonding > 0)
+				if (record3.Bonding > 0)
 				{
 					string text2 = string.Empty;
-					if ((record.Flags[0] & 134217728) != 0)
+					if ((record3.Flags[0] & 134217728) != 0)
 					{
-						if ((record.Flags[1] & 131072) != 0)
+						if ((record3.Flags[1] & 131072) != 0)
 						{
 							text2 = StaticDB.GetString("ITEM_BIND_TO_BNETACCOUNT", null);
 						}
@@ -152,19 +160,19 @@ namespace WoWCompanionApp
 							text2 = StaticDB.GetString("ITEM_BIND_TO_ACCOUNT", null);
 						}
 					}
-					else if (record.Bonding == 1)
+					else if (record3.Bonding == 1)
 					{
 						text2 = StaticDB.GetString("ITEM_BIND_ON_PICKUP", null);
 					}
-					else if (record.Bonding == 4)
+					else if (record3.Bonding == 4)
 					{
 						text2 = StaticDB.GetString("ITEM_BIND_QUEST", null);
 					}
-					else if (record.Bonding == 2)
+					else if (record3.Bonding == 2)
 					{
 						text2 = StaticDB.GetString("ITEM_BIND_ON_EQUIP", null);
 					}
-					else if (record.Bonding == 3)
+					else if (record3.Bonding == 3)
 					{
 						text2 = StaticDB.GetString("ITEM_BIND_ON_USE", null);
 					}
@@ -183,8 +191,8 @@ namespace WoWCompanionApp
 						});
 					}
 				}
-				ItemSubClassRec itemSubclass = StaticDB.GetItemSubclass(record.ClassID, record.SubclassID);
-				if (itemSubclass != null && itemSubclass.DisplayName != null && itemSubclass.DisplayName != string.Empty && (itemSubclass.DisplayFlags & 1) == 0 && record.InventoryType != 16)
+				ItemSubClassRec itemSubclass = StaticDB.GetItemSubclass(record3.ClassID, record3.SubclassID);
+				if (itemSubclass != null && itemSubclass.DisplayName != null && itemSubclass.DisplayName != string.Empty && (itemSubclass.DisplayFlags & 1) == 0 && record3.InventoryType != 16)
 				{
 					if (this.m_rewardDescription.text != string.Empty)
 					{
@@ -203,7 +211,7 @@ namespace WoWCompanionApp
 						"</color>"
 					});
 				}
-				string inventoryTypeString = GeneralHelpers.GetInventoryTypeString((INVENTORY_TYPE)record.InventoryType);
+				string inventoryTypeString = GeneralHelpers.GetInventoryTypeString((INVENTORY_TYPE)record3.InventoryType);
 				if (inventoryTypeString != null && inventoryTypeString != string.Empty)
 				{
 					if (this.m_rewardDescription.text != string.Empty)
@@ -287,7 +295,7 @@ namespace WoWCompanionApp
 						}
 					}
 				}
-				int requiredLevel = record.RequiredLevel;
+				int requiredLevel = record3.RequiredLevel;
 				if (itemStats != null)
 				{
 					requiredLevel = itemStats.Value.RequiredLevel;
@@ -318,7 +326,7 @@ namespace WoWCompanionApp
 						"</color>"
 					});
 				}
-				string itemDescription = GeneralHelpers.GetItemDescription(record);
+				string itemDescription = GeneralHelpers.GetItemDescription(record3);
 				if (itemDescription != null && itemDescription != string.Empty)
 				{
 					if (this.m_rewardDescription.text != string.Empty)
@@ -358,20 +366,31 @@ namespace WoWCompanionApp
 		public void SetCurrency(int currencyID, int quantity, Sprite iconSprite)
 		{
 			CurrencyTypesRec record = StaticDB.currencyTypesDB.GetRecord(currencyID);
-			if (record != null)
+			CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(currencyID, quantity);
+			if (currencyContainerRec != null)
 			{
-				this.m_rewardName.text = record.Name;
-				this.m_rewardDescription.text = record.Description;
+				this.m_rewardName.text = GeneralHelpers.GetItemQualityColorTag(currencyContainerRec.ContainerQuality) + currencyContainerRec.ContainerName + "</color>";
+				this.m_rewardDescription.text = GeneralHelpers.QuantityRule(currencyContainerRec.ContainerDescription, quantity);
+				this.m_rewardQuantity.text = string.Empty;
+				this.m_rewardIcon.sprite = iconSprite;
 			}
-			this.m_rewardQuantity.text = ((quantity <= 1) ? string.Empty : (string.Empty + quantity));
-			this.m_rewardIcon.sprite = iconSprite;
+			else
+			{
+				if (record != null)
+				{
+					this.m_rewardName.text = record.Name;
+					this.m_rewardDescription.text = record.Description;
+				}
+				this.m_rewardQuantity.text = ((quantity <= 1) ? string.Empty : (string.Empty + quantity));
+				this.m_rewardIcon.sprite = iconSprite;
+			}
 		}
 
 		public void SetGold(int quantity, Sprite iconSprite)
 		{
 			this.m_rewardName.text = StaticDB.GetString("GOLD", null);
 			this.m_rewardDescription.text = StaticDB.GetString("GOLD_DESCRIPTION", null);
-			this.m_rewardQuantity.text = ((quantity <= 1) ? string.Empty : (string.Empty + quantity));
+			this.m_rewardQuantity.text = ((quantity <= 1) ? string.Empty : (string.Empty + quantity.ToString(MobileDeviceLocale.GetCultureInfoLocale())));
 			this.m_rewardIcon.sprite = iconSprite;
 		}
 
@@ -405,6 +424,8 @@ namespace WoWCompanionApp
 		public Text m_rewardQuantity;
 
 		public Image m_rewardIcon;
+
+		public GameObject m_azeriteFrame;
 
 		private int m_rewardID;
 

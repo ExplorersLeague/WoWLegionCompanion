@@ -10,19 +10,25 @@ namespace WowStatConstants
 
 		public const int ITEM_CONTEXT_NONE = 0;
 
-		public const int BOUNTY_QUESTID_KIRIN_TOR = 43179;
+		public const int BOUNTY_QUESTID_CHAMPIONSOFAZEROTH = 50562;
 
-		public const int BOUNTY_QUESTID_VALARJAR = 42234;
+		public const int BOUNTY_QUESTID_ZANDALARIEMPIRE = 50598;
 
-		public const int BOUNTY_QUESTID_NIGHTFALLEN = 42421;
+		public const int BOUNTY_QUESTID_PROUDMOOREADMIRALTY = 50599;
 
-		public const int BOUNTY_QUESTID_WARDENS = 42422;
+		public const int BOUNTY_QUESTID_ORDEROFEMBERS = 50600;
 
-		public const int BOUNTY_QUESTID_DREAMWEAVERS = 42170;
+		public const int BOUNTY_QUESTID_STORMSWAKE = 50601;
 
-		public const int BOUNTY_QUESTID_COURTOFFARONDIS = 42420;
+		public const int BOUNTY_QUESTID_TALANJISEXPEDITION = 50602;
 
-		public const int BOUNTY_QUESTID_HIGHMOUNTINTRIBES = 42233;
+		public const int BOUNTY_QUESTID_VOLDUNAI = 50603;
+
+		public const int BOUNTY_QUESTID_TORTOLLANSEEKERS = 50604;
+
+		public const int BOUNTY_QUESTID_ALLIANCEWAREFFORT = 50605;
+
+		public const int BOUNTY_QUESTID_HORDERWAREFFORT = 50606;
 
 		public const int MAPID_BROKEN_ISLES = 1220;
 
@@ -37,6 +43,18 @@ namespace WowStatConstants
 		public const int UIMAPID_MACAREE = 882;
 
 		public const int UIMAPID_ANTORAN_WASTES = 885;
+
+		public const int UIMAPID_ZULDAZAR = 862;
+
+		public const int UIMAPID_NAZMIR = 863;
+
+		public const int UIMAPID_VOLDUN = 864;
+
+		public const int UIMAPID_TIRAGARDE = 895;
+
+		public const int UIMAPID_DRUSTVAR = 896;
+
+		public const int UIMAPID_STORMSONG = 942;
 
 		public const int WORLDMAPAREA_KROKUUN = 1135;
 
@@ -66,7 +84,13 @@ namespace WowStatConstants
 
 		public const int PET_CHARM_ITEM_ID = 116415;
 
+		public const int POLISHED_PET_CHARM_ITEM_ID = 163036;
+
 		public const int ORDER_HALL_RESOURCES_CURRENCY_ID = 1220;
+
+		public const int AZERITE_CURRENCY_ID = 1553;
+
+		public const int WAR_RESOURCES_CURRENCY_ID = 1560;
 
 		public const int GRANT_ARTIFACT_EXP_SPELL_EFFECT_ID = 240;
 
@@ -105,5 +129,13 @@ namespace WowStatConstants
 		public const int LEGIONFALL_COMMAND_CENTER_QUEST_ID = 46735;
 
 		public const int LEGIONFALL_NETHER_DISRUPTOR_QUEST_ID = 46736;
+
+		public const int HORDE_GARR_TALENT_ID = 152;
+
+		public const int ALLIANCE_GARR_TALENT_ID = 153;
+
+		public const int BATTLE_PET_WORLD_QUEST_QUESTINFOID = 115;
+
+		public const int SUBSTANTIAL_GOLD_REWARD = 1000000;
 	}
 }

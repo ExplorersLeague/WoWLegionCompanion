@@ -57,14 +57,29 @@ namespace WoWCompanionApp
 			{
 				foreach (WrapperWorldQuestReward wrapperWorldQuestReward2 in worldQuest.Currencies)
 				{
-					Sprite iconSprite = GeneralHelpers.LoadCurrencyIcon(wrapperWorldQuestReward2.RecordID);
 					CurrencyTypesRec record = StaticDB.currencyTypesDB.GetRecord(wrapperWorldQuestReward2.RecordID);
-					int quantity = wrapperWorldQuestReward2.Quantity / (((record.Flags & 8u) == 0u) ? 1 : 100);
-					this.m_rewardInfo[num].SetCurrency(wrapperWorldQuestReward2.RecordID, quantity, iconSprite);
-					this.EnableAdditionalRewardDisplays(num++);
-					if (num >= 3)
+					CurrencyContainerRec currencyContainerRec = CurrencyContainerDB.CheckAndGetValidCurrencyContainer(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+					if (currencyContainerRec != null)
 					{
-						break;
+						Sprite iconSprite = CurrencyContainerDB.LoadCurrencyContainerIcon(wrapperWorldQuestReward2.RecordID, wrapperWorldQuestReward2.Quantity);
+						int quantity = wrapperWorldQuestReward2.Quantity / (((record.Flags & 8u) == 0u) ? 1 : 100);
+						this.m_rewardInfo[num].SetCurrency(wrapperWorldQuestReward2.RecordID, quantity, iconSprite);
+						this.EnableAdditionalRewardDisplays(num++);
+						if (num >= 3)
+						{
+							break;
+						}
+					}
+					else
+					{
+						Sprite iconSprite = GeneralHelpers.LoadCurrencyIcon(wrapperWorldQuestReward2.RecordID);
+						int quantity = wrapperWorldQuestReward2.Quantity / (((record.Flags & 8u) == 0u) ? 1 : 100);
+						this.m_rewardInfo[num].SetCurrency(wrapperWorldQuestReward2.RecordID, quantity, iconSprite);
+						this.EnableAdditionalRewardDisplays(num++);
+						if (num >= 3)
+						{
+							break;
+						}
 					}
 				}
 			}
@@ -99,20 +114,19 @@ namespace WoWCompanionApp
 			{
 				if (transform != null && transform != this.m_worldQuestObjectiveRoot.transform)
 				{
+					transform.SetParent(null);
 					Object.Destroy(transform.gameObject);
 				}
 			}
 			WrapperWorldQuest worldQuest = WorldQuestData.WorldQuestDictionary[this.m_questID];
-			GameObject gameObject = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
-			gameObject.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
-			Text component = gameObject.GetComponent<Text>();
-			component.text = worldQuest.QuestTitle;
-			component.resizeTextMaxSize = 26;
+			this.m_worldQuestNameText.text = worldQuest.QuestTitle;
 			BountySite[] componentsInChildren2 = this.m_bountyLogoRoot.transform.GetComponentsInChildren<BountySite>(true);
 			foreach (BountySite bountySite in componentsInChildren2)
 			{
+				bountySite.transform.SetParent(null);
 				Object.Destroy(bountySite.gameObject);
 			}
+			int num = 0;
 			if (PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(worldQuest.QuestID))
 			{
 				WrapperBountiesByWorldQuest wrapperBountiesByWorldQuest = PersistentBountyData.bountiesByWorldQuestDictionary[worldQuest.QuestID];
@@ -125,30 +139,32 @@ namespace WoWCompanionApp
 							QuestV2Rec record = StaticDB.questDB.GetRecord(bounty.QuestID);
 							if (record != null)
 							{
-								GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
-								gameObject2.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
-								Text component2 = gameObject2.GetComponent<Text>();
-								component2.text = record.QuestTitle;
-								component2.color = new Color(1f, 0.773f, 0f, 1f);
+								GameObject gameObject = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
+								gameObject.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
+								Text component = gameObject.GetComponent<Text>();
+								component.text = record.QuestTitle;
+								component.color = new Color(1f, 0.773f, 0f, 1f);
 								BountySite bountySite2 = Object.Instantiate<BountySite>(this.m_bountyLogoPrefab);
 								bountySite2.SetBounty(bounty);
 								bountySite2.transform.SetParent(this.m_bountyLogoRoot.transform, false);
+								num++;
 							}
 						}
 					}
 				}
 			}
-			GameObject gameObject3 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
-			gameObject3.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
-			this.m_worldQuestTimeText = gameObject3.GetComponent<Text>();
+			this.EnableBountyFiligree(num);
+			GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
+			gameObject2.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
+			this.m_worldQuestTimeText = gameObject2.GetComponent<Text>();
 			this.m_worldQuestTimeText.text = worldQuest.QuestTitle;
 			this.m_worldQuestTimeText.color = new Color(1f, 0.773f, 0f, 1f);
 			foreach (WrapperWorldQuestObjective wrapperWorldQuestObjective in worldQuest.Objectives)
 			{
-				GameObject gameObject4 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
-				gameObject4.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
-				Text component3 = gameObject4.GetComponent<Text>();
-				component3.text = "- " + wrapperWorldQuestObjective.Text;
+				GameObject gameObject3 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
+				gameObject3.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
+				Text component2 = gameObject3.GetComponent<Text>();
+				component2.text = "- " + wrapperWorldQuestObjective.Text;
 			}
 			this.InitRewardInfoDisplay(worldQuest);
 			this.m_endTime = worldQuest.EndTime;
@@ -298,20 +314,20 @@ namespace WoWCompanionApp
 					text = "Mobile-Mining";
 					break;
 				}
-				goto IL_703;
+				goto IL_6F5;
 			}
 			case 3:
 				uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 				text = "Mobile-PVP";
-				goto IL_703;
+				goto IL_6F5;
 			case 4:
 				uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 				text = "Mobile-Pets";
-				goto IL_703;
+				goto IL_6F5;
 			}
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 			text = "Mobile-QuestExclamationIcon";
-			IL_703:
+			IL_6F5:
 			if (text != null)
 			{
 				this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/" + text);
@@ -322,6 +338,12 @@ namespace WoWCompanionApp
 				this.m_main.SetNativeSize();
 			}
 			this.UpdateTimeRemaining();
+		}
+
+		private void EnableBountyFiligree(int activeBounties)
+		{
+			this.m_singleEmissaryFiligree.SetActive(activeBounties == 1);
+			this.m_doubleEmissaryFiligree.SetActive(activeBounties == 2);
 		}
 
 		private void UpdateTimeRemaining()
@@ -351,6 +373,8 @@ namespace WoWCompanionApp
 		public Image m_expiringSoon;
 
 		[Header("World Quest Info")]
+		public Text m_worldQuestNameText;
+
 		private Text m_worldQuestTimeText;
 
 		public MissionRewardDisplay m_missionRewardDisplayPrefab;
@@ -362,6 +386,10 @@ namespace WoWCompanionApp
 		public GameObject m_bountyLogoRoot;
 
 		public BountySite m_bountyLogoPrefab;
+
+		public GameObject m_singleEmissaryFiligree;
+
+		public GameObject m_doubleEmissaryFiligree;
 
 		[Header("Misc")]
 		public RewardInfoPopup[] m_rewardInfo;

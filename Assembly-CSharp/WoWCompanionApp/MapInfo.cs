@@ -41,10 +41,6 @@ namespace WoWCompanionApp
 			{
 				this.m_viewRelativeScale = AdventureMapPanel.instance.m_mapViewRT.rect.height / mapH;
 			}
-			if (Main.instance.IsNarrowScreen() && AdventureMapPanel.instance.m_mapInfo_BrokenIsles.gameObject.activeSelf)
-			{
-				this.m_viewRelativeScale *= 0.9f;
-			}
 			this.m_fillViewSize.x = mapW * this.m_viewRelativeScale;
 			this.m_fillViewSize.y = mapH * this.m_viewRelativeScale;
 		}

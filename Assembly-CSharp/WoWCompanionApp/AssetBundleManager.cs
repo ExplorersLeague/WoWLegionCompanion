@@ -45,19 +45,60 @@ namespace WoWCompanionApp
 			string dataErrorTitle = this.GetDataErrorTitleText();
 			string dataErrorDescription = this.GetDataErrorDescriptionText();
 			this.m_assetServerURL = this.GetRemoteAssetPath();
+			bool redirect = true;
+			HashSet<string> previousURLs = new HashSet<string>();
+			while (redirect)
+			{
+				if (previousURLs.Contains(this.m_assetServerURL))
+				{
+					Debug.Log("Error: Caught in redirect loop searching for data bundles.");
+					GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
+					Singleton<Login>.instance.LoginUI.ShowGenericPopup(dataErrorTitle, dataErrorDescription);
+					redirect = false;
+					yield break;
+				}
+				previousURLs.Add(this.m_assetServerURL);
+				Debug.Log("Checking for redirect.txt at: " + this.m_assetServerURL + "redirect.txt");
+				using (WWW www = new WWW(this.m_assetServerURL + "redirect.txt"))
+				{
+					yield return www;
+					if (www.error == null)
+					{
+						if (Uri.IsWellFormedUriString(www.text, UriKind.Absolute))
+						{
+							this.m_assetServerURL = www.text;
+							if (!this.m_assetServerURL.EndsWith("/"))
+							{
+								this.m_assetServerURL += "/";
+							}
+							Debug.Log("Found redirect to " + this.m_assetServerURL);
+						}
+						else
+						{
+							redirect = false;
+							Debug.Log("End of redirect chain due to non-URI content: " + www.text);
+						}
+					}
+					else
+					{
+						redirect = false;
+						Debug.Log("End of redirect chain");
+					}
+				}
+			}
 			string manifestURL = this.m_assetServerURL + this.m_platform;
 			Debug.Log("Fetching manifest from " + manifestURL);
-			using (WWW www = new WWW(manifestURL))
+			using (WWW www2 = new WWW(manifestURL))
 			{
-				yield return www;
-				if (www.error != null)
+				yield return www2;
+				if (www2.error != null)
 				{
-					Debug.Log("Error: Could not get manifest bundle.");
+					Debug.Log("Error: Could not get manifest bundle: " + www2.error);
 					GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
 					Singleton<Login>.instance.LoginUI.ShowGenericPopup(dataErrorTitle, dataErrorDescription);
 					yield break;
 				}
-				AssetBundle assetBundle = www.assetBundle;
+				AssetBundle assetBundle = www2.assetBundle;
 				this.m_manifest = assetBundle.LoadAsset<AssetBundleManifest>("assetbundlemanifest");
 				if (this.m_manifest == null)
 				{
@@ -120,7 +161,7 @@ namespace WoWCompanionApp
 		private void DataErrorPopupDisabled()
 		{
 			GenericPopup.DisabledAction = (Action)Delegate.Remove(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
-			Main.instance.OnQuitButton();
+			Application.Quit();
 		}
 
 		private IEnumerator LoadAssetBundle(string fileName)
@@ -269,7 +310,7 @@ namespace WoWCompanionApp
 
 		public void UpdateVersion()
 		{
-			string text = this.GetRemoteAssetPath() + "update.txt";
+			string text = this.m_assetServerURL + "update.txt";
 			Debug.Log("Fetching latest version of " + text);
 			this.LatestVersion = new Version();
 			this.ForceUpgrade = false;
@@ -354,7 +395,7 @@ namespace WoWCompanionApp
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.Append("http://").Append((!(Singleton<Login>.instance.GetBnPortal() == "cn")) ? this.m_assetServerIpAddress : this.m_assetServerIpAddress_CN).Append("/falcon/");
-			stringBuilder.Append("d").Append(string.Format("{0:D5}", 204));
+			stringBuilder.Append("d").Append(string.Format("{0:D5}", MobileBuild.GetBuildNum()));
 			stringBuilder.Append("/").Append(this.m_assetBundleDirectory).Append("/");
 			stringBuilder.Append(this.m_platform).Append("/");
 			return stringBuilder.ToString();
