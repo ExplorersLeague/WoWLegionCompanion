@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileJSON
 {
-	[FlexJamMessage(Id = 4742, Name = "MobileServerSetCharacter", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4742, Name = "MobileServerSetCharacter", Version = 28333852u)]
 	public class MobileServerSetCharacter
 	{
 		[System.Runtime.Serialization.DataMember(Name = "characterGUID")]

@@ -183,14 +183,16 @@ namespace bgs
 			{
 				return;
 			}
-			switch (action)
+			if (action != 1)
 			{
-			case 1:
+				if (action == 3)
+				{
+					this.DeclineInvitation(inviteId);
+				}
+			}
+			else
+			{
 				this.AcceptInvitation(inviteId);
-				break;
-			case 3:
-				this.DeclineInvitation(inviteId);
-				break;
 			}
 		}
 

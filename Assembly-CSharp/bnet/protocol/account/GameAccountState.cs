@@ -42,49 +42,45 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
 							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 							}
-							else if (instance.GameStatus == null)
-							{
-								instance.GameStatus = GameStatus.DeserializeLengthDelimited(stream);
-							}
-							else
-							{
-								GameStatus.DeserializeLengthDelimited(stream, instance.GameStatus);
-							}
+							ProtocolParser.SkipKey(stream, key);
 						}
-						else if (instance.GameTimeInfo == null)
+						else if (instance.GameStatus == null)
 						{
-							instance.GameTimeInfo = GameTimeInfo.DeserializeLengthDelimited(stream);
+							instance.GameStatus = GameStatus.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							GameTimeInfo.DeserializeLengthDelimited(stream, instance.GameTimeInfo);
+							GameStatus.DeserializeLengthDelimited(stream, instance.GameStatus);
 						}
 					}
-					else if (instance.GameLevelInfo == null)
+					else if (instance.GameTimeInfo == null)
 					{
-						instance.GameLevelInfo = GameLevelInfo.DeserializeLengthDelimited(stream);
+						instance.GameTimeInfo = GameTimeInfo.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						GameLevelInfo.DeserializeLengthDelimited(stream, instance.GameLevelInfo);
+						GameTimeInfo.DeserializeLengthDelimited(stream, instance.GameTimeInfo);
 					}
+				}
+				else if (instance.GameLevelInfo == null)
+				{
+					instance.GameLevelInfo = GameLevelInfo.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					GameLevelInfo.DeserializeLengthDelimited(stream, instance.GameLevelInfo);
 				}
 			}
 			if (stream.Position == limit)

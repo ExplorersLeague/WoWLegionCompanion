@@ -10,7 +10,7 @@ namespace bgs
 	{
 		public void Process()
 		{
-			List<DotNetUrlDownloader.DownloadResult> completedDownloads = this.m_completedDownloads;
+			object completedDownloads = this.m_completedDownloads;
 			lock (completedDownloads)
 			{
 				foreach (DotNetUrlDownloader.DownloadResult downloadResult in this.m_completedDownloads)
@@ -127,7 +127,7 @@ namespace bgs
 				DotNetUrlDownloader.Download(state);
 				return;
 			}
-			List<DotNetUrlDownloader.DownloadResult> completedDownloads = state.downloader.m_completedDownloads;
+			object completedDownloads = state.downloader.m_completedDownloads;
 			lock (completedDownloads)
 			{
 				state.downloader.m_completedDownloads.Add(state.downloadResult);
@@ -155,8 +155,6 @@ namespace bgs
 				return result;
 			}
 
-			private const int bufferSize = 1024;
-
 			public DotNetUrlDownloader downloader;
 
 			public string host;
@@ -172,6 +170,8 @@ namespace bgs
 			public RegisteredWaitHandle timeoutWaitHandle;
 
 			public WaitHandle timeoutWatchHandle;
+
+			private const int bufferSize = 1024;
 
 			public byte[] readBuffer;
 

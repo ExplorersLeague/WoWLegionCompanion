@@ -51,48 +51,44 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.Region = ProtocolParser.ReadUInt32(stream);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.NewCredentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
+								instance.Region = ProtocolParser.ReadUInt32(stream);
 							}
 						}
 						else
 						{
-							instance.OldCredentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
+							instance.NewCredentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
 						}
-					}
-					else if (instance.Account == null)
-					{
-						instance.Account = AccountId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						AccountId.DeserializeLengthDelimited(stream, instance.Account);
+						instance.OldCredentials.Add(AccountCredential.DeserializeLengthDelimited(stream));
 					}
+				}
+				else if (instance.Account == null)
+				{
+					instance.Account = AccountId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					AccountId.DeserializeLengthDelimited(stream, instance.Account);
 				}
 			}
 			if (stream.Position == limit)

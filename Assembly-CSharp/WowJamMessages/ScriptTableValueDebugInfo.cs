@@ -4,16 +4,16 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "ScriptTableValueDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "ScriptTableValueDebugInfo", Version = 28333852u)]
 	public class ScriptTableValueDebugInfo
 	{
 		[System.Runtime.Serialization.DataMember(Name = "keyName")]
 		[FlexJamMember(Name = "keyName", Type = FlexJamType.String)]
 		public string KeyName { get; set; }
 
-		[FlexJamMember(Name = "valueName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "valueName")]
+		[FlexJamMember(Name = "valueName", Type = FlexJamType.String)]
 		public string ValueName { get; set; }
 	}
 }

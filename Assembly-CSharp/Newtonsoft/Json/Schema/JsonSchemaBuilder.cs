@@ -242,36 +242,17 @@ namespace Newtonsoft.Json.Schema
 				{
 					string text = Convert.ToString(this._reader.Value, CultureInfo.InvariantCulture);
 					this._reader.Read();
-					string text2 = text;
-					if (text2 != null)
+					if (text != null)
 					{
-						if (JsonSchemaBuilder.<>f__switch$map3 == null)
+						if (text == "value")
 						{
-							JsonSchemaBuilder.<>f__switch$map3 = new Dictionary<string, int>(2)
-							{
-								{
-									"value",
-									0
-								},
-								{
-									"label",
-									1
-								}
-							};
+							jtoken = JToken.ReadFrom(this._reader);
+							continue;
 						}
-						int num;
-						if (JsonSchemaBuilder.<>f__switch$map3.TryGetValue(text2, out num))
+						if (text == "label")
 						{
-							if (num == 0)
-							{
-								jtoken = JToken.ReadFrom(this._reader);
-								continue;
-							}
-							if (num == 1)
-							{
-								value = (string)this._reader.Value;
-								continue;
-							}
+							value = (string)this._reader.Value;
+							continue;
 						}
 					}
 					throw new Exception("Unexpected property in JSON schema option: {0}.".FormatWith(CultureInfo.InvariantCulture, new object[]
@@ -303,19 +284,15 @@ namespace Newtonsoft.Json.Schema
 		{
 			this.CurrentSchema.Identity = new List<string>();
 			JsonToken tokenType = this._reader.TokenType;
-			if (tokenType != JsonToken.StartArray)
+			if (tokenType != JsonToken.String)
 			{
-				if (tokenType != JsonToken.String)
+				if (tokenType != JsonToken.StartArray)
 				{
 					throw new Exception("Expected array or JSON property name string token, got {0}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 					{
 						this._reader.TokenType
 					}));
 				}
-				this.CurrentSchema.Identity.Add(this._reader.Value.ToString());
-			}
-			else
-			{
 				while (this._reader.Read() && this._reader.TokenType != JsonToken.EndArray)
 				{
 					if (this._reader.TokenType != JsonToken.String)
@@ -327,6 +304,10 @@ namespace Newtonsoft.Json.Schema
 					}
 					this.CurrentSchema.Identity.Add(this._reader.Value.ToString());
 				}
+			}
+			else
+			{
+				this.CurrentSchema.Identity.Add(this._reader.Value.ToString());
 			}
 		}
 
@@ -418,30 +399,30 @@ namespace Newtonsoft.Json.Schema
 		private JsonSchemaType? ProcessType()
 		{
 			JsonToken tokenType = this._reader.TokenType;
-			if (tokenType == JsonToken.StartArray)
+			if (tokenType == JsonToken.String)
 			{
-				JsonSchemaType? result = new JsonSchemaType?(JsonSchemaType.None);
-				while (this._reader.Read() && this._reader.TokenType != JsonToken.EndArray)
-				{
-					if (this._reader.TokenType != JsonToken.String)
-					{
-						throw new Exception("Exception JSON schema type string token, got {0}.".FormatWith(CultureInfo.InvariantCulture, new object[]
-						{
-							this._reader.TokenType
-						}));
-					}
-					result = ((result == null) ? null : new JsonSchemaType?(result.GetValueOrDefault() | JsonSchemaBuilder.MapType(this._reader.Value.ToString())));
-				}
-				return result;
+				return new JsonSchemaType?(JsonSchemaBuilder.MapType(this._reader.Value.ToString()));
 			}
-			if (tokenType != JsonToken.String)
+			if (tokenType != JsonToken.StartArray)
 			{
 				throw new Exception("Expected array or JSON schema type string token, got {0}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 				{
 					this._reader.TokenType
 				}));
 			}
-			return new JsonSchemaType?(JsonSchemaBuilder.MapType(this._reader.Value.ToString()));
+			JsonSchemaType? result = new JsonSchemaType?(JsonSchemaType.None);
+			while (this._reader.Read() && this._reader.TokenType != JsonToken.EndArray)
+			{
+				if (this._reader.TokenType != JsonToken.String)
+				{
+					throw new Exception("Exception JSON schema type string token, got {0}.".FormatWith(CultureInfo.InvariantCulture, new object[]
+					{
+						this._reader.TokenType
+					}));
+				}
+				result = ((result == null) ? null : new JsonSchemaType?(result.GetValueOrDefault() | JsonSchemaBuilder.MapType(this._reader.Value.ToString())));
+			}
+			return result;
 		}
 
 		internal static JsonSchemaType MapType(string type)

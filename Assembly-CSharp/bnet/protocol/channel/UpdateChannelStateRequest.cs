@@ -42,38 +42,34 @@ namespace bnet.protocol.channel
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else if (instance.StateChange == null)
-						{
-							instance.StateChange = ChannelState.DeserializeLengthDelimited(stream);
-						}
-						else
-						{
-							ChannelState.DeserializeLengthDelimited(stream, instance.StateChange);
-						}
+						ProtocolParser.SkipKey(stream, key);
 					}
-					else if (instance.AgentId == null)
+					else if (instance.StateChange == null)
 					{
-						instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+						instance.StateChange = ChannelState.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
+						ChannelState.DeserializeLengthDelimited(stream, instance.StateChange);
 					}
+				}
+				else if (instance.AgentId == null)
+				{
+					instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
 				}
 			}
 			if (stream.Position == limit)

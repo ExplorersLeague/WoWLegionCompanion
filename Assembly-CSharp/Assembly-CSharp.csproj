@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{26881826-3FA0-4858-8338-7A79F0061739}</ProjectGuid>
+    <ProjectGuid>{51BC04DA-004D-4CA7-B71A-32416C370A3A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -29,17 +30,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="UnityEngine" />
     <Reference Include="UnityEngine.UI" />
-    <Reference Include="SampleClassLibrary" />
-    <Reference Include="System.Core" />
-    <Reference Include="System" />
+    <Reference Include="UnityEngine" />
     <Reference Include="System.Xml" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Assembly-CSharp-firstpass" />
+    <Reference Include="SampleClassLibrary" />
     <Reference Include="ICSharpCode.SharpZipLib" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="Assembly-CSharp-firstpass" />
   </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />

@@ -24,45 +24,42 @@ namespace Newtonsoft.Json.Linq
 			while (this._currentIndex < this._expression.Length)
 			{
 				char c = this._expression[this._currentIndex];
-				char c2 = c;
-				switch (c2)
+				if (c != '(')
 				{
-				case '[':
-					goto IL_59;
-				default:
-					if (c2 == '(')
+					if (c != ')')
 					{
-						goto IL_59;
-					}
-					if (c2 == ')')
-					{
-						goto IL_9D;
-					}
-					if (c2 != '.')
-					{
-						if (flag)
+						switch (c)
 						{
-							throw new Exception("Unexpected character following indexer: " + c);
+						case '[':
+							goto IL_52;
+						default:
+							if (c == '.')
+							{
+								if (this._currentIndex > num)
+								{
+									string item = this._expression.Substring(num, this._currentIndex - num);
+									this.Parts.Add(item);
+								}
+								num = this._currentIndex + 1;
+								flag = false;
+								goto IL_10C;
+							}
+							if (flag)
+							{
+								throw new Exception("Unexpected character following indexer: " + c);
+							}
+							goto IL_10C;
+						case ']':
+							break;
 						}
 					}
-					else
-					{
-						if (this._currentIndex > num)
-						{
-							string item = this._expression.Substring(num, this._currentIndex - num);
-							this.Parts.Add(item);
-						}
-						num = this._currentIndex + 1;
-						flag = false;
-					}
-					break;
-				case ']':
-					goto IL_9D;
+					throw new Exception("Unexpected character while parsing path: " + c);
 				}
-				IL_113:
+				goto IL_52;
+				IL_10C:
 				this._currentIndex++;
 				continue;
-				IL_59:
+				IL_52:
 				if (this._currentIndex > num)
 				{
 					string item2 = this._expression.Substring(num, this._currentIndex - num);
@@ -71,9 +68,7 @@ namespace Newtonsoft.Json.Linq
 				this.ParseIndexer(c);
 				num = this._currentIndex + 1;
 				flag = true;
-				goto IL_113;
-				IL_9D:
-				throw new Exception("Unexpected character while parsing path: " + c);
+				goto IL_10C;
 			}
 			if (this._currentIndex > num)
 			{

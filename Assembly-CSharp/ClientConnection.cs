@@ -410,9 +410,35 @@ public class ClientConnection<PacketType> where PacketType : PacketFormat, new()
 			foreach (ClientConnection<PacketType>.ConnectionEvent connectionEvent in this.m_connectionEvents)
 			{
 				this.PrintConnectionException(connectionEvent);
-				switch (connectionEvent.Type)
+				ClientConnection<PacketType>.ConnectionEventTypes type = connectionEvent.Type;
+				if (type != ClientConnection<PacketType>.ConnectionEventTypes.OnConnected)
 				{
-				case ClientConnection<PacketType>.ConnectionEventTypes.OnConnected:
+					if (type != ClientConnection<PacketType>.ConnectionEventTypes.OnDisconnected)
+					{
+						if (type == ClientConnection<PacketType>.ConnectionEventTypes.OnPacketCompleted)
+						{
+							for (int i = 0; i < this.m_listeners.Count; i++)
+							{
+								IConnectionListener<PacketType> connectionListener = this.m_listeners[i];
+								object state = this.m_listenerStates[i];
+								connectionListener.PacketReceived(connectionEvent.Packet, state);
+							}
+						}
+					}
+					else
+					{
+						if (connectionEvent.Error != BattleNetErrors.ERROR_OK)
+						{
+							this.Disconnect();
+						}
+						foreach (ClientConnection<PacketType>.DisconnectHandler disconnectHandler in this.m_disconnectHandlers.ToArray())
+						{
+							disconnectHandler(connectionEvent.Error);
+						}
+					}
+				}
+				else
+				{
 					if (connectionEvent.Error != BattleNetErrors.ERROR_OK)
 					{
 						this.DisconnectSocket();
@@ -426,25 +452,6 @@ public class ClientConnection<PacketType> where PacketType : PacketFormat, new()
 					{
 						connectHandler(connectionEvent.Error);
 					}
-					break;
-				case ClientConnection<PacketType>.ConnectionEventTypes.OnDisconnected:
-					if (connectionEvent.Error != BattleNetErrors.ERROR_OK)
-					{
-						this.Disconnect();
-					}
-					foreach (ClientConnection<PacketType>.DisconnectHandler disconnectHandler in this.m_disconnectHandlers.ToArray())
-					{
-						disconnectHandler(connectionEvent.Error);
-					}
-					break;
-				case ClientConnection<PacketType>.ConnectionEventTypes.OnPacketCompleted:
-					for (int k = 0; k < this.m_listeners.Count; k++)
-					{
-						IConnectionListener<PacketType> connectionListener = this.m_listeners[k];
-						object state = this.m_listenerStates[k];
-						connectionListener.PacketReceived(connectionEvent.Packet, state);
-					}
-					break;
 				}
 			}
 			this.m_connectionEvents.Clear();

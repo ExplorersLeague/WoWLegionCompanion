@@ -8,8 +8,7 @@ public class DownloadingPanel : MonoBehaviour
 	{
 		this.m_downloadText.font = GeneralHelpers.LoadFancyFont();
 		string locale = Main.instance.GetLocale();
-		string text = locale;
-		switch (text)
+		switch (locale)
 		{
 		case "koKR":
 			this.m_downloadText.text = "다운로드 중...";

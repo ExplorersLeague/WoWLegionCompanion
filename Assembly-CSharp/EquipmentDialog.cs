@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages.MobileClientJSON;
@@ -63,19 +64,32 @@ public class EquipmentDialog : MonoBehaviour
 			Object.DestroyImmediate(followerInventoryListItem.gameObject);
 		}
 		bool active = true;
-		foreach (object obj in PersistentEquipmentData.equipmentDictionary.Values)
+		IEnumerator enumerator = PersistentEquipmentData.equipmentDictionary.Values.GetEnumerator();
+		try
 		{
-			MobileFollowerEquipment mobileFollowerEquipment = (MobileFollowerEquipment)obj;
-			GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(mobileFollowerEquipment.GarrAbilityID);
-			if (record != null)
+			while (enumerator.MoveNext())
 			{
-				if ((record.Flags & 64u) == 0u)
+				object obj = enumerator.Current;
+				MobileFollowerEquipment mobileFollowerEquipment = (MobileFollowerEquipment)obj;
+				GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(mobileFollowerEquipment.GarrAbilityID);
+				if (record != null)
 				{
-					FollowerInventoryListItem followerInventoryListItem2 = Object.Instantiate<FollowerInventoryListItem>(this.m_equipmentListItemPrefab);
-					followerInventoryListItem2.transform.SetParent(this.m_equipmentListContent.transform, false);
-					followerInventoryListItem2.SetEquipment(mobileFollowerEquipment, followerDetailView, garrAbilityID);
-					active = false;
+					if ((record.Flags & 64u) == 0u)
+					{
+						FollowerInventoryListItem followerInventoryListItem2 = Object.Instantiate<FollowerInventoryListItem>(this.m_equipmentListItemPrefab);
+						followerInventoryListItem2.transform.SetParent(this.m_equipmentListContent.transform, false);
+						followerInventoryListItem2.SetEquipment(mobileFollowerEquipment, followerDetailView, garrAbilityID);
+						active = false;
+					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		this.m_noEquipmentMessage.gameObject.SetActive(active);

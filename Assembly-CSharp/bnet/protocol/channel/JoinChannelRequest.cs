@@ -48,70 +48,66 @@ namespace bnet.protocol.channel
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 42)
 								{
-									if (num2 != 42)
+									if (num != 48)
 									{
-										if (num2 != 48)
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
 										{
-											Key key = ProtocolParser.ReadKey((byte)num, stream);
-											uint field = key.Field;
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 										}
-										else
-										{
-											instance.LocalSubscriber = ProtocolParser.ReadBool(stream);
-										}
+										ProtocolParser.SkipKey(stream, key);
 									}
 									else
 									{
-										instance.FriendAccountId.Add(EntityId.DeserializeLengthDelimited(stream));
+										instance.LocalSubscriber = ProtocolParser.ReadBool(stream);
 									}
 								}
 								else
 								{
-									instance.ObjectId = ProtocolParser.ReadUInt64(stream);
+									instance.FriendAccountId.Add(EntityId.DeserializeLengthDelimited(stream));
 								}
-							}
-							else if (instance.ChannelId == null)
-							{
-								instance.ChannelId = EntityId.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								EntityId.DeserializeLengthDelimited(stream, instance.ChannelId);
+								instance.ObjectId = ProtocolParser.ReadUInt64(stream);
 							}
 						}
-						else if (instance.MemberState == null)
+						else if (instance.ChannelId == null)
 						{
-							instance.MemberState = MemberState.DeserializeLengthDelimited(stream);
+							instance.ChannelId = EntityId.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							MemberState.DeserializeLengthDelimited(stream, instance.MemberState);
+							EntityId.DeserializeLengthDelimited(stream, instance.ChannelId);
 						}
 					}
-					else if (instance.AgentIdentity == null)
+					else if (instance.MemberState == null)
 					{
-						instance.AgentIdentity = Identity.DeserializeLengthDelimited(stream);
+						instance.MemberState = MemberState.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						Identity.DeserializeLengthDelimited(stream, instance.AgentIdentity);
+						MemberState.DeserializeLengthDelimited(stream, instance.MemberState);
 					}
+				}
+				else if (instance.AgentIdentity == null)
+				{
+					instance.AgentIdentity = Identity.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					Identity.DeserializeLengthDelimited(stream, instance.AgentIdentity);
 				}
 			}
 			if (stream.Position == limit)

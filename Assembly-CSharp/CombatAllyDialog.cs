@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -48,18 +49,31 @@ public class CombatAllyDialog : MonoBehaviour
 			Object.DestroyImmediate(followerInventoryListItem.gameObject);
 		}
 		int num = 0;
-		foreach (object obj in PersistentMissionData.missionDictionary.Values)
+		IEnumerator enumerator = PersistentMissionData.missionDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
-			GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
-			if (record != null)
+			while (enumerator.MoveNext())
 			{
-				if ((record.Flags & 16u) != 0u)
+				object obj = enumerator.Current;
+				JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
+				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
+				if (record != null)
 				{
-					this.CreateCombatAllyItems(jamGarrisonMobileMission.MissionRecID, (int)record.MissionCost);
-					num = (int)record.MissionCost;
-					break;
+					if ((record.Flags & 16u) != 0u)
+					{
+						this.CreateCombatAllyItems(jamGarrisonMobileMission.MissionRecID, (int)record.MissionCost);
+						num = (int)record.MissionCost;
+						break;
+					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		if (num <= GarrisonStatus.Resources())

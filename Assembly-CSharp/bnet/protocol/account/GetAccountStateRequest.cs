@@ -42,63 +42,59 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 82)
 							{
-								if (num2 != 82)
+								if (num != 90)
 								{
-									if (num2 != 90)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else if (instance.Tags == null)
-									{
-										instance.Tags = AccountFieldTags.DeserializeLengthDelimited(stream);
-									}
-									else
-									{
-										AccountFieldTags.DeserializeLengthDelimited(stream, instance.Tags);
-									}
+									ProtocolParser.SkipKey(stream, key);
 								}
-								else if (instance.Options == null)
+								else if (instance.Tags == null)
 								{
-									instance.Options = AccountFieldOptions.DeserializeLengthDelimited(stream);
+									instance.Tags = AccountFieldTags.DeserializeLengthDelimited(stream);
 								}
 								else
 								{
-									AccountFieldOptions.DeserializeLengthDelimited(stream, instance.Options);
+									AccountFieldTags.DeserializeLengthDelimited(stream, instance.Tags);
 								}
+							}
+							else if (instance.Options == null)
+							{
+								instance.Options = AccountFieldOptions.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								instance.Region = ProtocolParser.ReadUInt32(stream);
+								AccountFieldOptions.DeserializeLengthDelimited(stream, instance.Options);
 							}
 						}
 						else
 						{
-							instance.Program = ProtocolParser.ReadUInt32(stream);
+							instance.Region = ProtocolParser.ReadUInt32(stream);
 						}
-					}
-					else if (instance.EntityId == null)
-					{
-						instance.EntityId = EntityId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						EntityId.DeserializeLengthDelimited(stream, instance.EntityId);
+						instance.Program = ProtocolParser.ReadUInt32(stream);
 					}
+				}
+				else if (instance.EntityId == null)
+				{
+					instance.EntityId = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.EntityId);
 				}
 			}
 			if (stream.Position == limit)

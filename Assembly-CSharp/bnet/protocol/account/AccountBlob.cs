@@ -63,24 +63,23 @@ namespace bnet.protocol.account
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 21:
 						instance.Id = binaryReader.ReadUInt32();
 						break;
 					default:
-						if (num2 != 34)
+						if (num != 34)
 						{
-							if (num2 != 40)
+							if (num != 40)
 							{
-								if (num2 != 48)
+								if (num != 48)
 								{
-									if (num2 != 56)
+									if (num != 56)
 									{
-										if (num2 != 64)
+										if (num != 64)
 										{
-											if (num2 != 82)
+											if (num != 82)
 											{
 												Key key = ProtocolParser.ReadKey((byte)num, stream);
 												uint field = key.Field;

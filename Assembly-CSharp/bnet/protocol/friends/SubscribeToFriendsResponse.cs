@@ -60,65 +60,61 @@ namespace bnet.protocol.friends
 					}
 					return instance;
 				}
-				else
+				else if (num != 8)
 				{
-					int num2 = num;
-					if (num2 != 8)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 42)
 								{
-									if (num2 != 42)
+									if (num != 50)
 									{
-										if (num2 != 50)
+										if (num != 58)
 										{
-											if (num2 != 58)
+											Key key = ProtocolParser.ReadKey((byte)num, stream);
+											uint field = key.Field;
+											if (field == 0u)
 											{
-												Key key = ProtocolParser.ReadKey((byte)num, stream);
-												uint field = key.Field;
-												if (field == 0u)
-												{
-													throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-												}
-												ProtocolParser.SkipKey(stream, key);
+												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 											}
-											else
-											{
-												instance.ReceivedInvitations.Add(Invitation.DeserializeLengthDelimited(stream));
-											}
+											ProtocolParser.SkipKey(stream, key);
 										}
 										else
 										{
-											instance.SentInvitations.Add(Invitation.DeserializeLengthDelimited(stream));
+											instance.ReceivedInvitations.Add(Invitation.DeserializeLengthDelimited(stream));
 										}
 									}
 									else
 									{
-										instance.Friends.Add(Friend.DeserializeLengthDelimited(stream));
+										instance.SentInvitations.Add(Invitation.DeserializeLengthDelimited(stream));
 									}
 								}
 								else
 								{
-									instance.Role.Add(bnet.protocol.Role.DeserializeLengthDelimited(stream));
+									instance.Friends.Add(Friend.DeserializeLengthDelimited(stream));
 								}
 							}
 							else
 							{
-								instance.MaxSentInvitations = ProtocolParser.ReadUInt32(stream);
+								instance.Role.Add(bnet.protocol.Role.DeserializeLengthDelimited(stream));
 							}
 						}
 						else
 						{
-							instance.MaxReceivedInvitations = ProtocolParser.ReadUInt32(stream);
+							instance.MaxSentInvitations = ProtocolParser.ReadUInt32(stream);
 						}
 					}
 					else
 					{
-						instance.MaxFriends = ProtocolParser.ReadUInt32(stream);
+						instance.MaxReceivedInvitations = ProtocolParser.ReadUInt32(stream);
 					}
+				}
+				else
+				{
+					instance.MaxFriends = ProtocolParser.ReadUInt32(stream);
 				}
 			}
 			if (stream.Position == limit)

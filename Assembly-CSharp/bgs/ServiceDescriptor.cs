@@ -151,8 +151,6 @@ namespace bgs
 			}
 		}
 
-		private const uint INVALID_SERVICE_ID = 255u;
-
 		private string name;
 
 		private uint id;
@@ -160,5 +158,7 @@ namespace bgs
 		private uint hash;
 
 		protected MethodDescriptor[] Methods;
+
+		private const uint INVALID_SERVICE_ID = 255u;
 	}
 }

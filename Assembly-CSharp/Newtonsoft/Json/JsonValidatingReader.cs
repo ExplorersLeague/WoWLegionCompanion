@@ -21,30 +21,6 @@ namespace Newtonsoft.Json
 
 		public event ValidationEventHandler ValidationEventHandler;
 
-		bool IJsonLineInfo.HasLineInfo()
-		{
-			IJsonLineInfo jsonLineInfo = this._reader as IJsonLineInfo;
-			return jsonLineInfo != null && jsonLineInfo.HasLineInfo();
-		}
-
-		int IJsonLineInfo.LineNumber
-		{
-			get
-			{
-				IJsonLineInfo jsonLineInfo = this._reader as IJsonLineInfo;
-				return (jsonLineInfo == null) ? 0 : jsonLineInfo.LineNumber;
-			}
-		}
-
-		int IJsonLineInfo.LinePosition
-		{
-			get
-			{
-				IJsonLineInfo jsonLineInfo = this._reader as IJsonLineInfo;
-				return (jsonLineInfo == null) ? 0 : jsonLineInfo.LinePosition;
-			}
-		}
-
 		public override object Value
 		{
 			get
@@ -270,12 +246,9 @@ namespace Newtonsoft.Json
 
 		private JsonSchemaType? GetCurrentNodeSchemaType()
 		{
-			switch (this._reader.TokenType)
+			JsonToken tokenType = this._reader.TokenType;
+			switch (tokenType)
 			{
-			case JsonToken.StartObject:
-				return new JsonSchemaType?(JsonSchemaType.Object);
-			case JsonToken.StartArray:
-				return new JsonSchemaType?(JsonSchemaType.Array);
 			case JsonToken.Integer:
 				return new JsonSchemaType?(JsonSchemaType.Integer);
 			case JsonToken.Float:
@@ -286,8 +259,17 @@ namespace Newtonsoft.Json
 				return new JsonSchemaType?(JsonSchemaType.Boolean);
 			case JsonToken.Null:
 				return new JsonSchemaType?(JsonSchemaType.Null);
+			default:
+				if (tokenType == JsonToken.StartObject)
+				{
+					return new JsonSchemaType?(JsonSchemaType.Object);
+				}
+				if (tokenType != JsonToken.StartArray)
+				{
+					return null;
+				}
+				return new JsonSchemaType?(JsonSchemaType.Array);
 			}
-			return null;
 		}
 
 		public override byte[] ReadAsBytes()
@@ -448,29 +430,21 @@ namespace Newtonsoft.Json
 				return;
 			}
 			int arrayItemCount = this._currentScope.ArrayItemCount;
-			if (schema.MaximumItems != null)
+			if (schema.MaximumItems != null && arrayItemCount > schema.MaximumItems)
 			{
-				int? maximumItems = schema.MaximumItems;
-				if (maximumItems != null && arrayItemCount > maximumItems.Value)
+				this.RaiseError("Array item count {0} exceeds maximum count of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 				{
-					this.RaiseError("Array item count {0} exceeds maximum count of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
-					{
-						arrayItemCount,
-						schema.MaximumItems
-					}), schema);
-				}
+					arrayItemCount,
+					schema.MaximumItems
+				}), schema);
 			}
-			if (schema.MinimumItems != null)
+			if (schema.MinimumItems != null && arrayItemCount < schema.MinimumItems)
 			{
-				int? minimumItems = schema.MinimumItems;
-				if (minimumItems != null && arrayItemCount < minimumItems.Value)
+				this.RaiseError("Array item count {0} is less than minimum count of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 				{
-					this.RaiseError("Array item count {0} is less than minimum count of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
-					{
-						arrayItemCount,
-						schema.MinimumItems
-					}), schema);
-				}
+					arrayItemCount,
+					schema.MinimumItems
+				}), schema);
 			}
 		}
 
@@ -515,7 +489,7 @@ namespace Newtonsoft.Json
 			if (schema.MaximumLength != null)
 			{
 				int? maximumLength = schema.MaximumLength;
-				if (maximumLength != null && text.Length > maximumLength.Value)
+				if (text.Length > maximumLength)
 				{
 					this.RaiseError("String '{0}' exceeds maximum length of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 					{
@@ -527,7 +501,7 @@ namespace Newtonsoft.Json
 			if (schema.MinimumLength != null)
 			{
 				int? minimumLength = schema.MinimumLength;
-				if (minimumLength != null && text.Length < minimumLength.Value)
+				if (text.Length < minimumLength)
 				{
 					this.RaiseError("String '{0}' is less than minimum length of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 					{
@@ -567,7 +541,7 @@ namespace Newtonsoft.Json
 			if (schema.Maximum != null)
 			{
 				double? maximum = schema.Maximum;
-				if (maximum != null && (double)num > maximum.Value)
+				if ((double)num > maximum)
 				{
 					this.RaiseError("Integer {0} exceeds maximum value of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 					{
@@ -587,7 +561,7 @@ namespace Newtonsoft.Json
 			if (schema.Minimum != null)
 			{
 				double? minimum = schema.Minimum;
-				if (minimum != null && (double)num < minimum.Value)
+				if ((double)num < minimum)
 				{
 					this.RaiseError("Integer {0} is less than minimum value of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 					{
@@ -646,8 +620,7 @@ namespace Newtonsoft.Json
 			double num = Convert.ToDouble(this._reader.Value, CultureInfo.InvariantCulture);
 			if (schema.Maximum != null)
 			{
-				double? maximum = schema.Maximum;
-				if (maximum != null && num > maximum.Value)
+				if (num > schema.Maximum)
 				{
 					this.RaiseError("Float {0} exceeds maximum value of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 					{
@@ -666,8 +639,7 @@ namespace Newtonsoft.Json
 			}
 			if (schema.Minimum != null)
 			{
-				double? minimum = schema.Minimum;
-				if (minimum != null && num < minimum.Value)
+				if (num < schema.Minimum)
 				{
 					this.RaiseError("Float {0} is less than minimum value of {1}.".FormatWith(CultureInfo.InvariantCulture, new object[]
 					{
@@ -763,6 +735,30 @@ namespace Newtonsoft.Json
 				return false;
 			}
 			return true;
+		}
+
+		bool IJsonLineInfo.HasLineInfo()
+		{
+			IJsonLineInfo jsonLineInfo = this._reader as IJsonLineInfo;
+			return jsonLineInfo != null && jsonLineInfo.HasLineInfo();
+		}
+
+		int IJsonLineInfo.LineNumber
+		{
+			get
+			{
+				IJsonLineInfo jsonLineInfo = this._reader as IJsonLineInfo;
+				return (jsonLineInfo == null) ? 0 : jsonLineInfo.LineNumber;
+			}
+		}
+
+		int IJsonLineInfo.LinePosition
+		{
+			get
+			{
+				IJsonLineInfo jsonLineInfo = this._reader as IJsonLineInfo;
+				return (jsonLineInfo == null) ? 0 : jsonLineInfo.LinePosition;
+			}
 		}
 
 		private readonly JsonReader _reader;

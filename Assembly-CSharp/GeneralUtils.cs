@@ -231,10 +231,23 @@ public static class GeneralUtils
 				IDictionary dictionary2 = GeneralUtils.CreateNewType(type) as IDictionary;
 				Type type2 = type.GetGenericArguments()[0];
 				Type type3 = type.GetGenericArguments()[1];
-				foreach (object obj in dictionary)
+				IDictionaryEnumerator enumerator = dictionary.GetEnumerator();
+				try
 				{
-					DictionaryEntry dictionaryEntry = (DictionaryEntry)obj;
-					dictionary2.Add(GeneralUtils.CloneValue(dictionaryEntry.Key, type2), GeneralUtils.CloneValue(dictionaryEntry.Value, type3));
+					while (enumerator.MoveNext())
+					{
+						object obj = enumerator.Current;
+						DictionaryEntry dictionaryEntry = (DictionaryEntry)obj;
+						dictionary2.Add(GeneralUtils.CloneValue(dictionaryEntry.Key, type2), GeneralUtils.CloneValue(dictionaryEntry.Value, type3));
+					}
+				}
+				finally
+				{
+					IDisposable disposable;
+					if ((disposable = (enumerator as IDisposable)) != null)
+					{
+						disposable.Dispose();
+					}
 				}
 				return dictionary2;
 			}
@@ -243,9 +256,22 @@ public static class GeneralUtils
 				IList list = src as IList;
 				IList list2 = GeneralUtils.CreateNewType(type) as IList;
 				Type type4 = type.GetGenericArguments()[0];
-				foreach (object src2 in list)
+				IEnumerator enumerator2 = list.GetEnumerator();
+				try
 				{
-					list2.Add(GeneralUtils.CloneValue(src2, type4));
+					while (enumerator2.MoveNext())
+					{
+						object src2 = enumerator2.Current;
+						list2.Add(GeneralUtils.CloneValue(src2, type4));
+					}
+				}
+				finally
+				{
+					IDisposable disposable2;
+					if ((disposable2 = (enumerator2 as IDisposable)) != null)
+					{
+						disposable2.Dispose();
+					}
 				}
 				return list2;
 			}

@@ -47,45 +47,41 @@ namespace bnet.protocol.channel
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
 							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 							}
-							else if (instance.ChannelState == null)
-							{
-								instance.ChannelState = ChannelState.DeserializeLengthDelimited(stream);
-							}
-							else
-							{
-								ChannelState.DeserializeLengthDelimited(stream, instance.ChannelState);
-							}
+							ProtocolParser.SkipKey(stream, key);
+						}
+						else if (instance.ChannelState == null)
+						{
+							instance.ChannelState = ChannelState.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							instance.Member.Add(bnet.protocol.channel.Member.DeserializeLengthDelimited(stream));
+							ChannelState.DeserializeLengthDelimited(stream, instance.ChannelState);
 						}
-					}
-					else if (instance.Self == null)
-					{
-						instance.Self = bnet.protocol.channel.Member.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						bnet.protocol.channel.Member.DeserializeLengthDelimited(stream, instance.Self);
+						instance.Member.Add(bnet.protocol.channel.Member.DeserializeLengthDelimited(stream));
 					}
+				}
+				else if (instance.Self == null)
+				{
+					instance.Self = bnet.protocol.channel.Member.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					bnet.protocol.channel.Member.DeserializeLengthDelimited(stream, instance.Self);
 				}
 			}
 			if (stream.Position == limit)

@@ -13,50 +13,6 @@ namespace Newtonsoft.Json.Linq
 			this._current = token;
 		}
 
-		bool IJsonLineInfo.HasLineInfo()
-		{
-			if (base.CurrentState == JsonReader.State.Start)
-			{
-				return false;
-			}
-			IJsonLineInfo jsonLineInfo = (!this.IsEndElement) ? this._current : null;
-			return jsonLineInfo != null && jsonLineInfo.HasLineInfo();
-		}
-
-		int IJsonLineInfo.LineNumber
-		{
-			get
-			{
-				if (base.CurrentState == JsonReader.State.Start)
-				{
-					return 0;
-				}
-				IJsonLineInfo jsonLineInfo = (!this.IsEndElement) ? this._current : null;
-				if (jsonLineInfo != null)
-				{
-					return jsonLineInfo.LineNumber;
-				}
-				return 0;
-			}
-		}
-
-		int IJsonLineInfo.LinePosition
-		{
-			get
-			{
-				if (base.CurrentState == JsonReader.State.Start)
-				{
-					return 0;
-				}
-				IJsonLineInfo jsonLineInfo = (!this.IsEndElement) ? this._current : null;
-				if (jsonLineInfo != null)
-				{
-					return jsonLineInfo.LinePosition;
-				}
-				return 0;
-			}
-		}
-
 		public override byte[] ReadAsBytes()
 		{
 			this.Read();
@@ -270,6 +226,50 @@ namespace Newtonsoft.Json.Linq
 		private string SafeToString(object value)
 		{
 			return (value == null) ? null : value.ToString();
+		}
+
+		bool IJsonLineInfo.HasLineInfo()
+		{
+			if (base.CurrentState == JsonReader.State.Start)
+			{
+				return false;
+			}
+			IJsonLineInfo jsonLineInfo = (!this.IsEndElement) ? this._current : null;
+			return jsonLineInfo != null && jsonLineInfo.HasLineInfo();
+		}
+
+		int IJsonLineInfo.LineNumber
+		{
+			get
+			{
+				if (base.CurrentState == JsonReader.State.Start)
+				{
+					return 0;
+				}
+				IJsonLineInfo jsonLineInfo = (!this.IsEndElement) ? this._current : null;
+				if (jsonLineInfo != null)
+				{
+					return jsonLineInfo.LineNumber;
+				}
+				return 0;
+			}
+		}
+
+		int IJsonLineInfo.LinePosition
+		{
+			get
+			{
+				if (base.CurrentState == JsonReader.State.Start)
+				{
+					return 0;
+				}
+				IJsonLineInfo jsonLineInfo = (!this.IsEndElement) ? this._current : null;
+				if (jsonLineInfo != null)
+				{
+					return jsonLineInfo.LinePosition;
+				}
+				return 0;
+			}
 		}
 
 		private readonly JToken _root;

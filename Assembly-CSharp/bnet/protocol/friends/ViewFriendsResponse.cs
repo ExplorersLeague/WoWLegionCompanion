@@ -47,23 +47,19 @@ namespace bnet.protocol.friends
 					}
 					return instance;
 				}
+				else if (num != 10)
+				{
+					Key key = ProtocolParser.ReadKey((byte)num, stream);
+					uint field = key.Field;
+					if (field == 0u)
+					{
+						throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+					}
+					ProtocolParser.SkipKey(stream, key);
+				}
 				else
 				{
-					int num2 = num;
-					if (num2 != 10)
-					{
-						Key key = ProtocolParser.ReadKey((byte)num, stream);
-						uint field = key.Field;
-						if (field == 0u)
-						{
-							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-						}
-						ProtocolParser.SkipKey(stream, key);
-					}
-					else
-					{
-						instance.Friends.Add(Friend.DeserializeLengthDelimited(stream));
-					}
+					instance.Friends.Add(Friend.DeserializeLengthDelimited(stream));
 				}
 			}
 			if (stream.Position == limit)

@@ -43,44 +43,40 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 24)
 				{
-					int num2 = num;
-					if (num2 != 24)
+					if (num != 32)
 					{
-						if (num2 != 32)
+						if (num != 40)
 						{
-							if (num2 != 40)
+							if (num != 48)
 							{
-								if (num2 != 48)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.GameInfoPrivacy = (PrivacyInfo.Types.GameInfoPrivacy)ProtocolParser.ReadUInt64(stream);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.IsHiddenFromFriendFinder = ProtocolParser.ReadBool(stream);
+								instance.GameInfoPrivacy = (PrivacyInfo.Types.GameInfoPrivacy)ProtocolParser.ReadUInt64(stream);
 							}
 						}
 						else
 						{
-							instance.IsRealIdVisibleForViewFriends = ProtocolParser.ReadBool(stream);
+							instance.IsHiddenFromFriendFinder = ProtocolParser.ReadBool(stream);
 						}
 					}
 					else
 					{
-						instance.IsUsingRid = ProtocolParser.ReadBool(stream);
+						instance.IsRealIdVisibleForViewFriends = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else
+				{
+					instance.IsUsingRid = ProtocolParser.ReadBool(stream);
 				}
 			}
 			if (stream.Position == limit)

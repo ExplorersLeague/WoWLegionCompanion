@@ -9,6 +9,14 @@ using UnityEngine;
 
 public class MobileNetwork
 {
+	public bool IsConnected
+	{
+		get
+		{
+			return this.m_connection.Socket != null && this.m_connection.Socket.Connected;
+		}
+	}
+
 	public event EventHandler<EventArgs> ConnectionStateChanged;
 
 	public event EventHandler<EventArgs> ServerDisconnectedEventHandler;
@@ -18,14 +26,6 @@ public class MobileNetwork
 	public event EventHandler<MobileNetwork.MobileNetworkEventArgs> MessageReceivedEventHandler;
 
 	public event EventHandler<EventArgs> UnknownMessageReceivedEventHandler;
-
-	public bool IsConnected
-	{
-		get
-		{
-			return this.m_connection.Socket != null && this.m_connection.Socket.Connected;
-		}
-	}
 
 	protected void OnConnectionStateChanged()
 	{
@@ -302,13 +302,13 @@ public class MobileNetwork
 		MobileNetwork.s_log.Process();
 	}
 
-	private const int BUFFER_SIZE = 524288;
-
 	public byte[] m_byteArray;
 
 	public BufferedStream m_bufferedStream;
 
 	private TcpConnection m_connection = new TcpConnection();
+
+	private const int BUFFER_SIZE = 524288;
 
 	public uint m_messageLength;
 

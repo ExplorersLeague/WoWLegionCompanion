@@ -232,11 +232,11 @@ public class UISound : MonoBehaviour
 		this.PlayUISound("SFX/UI_72_ArtifactNote_Click", 1f, 3);
 	}
 
-	private const int maxSounds = 10;
-
 	public AudioSource[] m_oneShotAudioSources;
 
 	public string[] m_oneShotAudioSourceNames;
+
+	private const int maxSounds = 10;
 
 	private bool m_enableSFX = true;
 }

@@ -64,34 +64,33 @@ namespace bnet.protocol.channel
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 93:
 						instance.Program = binaryReader.ReadUInt32();
 						break;
 					default:
-						if (num2 != 8)
+						if (num != 8)
 						{
-							if (num2 != 16)
+							if (num != 16)
 							{
-								if (num2 != 26)
+								if (num != 26)
 								{
-									if (num2 != 34)
+									if (num != 34)
 									{
-										if (num2 != 40)
+										if (num != 40)
 										{
-											if (num2 != 48)
+											if (num != 48)
 											{
-												if (num2 != 56)
+												if (num != 56)
 												{
-													if (num2 != 66)
+													if (num != 66)
 													{
-														if (num2 != 74)
+														if (num != 74)
 														{
-															if (num2 != 82)
+															if (num != 82)
 															{
-																if (num2 != 104)
+																if (num != 104)
 																{
 																	Key key = ProtocolParser.ReadKey((byte)num, stream);
 																	uint field = key.Field;

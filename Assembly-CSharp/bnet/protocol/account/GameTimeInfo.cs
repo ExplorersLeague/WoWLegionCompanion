@@ -42,44 +42,40 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 24)
 				{
-					int num2 = num;
-					if (num2 != 24)
+					if (num != 40)
 					{
-						if (num2 != 40)
+						if (num != 48)
 						{
-							if (num2 != 48)
+							if (num != 56)
 							{
-								if (num2 != 56)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.IsRecurringSubscription = ProtocolParser.ReadBool(stream);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.IsSubscription = ProtocolParser.ReadBool(stream);
+								instance.IsRecurringSubscription = ProtocolParser.ReadBool(stream);
 							}
 						}
 						else
 						{
-							instance.PlayTimeExpires = ProtocolParser.ReadUInt64(stream);
+							instance.IsSubscription = ProtocolParser.ReadBool(stream);
 						}
 					}
 					else
 					{
-						instance.IsUnlimitedPlayTime = ProtocolParser.ReadBool(stream);
+						instance.PlayTimeExpires = ProtocolParser.ReadUInt64(stream);
 					}
+				}
+				else
+				{
+					instance.IsUnlimitedPlayTime = ProtocolParser.ReadBool(stream);
 				}
 			}
 			if (stream.Position == limit)

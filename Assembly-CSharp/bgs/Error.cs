@@ -1,15 +1,28 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace bgs
 {
+	[StructLayout(LayoutKind.Sequential, Size = 1)]
 	public struct Error
 	{
 		public Error(BattleNetErrors code)
 		{
+			this = default(Error);
 			this.EnumVal = code;
 		}
 
 		public BattleNetErrors EnumVal { get; private set; }
+
+		public static implicit operator Error(BattleNetErrors code)
+		{
+			return new Error(code);
+		}
+
+		public static implicit operator Error(uint code)
+		{
+			return new Error((BattleNetErrors)code);
+		}
 
 		public uint Code
 		{
@@ -27,6 +40,26 @@ namespace bgs
 			}
 		}
 
+		public static bool operator ==(Error a, BattleNetErrors b)
+		{
+			return a.EnumVal == b;
+		}
+
+		public static bool operator !=(Error a, BattleNetErrors b)
+		{
+			return a.EnumVal != b;
+		}
+
+		public static bool operator ==(Error a, uint b)
+		{
+			return a.EnumVal == (BattleNetErrors)b;
+		}
+
+		public static bool operator !=(Error a, uint b)
+		{
+			return a.EnumVal != (BattleNetErrors)b;
+		}
+
 		public override string ToString()
 		{
 			return string.Format("{0} {1}", this.Code, this.Name);
@@ -36,7 +69,7 @@ namespace bgs
 		{
 			if (obj is BattleNetErrors)
 			{
-				return this.EnumVal == (BattleNetErrors)((uint)obj);
+				return this.EnumVal == (BattleNetErrors)obj;
 			}
 			if (obj is Error)
 			{
@@ -64,36 +97,6 @@ namespace bgs
 		public override int GetHashCode()
 		{
 			return this.Code.GetHashCode();
-		}
-
-		public static implicit operator Error(BattleNetErrors code)
-		{
-			return new Error(code);
-		}
-
-		public static implicit operator Error(uint code)
-		{
-			return new Error((BattleNetErrors)code);
-		}
-
-		public static bool operator ==(Error a, BattleNetErrors b)
-		{
-			return a.EnumVal == b;
-		}
-
-		public static bool operator !=(Error a, BattleNetErrors b)
-		{
-			return a.EnumVal != b;
-		}
-
-		public static bool operator ==(Error a, uint b)
-		{
-			return a.EnumVal == (BattleNetErrors)b;
-		}
-
-		public static bool operator !=(Error a, uint b)
-		{
-			return a.EnumVal != (BattleNetErrors)b;
 		}
 	}
 }

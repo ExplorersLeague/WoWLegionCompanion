@@ -38,50 +38,31 @@ public class MobileDeviceLocale
 			catch (Exception)
 			{
 			}
-			string text2 = text;
-			if (text2 != null)
+			if (text != null)
 			{
-				if (MobileDeviceLocale.<>f__switch$mapA == null)
+				if (text == "es")
 				{
-					MobileDeviceLocale.<>f__switch$mapA = new Dictionary<string, int>(2)
+					if (num == 1)
 					{
-						{
-							"es",
-							0
-						},
-						{
-							"zh",
-							1
-						}
-					};
+						result = "esMX";
+					}
+					else
+					{
+						result = "esES";
+					}
+					return result;
 				}
-				int num2;
-				if (MobileDeviceLocale.<>f__switch$mapA.TryGetValue(text2, out num2))
+				if (text == "zh")
 				{
-					if (num2 == 0)
+					if (countryCode == "CN")
 					{
-						if (num == 1)
-						{
-							result = "esMX";
-						}
-						else
-						{
-							result = "esES";
-						}
-						return result;
+						result = "zhCN";
 					}
-					if (num2 == 1)
+					else
 					{
-						if (countryCode == "CN")
-						{
-							result = "zhCN";
-						}
-						else
-						{
-							result = "zhTW";
-						}
-						return result;
+						result = "zhTW";
 					}
+					return result;
 				}
 			}
 			result = "enUS";

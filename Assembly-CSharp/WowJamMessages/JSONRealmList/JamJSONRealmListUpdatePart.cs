@@ -16,8 +16,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "update", Type = FlexJamType.Struct)]
 		public JamJSONRealmEntry Update { get; set; }
 
-		[FlexJamMember(Name = "deleting", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "deleting")]
+		[FlexJamMember(Name = "deleting", Type = FlexJamType.Bool)]
 		public bool Deleting { get; set; }
 	}
 }

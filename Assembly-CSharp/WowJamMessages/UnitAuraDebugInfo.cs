@@ -12,16 +12,16 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		public int SpellID { get; set; }
 
-		[FlexJamMember(Name = "fromItemSet", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "fromItemSet")]
+		[FlexJamMember(Name = "fromItemSet", Type = FlexJamType.Bool)]
 		public bool FromItemSet { get; set; }
 
-		[FlexJamMember(Name = "serverOnly", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "serverOnly")]
+		[FlexJamMember(Name = "serverOnly", Type = FlexJamType.Bool)]
 		public bool ServerOnly { get; set; }
 
-		[FlexJamMember(Name = "fromEnchantment", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "fromEnchantment")]
+		[FlexJamMember(Name = "fromEnchantment", Type = FlexJamType.Bool)]
 		public bool FromEnchantment { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "enchantmentSlot")]
@@ -32,20 +32,20 @@ namespace WowJamMessages
 		[FlexJamMember(ArrayDimensions = 1, Name = "effectDebugInfo", Type = FlexJamType.Struct)]
 		public UnitAuraEffectDebugInfo[] EffectDebugInfo { get; set; }
 
-		[FlexJamMember(Name = "paused", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "paused")]
+		[FlexJamMember(Name = "paused", Type = FlexJamType.Bool)]
 		public bool Paused { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "itemName")]
 		[FlexJamMember(Name = "itemName", Type = FlexJamType.String)]
 		public string ItemName { get; set; }
 
-		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
-		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemID")]
+		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "fromItem")]

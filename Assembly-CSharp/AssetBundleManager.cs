@@ -92,14 +92,13 @@ public class AssetBundleManager : MonoBehaviour
 		}
 		if (manifestText != null)
 		{
-			string manifestPath = Application.persistentDataPath + "/" + this.m_platform + ".manifest";
+			string path = Application.persistentDataPath + "/" + this.m_platform + ".manifest";
 			try
 			{
-				File.WriteAllText(manifestPath, manifestText);
+				File.WriteAllText(path, manifestText);
 			}
-			catch (Exception ex2)
+			catch (Exception ex)
 			{
-				Exception ex = ex2;
 				Debug.Log("Error: Could not write manifest file to local cache. " + ex.Message);
 			}
 		}
@@ -123,7 +122,7 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle("icn", delegate(AssetBundle value)
 		{
-			this.<>f__this.m_iconsBundle = value;
+			this.$this.m_iconsBundle = value;
 		}));
 		if (this.m_iconsBundle == null)
 		{
@@ -137,7 +136,7 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle("picn", delegate(AssetBundle value)
 		{
-			this.<>f__this.m_portraitIconsBundle = value;
+			this.$this.m_portraitIconsBundle = value;
 		}));
 		if (this.m_portraitIconsBundle == null)
 		{
@@ -153,7 +152,7 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle("gnrc", delegate(AssetBundle value)
 		{
-			this.<genericStaticDB>__9 = value;
+			genericStaticDB = value;
 		}));
 		if (genericStaticDB == null)
 		{
@@ -167,7 +166,7 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle(localeStaticIdentifier, delegate(AssetBundle value)
 		{
-			this.<localizedStaticDB>__10 = value;
+			localizedStaticDB = value;
 		}));
 		if (localizedStaticDB == null)
 		{
@@ -419,8 +418,7 @@ public class AssetBundleManager : MonoBehaviour
 	private string GetDataErrorTitleText()
 	{
 		string locale = Main.instance.GetLocale();
-		string text = locale;
-		switch (text)
+		switch (locale)
 		{
 		case "enUS":
 			return "Data Error";
@@ -451,8 +449,7 @@ public class AssetBundleManager : MonoBehaviour
 	private string GetDataErrorDescriptionText()
 	{
 		string locale = Main.instance.GetLocale();
-		string text = locale;
-		switch (text)
+		switch (locale)
 		{
 		case "enUS":
 			return "Unable to load data from device.";
@@ -482,8 +479,6 @@ public class AssetBundleManager : MonoBehaviour
 
 	private const int HASH_LENGTH = 32;
 
-	private const string m_versionFile = "update.txt";
-
 	private static AssetBundleManager s_instance;
 
 	private static bool s_initialized;
@@ -511,6 +506,8 @@ public class AssetBundleManager : MonoBehaviour
 	private float m_progressMultiplier;
 
 	private float m_progressStartTime;
+
+	private const string m_versionFile = "update.txt";
 
 	private string m_assetBundleDirectory = "ab";
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -499,63 +500,63 @@ public class GeneralHelpers : MonoBehaviour
 
 	public static FollowerCanCounterMechanic HasFollowerWhoCanCounter(int garrMechanicTypeID)
 	{
-		GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3A <HasFollowerWhoCanCounter>c__AnonStorey3A = new GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3A();
-		<HasFollowerWhoCanCounter>c__AnonStorey3A.garrMechanicTypeID = garrMechanicTypeID;
-		<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy = false;
-		<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable = false;
-		JamGarrisonFollower follower;
-		foreach (JamGarrisonFollower follower2 in PersistentFollowerData.followerDictionary.Values)
+		bool canCounterButBusy = false;
+		bool canCounterAndIsAvailable = false;
+		using (Dictionary<int, JamGarrisonFollower>.ValueCollection.Enumerator enumerator = PersistentFollowerData.followerDictionary.Values.GetEnumerator())
 		{
-			follower = follower2;
-			for (int i = 0; i < follower.AbilityID.Length; i++)
+			while (enumerator.MoveNext())
 			{
-				GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(follower.AbilityID[i]);
-				if (record == null)
+				JamGarrisonFollower follower = enumerator.Current;
+				for (int i = 0; i < follower.AbilityID.Length; i++)
 				{
-					Debug.Log(string.Concat(new object[]
+					GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(follower.AbilityID[i]);
+					if (record == null)
 					{
-						"Invalid Ability ID ",
-						follower.AbilityID[i],
-						" from follower ",
-						follower.GarrFollowerID
-					}));
-				}
-				else if ((record.Flags & 1u) == 0u)
-				{
-					StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(record.ID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+						Debug.Log(string.Concat(new object[]
+						{
+							"Invalid Ability ID ",
+							follower.AbilityID[i],
+							" from follower ",
+							follower.GarrFollowerID
+						}));
+					}
+					else if ((record.Flags & 1u) == 0u)
 					{
-						if (garrAbilityEffectRec.GarrMechanicTypeID == 0u)
+						StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(record.ID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 						{
+							if (garrAbilityEffectRec.GarrMechanicTypeID == 0u)
+							{
+								return true;
+							}
+							if (garrAbilityEffectRec.AbilityAction != 0u)
+							{
+								return true;
+							}
+							if ((long)garrMechanicTypeID != (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID))
+							{
+								return false;
+							}
+							bool flag = (follower.Flags & 4) != 0;
+							bool flag2 = (follower.Flags & 2) != 0;
+							bool flag3 = follower.CurrentMissionID != 0;
+							bool flag4 = follower.CurrentBuildingID != 0;
+							if (flag || flag2 || flag3 || flag4)
+							{
+								canCounterButBusy = true;
+								return false;
+							}
+							canCounterAndIsAvailable = true;
 							return true;
-						}
-						if (garrAbilityEffectRec.AbilityAction != 0u)
-						{
-							return true;
-						}
-						if ((long)<HasFollowerWhoCanCounter>c__AnonStorey3A.garrMechanicTypeID != (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID))
-						{
-							return false;
-						}
-						bool flag = (follower.Flags & 4) != 0;
-						bool flag2 = (follower.Flags & 2) != 0;
-						bool flag3 = follower.CurrentMissionID != 0;
-						bool flag4 = follower.CurrentBuildingID != 0;
-						if (flag || flag2 || flag3 || flag4)
-						{
-							<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy = true;
-							return false;
-						}
-						<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable = true;
-						return true;
-					});
+						});
+					}
 				}
 			}
 		}
-		if (<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable)
+		if (canCounterAndIsAvailable)
 		{
 			return FollowerCanCounterMechanic.yesAndAvailable;
 		}
-		if (<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy)
+		if (canCounterButBusy)
 		{
 			return FollowerCanCounterMechanic.yesButBusy;
 		}
@@ -1023,26 +1024,39 @@ public class GeneralHelpers : MonoBehaviour
 	public static float GetMissionDurationTalentMultiplier()
 	{
 		float multiplier = 1f;
-		foreach (object obj in PersistentTalentData.talentDictionary.Values)
+		IEnumerator enumerator = PersistentTalentData.talentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonTalent jamGarrisonTalent = (JamGarrisonTalent)obj;
-			if ((jamGarrisonTalent.Flags & 1) != 0)
+			while (enumerator.MoveNext())
 			{
-				GarrTalentRec record = StaticDB.garrTalentDB.GetRecord(jamGarrisonTalent.GarrTalentID);
-				if (record != null)
+				object obj = enumerator.Current;
+				JamGarrisonTalent jamGarrisonTalent = (JamGarrisonTalent)obj;
+				if ((jamGarrisonTalent.Flags & 1) != 0)
 				{
-					if (record.GarrAbilityID > 0u)
+					GarrTalentRec record = StaticDB.garrTalentDB.GetRecord(jamGarrisonTalent.GarrTalentID);
+					if (record != null)
 					{
-						StaticDB.garrAbilityEffectDB.EnumRecordsByParentID((int)record.GarrAbilityID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+						if (record.GarrAbilityID > 0u)
 						{
-							if (garrAbilityEffectRec.AbilityAction == 17u)
+							StaticDB.garrAbilityEffectDB.EnumRecordsByParentID((int)record.GarrAbilityID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 							{
-								multiplier *= garrAbilityEffectRec.ActionValueFlat;
-							}
-							return true;
-						});
+								if (garrAbilityEffectRec.AbilityAction == 17u)
+								{
+									multiplier *= garrAbilityEffectRec.ActionValueFlat;
+								}
+								return true;
+							});
+						}
 					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		return multiplier;

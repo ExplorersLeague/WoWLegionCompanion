@@ -54,11 +54,12 @@ public class MissionMechanic : MonoBehaviour
 
 	public static List<int> GetUsefulBuffAbilitiesForFollower(int garrFollowerID)
 	{
-		MissionMechanic.<GetUsefulBuffAbilitiesForFollower>c__AnonStorey48 <GetUsefulBuffAbilitiesForFollower>c__AnonStorey = new MissionMechanic.<GetUsefulBuffAbilitiesForFollower>c__AnonStorey48();
-		<GetUsefulBuffAbilitiesForFollower>c__AnonStorey.usefulBuffAbilityIDs = new List<int>();
+		List<int> usefulBuffAbilityIDs = new List<int>();
 		JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[garrFollowerID];
-		foreach (int abilityID in jamGarrisonFollower.AbilityID)
+		int[] abilityID2 = jamGarrisonFollower.AbilityID;
+		for (int i = 0; i < abilityID2.Length; i++)
 		{
+			int abilityID = abilityID2[i];
 			GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(abilityID);
 			if (record != null)
 			{
@@ -70,13 +71,13 @@ public class MissionMechanic : MonoBehaviour
 						{
 							return true;
 						}
-						<GetUsefulBuffAbilitiesForFollower>c__AnonStorey.usefulBuffAbilityIDs.Add(abilityID);
+						usefulBuffAbilityIDs.Add(abilityID);
 						return true;
 					});
 				}
 			}
 		}
-		return <GetUsefulBuffAbilitiesForFollower>c__AnonStorey.usefulBuffAbilityIDs;
+		return usefulBuffAbilityIDs;
 	}
 
 	public static int GetAbilityToCounterMechanicType(int garrMechanicTypeID)

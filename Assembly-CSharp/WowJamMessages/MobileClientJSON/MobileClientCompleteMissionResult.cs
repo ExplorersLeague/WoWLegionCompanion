@@ -20,8 +20,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "mission", Type = FlexJamType.Struct)]
 		public JamGarrisonMobileMission Mission { get; set; }
 
-		[FlexJamMember(Name = "bonusRollSucceeded", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "bonusRollSucceeded")]
+		[FlexJamMember(Name = "bonusRollSucceeded", Type = FlexJamType.Bool)]
 		public bool BonusRollSucceeded { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "result")]

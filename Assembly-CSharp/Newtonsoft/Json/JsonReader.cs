@@ -16,11 +16,6 @@ namespace Newtonsoft.Json
 			this.Push(JTokenType.None);
 		}
 
-		void IDisposable.Dispose()
-		{
-			this.Dispose(true);
-		}
-
 		protected JsonReader.State CurrentState
 		{
 			get
@@ -287,6 +282,11 @@ namespace Newtonsoft.Json
 					token
 				}));
 			}
+		}
+
+		void IDisposable.Dispose()
+		{
+			this.Dispose(true);
 		}
 
 		protected virtual void Dispose(bool disposing)

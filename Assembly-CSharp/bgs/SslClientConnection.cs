@@ -137,14 +137,40 @@ namespace bgs
 		public void Update()
 		{
 			SslSocket.Process();
-			List<SslClientConnection.ConnectionEvent> connectionEvents = this.m_connectionEvents;
+			object connectionEvents = this.m_connectionEvents;
 			lock (connectionEvents)
 			{
 				foreach (SslClientConnection.ConnectionEvent connectionEvent in this.m_connectionEvents)
 				{
-					switch (connectionEvent.Type)
+					SslClientConnection.ConnectionEventTypes type = connectionEvent.Type;
+					if (type != SslClientConnection.ConnectionEventTypes.OnConnected)
 					{
-					case SslClientConnection.ConnectionEventTypes.OnConnected:
+						if (type != SslClientConnection.ConnectionEventTypes.OnDisconnected)
+						{
+							if (type == SslClientConnection.ConnectionEventTypes.OnPacketCompleted)
+							{
+								for (int i = 0; i < this.m_listeners.Count; i++)
+								{
+									IClientConnectionListener<BattleNetPacket> clientConnectionListener = this.m_listeners[i];
+									object state = this.m_listenerStates[i];
+									clientConnectionListener.PacketReceived(connectionEvent.Packet, state);
+								}
+							}
+						}
+						else
+						{
+							if (connectionEvent.Error != BattleNetErrors.ERROR_OK)
+							{
+								this.Disconnect();
+							}
+							foreach (DisconnectHandler disconnectHandler in this.m_disconnectHandlers.ToArray())
+							{
+								disconnectHandler(connectionEvent.Error);
+							}
+						}
+					}
+					else
+					{
 						if (connectionEvent.Error != BattleNetErrors.ERROR_OK)
 						{
 							this.Disconnect();
@@ -158,25 +184,6 @@ namespace bgs
 						{
 							connectHandler(connectionEvent.Error);
 						}
-						break;
-					case SslClientConnection.ConnectionEventTypes.OnDisconnected:
-						if (connectionEvent.Error != BattleNetErrors.ERROR_OK)
-						{
-							this.Disconnect();
-						}
-						foreach (DisconnectHandler disconnectHandler in this.m_disconnectHandlers.ToArray())
-						{
-							disconnectHandler(connectionEvent.Error);
-						}
-						break;
-					case SslClientConnection.ConnectionEventTypes.OnPacketCompleted:
-						for (int k = 0; k < this.m_listeners.Count; k++)
-						{
-							IClientConnectionListener<BattleNetPacket> clientConnectionListener = this.m_listeners[k];
-							object state = this.m_listenerStates[k];
-							clientConnectionListener.PacketReceived(connectionEvent.Packet, state);
-						}
-						break;
 					}
 				}
 				this.m_connectionEvents.Clear();
@@ -221,7 +228,7 @@ namespace bgs
 			SslClientConnection.ConnectionEvent connectionEvent = new SslClientConnection.ConnectionEvent();
 			connectionEvent.Type = SslClientConnection.ConnectionEventTypes.OnConnected;
 			connectionEvent.Error = error;
-			List<SslClientConnection.ConnectionEvent> connectionEvents = this.m_connectionEvents;
+			object connectionEvents = this.m_connectionEvents;
 			lock (connectionEvents)
 			{
 				this.m_connectionEvents.Add(connectionEvent);
@@ -233,7 +240,7 @@ namespace bgs
 			SslClientConnection.ConnectionEvent connectionEvent = new SslClientConnection.ConnectionEvent();
 			connectionEvent.Type = SslClientConnection.ConnectionEventTypes.OnDisconnected;
 			connectionEvent.Error = error;
-			List<SslClientConnection.ConnectionEvent> connectionEvents = this.m_connectionEvents;
+			object connectionEvents = this.m_connectionEvents;
 			lock (connectionEvents)
 			{
 				this.m_connectionEvents.Add(connectionEvent);
@@ -283,7 +290,7 @@ namespace bgs
 				SslClientConnection.ConnectionEvent connectionEvent = new SslClientConnection.ConnectionEvent();
 				connectionEvent.Type = SslClientConnection.ConnectionEventTypes.OnPacketCompleted;
 				connectionEvent.Packet = this.m_currentPacket;
-				List<SslClientConnection.ConnectionEvent> connectionEvents = this.m_connectionEvents;
+				object connectionEvents = this.m_connectionEvents;
 				lock (connectionEvents)
 				{
 					this.m_connectionEvents.Add(connectionEvent);
@@ -339,11 +346,11 @@ namespace bgs
 			}
 		}
 
-		private const float BLOCKING_SEND_TIME_OUT = 1f;
-
 		private static int RECEIVE_BUFFER_SIZE = 262144;
 
 		private static int BACKING_BUFFER_SIZE = 262144;
+
+		private const float BLOCKING_SEND_TIME_OUT = 1f;
 
 		private SslClientConnection.ConnectionState m_connectionState;
 

@@ -49,62 +49,58 @@ namespace bnet.protocol.game_master
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 17)
 					{
-						if (num2 != 17)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 41)
 								{
-									if (num2 != 41)
+									if (num != 48)
 									{
-										if (num2 != 48)
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
 										{
-											Key key = ProtocolParser.ReadKey((byte)num, stream);
-											uint field = key.Field;
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 										}
-										else
-										{
-											instance.AdvancedNotification = ProtocolParser.ReadBool(stream);
-										}
+										ProtocolParser.SkipKey(stream, key);
 									}
 									else
 									{
-										instance.RequestId = binaryReader.ReadUInt64();
+										instance.AdvancedNotification = ProtocolParser.ReadBool(stream);
 									}
 								}
 								else
 								{
-									instance.ObjectId = ProtocolParser.ReadUInt64(stream);
+									instance.RequestId = binaryReader.ReadUInt64();
 								}
-							}
-							else if (instance.Properties == null)
-							{
-								instance.Properties = GameProperties.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								GameProperties.DeserializeLengthDelimited(stream, instance.Properties);
+								instance.ObjectId = ProtocolParser.ReadUInt64(stream);
 							}
+						}
+						else if (instance.Properties == null)
+						{
+							instance.Properties = GameProperties.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							instance.FactoryId = binaryReader.ReadUInt64();
+							GameProperties.DeserializeLengthDelimited(stream, instance.Properties);
 						}
 					}
 					else
 					{
-						instance.Player.Add(bnet.protocol.game_master.Player.DeserializeLengthDelimited(stream));
+						instance.FactoryId = binaryReader.ReadUInt64();
 					}
+				}
+				else
+				{
+					instance.Player.Add(bnet.protocol.game_master.Player.DeserializeLengthDelimited(stream));
 				}
 			}
 			if (stream.Position == limit)

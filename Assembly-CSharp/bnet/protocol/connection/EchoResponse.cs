@@ -43,30 +43,26 @@ namespace bnet.protocol.connection
 					}
 					return instance;
 				}
-				else
+				else if (num != 9)
 				{
-					int num2 = num;
-					if (num2 != 9)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else
-						{
-							instance.Payload = ProtocolParser.ReadBytes(stream);
-						}
+						ProtocolParser.SkipKey(stream, key);
 					}
 					else
 					{
-						instance.Time = binaryReader.ReadUInt64();
+						instance.Payload = ProtocolParser.ReadBytes(stream);
 					}
+				}
+				else
+				{
+					instance.Time = binaryReader.ReadUInt64();
 				}
 			}
 			if (stream.Position == limit)

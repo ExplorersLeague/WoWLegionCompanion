@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamBattlenetRequestHeader", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamBattlenetRequestHeader", Version = 28333852u)]
 	public class JamBattlenetRequestHeader
 	{
 		public JamBattlenetRequestHeader()

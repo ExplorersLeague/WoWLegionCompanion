@@ -7,6 +7,10 @@ using WowStaticData;
 
 public class TalentTreePanel : MonoBehaviour
 {
+	private void Start()
+	{
+	}
+
 	private void OnEnable()
 	{
 		Main instance = Main.instance;
@@ -222,4 +226,6 @@ public class TalentTreePanel : MonoBehaviour
 	private bool m_needsFullInit = true;
 
 	private List<TalentTreeItem> m_talentTreeItems;
+
+	public GameObject m_resourcesDisplay;
 }

@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<UiTextureAtlasMemberRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				UiTextureAtlasMemberRec obj2 = (UiTextureAtlasMemberRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					UiTextureAtlasMemberRec obj2 = (UiTextureAtlasMemberRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<UiTextureAtlasMemberRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				UiTextureAtlasMemberRec uiTextureAtlasMemberRec = (UiTextureAtlasMemberRec)obj;
-				if ((ulong)uiTextureAtlasMemberRec.UiTextureAtlasID == (ulong)((long)parentID) && !callback(uiTextureAtlasMemberRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					UiTextureAtlasMemberRec uiTextureAtlasMemberRec = (UiTextureAtlasMemberRec)obj;
+					if ((ulong)uiTextureAtlasMemberRec.UiTextureAtlasID == (ulong)((long)parentID) && !callback(uiTextureAtlasMemberRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

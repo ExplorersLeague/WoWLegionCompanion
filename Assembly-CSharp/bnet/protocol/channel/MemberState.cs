@@ -54,64 +54,60 @@ namespace bnet.protocol.channel
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 40)
 								{
-									if (num2 != 40)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else
-									{
-										instance.Hidden = ProtocolParser.ReadBool(stream);
-									}
-								}
-								else if (instance.Info == null)
-								{
-									instance.Info = AccountInfo.DeserializeLengthDelimited(stream);
+									ProtocolParser.SkipKey(stream, key);
 								}
 								else
 								{
-									AccountInfo.DeserializeLengthDelimited(stream, instance.Info);
+									instance.Hidden = ProtocolParser.ReadBool(stream);
 								}
+							}
+							else if (instance.Info == null)
+							{
+								instance.Info = AccountInfo.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								instance.Privileges = ProtocolParser.ReadUInt64(stream);
+								AccountInfo.DeserializeLengthDelimited(stream, instance.Info);
 							}
 						}
 						else
 						{
-							long num3 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-							num3 += stream.Position;
-							while (stream.Position < num3)
-							{
-								instance.Role.Add(ProtocolParser.ReadUInt32(stream));
-							}
-							if (stream.Position != num3)
-							{
-								throw new ProtocolBufferException("Read too many bytes in packed data");
-							}
+							instance.Privileges = ProtocolParser.ReadUInt64(stream);
 						}
 					}
 					else
 					{
-						instance.Attribute.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
+						long num2 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+						num2 += stream.Position;
+						while (stream.Position < num2)
+						{
+							instance.Role.Add(ProtocolParser.ReadUInt32(stream));
+						}
+						if (stream.Position != num2)
+						{
+							throw new ProtocolBufferException("Read too many bytes in packed data");
+						}
 					}
+				}
+				else
+				{
+					instance.Attribute.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
 				}
 			}
 			if (stream.Position == limit)

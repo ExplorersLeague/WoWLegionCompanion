@@ -65,17 +65,30 @@ public class PersistentShipmentData
 	public static int GetNumReadyShipments()
 	{
 		int num = 0;
-		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		IEnumerator enumerator = PersistentShipmentData.shipmentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			if (PersistentShipmentData.ShipmentTypeForShipmentIsAvailable(jamCharacterShipment.ShipmentRecID))
+			while (enumerator.MoveNext())
 			{
-				long num2 = GarrisonStatus.CurrentTime() - (long)jamCharacterShipment.CreationTime;
-				long num3 = (long)jamCharacterShipment.ShipmentDuration - num2;
-				if (num3 <= 0L)
+				object obj = enumerator.Current;
+				JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+				if (PersistentShipmentData.ShipmentTypeForShipmentIsAvailable(jamCharacterShipment.ShipmentRecID))
 				{
-					num++;
+					long num2 = GarrisonStatus.CurrentTime() - (long)jamCharacterShipment.CreationTime;
+					long num3 = (long)jamCharacterShipment.ShipmentDuration - num2;
+					if (num3 <= 0L)
+					{
+						num++;
+					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		return num;

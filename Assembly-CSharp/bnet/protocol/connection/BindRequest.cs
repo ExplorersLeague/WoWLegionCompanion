@@ -52,38 +52,34 @@ namespace bnet.protocol.connection
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else
-						{
-							instance.ExportedService.Add(BoundService.DeserializeLengthDelimited(stream));
-						}
+						ProtocolParser.SkipKey(stream, key);
 					}
 					else
 					{
-						long num3 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-						num3 += stream.Position;
-						while (stream.Position < num3)
-						{
-							instance.ImportedServiceHash.Add(binaryReader.ReadUInt32());
-						}
-						if (stream.Position != num3)
-						{
-							throw new ProtocolBufferException("Read too many bytes in packed data");
-						}
+						instance.ExportedService.Add(BoundService.DeserializeLengthDelimited(stream));
+					}
+				}
+				else
+				{
+					long num2 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+					num2 += stream.Position;
+					while (stream.Position < num2)
+					{
+						instance.ImportedServiceHash.Add(binaryReader.ReadUInt32());
+					}
+					if (stream.Position != num2)
+					{
+						throw new ProtocolBufferException("Read too many bytes in packed data");
 					}
 				}
 			}

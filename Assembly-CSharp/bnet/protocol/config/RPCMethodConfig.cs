@@ -50,30 +50,29 @@ namespace bnet.protocol.config
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 53:
 						instance.Multiplier = binaryReader.ReadSingle();
 						break;
 					default:
-						if (num2 != 10)
+						if (num != 10)
 						{
-							if (num2 != 18)
+							if (num != 18)
 							{
-								if (num2 != 24)
+								if (num != 24)
 								{
-									if (num2 != 32)
+									if (num != 32)
 									{
-										if (num2 != 45)
+										if (num != 45)
 										{
-											if (num2 != 64)
+											if (num != 64)
 											{
-												if (num2 != 72)
+												if (num != 72)
 												{
-													if (num2 != 80)
+													if (num != 80)
 													{
-														if (num2 != 93)
+														if (num != 93)
 														{
 															Key key = ProtocolParser.ReadKey((byte)num, stream);
 															uint field = key.Field;

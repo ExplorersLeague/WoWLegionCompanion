@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamBattlePayProductGroup", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamBattlePayProductGroup", Version = 28333852u)]
 	public class JamBattlePayProductGroup
 	{
 		[System.Runtime.Serialization.DataMember(Name = "iconFileDataID")]

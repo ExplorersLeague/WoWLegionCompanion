@@ -361,7 +361,7 @@ namespace Newtonsoft.Json.Serialization
 					}
 					if (!flag || reader.TokenType != JsonToken.PropertyName)
 					{
-						goto IL_2B1;
+						goto IL_2AC;
 					}
 				}
 				throw new JsonSerializationException("JSON reference {0} property must have a string or null value.".FormatWith(CultureInfo.InvariantCulture, new object[]
@@ -394,7 +394,7 @@ namespace Newtonsoft.Json.Serialization
 				this.CheckedRead(reader);
 				return result;
 			}
-			IL_2B1:
+			IL_2AC:
 			if (!this.HasDefinedType(objectType))
 			{
 				return this.CreateJObject(reader);
@@ -749,13 +749,13 @@ namespace Newtonsoft.Json.Serialization
 			while (this.ReadForTypeArrayHack(reader, contract.CollectionItemType))
 			{
 				JsonToken tokenType = reader.TokenType;
+				if (tokenType == JsonToken.EndArray)
+				{
+					contract.InvokeOnDeserialized(underlyingCollection, base.Serializer.Context);
+					return wrappedList.UnderlyingCollection;
+				}
 				if (tokenType != JsonToken.Comment)
 				{
-					if (tokenType == JsonToken.EndArray)
-					{
-						contract.InvokeOnDeserialized(underlyingCollection, base.Serializer.Context);
-						return wrappedList.UnderlyingCollection;
-					}
 					try
 					{
 						object value = this.CreateValueNonProperty(reader, contract.CollectionItemType, this.GetContractSafe(contract.CollectionItemType));
@@ -796,9 +796,9 @@ namespace Newtonsoft.Json.Serialization
 						break;
 					}
 					JsonToken tokenType = reader.TokenType;
-					if (tokenType != JsonToken.Comment)
+					if (tokenType != JsonToken.EndArray)
 					{
-						if (tokenType != JsonToken.EndArray)
+						if (tokenType != JsonToken.Comment)
 						{
 							try
 							{
@@ -814,11 +814,11 @@ namespace Newtonsoft.Json.Serialization
 								this.HandleError(reader, depth);
 							}
 						}
-						else
-						{
-							stack.Pop();
-							list2 = stack.Peek();
-						}
+					}
+					else
+					{
+						stack.Pop();
+						list2 = stack.Peek();
 					}
 				}
 				else
@@ -827,8 +827,8 @@ namespace Newtonsoft.Json.Serialization
 					{
 						break;
 					}
-					JsonToken tokenType = reader.TokenType;
-					switch (tokenType)
+					JsonToken tokenType2 = reader.TokenType;
+					switch (tokenType2)
 					{
 					case JsonToken.StartArray:
 					{
@@ -839,7 +839,7 @@ namespace Newtonsoft.Json.Serialization
 						break;
 					}
 					default:
-						if (tokenType != JsonToken.EndArray)
+						if (tokenType2 != JsonToken.EndArray)
 						{
 							goto Block_8;
 						}
@@ -902,7 +902,7 @@ namespace Newtonsoft.Json.Serialization
 				}
 				if (flag || !reader.Read())
 				{
-					goto IL_C1;
+					goto IL_C0;
 				}
 			}
 			throw new JsonSerializationException("Unexpected token when deserializing object: " + reader.TokenType);
@@ -911,7 +911,7 @@ namespace Newtonsoft.Json.Serialization
 			{
 				text
 			}));
-			IL_C1:
+			IL_C0:
 			if (contract.ISerializableCreator == null)
 			{
 				throw new JsonSerializationException("ISerializable type '{0}' does not have a valid constructor. To correctly implement ISerializable a constructor that takes SerializationInfo and StreamingContext parameters should be present.".FormatWith(CultureInfo.InvariantCulture, new object[]
@@ -1014,9 +1014,22 @@ namespace Newtonsoft.Json.Serialization
 						{
 							IWrappedCollection wrappedCollection = jsonArrayContract.CreateWrapper(value2);
 							IWrappedCollection wrappedCollection2 = jsonArrayContract.CreateWrapper(value);
-							foreach (object value3 in wrappedCollection2)
+							IEnumerator enumerator3 = wrappedCollection2.GetEnumerator();
+							try
 							{
-								wrappedCollection.Add(value3);
+								while (enumerator3.MoveNext())
+								{
+									object value3 = enumerator3.Current;
+									wrappedCollection.Add(value3);
+								}
+							}
+							finally
+							{
+								IDisposable disposable;
+								if ((disposable = (enumerator3 as IDisposable)) != null)
+								{
+									disposable.Dispose();
+								}
 							}
 						}
 					}
@@ -1028,10 +1041,23 @@ namespace Newtonsoft.Json.Serialization
 						{
 							IWrappedDictionary wrappedDictionary = jsonDictionaryContract.CreateWrapper(value4);
 							IWrappedDictionary wrappedDictionary2 = jsonDictionaryContract.CreateWrapper(value);
-							foreach (object obj2 in wrappedDictionary2)
+							IDictionaryEnumerator enumerator4 = wrappedDictionary2.GetEnumerator();
+							try
 							{
-								DictionaryEntry dictionaryEntry = (DictionaryEntry)obj2;
-								wrappedDictionary.Add(dictionaryEntry.Key, dictionaryEntry.Value);
+								while (enumerator4.MoveNext())
+								{
+									object obj2 = enumerator4.Current;
+									DictionaryEntry dictionaryEntry = (DictionaryEntry)obj2;
+									wrappedDictionary.Add(dictionaryEntry.Key, dictionaryEntry.Value);
+								}
+							}
+							finally
+							{
+								IDisposable disposable2;
+								if ((disposable2 = (enumerator4 as IDisposable)) != null)
+								{
+									disposable2.Dispose();
+								}
 							}
 						}
 					}
@@ -1221,10 +1247,9 @@ namespace Newtonsoft.Json.Serialization
 			{
 				JsonProperty key = keyValuePair.Key;
 				JsonSerializerInternalReader.PropertyPresence value = keyValuePair.Value;
-				JsonSerializerInternalReader.PropertyPresence propertyPresence = value;
-				if (propertyPresence != JsonSerializerInternalReader.PropertyPresence.None)
+				if (value != JsonSerializerInternalReader.PropertyPresence.None)
 				{
-					if (propertyPresence == JsonSerializerInternalReader.PropertyPresence.Null)
+					if (value == JsonSerializerInternalReader.PropertyPresence.Null)
 					{
 						if (key.Required == Required.Always)
 						{

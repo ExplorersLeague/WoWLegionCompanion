@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using bgs.types;
@@ -557,100 +558,217 @@ namespace bgs
 			Type type = (targetObject != null) ? targetObject.GetType() : null;
 			if (BnetParty.OnError != null)
 			{
-				foreach (object obj in (BnetParty.OnError.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator = (BnetParty.OnError.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate @delegate = (Delegate)obj;
-					if (@delegate.Target == targetObject || (@delegate.Target == null && @delegate.Method.DeclaringType == type))
+					while (enumerator.MoveNext())
 					{
-						BnetParty.OnError = (BnetParty.PartyErrorHandler)Delegate.Remove(BnetParty.OnError, (BnetParty.PartyErrorHandler)@delegate);
+						object obj = enumerator.Current;
+						Delegate @delegate = (Delegate)obj;
+						if (@delegate.Target == targetObject || (@delegate.Target == null && @delegate.Method.DeclaringType == type))
+						{
+							BnetParty.OnError -= (BnetParty.PartyErrorHandler)@delegate;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable;
+					if ((disposable = (enumerator as IDisposable)) != null)
+					{
+						disposable.Dispose();
 					}
 				}
 			}
 			if (BnetParty.OnJoined != null)
 			{
-				foreach (object obj2 in (BnetParty.OnJoined.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator2 = (BnetParty.OnJoined.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate delegate2 = (Delegate)obj2;
-					if (delegate2.Target == targetObject || (delegate2.Target == null && delegate2.Method.DeclaringType == type))
+					while (enumerator2.MoveNext())
 					{
-						BnetParty.OnJoined = (BnetParty.JoinedHandler)Delegate.Remove(BnetParty.OnJoined, (BnetParty.JoinedHandler)delegate2);
+						object obj2 = enumerator2.Current;
+						Delegate delegate2 = (Delegate)obj2;
+						if (delegate2.Target == targetObject || (delegate2.Target == null && delegate2.Method.DeclaringType == type))
+						{
+							BnetParty.OnJoined -= (BnetParty.JoinedHandler)delegate2;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable2;
+					if ((disposable2 = (enumerator2 as IDisposable)) != null)
+					{
+						disposable2.Dispose();
 					}
 				}
 			}
 			if (BnetParty.OnPrivacyLevelChanged != null)
 			{
-				foreach (object obj3 in (BnetParty.OnPrivacyLevelChanged.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator3 = (BnetParty.OnPrivacyLevelChanged.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate delegate3 = (Delegate)obj3;
-					if (delegate3.Target == targetObject || (delegate3.Target == null && delegate3.Method.DeclaringType == type))
+					while (enumerator3.MoveNext())
 					{
-						BnetParty.OnPrivacyLevelChanged = (BnetParty.PrivacyLevelChangedHandler)Delegate.Remove(BnetParty.OnPrivacyLevelChanged, (BnetParty.PrivacyLevelChangedHandler)delegate3);
+						object obj3 = enumerator3.Current;
+						Delegate delegate3 = (Delegate)obj3;
+						if (delegate3.Target == targetObject || (delegate3.Target == null && delegate3.Method.DeclaringType == type))
+						{
+							BnetParty.OnPrivacyLevelChanged -= (BnetParty.PrivacyLevelChangedHandler)delegate3;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable3;
+					if ((disposable3 = (enumerator3 as IDisposable)) != null)
+					{
+						disposable3.Dispose();
 					}
 				}
 			}
 			if (BnetParty.OnMemberEvent != null)
 			{
-				foreach (object obj4 in (BnetParty.OnMemberEvent.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator4 = (BnetParty.OnMemberEvent.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate delegate4 = (Delegate)obj4;
-					if (delegate4.Target == targetObject || (delegate4.Target == null && delegate4.Method.DeclaringType == type))
+					while (enumerator4.MoveNext())
 					{
-						BnetParty.OnMemberEvent = (BnetParty.MemberEventHandler)Delegate.Remove(BnetParty.OnMemberEvent, (BnetParty.MemberEventHandler)delegate4);
+						object obj4 = enumerator4.Current;
+						Delegate delegate4 = (Delegate)obj4;
+						if (delegate4.Target == targetObject || (delegate4.Target == null && delegate4.Method.DeclaringType == type))
+						{
+							BnetParty.OnMemberEvent -= (BnetParty.MemberEventHandler)delegate4;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable4;
+					if ((disposable4 = (enumerator4 as IDisposable)) != null)
+					{
+						disposable4.Dispose();
 					}
 				}
 			}
 			if (BnetParty.OnReceivedInvite != null)
 			{
-				foreach (object obj5 in (BnetParty.OnReceivedInvite.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator5 = (BnetParty.OnReceivedInvite.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate delegate5 = (Delegate)obj5;
-					if (delegate5.Target == targetObject || (delegate5.Target == null && delegate5.Method.DeclaringType == type))
+					while (enumerator5.MoveNext())
 					{
-						BnetParty.OnReceivedInvite = (BnetParty.ReceivedInviteHandler)Delegate.Remove(BnetParty.OnReceivedInvite, (BnetParty.ReceivedInviteHandler)delegate5);
+						object obj5 = enumerator5.Current;
+						Delegate delegate5 = (Delegate)obj5;
+						if (delegate5.Target == targetObject || (delegate5.Target == null && delegate5.Method.DeclaringType == type))
+						{
+							BnetParty.OnReceivedInvite -= (BnetParty.ReceivedInviteHandler)delegate5;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable5;
+					if ((disposable5 = (enumerator5 as IDisposable)) != null)
+					{
+						disposable5.Dispose();
 					}
 				}
 			}
 			if (BnetParty.OnSentInvite != null)
 			{
-				foreach (object obj6 in (BnetParty.OnSentInvite.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator6 = (BnetParty.OnSentInvite.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate delegate6 = (Delegate)obj6;
-					if (delegate6.Target == targetObject || (delegate6.Target == null && delegate6.Method.DeclaringType == type))
+					while (enumerator6.MoveNext())
 					{
-						BnetParty.OnSentInvite = (BnetParty.SentInviteHandler)Delegate.Remove(BnetParty.OnSentInvite, (BnetParty.SentInviteHandler)delegate6);
+						object obj6 = enumerator6.Current;
+						Delegate delegate6 = (Delegate)obj6;
+						if (delegate6.Target == targetObject || (delegate6.Target == null && delegate6.Method.DeclaringType == type))
+						{
+							BnetParty.OnSentInvite -= (BnetParty.SentInviteHandler)delegate6;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable6;
+					if ((disposable6 = (enumerator6 as IDisposable)) != null)
+					{
+						disposable6.Dispose();
 					}
 				}
 			}
 			if (BnetParty.OnReceivedInviteRequest != null)
 			{
-				foreach (object obj7 in (BnetParty.OnReceivedInviteRequest.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator7 = (BnetParty.OnReceivedInviteRequest.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate delegate7 = (Delegate)obj7;
-					if (delegate7.Target == targetObject || (delegate7.Target == null && delegate7.Method.DeclaringType == type))
+					while (enumerator7.MoveNext())
 					{
-						BnetParty.OnReceivedInviteRequest = (BnetParty.ReceivedInviteRequestHandler)Delegate.Remove(BnetParty.OnReceivedInviteRequest, (BnetParty.ReceivedInviteRequestHandler)delegate7);
+						object obj7 = enumerator7.Current;
+						Delegate delegate7 = (Delegate)obj7;
+						if (delegate7.Target == targetObject || (delegate7.Target == null && delegate7.Method.DeclaringType == type))
+						{
+							BnetParty.OnReceivedInviteRequest -= (BnetParty.ReceivedInviteRequestHandler)delegate7;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable7;
+					if ((disposable7 = (enumerator7 as IDisposable)) != null)
+					{
+						disposable7.Dispose();
 					}
 				}
 			}
 			if (BnetParty.OnChatMessage != null)
 			{
-				foreach (object obj8 in (BnetParty.OnChatMessage.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator8 = (BnetParty.OnChatMessage.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate delegate8 = (Delegate)obj8;
-					if (delegate8.Target == targetObject || (delegate8.Target == null && delegate8.Method.DeclaringType == type))
+					while (enumerator8.MoveNext())
 					{
-						BnetParty.OnChatMessage = (BnetParty.ChatMessageHandler)Delegate.Remove(BnetParty.OnChatMessage, (BnetParty.ChatMessageHandler)delegate8);
+						object obj8 = enumerator8.Current;
+						Delegate delegate8 = (Delegate)obj8;
+						if (delegate8.Target == targetObject || (delegate8.Target == null && delegate8.Method.DeclaringType == type))
+						{
+							BnetParty.OnChatMessage -= (BnetParty.ChatMessageHandler)delegate8;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable8;
+					if ((disposable8 = (enumerator8 as IDisposable)) != null)
+					{
+						disposable8.Dispose();
 					}
 				}
 			}
 			if (BnetParty.OnPartyAttributeChanged != null)
 			{
-				foreach (object obj9 in (BnetParty.OnPartyAttributeChanged.GetInvocationList().Clone() as Array))
+				IEnumerator enumerator9 = (BnetParty.OnPartyAttributeChanged.GetInvocationList().Clone() as Array).GetEnumerator();
+				try
 				{
-					Delegate delegate9 = (Delegate)obj9;
-					if (delegate9.Target == targetObject || (delegate9.Target == null && delegate9.Method.DeclaringType == type))
+					while (enumerator9.MoveNext())
 					{
-						BnetParty.OnPartyAttributeChanged = (BnetParty.PartyAttributeChangedHandler)Delegate.Remove(BnetParty.OnPartyAttributeChanged, (BnetParty.PartyAttributeChangedHandler)delegate9);
+						object obj9 = enumerator9.Current;
+						Delegate delegate9 = (Delegate)obj9;
+						if (delegate9.Target == targetObject || (delegate9.Target == null && delegate9.Method.DeclaringType == type))
+						{
+							BnetParty.OnPartyAttributeChanged -= (BnetParty.PartyAttributeChangedHandler)delegate9;
+						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable9;
+					if ((disposable9 = (enumerator9 as IDisposable)) != null)
+					{
+						disposable9.Dispose();
 					}
 				}
 			}
@@ -1007,18 +1125,6 @@ namespace bgs
 
 		private static Map<string, List<BnetParty.PartyAttributeChangedHandler>> s_attributeChangedSubscribers = null;
 
-		public enum FriendlyGameRoleSet
-		{
-			Inviter = 1,
-			Invitee
-		}
-
-		public enum SpectatorPartyRoleSet
-		{
-			Member = 1,
-			Leader
-		}
-
 		public delegate void PartyErrorHandler(PartyError error);
 
 		public delegate void JoinedHandler(OnlineEventType evt, PartyInfo party, LeaveReason? reason);
@@ -1038,5 +1144,17 @@ namespace bgs
 		public delegate void PartyAttributeChangedHandler(PartyInfo party, string attributeKey, Variant attributeValue);
 
 		public delegate void CreateSuccessCallback(PartyType type, PartyId newlyCreatedPartyId);
+
+		public enum FriendlyGameRoleSet
+		{
+			Inviter = 1,
+			Invitee
+		}
+
+		public enum SpectatorPartyRoleSet
+		{
+			Member = 1,
+			Leader
+		}
 	}
 }

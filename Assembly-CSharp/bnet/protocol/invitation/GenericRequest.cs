@@ -53,61 +53,44 @@ namespace bnet.protocol.invitation
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 25)
 						{
-							if (num2 != 25)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 42)
 								{
-									if (num2 != 42)
+									if (num != 50)
 									{
-										if (num2 != 50)
+										if (num != 58)
 										{
-											if (num2 != 58)
+											if (num != 64)
 											{
-												if (num2 != 64)
+												Key key = ProtocolParser.ReadKey((byte)num, stream);
+												uint field = key.Field;
+												if (field == 0u)
 												{
-													Key key = ProtocolParser.ReadKey((byte)num, stream);
-													uint field = key.Field;
-													if (field == 0u)
-													{
-														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-													}
-													ProtocolParser.SkipKey(stream, key);
+													throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 												}
-												else
-												{
-													instance.Reason = ProtocolParser.ReadUInt32(stream);
-												}
+												ProtocolParser.SkipKey(stream, key);
 											}
 											else
 											{
-												long num3 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-												num3 += stream.Position;
-												while (stream.Position < num3)
-												{
-													instance.DesiredRole.Add(ProtocolParser.ReadUInt32(stream));
-												}
-												if (stream.Position != num3)
-												{
-													throw new ProtocolBufferException("Read too many bytes in packed data");
-												}
+												instance.Reason = ProtocolParser.ReadUInt32(stream);
 											}
 										}
 										else
 										{
-											long num4 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
-											num4 += stream.Position;
-											while (stream.Position < num4)
+											long num2 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+											num2 += stream.Position;
+											while (stream.Position < num2)
 											{
-												instance.PreviousRole.Add(ProtocolParser.ReadUInt32(stream));
+												instance.DesiredRole.Add(ProtocolParser.ReadUInt32(stream));
 											}
-											if (stream.Position != num4)
+											if (stream.Position != num2)
 											{
 												throw new ProtocolBufferException("Read too many bytes in packed data");
 											}
@@ -115,36 +98,49 @@ namespace bnet.protocol.invitation
 									}
 									else
 									{
-										instance.InviterName = ProtocolParser.ReadString(stream);
+										long num3 = (long)((ulong)ProtocolParser.ReadUInt32(stream));
+										num3 += stream.Position;
+										while (stream.Position < num3)
+										{
+											instance.PreviousRole.Add(ProtocolParser.ReadUInt32(stream));
+										}
+										if (stream.Position != num3)
+										{
+											throw new ProtocolBufferException("Read too many bytes in packed data");
+										}
 									}
 								}
 								else
 								{
-									instance.InviteeName = ProtocolParser.ReadString(stream);
+									instance.InviterName = ProtocolParser.ReadString(stream);
 								}
 							}
 							else
 							{
-								instance.InvitationId = binaryReader.ReadUInt64();
+								instance.InviteeName = ProtocolParser.ReadString(stream);
 							}
-						}
-						else if (instance.TargetId == null)
-						{
-							instance.TargetId = EntityId.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							EntityId.DeserializeLengthDelimited(stream, instance.TargetId);
+							instance.InvitationId = binaryReader.ReadUInt64();
 						}
 					}
-					else if (instance.AgentId == null)
+					else if (instance.TargetId == null)
 					{
-						instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+						instance.TargetId = EntityId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
+						EntityId.DeserializeLengthDelimited(stream, instance.TargetId);
 					}
+				}
+				else if (instance.AgentId == null)
+				{
+					instance.AgentId = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.AgentId);
 				}
 			}
 			if (stream.Position == limit)

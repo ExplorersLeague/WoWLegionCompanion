@@ -9,67 +9,10 @@ using Newtonsoft.Json.Utilities;
 
 namespace Newtonsoft.Json.Linq
 {
-	public abstract class JToken : IJsonLineInfo, IEnumerable, IEnumerable<JToken>, ICloneable, IJEnumerable<JToken>
+	public abstract class JToken : IJEnumerable<JToken>, IJsonLineInfo, ICloneable, IEnumerable<JToken>, IEnumerable
 	{
 		internal JToken()
 		{
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return ((IEnumerable<JToken>)this).GetEnumerator();
-		}
-
-		IEnumerator<JToken> IEnumerable<JToken>.GetEnumerator()
-		{
-			return this.Children().GetEnumerator();
-		}
-
-		IJEnumerable<JToken> IJEnumerable<JToken>.this[object key]
-		{
-			get
-			{
-				return this[key];
-			}
-		}
-
-		bool IJsonLineInfo.HasLineInfo()
-		{
-			int? lineNumber = this._lineNumber;
-			bool result;
-			if (lineNumber != null)
-			{
-				int? linePosition = this._linePosition;
-				result = (linePosition != null);
-			}
-			else
-			{
-				result = false;
-			}
-			return result;
-		}
-
-		int IJsonLineInfo.LineNumber
-		{
-			get
-			{
-				int? lineNumber = this._lineNumber;
-				return (lineNumber == null) ? 0 : lineNumber.Value;
-			}
-		}
-
-		int IJsonLineInfo.LinePosition
-		{
-			get
-			{
-				int? linePosition = this._linePosition;
-				return (linePosition == null) ? 0 : linePosition.Value;
-			}
-		}
-
-		object ICloneable.Clone()
-		{
-			return this.DeepClone();
 		}
 
 		public static JTokenEqualityComparer EqualityComparer
@@ -361,127 +304,6 @@ namespace Newtonsoft.Json.Linq
 		private static bool ValidateBytes(JToken o)
 		{
 			return o.Type == JTokenType.Bytes || JToken.IsNullable(o);
-		}
-
-		internal abstract int GetDeepHashCode();
-
-		public JsonReader CreateReader()
-		{
-			return new JTokenReader(this);
-		}
-
-		internal static JToken FromObjectInternal(object o, JsonSerializer jsonSerializer)
-		{
-			ValidationUtils.ArgumentNotNull(o, "o");
-			ValidationUtils.ArgumentNotNull(jsonSerializer, "jsonSerializer");
-			JToken token;
-			using (JTokenWriter jtokenWriter = new JTokenWriter())
-			{
-				jsonSerializer.Serialize(jtokenWriter, o);
-				token = jtokenWriter.Token;
-			}
-			return token;
-		}
-
-		public static JToken FromObject(object o)
-		{
-			return JToken.FromObjectInternal(o, new JsonSerializer());
-		}
-
-		public static JToken FromObject(object o, JsonSerializer jsonSerializer)
-		{
-			return JToken.FromObjectInternal(o, jsonSerializer);
-		}
-
-		public T ToObject<T>()
-		{
-			return this.ToObject<T>(new JsonSerializer());
-		}
-
-		public T ToObject<T>(JsonSerializer jsonSerializer)
-		{
-			ValidationUtils.ArgumentNotNull(jsonSerializer, "jsonSerializer");
-			T result;
-			using (JTokenReader jtokenReader = new JTokenReader(this))
-			{
-				result = jsonSerializer.Deserialize<T>(jtokenReader);
-			}
-			return result;
-		}
-
-		public static JToken ReadFrom(JsonReader reader)
-		{
-			ValidationUtils.ArgumentNotNull(reader, "reader");
-			if (reader.TokenType == JsonToken.None && !reader.Read())
-			{
-				throw new Exception("Error reading JToken from JsonReader.");
-			}
-			if (reader.TokenType == JsonToken.StartObject)
-			{
-				return JObject.Load(reader);
-			}
-			if (reader.TokenType == JsonToken.StartArray)
-			{
-				return JArray.Load(reader);
-			}
-			if (reader.TokenType == JsonToken.PropertyName)
-			{
-				return JProperty.Load(reader);
-			}
-			if (reader.TokenType == JsonToken.StartConstructor)
-			{
-				return JConstructor.Load(reader);
-			}
-			if (!JsonReader.IsStartToken(reader.TokenType))
-			{
-				return new JValue(reader.Value);
-			}
-			throw new Exception("Error reading JToken from JsonReader. Unexpected token: {0}".FormatWith(CultureInfo.InvariantCulture, new object[]
-			{
-				reader.TokenType
-			}));
-		}
-
-		public static JToken Parse(string json)
-		{
-			JsonReader reader = new JsonTextReader(new StringReader(json));
-			return JToken.Load(reader);
-		}
-
-		public static JToken Load(JsonReader reader)
-		{
-			return JToken.ReadFrom(reader);
-		}
-
-		internal void SetLineInfo(IJsonLineInfo lineInfo)
-		{
-			if (lineInfo == null || !lineInfo.HasLineInfo())
-			{
-				return;
-			}
-			this.SetLineInfo(lineInfo.LineNumber, lineInfo.LinePosition);
-		}
-
-		internal void SetLineInfo(int lineNumber, int linePosition)
-		{
-			this._lineNumber = new int?(lineNumber);
-			this._linePosition = new int?(linePosition);
-		}
-
-		public JToken SelectToken(string path)
-		{
-			return this.SelectToken(path, false);
-		}
-
-		public JToken SelectToken(string path, bool errorWhenNoMatch)
-		{
-			JPath jpath = new JPath(path);
-			return jpath.Evaluate(this, errorWhenNoMatch);
-		}
-
-		public JToken DeepClone()
-		{
-			return this.CloneToken();
 		}
 
 		public static explicit operator bool(JToken value)
@@ -1002,6 +824,184 @@ namespace Newtonsoft.Json.Linq
 		public static implicit operator JToken(byte[] value)
 		{
 			return new JValue(value);
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return ((IEnumerable<JToken>)this).GetEnumerator();
+		}
+
+		IEnumerator<JToken> IEnumerable<JToken>.GetEnumerator()
+		{
+			return this.Children().GetEnumerator();
+		}
+
+		internal abstract int GetDeepHashCode();
+
+		IJEnumerable<JToken> IJEnumerable<JToken>.this[object key]
+		{
+			get
+			{
+				return this[key];
+			}
+		}
+
+		public JsonReader CreateReader()
+		{
+			return new JTokenReader(this);
+		}
+
+		internal static JToken FromObjectInternal(object o, JsonSerializer jsonSerializer)
+		{
+			ValidationUtils.ArgumentNotNull(o, "o");
+			ValidationUtils.ArgumentNotNull(jsonSerializer, "jsonSerializer");
+			JToken token;
+			using (JTokenWriter jtokenWriter = new JTokenWriter())
+			{
+				jsonSerializer.Serialize(jtokenWriter, o);
+				token = jtokenWriter.Token;
+			}
+			return token;
+		}
+
+		public static JToken FromObject(object o)
+		{
+			return JToken.FromObjectInternal(o, new JsonSerializer());
+		}
+
+		public static JToken FromObject(object o, JsonSerializer jsonSerializer)
+		{
+			return JToken.FromObjectInternal(o, jsonSerializer);
+		}
+
+		public T ToObject<T>()
+		{
+			return this.ToObject<T>(new JsonSerializer());
+		}
+
+		public T ToObject<T>(JsonSerializer jsonSerializer)
+		{
+			ValidationUtils.ArgumentNotNull(jsonSerializer, "jsonSerializer");
+			T result;
+			using (JTokenReader jtokenReader = new JTokenReader(this))
+			{
+				result = jsonSerializer.Deserialize<T>(jtokenReader);
+			}
+			return result;
+		}
+
+		public static JToken ReadFrom(JsonReader reader)
+		{
+			ValidationUtils.ArgumentNotNull(reader, "reader");
+			if (reader.TokenType == JsonToken.None && !reader.Read())
+			{
+				throw new Exception("Error reading JToken from JsonReader.");
+			}
+			if (reader.TokenType == JsonToken.StartObject)
+			{
+				return JObject.Load(reader);
+			}
+			if (reader.TokenType == JsonToken.StartArray)
+			{
+				return JArray.Load(reader);
+			}
+			if (reader.TokenType == JsonToken.PropertyName)
+			{
+				return JProperty.Load(reader);
+			}
+			if (reader.TokenType == JsonToken.StartConstructor)
+			{
+				return JConstructor.Load(reader);
+			}
+			if (!JsonReader.IsStartToken(reader.TokenType))
+			{
+				return new JValue(reader.Value);
+			}
+			throw new Exception("Error reading JToken from JsonReader. Unexpected token: {0}".FormatWith(CultureInfo.InvariantCulture, new object[]
+			{
+				reader.TokenType
+			}));
+		}
+
+		public static JToken Parse(string json)
+		{
+			JsonReader reader = new JsonTextReader(new StringReader(json));
+			return JToken.Load(reader);
+		}
+
+		public static JToken Load(JsonReader reader)
+		{
+			return JToken.ReadFrom(reader);
+		}
+
+		internal void SetLineInfo(IJsonLineInfo lineInfo)
+		{
+			if (lineInfo == null || !lineInfo.HasLineInfo())
+			{
+				return;
+			}
+			this.SetLineInfo(lineInfo.LineNumber, lineInfo.LinePosition);
+		}
+
+		internal void SetLineInfo(int lineNumber, int linePosition)
+		{
+			this._lineNumber = new int?(lineNumber);
+			this._linePosition = new int?(linePosition);
+		}
+
+		bool IJsonLineInfo.HasLineInfo()
+		{
+			int? lineNumber = this._lineNumber;
+			bool result;
+			if (lineNumber != null)
+			{
+				int? linePosition = this._linePosition;
+				result = (linePosition != null);
+			}
+			else
+			{
+				result = false;
+			}
+			return result;
+		}
+
+		int IJsonLineInfo.LineNumber
+		{
+			get
+			{
+				int? lineNumber = this._lineNumber;
+				return (lineNumber == null) ? 0 : lineNumber.Value;
+			}
+		}
+
+		int IJsonLineInfo.LinePosition
+		{
+			get
+			{
+				int? linePosition = this._linePosition;
+				return (linePosition == null) ? 0 : linePosition.Value;
+			}
+		}
+
+		public JToken SelectToken(string path)
+		{
+			return this.SelectToken(path, false);
+		}
+
+		public JToken SelectToken(string path, bool errorWhenNoMatch)
+		{
+			JPath jpath = new JPath(path);
+			return jpath.Evaluate(this, errorWhenNoMatch);
+		}
+
+		object ICloneable.Clone()
+		{
+			return this.DeepClone();
+		}
+
+		public JToken DeepClone()
+		{
+			return this.CloneToken();
 		}
 
 		private JContainer _parent;

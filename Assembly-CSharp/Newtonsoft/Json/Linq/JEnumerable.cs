@@ -6,7 +6,7 @@ using Newtonsoft.Json.Utilities;
 
 namespace Newtonsoft.Json.Linq
 {
-	public struct JEnumerable<T> : IEnumerable, IEnumerable<T>, IJEnumerable<T> where T : JToken
+	public struct JEnumerable<T> : IJEnumerable<T>, IEnumerable<T>, IEnumerable where T : JToken
 	{
 		public JEnumerable(IEnumerable<T> enumerable)
 		{
@@ -14,14 +14,14 @@ namespace Newtonsoft.Json.Linq
 			this._enumerable = enumerable;
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return this.GetEnumerator();
-		}
-
 		public IEnumerator<T> GetEnumerator()
 		{
 			return this._enumerable.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return this.GetEnumerator();
 		}
 
 		public IJEnumerable<JToken> this[object key]

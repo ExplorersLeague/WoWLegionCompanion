@@ -50,51 +50,47 @@ namespace bnet.protocol.config
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 45)
 								{
-									if (num2 != 45)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else
-									{
-										instance.StartupPeriod = binaryReader.ReadSingle();
-									}
+									ProtocolParser.SkipKey(stream, key);
 								}
 								else
 								{
-									instance.CapBalance = ProtocolParser.ReadUInt32(stream);
+									instance.StartupPeriod = binaryReader.ReadSingle();
 								}
 							}
 							else
 							{
-								instance.InitialBalance = ProtocolParser.ReadUInt32(stream);
+								instance.CapBalance = ProtocolParser.ReadUInt32(stream);
 							}
 						}
 						else
 						{
-							instance.IncomePerSecond = ProtocolParser.ReadUInt32(stream);
+							instance.InitialBalance = ProtocolParser.ReadUInt32(stream);
 						}
 					}
 					else
 					{
-						instance.Method.Add(RPCMethodConfig.DeserializeLengthDelimited(stream));
+						instance.IncomePerSecond = ProtocolParser.ReadUInt32(stream);
 					}
+				}
+				else
+				{
+					instance.Method.Add(RPCMethodConfig.DeserializeLengthDelimited(stream));
 				}
 			}
 			if (stream.Position == limit)

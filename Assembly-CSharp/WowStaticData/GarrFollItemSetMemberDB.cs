@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<GarrFollItemSetMemberRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrFollItemSetMemberRec obj2 = (GarrFollItemSetMemberRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrFollItemSetMemberRec obj2 = (GarrFollItemSetMemberRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<GarrFollItemSetMemberRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrFollItemSetMemberRec garrFollItemSetMemberRec = (GarrFollItemSetMemberRec)obj;
-				if ((ulong)garrFollItemSetMemberRec.GarrFollItemSetID == (ulong)((long)parentID) && !callback(garrFollItemSetMemberRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrFollItemSetMemberRec garrFollItemSetMemberRec = (GarrFollItemSetMemberRec)obj;
+					if ((ulong)garrFollItemSetMemberRec.GarrFollItemSetID == (ulong)((long)parentID) && !callback(garrFollItemSetMemberRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

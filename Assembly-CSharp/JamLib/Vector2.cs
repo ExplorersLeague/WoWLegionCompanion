@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace JamLib
 {
-	[FlexJamStruct(Name = "vector2")]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "vector2")]
+	[StructLayout(LayoutKind.Sequential, Size = 1)]
 	public struct Vector2
 	{
 		[System.Runtime.Serialization.DataMember(Name = "x")]

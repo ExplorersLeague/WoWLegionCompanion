@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamWhoEntry", Version = 28333852u)]
 	public class JamWhoEntry
 	{
-		[FlexJamMember(Name = "guildGUID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "guildGUID")]
+		[FlexJamMember(Name = "guildGUID", Type = FlexJamType.WowGuid)]
 		public string GuildGUID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "areaID")]
@@ -24,12 +24,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "guildName", Type = FlexJamType.String)]
 		public string GuildName { get; set; }
 
-		[FlexJamMember(Name = "playerData", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "playerData")]
+		[FlexJamMember(Name = "playerData", Type = FlexJamType.Struct)]
 		public JamPlayerGuidLookupData PlayerData { get; set; }
 
-		[FlexJamMember(Name = "isGM", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "isGM")]
+		[FlexJamMember(Name = "isGM", Type = FlexJamType.Bool)]
 		public bool IsGM { get; set; }
 	}
 }

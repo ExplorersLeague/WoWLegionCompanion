@@ -43,34 +43,30 @@ namespace bnet.protocol.attribute
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else if (instance.Value == null)
-						{
-							instance.Value = Variant.DeserializeLengthDelimited(stream);
-						}
-						else
-						{
-							Variant.DeserializeLengthDelimited(stream, instance.Value);
-						}
+						ProtocolParser.SkipKey(stream, key);
+					}
+					else if (instance.Value == null)
+					{
+						instance.Value = Variant.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						instance.Name = ProtocolParser.ReadString(stream);
+						Variant.DeserializeLengthDelimited(stream, instance.Value);
 					}
+				}
+				else
+				{
+					instance.Name = ProtocolParser.ReadString(stream);
 				}
 			}
 			if (stream.Position == limit)

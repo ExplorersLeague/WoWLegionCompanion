@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -61,25 +62,38 @@ public class CombatAllyListItem : MonoBehaviour
 	public void UpdateVisuals()
 	{
 		CombatAllyMissionState combatAllyMissionState = CombatAllyMissionState.notAvailable;
-		foreach (object obj in PersistentMissionData.missionDictionary.Values)
+		IEnumerator enumerator = PersistentMissionData.missionDictionary.Values.GetEnumerator();
+		try
 		{
-			JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
-			GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
-			if (record != null)
+			while (enumerator.MoveNext())
 			{
-				if ((record.Flags & 16u) != 0u)
+				object obj = enumerator.Current;
+				JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)obj;
+				GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
+				if (record != null)
 				{
-					this.m_combatAllyMissionID = jamGarrisonMobileMission.MissionRecID;
-					if (jamGarrisonMobileMission.MissionState == 1)
+					if ((record.Flags & 16u) != 0u)
 					{
-						combatAllyMissionState = CombatAllyMissionState.inProgress;
+						this.m_combatAllyMissionID = jamGarrisonMobileMission.MissionRecID;
+						if (jamGarrisonMobileMission.MissionState == 1)
+						{
+							combatAllyMissionState = CombatAllyMissionState.inProgress;
+						}
+						else
+						{
+							combatAllyMissionState = CombatAllyMissionState.available;
+						}
+						break;
 					}
-					else
-					{
-						combatAllyMissionState = CombatAllyMissionState.available;
-					}
-					break;
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		if (combatAllyMissionState == CombatAllyMissionState.inProgress)

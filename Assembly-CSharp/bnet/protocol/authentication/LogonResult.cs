@@ -52,83 +52,79 @@ namespace bnet.protocol.authentication
 					}
 					return instance;
 				}
-				else
+				else if (num != 8)
 				{
-					int num2 = num;
-					if (num2 != 8)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 40)
 								{
-									if (num2 != 40)
+									if (num != 48)
 									{
-										if (num2 != 48)
+										if (num != 58)
 										{
-											if (num2 != 58)
+											if (num != 66)
 											{
-												if (num2 != 66)
+												if (num != 74)
 												{
-													if (num2 != 74)
+													Key key = ProtocolParser.ReadKey((byte)num, stream);
+													uint field = key.Field;
+													if (field == 0u)
 													{
-														Key key = ProtocolParser.ReadKey((byte)num, stream);
-														uint field = key.Field;
-														if (field == 0u)
-														{
-															throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-														}
-														ProtocolParser.SkipKey(stream, key);
+														throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 													}
-													else
-													{
-														instance.SessionKey = ProtocolParser.ReadBytes(stream);
-													}
+													ProtocolParser.SkipKey(stream, key);
 												}
 												else
 												{
-													instance.GeoipCountry = ProtocolParser.ReadString(stream);
+													instance.SessionKey = ProtocolParser.ReadBytes(stream);
 												}
 											}
 											else
 											{
-												instance.BattleTag = ProtocolParser.ReadString(stream);
+												instance.GeoipCountry = ProtocolParser.ReadString(stream);
 											}
 										}
 										else
 										{
-											instance.ConnectedRegion = ProtocolParser.ReadUInt32(stream);
+											instance.BattleTag = ProtocolParser.ReadString(stream);
 										}
 									}
 									else
 									{
-										instance.AvailableRegion.Add(ProtocolParser.ReadUInt32(stream));
+										instance.ConnectedRegion = ProtocolParser.ReadUInt32(stream);
 									}
 								}
 								else
 								{
-									instance.Email = ProtocolParser.ReadString(stream);
+									instance.AvailableRegion.Add(ProtocolParser.ReadUInt32(stream));
 								}
 							}
 							else
 							{
-								instance.GameAccount.Add(EntityId.DeserializeLengthDelimited(stream));
+								instance.Email = ProtocolParser.ReadString(stream);
 							}
-						}
-						else if (instance.Account == null)
-						{
-							instance.Account = EntityId.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							EntityId.DeserializeLengthDelimited(stream, instance.Account);
+							instance.GameAccount.Add(EntityId.DeserializeLengthDelimited(stream));
 						}
+					}
+					else if (instance.Account == null)
+					{
+						instance.Account = EntityId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						instance.ErrorCode = ProtocolParser.ReadUInt32(stream);
+						EntityId.DeserializeLengthDelimited(stream, instance.Account);
 					}
+				}
+				else
+				{
+					instance.ErrorCode = ProtocolParser.ReadUInt32(stream);
 				}
 			}
 			if (stream.Position == limit)

@@ -24,6 +24,12 @@ public class PartyBuffDisplay : MonoBehaviour
 		}
 	}
 
+	public void UseReducedHeight()
+	{
+		this.m_abilityName.fontSize = 16;
+		this.m_abilityDescription.fontSize = 15;
+	}
+
 	public Image m_abilityIcon;
 
 	public Text m_abilityName;

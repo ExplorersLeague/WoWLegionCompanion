@@ -8,7 +8,7 @@ using Newtonsoft.Json.Utilities;
 
 namespace Newtonsoft.Json.Linq
 {
-	public abstract class JContainer : JToken, IEnumerable, IEnumerable<JToken>, ICollection<JToken>, IList<JToken>, IList, ICollection
+	public abstract class JContainer : JToken, IList<JToken>, IList, ICollection<JToken>, IEnumerable<JToken>, IEnumerable, ICollection
 	{
 		internal JContainer()
 		{
@@ -20,155 +20,6 @@ namespace Newtonsoft.Json.Linq
 			foreach (JToken content in ((IEnumerable<JToken>)other))
 			{
 				this.Add(content);
-			}
-		}
-
-		int IList<JToken>.IndexOf(JToken item)
-		{
-			return this.IndexOfItem(item);
-		}
-
-		void IList<JToken>.Insert(int index, JToken item)
-		{
-			this.InsertItem(index, item);
-		}
-
-		void IList<JToken>.RemoveAt(int index)
-		{
-			this.RemoveItemAt(index);
-		}
-
-		JToken IList<JToken>.this[int index]
-		{
-			get
-			{
-				return this.GetItem(index);
-			}
-			set
-			{
-				this.SetItem(index, value);
-			}
-		}
-
-		void ICollection<JToken>.Add(JToken item)
-		{
-			this.Add(item);
-		}
-
-		void ICollection<JToken>.Clear()
-		{
-			this.ClearItems();
-		}
-
-		bool ICollection<JToken>.Contains(JToken item)
-		{
-			return this.ContainsItem(item);
-		}
-
-		void ICollection<JToken>.CopyTo(JToken[] array, int arrayIndex)
-		{
-			this.CopyItemsTo(array, arrayIndex);
-		}
-
-		bool ICollection<JToken>.IsReadOnly
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-		bool ICollection<JToken>.Remove(JToken item)
-		{
-			return this.RemoveItem(item);
-		}
-
-		int IList.Add(object value)
-		{
-			this.Add(this.EnsureValue(value));
-			return this.Count - 1;
-		}
-
-		void IList.Clear()
-		{
-			this.ClearItems();
-		}
-
-		bool IList.Contains(object value)
-		{
-			return this.ContainsItem(this.EnsureValue(value));
-		}
-
-		int IList.IndexOf(object value)
-		{
-			return this.IndexOfItem(this.EnsureValue(value));
-		}
-
-		void IList.Insert(int index, object value)
-		{
-			this.InsertItem(index, this.EnsureValue(value));
-		}
-
-		bool IList.IsFixedSize
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-		bool IList.IsReadOnly
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-		void IList.Remove(object value)
-		{
-			this.RemoveItem(this.EnsureValue(value));
-		}
-
-		void IList.RemoveAt(int index)
-		{
-			this.RemoveItemAt(index);
-		}
-
-		object IList.this[int index]
-		{
-			get
-			{
-				return this.GetItem(index);
-			}
-			set
-			{
-				this.SetItem(index, this.EnsureValue(value));
-			}
-		}
-
-		void ICollection.CopyTo(Array array, int index)
-		{
-			this.CopyItemsTo(array, index);
-		}
-
-		bool ICollection.IsSynchronized
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-		object ICollection.SyncRoot
-		{
-			get
-			{
-				if (this._syncRoot == null)
-				{
-					Interlocked.CompareExchange(ref this._syncRoot, new object(), null);
-				}
-				return this._syncRoot;
 			}
 		}
 
@@ -485,10 +336,23 @@ namespace Newtonsoft.Json.Linq
 			{
 				IEnumerable enumerable = (IEnumerable)content;
 				int num = index;
-				foreach (object content2 in enumerable)
+				IEnumerator enumerator = enumerable.GetEnumerator();
+				try
 				{
-					this.AddInternal(num, content2);
-					num++;
+					while (enumerator.MoveNext())
+					{
+						object content2 = enumerator.Current;
+						this.AddInternal(num, content2);
+						num++;
+					}
+				}
+				finally
+				{
+					IDisposable disposable;
+					if ((disposable = (enumerator as IDisposable)) != null)
+					{
+						disposable.Dispose();
+					}
 				}
 			}
 			else
@@ -562,14 +426,14 @@ namespace Newtonsoft.Json.Linq
 				switch (r.TokenType)
 				{
 				case JsonToken.None:
-					goto IL_242;
+					goto IL_244;
 				case JsonToken.StartObject:
 				{
 					JObject jobject = new JObject();
 					jobject.SetLineInfo(lineInfo);
 					jcontainer.Add(jobject);
 					jcontainer = jobject;
-					goto IL_242;
+					goto IL_244;
 				}
 				case JsonToken.StartArray:
 				{
@@ -577,7 +441,7 @@ namespace Newtonsoft.Json.Linq
 					jarray.SetLineInfo(lineInfo);
 					jcontainer.Add(jarray);
 					jcontainer = jarray;
-					goto IL_242;
+					goto IL_244;
 				}
 				case JsonToken.StartConstructor:
 				{
@@ -585,7 +449,7 @@ namespace Newtonsoft.Json.Linq
 					jconstructor.SetLineInfo(jconstructor);
 					jcontainer.Add(jconstructor);
 					jcontainer = jconstructor;
-					goto IL_242;
+					goto IL_244;
 				}
 				case JsonToken.PropertyName:
 				{
@@ -603,14 +467,14 @@ namespace Newtonsoft.Json.Linq
 						jproperty2.Replace(jproperty);
 					}
 					jcontainer = jproperty;
-					goto IL_242;
+					goto IL_244;
 				}
 				case JsonToken.Comment:
 				{
 					JValue jvalue = JValue.CreateComment(r.Value.ToString());
 					jvalue.SetLineInfo(lineInfo);
 					jcontainer.Add(jvalue);
-					goto IL_242;
+					goto IL_244;
 				}
 				case JsonToken.Integer:
 				case JsonToken.Float:
@@ -622,21 +486,21 @@ namespace Newtonsoft.Json.Linq
 					JValue jvalue = new JValue(r.Value);
 					jvalue.SetLineInfo(lineInfo);
 					jcontainer.Add(jvalue);
-					goto IL_242;
+					goto IL_244;
 				}
 				case JsonToken.Null:
 				{
 					JValue jvalue = new JValue(null, JTokenType.Null);
 					jvalue.SetLineInfo(lineInfo);
 					jcontainer.Add(jvalue);
-					goto IL_242;
+					goto IL_244;
 				}
 				case JsonToken.Undefined:
 				{
 					JValue jvalue = new JValue(null, JTokenType.Undefined);
 					jvalue.SetLineInfo(lineInfo);
 					jcontainer.Add(jvalue);
-					goto IL_242;
+					goto IL_244;
 				}
 				case JsonToken.EndObject:
 					if (jcontainer == this)
@@ -644,24 +508,24 @@ namespace Newtonsoft.Json.Linq
 						return;
 					}
 					jcontainer = jcontainer.Parent;
-					goto IL_242;
+					goto IL_244;
 				case JsonToken.EndArray:
 					if (jcontainer == this)
 					{
 						return;
 					}
 					jcontainer = jcontainer.Parent;
-					goto IL_242;
+					goto IL_244;
 				case JsonToken.EndConstructor:
 					if (jcontainer == this)
 					{
 						return;
 					}
 					jcontainer = jcontainer.Parent;
-					goto IL_242;
+					goto IL_244;
 				}
 				goto Block_4;
-				IL_242:
+				IL_244:
 				if (!r.Read())
 				{
 					return;
@@ -685,6 +549,66 @@ namespace Newtonsoft.Json.Linq
 			return num;
 		}
 
+		int IList<JToken>.IndexOf(JToken item)
+		{
+			return this.IndexOfItem(item);
+		}
+
+		void IList<JToken>.Insert(int index, JToken item)
+		{
+			this.InsertItem(index, item);
+		}
+
+		void IList<JToken>.RemoveAt(int index)
+		{
+			this.RemoveItemAt(index);
+		}
+
+		JToken IList<JToken>.this[int index]
+		{
+			get
+			{
+				return this.GetItem(index);
+			}
+			set
+			{
+				this.SetItem(index, value);
+			}
+		}
+
+		void ICollection<JToken>.Add(JToken item)
+		{
+			this.Add(item);
+		}
+
+		void ICollection<JToken>.Clear()
+		{
+			this.ClearItems();
+		}
+
+		bool ICollection<JToken>.Contains(JToken item)
+		{
+			return this.ContainsItem(item);
+		}
+
+		void ICollection<JToken>.CopyTo(JToken[] array, int arrayIndex)
+		{
+			this.CopyItemsTo(array, arrayIndex);
+		}
+
+		bool ICollection<JToken>.IsReadOnly
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		bool ICollection<JToken>.Remove(JToken item)
+		{
+			return this.RemoveItem(item);
+		}
+
 		private JToken EnsureValue(object value)
 		{
 			if (value == null)
@@ -698,11 +622,100 @@ namespace Newtonsoft.Json.Linq
 			throw new ArgumentException("Argument is not a JToken.");
 		}
 
+		int IList.Add(object value)
+		{
+			this.Add(this.EnsureValue(value));
+			return this.Count - 1;
+		}
+
+		void IList.Clear()
+		{
+			this.ClearItems();
+		}
+
+		bool IList.Contains(object value)
+		{
+			return this.ContainsItem(this.EnsureValue(value));
+		}
+
+		int IList.IndexOf(object value)
+		{
+			return this.IndexOfItem(this.EnsureValue(value));
+		}
+
+		void IList.Insert(int index, object value)
+		{
+			this.InsertItem(index, this.EnsureValue(value));
+		}
+
+		bool IList.IsFixedSize
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		bool IList.IsReadOnly
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		void IList.Remove(object value)
+		{
+			this.RemoveItem(this.EnsureValue(value));
+		}
+
+		void IList.RemoveAt(int index)
+		{
+			this.RemoveItemAt(index);
+		}
+
+		object IList.this[int index]
+		{
+			get
+			{
+				return this.GetItem(index);
+			}
+			set
+			{
+				this.SetItem(index, this.EnsureValue(value));
+			}
+		}
+
+		void ICollection.CopyTo(Array array, int index)
+		{
+			this.CopyItemsTo(array, index);
+		}
+
 		public int Count
 		{
 			get
 			{
 				return this.ChildrenTokens.Count;
+			}
+		}
+
+		bool ICollection.IsSynchronized
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		object ICollection.SyncRoot
+		{
+			get
+			{
+				if (this._syncRoot == null)
+				{
+					Interlocked.CompareExchange(ref this._syncRoot, new object(), null);
+				}
+				return this._syncRoot;
 			}
 		}
 

@@ -596,11 +596,11 @@ namespace bgs
 			BattleNet.s_impl.ApplicationWasUnpaused();
 		}
 
+		private static IBattleNet s_impl = new BattleNetCSharp();
+
 		public const string COUNTRY_KOREA = "KOR";
 
 		public const string COUNTRY_CHINA = "CHN";
-
-		private static IBattleNet s_impl = new BattleNetCSharp();
 
 		public enum BnetEvent
 		{

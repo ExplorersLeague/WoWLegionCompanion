@@ -13,12 +13,25 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<SpellDurationRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				SpellDurationRec obj2 = (SpellDurationRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					SpellDurationRec obj2 = (SpellDurationRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

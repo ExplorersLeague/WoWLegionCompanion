@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -117,23 +118,36 @@ public class WorldQuestTooltip : MonoBehaviour
 			MobileBountiesByWorldQuest mobileBountiesByWorldQuest = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
 			for (int k = 0; k < mobileBountiesByWorldQuest.BountyQuestID.Length; k++)
 			{
-				foreach (object obj in PersistentBountyData.bountyDictionary.Values)
+				IEnumerator enumerator = PersistentBountyData.bountyDictionary.Values.GetEnumerator();
+				try
 				{
-					MobileWorldQuestBounty mobileWorldQuestBounty = (MobileWorldQuestBounty)obj;
-					if (mobileBountiesByWorldQuest.BountyQuestID[k] == mobileWorldQuestBounty.QuestID)
+					while (enumerator.MoveNext())
 					{
-						QuestV2Rec record = StaticDB.questDB.GetRecord(mobileWorldQuestBounty.QuestID);
-						if (record != null)
+						object obj = enumerator.Current;
+						MobileWorldQuestBounty mobileWorldQuestBounty = (MobileWorldQuestBounty)obj;
+						if (mobileBountiesByWorldQuest.BountyQuestID[k] == mobileWorldQuestBounty.QuestID)
 						{
-							GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
-							gameObject2.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
-							Text component2 = gameObject2.GetComponent<Text>();
-							component2.text = record.QuestTitle;
-							component2.color = new Color(1f, 0.773f, 0f, 1f);
-							BountySite bountySite2 = Object.Instantiate<BountySite>(this.m_bountyLogoPrefab);
-							bountySite2.SetBounty(mobileWorldQuestBounty);
-							bountySite2.transform.SetParent(this.m_bountyLogoRoot.transform, false);
+							QuestV2Rec record = StaticDB.questDB.GetRecord(mobileWorldQuestBounty.QuestID);
+							if (record != null)
+							{
+								GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
+								gameObject2.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
+								Text component2 = gameObject2.GetComponent<Text>();
+								component2.text = record.QuestTitle;
+								component2.color = new Color(1f, 0.773f, 0f, 1f);
+								BountySite bountySite2 = Object.Instantiate<BountySite>(this.m_bountyLogoPrefab);
+								bountySite2.SetBounty(mobileWorldQuestBounty);
+								bountySite2.transform.SetParent(this.m_bountyLogoRoot.transform, false);
+							}
 						}
+					}
+				}
+				finally
+				{
+					IDisposable disposable;
+					if ((disposable = (enumerator as IDisposable)) != null)
+					{
+						disposable.Dispose();
 					}
 				}
 			}
@@ -298,20 +312,20 @@ public class WorldQuestTooltip : MonoBehaviour
 				text = "Mobile-Mining";
 				break;
 			}
-			goto IL_726;
+			goto IL_729;
 		}
 		case 3:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 			text = "Mobile-PVP";
-			goto IL_726;
+			goto IL_729;
 		case 4:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 			text = "Mobile-Pets";
-			goto IL_726;
+			goto IL_729;
 		}
 		uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 		text = "Mobile-QuestExclamationIcon";
-		IL_726:
+		IL_729:
 		if (text != null)
 		{
 			this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/" + text);
@@ -342,8 +356,6 @@ public class WorldQuestTooltip : MonoBehaviour
 		this.UpdateTimeRemaining();
 	}
 
-	private const int WORLD_QUEST_TIME_LOW_MINUTES = 75;
-
 	[Header("World Quest Icon Layers")]
 	public Image m_dragonFrame;
 
@@ -372,6 +384,8 @@ public class WorldQuestTooltip : MonoBehaviour
 	public Text m_rewardsLabel;
 
 	private int m_questID;
+
+	private const int WORLD_QUEST_TIME_LOW_MINUTES = 75;
 
 	private long m_endTime;
 

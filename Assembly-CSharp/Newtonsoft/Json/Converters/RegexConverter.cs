@@ -78,14 +78,13 @@ namespace Newtonsoft.Json.Converters
 			RegexOptions regexOptions = RegexOptions.None;
 			foreach (char c in text2)
 			{
-				char c2 = c;
-				if (c2 != 'i')
+				if (c != 'i')
 				{
-					if (c2 != 'm')
+					if (c != 'm')
 					{
-						if (c2 != 's')
+						if (c != 's')
 						{
-							if (c2 == 'x')
+							if (c == 'x')
 							{
 								regexOptions |= RegexOptions.ExplicitCapture;
 							}

@@ -43,34 +43,30 @@ namespace bnet.protocol.presence
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else
-						{
-							instance.ReleaseOwnership = ProtocolParser.ReadBool(stream);
-						}
-					}
-					else if (instance.EntityId == null)
-					{
-						instance.EntityId = EntityId.DeserializeLengthDelimited(stream);
+						ProtocolParser.SkipKey(stream, key);
 					}
 					else
 					{
-						EntityId.DeserializeLengthDelimited(stream, instance.EntityId);
+						instance.ReleaseOwnership = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else if (instance.EntityId == null)
+				{
+					instance.EntityId = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.EntityId);
 				}
 			}
 			if (stream.Position == limit)

@@ -49,24 +49,23 @@ namespace bnet.protocol.channel
 				}
 				else
 				{
-					int num2 = num;
-					switch (num2)
+					switch (num)
 					{
 					case 45:
 						instance.Locale = binaryReader.ReadUInt32();
 						break;
 					default:
-						if (num2 != 8)
+						if (num != 8)
 						{
-							if (num2 != 16)
+							if (num != 16)
 							{
-								if (num2 != 26)
+								if (num != 26)
 								{
-									if (num2 != 37)
+									if (num != 37)
 									{
-										if (num2 != 58)
+										if (num != 58)
 										{
-											if (num2 != 66)
+											if (num != 66)
 											{
 												Key key = ProtocolParser.ReadKey((byte)num, stream);
 												uint field = key.Field;

@@ -16,12 +16,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "assignedFollowerDBID", Type = FlexJamType.UInt64)]
 		public ulong AssignedFollowerDBID { get; set; }
 
-		[FlexJamMember(Name = "shipmentID", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "shipmentID")]
+		[FlexJamMember(Name = "shipmentID", Type = FlexJamType.UInt64)]
 		public ulong ShipmentID { get; set; }
 
-		[FlexJamMember(Name = "shipmentRecID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "shipmentRecID")]
+		[FlexJamMember(Name = "shipmentRecID", Type = FlexJamType.Int32)]
 		public int ShipmentRecID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "creationTime")]

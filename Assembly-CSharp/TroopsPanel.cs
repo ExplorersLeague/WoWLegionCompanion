@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -13,6 +14,10 @@ public class TroopsPanel : MonoBehaviour
 		this.m_noRecruitsYetMessage.font = GeneralHelpers.LoadStandardFont();
 		this.m_noRecruitsYetMessage.text = StaticDB.GetString("NO_RECRUITS_AVAILABLE_YET", "You have no recruits available yet.");
 		this.InitList();
+	}
+
+	private void Start()
+	{
 	}
 
 	public void OnEnable()
@@ -147,32 +152,45 @@ public class TroopsPanel : MonoBehaviour
 				component2.Activate();
 			}
 		}
-		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		IEnumerator enumerator = PersistentShipmentData.shipmentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			if (!PersistentShipmentData.ShipmentTypeForShipmentIsAvailable(jamCharacterShipment.ShipmentRecID))
+			while (enumerator.MoveNext())
 			{
-				bool flag3 = true;
-				bool flag4 = false;
-				if (jamCharacterShipment.ShipmentRecID < 372 || jamCharacterShipment.ShipmentRecID > 383)
+				object obj = enumerator.Current;
+				JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+				if (!PersistentShipmentData.ShipmentTypeForShipmentIsAvailable(jamCharacterShipment.ShipmentRecID))
 				{
-					flag3 = false;
-				}
-				if (jamCharacterShipment.ShipmentRecID == 178 || jamCharacterShipment.ShipmentRecID == 179 || jamCharacterShipment.ShipmentRecID == 180 || jamCharacterShipment.ShipmentRecID == 192 || jamCharacterShipment.ShipmentRecID == 194 || jamCharacterShipment.ShipmentRecID == 195)
-				{
-					flag4 = true;
-				}
-				if (flag3 || flag4)
-				{
-					CharShipmentRec record = StaticDB.charShipmentDB.GetRecord(jamCharacterShipment.ShipmentRecID);
-					if (record != null)
+					bool flag3 = true;
+					bool flag4 = false;
+					if (jamCharacterShipment.ShipmentRecID < 372 || jamCharacterShipment.ShipmentRecID > 383)
 					{
-						GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_troopsListItemPrefab);
-						gameObject2.transform.SetParent(this.m_troopsListContents.transform, false);
-						TroopsListItem component3 = gameObject2.GetComponent<TroopsListItem>();
-						component3.SetCharShipment(null, true, record);
+						flag3 = false;
+					}
+					if (jamCharacterShipment.ShipmentRecID == 178 || jamCharacterShipment.ShipmentRecID == 179 || jamCharacterShipment.ShipmentRecID == 180 || jamCharacterShipment.ShipmentRecID == 192 || jamCharacterShipment.ShipmentRecID == 194 || jamCharacterShipment.ShipmentRecID == 195)
+					{
+						flag4 = true;
+					}
+					if (flag3 || flag4)
+					{
+						CharShipmentRec record = StaticDB.charShipmentDB.GetRecord(jamCharacterShipment.ShipmentRecID);
+						if (record != null)
+						{
+							GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_troopsListItemPrefab);
+							gameObject2.transform.SetParent(this.m_troopsListContents.transform, false);
+							TroopsListItem component3 = gameObject2.GetComponent<TroopsListItem>();
+							component3.SetCharShipment(null, true, record);
+						}
 					}
 				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 	}
@@ -206,4 +224,6 @@ public class TroopsPanel : MonoBehaviour
 	public Text m_noRecruitsYetMessage;
 
 	public RectTransform m_panelViewRT;
+
+	public GameObject m_resourcesDisplay;
 }

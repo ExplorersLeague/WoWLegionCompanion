@@ -337,20 +337,20 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				text = "Mobile-Mining";
 				break;
 			}
-			goto IL_6FE;
+			goto IL_70A;
 		}
 		case 3:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 			text = "Mobile-PVP";
-			goto IL_6FE;
+			goto IL_70A;
 		case 4:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 			text = "Mobile-Pets";
-			goto IL_6FE;
+			goto IL_70A;
 		}
 		uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 		text = "Mobile-QuestExclamationIcon";
-		IL_6FE:
+		IL_70A:
 		if (!this.m_showLootIconInsteadOfMain)
 		{
 			if (text != null)
@@ -407,8 +407,6 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		}
 	}
 
-	private const int WORLD_QUEST_TIME_LOW_MINUTES = 75;
-
 	public Image m_errorImage;
 
 	public Image m_dragonFrame;
@@ -436,6 +434,8 @@ public class AdventureMapWorldQuest : MonoBehaviour
 	private int m_questID;
 
 	private ITEM_QUALITY m_lootQuality;
+
+	private const int WORLD_QUEST_TIME_LOW_MINUTES = 75;
 
 	private long m_endTime;
 

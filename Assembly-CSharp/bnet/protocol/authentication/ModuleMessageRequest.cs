@@ -42,30 +42,26 @@ namespace bnet.protocol.authentication
 					}
 					return instance;
 				}
-				else
+				else if (num != 8)
 				{
-					int num2 = num;
-					if (num2 != 8)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else
-						{
-							instance.Message = ProtocolParser.ReadBytes(stream);
-						}
+						ProtocolParser.SkipKey(stream, key);
 					}
 					else
 					{
-						instance.ModuleId = (int)ProtocolParser.ReadUInt64(stream);
+						instance.Message = ProtocolParser.ReadBytes(stream);
 					}
+				}
+				else
+				{
+					instance.ModuleId = (int)ProtocolParser.ReadUInt64(stream);
 				}
 			}
 			if (stream.Position == limit)

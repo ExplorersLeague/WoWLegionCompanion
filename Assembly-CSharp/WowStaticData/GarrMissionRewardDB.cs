@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<GarrMissionRewardRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrMissionRewardRec obj2 = (GarrMissionRewardRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrMissionRewardRec obj2 = (GarrMissionRewardRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<GarrMissionRewardRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				GarrMissionRewardRec garrMissionRewardRec = (GarrMissionRewardRec)obj;
-				if ((ulong)garrMissionRewardRec.GarrMissionID == (ulong)((long)parentID) && !callback(garrMissionRewardRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					GarrMissionRewardRec garrMissionRewardRec = (GarrMissionRewardRec)obj;
+					if ((ulong)garrMissionRewardRec.GarrMissionID == (ulong)((long)parentID) && !callback(garrMissionRewardRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

@@ -309,7 +309,7 @@ namespace bgs
 		public QueueEvent GetQueueEvent()
 		{
 			QueueEvent result = null;
-			Queue<QueueEvent> queueEvents = this.m_queueEvents;
+			object queueEvents = this.m_queueEvents;
 			lock (queueEvents)
 			{
 				if (this.m_queueEvents.Count > 0)
@@ -323,7 +323,7 @@ namespace bgs
 		private void AddQueueEvent(QueueEvent.Type queueType, int minSeconds = 0, int maxSeconds = 0, int bnetError = 0, GameServerInfo gsInfo = null)
 		{
 			QueueEvent item = new QueueEvent(queueType, minSeconds, maxSeconds, bnetError, gsInfo);
-			Queue<QueueEvent> queueEvents = this.m_queueEvents;
+			object queueEvents = this.m_queueEvents;
 			lock (queueEvents)
 			{
 				this.m_queueEvents.Enqueue(item);

@@ -45,48 +45,44 @@ namespace bnet.protocol.channel_invitation
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.ServiceType = ProtocolParser.ReadUInt32(stream);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.Rejoin = ProtocolParser.ReadBool(stream);
+								instance.ServiceType = ProtocolParser.ReadUInt32(stream);
 							}
 						}
 						else
 						{
-							instance.Reserved = ProtocolParser.ReadBool(stream);
+							instance.Rejoin = ProtocolParser.ReadBool(stream);
 						}
-					}
-					else if (instance.ChannelDescription == null)
-					{
-						instance.ChannelDescription = ChannelDescription.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						ChannelDescription.DeserializeLengthDelimited(stream, instance.ChannelDescription);
+						instance.Reserved = ProtocolParser.ReadBool(stream);
 					}
+				}
+				else if (instance.ChannelDescription == null)
+				{
+					instance.ChannelDescription = ChannelDescription.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					ChannelDescription.DeserializeLengthDelimited(stream, instance.ChannelDescription);
 				}
 			}
 			if (stream.Position == limit)

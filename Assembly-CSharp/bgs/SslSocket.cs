@@ -1359,12 +1359,6 @@ namespace bgs
 			}
 		}
 
-		private const int PUBKEY_MODULUS_SIZE_BITS = 2048;
-
-		private const int PUBKEY_MODULUS_SIZE_BYTES = 256;
-
-		private const int PUBKEY_EXP_SIZE_BYTES = 4;
-
 		private string m_address;
 
 		public SslCertBundleSettings m_bundleSettings;
@@ -1372,6 +1366,12 @@ namespace bgs
 		private static Map<SslStream, SslSocket.SslStreamValidateContext> s_streamValidationContexts = new Map<SslStream, SslSocket.SslStreamValidateContext>();
 
 		private static string s_magicBundleSignaturePreamble = "NGIS";
+
+		private const int PUBKEY_MODULUS_SIZE_BITS = 2048;
+
+		private const int PUBKEY_MODULUS_SIZE_BYTES = 256;
+
+		private const int PUBKEY_EXP_SIZE_BYTES = 4;
 
 		private static byte[] s_standardPublicExponent;
 
@@ -1398,6 +1398,12 @@ namespace bgs
 			public SslSocket m_sslSocket;
 		}
 
+		public delegate void BeginConnectDelegate(bool connectFailed, bool isEncrypted, bool isSigned);
+
+		public delegate void BeginSendDelegate(bool wasSent);
+
+		public delegate void BeginReceiveDelegate(int bytesReceived);
+
 		private enum HexStrToBytesError
 		{
 			[Description("OK")]
@@ -1423,11 +1429,5 @@ namespace bgs
 			FAILED_SERVER_RESPONSE,
 			FAILED_CERT_BUNDLE
 		}
-
-		public delegate void BeginConnectDelegate(bool connectFailed, bool isEncrypted, bool isSigned);
-
-		public delegate void BeginSendDelegate(bool wasSent);
-
-		public delegate void BeginReceiveDelegate(int bytesReceived);
 	}
 }

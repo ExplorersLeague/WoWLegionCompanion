@@ -42,23 +42,19 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
+				else if (num != 8)
+				{
+					Key key = ProtocolParser.ReadKey((byte)num, stream);
+					uint field = key.Field;
+					if (field == 0u)
+					{
+						throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+					}
+					ProtocolParser.SkipKey(stream, key);
+				}
 				else
 				{
-					int num2 = num;
-					if (num2 != 8)
-					{
-						Key key = ProtocolParser.ReadKey((byte)num, stream);
-						uint field = key.Field;
-						if (field == 0u)
-						{
-							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-						}
-						ProtocolParser.SkipKey(stream, key);
-					}
-					else
-					{
-						instance.CurrencyHomeRegion = ProtocolParser.ReadUInt32(stream);
-					}
+					instance.CurrencyHomeRegion = ProtocolParser.ReadUInt32(stream);
 				}
 			}
 			if (stream.Position == limit)

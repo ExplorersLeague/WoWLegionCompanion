@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[FlexJamStruct(Name = "JamJSONRealmListLoginHistoryEntry", Version = 28333852u)]
 	public class JamJSONRealmListLoginHistoryEntry
 	{
-		[FlexJamMember(Name = "characterGUID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "characterGUID")]
+		[FlexJamMember(Name = "characterGUID", Type = FlexJamType.WowGuid)]
 		public string CharacterGUID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]

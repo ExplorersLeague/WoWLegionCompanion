@@ -16,8 +16,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "endTime", Type = FlexJamType.Int32)]
 		public int EndTime { get; set; }
 
-		[FlexJamMember(Name = "worldMapAreaID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "worldMapAreaID")]
+		[FlexJamMember(Name = "worldMapAreaID", Type = FlexJamType.Int32)]
 		public int WorldMapAreaID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "experience")]
@@ -48,24 +48,24 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "startLocationY", Type = FlexJamType.Int32)]
 		public int StartLocationY { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "currency", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "currency")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "currency", Type = FlexJamType.Struct)]
 		public MobileWorldQuestReward[] Currency { get; set; }
 
-		[FlexJamMember(Name = "startLocationX", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "startLocationX")]
+		[FlexJamMember(Name = "startLocationX", Type = FlexJamType.Int32)]
 		public int StartLocationX { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "faction", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "faction")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "faction", Type = FlexJamType.Struct)]
 		public MobileWorldQuestReward[] Faction { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "objective", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "objective")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "objective", Type = FlexJamType.Struct)]
 		public MobileWorldQuestObjective[] Objective { get; set; }
 
-		[FlexJamMember(Name = "questTitle", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "questTitle")]
+		[FlexJamMember(Name = "questTitle", Type = FlexJamType.String)]
 		public string QuestTitle { get; set; }
 	}
 }

@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "canUseData", Type = FlexJamType.Int32)]
 		public int CanUseData { get; set; }
 
-		[FlexJamMember(Name = "trophyID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "trophyID")]
+		[FlexJamMember(Name = "trophyID", Type = FlexJamType.Int32)]
 		public int TrophyID { get; set; }
 	}
 }

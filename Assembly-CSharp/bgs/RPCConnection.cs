@@ -159,7 +159,7 @@ namespace bgs
 			this.ProcessPendingOutboundPackets();
 			if (this.outBoundPackets.Count > 0)
 			{
-				Queue<BattleNetPacket> obj = this.outBoundPackets;
+				object obj = this.outBoundPackets;
 				Queue<BattleNetPacket> queue;
 				lock (obj)
 				{
@@ -185,7 +185,7 @@ namespace bgs
 			}
 			if (this.incomingPackets.Count > 0)
 			{
-				Queue<BattleNetPacket> obj2 = this.incomingPackets;
+				object obj2 = this.incomingPackets;
 				Queue<BattleNetPacket> queue2;
 				lock (obj2)
 				{
@@ -314,7 +314,7 @@ namespace bgs
 
 		public void PacketReceived(BattleNetPacket p, object state)
 		{
-			Queue<BattleNetPacket> obj = this.incomingPackets;
+			object obj = this.incomingPackets;
 			lock (obj)
 			{
 				this.incomingPackets.Enqueue(p);
@@ -364,7 +364,7 @@ namespace bgs
 		protected void QueuePacket(BattleNetPacket packet)
 		{
 			this.LogOutgoingPacket(packet, false);
-			Queue<BattleNetPacket> obj = this.outBoundPackets;
+			object obj = this.outBoundPackets;
 			lock (obj)
 			{
 				this.outBoundPackets.Enqueue(packet);

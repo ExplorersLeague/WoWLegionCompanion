@@ -42,27 +42,23 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
+				else if (num != 18)
+				{
+					Key key = ProtocolParser.ReadKey((byte)num, stream);
+					uint field = key.Field;
+					if (field == 0u)
+					{
+						throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
+					}
+					ProtocolParser.SkipKey(stream, key);
+				}
+				else if (instance.SessionInfo == null)
+				{
+					instance.SessionInfo = GameSessionInfo.DeserializeLengthDelimited(stream);
+				}
 				else
 				{
-					int num2 = num;
-					if (num2 != 18)
-					{
-						Key key = ProtocolParser.ReadKey((byte)num, stream);
-						uint field = key.Field;
-						if (field == 0u)
-						{
-							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-						}
-						ProtocolParser.SkipKey(stream, key);
-					}
-					else if (instance.SessionInfo == null)
-					{
-						instance.SessionInfo = GameSessionInfo.DeserializeLengthDelimited(stream);
-					}
-					else
-					{
-						GameSessionInfo.DeserializeLengthDelimited(stream, instance.SessionInfo);
-					}
+					GameSessionInfo.DeserializeLengthDelimited(stream, instance.SessionInfo);
 				}
 			}
 			if (stream.Position == limit)

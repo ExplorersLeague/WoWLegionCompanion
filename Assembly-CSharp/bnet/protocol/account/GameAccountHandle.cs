@@ -43,16 +43,11 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 13)
 				{
-					int num2 = num;
-					switch (num2)
+					if (num != 21)
 					{
-					case 21:
-						instance.Program = binaryReader.ReadUInt32();
-						break;
-					default:
-						if (num2 != 13)
+						if (num != 24)
 						{
 							Key key = ProtocolParser.ReadKey((byte)num, stream);
 							uint field = key.Field;
@@ -64,13 +59,17 @@ namespace bnet.protocol.account
 						}
 						else
 						{
-							instance.Id = binaryReader.ReadUInt32();
+							instance.Region = ProtocolParser.ReadUInt32(stream);
 						}
-						break;
-					case 24:
-						instance.Region = ProtocolParser.ReadUInt32(stream);
-						break;
 					}
+					else
+					{
+						instance.Program = binaryReader.ReadUInt32();
+					}
+				}
+				else
+				{
+					instance.Id = binaryReader.ReadUInt32();
 				}
 			}
 			if (stream.Position == limit)

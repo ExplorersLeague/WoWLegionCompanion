@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -30,42 +31,55 @@ namespace bgs
 				result = (T)((object)obj);
 				return true;
 			}
-			foreach (object obj2 in Enum.GetValues(typeFromHandle))
+			IEnumerator enumerator = Enum.GetValues(typeFromHandle).GetEnumerator();
+			try
 			{
-				T t = (T)((object)obj2);
-				bool flag = false;
-				string @string = EnumUtils.GetString<T>(t);
-				if (@string.Equals(str, comparisonType))
+				while (enumerator.MoveNext())
 				{
-					flag = true;
-					result = t;
-				}
-				else
-				{
-					FieldInfo field = t.GetType().GetField(t.ToString());
-					DescriptionAttribute[] array = (DescriptionAttribute[])field.GetCustomAttributes(typeof(DescriptionAttribute), false);
-					for (int i = 0; i < array.Length; i++)
+					object obj2 = enumerator.Current;
+					T t = (T)((object)obj2);
+					bool flag = false;
+					string @string = EnumUtils.GetString<T>(t);
+					if (@string.Equals(str, comparisonType))
 					{
-						if (array[i].Description.Equals(str, comparisonType))
+						flag = true;
+						result = t;
+					}
+					else
+					{
+						FieldInfo field = t.GetType().GetField(t.ToString());
+						DescriptionAttribute[] array = (DescriptionAttribute[])field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+						for (int i = 0; i < array.Length; i++)
 						{
-							flag = true;
-							break;
+							if (array[i].Description.Equals(str, comparisonType))
+							{
+								flag = true;
+								break;
+							}
 						}
 					}
+					if (flag)
+					{
+						if (dictionary == null)
+						{
+							dictionary = new Dictionary<string, object>();
+							EnumUtils.s_enumCache.Add(typeFromHandle, dictionary);
+						}
+						if (!dictionary.ContainsKey(str))
+						{
+							dictionary.Add(str, t);
+						}
+						result = t;
+						return true;
+					}
 				}
-				if (flag)
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
 				{
-					if (dictionary == null)
-					{
-						dictionary = new Dictionary<string, object>();
-						EnumUtils.s_enumCache.Add(typeFromHandle, dictionary);
-					}
-					if (!dictionary.ContainsKey(str))
-					{
-						dictionary.Add(str, t);
-					}
-					result = t;
-					return true;
+					disposable.Dispose();
 				}
 			}
 			result = default(T);

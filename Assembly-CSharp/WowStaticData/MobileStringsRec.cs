@@ -31,17 +31,23 @@ namespace WowStaticData
 
 		private void DeserializeIndex(int index, string valueText)
 		{
-			switch (index)
+			if (index != 0)
 			{
-			case 0:
+				if (index != 1)
+				{
+					if (index == 2)
+					{
+						this.TagText = valueText;
+					}
+				}
+				else
+				{
+					this.BaseTag = valueText;
+				}
+			}
+			else
+			{
 				this.ID = Convert.ToInt32(valueText);
-				break;
-			case 1:
-				this.BaseTag = valueText;
-				break;
-			case 2:
-				this.TagText = valueText;
-				break;
 			}
 		}
 	}

@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<ItemEffectRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				ItemEffectRec obj2 = (ItemEffectRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					ItemEffectRec obj2 = (ItemEffectRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<ItemEffectRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				ItemEffectRec itemEffectRec = (ItemEffectRec)obj;
-				if (itemEffectRec.ParentItemID == parentID && !callback(itemEffectRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					ItemEffectRec itemEffectRec = (ItemEffectRec)obj;
+					if (itemEffectRec.ParentItemID == parentID && !callback(itemEffectRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

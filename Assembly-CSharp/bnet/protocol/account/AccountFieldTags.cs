@@ -56,58 +56,54 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 21)
 				{
-					int num2 = num;
-					if (num2 != 21)
+					if (num != 29)
 					{
-						if (num2 != 29)
+						if (num != 37)
 						{
-							if (num2 != 37)
+							if (num != 58)
 							{
-								if (num2 != 58)
+								if (num != 74)
 								{
-									if (num2 != 74)
+									if (num != 90)
 									{
-										if (num2 != 90)
+										Key key = ProtocolParser.ReadKey((byte)num, stream);
+										uint field = key.Field;
+										if (field == 0u)
 										{
-											Key key = ProtocolParser.ReadKey((byte)num, stream);
-											uint field = key.Field;
-											if (field == 0u)
-											{
-												throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-											}
-											ProtocolParser.SkipKey(stream, key);
+											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 										}
-										else
-										{
-											instance.GameAccountTags.Add(RegionTag.DeserializeLengthDelimited(stream));
-										}
+										ProtocolParser.SkipKey(stream, key);
 									}
 									else
 									{
-										instance.GameStatusTags.Add(ProgramTag.DeserializeLengthDelimited(stream));
+										instance.GameAccountTags.Add(RegionTag.DeserializeLengthDelimited(stream));
 									}
 								}
 								else
 								{
-									instance.GameLevelInfoTags.Add(ProgramTag.DeserializeLengthDelimited(stream));
+									instance.GameStatusTags.Add(ProgramTag.DeserializeLengthDelimited(stream));
 								}
 							}
 							else
 							{
-								instance.ParentalControlInfoTag = binaryReader.ReadUInt32();
+								instance.GameLevelInfoTags.Add(ProgramTag.DeserializeLengthDelimited(stream));
 							}
 						}
 						else
 						{
-							instance.PrivacyInfoTag = binaryReader.ReadUInt32();
+							instance.ParentalControlInfoTag = binaryReader.ReadUInt32();
 						}
 					}
 					else
 					{
-						instance.AccountLevelInfoTag = binaryReader.ReadUInt32();
+						instance.PrivacyInfoTag = binaryReader.ReadUInt32();
 					}
+				}
+				else
+				{
+					instance.AccountLevelInfoTag = binaryReader.ReadUInt32();
 				}
 			}
 			if (stream.Position == limit)

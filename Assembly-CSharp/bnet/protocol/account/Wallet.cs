@@ -43,121 +43,117 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 8)
 				{
-					int num2 = num;
-					if (num2 != 8)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								if (num != 40)
 								{
-									if (num2 != 40)
+									if (num != 50)
 									{
-										if (num2 != 50)
+										if (num != 58)
 										{
-											if (num2 != 58)
+											if (num != 66)
 											{
-												if (num2 != 66)
+												if (num != 74)
 												{
-													if (num2 != 74)
+													if (num != 82)
 													{
-														if (num2 != 82)
+														if (num != 90)
 														{
-															if (num2 != 90)
+															if (num != 98)
 															{
-																if (num2 != 98)
+																if (num != 106)
 																{
-																	if (num2 != 106)
+																	if (num != 114)
 																	{
-																		if (num2 != 114)
+																		if (num != 120)
 																		{
-																			if (num2 != 120)
+																			Key key = ProtocolParser.ReadKey((byte)num, stream);
+																			uint field = key.Field;
+																			if (field == 0u)
 																			{
-																				Key key = ProtocolParser.ReadKey((byte)num, stream);
-																				uint field = key.Field;
-																				if (field == 0u)
-																				{
-																					throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-																				}
-																				ProtocolParser.SkipKey(stream, key);
+																				throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 																			}
-																			else
-																			{
-																				instance.BirthDate = ProtocolParser.ReadUInt64(stream);
-																			}
+																			ProtocolParser.SkipKey(stream, key);
 																		}
 																		else
 																		{
-																			instance.LastName = ProtocolParser.ReadString(stream);
+																			instance.BirthDate = ProtocolParser.ReadUInt64(stream);
 																		}
 																	}
 																	else
 																	{
-																		instance.FirstName = ProtocolParser.ReadString(stream);
+																		instance.LastName = ProtocolParser.ReadString(stream);
 																	}
 																}
 																else
 																{
-																	instance.Street = ProtocolParser.ReadString(stream);
+																	instance.FirstName = ProtocolParser.ReadString(stream);
 																}
 															}
 															else
 															{
-																instance.LocaleId = ProtocolParser.ReadString(stream);
+																instance.Street = ProtocolParser.ReadString(stream);
 															}
 														}
 														else
 														{
-															instance.Bin = ProtocolParser.ReadString(stream);
+															instance.LocaleId = ProtocolParser.ReadString(stream);
 														}
 													}
 													else
 													{
-														instance.PaymentInfo = ProtocolParser.ReadBytes(stream);
+														instance.Bin = ProtocolParser.ReadString(stream);
 													}
 												}
 												else
 												{
-													instance.PostalCode = ProtocolParser.ReadString(stream);
+													instance.PaymentInfo = ProtocolParser.ReadBytes(stream);
 												}
 											}
 											else
 											{
-												instance.City = ProtocolParser.ReadString(stream);
+												instance.PostalCode = ProtocolParser.ReadString(stream);
 											}
 										}
 										else
 										{
-											instance.State = ProtocolParser.ReadString(stream);
+											instance.City = ProtocolParser.ReadString(stream);
 										}
 									}
 									else
 									{
-										instance.CountryId = ProtocolParser.ReadUInt32(stream);
+										instance.State = ProtocolParser.ReadString(stream);
 									}
 								}
 								else
 								{
-									instance.Description = ProtocolParser.ReadString(stream);
+									instance.CountryId = ProtocolParser.ReadUInt32(stream);
 								}
 							}
 							else
 							{
-								instance.WalletType = ProtocolParser.ReadUInt32(stream);
+								instance.Description = ProtocolParser.ReadString(stream);
 							}
 						}
 						else
 						{
-							instance.WalletId = ProtocolParser.ReadUInt64(stream);
+							instance.WalletType = ProtocolParser.ReadUInt32(stream);
 						}
 					}
 					else
 					{
-						instance.Region = ProtocolParser.ReadUInt32(stream);
+						instance.WalletId = ProtocolParser.ReadUInt64(stream);
 					}
+				}
+				else
+				{
+					instance.Region = ProtocolParser.ReadUInt32(stream);
 				}
 			}
 			if (stream.Position == limit)

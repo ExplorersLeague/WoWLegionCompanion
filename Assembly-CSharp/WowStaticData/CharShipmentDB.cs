@@ -13,24 +13,50 @@ namespace WowStaticData
 
 		public void EnumRecords(Predicate<CharShipmentRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				CharShipmentRec obj2 = (CharShipmentRec)obj;
-				if (!callback(obj2))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					CharShipmentRec obj2 = (CharShipmentRec)obj;
+					if (!callback(obj2))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}
 
 		public void EnumRecordsByParentID(int parentID, Predicate<CharShipmentRec> callback)
 		{
-			foreach (object obj in this.m_records.Values)
+			IEnumerator enumerator = this.m_records.Values.GetEnumerator();
+			try
 			{
-				CharShipmentRec charShipmentRec = (CharShipmentRec)obj;
-				if ((ulong)charShipmentRec.ContainerID == (ulong)((long)parentID) && !callback(charShipmentRec))
+				while (enumerator.MoveNext())
 				{
-					break;
+					object obj = enumerator.Current;
+					CharShipmentRec charShipmentRec = (CharShipmentRec)obj;
+					if ((ulong)charShipmentRec.ContainerID == (ulong)((long)parentID) && !callback(charShipmentRec))
+					{
+						break;
+					}
+				}
+			}
+			finally
+			{
+				IDisposable disposable;
+				if ((disposable = (enumerator as IDisposable)) != null)
+				{
+					disposable.Dispose();
 				}
 			}
 		}

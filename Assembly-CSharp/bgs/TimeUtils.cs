@@ -159,8 +159,7 @@ namespace bgs
 				return "sec";
 			}
 			unitsStr = unitsStr.ToLowerInvariant();
-			string text = unitsStr;
-			switch (text)
+			switch (unitsStr)
 			{
 			case "s":
 			case "sec":
@@ -196,8 +195,6 @@ namespace bgs
 
 		public const int MS_PER_HOUR = 3600000;
 
-		public const string DEFAULT_TIME_UNITS_STR = "sec";
-
 		public static readonly DateTime EPOCH_TIME = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		public static readonly TimeUtils.ElapsedStringSet SPLASHSCREEN_DATETIME_STRINGSET = new TimeUtils.ElapsedStringSet
@@ -210,6 +207,8 @@ namespace bgs
 			m_weeks = "GLOBAL_DATETIME_SPLASHSCREEN_WEEKS",
 			m_monthAgo = "GLOBAL_DATETIME_SPLASHSCREEN_MONTH"
 		};
+
+		public const string DEFAULT_TIME_UNITS_STR = "sec";
 
 		public enum ElapsedTimeType
 		{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Assets.SimpleAndroidNotifications
@@ -12,12 +13,17 @@ namespace Assets.SimpleAndroidNotifications
 			List<int> result;
 			if (PlayerPrefs.HasKey("NotificationHelper.Scheduled"))
 			{
-				result = (from i in PlayerPrefs.GetString("NotificationHelper.Scheduled").Split(new char[]
+				IEnumerable<string> source = from i in PlayerPrefs.GetString("NotificationHelper.Scheduled").Split(new char[]
 				{
 					'|'
 				})
 				where i != string.Empty
-				select int.Parse(i)).ToList<int>();
+				select i;
+				if (NotificationIdHandler.<>f__mg$cache0 == null)
+				{
+					NotificationIdHandler.<>f__mg$cache0 = new Func<string, int>(int.Parse);
+				}
+				result = source.Select(NotificationIdHandler.<>f__mg$cache0).ToList<int>();
 			}
 			else
 			{
@@ -59,5 +65,8 @@ namespace Assets.SimpleAndroidNotifications
 		}
 
 		private const string PlayerPrefsKey = "NotificationHelper.Scheduled";
+
+		[CompilerGenerated]
+		private static Func<string, int> <>f__mg$cache0;
 	}
 }

@@ -44,44 +44,40 @@ namespace bnet.protocol
 					}
 					return instance;
 				}
-				else
+				else if (num != 13)
 				{
-					int num2 = num;
-					if (num2 != 13)
+					if (num != 21)
 					{
-						if (num2 != 21)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.ProtoUrl = ProtocolParser.ReadString(stream);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.Hash = ProtocolParser.ReadBytes(stream);
+								instance.ProtoUrl = ProtocolParser.ReadString(stream);
 							}
 						}
 						else
 						{
-							instance.Usage = binaryReader.ReadUInt32();
+							instance.Hash = ProtocolParser.ReadBytes(stream);
 						}
 					}
 					else
 					{
-						instance.Region = binaryReader.ReadUInt32();
+						instance.Usage = binaryReader.ReadUInt32();
 					}
+				}
+				else
+				{
+					instance.Region = binaryReader.ReadUInt32();
 				}
 			}
 			if (stream.Position == limit)

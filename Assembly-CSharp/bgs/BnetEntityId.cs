@@ -107,11 +107,6 @@ namespace bgs
 			return num * 11 + this.m_lo.GetHashCode();
 		}
 
-		public override string ToString()
-		{
-			return string.Format("[hi={0} lo={1}]", this.m_hi, this.m_lo);
-		}
-
 		public static bool operator ==(BnetEntityId a, BnetEntityId b)
 		{
 			return object.ReferenceEquals(a, b) || (a != null && b != null && a.m_hi == b.m_hi && a.m_lo == b.m_lo);
@@ -120,6 +115,11 @@ namespace bgs
 		public static bool operator !=(BnetEntityId a, BnetEntityId b)
 		{
 			return !(a == b);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("[hi={0} lo={1}]", this.m_hi, this.m_lo);
 		}
 
 		protected ulong m_hi;

@@ -250,8 +250,6 @@ namespace bgs
 		{
 		}
 
-		private const uint PWD_FOURCC = 5265220u;
-
 		private ServiceDescriptor m_challengeService = new ChallengeService();
 
 		private ServiceDescriptor m_challengeNotifyService = new ChallengeNotify();
@@ -261,6 +259,8 @@ namespace bgs
 		private Dictionary<uint, ChallengeInfo> m_challengePendingList = new Dictionary<uint, ChallengeInfo>();
 
 		private Dictionary<uint, ulong> s_pendingAnswers = new Dictionary<uint, ulong>();
+
+		private const uint PWD_FOURCC = 5265220u;
 
 		private ExternalChallenge m_nextExternalChallenge;
 	}

@@ -102,65 +102,68 @@ public class UiAnimation : MonoBehaviour
 		}
 		foreach (UiAnimation.UiLayer uiLayer in uiSourceAnimation.frame.layers)
 		{
-			UiAnimation.UiSourceTexture texture;
-			foreach (UiAnimation.UiSourceTexture texture2 in uiLayer.textures)
+			using (List<UiAnimation.UiSourceTexture>.Enumerator enumerator7 = uiLayer.textures.GetEnumerator())
 			{
-				texture = texture2;
-				if (texture.m_parentKey != null)
+				while (enumerator7.MoveNext())
 				{
-					UiAnimation.UiTexture uiTexture;
-					this.m_textures.TryGetValue(texture.m_parentKey, out uiTexture);
-					if (uiTexture != null)
+					UiAnimation.<Deserialize>c__AnonStorey0 <Deserialize>c__AnonStorey = new UiAnimation.<Deserialize>c__AnonStorey0();
+					<Deserialize>c__AnonStorey.texture = enumerator7.Current;
+					if (<Deserialize>c__AnonStorey.texture.m_parentKey != null)
 					{
-						Debug.Log("Found duplicate texture " + texture.m_parentKey);
-					}
-					else
-					{
-						int textureAtlasMemberID = 0;
-						StaticDB.uiTextureAtlasMemberDB.EnumRecords(delegate(UiTextureAtlasMemberRec memberRec)
+						UiAnimation.UiTexture uiTexture;
+						this.m_textures.TryGetValue(<Deserialize>c__AnonStorey.texture.m_parentKey, out uiTexture);
+						if (uiTexture != null)
 						{
-							if (memberRec.CommittedName != null && texture.m_atlas != null && memberRec.CommittedName.ToLower() == texture.m_atlas.ToLower())
-							{
-								textureAtlasMemberID = memberRec.ID;
-								return false;
-							}
-							return true;
-						});
-						Sprite sprite = null;
-						if (textureAtlasMemberID > 0)
-						{
-							sprite = TextureAtlas.GetSprite(textureAtlasMemberID);
-						}
-						else if (texture.m_resourceImage != null)
-						{
-							sprite = Resources.Load<Sprite>(texture.m_resourceImage);
-						}
-						if (sprite != null)
-						{
-							UiAnimation.UiTexture uiTexture2 = new UiAnimation.UiTexture();
-							uiTexture2.m_alpha = texture.m_alpha;
-							uiTexture2.m_alphaMode = texture.m_alphaMode;
-							uiTexture2.m_anchor = ((texture.m_anchors.Count <= 0) ? null : texture.m_anchors.ToArray()[0]);
-							uiTexture2.m_atlas = texture.m_atlas;
-							uiTexture2.m_resourceImage = texture.m_resourceImage;
-							uiTexture2.m_width = texture.m_width;
-							uiTexture2.m_height = texture.m_height;
-							uiTexture2.m_hidden = texture.m_hidden;
-							uiTexture2.m_parentKey = texture.m_parentKey;
-							uiTexture2.m_sprite = sprite;
-							this.m_textures.Add(texture.m_parentKey, uiTexture2);
+							Debug.Log("Found duplicate texture " + <Deserialize>c__AnonStorey.texture.m_parentKey);
 						}
 						else
 						{
-							Debug.Log(string.Concat(new object[]
+							int textureAtlasMemberID = 0;
+							StaticDB.uiTextureAtlasMemberDB.EnumRecords(delegate(UiTextureAtlasMemberRec memberRec)
 							{
-								"Could not find sprite for textureAtlasMemberID ",
-								textureAtlasMemberID,
-								" resourceImage ",
-								texture.m_resourceImage,
-								" in Ui Animation ",
-								animName
-							}));
+								if (memberRec.CommittedName != null && <Deserialize>c__AnonStorey.texture.m_atlas != null && memberRec.CommittedName.ToLower() == <Deserialize>c__AnonStorey.texture.m_atlas.ToLower())
+								{
+									textureAtlasMemberID = memberRec.ID;
+									return false;
+								}
+								return true;
+							});
+							Sprite sprite = null;
+							if (textureAtlasMemberID > 0)
+							{
+								sprite = TextureAtlas.GetSprite(textureAtlasMemberID);
+							}
+							else if (<Deserialize>c__AnonStorey.texture.m_resourceImage != null)
+							{
+								sprite = Resources.Load<Sprite>(<Deserialize>c__AnonStorey.texture.m_resourceImage);
+							}
+							if (sprite != null)
+							{
+								UiAnimation.UiTexture uiTexture2 = new UiAnimation.UiTexture();
+								uiTexture2.m_alpha = <Deserialize>c__AnonStorey.texture.m_alpha;
+								uiTexture2.m_alphaMode = <Deserialize>c__AnonStorey.texture.m_alphaMode;
+								uiTexture2.m_anchor = ((<Deserialize>c__AnonStorey.texture.m_anchors.Count <= 0) ? null : <Deserialize>c__AnonStorey.texture.m_anchors.ToArray()[0]);
+								uiTexture2.m_atlas = <Deserialize>c__AnonStorey.texture.m_atlas;
+								uiTexture2.m_resourceImage = <Deserialize>c__AnonStorey.texture.m_resourceImage;
+								uiTexture2.m_width = <Deserialize>c__AnonStorey.texture.m_width;
+								uiTexture2.m_height = <Deserialize>c__AnonStorey.texture.m_height;
+								uiTexture2.m_hidden = <Deserialize>c__AnonStorey.texture.m_hidden;
+								uiTexture2.m_parentKey = <Deserialize>c__AnonStorey.texture.m_parentKey;
+								uiTexture2.m_sprite = sprite;
+								this.m_textures.Add(<Deserialize>c__AnonStorey.texture.m_parentKey, uiTexture2);
+							}
+							else
+							{
+								Debug.Log(string.Concat(new object[]
+								{
+									"Could not find sprite for textureAtlasMemberID ",
+									textureAtlasMemberID,
+									" resourceImage ",
+									<Deserialize>c__AnonStorey.texture.m_resourceImage,
+									" in Ui Animation ",
+									animName
+								}));
+							}
 						}
 					}
 				}
@@ -702,8 +705,8 @@ public class UiAnimation : MonoBehaviour
 		[XmlAttribute("h")]
 		public string m_height;
 
-		[XmlArrayItem("Anchor")]
 		[XmlArray("Anchors")]
+		[XmlArrayItem("Anchor")]
 		public List<UiAnimation.UiAnchor> m_anchors = new List<UiAnimation.UiAnchor>();
 	}
 

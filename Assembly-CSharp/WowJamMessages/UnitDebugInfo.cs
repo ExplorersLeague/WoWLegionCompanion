@@ -25,20 +25,20 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "level", Type = FlexJamType.Int32)]
 		public int Level { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "aiTriggerActionDebugInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "aiTriggerActionDebugInfo")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "aiTriggerActionDebugInfo", Type = FlexJamType.Struct)]
 		public AITriggerActionDebugInfo[] AiTriggerActionDebugInfo { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "spellDebugInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "spellDebugInfo")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "spellDebugInfo", Type = FlexJamType.Struct)]
 		public CreatureSpellDebugInfo[] SpellDebugInfo { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "effectiveStatValues")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "effectiveStatValues", Type = FlexJamType.Int32)]
 		public int[] EffectiveStatValues { get; set; }
 
-		[FlexJamMember(Name = "spawnRegionName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "spawnRegionName")]
+		[FlexJamMember(Name = "spawnRegionName", Type = FlexJamType.String)]
 		public string SpawnRegionName { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "spawnGroupName")]
@@ -61,16 +61,16 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "playerClassID", Type = FlexJamType.Int32)]
 		public int PlayerClassID { get; set; }
 
-		[FlexJamMember(Name = "percentSupportAction", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "percentSupportAction")]
+		[FlexJamMember(Name = "percentSupportAction", Type = FlexJamType.Int32)]
 		public int PercentSupportAction { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "spawnGroupID")]
 		[FlexJamMember(Name = "spawnGroupID", Type = FlexJamType.Int32)]
 		public int SpawnGroupID { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "spawnEventDebugInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "spawnEventDebugInfo")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "spawnEventDebugInfo", Type = FlexJamType.Struct)]
 		public SpawnEventDebugInfo[] SpawnEventDebugInfo { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "auraDebugInfo")]

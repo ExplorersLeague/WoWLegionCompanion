@@ -42,60 +42,56 @@ namespace bnet.protocol.game_utilities
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 26)
 					{
-						if (num2 != 26)
+						if (num != 34)
 						{
-							if (num2 != 34)
+							if (num != 42)
 							{
-								if (num2 != 42)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else if (instance.Host == null)
-								{
-									instance.Host = ProcessId.DeserializeLengthDelimited(stream);
-								}
-								else
-								{
-									ProcessId.DeserializeLengthDelimited(stream, instance.Host);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
-							else if (instance.BnetAccountId == null)
+							else if (instance.Host == null)
 							{
-								instance.BnetAccountId = EntityId.DeserializeLengthDelimited(stream);
+								instance.Host = ProcessId.DeserializeLengthDelimited(stream);
 							}
 							else
 							{
-								EntityId.DeserializeLengthDelimited(stream, instance.BnetAccountId);
+								ProcessId.DeserializeLengthDelimited(stream, instance.Host);
 							}
 						}
-						else if (instance.GameAccountId == null)
+						else if (instance.BnetAccountId == null)
 						{
-							instance.GameAccountId = EntityId.DeserializeLengthDelimited(stream);
+							instance.BnetAccountId = EntityId.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							EntityId.DeserializeLengthDelimited(stream, instance.GameAccountId);
+							EntityId.DeserializeLengthDelimited(stream, instance.BnetAccountId);
 						}
 					}
-					else if (instance.Id == null)
+					else if (instance.GameAccountId == null)
 					{
-						instance.Id = EntityId.DeserializeLengthDelimited(stream);
+						instance.GameAccountId = EntityId.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						EntityId.DeserializeLengthDelimited(stream, instance.Id);
+						EntityId.DeserializeLengthDelimited(stream, instance.GameAccountId);
 					}
+				}
+				else if (instance.Id == null)
+				{
+					instance.Id = EntityId.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					EntityId.DeserializeLengthDelimited(stream, instance.Id);
 				}
 			}
 			if (stream.Position == limit)

@@ -46,16 +46,11 @@ namespace bnet.protocol.server_pool
 					}
 					return instance;
 				}
-				else
+				else if (num != 13)
 				{
-					int num2 = num;
-					switch (num2)
+					if (num != 16)
 					{
-					case 13:
-						instance.CurrentLoad = binaryReader.ReadSingle();
-						break;
-					default:
-						if (num2 != 24)
+						if (num != 24)
 						{
 							Key key = ProtocolParser.ReadKey((byte)num, stream);
 							uint field = key.Field;
@@ -69,11 +64,15 @@ namespace bnet.protocol.server_pool
 						{
 							instance.PlayerCount = ProtocolParser.ReadUInt32(stream);
 						}
-						break;
-					case 16:
-						instance.GameCount = ProtocolParser.ReadUInt32(stream);
-						break;
 					}
+					else
+					{
+						instance.GameCount = ProtocolParser.ReadUInt32(stream);
+					}
+				}
+				else
+				{
+					instance.CurrentLoad = binaryReader.ReadSingle();
 				}
 			}
 			if (stream.Position == limit)

@@ -42,30 +42,26 @@ namespace bnet.protocol
 					}
 					return instance;
 				}
-				else
+				else if (num != 8)
 				{
-					int num2 = num;
-					if (num2 != 8)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else
-						{
-							instance.Epoch = ProtocolParser.ReadUInt32(stream);
-						}
+						ProtocolParser.SkipKey(stream, key);
 					}
 					else
 					{
-						instance.Label = ProtocolParser.ReadUInt32(stream);
+						instance.Epoch = ProtocolParser.ReadUInt32(stream);
 					}
+				}
+				else
+				{
+					instance.Label = ProtocolParser.ReadUInt32(stream);
 				}
 			}
 			if (stream.Position == limit)

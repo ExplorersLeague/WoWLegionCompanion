@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Utilities;
 
@@ -8,6 +9,16 @@ namespace Newtonsoft.Json.Serialization
 {
 	public class DefaultSerializationBinder : SerializationBinder
 	{
+		public DefaultSerializationBinder()
+		{
+			if (DefaultSerializationBinder.<>f__mg$cache0 == null)
+			{
+				DefaultSerializationBinder.<>f__mg$cache0 = new Func<DefaultSerializationBinder.TypeNameKey, Type>(DefaultSerializationBinder.GetTypeFromTypeNameKey);
+			}
+			this._typeCache = new ThreadSafeStore<DefaultSerializationBinder.TypeNameKey, Type>(DefaultSerializationBinder.<>f__mg$cache0);
+			base..ctor();
+		}
+
 		private static Type GetTypeFromTypeNameKey(DefaultSerializationBinder.TypeNameKey typeNameKey)
 		{
 			string assemblyName = typeNameKey.AssemblyName;
@@ -43,7 +54,10 @@ namespace Newtonsoft.Json.Serialization
 
 		internal static readonly DefaultSerializationBinder Instance = new DefaultSerializationBinder();
 
-		private readonly ThreadSafeStore<DefaultSerializationBinder.TypeNameKey, Type> _typeCache = new ThreadSafeStore<DefaultSerializationBinder.TypeNameKey, Type>(new Func<DefaultSerializationBinder.TypeNameKey, Type>(DefaultSerializationBinder.GetTypeFromTypeNameKey));
+		private readonly ThreadSafeStore<DefaultSerializationBinder.TypeNameKey, Type> _typeCache;
+
+		[CompilerGenerated]
+		private static Func<DefaultSerializationBinder.TypeNameKey, Type> <>f__mg$cache0;
 
 		internal struct TypeNameKey
 		{

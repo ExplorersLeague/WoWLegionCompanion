@@ -11,17 +11,6 @@ public class ChatPopup : MonoBehaviour
 
 	private void Update()
 	{
-		if (TouchScreenKeyboard.visible)
-		{
-			Vector3 vector;
-			RectTransformUtility.ScreenPointToWorldPointInRectangle(this.textToSend.gameObject.GetComponent<RectTransform>(), TouchScreenKeyboard.area.max, null, ref vector);
-			base.transform.position = new Vector3(base.transform.position.x, vector.y, base.transform.position.z);
-		}
-		else
-		{
-			base.transform.localPosition = Vector3.zero;
-		}
-		TouchScreenKeyboard.hideInput = true;
 	}
 
 	public void OnSendText()

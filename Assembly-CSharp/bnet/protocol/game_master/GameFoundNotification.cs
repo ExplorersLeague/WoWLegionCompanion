@@ -49,48 +49,44 @@ namespace bnet.protocol.game_master
 					}
 					return instance;
 				}
-				else
+				else if (num != 9)
 				{
-					int num2 = num;
-					if (num2 != 9)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 34)
 							{
-								if (num2 != 34)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.ConnectInfo.Add(bnet.protocol.game_master.ConnectInfo.DeserializeLengthDelimited(stream));
-								}
-							}
-							else if (instance.GameHandle == null)
-							{
-								instance.GameHandle = GameHandle.DeserializeLengthDelimited(stream);
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								GameHandle.DeserializeLengthDelimited(stream, instance.GameHandle);
+								instance.ConnectInfo.Add(bnet.protocol.game_master.ConnectInfo.DeserializeLengthDelimited(stream));
 							}
+						}
+						else if (instance.GameHandle == null)
+						{
+							instance.GameHandle = GameHandle.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							instance.ErrorCode = ProtocolParser.ReadUInt32(stream);
+							GameHandle.DeserializeLengthDelimited(stream, instance.GameHandle);
 						}
 					}
 					else
 					{
-						instance.RequestId = binaryReader.ReadUInt64();
+						instance.ErrorCode = ProtocolParser.ReadUInt32(stream);
 					}
+				}
+				else
+				{
+					instance.RequestId = binaryReader.ReadUInt64();
 				}
 			}
 			if (stream.Position == limit)

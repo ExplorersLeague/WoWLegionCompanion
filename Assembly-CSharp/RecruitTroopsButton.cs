@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -90,14 +91,27 @@ public class RecruitTroopsButton : MonoBehaviour
 	private void Update()
 	{
 		int num = 0;
-		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		IEnumerator enumerator = PersistentShipmentData.shipmentDictionary.Values.GetEnumerator();
+		try
 		{
-			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			long num2 = GarrisonStatus.CurrentTime() - (long)jamCharacterShipment.CreationTime;
-			long num3 = (long)jamCharacterShipment.ShipmentDuration - num2;
-			if (num3 <= 0L)
+			while (enumerator.MoveNext())
 			{
-				num++;
+				object obj = enumerator.Current;
+				JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+				long num2 = GarrisonStatus.CurrentTime() - (long)jamCharacterShipment.CreationTime;
+				long num3 = (long)jamCharacterShipment.ShipmentDuration - num2;
+				if (num3 <= 0L)
+				{
+					num++;
+				}
+			}
+		}
+		finally
+		{
+			IDisposable disposable;
+			if ((disposable = (enumerator as IDisposable)) != null)
+			{
+				disposable.Dispose();
 			}
 		}
 		if (num != this.m_numReadyTroops)

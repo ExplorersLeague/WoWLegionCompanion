@@ -43,34 +43,30 @@ namespace bnet.protocol.channel_invitation
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 16)
 					{
-						if (num2 != 16)
+						Key key = ProtocolParser.ReadKey((byte)num, stream);
+						uint field = key.Field;
+						if (field == 0u)
 						{
-							Key key = ProtocolParser.ReadKey((byte)num, stream);
-							uint field = key.Field;
-							if (field == 0u)
-							{
-								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-							}
-							ProtocolParser.SkipKey(stream, key);
+							throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 						}
-						else
-						{
-							instance.Reason = ProtocolParser.ReadUInt32(stream);
-						}
-					}
-					else if (instance.Invitation == null)
-					{
-						instance.Invitation = Invitation.DeserializeLengthDelimited(stream);
+						ProtocolParser.SkipKey(stream, key);
 					}
 					else
 					{
-						Invitation.DeserializeLengthDelimited(stream, instance.Invitation);
+						instance.Reason = ProtocolParser.ReadUInt32(stream);
 					}
+				}
+				else if (instance.Invitation == null)
+				{
+					instance.Invitation = Invitation.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					Invitation.DeserializeLengthDelimited(stream, instance.Invitation);
 				}
 			}
 			if (stream.Position == limit)

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamCurrencySimple", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamCurrencySimple", Version = 28333852u)]
 	public class JamCurrencySimple
 	{
 		[System.Runtime.Serialization.DataMember(Name = "type")]

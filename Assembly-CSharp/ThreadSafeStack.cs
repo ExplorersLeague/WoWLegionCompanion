@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 
-public class ThreadSafeStack : IDisposable, MemoryStreamStack
+public class ThreadSafeStack : MemoryStreamStack, IDisposable
 {
 	public MemoryStream Pop()
 	{
-		Stack<MemoryStream> obj = this.stack;
+		object obj = this.stack;
 		MemoryStream result;
 		lock (obj)
 		{
@@ -24,7 +24,7 @@ public class ThreadSafeStack : IDisposable, MemoryStreamStack
 
 	public void Push(MemoryStream stream)
 	{
-		Stack<MemoryStream> obj = this.stack;
+		object obj = this.stack;
 		lock (obj)
 		{
 			this.stack.Push(stream);
@@ -33,7 +33,7 @@ public class ThreadSafeStack : IDisposable, MemoryStreamStack
 
 	public void Dispose()
 	{
-		Stack<MemoryStream> obj = this.stack;
+		object obj = this.stack;
 		lock (obj)
 		{
 			this.stack.Clear();

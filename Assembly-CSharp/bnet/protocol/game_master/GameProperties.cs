@@ -51,55 +51,51 @@ namespace bnet.protocol.game_master
 					}
 					return instance;
 				}
-				else
+				else if (num != 10)
 				{
-					int num2 = num;
-					if (num2 != 10)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 24)
 						{
-							if (num2 != 24)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								if (num != 45)
 								{
-									if (num2 != 45)
+									Key key = ProtocolParser.ReadKey((byte)num, stream);
+									uint field = key.Field;
+									if (field == 0u)
 									{
-										Key key = ProtocolParser.ReadKey((byte)num, stream);
-										uint field = key.Field;
-										if (field == 0u)
-										{
-											throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-										}
-										ProtocolParser.SkipKey(stream, key);
+										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 									}
-									else
-									{
-										instance.ProgramId = binaryReader.ReadUInt32();
-									}
+									ProtocolParser.SkipKey(stream, key);
 								}
 								else
 								{
-									instance.Open = ProtocolParser.ReadBool(stream);
+									instance.ProgramId = binaryReader.ReadUInt32();
 								}
 							}
 							else
 							{
-								instance.Create = ProtocolParser.ReadBool(stream);
+								instance.Open = ProtocolParser.ReadBool(stream);
 							}
-						}
-						else if (instance.Filter == null)
-						{
-							instance.Filter = AttributeFilter.DeserializeLengthDelimited(stream);
 						}
 						else
 						{
-							AttributeFilter.DeserializeLengthDelimited(stream, instance.Filter);
+							instance.Create = ProtocolParser.ReadBool(stream);
 						}
+					}
+					else if (instance.Filter == null)
+					{
+						instance.Filter = AttributeFilter.DeserializeLengthDelimited(stream);
 					}
 					else
 					{
-						instance.CreationAttributes.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
+						AttributeFilter.DeserializeLengthDelimited(stream, instance.Filter);
 					}
+				}
+				else
+				{
+					instance.CreationAttributes.Add(bnet.protocol.attribute.Attribute.DeserializeLengthDelimited(stream));
 				}
 			}
 			if (stream.Position == limit)

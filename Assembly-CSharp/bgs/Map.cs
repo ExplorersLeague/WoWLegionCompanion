@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace bgs
 {
-	public class Map<TKey, TValue> : IEnumerable, IEnumerable<KeyValuePair<TKey, TValue>>
+	public class Map<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable
 	{
 		public Map()
 		{
@@ -19,16 +20,6 @@ namespace bgs
 		public Map(IEqualityComparer<TKey> comparer)
 		{
 			this.Init(4, comparer);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return new Map<TKey, TValue>.Enumerator(this);
-		}
-
-		IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
-		{
-			return new Map<TKey, TValue>.Enumerator(this);
 		}
 
 		public int Count
@@ -421,6 +412,16 @@ namespace bgs
 			}
 		}
 
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return new Map<TKey, TValue>.Enumerator(this);
+		}
+
+		IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+		{
+			return new Map<TKey, TValue>.Enumerator(this);
+		}
+
 		public Map<TKey, TValue>.Enumerator GetEnumerator()
 		{
 			return new Map<TKey, TValue>.Enumerator(this);
@@ -454,26 +455,15 @@ namespace bgs
 
 		private int generation;
 
-		public struct Enumerator : IDisposable, IEnumerator, IEnumerator<KeyValuePair<TKey, TValue>>
+		private delegate TRet Transform<TRet>(TKey key, TValue value);
+
+		public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>, IEnumerator, IDisposable
 		{
 			internal Enumerator(Map<TKey, TValue> dictionary)
 			{
+				this = default(Map<TKey, TValue>.Enumerator);
 				this.dictionary = dictionary;
 				this.stamp = dictionary.generation;
-			}
-
-			object IEnumerator.Current
-			{
-				get
-				{
-					this.VerifyCurrent();
-					return this.current;
-				}
-			}
-
-			void IEnumerator.Reset()
-			{
-				this.Reset();
 			}
 
 			public bool MoveNext()
@@ -522,6 +512,20 @@ namespace bgs
 				}
 			}
 
+			object IEnumerator.Current
+			{
+				get
+				{
+					this.VerifyCurrent();
+					return this.current;
+				}
+			}
+
+			void IEnumerator.Reset()
+			{
+				this.Reset();
+			}
+
 			internal void Reset()
 			{
 				this.VerifyState();
@@ -563,7 +567,7 @@ namespace bgs
 			internal KeyValuePair<TKey, TValue> current;
 		}
 
-		public sealed class KeyCollection : IEnumerable, ICollection, ICollection<TKey>, IEnumerable<TKey>
+		public sealed class KeyCollection : ICollection<TKey>, IEnumerable<TKey>, ICollection, IEnumerable
 		{
 			public KeyCollection(Map<TKey, TValue> dictionary)
 			{
@@ -572,6 +576,17 @@ namespace bgs
 					throw new ArgumentNullException("dictionary");
 				}
 				this.dictionary = dictionary;
+			}
+
+			public void CopyTo(TKey[] array, int index)
+			{
+				this.dictionary.CopyToCheck(array, index);
+				this.dictionary.CopyKeys(array, index);
+			}
+
+			public Map<TKey, TValue>.KeyCollection.Enumerator GetEnumerator()
+			{
+				return new Map<TKey, TValue>.KeyCollection.Enumerator(this.dictionary);
 			}
 
 			void ICollection<TKey>.Add(TKey item)
@@ -608,12 +623,25 @@ namespace bgs
 					return;
 				}
 				this.dictionary.CopyToCheck(array, index);
-				this.dictionary.Do_ICollectionCopyTo<TKey>(array, index, new Map<TKey, TValue>.Transform<TKey>(Map<TKey, TValue>.pick_key));
+				Map<TKey, TValue> map = this.dictionary;
+				if (Map<TKey, TValue>.KeyCollection.<>f__mg$cache0 == null)
+				{
+					Map<TKey, TValue>.KeyCollection.<>f__mg$cache0 = new Map<TKey, TValue>.Transform<TKey>(Map<TKey, TValue>.pick_key);
+				}
+				map.Do_ICollectionCopyTo<TKey>(array, index, Map<TKey, TValue>.KeyCollection.<>f__mg$cache0);
 			}
 
 			IEnumerator IEnumerable.GetEnumerator()
 			{
 				return this.GetEnumerator();
+			}
+
+			public int Count
+			{
+				get
+				{
+					return this.dictionary.Count;
+				}
 			}
 
 			bool ICollection<TKey>.IsReadOnly
@@ -640,45 +668,16 @@ namespace bgs
 				}
 			}
 
-			public void CopyTo(TKey[] array, int index)
-			{
-				this.dictionary.CopyToCheck(array, index);
-				this.dictionary.CopyKeys(array, index);
-			}
-
-			public Map<TKey, TValue>.KeyCollection.Enumerator GetEnumerator()
-			{
-				return new Map<TKey, TValue>.KeyCollection.Enumerator(this.dictionary);
-			}
-
-			public int Count
-			{
-				get
-				{
-					return this.dictionary.Count;
-				}
-			}
-
 			private Map<TKey, TValue> dictionary;
 
-			public struct Enumerator : IDisposable, IEnumerator, IEnumerator<TKey>
+			[CompilerGenerated]
+			private static Map<TKey, TValue>.Transform<TKey> <>f__mg$cache0;
+
+			public struct Enumerator : IEnumerator<TKey>, IDisposable, IEnumerator
 			{
 				internal Enumerator(Map<TKey, TValue> host)
 				{
 					this.host_enumerator = host.GetEnumerator();
-				}
-
-				object IEnumerator.Current
-				{
-					get
-					{
-						return this.host_enumerator.CurrentKey;
-					}
-				}
-
-				void IEnumerator.Reset()
-				{
-					this.host_enumerator.Reset();
 				}
 
 				public void Dispose()
@@ -699,11 +698,24 @@ namespace bgs
 					}
 				}
 
+				object IEnumerator.Current
+				{
+					get
+					{
+						return this.host_enumerator.CurrentKey;
+					}
+				}
+
+				void IEnumerator.Reset()
+				{
+					this.host_enumerator.Reset();
+				}
+
 				private Map<TKey, TValue>.Enumerator host_enumerator;
 			}
 		}
 
-		public sealed class ValueCollection : IEnumerable, ICollection, ICollection<TValue>, IEnumerable<TValue>
+		public sealed class ValueCollection : ICollection<TValue>, IEnumerable<TValue>, ICollection, IEnumerable
 		{
 			public ValueCollection(Map<TKey, TValue> dictionary)
 			{
@@ -712,6 +724,17 @@ namespace bgs
 					throw new ArgumentNullException("dictionary");
 				}
 				this.dictionary = dictionary;
+			}
+
+			public void CopyTo(TValue[] array, int index)
+			{
+				this.dictionary.CopyToCheck(array, index);
+				this.dictionary.CopyValues(array, index);
+			}
+
+			public Map<TKey, TValue>.ValueCollection.Enumerator GetEnumerator()
+			{
+				return new Map<TKey, TValue>.ValueCollection.Enumerator(this.dictionary);
 			}
 
 			void ICollection<TValue>.Add(TValue item)
@@ -748,12 +771,25 @@ namespace bgs
 					return;
 				}
 				this.dictionary.CopyToCheck(array, index);
-				this.dictionary.Do_ICollectionCopyTo<TValue>(array, index, new Map<TKey, TValue>.Transform<TValue>(Map<TKey, TValue>.pick_value));
+				Map<TKey, TValue> map = this.dictionary;
+				if (Map<TKey, TValue>.ValueCollection.<>f__mg$cache0 == null)
+				{
+					Map<TKey, TValue>.ValueCollection.<>f__mg$cache0 = new Map<TKey, TValue>.Transform<TValue>(Map<TKey, TValue>.pick_value);
+				}
+				map.Do_ICollectionCopyTo<TValue>(array, index, Map<TKey, TValue>.ValueCollection.<>f__mg$cache0);
 			}
 
 			IEnumerator IEnumerable.GetEnumerator()
 			{
 				return this.GetEnumerator();
+			}
+
+			public int Count
+			{
+				get
+				{
+					return this.dictionary.Count;
+				}
 			}
 
 			bool ICollection<TValue>.IsReadOnly
@@ -780,45 +816,16 @@ namespace bgs
 				}
 			}
 
-			public void CopyTo(TValue[] array, int index)
-			{
-				this.dictionary.CopyToCheck(array, index);
-				this.dictionary.CopyValues(array, index);
-			}
-
-			public Map<TKey, TValue>.ValueCollection.Enumerator GetEnumerator()
-			{
-				return new Map<TKey, TValue>.ValueCollection.Enumerator(this.dictionary);
-			}
-
-			public int Count
-			{
-				get
-				{
-					return this.dictionary.Count;
-				}
-			}
-
 			private Map<TKey, TValue> dictionary;
 
-			public struct Enumerator : IDisposable, IEnumerator, IEnumerator<TValue>
+			[CompilerGenerated]
+			private static Map<TKey, TValue>.Transform<TValue> <>f__mg$cache0;
+
+			public struct Enumerator : IEnumerator<TValue>, IDisposable, IEnumerator
 			{
 				internal Enumerator(Map<TKey, TValue> host)
 				{
 					this.host_enumerator = host.GetEnumerator();
-				}
-
-				object IEnumerator.Current
-				{
-					get
-					{
-						return this.host_enumerator.CurrentValue;
-					}
-				}
-
-				void IEnumerator.Reset()
-				{
-					this.host_enumerator.Reset();
 				}
 
 				public void Dispose()
@@ -839,10 +846,21 @@ namespace bgs
 					}
 				}
 
+				object IEnumerator.Current
+				{
+					get
+					{
+						return this.host_enumerator.CurrentValue;
+					}
+				}
+
+				void IEnumerator.Reset()
+				{
+					this.host_enumerator.Reset();
+				}
+
 				private Map<TKey, TValue>.Enumerator host_enumerator;
 			}
 		}
-
-		private delegate TRet Transform<TRet>(TKey key, TValue value);
 	}
 }

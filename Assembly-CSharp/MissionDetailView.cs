@@ -109,6 +109,10 @@ public class MissionDetailView : MonoBehaviour
 		{
 			this.m_partyDebuffsText.text = StaticDB.GetString("PARTY_DEBUFFS", null);
 		}
+		if (Main.instance.IsNarrowScreen())
+		{
+			this.NarrowScreenAdjust();
+		}
 	}
 
 	public void OnAssetBundleManagerInitialized()
@@ -134,6 +138,11 @@ public class MissionDetailView : MonoBehaviour
 	{
 		Main.instance.m_UISound.Play_CloseButton();
 		base.gameObject.SetActive(false);
+	}
+
+	private void OnApplicationPause(bool paused)
+	{
+		this.HideMissionDetailView();
 	}
 
 	private void OnEnable()
@@ -652,8 +661,28 @@ public class MissionDetailView : MonoBehaviour
 					}
 				}
 			}
+			if (num3 > 8)
+			{
+				this.m_partyBuffsText.text = string.Empty;
+			}
+			else
+			{
+				this.m_partyBuffsText.text = StaticDB.GetString("PARTY_BUFFS", null);
+			}
 			if (this.m_partyBuffGroup != null)
 			{
+				HorizontalLayoutGroup component2 = this.m_partyBuffGroup.GetComponent<HorizontalLayoutGroup>();
+				if (component2 != null)
+				{
+					if (num3 > 10 && Main.instance.IsNarrowScreen())
+					{
+						component2.spacing = 3f;
+					}
+					else
+					{
+						component2.spacing = 6f;
+					}
+				}
 				this.m_partyBuffGroup.SetActive(num3 > 0);
 			}
 			if (this.m_partyDebuffGroup != null)
@@ -692,15 +721,15 @@ public class MissionDetailView : MonoBehaviour
 			{
 				this.m_startMissionButton.material.SetFloat("_GrayscaleAmount", 0f);
 				this.m_startMissionButtonText.color = new Color(1f, 0.8588f, 0f, 1f);
-				Shadow component2 = this.m_startMissionButtonText.GetComponent<Shadow>();
-				component2.enabled = true;
+				Shadow component3 = this.m_startMissionButtonText.GetComponent<Shadow>();
+				component3.enabled = true;
 			}
 			else
 			{
 				this.m_startMissionButton.material.SetFloat("_GrayscaleAmount", 1f);
 				this.m_startMissionButtonText.color = Color.gray;
-				Shadow component3 = this.m_startMissionButtonText.GetComponent<Shadow>();
-				component3.enabled = false;
+				Shadow component4 = this.m_startMissionButtonText.GetComponent<Shadow>();
+				component4.enabled = false;
 			}
 			Duration duration = new Duration(adjustedMissionDuration, false);
 			if (this.missionLocationText != null)
@@ -828,14 +857,7 @@ public class MissionDetailView : MonoBehaviour
 		else if (newChance > this.m_percentChance)
 		{
 		}
-		this.m_bonusLootChanceText.text = string.Concat(new object[]
-		{
-			"<color=#ffff00ff>",
-			StaticDB.GetString("BONUS", "Bonus:"),
-			" </color>\n<color=#ff8600ff>",
-			Math.Max(0, newChance - 100),
-			"%</color>"
-		});
+		this.m_bonusLootChanceText.text = "<color=#ff9600ff>" + Math.Max(0, newChance - 100) + "%</color>";
 		this.m_percentChance = newChance;
 	}
 
@@ -1087,6 +1109,24 @@ public class MissionDetailView : MonoBehaviour
 		}
 	}
 
+	public void NarrowScreenAdjust()
+	{
+		GridLayoutGroup component = this.m_EnemiesGroup.GetComponent<GridLayoutGroup>();
+		if (component != null)
+		{
+			Vector2 spacing = component.spacing;
+			spacing.x = 40f;
+			component.spacing = spacing;
+		}
+		component = this.m_FollowerSlotGroup.GetComponent<GridLayoutGroup>();
+		if (component != null)
+		{
+			Vector2 spacing2 = component.spacing;
+			spacing2.x = 40f;
+			component.spacing = spacing2;
+		}
+	}
+
 	[Header("Main Mission Display")]
 	public Text missionNameText;
 
@@ -1229,4 +1269,22 @@ public class MissionDetailView : MonoBehaviour
 	private int m_percentChance;
 
 	public Action FollowerSlotsChangedAction;
+
+	[Header("Notched Screen")]
+	public GameObject m_DarkBG;
+
+	public GameObject m_LevelBG;
+
+	public GameObject m_MissionTypeImage;
+
+	public GameObject m_MissionNameText;
+
+	public GameObject m_MissionLocationText;
+
+	public GameObject m_CloseButton;
+
+	[Header("Narrow Screen")]
+	public GameObject m_EnemiesGroup;
+
+	public GameObject m_FollowerSlotGroup;
 }

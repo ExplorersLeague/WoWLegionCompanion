@@ -44,44 +44,40 @@ namespace bnet.protocol.challenge
 					}
 					return instance;
 				}
-				else
+				else if (num != 13)
 				{
-					int num2 = num;
-					if (num2 != 13)
+					if (num != 18)
 					{
-						if (num2 != 18)
+						if (num != 26)
 						{
-							if (num2 != 26)
+							if (num != 32)
 							{
-								if (num2 != 32)
+								Key key = ProtocolParser.ReadKey((byte)num, stream);
+								uint field = key.Field;
+								if (field == 0u)
 								{
-									Key key = ProtocolParser.ReadKey((byte)num, stream);
-									uint field = key.Field;
-									if (field == 0u)
-									{
-										throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-									}
-									ProtocolParser.SkipKey(stream, key);
+									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 								}
-								else
-								{
-									instance.Retries = ProtocolParser.ReadUInt32(stream);
-								}
+								ProtocolParser.SkipKey(stream, key);
 							}
 							else
 							{
-								instance.Answer = ProtocolParser.ReadString(stream);
+								instance.Retries = ProtocolParser.ReadUInt32(stream);
 							}
 						}
 						else
 						{
-							instance.Info = ProtocolParser.ReadString(stream);
+							instance.Answer = ProtocolParser.ReadString(stream);
 						}
 					}
 					else
 					{
-						instance.Type = binaryReader.ReadUInt32();
+						instance.Info = ProtocolParser.ReadString(stream);
 					}
+				}
+				else
+				{
+					instance.Type = binaryReader.ReadUInt32();
 				}
 			}
 			if (stream.Position == limit)

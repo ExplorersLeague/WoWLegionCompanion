@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[FlexJamStruct(Name = "JamJSONRealmEntry", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamJSONRealmEntry", Version = 28333852u)]
 	public class JamJSONRealmEntry
 	{
 		[System.Runtime.Serialization.DataMember(Name = "wowRealmAddress")]
@@ -20,8 +20,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "populationState", Type = FlexJamType.Int32)]
 		public int PopulationState { get; set; }
 
-		[FlexJamMember(Name = "cfgCategoriesID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "cfgCategoriesID")]
+		[FlexJamMember(Name = "cfgCategoriesID", Type = FlexJamType.Int32)]
 		public int CfgCategoriesID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "version")]
@@ -32,8 +32,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "cfgRealmsID", Type = FlexJamType.Int32)]
 		public int CfgRealmsID { get; set; }
 
-		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
+		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		public uint Flags { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "name")]
@@ -44,8 +44,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "cfgConfigsID", Type = FlexJamType.Int32)]
 		public int CfgConfigsID { get; set; }
 
-		[FlexJamMember(Name = "cfgLanguagesID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "cfgLanguagesID")]
+		[FlexJamMember(Name = "cfgLanguagesID", Type = FlexJamType.Int32)]
 		public int CfgLanguagesID { get; set; }
 	}
 }

@@ -43,37 +43,33 @@ namespace bnet.protocol.account
 					}
 					return instance;
 				}
-				else
+				else if (num != 21)
 				{
-					int num2 = num;
-					if (num2 != 21)
+					if (num != 29)
 					{
-						if (num2 != 29)
+						if (num != 37)
 						{
-							if (num2 != 37)
+							Key key = ProtocolParser.ReadKey((byte)num, stream);
+							uint field = key.Field;
+							if (field == 0u)
 							{
-								Key key = ProtocolParser.ReadKey((byte)num, stream);
-								uint field = key.Field;
-								if (field == 0u)
-								{
-									throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
-								}
-								ProtocolParser.SkipKey(stream, key);
+								throw new ProtocolBufferException("Invalid field id: 0, something went wrong in the stream");
 							}
-							else
-							{
-								instance.GameStatusTag = binaryReader.ReadUInt32();
-							}
+							ProtocolParser.SkipKey(stream, key);
 						}
 						else
 						{
-							instance.GameTimeInfoTag = binaryReader.ReadUInt32();
+							instance.GameStatusTag = binaryReader.ReadUInt32();
 						}
 					}
 					else
 					{
-						instance.GameLevelInfoTag = binaryReader.ReadUInt32();
+						instance.GameTimeInfoTag = binaryReader.ReadUInt32();
 					}
+				}
+				else
+				{
+					instance.GameLevelInfoTag = binaryReader.ReadUInt32();
 				}
 			}
 			if (stream.Position == limit)
