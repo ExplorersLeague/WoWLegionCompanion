@@ -1,0 +1,31 @@
+﻿using System;
+using System.Runtime.Serialization;
+using JamLib;
+
+namespace WowJamMessages
+{
+	[FlexJamStruct(Name = "GameObjectDebugInfo", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
+	public class GameObjectDebugInfo
+	{
+		[System.Runtime.Serialization.DataMember(Name = "health")]
+		[FlexJamMember(Name = "health", Type = FlexJamType.Float)]
+		public float Health { get; set; }
+
+		[System.Runtime.Serialization.DataMember(Name = "state")]
+		[FlexJamMember(Name = "state", Type = FlexJamType.Int32)]
+		public int State { get; set; }
+
+		[System.Runtime.Serialization.DataMember(Name = "flags")]
+		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
+		public uint Flags { get; set; }
+
+		[FlexJamMember(Name = "gameObjectType", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "gameObjectType")]
+		public int GameObjectType { get; set; }
+
+		[FlexJamMember(Name = "debugName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "debugName")]
+		public string DebugName { get; set; }
+	}
+}
