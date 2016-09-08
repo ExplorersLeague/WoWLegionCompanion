@@ -29,8 +29,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "followerXP", Type = FlexJamType.UInt32)]
 		public uint FollowerXP { get; set; }
 
-		[FlexJamMember(Name = "currencyQuantity", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "currencyQuantity")]
+		[FlexJamMember(Name = "currencyQuantity", Type = FlexJamType.UInt32)]
 		public uint CurrencyQuantity { get; set; }
 
 		[FlexJamMember(Name = "itemQuantity", Type = FlexJamType.UInt32)]

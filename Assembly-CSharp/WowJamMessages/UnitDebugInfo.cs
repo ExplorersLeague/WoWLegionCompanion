@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "UnitDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "UnitDebugInfo", Version = 28333852u)]
 	public class UnitDebugInfo
 	{
 		public UnitDebugInfo()
@@ -81,8 +81,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "creatureSpellDataID", Type = FlexJamType.Int32)]
 		public int CreatureSpellDataID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "zoneFlags")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "zoneFlags", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "zoneFlags")]
 		public uint[] ZoneFlags { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "percentRangedAttack")]

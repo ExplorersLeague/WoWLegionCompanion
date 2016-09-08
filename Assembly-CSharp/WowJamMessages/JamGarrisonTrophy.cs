@@ -8,12 +8,12 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamGarrisonTrophy
 	{
-		[FlexJamMember(Name = "trophyInstanceID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "trophyInstanceID")]
+		[FlexJamMember(Name = "trophyInstanceID", Type = FlexJamType.Int32)]
 		public int TrophyInstanceID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "trophyID")]
 		[FlexJamMember(Name = "trophyID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "trophyID")]
 		public int TrophyID { get; set; }
 	}
 }

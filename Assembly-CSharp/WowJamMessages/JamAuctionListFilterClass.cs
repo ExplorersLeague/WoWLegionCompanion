@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "itemClass")]
 		public int ItemClass { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "subClasses")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "subClasses", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "subClasses")]
 		public JamAuctionListFilterSubClass[] SubClasses { get; set; }
 	}
 }

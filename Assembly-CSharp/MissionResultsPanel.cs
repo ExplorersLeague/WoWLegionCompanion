@@ -223,6 +223,11 @@ public class MissionResultsPanel : MonoBehaviour
 
 	public void ShowMissionResults(int garrMissionID, int missionResultType, bool awardOvermax)
 	{
+		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+		if (record == null)
+		{
+			return;
+		}
 		this.m_missionResultsDisplayCanvasGroupAutoFadeOut.Reset();
 		this.m_currentResultType = (MissionResultType)missionResultType;
 		this.m_followerExperienceDisplayArea.SetActive(false);
@@ -274,7 +279,6 @@ public class MissionResultsPanel : MonoBehaviour
 			int garrMechanicID = (jamGarrisonMobileMission.Encounter[k].MechanicID.Length <= 0) ? 0 : jamGarrisonMobileMission.Encounter[k].MechanicID[0];
 			component.SetEncounter(jamGarrisonMobileMission.Encounter[k].EncounterID, garrMechanicID);
 		}
-		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
 		this.missionNameText.text = record.Name;
 		this.missionLocationText.text = record.Location;
 		this.missioniLevelText.text = StaticDB.GetString("ITEM_LEVEL_ABBREVIATION", null) + " " + record.TargetItemLevel;
@@ -351,6 +355,10 @@ public class MissionResultsPanel : MonoBehaviour
 			{
 				Object.DestroyImmediate(componentsInChildren3[l].gameObject);
 			}
+		}
+		if (missionResultType == 1)
+		{
+			PersistentFollowerData.ClearPreMissionFollowerData();
 		}
 		MissionFollowerSlot[] componentsInChildren4 = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 		int num2 = 0;

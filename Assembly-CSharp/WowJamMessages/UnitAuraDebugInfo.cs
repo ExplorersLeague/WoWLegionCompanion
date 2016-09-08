@@ -16,20 +16,20 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "fromItemSet", Type = FlexJamType.Bool)]
 		public bool FromItemSet { get; set; }
 
-		[FlexJamMember(Name = "serverOnly", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "serverOnly")]
+		[FlexJamMember(Name = "serverOnly", Type = FlexJamType.Bool)]
 		public bool ServerOnly { get; set; }
 
 		[FlexJamMember(Name = "fromEnchantment", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "fromEnchantment")]
 		public bool FromEnchantment { get; set; }
 
-		[FlexJamMember(Name = "enchantmentSlot", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "enchantmentSlot")]
+		[FlexJamMember(Name = "enchantmentSlot", Type = FlexJamType.Int32)]
 		public int EnchantmentSlot { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "effectDebugInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "effectDebugInfo")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "effectDebugInfo", Type = FlexJamType.Struct)]
 		public UnitAuraEffectDebugInfo[] EffectDebugInfo { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "paused")]

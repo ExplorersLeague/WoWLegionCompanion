@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "value")]
 		public AttributeValue Value { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "param")]
 		[FlexJamMember(Name = "param", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "param")]
 		public int Param { get; set; }
 	}
 }

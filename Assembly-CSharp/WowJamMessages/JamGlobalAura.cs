@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "spellID")]
 		public int SpellID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "playerConditionID")]
 		[FlexJamMember(Name = "playerConditionID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "playerConditionID")]
 		public int PlayerConditionID { get; set; }
 	}
 }

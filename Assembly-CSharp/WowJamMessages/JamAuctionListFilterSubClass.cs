@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamAuctionListFilterSubClass
 	{
-		[FlexJamMember(Name = "itemSubclass", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemSubclass")]
+		[FlexJamMember(Name = "itemSubclass", Type = FlexJamType.Int32)]
 		public int ItemSubclass { get; set; }
 
 		[FlexJamMember(Name = "invTypeMask", Type = FlexJamType.UInt32)]

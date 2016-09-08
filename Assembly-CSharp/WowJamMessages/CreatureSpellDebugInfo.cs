@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "CreatureSpellDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "CreatureSpellDebugInfo", Version = 28333852u)]
 	public class CreatureSpellDebugInfo
 	{
 		[System.Runtime.Serialization.DataMember(Name = "spellID")]

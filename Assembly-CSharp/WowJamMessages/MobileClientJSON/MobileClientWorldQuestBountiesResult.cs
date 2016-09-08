@@ -12,8 +12,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "bounty")]
 		public MobileWorldQuestBounty[] Bounty { get; set; }
 
-		[FlexJamMember(Name = "visible", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "visible")]
+		[FlexJamMember(Name = "visible", Type = FlexJamType.Bool)]
 		public bool Visible { get; set; }
 
 		[FlexJamMember(Name = "lockedQuestID", Type = FlexJamType.Int32)]

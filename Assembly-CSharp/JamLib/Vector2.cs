@@ -3,8 +3,8 @@ using System.Runtime.Serialization;
 
 namespace JamLib
 {
-	[FlexJamStruct(Name = "vector2")]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "vector2")]
 	public struct Vector2
 	{
 		[System.Runtime.Serialization.DataMember(Name = "x")]

@@ -7,8 +7,8 @@ namespace JamLib
 	[System.Runtime.Serialization.DataContract]
 	public struct IntRange
 	{
-		[System.Runtime.Serialization.DataMember(Name = "l")]
 		[FlexJamMember(Name = "l", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "l")]
 		public int Low { get; set; }
 
 		[FlexJamMember(Name = "h", Type = FlexJamType.Int32)]

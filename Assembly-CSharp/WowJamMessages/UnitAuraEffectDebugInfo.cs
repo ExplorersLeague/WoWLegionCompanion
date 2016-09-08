@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "active", Type = FlexJamType.Bool)]
 		public bool Active { get; set; }
 
-		[FlexJamMember(Name = "effectIndex", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "effectIndex")]
+		[FlexJamMember(Name = "effectIndex", Type = FlexJamType.Int32)]
 		public int EffectIndex { get; set; }
 
 		[FlexJamMember(Name = "amount", Type = FlexJamType.Float)]

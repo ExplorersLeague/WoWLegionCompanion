@@ -17,8 +17,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "methodType", Type = FlexJamType.UInt64)]
 		public ulong MethodType { get; set; }
 
-		[FlexJamMember(Name = "token", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "token")]
+		[FlexJamMember(Name = "token", Type = FlexJamType.UInt32)]
 		public uint Token { get; set; }
 
 		[FlexJamMember(Name = "objectID", Type = FlexJamType.UInt64)]

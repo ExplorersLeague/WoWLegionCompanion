@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "GameObjectDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "GameObjectDebugInfo", Version = 28333852u)]
 	public class GameObjectDebugInfo
 	{
 		[System.Runtime.Serialization.DataMember(Name = "health")]

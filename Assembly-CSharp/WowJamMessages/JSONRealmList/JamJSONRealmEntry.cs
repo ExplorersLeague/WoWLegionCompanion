@@ -16,16 +16,16 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "cfgTimezonesID")]
 		public int CfgTimezonesID { get; set; }
 
-		[FlexJamMember(Name = "populationState", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "populationState")]
+		[FlexJamMember(Name = "populationState", Type = FlexJamType.Int32)]
 		public int PopulationState { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "cfgCategoriesID")]
 		[FlexJamMember(Name = "cfgCategoriesID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "cfgCategoriesID")]
 		public int CfgCategoriesID { get; set; }
 
-		[FlexJamMember(Name = "version", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "version")]
+		[FlexJamMember(Name = "version", Type = FlexJamType.Struct)]
 		public JamJSONGameVersion Version { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "cfgRealmsID")]

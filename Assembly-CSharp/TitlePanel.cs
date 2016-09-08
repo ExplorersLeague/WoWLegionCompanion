@@ -27,7 +27,7 @@ public class TitlePanel : MonoBehaviour
 		}
 		else
 		{
-			this.m_regionOptions = new string[5];
+			this.m_regionOptions = new string[4];
 		}
 		this.m_briefBuildText.text = string.Format("{0:D2}", BuildNum.CodeBuildNum);
 		this.m_buildText.text = string.Empty;

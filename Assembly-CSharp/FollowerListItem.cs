@@ -211,7 +211,14 @@ public class FollowerListItem : MonoBehaviour
 			Color qualityColor = GeneralHelpers.GetQualityColor(follower.Quality);
 			this.qualityBorder.color = qualityColor;
 			this.levelBorder.color = qualityColor;
-			this.nameText.color = qualityColor;
+			if (follower.Quality <= 1)
+			{
+				this.nameText.color = Color.white;
+			}
+			else
+			{
+				this.nameText.color = qualityColor;
+			}
 			uint num2;
 			bool flag2;
 			bool flag3;

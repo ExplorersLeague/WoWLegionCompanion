@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "factionGroup")]
 		public int FactionGroup { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "locale")]
 		[FlexJamMember(Name = "locale", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "locale")]
 		public int Locale { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "requesterVirtualRealmAddress")]

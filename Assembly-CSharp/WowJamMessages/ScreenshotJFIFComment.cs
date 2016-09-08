@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "ScreenshotJFIFComment", Version = 28333852u)]
 	public class ScreenshotJFIFComment
 	{
-		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "guid")]
+		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
 		public string Guid { get; set; }
 
 		[FlexJamMember(Name = "level", Type = FlexJamType.Int32)]
@@ -20,12 +20,12 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "raceID")]
 		public uint RaceID { get; set; }
 
-		[FlexJamMember(Name = "worldport", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "worldport")]
+		[FlexJamMember(Name = "worldport", Type = FlexJamType.String)]
 		public string Worldport { get; set; }
 
-		[FlexJamMember(Name = "isInGame", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "isInGame")]
+		[FlexJamMember(Name = "isInGame", Type = FlexJamType.Bool)]
 		public bool IsInGame { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "realmName")]
@@ -36,20 +36,20 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "zoneName")]
 		public string ZoneName { get; set; }
 
-		[FlexJamMember(Name = "facing", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "facing")]
+		[FlexJamMember(Name = "facing", Type = FlexJamType.Float)]
 		public float Facing { get; set; }
 
 		[FlexJamMember(Name = "mapID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "mapID")]
 		public uint MapID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "position")]
 		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "position")]
 		public Vector3 Position { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "name")]
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "classID")]
@@ -60,8 +60,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "sex")]
 		public uint Sex { get; set; }
 
-		[FlexJamMember(Name = "mapName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "mapName")]
+		[FlexJamMember(Name = "mapName", Type = FlexJamType.String)]
 		public string MapName { get; set; }
 	}
 }

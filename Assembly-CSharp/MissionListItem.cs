@@ -35,6 +35,10 @@ public class MissionListItem : MonoBehaviour
 	{
 		this.garrMissionID = missionRecID;
 		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(this.garrMissionID);
+		if (record == null)
+		{
+			return;
+		}
 		if (!PersistentMissionData.missionDictionary.ContainsKey(this.garrMissionID))
 		{
 			return;

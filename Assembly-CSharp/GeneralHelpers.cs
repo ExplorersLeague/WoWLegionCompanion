@@ -714,7 +714,7 @@ public class GeneralHelpers : MonoBehaviour
 					case 6u:
 					{
 						GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if ((float)record.MissionDuration < garrAbilityEffectRec.ActionHours * 3600f)
+						if (record != null && (float)record.MissionDuration < garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -723,7 +723,7 @@ public class GeneralHelpers : MonoBehaviour
 					case 7u:
 					{
 						GarrMissionRec record2 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if ((float)record2.MissionDuration > garrAbilityEffectRec.ActionHours * 3600f)
+						if (record2 != null && (float)record2.MissionDuration > garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -732,7 +732,7 @@ public class GeneralHelpers : MonoBehaviour
 					case 9u:
 					{
 						GarrMissionRec record3 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record3.TravelDuration < garrAbilityEffectRec.ActionHours * 3600f)
+						if (record3 != null && record3.TravelDuration < garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -741,7 +741,7 @@ public class GeneralHelpers : MonoBehaviour
 					case 10u:
 					{
 						GarrMissionRec record4 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record4.TravelDuration > garrAbilityEffectRec.ActionHours * 3600f)
+						if (record4 != null && record4.TravelDuration > garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}

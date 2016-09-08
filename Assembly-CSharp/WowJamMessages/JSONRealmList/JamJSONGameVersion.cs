@@ -8,16 +8,16 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JamJSONGameVersion
 	{
-		[System.Runtime.Serialization.DataMember(Name = "versionMajor")]
 		[FlexJamMember(Name = "versionMajor", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "versionMajor")]
 		public uint VersionMajor { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "versionBuild")]
 		[FlexJamMember(Name = "versionBuild", Type = FlexJamType.UInt32)]
 		public uint VersionBuild { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "versionMinor")]
 		[FlexJamMember(Name = "versionMinor", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "versionMinor")]
 		public uint VersionMinor { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "versionRevision")]

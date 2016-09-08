@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamPartyMemberPetState", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamPartyMemberPetState
 	{
 		public JamPartyMemberPetState()

@@ -18,6 +18,12 @@ public class MissionDescriptionTooltip : MonoBehaviour
 	public void SetMission(int garrMissionID)
 	{
 		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+		if (record == null)
+		{
+			this.m_missionName.text = string.Empty;
+			this.m_missionDescription.text = string.Empty;
+			return;
+		}
 		this.m_missionName.text = record.Name;
 		this.m_missionDescription.text = record.Description;
 	}

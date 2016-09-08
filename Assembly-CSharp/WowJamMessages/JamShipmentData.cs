@@ -13,8 +13,8 @@ namespace WowJamMessages
 			this.ResetPending = false;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "shipment")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "shipment", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "shipment")]
 		public JamCharacterShipment[] Shipment { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "resetPending")]

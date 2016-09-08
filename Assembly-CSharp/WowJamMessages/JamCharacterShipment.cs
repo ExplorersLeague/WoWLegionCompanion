@@ -20,8 +20,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "shipmentID")]
 		public ulong ShipmentID { get; set; }
 
-		[FlexJamMember(Name = "shipmentRecID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "shipmentRecID")]
+		[FlexJamMember(Name = "shipmentRecID", Type = FlexJamType.Int32)]
 		public int ShipmentRecID { get; set; }
 
 		[FlexJamMember(Name = "creationTime", Type = FlexJamType.Int32)]

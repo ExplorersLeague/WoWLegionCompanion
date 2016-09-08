@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamBattlePayDistributionObject
 	{
-		[System.Runtime.Serialization.DataMember(Name = "revoked")]
 		[FlexJamMember(Name = "revoked", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "revoked")]
 		public bool Revoked { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "deliverableID")]
@@ -20,12 +20,12 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "targetPlayer")]
 		public string TargetPlayer { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "deliverable")]
 		[FlexJamMember(Optional = true, Name = "deliverable", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "deliverable")]
 		public JamBattlePayDeliverable[] Deliverable { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
 		[FlexJamMember(Name = "purchaseID", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
 		public ulong PurchaseID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "status")]
@@ -36,8 +36,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "targetNativeRealm", Type = FlexJamType.UInt32)]
 		public uint TargetNativeRealm { get; set; }
 
-		[FlexJamMember(Name = "distributionID", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "distributionID")]
+		[FlexJamMember(Name = "distributionID", Type = FlexJamType.UInt64)]
 		public ulong DistributionID { get; set; }
 
 		[FlexJamMember(Name = "targetVirtualRealm", Type = FlexJamType.UInt32)]
