@@ -8,16 +8,16 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientGarrisonDataRequestResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "orderhallResourcesCurrency")]
 		[FlexJamMember(Name = "orderhallResourcesCurrency", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "orderhallResourcesCurrency")]
 		public int OrderhallResourcesCurrency { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "pvpFaction")]
 		[FlexJamMember(Name = "pvpFaction", Type = FlexJamType.Int32)]
 		public int PvpFaction { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "mission", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "mission")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "mission", Type = FlexJamType.Struct)]
 		public JamGarrisonMobileMission[] Mission { get; set; }
 
 		[FlexJamMember(Name = "oilCurrency", Type = FlexJamType.Int32)]
@@ -32,16 +32,16 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "characterClassID")]
 		public int CharacterClassID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "goldCurrency")]
 		[FlexJamMember(Name = "goldCurrency", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "goldCurrency")]
 		public int GoldCurrency { get; set; }
 
 		[FlexJamMember(Name = "characterLevel", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "characterLevel")]
 		public int CharacterLevel { get; set; }
 
-		[FlexJamMember(Name = "serverTime", Type = FlexJamType.Int64)]
 		[System.Runtime.Serialization.DataMember(Name = "serverTime")]
+		[FlexJamMember(Name = "serverTime", Type = FlexJamType.Int64)]
 		public long ServerTime { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "dailyMissionCount")]
@@ -56,8 +56,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "talent")]
 		public JamGarrisonTalent[] Talent { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "characterName")]
 		[FlexJamMember(Name = "characterName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "characterName")]
 		public string CharacterName { get; set; }
 
 		[FlexJamMember(Name = "garrTypeID", Type = FlexJamType.Int32)]

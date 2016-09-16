@@ -8,16 +8,16 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamSpawnRegionDebug
 	{
-		[FlexJamMember(Name = "pending", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "pending")]
+		[FlexJamMember(Name = "pending", Type = FlexJamType.Int32)]
 		public int Pending { get; set; }
 
-		[FlexJamMember(Name = "numThresholdsHit", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "numThresholdsHit")]
+		[FlexJamMember(Name = "numThresholdsHit", Type = FlexJamType.Int32)]
 		public int NumThresholdsHit { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "maxThreshold")]
 		[FlexJamMember(Name = "maxThreshold", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "maxThreshold")]
 		public float MaxThreshold { get; set; }
 
 		[FlexJamMember(Name = "numGroups", Type = FlexJamType.Int32)]
@@ -36,8 +36,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "actual")]
 		public int Actual { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "minThreshold")]
 		[FlexJamMember(Name = "minThreshold", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "minThreshold")]
 		public float MinThreshold { get; set; }
 
 		[FlexJamMember(Name = "regionID", Type = FlexJamType.Int32)]

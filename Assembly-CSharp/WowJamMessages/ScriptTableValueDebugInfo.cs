@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "ScriptTableValueDebugInfo", Version = 28333852u)]
 	public class ScriptTableValueDebugInfo
 	{
-		[FlexJamMember(Name = "keyName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "keyName")]
+		[FlexJamMember(Name = "keyName", Type = FlexJamType.String)]
 		public string KeyName { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "valueName")]

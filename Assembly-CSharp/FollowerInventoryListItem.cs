@@ -186,7 +186,6 @@ public class FollowerInventoryListItem : MonoBehaviour
 		bool flag3 = this.m_combatAllyChampion.CurrentMissionID != 0;
 		bool flag4 = this.m_combatAllyChampion.CurrentBuildingID != 0;
 		bool flag5 = !flag && !flag2 && !flag3 && !flag4;
-		Debug.Log("Set Status available = " + flag5);
 		if (flag5)
 		{
 			this.m_combatAllyStatus.gameObject.SetActive(false);
@@ -196,22 +195,6 @@ public class FollowerInventoryListItem : MonoBehaviour
 			Debug.Log("Available");
 			return;
 		}
-		Debug.Log("Not Available");
-		Debug.Log(string.Concat(new object[]
-		{
-			string.Empty,
-			flag,
-			" ",
-			flag2,
-			" ",
-			flag3,
-			" ",
-			flag4,
-			" WORDS",
-			FollowerInventoryListItem.m_inactiveString,
-			" ",
-			FollowerInventoryListItem.m_onMissionString
-		}));
 		this.m_combatAllyStatus.gameObject.SetActive(true);
 		this.m_combatAllyUnavailableDarkener.gameObject.SetActive(true);
 		this.m_mainButton.enabled = false;

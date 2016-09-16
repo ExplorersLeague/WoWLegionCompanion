@@ -261,7 +261,7 @@ public class WorldQuestTooltip : MonoBehaviour
 		{
 			num = 0;
 		}
-		Duration duration = new Duration(num);
+		Duration duration = new Duration(num, false);
 		this.m_worldQuestTimeText.text = this.m_timeLeftString + " " + duration.DurationString;
 		bool active = num < 4500;
 		this.m_expiringSoon.gameObject.SetActive(active);

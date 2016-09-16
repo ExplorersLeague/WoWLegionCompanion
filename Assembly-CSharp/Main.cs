@@ -95,6 +95,17 @@ public class Main : MonoBehaviour
 	{
 		Main main = Main.instance;
 		main.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(main.GarrisonDataResetFinishedAction, new Action(this.HandleEnterWorld));
+		PersistentArmamentData.ClearData();
+		PersistentBountyData.ClearData();
+		PersistentEquipmentData.ClearData();
+		PersistentFollowerData.ClearData();
+		PersistentFollowerData.ClearPreMissionFollowerData();
+		PersistentMissionData.ClearData();
+		PersistentShipmentData.ClearData();
+		PersistentTalentData.ClearData();
+		GuildData.ClearData();
+		MissionDataCache.ClearData();
+		WorldQuestData.ClearData();
 		this.MobileRequestData();
 	}
 
@@ -403,9 +414,6 @@ public class Main : MonoBehaviour
 		{
 			this.CompleteMissionResultAction(msg.GarrMissionID, msg.Result, (int)msg.MissionSuccessChance);
 		}
-		MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
-		mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
-		Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
 		MobilePlayerRequestShipmentTypes obj = new MobilePlayerRequestShipmentTypes();
 		Login.instance.SendToMobileServer(obj);
 		MobilePlayerRequestShipments obj2 = new MobilePlayerRequestShipments();
@@ -413,6 +421,9 @@ public class Main : MonoBehaviour
 		MobilePlayerFollowerEquipmentRequest mobilePlayerFollowerEquipmentRequest = new MobilePlayerFollowerEquipmentRequest();
 		mobilePlayerFollowerEquipmentRequest.GarrFollowerTypeID = 4;
 		Login.instance.SendToMobileServer(mobilePlayerFollowerEquipmentRequest);
+		MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
+		mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
+		Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
 	}
 
 	private void MobileClientClaimMissionBonusResultHandler(MobileClientClaimMissionBonusResult msg)
@@ -578,9 +589,6 @@ public class Main : MonoBehaviour
 
 	public void MobileRequestData()
 	{
-		MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
-		mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
-		Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
 		MobilePlayerRequestShipmentTypes obj = new MobilePlayerRequestShipmentTypes();
 		Login.instance.SendToMobileServer(obj);
 		MobilePlayerRequestShipments obj2 = new MobilePlayerRequestShipments();
@@ -599,6 +607,9 @@ public class Main : MonoBehaviour
 		Login.instance.SendToMobileServer(mobilePlayerFollowerActivationDataRequest);
 		MobilePlayerGetArtifactInfo obj4 = new MobilePlayerGetArtifactInfo();
 		Login.instance.SendToMobileServer(obj4);
+		MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
+		mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
+		Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
 	}
 
 	private void UpdateDebugText()
@@ -755,6 +766,10 @@ public class Main : MonoBehaviour
 		}
 		if (result == GARRISON_RESULT.SUCCESS)
 		{
+			MobilePlayerRequestShipmentTypes obj = new MobilePlayerRequestShipmentTypes();
+			Login.instance.SendToMobileServer(obj);
+			MobilePlayerRequestShipments obj2 = new MobilePlayerRequestShipments();
+			Login.instance.SendToMobileServer(obj2);
 			MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
 			mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
 			Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
@@ -911,8 +926,7 @@ public class Main : MonoBehaviour
 
 	private void MobileClientUseFollowerArmamentResultHandler(MobileClientUseFollowerArmamentResult msg)
 	{
-		GARRISON_RESULT result = (GARRISON_RESULT)msg.Result;
-		if (result == GARRISON_RESULT.SUCCESS)
+		if (msg.Result == 0)
 		{
 			PersistentFollowerData.AddOrUpdateFollower(msg.Follower);
 			MobilePlayerFollowerArmamentsRequest mobilePlayerFollowerArmamentsRequest = new MobilePlayerFollowerArmamentsRequest();
@@ -921,7 +935,7 @@ public class Main : MonoBehaviour
 		}
 		else
 		{
-			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("USE_ARMAMENT_FAILED", null), result.ToString());
+			AllPopups.instance.ShowGenericPopupFull(StaticDB.GetString("USE_ARMAMENT_FAILED", null));
 		}
 		if (this.UseArmamentResultAction != null)
 		{
@@ -1056,10 +1070,6 @@ public class Main : MonoBehaviour
 	public void Logout()
 	{
 		MissionDataCache.ClearData();
-		if (this.StartLogOutAction != null)
-		{
-			this.StartLogOutAction();
-		}
 		AllPopups.instance.HideAllPopups();
 		AllPanels.instance.ShowOrderHallMultiPanel(false);
 		Login.instance.ReconnectToMobileServerCharacterSelect();
@@ -1228,8 +1238,6 @@ public class Main : MonoBehaviour
 	public Action<OrderHallNavButton> OrderHallNavButtonSelectedAction;
 
 	public Action<OrderHallFilterOptionsButton> OrderHallfilterOptionsButtonSelectedAction;
-
-	public Action StartLogOutAction;
 
 	public GameObject m_debugButton;
 

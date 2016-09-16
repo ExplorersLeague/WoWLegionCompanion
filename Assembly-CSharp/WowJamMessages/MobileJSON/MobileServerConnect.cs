@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileJSON
 {
-	[FlexJamMessage(Id = 4743, Name = "MobileServerConnect", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4743, Name = "MobileServerConnect", Version = 28333852u)]
 	public class MobileServerConnect
 	{
 		public MobileServerConnect()
@@ -18,8 +18,8 @@ namespace WowJamMessages.MobileJSON
 		[System.Runtime.Serialization.DataMember(Name = "proof")]
 		public byte[] Proof { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "realmAddress")]
 		[FlexJamMember(Name = "realmAddress", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "realmAddress")]
 		public uint RealmAddress { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "joinTicket")]

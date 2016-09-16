@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using GarbageFreeStringBuilder;
 using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
@@ -39,6 +41,8 @@ public class FollowerListItem : MonoBehaviour
 		{
 			this.m_useArmamentsButtonText.font = GeneralHelpers.LoadStandardFont();
 		}
+		this.m_missionTimeRemaining = new Duration(0, false);
+		this.m_statusTextSB = new StringBuilder(16);
 	}
 
 	private void OnEnable()
@@ -176,7 +180,7 @@ public class FollowerListItem : MonoBehaviour
 		{
 			this.m_classIcon.sprite = atlasSprite;
 		}
-		Transform[] componentsInChildren = this.m_troopHeartContainer.GetComponentsInChildren<Transform>();
+		Transform[] componentsInChildren = this.m_troopHeartContainer.GetComponentsInChildren<Transform>(true);
 		foreach (Transform transform in componentsInChildren)
 		{
 			if (transform != this.m_troopHeartContainer.transform)
@@ -258,30 +262,16 @@ public class FollowerListItem : MonoBehaviour
 		num2 = ((num2 <= 0L) ? 0L : num2);
 		if (num2 > 0L)
 		{
-			Duration duration = new Duration((int)num2);
-			this.m_statusText.text = string.Concat(new object[]
-			{
-				FollowerListItem.m_iLvlString,
-				" ",
-				this.m_itemLevel,
-				" - ",
-				FollowerListItem.m_onMissionString,
-				" - ",
-				duration.DurationString
-			});
+			this.m_missionTimeRemaining.FormatDurationString((int)num2, false);
+			this.m_statusTextSB.Length = 0;
+			this.m_statusTextSB.ConcatFormat("{0} {1} - {2} - {3}", FollowerListItem.m_iLvlString, this.m_itemLevel, FollowerListItem.m_onMissionString, this.m_missionTimeRemaining.DurationString);
+			this.m_statusText.text = this.m_statusTextSB.ToString();
 		}
 		else
 		{
-			this.m_statusText.text = string.Concat(new object[]
-			{
-				FollowerListItem.m_iLvlString,
-				" ",
-				this.m_itemLevel,
-				" - ",
-				FollowerListItem.m_onMissionString,
-				" - ",
-				FollowerListItem.m_missionCompleteString
-			});
+			this.m_statusTextSB.Length = 0;
+			this.m_statusTextSB.ConcatFormat("{0} {1} - {2} - {3}", FollowerListItem.m_iLvlString, this.m_itemLevel, FollowerListItem.m_onMissionString, FollowerListItem.m_missionCompleteString);
+			this.m_statusText.text = this.m_statusTextSB.ToString();
 		}
 	}
 
@@ -823,6 +813,10 @@ public class FollowerListItem : MonoBehaviour
 	private bool m_isCombatAlly;
 
 	private int m_itemLevel;
+
+	private Duration m_missionTimeRemaining;
+
+	private StringBuilder m_statusTextSB;
 
 	private static string m_iLvlString;
 

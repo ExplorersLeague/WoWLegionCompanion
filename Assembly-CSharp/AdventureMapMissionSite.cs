@@ -49,36 +49,12 @@ public class AdventureMapMissionSite : MonoBehaviour
 		instance.MissionMapSelectionChangedAction = (Action<int>)Delegate.Combine(instance.MissionMapSelectionChangedAction, new Action<int>(this.HandleMissionChanged));
 		this.m_missionCompleteText.text = StaticDB.GetString("MISSION_COMPLETE", null);
 		this.m_isStackablePreview = false;
+		this.m_missionTimeRemaining = new Duration(0, false);
 	}
 
 	private void Update()
 	{
 		this.UpdateMissionRemainingTimeDisplay();
-		Vector3[] array = new Vector3[4];
-		AdventureMapPanel.instance.m_mapViewRT.GetWorldCorners(array);
-		float num = array[2].x - array[0].x;
-		float num2 = array[2].y - array[0].y;
-		Rect rect;
-		rect..ctor(array[0].x, array[0].y, num, num2);
-		Vector3[] array2 = new Vector3[4];
-		this.m_myRT.GetWorldCorners(array2);
-		float num3 = array2[2].x - array2[0].x;
-		float num4 = array2[2].y - array2[0].y;
-		Rect rect2;
-		rect2..ctor(array2[0].x, array2[0].y, num3, num4);
-		if (!rect.Overlaps(rect2))
-		{
-			if (AdventureMapPanel.instance.GetCurrentMapMission() == this.m_garrMissionID)
-			{
-				AdventureMapPanel.instance.SelectMissionFromMap(0);
-			}
-			StackableMapIcon component = base.GetComponent<StackableMapIcon>();
-			if (component != null && AdventureMapPanel.instance.GetSelectedIconContainer() == component.GetContainer())
-			{
-				AdventureMapPanel.instance.SetSelectedIconContainer(null);
-			}
-			return;
-		}
 	}
 
 	private void UpdateMissionRemainingTimeDisplay()
@@ -96,8 +72,8 @@ public class AdventureMapMissionSite : MonoBehaviour
 		num2 = ((num2 <= 0L) ? 0L : num2);
 		if (!this.m_isSupportMission)
 		{
-			Duration duration = new Duration((int)num2);
-			this.m_missionTimeRemainingText.text = duration.DurationString;
+			this.m_missionTimeRemaining.FormatDurationString((int)num2, false);
+			this.m_missionTimeRemainingText.text = this.m_missionTimeRemaining.DurationString;
 		}
 		if (num2 == 0L)
 		{
@@ -398,4 +374,6 @@ public class AdventureMapMissionSite : MonoBehaviour
 	public Text m_missionCompleteText;
 
 	private UiAnimMgr.UiAnimHandle m_selectedEffectAnimHandle;
+
+	private Duration m_missionTimeRemaining;
 }

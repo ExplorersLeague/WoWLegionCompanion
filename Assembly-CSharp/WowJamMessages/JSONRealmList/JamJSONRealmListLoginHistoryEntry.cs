@@ -8,16 +8,16 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JamJSONRealmListLoginHistoryEntry
 	{
-		[System.Runtime.Serialization.DataMember(Name = "characterGUID")]
 		[FlexJamMember(Name = "characterGUID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "characterGUID")]
 		public string CharacterGUID { get; set; }
 
-		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
+		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
-		[FlexJamMember(Name = "lastPlayedTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "lastPlayedTime")]
+		[FlexJamMember(Name = "lastPlayedTime", Type = FlexJamType.Int32)]
 		public int LastPlayedTime { get; set; }
 	}
 }

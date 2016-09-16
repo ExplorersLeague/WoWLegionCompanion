@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JSONRealmCharacterList
 	{
-		[System.Runtime.Serialization.DataMember(Name = "characterList")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "characterList", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "characterList")]
 		public JamJSONCharacterEntry[] CharacterList { get; set; }
 	}
 }

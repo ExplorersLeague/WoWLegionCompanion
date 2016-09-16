@@ -13,28 +13,28 @@ namespace WowJamMessages
 			this.ItemFileDataID = 0;
 		}
 
-		[FlexJamMember(Name = "itemFileDataID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemFileDataID")]
+		[FlexJamMember(Name = "itemFileDataID", Type = FlexJamType.Int32)]
 		public int ItemFileDataID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "currencyType")]
 		[FlexJamMember(Name = "currencyType", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "currencyType")]
 		public int CurrencyType { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "followerXP")]
 		[FlexJamMember(Name = "followerXP", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "followerXP")]
 		public uint FollowerXP { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "currencyQuantity")]
 		[FlexJamMember(Name = "currencyQuantity", Type = FlexJamType.UInt32)]
 		public uint CurrencyQuantity { get; set; }
 
-		[FlexJamMember(Name = "itemQuantity", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemQuantity")]
+		[FlexJamMember(Name = "itemQuantity", Type = FlexJamType.UInt32)]
 		public uint ItemQuantity { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "garrMssnBonusAbilityID")]

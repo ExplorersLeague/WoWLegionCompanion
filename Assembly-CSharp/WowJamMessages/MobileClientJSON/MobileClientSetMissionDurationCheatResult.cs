@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamMessage(Id = 4856, Name = "MobileClientSetMissionDurationCheatResult", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4856, Name = "MobileClientSetMissionDurationCheatResult", Version = 28333852u)]
 	public class MobileClientSetMissionDurationCheatResult
 	{
-		[FlexJamMember(Name = "success", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "success")]
+		[FlexJamMember(Name = "success", Type = FlexJamType.Bool)]
 		public bool Success { get; set; }
 	}
 }

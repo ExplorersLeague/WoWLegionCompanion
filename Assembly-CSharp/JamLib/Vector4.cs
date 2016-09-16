@@ -3,12 +3,12 @@ using System.Runtime.Serialization;
 
 namespace JamLib
 {
-	[FlexJamStruct(Name = "vector4")]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "vector4")]
 	public struct Vector4
 	{
-		[System.Runtime.Serialization.DataMember(Name = "x")]
 		[FlexJamMember(Name = "x", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "x")]
 		public float X { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "y")]
@@ -19,8 +19,8 @@ namespace JamLib
 		[FlexJamMember(Name = "z", Type = FlexJamType.Float)]
 		public float Z { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "w")]
 		[FlexJamMember(Name = "w", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "w")]
 		public float W { get; set; }
 	}
 }

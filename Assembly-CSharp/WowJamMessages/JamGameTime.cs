@@ -29,12 +29,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "isCAISEnabled", Type = FlexJamType.Bool)]
 		public bool IsCAISEnabled { get; set; }
 
-		[FlexJamMember(Name = "billingType", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "billingType")]
+		[FlexJamMember(Name = "billingType", Type = FlexJamType.Int32)]
 		public int BillingType { get; set; }
 
-		[FlexJamMember(Name = "isPaidForByIGR", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "isPaidForByIGR")]
+		[FlexJamMember(Name = "isPaidForByIGR", Type = FlexJamType.Bool)]
 		public bool IsPaidForByIGR { get; set; }
 	}
 }

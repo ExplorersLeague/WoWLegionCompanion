@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamCharacterShipment", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamCharacterShipment", Version = 28333852u)]
 	public class JamCharacterShipment
 	{
 		[System.Runtime.Serialization.DataMember(Name = "shipmentDuration")]
@@ -16,16 +16,16 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "assignedFollowerDBID", Type = FlexJamType.UInt64)]
 		public ulong AssignedFollowerDBID { get; set; }
 
-		[FlexJamMember(Name = "shipmentID", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "shipmentID")]
+		[FlexJamMember(Name = "shipmentID", Type = FlexJamType.UInt64)]
 		public ulong ShipmentID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "shipmentRecID")]
 		[FlexJamMember(Name = "shipmentRecID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "shipmentRecID")]
 		public int ShipmentRecID { get; set; }
 
-		[FlexJamMember(Name = "creationTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "creationTime")]
+		[FlexJamMember(Name = "creationTime", Type = FlexJamType.Int32)]
 		public int CreationTime { get; set; }
 
 		[FlexJamMember(Name = "buildingType", Type = FlexJamType.Int32)]

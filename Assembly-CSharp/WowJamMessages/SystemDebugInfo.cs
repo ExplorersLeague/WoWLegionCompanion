@@ -13,8 +13,8 @@ namespace WowJamMessages
 			this.RequestParameter = string.Empty;
 		}
 
-		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "attributeDescriptions", Type = FlexJamType.Struct)]
@@ -25,8 +25,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "updateTime")]
 		public int UpdateTime { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "attributes", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "attributes")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "attributes", Type = FlexJamType.Struct)]
 		public DebugAttribute[] Attributes { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "requestParameter")]

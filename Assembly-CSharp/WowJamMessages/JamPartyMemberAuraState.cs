@@ -8,12 +8,12 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamPartyMemberAuraState
 	{
-		[FlexJamMember(Name = "activeFlags", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "activeFlags")]
+		[FlexJamMember(Name = "activeFlags", Type = FlexJamType.UInt32)]
 		public uint ActiveFlags { get; set; }
 
-		[FlexJamMember(Name = "aura", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "aura")]
+		[FlexJamMember(Name = "aura", Type = FlexJamType.Int32)]
 		public int Aura { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "flags")]

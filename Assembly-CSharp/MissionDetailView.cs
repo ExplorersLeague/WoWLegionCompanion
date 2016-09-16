@@ -150,8 +150,7 @@ public class MissionDetailView : MonoBehaviour
 				instance3.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Combine(instance3.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
 			}
 		}
-		Main instance4 = Main.instance;
-		instance4.StartLogOutAction = (Action)Delegate.Combine(instance4.StartLogOutAction, new Action(this.HandleStartLogoutAction));
+		this.HandleEnteredWorld();
 	}
 
 	private void OnDisable()
@@ -174,8 +173,6 @@ public class MissionDetailView : MonoBehaviour
 				instance3.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Remove(instance3.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
 			}
 		}
-		Main instance4 = Main.instance;
-		instance4.StartLogOutAction = (Action)Delegate.Remove(instance4.StartLogOutAction, new Action(this.HandleStartLogoutAction));
 	}
 
 	private void SetupInputForPreviewSlider(Button button)
@@ -220,7 +217,7 @@ public class MissionDetailView : MonoBehaviour
 		eventTrigger.triggers.Add(entry3);
 	}
 
-	public void HandleStartLogoutAction()
+	public void HandleEnteredWorld()
 	{
 		AdventureMapPanel.instance.SelectMissionFromList(0);
 		if (this.missionFollowerSlotGroup != null)
@@ -729,7 +726,7 @@ public class MissionDetailView : MonoBehaviour
 				component3.enabled = false;
 			}
 			int trueMissionDuration = this.GetTrueMissionDuration(record, list2);
-			Duration duration = new Duration(trueMissionDuration);
+			Duration duration = new Duration(trueMissionDuration, false);
 			if (this.missionLocationText != null)
 			{
 				this.missionLocationText.text = string.Concat(new object[]
@@ -952,7 +949,7 @@ public class MissionDetailView : MonoBehaviour
 		{
 		case CombatAllyMissionState.notAvailable:
 		{
-			Text[] componentsInChildren = this.m_combatAllyNotAvailableStuff.GetComponentsInChildren<Text>();
+			Text[] componentsInChildren = this.m_combatAllyNotAvailableStuff.GetComponentsInChildren<Text>(true);
 			if (componentsInChildren[0] != null)
 			{
 				componentsInChildren[0].text = StaticDB.GetString("COMBAT_ALLY_UNAVAILABLE", null);

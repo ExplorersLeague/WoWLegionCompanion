@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamServerBuckDataList
 	{
-		[FlexJamMember(Name = "mpID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "mpID")]
+		[FlexJamMember(Name = "mpID", Type = FlexJamType.UInt32)]
 		public uint MpID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "entries")]

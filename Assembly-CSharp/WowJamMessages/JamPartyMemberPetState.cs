@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamPartyMemberPetState", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamPartyMemberPetState", Version = 28333852u)]
 	public class JamPartyMemberPetState
 	{
 		public JamPartyMemberPetState()
@@ -13,12 +13,12 @@ namespace WowJamMessages
 			this.Guid = "0000000000000000";
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		public string Guid { get; set; }
 
-		[FlexJamMember(Name = "health", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "health")]
+		[FlexJamMember(Name = "health", Type = FlexJamType.Int32)]
 		public int Health { get; set; }
 
 		[FlexJamMember(Name = "maxHealth", Type = FlexJamType.Int32)]
@@ -33,8 +33,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "auras")]
 		public JamPartyMemberAuraState[] Auras { get; set; }
 
-		[FlexJamMember(Name = "displayID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "displayID")]
+		[FlexJamMember(Name = "displayID", Type = FlexJamType.Int32)]
 		public int DisplayID { get; set; }
 	}
 }

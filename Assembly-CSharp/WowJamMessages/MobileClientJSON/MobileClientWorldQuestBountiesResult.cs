@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamMessage(Id = 4864, Name = "MobileClientWorldQuestBountiesResult", Version = 28333852u)]
 	public class MobileClientWorldQuestBountiesResult
 	{
-		[FlexJamMember(ArrayDimensions = 1, Name = "bounty", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "bounty")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "bounty", Type = FlexJamType.Struct)]
 		public MobileWorldQuestBounty[] Bounty { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "visible")]

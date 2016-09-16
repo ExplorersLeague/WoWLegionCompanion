@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "price", Type = FlexJamType.UInt64)]
 		public ulong Price { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "status")]
 		[FlexJamMember(Name = "status", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "status")]
 		public int Status { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "expectedSecondsUntilSold")]

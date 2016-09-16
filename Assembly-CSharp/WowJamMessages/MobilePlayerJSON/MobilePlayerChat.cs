@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobilePlayerJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4789, Name = "MobilePlayerChat", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobilePlayerChat
 	{
 		public MobilePlayerChat()
@@ -14,16 +14,16 @@ namespace WowJamMessages.MobilePlayerJSON
 			this.ChatText = string.Empty;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "slashCmd")]
 		[FlexJamMember(Name = "slashCmd", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "slashCmd")]
 		public byte SlashCmd { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "chatText")]
 		[FlexJamMember(Name = "chatText", Type = FlexJamType.String)]
 		public string ChatText { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "targetName")]
 		[FlexJamMember(Name = "targetName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "targetName")]
 		public string TargetName { get; set; }
 	}
 }

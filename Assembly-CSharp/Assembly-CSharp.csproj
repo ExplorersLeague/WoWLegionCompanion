@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EF5F6C22-3C06-49BA-9B9F-886F6E67BDE2}</ProjectGuid>
+    <ProjectGuid>{12453F7E-7FCA-4566-BBEE-D5C7FDFB97EE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -559,6 +559,7 @@
     <Compile Include="FollowerModelSpinningBase.cs" />
     <Compile Include="FreezeFrame.cs" />
     <Compile Include="GameClient.cs" />
+    <Compile Include="GarbageFreeStringBuilder\StringBuilderExtensions.cs" />
     <Compile Include="GarrisonStatus.cs" />
     <Compile Include="GeneralHelpers.cs" />
     <Compile Include="GeneralUtils.cs" />

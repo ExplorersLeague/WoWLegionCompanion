@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "PhaseShiftDataVersion0", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class PhaseShiftDataVersion0
 	{
 		[FlexJamMember(Name = "phaseShiftFlags", Type = FlexJamType.UInt32)]

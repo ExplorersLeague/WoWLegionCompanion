@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamMessage(Id = 4854, Name = "MobileClientWorldQuestUpdate", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4854, Name = "MobileClientWorldQuestUpdate", Version = 28333852u)]
 	public class MobileClientWorldQuestUpdate
 	{
 		[FlexJamMember(ArrayDimensions = 1, Name = "quest", Type = FlexJamType.Struct)]

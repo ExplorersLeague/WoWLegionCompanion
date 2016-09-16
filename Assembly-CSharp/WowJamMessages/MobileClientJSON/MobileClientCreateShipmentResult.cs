@@ -8,12 +8,12 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientCreateShipmentResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "charShipmentID")]
 		[FlexJamMember(Name = "charShipmentID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "charShipmentID")]
 		public int CharShipmentID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "result")]
 		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "result")]
 		public int Result { get; set; }
 	}
 }

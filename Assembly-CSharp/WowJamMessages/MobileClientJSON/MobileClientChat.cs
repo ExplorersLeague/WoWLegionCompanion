@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4844, Name = "MobileClientChat", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileClientChat
 	{
 		public MobileClientChat()
@@ -18,8 +18,8 @@ namespace WowJamMessages.MobileClientJSON
 			this.ChatFlags = 0;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "senderName")]
 		[FlexJamMember(Name = "senderName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "senderName")]
 		public string SenderName { get; set; }
 
 		[FlexJamMember(Name = "senderGUID", Type = FlexJamType.WowGuid)]
@@ -34,16 +34,16 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "prefix", Type = FlexJamType.String)]
 		public string Prefix { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "channel")]
 		[FlexJamMember(Name = "channel", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "channel")]
 		public string Channel { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "slashCmd")]
 		[FlexJamMember(Name = "slashCmd", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "slashCmd")]
 		public byte SlashCmd { get; set; }
 
-		[FlexJamMember(Name = "chatFlags", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "chatFlags")]
+		[FlexJamMember(Name = "chatFlags", Type = FlexJamType.UInt16)]
 		public ushort ChatFlags { get; set; }
 	}
 }

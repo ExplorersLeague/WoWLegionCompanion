@@ -11,12 +11,12 @@ namespace JamLib
 		[FlexJamMember(Name = "realm", Type = FlexJamType.UInt32)]
 		public uint RealmAddress { get; set; }
 
-		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "type")]
+		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
 		public JAM_DESTINATION ServerType { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "server")]
 		[FlexJamMember(Name = "server", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "server")]
 		public uint ServerID { get; set; }
 
 		public override string ToString()

@@ -42,7 +42,7 @@ public class MiniMissionListItem : MonoBehaviour
 			this.m_missionTime.gameObject.SetActive(false);
 		}
 		this.m_previewMechanicsGroup.SetActive(!flag);
-		Duration duration = new Duration(record.MissionDuration);
+		Duration duration = new Duration(record.MissionDuration, false);
 		string str;
 		if (duration.DurationValue >= 28800)
 		{
@@ -168,7 +168,7 @@ public class MiniMissionListItem : MonoBehaviour
 			long num = GarrisonStatus.CurrentTime() - this.m_mission.StartTime;
 			long num2 = this.m_mission.MissionDuration - num;
 			num2 = ((num2 <= 0L) ? 0L : num2);
-			Duration duration = new Duration((int)num2);
+			Duration duration = new Duration((int)num2, false);
 			if (num2 > 0L)
 			{
 				this.m_statusText.text = duration.DurationString + " <color=#ff0000ff>(" + StaticDB.GetString("IN_PROGRESS", null) + ")</color>";

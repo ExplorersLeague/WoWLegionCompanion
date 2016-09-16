@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4830, Name = "MobileClientLoginResult", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileClientLoginResult
 	{
 		public MobileClientLoginResult()

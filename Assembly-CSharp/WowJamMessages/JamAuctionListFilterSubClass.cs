@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamAuctionListFilterSubClass", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamAuctionListFilterSubClass", Version = 28333852u)]
 	public class JamAuctionListFilterSubClass
 	{
 		[System.Runtime.Serialization.DataMember(Name = "itemSubclass")]

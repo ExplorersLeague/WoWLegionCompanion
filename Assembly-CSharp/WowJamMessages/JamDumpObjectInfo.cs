@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamDumpObjectInfo", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamDumpObjectInfo
 	{
 		public JamDumpObjectInfo()
@@ -21,8 +21,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "position")]
 		public Vector3 Position { get; set; }
 
-		[FlexJamMember(Name = "granted", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "granted")]
+		[FlexJamMember(Name = "granted", Type = FlexJamType.Bool)]
 		public bool Granted { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "visibleRange")]

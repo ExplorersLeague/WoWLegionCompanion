@@ -12,24 +12,24 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "garrMissionID")]
 		public int GarrMissionID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "missionSuccessChance")]
 		[FlexJamMember(Name = "missionSuccessChance", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "missionSuccessChance")]
 		public byte MissionSuccessChance { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "mission")]
 		[FlexJamMember(Name = "mission", Type = FlexJamType.Struct)]
 		public JamGarrisonMobileMission Mission { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "bonusRollSucceeded")]
 		[FlexJamMember(Name = "bonusRollSucceeded", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "bonusRollSucceeded")]
 		public bool BonusRollSucceeded { get; set; }
 
-		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "result")]
+		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		public int Result { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "followerInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "followerInfo")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "followerInfo", Type = FlexJamType.Struct)]
 		public JamGarrisonMissionFollowerInfo[] FollowerInfo { get; set; }
 	}
 }

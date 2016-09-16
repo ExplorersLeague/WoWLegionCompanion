@@ -54,7 +54,7 @@ public class MissionMechanic : MonoBehaviour
 
 	public static List<int> GetUsefulBuffAbilitiesForFollower(int garrFollowerID)
 	{
-		MissionMechanic.<GetUsefulBuffAbilitiesForFollower>c__AnonStorey46 <GetUsefulBuffAbilitiesForFollower>c__AnonStorey = new MissionMechanic.<GetUsefulBuffAbilitiesForFollower>c__AnonStorey46();
+		MissionMechanic.<GetUsefulBuffAbilitiesForFollower>c__AnonStorey47 <GetUsefulBuffAbilitiesForFollower>c__AnonStorey = new MissionMechanic.<GetUsefulBuffAbilitiesForFollower>c__AnonStorey47();
 		<GetUsefulBuffAbilitiesForFollower>c__AnonStorey.usefulBuffAbilityIDs = new List<int>();
 		JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[garrFollowerID];
 		foreach (int abilityID in jamGarrisonFollower.AbilityID)

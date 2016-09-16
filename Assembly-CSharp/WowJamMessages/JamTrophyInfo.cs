@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamTrophyInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamTrophyInfo", Version = 28333852u)]
 	public class JamTrophyInfo
 	{
 		[FlexJamMember(Name = "canUseReason", Type = FlexJamType.Int32)]

@@ -12,8 +12,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		public uint WowRealmAddress { get; set; }
 
-		[FlexJamMember(Name = "count", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "count")]
+		[FlexJamMember(Name = "count", Type = FlexJamType.UInt8)]
 		public byte Count { get; set; }
 	}
 }
