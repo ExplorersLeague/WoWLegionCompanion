@@ -27,8 +27,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "maximum")]
 		public ulong Maximum { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "sqaccum")]
 		[FlexJamMember(Name = "sqaccum", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "sqaccum")]
 		public ulong Sqaccum { get; set; }
 
 		[FlexJamMember(Name = "arg", Type = FlexJamType.UInt64)]
@@ -43,8 +43,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "argname", Type = FlexJamType.String)]
 		public string Argname { get; set; }
 
-		[FlexJamMember(Name = "minimum", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "minimum")]
+		[FlexJamMember(Name = "minimum", Type = FlexJamType.UInt64)]
 		public ulong Minimum { get; set; }
 	}
 }

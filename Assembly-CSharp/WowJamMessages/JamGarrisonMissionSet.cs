@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamGarrisonMissionSet
 	{
-		[FlexJamMember(Name = "garrMissionSetID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "garrMissionSetID")]
+		[FlexJamMember(Name = "garrMissionSetID", Type = FlexJamType.Int32)]
 		public int GarrMissionSetID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "lastUpdateTime")]

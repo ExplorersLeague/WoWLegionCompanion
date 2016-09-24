@@ -21,8 +21,7 @@ public class TroopsPanel : MonoBehaviour
 		instance2.FollowerDataChangedAction = (Action)Delegate.Combine(instance2.FollowerDataChangedAction, new Action(this.HandleFollowerDataChanged));
 		Main instance3 = Main.instance;
 		instance3.ShipmentTypesUpdatedAction = (Action)Delegate.Combine(instance3.ShipmentTypesUpdatedAction, new Action(this.InitList));
-		Main instance4 = Main.instance;
-		instance4.StartLogOutAction = (Action)Delegate.Combine(instance4.StartLogOutAction, new Action(this.HandleStartLogout));
+		this.HandleEnteredWorld();
 	}
 
 	private void OnDisable()
@@ -33,8 +32,6 @@ public class TroopsPanel : MonoBehaviour
 		instance2.FollowerDataChangedAction = (Action)Delegate.Remove(instance2.FollowerDataChangedAction, new Action(this.HandleFollowerDataChanged));
 		Main instance3 = Main.instance;
 		instance3.ShipmentTypesUpdatedAction = (Action)Delegate.Remove(instance3.ShipmentTypesUpdatedAction, new Action(this.InitList));
-		Main instance4 = Main.instance;
-		instance4.StartLogOutAction = (Action)Delegate.Remove(instance4.StartLogOutAction, new Action(this.HandleStartLogout));
 	}
 
 	private void Update()
@@ -50,16 +47,16 @@ public class TroopsPanel : MonoBehaviour
 	private void HandleFollowerDataChanged()
 	{
 		this.InitList();
-		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>();
+		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>(true);
 		foreach (TroopsListItem troopsListItem in componentsInChildren)
 		{
 			troopsListItem.HandleFollowerDataChanged();
 		}
 	}
 
-	private void HandleStartLogout()
+	private void HandleEnteredWorld()
 	{
-		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>();
+		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>(true);
 		foreach (TroopsListItem troopsListItem in componentsInChildren)
 		{
 			Object.DestroyImmediate(troopsListItem.gameObject);
@@ -77,7 +74,7 @@ public class TroopsPanel : MonoBehaviour
 		{
 			this.m_noRecruitsYetMessage.gameObject.SetActive(false);
 		}
-		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>();
+		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>(true);
 		foreach (TroopsListItem troopsListItem in componentsInChildren)
 		{
 			bool flag = true;
@@ -101,7 +98,7 @@ public class TroopsPanel : MonoBehaviour
 		{
 			return;
 		}
-		componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>();
+		componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>(true);
 		for (int k = 0; k < availableShipmentTypes.Length; k++)
 		{
 			bool flag2 = false;

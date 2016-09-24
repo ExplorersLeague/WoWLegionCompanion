@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "phaseName")]
 		public string PhaseName { get; set; }
 
-		[FlexJamMember(Name = "phaseID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "phaseID")]
+		[FlexJamMember(Name = "phaseID", Type = FlexJamType.Int32)]
 		public int PhaseID { get; set; }
 	}
 }

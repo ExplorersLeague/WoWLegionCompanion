@@ -4,24 +4,24 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "DebugEvent", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "DebugEvent", Version = 28333852u)]
 	public class DebugEvent
 	{
 		[System.Runtime.Serialization.DataMember(Name = "eventName")]
 		[FlexJamMember(Name = "eventName", Type = FlexJamType.String)]
 		public string EventName { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "guid", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		public string[] Guid { get; set; }
 
 		[FlexJamMember(Name = "messageText", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "messageText")]
 		public string MessageText { get; set; }
 
-		[FlexJamMember(Name = "systemNameHash", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "systemNameHash")]
+		[FlexJamMember(Name = "systemNameHash", Type = FlexJamType.Int32)]
 		public int SystemNameHash { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "eventTime")]
@@ -36,8 +36,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "messageTextHash", Type = FlexJamType.Int32)]
 		public int MessageTextHash { get; set; }
 
-		[FlexJamMember(Name = "eventNameHash", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "eventNameHash")]
+		[FlexJamMember(Name = "eventNameHash", Type = FlexJamType.Int32)]
 		public int EventNameHash { get; set; }
 	}
 }

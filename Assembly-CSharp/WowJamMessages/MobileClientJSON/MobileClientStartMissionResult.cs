@@ -16,8 +16,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "result")]
 		public int Result { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "newDailyMissionCounter")]
 		[FlexJamMember(Name = "newDailyMissionCounter", Type = FlexJamType.UInt16)]
+		[System.Runtime.Serialization.DataMember(Name = "newDailyMissionCounter")]
 		public ushort NewDailyMissionCounter { get; set; }
 	}
 }

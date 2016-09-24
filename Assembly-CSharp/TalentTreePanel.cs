@@ -11,8 +11,7 @@ public class TalentTreePanel : MonoBehaviour
 	{
 		Main instance = Main.instance;
 		instance.GarrisonDataResetFinishedAction = (Action)Delegate.Combine(instance.GarrisonDataResetFinishedAction, new Action(this.HandleGarrisonDataResetFinished));
-		Main instance2 = Main.instance;
-		instance2.StartLogOutAction = (Action)Delegate.Combine(instance2.StartLogOutAction, new Action(this.HandleStartLogout));
+		this.HandleEnteredWorld();
 		this.InitTalentTree();
 	}
 
@@ -20,8 +19,6 @@ public class TalentTreePanel : MonoBehaviour
 	{
 		Main instance = Main.instance;
 		instance.GarrisonDataResetFinishedAction = (Action)Delegate.Remove(instance.GarrisonDataResetFinishedAction, new Action(this.HandleGarrisonDataResetFinished));
-		Main instance2 = Main.instance;
-		instance2.StartLogOutAction = (Action)Delegate.Remove(instance2.StartLogOutAction, new Action(this.HandleStartLogout));
 	}
 
 	private void HandleGarrisonDataResetFinished()
@@ -91,7 +88,7 @@ public class TalentTreePanel : MonoBehaviour
 		return result;
 	}
 
-	private void HandleStartLogout()
+	private void HandleEnteredWorld()
 	{
 		this.m_needsFullInit = true;
 	}

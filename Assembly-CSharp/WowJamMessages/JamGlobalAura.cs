@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamGlobalAura
 	{
-		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "spellID")]
+		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		public int SpellID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "playerConditionID")]

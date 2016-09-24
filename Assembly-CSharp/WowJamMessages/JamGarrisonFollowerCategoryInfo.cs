@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamGarrisonFollowerCategoryInfo", Version = 28333852u)]
 	public class JamGarrisonFollowerCategoryInfo
 	{
-		[System.Runtime.Serialization.DataMember(Name = "classSpec")]
 		[FlexJamMember(Name = "classSpec", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "classSpec")]
 		public int ClassSpec { get; set; }
 
 		[FlexJamMember(Name = "classSpecPlayerCondID", Type = FlexJamType.Int32)]

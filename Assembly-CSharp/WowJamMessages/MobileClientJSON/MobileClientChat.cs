@@ -18,20 +18,20 @@ namespace WowJamMessages.MobileClientJSON
 			this.ChatFlags = 0;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "senderName")]
 		[FlexJamMember(Name = "senderName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "senderName")]
 		public string SenderName { get; set; }
 
-		[FlexJamMember(Name = "senderGUID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "senderGUID")]
+		[FlexJamMember(Name = "senderGUID", Type = FlexJamType.WowGuid)]
 		public string SenderGUID { get; set; }
 
-		[FlexJamMember(Name = "chatText", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "chatText")]
+		[FlexJamMember(Name = "chatText", Type = FlexJamType.String)]
 		public string ChatText { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "prefix")]
 		[FlexJamMember(Name = "prefix", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "prefix")]
 		public string Prefix { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "channel")]

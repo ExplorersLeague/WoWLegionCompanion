@@ -8,12 +8,12 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamStruct(Name = "MobileEmissaryFaction", Version = 28333852u)]
 	public class MobileEmissaryFaction
 	{
-		[FlexJamMember(Name = "factionID", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "factionID")]
+		[FlexJamMember(Name = "factionID", Type = FlexJamType.UInt16)]
 		public ushort FactionID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "factionAmount")]
 		[FlexJamMember(Name = "factionAmount", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "factionAmount")]
 		public int FactionAmount { get; set; }
 	}
 }

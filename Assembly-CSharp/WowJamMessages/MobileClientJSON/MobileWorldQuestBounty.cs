@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamStruct(Name = "MobileWorldQuestBounty", Version = 28333852u)]
 	public class MobileWorldQuestBounty
 	{
-		[FlexJamMember(ArrayDimensions = 1, Name = "item", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "item")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "item", Type = FlexJamType.Struct)]
 		public MobileWorldQuestReward[] Item { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "endTime")]
@@ -20,12 +20,12 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "numNeeded", Type = FlexJamType.Int32)]
 		public int NumNeeded { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "experience")]
 		[FlexJamMember(Name = "experience", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "experience")]
 		public int Experience { get; set; }
 
-		[FlexJamMember(Name = "questID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "questID")]
+		[FlexJamMember(Name = "questID", Type = FlexJamType.Int32)]
 		public int QuestID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "iconFileDataID")]
@@ -40,8 +40,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "money", Type = FlexJamType.Int32)]
 		public int Money { get; set; }
 
-		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "startTime")]
+		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
 		public int StartTime { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "currency")]

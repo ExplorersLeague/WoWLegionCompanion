@@ -21,8 +21,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "attributeDescriptions")]
 		public DebugAttributeDescription[] AttributeDescriptions { get; set; }
 
-		[FlexJamMember(Name = "updateTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "updateTime")]
+		[FlexJamMember(Name = "updateTime", Type = FlexJamType.Int32)]
 		public int UpdateTime { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "attributes", Type = FlexJamType.Struct)]

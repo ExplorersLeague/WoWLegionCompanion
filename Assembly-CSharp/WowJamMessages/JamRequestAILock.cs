@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamRequestAILock
 	{
-		[FlexJamMember(Name = "lockReason", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "lockReason")]
+		[FlexJamMember(Name = "lockReason", Type = FlexJamType.UInt32)]
 		public uint LockReason { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "ticketGUID")]

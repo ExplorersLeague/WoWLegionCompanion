@@ -22,8 +22,8 @@ namespace WowJamMessages.MobilePlayerJSON
 		[FlexJamMember(Name = "chatText", Type = FlexJamType.String)]
 		public string ChatText { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "targetName")]
 		[FlexJamMember(Name = "targetName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "targetName")]
 		public string TargetName { get; set; }
 	}
 }

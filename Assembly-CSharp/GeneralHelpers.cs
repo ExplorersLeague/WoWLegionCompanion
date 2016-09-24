@@ -496,10 +496,10 @@ public class GeneralHelpers : MonoBehaviour
 
 	public static FollowerCanCounterMechanic HasFollowerWhoCanCounter(int garrMechanicTypeID)
 	{
-		GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3A <HasFollowerWhoCanCounter>c__AnonStorey3A = new GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3A();
-		<HasFollowerWhoCanCounter>c__AnonStorey3A.garrMechanicTypeID = garrMechanicTypeID;
-		<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy = false;
-		<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable = false;
+		GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3B <HasFollowerWhoCanCounter>c__AnonStorey3B = new GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3B();
+		<HasFollowerWhoCanCounter>c__AnonStorey3B.garrMechanicTypeID = garrMechanicTypeID;
+		<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterButBusy = false;
+		<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterAndIsAvailable = false;
 		JamGarrisonFollower follower;
 		foreach (JamGarrisonFollower follower2 in PersistentFollowerData.followerDictionary.Values)
 		{
@@ -529,7 +529,7 @@ public class GeneralHelpers : MonoBehaviour
 						{
 							return true;
 						}
-						if ((long)<HasFollowerWhoCanCounter>c__AnonStorey3A.garrMechanicTypeID != (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID))
+						if ((long)<HasFollowerWhoCanCounter>c__AnonStorey3B.garrMechanicTypeID != (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID))
 						{
 							return false;
 						}
@@ -539,20 +539,20 @@ public class GeneralHelpers : MonoBehaviour
 						bool flag4 = follower.CurrentBuildingID != 0;
 						if (flag || flag2 || flag3 || flag4)
 						{
-							<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy = true;
+							<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterButBusy = true;
 							return false;
 						}
-						<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable = true;
+						<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterAndIsAvailable = true;
 						return true;
 					});
 				}
 			}
 		}
-		if (<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable)
+		if (<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterAndIsAvailable)
 		{
 			return FollowerCanCounterMechanic.yesAndAvailable;
 		}
-		if (<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy)
+		if (<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterButBusy)
 		{
 			return FollowerCanCounterMechanic.yesButBusy;
 		}
@@ -714,7 +714,7 @@ public class GeneralHelpers : MonoBehaviour
 					case 6u:
 					{
 						GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if ((float)record.MissionDuration < garrAbilityEffectRec.ActionHours * 3600f)
+						if (record != null && (float)record.MissionDuration < garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -723,7 +723,7 @@ public class GeneralHelpers : MonoBehaviour
 					case 7u:
 					{
 						GarrMissionRec record2 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if ((float)record2.MissionDuration > garrAbilityEffectRec.ActionHours * 3600f)
+						if (record2 != null && (float)record2.MissionDuration > garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -732,7 +732,7 @@ public class GeneralHelpers : MonoBehaviour
 					case 9u:
 					{
 						GarrMissionRec record3 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record3.TravelDuration < garrAbilityEffectRec.ActionHours * 3600f)
+						if (record3 != null && record3.TravelDuration < garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -741,7 +741,7 @@ public class GeneralHelpers : MonoBehaviour
 					case 10u:
 					{
 						GarrMissionRec record4 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record4.TravelDuration > garrAbilityEffectRec.ActionHours * 3600f)
+						if (record4 != null && record4.TravelDuration > garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}

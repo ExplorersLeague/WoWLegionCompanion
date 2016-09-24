@@ -141,6 +141,10 @@ public class Login : MonoBehaviour
 		this.InitRecentCharacters();
 		this.LoadRecentCharacters();
 		this.ReturnToRecentCharacter = false;
+		if (this.IsDevRegionList())
+		{
+			this.m_mobileLoginTimeout = 120f;
+		}
 	}
 
 	private void SetLoginState(Login.eLoginState newState)
@@ -1265,7 +1269,7 @@ public class Login : MonoBehaviour
 			this.SetLoginState(Login.eLoginState.MOBILE_CONNECT_FAILED);
 			return;
 		}
-		if (Time.timeSinceLevelLoad > this.m_mobileLoginTime + 120f)
+		if (Time.timeSinceLevelLoad > this.m_mobileLoginTime + this.m_mobileLoginTimeout)
 		{
 			Debug.Log("MobileConnecting(): timeout exceeded while connecting");
 			this.SetLoginState(Login.eLoginState.MOBILE_CONNECT_FAILED);
@@ -1337,7 +1341,7 @@ public class Login : MonoBehaviour
 
 	private void MobileLoggingIn()
 	{
-		if (Time.timeSinceLevelLoad > this.m_mobileLoginTime + 120f)
+		if (Time.timeSinceLevelLoad > this.m_mobileLoginTime + this.m_mobileLoginTimeout)
 		{
 			Debug.Log("Mobile login attempt timed out.");
 			this.MobileDisconnect(DisconnectReason.TimeoutContactingServer);
@@ -1775,10 +1779,6 @@ public class Login : MonoBehaviour
 
 	private const float PONG_TIMEOUT = 60f;
 
-	private const float m_mobileLoginTimeout = 120f;
-
-	private const float m_mobileConnectTimeout = 120f;
-
 	public const int m_numRecentChars = 3;
 
 	private const int m_unpauseReconnectTime = 30;
@@ -1832,6 +1832,8 @@ public class Login : MonoBehaviour
 	private bool m_pongReceived;
 
 	private float m_mobileLoginTime;
+
+	private float m_mobileLoginTimeout = 25f;
 
 	public DotNetUrlDownloader m_urlDownloader;
 
@@ -2169,12 +2171,14 @@ public class Login : MonoBehaviour
 				Login.instance.LoginLog("Couldn't connect to mobile server, ip address was blank.");
 				return;
 			}
-			if (this.Port == 0)
+			int num = this.Port;
+			if (num == 0)
 			{
+				num = 6012;
 			}
 			string bnetAccount = string.Format("BNetAccount-0-{0:X12}", BattleNet.GetMyAccountId().lo);
 			string wowAccount = string.Format("WowAccount-0-{0:X12}", Login.instance.m_gameAccount.Low);
-			Login.instance.ConnectToMobileServer(this.IpAddress, 6012, bnetAccount, this.RealmAddress, wowAccount, this.JoinTicket, true);
+			Login.instance.ConnectToMobileServer(this.IpAddress, num, bnetAccount, this.RealmAddress, wowAccount, this.JoinTicket, true);
 		}
 
 		private ulong m_realmAddress;

@@ -8,16 +8,16 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileItemStats
 	{
-		[System.Runtime.Serialization.DataMember(Name = "itemDelay")]
 		[FlexJamMember(Name = "itemDelay", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemDelay")]
 		public int ItemDelay { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "dpr")]
 		[FlexJamMember(Name = "dpr", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "dpr")]
 		public float Dpr { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "effectiveArmor")]
 		[FlexJamMember(Name = "effectiveArmor", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "effectiveArmor")]
 		public int EffectiveArmor { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "weaponSpeed")]
@@ -32,8 +32,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "bonusStat")]
 		public MobileItemBonusStat[] BonusStat { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "requiredLevel")]
 		[FlexJamMember(Name = "requiredLevel", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "requiredLevel")]
 		public int RequiredLevel { get; set; }
 
 		[FlexJamMember(Name = "maxDamage", Type = FlexJamType.Int32)]
@@ -44,8 +44,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "minDamage")]
 		public int MinDamage { get; set; }
 
-		[FlexJamMember(Name = "quality", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "quality")]
+		[FlexJamMember(Name = "quality", Type = FlexJamType.Int32)]
 		public int Quality { get; set; }
 	}
 }

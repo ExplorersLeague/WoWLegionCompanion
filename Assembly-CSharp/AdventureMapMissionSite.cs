@@ -15,7 +15,7 @@ public class AdventureMapMissionSite : MonoBehaviour
 		Main instance2 = Main.instance;
 		instance2.ClaimMissionBonusResultAction = (Action<int, bool, int>)Delegate.Combine(instance2.ClaimMissionBonusResultAction, new Action<int, bool, int>(this.HandleClaimMissionBonusResult));
 		Main instance3 = Main.instance;
-		instance3.CompleteMissionResultAction = (Action<int, int, int>)Delegate.Combine(instance3.CompleteMissionResultAction, new Action<int, int, int>(this.HandleCompleteMissionResult));
+		instance3.CompleteMissionResultAction = (Action<int, bool>)Delegate.Combine(instance3.CompleteMissionResultAction, new Action<int, bool>(this.HandleCompleteMissionResult));
 		PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
 		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Combine(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
 	}
@@ -27,7 +27,7 @@ public class AdventureMapMissionSite : MonoBehaviour
 		Main instance2 = Main.instance;
 		instance2.ClaimMissionBonusResultAction = (Action<int, bool, int>)Delegate.Remove(instance2.ClaimMissionBonusResultAction, new Action<int, bool, int>(this.HandleClaimMissionBonusResult));
 		Main instance3 = Main.instance;
-		instance3.CompleteMissionResultAction = (Action<int, int, int>)Delegate.Remove(instance3.CompleteMissionResultAction, new Action<int, int, int>(this.HandleCompleteMissionResult));
+		instance3.CompleteMissionResultAction = (Action<int, bool>)Delegate.Remove(instance3.CompleteMissionResultAction, new Action<int, bool>(this.HandleCompleteMissionResult));
 		PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
 		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Remove(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
 	}
@@ -49,36 +49,12 @@ public class AdventureMapMissionSite : MonoBehaviour
 		instance.MissionMapSelectionChangedAction = (Action<int>)Delegate.Combine(instance.MissionMapSelectionChangedAction, new Action<int>(this.HandleMissionChanged));
 		this.m_missionCompleteText.text = StaticDB.GetString("MISSION_COMPLETE", null);
 		this.m_isStackablePreview = false;
+		this.m_missionTimeRemaining = new Duration(0, false);
 	}
 
 	private void Update()
 	{
 		this.UpdateMissionRemainingTimeDisplay();
-		Vector3[] array = new Vector3[4];
-		AdventureMapPanel.instance.m_mapViewRT.GetWorldCorners(array);
-		float num = array[2].x - array[0].x;
-		float num2 = array[2].y - array[0].y;
-		Rect rect;
-		rect..ctor(array[0].x, array[0].y, num, num2);
-		Vector3[] array2 = new Vector3[4];
-		this.m_myRT.GetWorldCorners(array2);
-		float num3 = array2[2].x - array2[0].x;
-		float num4 = array2[2].y - array2[0].y;
-		Rect rect2;
-		rect2..ctor(array2[0].x, array2[0].y, num3, num4);
-		if (!rect.Overlaps(rect2))
-		{
-			if (AdventureMapPanel.instance.GetCurrentMapMission() == this.m_garrMissionID)
-			{
-				AdventureMapPanel.instance.SelectMissionFromMap(0);
-			}
-			StackableMapIcon component = base.GetComponent<StackableMapIcon>();
-			if (component != null && AdventureMapPanel.instance.GetSelectedIconContainer() == component.GetContainer())
-			{
-				AdventureMapPanel.instance.SetSelectedIconContainer(null);
-			}
-			return;
-		}
 	}
 
 	private void UpdateMissionRemainingTimeDisplay()
@@ -96,8 +72,8 @@ public class AdventureMapMissionSite : MonoBehaviour
 		num2 = ((num2 <= 0L) ? 0L : num2);
 		if (!this.m_isSupportMission)
 		{
-			Duration duration = new Duration((int)num2);
-			this.m_missionTimeRemainingText.text = duration.DurationString;
+			this.m_missionTimeRemaining.FormatDurationString((int)num2, false);
+			this.m_missionTimeRemainingText.text = this.m_missionTimeRemaining.DurationString;
 		}
 		if (num2 == 0L)
 		{
@@ -258,11 +234,11 @@ public class AdventureMapMissionSite : MonoBehaviour
 		Main.instance.CompleteMission(this.m_garrMissionID);
 	}
 
-	public void HandleCompleteMissionResult(int garrMissionID, int result, int missionSuccessChance)
+	public void HandleCompleteMissionResult(int garrMissionID, bool missionSucceeded)
 	{
 		if (garrMissionID == this.m_garrMissionID)
 		{
-			this.OnMissionStatusChanged(false);
+			this.OnMissionStatusChanged(false, missionSucceeded);
 		}
 	}
 
@@ -272,7 +248,7 @@ public class AdventureMapMissionSite : MonoBehaviour
 		{
 			if (result == 0)
 			{
-				this.OnMissionStatusChanged(awardOvermax);
+				this.OnMissionStatusChanged(awardOvermax, true);
 			}
 			else
 			{
@@ -281,10 +257,10 @@ public class AdventureMapMissionSite : MonoBehaviour
 		}
 	}
 
-	public void OnMissionStatusChanged(bool awardOvermax = false)
+	public void OnMissionStatusChanged(bool awardOvermax, bool missionSucceeded)
 	{
 		JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[this.m_garrMissionID];
-		if (jamGarrisonMobileMission.MissionState == 6 && !this.m_claimedMyLoot)
+		if (jamGarrisonMobileMission.MissionState == 6 && !missionSucceeded)
 		{
 			Debug.Log("OnMissionStatusChanged() MISSION FAILED " + this.m_garrMissionID);
 			this.m_claimedMyLoot = true;
@@ -398,4 +374,6 @@ public class AdventureMapMissionSite : MonoBehaviour
 	public Text m_missionCompleteText;
 
 	private UiAnimMgr.UiAnimHandle m_selectedEffectAnimHandle;
+
+	private Duration m_missionTimeRemaining;
 }

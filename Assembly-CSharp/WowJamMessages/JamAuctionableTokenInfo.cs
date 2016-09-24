@@ -16,12 +16,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "status", Type = FlexJamType.Int32)]
 		public int Status { get; set; }
 
-		[FlexJamMember(Name = "expectedSecondsUntilSold", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "expectedSecondsUntilSold")]
+		[FlexJamMember(Name = "expectedSecondsUntilSold", Type = FlexJamType.UInt32)]
 		public uint ExpectedSecondsUntilSold { get; set; }
 
-		[FlexJamMember(Name = "id", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "id")]
+		[FlexJamMember(Name = "id", Type = FlexJamType.UInt64)]
 		public ulong Id { get; set; }
 
 		[FlexJamMember(Name = "lastUpdate", Type = FlexJamType.Int32)]

@@ -14,20 +14,20 @@ namespace WowJamMessages.MobileClientJSON
 			this.ItemContext = 0;
 		}
 
-		[FlexJamMember(Name = "itemContext", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemContext")]
+		[FlexJamMember(Name = "itemContext", Type = FlexJamType.Int32)]
 		public int ItemContext { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "recordID")]
 		[FlexJamMember(Name = "recordID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "recordID")]
 		public int RecordID { get; set; }
 
-		[FlexJamMember(Name = "fileDataID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "fileDataID")]
+		[FlexJamMember(Name = "fileDataID", Type = FlexJamType.Int32)]
 		public int FileDataID { get; set; }
 
-		[FlexJamMember(Name = "quantity", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "quantity")]
+		[FlexJamMember(Name = "quantity", Type = FlexJamType.Int32)]
 		public int Quantity { get; set; }
 	}
 }

@@ -8,12 +8,12 @@ namespace WowJamMessages.MobilePlayerJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobilePlayerGarrisonAdvanceMissionSet
 	{
-		[System.Runtime.Serialization.DataMember(Name = "missionSetID")]
 		[FlexJamMember(Name = "missionSetID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "missionSetID")]
 		public int MissionSetID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
 		[FlexJamMember(Name = "garrTypeID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
 		public int GarrTypeID { get; set; }
 	}
 }

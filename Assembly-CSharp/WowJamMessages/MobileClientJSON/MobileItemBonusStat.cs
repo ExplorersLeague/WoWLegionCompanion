@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamStruct(Name = "MobileItemBonusStat", Version = 28333852u)]
 	public class MobileItemBonusStat
 	{
-		[FlexJamMember(Name = "statID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "statID")]
+		[FlexJamMember(Name = "statID", Type = FlexJamType.Int32)]
 		public int StatID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "bonusAmount")]

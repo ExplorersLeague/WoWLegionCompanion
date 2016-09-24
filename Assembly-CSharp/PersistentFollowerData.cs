@@ -60,6 +60,11 @@ public class PersistentFollowerData
 		}
 	}
 
+	public static void ClearPreMissionFollowerData()
+	{
+		PersistentFollowerData.instance.m_preMissionFollowerDictionary.Clear();
+	}
+
 	public static void CachePreMissionFollower(JamGarrisonFollower follower)
 	{
 		if (PersistentFollowerData.instance.m_preMissionFollowerDictionary.ContainsKey(follower.GarrFollowerID))

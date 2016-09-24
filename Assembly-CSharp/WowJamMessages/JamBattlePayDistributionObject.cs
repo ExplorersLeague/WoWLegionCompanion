@@ -16,16 +16,16 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "deliverableID", Type = FlexJamType.UInt32)]
 		public uint DeliverableID { get; set; }
 
-		[FlexJamMember(Name = "targetPlayer", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "targetPlayer")]
+		[FlexJamMember(Name = "targetPlayer", Type = FlexJamType.WowGuid)]
 		public string TargetPlayer { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "deliverable")]
 		[FlexJamMember(Optional = true, Name = "deliverable", Type = FlexJamType.Struct)]
 		public JamBattlePayDeliverable[] Deliverable { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
 		[FlexJamMember(Name = "purchaseID", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
 		public ulong PurchaseID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "status")]
@@ -40,8 +40,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "distributionID")]
 		public ulong DistributionID { get; set; }
 
-		[FlexJamMember(Name = "targetVirtualRealm", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "targetVirtualRealm")]
+		[FlexJamMember(Name = "targetVirtualRealm", Type = FlexJamType.UInt32)]
 		public uint TargetVirtualRealm { get; set; }
 	}
 }

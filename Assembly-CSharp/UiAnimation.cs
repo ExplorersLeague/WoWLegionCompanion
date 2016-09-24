@@ -683,8 +683,8 @@ public class UiAnimation : MonoBehaviour
 		[XmlAttribute("useAtlasSize")]
 		public bool m_useAtlasSize;
 
-		[XmlArrayItem("Anchor")]
 		[XmlArray("Anchors")]
+		[XmlArrayItem("Anchor")]
 		public List<UiAnimation.UiAnchor> m_anchors = new List<UiAnimation.UiAnchor>();
 	}
 

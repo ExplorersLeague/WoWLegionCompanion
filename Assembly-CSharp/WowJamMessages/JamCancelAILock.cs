@@ -12,16 +12,16 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "lockReason")]
 		public uint LockReason { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "ticketGUID")]
 		[FlexJamMember(Name = "ticketGUID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "ticketGUID")]
 		public string TicketGUID { get; set; }
 
-		[FlexJamMember(Name = "lockGUID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "lockGUID")]
+		[FlexJamMember(Name = "lockGUID", Type = FlexJamType.WowGuid)]
 		public string LockGUID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "lockResourceGUID")]
 		[FlexJamMember(Name = "lockResourceGUID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "lockResourceGUID")]
 		public string LockResourceGUID { get; set; }
 	}
 }

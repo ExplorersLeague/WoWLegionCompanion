@@ -29,16 +29,16 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "aiGroupActionSetID", Type = FlexJamType.Int32)]
 		public int AiGroupActionSetID { get; set; }
 
-		[FlexJamMember(Name = "note", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "note")]
+		[FlexJamMember(Name = "note", Type = FlexJamType.String)]
 		public string Note { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "typeName")]
 		[FlexJamMember(Name = "typeName", Type = FlexJamType.String)]
 		public string TypeName { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "triggerTime")]
 		[FlexJamMember(Name = "triggerTime", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "triggerTime")]
 		public uint TriggerTime { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "type")]
@@ -49,12 +49,12 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "triggerData")]
 		public int TriggerData { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "param")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "param", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "param")]
 		public int[] Param { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetName")]
 		[FlexJamMember(Name = "aiGroupActionSetName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetName")]
 		public string AiGroupActionSetName { get; set; }
 	}
 }

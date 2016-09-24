@@ -6,20 +6,22 @@ public class ExceptionCatcher : MonoBehaviour
 {
 	private void Awake()
 	{
+		Application.stackTraceLogType = 2;
+		Application.logMessageReceived += new Application.LogCallback(this.HandleLogMessage);
 	}
 
 	private void HandleLogMessage(string condition, string stackTrace, LogType type)
 	{
 		if (type == 4)
 		{
-			this.exceptionPanel.gameObject.SetActive(true);
 			Debug.Log(condition + "\n" + stackTrace);
-			FileStream fileStream = new FileStream(Application.persistentDataPath + "/exceptions.log", FileMode.Append);
+			FileStream fileStream = new FileStream(Application.persistentDataPath + "/exceptions.log", FileMode.Create);
 			StreamWriter streamWriter = new StreamWriter(fileStream);
 			streamWriter.WriteLine(condition + "\n" + stackTrace + "\n\n");
 			streamWriter.Close();
 			fileStream.Close();
-			this.exceptionPanel.m_exceptionText.text = condition + "\n" + stackTrace;
+			Login.instance.BnQuit();
+			Application.Quit();
 		}
 	}
 

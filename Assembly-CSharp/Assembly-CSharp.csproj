@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B6B1B6DC-9055-44E9-9DC8-2709FB0070A6}</ProjectGuid>
+    <ProjectGuid>{0950ED24-5817-4B70-9051-B05FE56F53F6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -536,6 +536,7 @@
     <Compile Include="DustinHorne\Json\Examples\JNSimpleObjectSample.cs" />
     <Compile Include="DustinHorne\Json\Examples\JNSubClassModel.cs" />
     <Compile Include="EmissaryPopup.cs" />
+    <Compile Include="EncounterPopup.cs" />
     <Compile Include="EquipmentDialog.cs" />
     <Compile Include="EquipmentPopup.cs" />
     <Compile Include="ExceptionCatcher.cs" />
@@ -558,6 +559,7 @@
     <Compile Include="FollowerModelSpinningBase.cs" />
     <Compile Include="FreezeFrame.cs" />
     <Compile Include="GameClient.cs" />
+    <Compile Include="GarbageFreeStringBuilder\StringBuilderExtensions.cs" />
     <Compile Include="GarrisonStatus.cs" />
     <Compile Include="GeneralHelpers.cs" />
     <Compile Include="GeneralUtils.cs" />

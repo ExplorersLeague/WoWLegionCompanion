@@ -19,7 +19,7 @@ public class MissionListItem : MonoBehaviour
 		long num = GarrisonStatus.CurrentTime() - this.missionStartedTime;
 		long num2 = (long)this.missionDurationInSeconds - num;
 		num2 = ((num2 <= 0L) ? 0L : num2);
-		Duration duration = new Duration((int)num2);
+		Duration duration = new Duration((int)num2, false);
 		this.missionTimeRemainingText.text = duration.DurationString + " <color=#ff0000ff>(In Progress)</color>";
 	}
 
@@ -35,6 +35,10 @@ public class MissionListItem : MonoBehaviour
 	{
 		this.garrMissionID = missionRecID;
 		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(this.garrMissionID);
+		if (record == null)
+		{
+			return;
+		}
 		if (!PersistentMissionData.missionDictionary.ContainsKey(this.garrMissionID))
 		{
 			return;
@@ -42,7 +46,7 @@ public class MissionListItem : MonoBehaviour
 		this.missionDurationInSeconds = record.MissionDuration;
 		JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[this.garrMissionID];
 		this.missionStartedTime = jamGarrisonMobileMission.StartTime;
-		Duration duration = new Duration(record.MissionDuration);
+		Duration duration = new Duration(record.MissionDuration, false);
 		string str = (duration.Hours < 2) ? "<color=#ffffffff>" : "<color=#ff8600ff>";
 		long num = GarrisonStatus.CurrentTime() - this.missionStartedTime;
 		long num2 = (long)this.missionDurationInSeconds - num;

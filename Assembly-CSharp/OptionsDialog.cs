@@ -15,6 +15,23 @@ public class OptionsDialog : MonoBehaviour
 		this.m_mapFilters[2].onValueChanged.RemoveListener(new UnityAction<bool>(this.OnValueChanged_EnableOrderResources));
 		this.m_mapFilters[5].onValueChanged.RemoveListener(new UnityAction<bool>(this.OnValueChanged_EnableProfessionMats));
 		this.m_mapFilters[6].onValueChanged.RemoveListener(new UnityAction<bool>(this.OnValueChanged_EnablePetCharms));
+		bool flag = Main.instance.m_UISound.IsSFXEnabled();
+		string @string = SecurePlayerPrefs.GetString("EnableSFX", Main.uniqueIdentifier);
+		if (@string != null)
+		{
+			if (@string == "true")
+			{
+				flag = true;
+			}
+			else if (@string == "false")
+			{
+				flag = false;
+			}
+		}
+		if (Main.instance.m_UISound.IsSFXEnabled() != flag)
+		{
+			Main.instance.m_UISound.EnableSFX(flag);
+		}
 		this.m_enableSFX.isOn = Main.instance.m_UISound.IsSFXEnabled();
 		this.m_mapFilters[0].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.All);
 		this.m_mapFilters[1].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.ArtifactPower);
@@ -45,7 +62,7 @@ public class OptionsDialog : MonoBehaviour
 		this.m_sfxText.text = StaticDB.GetString("ENABLE_SFX", null);
 		this.m_mapFilters[0].GetComponentInChildren<Text>().text = StaticDB.GetString("SHOW_ALL", "Show All");
 		this.m_mapFilters[1].GetComponentInChildren<Text>().text = StaticDB.GetString("ARTIFACT_POWER", "Artifact Power");
-		this.m_mapFilters[3].GetComponentInChildren<Text>().text = StaticDB.GetString("GEAR", "Gear");
+		this.m_mapFilters[3].GetComponentInChildren<Text>().text = StaticDB.GetString("EQUIPMENT", null);
 		this.m_mapFilters[4].GetComponentInChildren<Text>().text = StaticDB.GetString("GOLD", "Gold");
 		this.m_mapFilters[2].GetComponentInChildren<Text>().text = StaticDB.GetString("ORDER_RESOURCES", "Order Resources");
 		this.m_mapFilters[5].GetComponentInChildren<Text>().text = StaticDB.GetString("PROFESSION_MATERIALS", "Profession Materials");
@@ -70,6 +87,7 @@ public class OptionsDialog : MonoBehaviour
 	{
 		Main.instance.m_UISound.Play_ButtonBlackClick();
 		Main.instance.m_UISound.EnableSFX(isOn);
+		SecurePlayerPrefs.SetString("EnableSFX", isOn.ToString().ToLower(), Main.uniqueIdentifier);
 	}
 
 	private void OnValueChanged_EnableAll(bool isOn)

@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4868, Name = "MobileClientArtifactInfoResult", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileClientArtifactInfoResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "knowledgeLevel")]
 		[FlexJamMember(Name = "knowledgeLevel", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "knowledgeLevel")]
 		public int KnowledgeLevel { get; set; }
 
 		[FlexJamMember(Name = "xpMultiplier", Type = FlexJamType.Float)]

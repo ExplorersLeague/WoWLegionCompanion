@@ -8,28 +8,28 @@ namespace WowJamMessages.JSONRealmList
 	[FlexJamStruct(Name = "JamJSONRealmEntry", Version = 28333852u)]
 	public class JamJSONRealmEntry
 	{
-		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "wowRealmAddress")]
+		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		public uint WowRealmAddress { get; set; }
 
-		[FlexJamMember(Name = "cfgTimezonesID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "cfgTimezonesID")]
+		[FlexJamMember(Name = "cfgTimezonesID", Type = FlexJamType.Int32)]
 		public int CfgTimezonesID { get; set; }
 
 		[FlexJamMember(Name = "populationState", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "populationState")]
 		public int PopulationState { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "cfgCategoriesID")]
 		[FlexJamMember(Name = "cfgCategoriesID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "cfgCategoriesID")]
 		public int CfgCategoriesID { get; set; }
 
-		[FlexJamMember(Name = "version", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "version")]
+		[FlexJamMember(Name = "version", Type = FlexJamType.Struct)]
 		public JamJSONGameVersion Version { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "cfgRealmsID")]
 		[FlexJamMember(Name = "cfgRealmsID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "cfgRealmsID")]
 		public int CfgRealmsID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
@@ -40,8 +40,8 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
-		[FlexJamMember(Name = "cfgConfigsID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "cfgConfigsID")]
+		[FlexJamMember(Name = "cfgConfigsID", Type = FlexJamType.Int32)]
 		public int CfgConfigsID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "cfgLanguagesID")]

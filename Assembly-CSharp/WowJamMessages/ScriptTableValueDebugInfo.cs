@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "keyName")]
 		public string KeyName { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "valueName")]
 		[FlexJamMember(Name = "valueName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "valueName")]
 		public string ValueName { get; set; }
 	}
 }

@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		public uint Flags { get; set; }
 
-		[FlexJamMember(Optional = true, Name = "displayInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "displayInfo")]
+		[FlexJamMember(Optional = true, Name = "displayInfo", Type = FlexJamType.Struct)]
 		public JamBattlepayDisplayInfo[] DisplayInfo { get; set; }
 
 		[FlexJamMember(Name = "ordering", Type = FlexJamType.Int32)]
@@ -28,8 +28,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "bannerType", Type = FlexJamType.UInt8)]
 		public byte BannerType { get; set; }
 
-		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "productID")]
+		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]
 		public uint ProductID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "groupID")]

@@ -16,8 +16,8 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
 		public uint VirtualRealmAddress { get; set; }
 
-		[FlexJamMember(Name = "lastPlayedTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "lastPlayedTime")]
+		[FlexJamMember(Name = "lastPlayedTime", Type = FlexJamType.Int32)]
 		public int LastPlayedTime { get; set; }
 	}
 }

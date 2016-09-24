@@ -74,7 +74,7 @@ public class MissionResultsPanel : MonoBehaviour
 		long num2 = this.m_missionDurationInSeconds - num;
 		bool flag = num2 < 0L && this.m_popupView.gameObject.activeSelf;
 		num2 = ((num2 <= 0L) ? 0L : num2);
-		Duration duration = new Duration((int)num2);
+		Duration duration = new Duration((int)num2, false);
 		this.m_missionTimeRemainingText.text = duration.DurationString;
 		if (flag && !this.m_attemptedAutoComplete)
 		{
@@ -207,7 +207,8 @@ public class MissionResultsPanel : MonoBehaviour
 		{
 			return;
 		}
-		if (record.OvermaxRewardPackID > 0)
+		JamGarrisonMobileMission jamGarrisonMobileMission = (!PersistentMissionData.missionDictionary.ContainsKey(this.m_garrMissionID)) ? null : ((JamGarrisonMobileMission)PersistentMissionData.missionDictionary[this.m_garrMissionID]);
+		if (record.OvermaxRewardPackID > 0 && jamGarrisonMobileMission != null && jamGarrisonMobileMission.OvermaxReward.Length > 0)
 		{
 			this.m_bonusLootDisplay.SetActive(true);
 			this.m_bonusLootChanceText.text = string.Concat(new object[]
@@ -223,6 +224,11 @@ public class MissionResultsPanel : MonoBehaviour
 
 	public void ShowMissionResults(int garrMissionID, int missionResultType, bool awardOvermax)
 	{
+		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+		if (record == null)
+		{
+			return;
+		}
 		this.m_missionResultsDisplayCanvasGroupAutoFadeOut.Reset();
 		this.m_currentResultType = (MissionResultType)missionResultType;
 		this.m_followerExperienceDisplayArea.SetActive(false);
@@ -274,7 +280,6 @@ public class MissionResultsPanel : MonoBehaviour
 			int garrMechanicID = (jamGarrisonMobileMission.Encounter[k].MechanicID.Length <= 0) ? 0 : jamGarrisonMobileMission.Encounter[k].MechanicID[0];
 			component.SetEncounter(jamGarrisonMobileMission.Encounter[k].EncounterID, garrMechanicID);
 		}
-		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
 		this.missionNameText.text = record.Name;
 		this.missionLocationText.text = record.Location;
 		this.missioniLevelText.text = StaticDB.GetString("ITEM_LEVEL_ABBREVIATION", null) + " " + record.TargetItemLevel;
@@ -351,6 +356,10 @@ public class MissionResultsPanel : MonoBehaviour
 			{
 				Object.DestroyImmediate(componentsInChildren3[l].gameObject);
 			}
+		}
+		if (missionResultType == 1)
+		{
+			PersistentFollowerData.ClearPreMissionFollowerData();
 		}
 		MissionFollowerSlot[] componentsInChildren4 = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 		int num2 = 0;

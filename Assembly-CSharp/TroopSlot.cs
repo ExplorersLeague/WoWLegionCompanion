@@ -8,6 +8,12 @@ using WowStaticData;
 
 public class TroopSlot : MonoBehaviour
 {
+	private void Awake()
+	{
+		this.m_collected = false;
+		this.m_collectingSpinner.SetActive(false);
+	}
+
 	private void Start()
 	{
 		this.m_timeRemainingText.font = GeneralHelpers.LoadStandardFont();
@@ -41,10 +47,15 @@ public class TroopSlot : MonoBehaviour
 		}
 		if (this.m_glowLoopHandle != null)
 		{
-			this.m_glowLoopHandle.GetAnim().Stop(0f);
+			UiAnimation anim = this.m_glowLoopHandle.GetAnim();
+			if (anim != null)
+			{
+				anim.Stop(0.5f);
+			}
 			this.m_glowLoopHandle = null;
 		}
 		this.m_collected = false;
+		this.m_collectingSpinner.SetActive(false);
 		this.m_ownedGarrFollowerID = ownedGarrFollowerID;
 		this.m_training = training;
 		this.m_shipmentDBID = shipmentDBID;
@@ -157,7 +168,7 @@ public class TroopSlot : MonoBehaviour
 			}
 			if (num2 > 0L)
 			{
-				Duration duration = new Duration((int)num2);
+				Duration duration = new Duration((int)num2, true);
 				this.m_timeRemainingText.text = duration.DurationString;
 			}
 			else if (this.m_glowLoopHandle == null)
@@ -210,6 +221,7 @@ public class TroopSlot : MonoBehaviour
 		if (this.m_shipmentDBID != 0UL && !this.m_collected)
 		{
 			this.m_collected = true;
+			this.m_collectingSpinner.SetActive(true);
 			UiAnimMgr.instance.PlayAnim("MinimapPulseAnim", base.transform, Vector3.zero, 2f, 0f);
 			Main.instance.m_UISound.Play_CollectTroop();
 			MobilePlayerCompleteShipment mobilePlayerCompleteShipment = new MobilePlayerCompleteShipment();
@@ -229,6 +241,7 @@ public class TroopSlot : MonoBehaviour
 				{
 					anim.Stop(0.5f);
 				}
+				this.m_glowLoopHandle = null;
 			}
 			UiAnimMgr.instance.PlayAnim("GreenCheck", this.m_greenCheckEffectRoot, Vector3.zero, 1.8f, 0f);
 			Main.instance.m_UISound.Play_GreenCheck();
@@ -240,6 +253,10 @@ public class TroopSlot : MonoBehaviour
 			this.m_timeRemainingText.gameObject.SetActive(false);
 			this.m_troopPortraitImage.material = null;
 			PersistentShipmentData.shipmentDictionary.Remove(shipmentDBID);
+			MobilePlayerRequestShipmentTypes obj = new MobilePlayerRequestShipmentTypes();
+			Login.instance.SendToMobileServer(obj);
+			MobilePlayerRequestShipments obj2 = new MobilePlayerRequestShipments();
+			Login.instance.SendToMobileServer(obj2);
 			MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
 			mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
 			Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
@@ -261,6 +278,8 @@ public class TroopSlot : MonoBehaviour
 	public Shader m_grayscaleShader;
 
 	public Transform m_greenCheckEffectRoot;
+
+	public GameObject m_collectingSpinner;
 
 	private int m_ownedGarrFollowerID;
 

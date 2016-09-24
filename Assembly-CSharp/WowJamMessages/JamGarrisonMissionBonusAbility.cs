@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamGarrisonMissionBonusAbility", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamGarrisonMissionBonusAbility", Version = 28333852u)]
 	public class JamGarrisonMissionBonusAbility
 	{
 		[System.Runtime.Serialization.DataMember(Name = "garrMssnBonusAbilityID")]

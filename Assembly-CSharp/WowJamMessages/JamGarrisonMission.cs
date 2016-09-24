@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamGarrisonMission", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamGarrisonMission
 	{
 		public JamGarrisonMission()
@@ -17,16 +17,16 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "offerTime", Type = FlexJamType.Int32)]
 		public int OfferTime { get; set; }
 
-		[FlexJamMember(Name = "successChance", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "successChance")]
+		[FlexJamMember(Name = "successChance", Type = FlexJamType.Int32)]
 		public int SuccessChance { get; set; }
 
 		[FlexJamMember(Name = "travelDuration", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "travelDuration")]
 		public int TravelDuration { get; set; }
 
-		[FlexJamMember(Name = "missionRecID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "missionRecID")]
+		[FlexJamMember(Name = "missionRecID", Type = FlexJamType.Int32)]
 		public int MissionRecID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "missionState")]
@@ -49,8 +49,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "offerDuration")]
 		public int OfferDuration { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "missionDuration")]
 		[FlexJamMember(Name = "missionDuration", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "missionDuration")]
 		public int MissionDuration { get; set; }
 	}
 }

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamDumpObjectInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamDumpObjectInfo", Version = 28333852u)]
 	public class JamDumpObjectInfo
 	{
 		public JamDumpObjectInfo()
@@ -13,16 +13,16 @@ namespace WowJamMessages
 			this.Granted = true;
 		}
 
-		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "guid")]
+		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
 		public string Guid { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "position")]
 		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
 		public Vector3 Position { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "granted")]
 		[FlexJamMember(Name = "granted", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "granted")]
 		public bool Granted { get; set; }
 
 		[FlexJamMember(Name = "visibleRange", Type = FlexJamType.Float)]

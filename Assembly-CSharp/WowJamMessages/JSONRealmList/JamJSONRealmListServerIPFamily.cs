@@ -8,12 +8,12 @@ namespace WowJamMessages.JSONRealmList
 	[FlexJamStruct(Name = "JamJSONRealmListServerIPFamily", Version = 28333852u)]
 	public class JamJSONRealmListServerIPFamily
 	{
-		[FlexJamMember(Name = "family", Type = FlexJamType.Int8)]
 		[System.Runtime.Serialization.DataMember(Name = "family")]
+		[FlexJamMember(Name = "family", Type = FlexJamType.Int8)]
 		public sbyte Family { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "addresses", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "addresses")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "addresses", Type = FlexJamType.Struct)]
 		public JamJSONRealmListServerIPAddress[] Addresses { get; set; }
 	}
 }

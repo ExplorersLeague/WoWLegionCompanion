@@ -4,20 +4,20 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "GameObjectDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "GameObjectDebugInfo", Version = 28333852u)]
 	public class GameObjectDebugInfo
 	{
-		[System.Runtime.Serialization.DataMember(Name = "health")]
 		[FlexJamMember(Name = "health", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "health")]
 		public float Health { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "state")]
 		[FlexJamMember(Name = "state", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "state")]
 		public int State { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		public uint Flags { get; set; }
 
 		[FlexJamMember(Name = "gameObjectType", Type = FlexJamType.Int32)]

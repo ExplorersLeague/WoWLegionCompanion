@@ -8,8 +8,8 @@ namespace WowJamMessages.MobilePlayerJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobilePlayerCanResearchGarrisonTalent
 	{
-		[FlexJamMember(Name = "garrTalentID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "garrTalentID")]
+		[FlexJamMember(Name = "garrTalentID", Type = FlexJamType.Int32)]
 		public int GarrTalentID { get; set; }
 	}
 }

@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamPartyMemberAuraState", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamPartyMemberAuraState", Version = 28333852u)]
 	public class JamPartyMemberAuraState
 	{
-		[FlexJamMember(Name = "activeFlags", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "activeFlags")]
+		[FlexJamMember(Name = "activeFlags", Type = FlexJamType.UInt32)]
 		public uint ActiveFlags { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "aura")]

@@ -109,7 +109,7 @@ public class BountyInfoTooltip : MonoBehaviour
 	{
 		long num = (long)this.m_bounty.EndTime - GarrisonStatus.CurrentTime();
 		num = ((num <= 0L) ? 0L : num);
-		Duration duration = new Duration((int)num);
+		Duration duration = new Duration((int)num, false);
 		this.m_timeLeft.text = StaticDB.GetString("TIME_REMAINING", null) + " " + duration.DurationString;
 	}
 

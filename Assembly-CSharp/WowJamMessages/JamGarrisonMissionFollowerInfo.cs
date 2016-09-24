@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamGarrisonMissionFollowerInfo", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamGarrisonMissionFollowerInfo
 	{
 		[FlexJamMember(Name = "followerDBID", Type = FlexJamType.UInt64)]

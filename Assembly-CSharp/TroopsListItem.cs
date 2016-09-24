@@ -28,7 +28,7 @@ public class TroopsListItem : MonoBehaviour
 
 	private void UpdateRecruitButtonState()
 	{
-		TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>();
+		TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
 		bool flag = false;
 		foreach (TroopSlot troopSlot in componentsInChildren)
 		{
@@ -90,7 +90,7 @@ public class TroopsListItem : MonoBehaviour
 	{
 		this.m_shipmentCost = shipmentType.CurrencyCost;
 		this.m_shipmentType = shipmentType;
-		Transform[] componentsInChildren = this.m_troopHeartContainer.GetComponentsInChildren<Transform>();
+		Transform[] componentsInChildren = this.m_troopHeartContainer.GetComponentsInChildren<Transform>(true);
 		foreach (Transform transform in componentsInChildren)
 		{
 			if (transform != this.m_troopHeartContainer.transform)
@@ -98,12 +98,12 @@ public class TroopsListItem : MonoBehaviour
 				Object.DestroyImmediate(transform.gameObject);
 			}
 		}
-		AbilityDisplay[] componentsInChildren2 = this.m_traitsAndAbilitiesRootObject.GetComponentsInChildren<AbilityDisplay>();
+		AbilityDisplay[] componentsInChildren2 = this.m_traitsAndAbilitiesRootObject.GetComponentsInChildren<AbilityDisplay>(true);
 		foreach (AbilityDisplay abilityDisplay in componentsInChildren2)
 		{
 			Object.DestroyImmediate(abilityDisplay.gameObject);
 		}
-		TroopSlot[] componentsInChildren3 = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>();
+		TroopSlot[] componentsInChildren3 = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
 		foreach (TroopSlot troopSlot in componentsInChildren3)
 		{
 			Object.DestroyImmediate(troopSlot.gameObject);
@@ -381,7 +381,7 @@ public class TroopsListItem : MonoBehaviour
 	{
 		if (charShipmentID == this.m_shipmentType.CharShipmentID)
 		{
-			TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>();
+			TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
 			foreach (TroopSlot troopSlot in componentsInChildren)
 			{
 				if (troopSlot.GetDBID() == shipmentDBID)

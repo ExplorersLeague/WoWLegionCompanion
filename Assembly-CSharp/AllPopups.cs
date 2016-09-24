@@ -44,6 +44,7 @@ public class AllPopups : MonoBehaviour
 		this.m_regionConfirmation.gameObject.SetActive(false);
 		this.m_talentTooltip.gameObject.SetActive(false);
 		this.HideCombatAllyDialog();
+		this.m_encounterPopup.gameObject.SetActive(false);
 	}
 
 	public void ShowUnassignCombatAllyConfirmationDialog()
@@ -55,6 +56,12 @@ public class AllPopups : MonoBehaviour
 	{
 		this.m_partyBuffsPopup.gameObject.SetActive(true);
 		this.m_partyBuffsPopup.Init(buffIDs);
+	}
+
+	public void ShowEncounterPopup(int garrEncounterID, int garrMechanicID)
+	{
+		this.m_encounterPopup.SetEncounter(garrEncounterID, garrMechanicID);
+		this.m_encounterPopup.gameObject.SetActive(true);
 	}
 
 	public void ShowCombatAllyDialog()
@@ -219,8 +226,9 @@ public class AllPopups : MonoBehaviour
 		this.m_championDeactivationConfirmationDialog.Show(followerDetailView);
 	}
 
-	public void ShowLogoutConfirmationPopup()
+	public void ShowLogoutConfirmationPopup(bool goToWebAuth)
 	{
+		this.m_logoutConfirmation.GoToWebAuth = goToWebAuth;
 		this.m_logoutConfirmation.gameObject.SetActive(true);
 	}
 
@@ -276,6 +284,8 @@ public class AllPopups : MonoBehaviour
 	public LogoutConfirmation m_logoutConfirmation;
 
 	public RegionConfirmation m_regionConfirmation;
+
+	public EncounterPopup m_encounterPopup;
 
 	private FollowerDetailView m_currentFollowerDetailView;
 }
