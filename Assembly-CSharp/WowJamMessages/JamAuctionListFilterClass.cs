@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamAuctionListFilterClass", Version = 28333852u)]
 	public class JamAuctionListFilterClass
 	{
-		[FlexJamMember(Name = "itemClass", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemClass")]
+		[FlexJamMember(Name = "itemClass", Type = FlexJamType.Int32)]
 		public int ItemClass { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "subClasses")]

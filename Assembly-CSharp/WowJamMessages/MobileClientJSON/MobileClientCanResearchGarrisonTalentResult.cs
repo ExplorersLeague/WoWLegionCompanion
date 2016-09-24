@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamMessage(Id = 4858, Name = "MobileClientCanResearchGarrisonTalentResult", Version = 28333852u)]
 	public class MobileClientCanResearchGarrisonTalentResult
 	{
-		[FlexJamMember(Name = "conditionText", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "conditionText")]
+		[FlexJamMember(Name = "conditionText", Type = FlexJamType.String)]
 		public string ConditionText { get; set; }
 
 		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]

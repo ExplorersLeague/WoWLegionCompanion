@@ -12,8 +12,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "knowledgeLevel")]
 		public int KnowledgeLevel { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "xpMultiplier")]
 		[FlexJamMember(Name = "xpMultiplier", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "xpMultiplier")]
 		public float XpMultiplier { get; set; }
 	}
 }

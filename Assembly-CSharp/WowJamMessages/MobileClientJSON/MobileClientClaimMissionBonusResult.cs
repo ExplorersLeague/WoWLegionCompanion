@@ -8,20 +8,20 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientClaimMissionBonusResult
 	{
-		[FlexJamMember(Name = "awardOvermax", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "awardOvermax")]
+		[FlexJamMember(Name = "awardOvermax", Type = FlexJamType.Bool)]
 		public bool AwardOvermax { get; set; }
 
 		[FlexJamMember(Name = "garrMissionID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "garrMissionID")]
 		public int GarrMissionID { get; set; }
 
-		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "result")]
+		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		public int Result { get; set; }
 
-		[FlexJamMember(Name = "mission", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "mission")]
+		[FlexJamMember(Name = "mission", Type = FlexJamType.Struct)]
 		public JamGarrisonMobileMission Mission { get; set; }
 	}
 }

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamBattlenetRequestHeader", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamBattlenetRequestHeader
 	{
 		public JamBattlenetRequestHeader()
@@ -21,8 +21,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "token", Type = FlexJamType.UInt32)]
 		public uint Token { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "objectID")]
 		[FlexJamMember(Name = "objectID", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "objectID")]
 		public ulong ObjectID { get; set; }
 	}
 }

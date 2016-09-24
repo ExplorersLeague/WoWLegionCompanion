@@ -57,7 +57,14 @@ public class AllPanels : MonoBehaviour
 
 	public void OnClickTitleConnect()
 	{
-		Login.instance.StartNewLogin();
+		if (Login.instance.HaveCachedWebToken())
+		{
+			AllPopups.instance.ShowLogoutConfirmationPopup(true);
+		}
+		else
+		{
+			Login.instance.StartNewLogin();
+		}
 	}
 
 	public void OnClickTitleResume()
@@ -177,7 +184,7 @@ public class AllPanels : MonoBehaviour
 
 	public void OnClickCharacterSelectCancel()
 	{
-		AllPopups.instance.ShowLogoutConfirmationPopup();
+		AllPopups.instance.ShowLogoutConfirmationPopup(false);
 	}
 
 	public void OnClickConnectingCancel()

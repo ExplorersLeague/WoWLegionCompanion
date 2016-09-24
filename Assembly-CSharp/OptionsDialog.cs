@@ -62,7 +62,7 @@ public class OptionsDialog : MonoBehaviour
 		this.m_sfxText.text = StaticDB.GetString("ENABLE_SFX", null);
 		this.m_mapFilters[0].GetComponentInChildren<Text>().text = StaticDB.GetString("SHOW_ALL", "Show All");
 		this.m_mapFilters[1].GetComponentInChildren<Text>().text = StaticDB.GetString("ARTIFACT_POWER", "Artifact Power");
-		this.m_mapFilters[3].GetComponentInChildren<Text>().text = StaticDB.GetString("GEAR", "Gear");
+		this.m_mapFilters[3].GetComponentInChildren<Text>().text = StaticDB.GetString("EQUIPMENT", null);
 		this.m_mapFilters[4].GetComponentInChildren<Text>().text = StaticDB.GetString("GOLD", "Gold");
 		this.m_mapFilters[2].GetComponentInChildren<Text>().text = StaticDB.GetString("ORDER_RESOURCES", "Order Resources");
 		this.m_mapFilters[5].GetComponentInChildren<Text>().text = StaticDB.GetString("PROFESSION_MATERIALS", "Profession Materials");

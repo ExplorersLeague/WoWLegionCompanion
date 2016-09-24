@@ -15,7 +15,7 @@ public class AdventureMapMissionSite : MonoBehaviour
 		Main instance2 = Main.instance;
 		instance2.ClaimMissionBonusResultAction = (Action<int, bool, int>)Delegate.Combine(instance2.ClaimMissionBonusResultAction, new Action<int, bool, int>(this.HandleClaimMissionBonusResult));
 		Main instance3 = Main.instance;
-		instance3.CompleteMissionResultAction = (Action<int, int, int>)Delegate.Combine(instance3.CompleteMissionResultAction, new Action<int, int, int>(this.HandleCompleteMissionResult));
+		instance3.CompleteMissionResultAction = (Action<int, bool>)Delegate.Combine(instance3.CompleteMissionResultAction, new Action<int, bool>(this.HandleCompleteMissionResult));
 		PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
 		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Combine(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
 	}
@@ -27,7 +27,7 @@ public class AdventureMapMissionSite : MonoBehaviour
 		Main instance2 = Main.instance;
 		instance2.ClaimMissionBonusResultAction = (Action<int, bool, int>)Delegate.Remove(instance2.ClaimMissionBonusResultAction, new Action<int, bool, int>(this.HandleClaimMissionBonusResult));
 		Main instance3 = Main.instance;
-		instance3.CompleteMissionResultAction = (Action<int, int, int>)Delegate.Remove(instance3.CompleteMissionResultAction, new Action<int, int, int>(this.HandleCompleteMissionResult));
+		instance3.CompleteMissionResultAction = (Action<int, bool>)Delegate.Remove(instance3.CompleteMissionResultAction, new Action<int, bool>(this.HandleCompleteMissionResult));
 		PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
 		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Remove(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
 	}
@@ -234,11 +234,11 @@ public class AdventureMapMissionSite : MonoBehaviour
 		Main.instance.CompleteMission(this.m_garrMissionID);
 	}
 
-	public void HandleCompleteMissionResult(int garrMissionID, int result, int missionSuccessChance)
+	public void HandleCompleteMissionResult(int garrMissionID, bool missionSucceeded)
 	{
 		if (garrMissionID == this.m_garrMissionID)
 		{
-			this.OnMissionStatusChanged(false);
+			this.OnMissionStatusChanged(false, missionSucceeded);
 		}
 	}
 
@@ -248,7 +248,7 @@ public class AdventureMapMissionSite : MonoBehaviour
 		{
 			if (result == 0)
 			{
-				this.OnMissionStatusChanged(awardOvermax);
+				this.OnMissionStatusChanged(awardOvermax, true);
 			}
 			else
 			{
@@ -257,10 +257,10 @@ public class AdventureMapMissionSite : MonoBehaviour
 		}
 	}
 
-	public void OnMissionStatusChanged(bool awardOvermax = false)
+	public void OnMissionStatusChanged(bool awardOvermax, bool missionSucceeded)
 	{
 		JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[this.m_garrMissionID];
-		if (jamGarrisonMobileMission.MissionState == 6 && !this.m_claimedMyLoot)
+		if (jamGarrisonMobileMission.MissionState == 6 && !missionSucceeded)
 		{
 			Debug.Log("OnMissionStatusChanged() MISSION FAILED " + this.m_garrMissionID);
 			this.m_claimedMyLoot = true;

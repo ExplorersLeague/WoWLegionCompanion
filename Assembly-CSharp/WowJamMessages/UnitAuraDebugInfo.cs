@@ -4,16 +4,16 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "UnitAuraDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "UnitAuraDebugInfo", Version = 28333852u)]
 	public class UnitAuraDebugInfo
 	{
 		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "spellID")]
 		public int SpellID { get; set; }
 
-		[FlexJamMember(Name = "fromItemSet", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "fromItemSet")]
+		[FlexJamMember(Name = "fromItemSet", Type = FlexJamType.Bool)]
 		public bool FromItemSet { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "serverOnly")]
@@ -32,16 +32,16 @@ namespace WowJamMessages
 		[FlexJamMember(ArrayDimensions = 1, Name = "effectDebugInfo", Type = FlexJamType.Struct)]
 		public UnitAuraEffectDebugInfo[] EffectDebugInfo { get; set; }
 
-		[FlexJamMember(Name = "paused", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "paused")]
+		[FlexJamMember(Name = "paused", Type = FlexJamType.Bool)]
 		public bool Paused { get; set; }
 
 		[FlexJamMember(Name = "itemName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "itemName")]
 		public string ItemName { get; set; }
 
-		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]

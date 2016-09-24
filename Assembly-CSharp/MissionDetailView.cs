@@ -563,6 +563,7 @@ public class MissionDetailView : MonoBehaviour
 		{
 			MissionRewardDisplay.InitMissionRewards(this.m_missionRewardDisplayPrefab.gameObject, this.m_previewLootGroup.transform, jamGarrisonMobileMission.Reward);
 		}
+		this.InitBonusRewardDisplay(record, this.m_percentChance);
 	}
 
 	public void UpdateMissionStatus()
@@ -815,7 +816,6 @@ public class MissionDetailView : MonoBehaviour
 		{
 			return;
 		}
-		this.m_bonusLootDisplay.SetActive(false);
 		this.m_missionChanceSpinner.SetActive(false);
 		this.missionPercentChanceText.text = newChance + "%";
 		this.m_lootBorderNormal.SetActive(newChance < 100);
@@ -841,53 +841,66 @@ public class MissionDetailView : MonoBehaviour
 		else if (newChance > this.m_percentChance)
 		{
 		}
-		if (StaticDB.rewardPackDB.GetRecord(record.OvermaxRewardPackID) == null)
+		this.m_bonusLootChanceText.text = string.Concat(new object[]
+		{
+			"<color=#ffff00ff>",
+			StaticDB.GetString("BONUS", "Bonus:"),
+			" </color>\n<color=#ff8600ff>",
+			Math.Max(0, newChance - 100),
+			"%</color>"
+		});
+		this.m_percentChance = newChance;
+	}
+
+	private void InitBonusRewardDisplay(GarrMissionRec garrMissionRec, int missionSuccessChance)
+	{
+		this.m_bonusLootDisplay.SetActive(false);
+		if (garrMissionRec == null)
 		{
 			return;
 		}
-		if (record.OvermaxRewardPackID > 0)
+		if (StaticDB.rewardPackDB.GetRecord(garrMissionRec.OvermaxRewardPackID) == null)
 		{
-			string @string = StaticDB.GetString("BONUS", "Bonus:");
+			return;
+		}
+		JamGarrisonMobileMission jamGarrisonMobileMission = (!PersistentMissionData.missionDictionary.ContainsKey(garrMissionRec.ID)) ? null : ((JamGarrisonMobileMission)PersistentMissionData.missionDictionary[garrMissionRec.ID]);
+		if (garrMissionRec.OvermaxRewardPackID > 0 && jamGarrisonMobileMission != null && jamGarrisonMobileMission.OvermaxReward.Length > 0)
+		{
+			this.m_bonusLootDisplay.SetActive(true);
 			this.m_bonusLootChanceText.text = string.Concat(new object[]
 			{
 				"<color=#ffff00ff>",
-				@string,
+				StaticDB.GetString("BONUS", "Bonus:"),
 				" </color>\n<color=#ff8600ff>",
-				Math.Max(0, newChance - 100),
+				Math.Max(0, missionSuccessChance - 100),
 				"%</color>"
 			});
-			if (PersistentMissionData.missionDictionary.ContainsKey(this.m_currentGarrMissionID))
+			if (PersistentMissionData.missionDictionary.ContainsKey(this.m_currentGarrMissionID) && jamGarrisonMobileMission.OvermaxReward.Length > 0)
 			{
-				JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[this.m_currentGarrMissionID];
-				if (jamGarrisonMobileMission.OvermaxReward.Length > 0)
+				JamGarrisonMissionReward jamGarrisonMissionReward = jamGarrisonMobileMission.OvermaxReward[0];
+				if (jamGarrisonMissionReward.ItemID > 0)
 				{
-					this.m_bonusLootDisplay.SetActive(true);
-					JamGarrisonMissionReward jamGarrisonMissionReward = jamGarrisonMobileMission.OvermaxReward[0];
-					if (jamGarrisonMissionReward.ItemID > 0)
+					this.m_bonusMissionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.item, jamGarrisonMissionReward.ItemID, (int)jamGarrisonMissionReward.ItemQuantity, 0, jamGarrisonMissionReward.ItemFileDataID);
+				}
+				else if (jamGarrisonMissionReward.FollowerXP > 0u)
+				{
+					this.m_bonusMissionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.followerXP, 0, (int)jamGarrisonMissionReward.FollowerXP, 0, 0);
+				}
+				else if (jamGarrisonMissionReward.CurrencyQuantity > 0u)
+				{
+					if (jamGarrisonMissionReward.CurrencyType == 0)
 					{
-						this.m_bonusMissionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.item, jamGarrisonMissionReward.ItemID, (int)jamGarrisonMissionReward.ItemQuantity, 0, jamGarrisonMissionReward.ItemFileDataID);
+						this.m_bonusMissionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.gold, 0, (int)(jamGarrisonMissionReward.CurrencyQuantity / 10000u), 0, 0);
 					}
-					else if (jamGarrisonMissionReward.FollowerXP > 0u)
+					else
 					{
-						this.m_bonusMissionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.followerXP, 0, (int)jamGarrisonMissionReward.FollowerXP, 0, 0);
-					}
-					else if (jamGarrisonMissionReward.CurrencyQuantity > 0u)
-					{
-						if (jamGarrisonMissionReward.CurrencyType == 0)
-						{
-							this.m_bonusMissionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.gold, 0, (int)(jamGarrisonMissionReward.CurrencyQuantity / 10000u), 0, 0);
-						}
-						else
-						{
-							CurrencyTypesRec record2 = StaticDB.currencyTypesDB.GetRecord(jamGarrisonMissionReward.CurrencyType);
-							int rewardQuantity = (int)((ulong)jamGarrisonMissionReward.CurrencyQuantity / (ulong)(((record2.Flags & 8u) == 0u) ? 1L : 100L));
-							this.m_bonusMissionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.currency, jamGarrisonMissionReward.CurrencyType, rewardQuantity, 0, 0);
-						}
+						CurrencyTypesRec record = StaticDB.currencyTypesDB.GetRecord(jamGarrisonMissionReward.CurrencyType);
+						int rewardQuantity = (int)((ulong)jamGarrisonMissionReward.CurrencyQuantity / (ulong)(((record.Flags & 8u) == 0u) ? 1L : 100L));
+						this.m_bonusMissionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.currency, jamGarrisonMissionReward.CurrencyType, rewardQuantity, 0, 0);
 					}
 				}
 			}
 		}
-		this.m_percentChance = newChance;
 	}
 
 	public void AssignCombatAlly()

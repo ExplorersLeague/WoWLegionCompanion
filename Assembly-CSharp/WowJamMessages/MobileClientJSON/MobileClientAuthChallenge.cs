@@ -13,8 +13,8 @@ namespace WowJamMessages.MobileClientJSON
 			this.ServerChallenge = new byte[16];
 		}
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "serverChallenge", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "serverChallenge")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "serverChallenge", Type = FlexJamType.UInt8)]
 		public byte[] ServerChallenge { get; set; }
 	}
 }

@@ -24,6 +24,16 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Remove(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
 	}
 
+	private void ItemStatsUpdated(int itemID, int itemContext, MobileItemStats itemStats)
+	{
+		if (this.m_itemID == itemID && this.m_itemContext == itemContext)
+		{
+			ItemStatCache instance = ItemStatCache.instance;
+			instance.ItemStatCacheUpdateAction = (Action<int, int, MobileItemStats>)Delegate.Remove(instance.ItemStatCacheUpdateAction, new Action<int, int, MobileItemStats>(this.ItemStatsUpdated));
+			this.ShowILVL();
+		}
+	}
+
 	private void OnTestIconSizeChanged(float newScale)
 	{
 		base.transform.localScale = Vector3.one * newScale;
@@ -45,6 +55,37 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		}
 	}
 
+	private void ShowILVL()
+	{
+		ItemRec record = StaticDB.itemDB.GetRecord(this.m_itemID);
+		if (record == null)
+		{
+			Debug.LogWarning(string.Concat(new object[]
+			{
+				"Invalid Item ID ",
+				this.m_itemID,
+				" from Quest ID ",
+				this.m_questID,
+				". Ignoring for showing iLevel on map."
+			}));
+			return;
+		}
+		if (AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.Gear) && (record.ClassID == 2 || record.ClassID == 3 || record.ClassID == 4 || record.ClassID == 6))
+		{
+			MobileItemStats itemStats = ItemStatCache.instance.GetItemStats(this.m_itemID, this.m_itemContext);
+			if (itemStats != null)
+			{
+				this.m_quantityArea.gameObject.SetActive(true);
+				this.m_quantity.text = StaticDB.GetString("ILVL", null) + " " + itemStats.ItemLevel;
+			}
+			else
+			{
+				ItemStatCache instance = ItemStatCache.instance;
+				instance.ItemStatCacheUpdateAction = (Action<int, int, MobileItemStats>)Delegate.Combine(instance.ItemStatCacheUpdateAction, new Action<int, int, MobileItemStats>(this.ItemStatsUpdated));
+			}
+		}
+	}
+
 	public void SetQuestID(int questID)
 	{
 		this.m_questID = questID;
@@ -54,6 +95,8 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		{
 			return;
 		}
+		this.m_quantityArea.gameObject.SetActive(false);
+		bool flag = false;
 		foreach (MobileWorldQuestReward mobileWorldQuestReward in mobileWorldQuest.Item)
 		{
 			ItemRec record = StaticDB.itemDB.GetRecord(mobileWorldQuestReward.RecordID);
@@ -70,6 +113,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 			}
 			else
 			{
+				flag = true;
 				if (record.OverallQualityID > (int)this.m_lootQuality)
 				{
 					this.m_lootQuality = (ITEM_QUALITY)record.OverallQualityID;
@@ -77,6 +121,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				if (this.m_showLootIconInsteadOfMain)
 				{
 					bool isArtifactXP = false;
+					int quantity = 0;
 					StaticDB.itemEffectDB.EnumRecordsByParentID(mobileWorldQuestReward.RecordID, delegate(ItemEffectRec itemEffectRec)
 					{
 						StaticDB.spellEffectDB.EnumRecordsByParentID(itemEffectRec.SpellID, delegate(SpellEffectRec spellEffectRec)
@@ -84,6 +129,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 							if (spellEffectRec.Effect == 240)
 							{
 								isArtifactXP = true;
+								quantity = GeneralHelpers.ApplyArtifactXPMultiplier(spellEffectRec.EffectBasePoints, GarrisonStatus.ArtifactXpMultiplier);
 								return false;
 							}
 							return true;
@@ -93,31 +139,52 @@ public class AdventureMapWorldQuest : MonoBehaviour
 					if (isArtifactXP)
 					{
 						this.m_main.sprite = Resources.Load<Sprite>("WorldMap/INV_Artifact_XP02");
+						if (AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.ArtifactPower))
+						{
+							this.m_quantityArea.gameObject.SetActive(true);
+							this.m_quantity.text = quantity.ToString();
+						}
 					}
 					else
 					{
 						this.m_main.sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, mobileWorldQuestReward.FileDataID);
+						this.m_itemID = mobileWorldQuestReward.RecordID;
+						this.m_itemContext = mobileWorldQuestReward.ItemContext;
+						this.ShowILVL();
 					}
 				}
 			}
 		}
-		if (this.m_showLootIconInsteadOfMain)
+		if (!flag && this.m_showLootIconInsteadOfMain)
 		{
-			if (mobileWorldQuest.Money > 0)
+			if (mobileWorldQuest.Currency.GetLength(0) > 0)
+			{
+				foreach (MobileWorldQuestReward mobileWorldQuestReward2 in mobileWorldQuest.Currency)
+				{
+					CurrencyTypesRec record2 = StaticDB.currencyTypesDB.GetRecord(mobileWorldQuestReward2.RecordID);
+					if (record2 != null)
+					{
+						this.m_main.sprite = GeneralHelpers.LoadCurrencyIcon(mobileWorldQuestReward2.RecordID);
+					}
+					if (AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.OrderResources))
+					{
+						this.m_quantityArea.gameObject.SetActive(true);
+						this.m_quantity.text = mobileWorldQuestReward2.Quantity.ToString();
+					}
+				}
+			}
+			else if (mobileWorldQuest.Money > 0)
 			{
 				this.m_main.sprite = Resources.Load<Sprite>("MiscIcons/INV_Misc_Coin_01");
+				if (AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.Gold))
+				{
+					this.m_quantityArea.gameObject.SetActive(true);
+					this.m_quantity.text = string.Empty + mobileWorldQuest.Money / 100 / 100;
+				}
 			}
-			if (mobileWorldQuest.Experience > 0)
+			else if (mobileWorldQuest.Experience > 0)
 			{
 				this.m_main.sprite = GeneralHelpers.GetLocalizedFollowerXpIcon();
-			}
-			foreach (MobileWorldQuestReward mobileWorldQuestReward2 in mobileWorldQuest.Currency)
-			{
-				CurrencyTypesRec record2 = StaticDB.currencyTypesDB.GetRecord(mobileWorldQuestReward2.RecordID);
-				if (record2 != null)
-				{
-					this.m_main.sprite = GeneralHelpers.LoadCurrencyIcon(mobileWorldQuestReward2.RecordID);
-				}
 			}
 		}
 		this.m_endTime = (long)mobileWorldQuest.EndTime;
@@ -135,13 +202,13 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		}
 		bool active = (record4.Modifiers & 2) != 0;
 		this.m_dragonFrame.gameObject.SetActive(active);
-		bool flag = (record4.Modifiers & 1) != 0;
-		if (flag && record4.Type != 3)
+		bool flag2 = (record4.Modifiers & 1) != 0;
+		if (flag2 && record4.Type != 3)
 		{
 			this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-RareQuest");
 		}
-		bool flag2 = (record4.Modifiers & 4) != 0;
-		if (flag2 && record4.Type != 3)
+		bool flag3 = (record4.Modifiers & 4) != 0;
+		if (flag3 && record4.Type != 3)
 		{
 			this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-EpicQuest");
 		}
@@ -267,20 +334,20 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				text = "Mobile-Mining";
 				break;
 			}
-			goto IL_5AD;
+			goto IL_6CA;
 		}
 		case 3:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 			text = "Mobile-PVP";
-			goto IL_5AD;
+			goto IL_6CA;
 		case 4:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 			text = "Mobile-Pets";
-			goto IL_5AD;
+			goto IL_6CA;
 		}
 		uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 		text = "Mobile-QuestExclamationIcon";
-		IL_5AD:
+		IL_6CA:
 		if (!this.m_showLootIconInsteadOfMain)
 		{
 			if (text != null)
@@ -346,11 +413,19 @@ public class AdventureMapWorldQuest : MonoBehaviour
 
 	public GameObject m_zoomScaleRoot;
 
+	public GameObject m_quantityArea;
+
+	public Text m_quantity;
+
 	private int m_questID;
 
 	private ITEM_QUALITY m_lootQuality;
 
 	private long m_endTime;
+
+	private int m_itemID;
+
+	private int m_itemContext;
 
 	public bool m_showLootIconInsteadOfMain;
 }

@@ -106,6 +106,7 @@ public class Main : MonoBehaviour
 		GuildData.ClearData();
 		MissionDataCache.ClearData();
 		WorldQuestData.ClearData();
+		ItemStatCache.instance.ClearItemStats();
 		this.MobileRequestData();
 	}
 
@@ -412,7 +413,7 @@ public class Main : MonoBehaviour
 		PersistentMissionData.UpdateMission(msg.Mission);
 		if (this.CompleteMissionResultAction != null)
 		{
-			this.CompleteMissionResultAction(msg.GarrMissionID, msg.Result, (int)msg.MissionSuccessChance);
+			this.CompleteMissionResultAction(msg.GarrMissionID, msg.BonusRollSucceeded);
 		}
 		MobilePlayerRequestShipmentTypes obj = new MobilePlayerRequestShipmentTypes();
 		Login.instance.SendToMobileServer(obj);
@@ -815,6 +816,10 @@ public class Main : MonoBehaviour
 			if (mobileWorldQuest.StartLocationMapID == 1220)
 			{
 				WorldQuestData.AddWorldQuest(mobileWorldQuest);
+				for (int j = 0; j < mobileWorldQuest.Item.Count<MobileWorldQuestReward>(); j++)
+				{
+					ItemStatCache.instance.GetItemStats(mobileWorldQuest.Item[j].RecordID, mobileWorldQuest.Item[j].ItemContext);
+				}
 			}
 		}
 		this.allPanels.adventureMapPanel.UpdateWorldQuests();
@@ -1207,7 +1212,7 @@ public class Main : MonoBehaviour
 
 	public Action<SHIPMENT_RESULT, ulong> CompleteShipmentResultAction;
 
-	public Action<int, int, int> CompleteMissionResultAction;
+	public Action<int, bool> CompleteMissionResultAction;
 
 	public Action<int, bool, int> ClaimMissionBonusResultAction;
 

@@ -21,8 +21,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "minutesRemaining")]
 		public uint MinutesRemaining { get; set; }
 
-		[FlexJamMember(Name = "isInIGR", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "isInIGR")]
+		[FlexJamMember(Name = "isInIGR", Type = FlexJamType.Bool)]
 		public bool IsInIGR { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "isCAISEnabled")]

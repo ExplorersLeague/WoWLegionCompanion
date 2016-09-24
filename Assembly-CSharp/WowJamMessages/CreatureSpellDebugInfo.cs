@@ -8,16 +8,16 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "CreatureSpellDebugInfo", Version = 28333852u)]
 	public class CreatureSpellDebugInfo
 	{
-		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "spellID")]
+		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		public int SpellID { get; set; }
 
-		[FlexJamMember(Name = "availability", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "availability")]
+		[FlexJamMember(Name = "availability", Type = FlexJamType.Int32)]
 		public int Availability { get; set; }
 
-		[FlexJamMember(Name = "initialDelayMax", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "initialDelayMax")]
+		[FlexJamMember(Name = "initialDelayMax", Type = FlexJamType.Int32)]
 		public int InitialDelayMax { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "spellName")]
@@ -32,8 +32,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "priority")]
 		public int Priority { get; set; }
 
-		[FlexJamMember(Name = "initialDelayMin", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "initialDelayMin")]
+		[FlexJamMember(Name = "initialDelayMin", Type = FlexJamType.Int32)]
 		public int InitialDelayMin { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "repeatFrequencyMax")]

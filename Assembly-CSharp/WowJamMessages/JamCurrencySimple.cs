@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
 		public int Type { get; set; }
 
-		[FlexJamMember(Name = "quantity", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "quantity")]
+		[FlexJamMember(Name = "quantity", Type = FlexJamType.Int32)]
 		public int Quantity { get; set; }
 	}
 }

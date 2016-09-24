@@ -40,28 +40,28 @@ public class WorldQuestTooltip : MonoBehaviour
 				this.m_rewardInfo.SetReward(MissionRewardDisplay.RewardType.item, mobileWorldQuestReward.RecordID, mobileWorldQuestReward.Quantity, rewardSprite, mobileWorldQuestReward.ItemContext);
 			}
 		}
-		else if (worldQuest.Money > 0)
-		{
-			Sprite iconSprite = Resources.Load<Sprite>("MiscIcons/INV_Misc_Coin_01");
-			this.m_rewardInfo.SetGold(worldQuest.Money / 10000, iconSprite);
-		}
-		else if (worldQuest.Experience > 0)
-		{
-			Sprite localizedFollowerXpIcon = GeneralHelpers.GetLocalizedFollowerXpIcon();
-			this.m_rewardInfo.SetFollowerXP(worldQuest.Experience, localizedFollowerXpIcon);
-		}
-		else
+		else if (worldQuest.Currency.Count<MobileWorldQuestReward>() > 0)
 		{
 			MobileWorldQuestReward[] currency = worldQuest.Currency;
 			int num2 = 0;
 			if (num2 < currency.Length)
 			{
 				MobileWorldQuestReward mobileWorldQuestReward2 = currency[num2];
-				Sprite iconSprite2 = GeneralHelpers.LoadCurrencyIcon(mobileWorldQuestReward2.RecordID);
+				Sprite iconSprite = GeneralHelpers.LoadCurrencyIcon(mobileWorldQuestReward2.RecordID);
 				CurrencyTypesRec record = StaticDB.currencyTypesDB.GetRecord(mobileWorldQuestReward2.RecordID);
 				int quantity = mobileWorldQuestReward2.Quantity / (((record.Flags & 8u) == 0u) ? 1 : 100);
-				this.m_rewardInfo.SetCurrency(mobileWorldQuestReward2.RecordID, quantity, iconSprite2);
+				this.m_rewardInfo.SetCurrency(mobileWorldQuestReward2.RecordID, quantity, iconSprite);
 			}
+		}
+		else if (worldQuest.Money > 0)
+		{
+			Sprite iconSprite2 = Resources.Load<Sprite>("MiscIcons/INV_Misc_Coin_01");
+			this.m_rewardInfo.SetGold(worldQuest.Money / 10000, iconSprite2);
+		}
+		else if (worldQuest.Experience > 0)
+		{
+			Sprite localizedFollowerXpIcon = GeneralHelpers.GetLocalizedFollowerXpIcon();
+			this.m_rewardInfo.SetFollowerXP(worldQuest.Experience, localizedFollowerXpIcon);
 		}
 	}
 

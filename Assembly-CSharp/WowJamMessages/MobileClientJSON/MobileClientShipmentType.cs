@@ -8,16 +8,16 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamStruct(Name = "MobileClientShipmentType", Version = 28333852u)]
 	public class MobileClientShipmentType
 	{
-		[FlexJamMember(Name = "currencyTypeID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "currencyTypeID")]
+		[FlexJamMember(Name = "currencyTypeID", Type = FlexJamType.Int32)]
 		public int CurrencyTypeID { get; set; }
 
 		[FlexJamMember(Name = "charShipmentID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "charShipmentID")]
 		public int CharShipmentID { get; set; }
 
-		[FlexJamMember(Name = "currencyCost", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "currencyCost")]
+		[FlexJamMember(Name = "currencyCost", Type = FlexJamType.Int32)]
 		public int CurrencyCost { get; set; }
 	}
 }

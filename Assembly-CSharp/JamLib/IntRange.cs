@@ -11,8 +11,8 @@ namespace JamLib
 		[System.Runtime.Serialization.DataMember(Name = "l")]
 		public int Low { get; set; }
 
-		[FlexJamMember(Name = "h", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "h")]
+		[FlexJamMember(Name = "h", Type = FlexJamType.Int32)]
 		public int High { get; set; }
 	}
 }

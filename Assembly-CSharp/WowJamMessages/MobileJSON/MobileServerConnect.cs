@@ -18,16 +18,16 @@ namespace WowJamMessages.MobileJSON
 		[System.Runtime.Serialization.DataMember(Name = "proof")]
 		public byte[] Proof { get; set; }
 
-		[FlexJamMember(Name = "realmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "realmAddress")]
+		[FlexJamMember(Name = "realmAddress", Type = FlexJamType.UInt32)]
 		public uint RealmAddress { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "joinTicket")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "joinTicket", Type = FlexJamType.UInt8)]
 		public byte[] JoinTicket { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "characterID")]
 		[FlexJamMember(Name = "characterID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "characterID")]
 		public string CharacterID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "build")]
@@ -38,8 +38,8 @@ namespace WowJamMessages.MobileJSON
 		[System.Runtime.Serialization.DataMember(Name = "buildType")]
 		public uint BuildType { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "clientChallenge", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "clientChallenge")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "clientChallenge", Type = FlexJamType.UInt8)]
 		public byte[] ClientChallenge { get; set; }
 	}
 }

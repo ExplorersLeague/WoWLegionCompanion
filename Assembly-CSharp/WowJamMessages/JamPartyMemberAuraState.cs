@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamPartyMemberAuraState", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamPartyMemberAuraState", Version = 28333852u)]
 	public class JamPartyMemberAuraState
 	{
 		[System.Runtime.Serialization.DataMember(Name = "activeFlags")]
@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "aura", Type = FlexJamType.Int32)]
 		public int Aura { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		public byte Flags { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "points")]

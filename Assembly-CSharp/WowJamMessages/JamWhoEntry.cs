@@ -8,16 +8,16 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamWhoEntry", Version = 28333852u)]
 	public class JamWhoEntry
 	{
-		[System.Runtime.Serialization.DataMember(Name = "guildGUID")]
 		[FlexJamMember(Name = "guildGUID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "guildGUID")]
 		public string GuildGUID { get; set; }
 
 		[FlexJamMember(Name = "areaID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "areaID")]
 		public int AreaID { get; set; }
 
-		[FlexJamMember(Name = "guildVirtualRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "guildVirtualRealmAddress")]
+		[FlexJamMember(Name = "guildVirtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint GuildVirtualRealmAddress { get; set; }
 
 		[FlexJamMember(Name = "guildName", Type = FlexJamType.String)]

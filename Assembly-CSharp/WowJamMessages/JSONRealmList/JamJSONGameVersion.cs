@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamJSONGameVersion", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamJSONGameVersion
 	{
 		[System.Runtime.Serialization.DataMember(Name = "versionMajor")]

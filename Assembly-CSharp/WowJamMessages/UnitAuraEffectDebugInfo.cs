@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "UnitAuraEffectDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "UnitAuraEffectDebugInfo", Version = 28333852u)]
 	public class UnitAuraEffectDebugInfo
 	{
 		[FlexJamMember(Name = "active", Type = FlexJamType.Bool)]
@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "effectIndex")]
 		public int EffectIndex { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "amount")]
 		[FlexJamMember(Name = "amount", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "amount")]
 		public float Amount { get; set; }
 	}
 }

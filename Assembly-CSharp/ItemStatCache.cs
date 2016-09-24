@@ -53,6 +53,11 @@ public class ItemStatCache : MonoBehaviour
 		}
 	}
 
+	public void ClearItemStats()
+	{
+		this.m_records.Clear();
+	}
+
 	private static ItemStatCache s_instance;
 
 	private Hashtable m_records;

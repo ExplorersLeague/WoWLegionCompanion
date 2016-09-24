@@ -207,7 +207,8 @@ public class MissionResultsPanel : MonoBehaviour
 		{
 			return;
 		}
-		if (record.OvermaxRewardPackID > 0)
+		JamGarrisonMobileMission jamGarrisonMobileMission = (!PersistentMissionData.missionDictionary.ContainsKey(this.m_garrMissionID)) ? null : ((JamGarrisonMobileMission)PersistentMissionData.missionDictionary[this.m_garrMissionID]);
+		if (record.OvermaxRewardPackID > 0 && jamGarrisonMobileMission != null && jamGarrisonMobileMission.OvermaxReward.Length > 0)
 		{
 			this.m_bonusLootDisplay.SetActive(true);
 			this.m_bonusLootChanceText.text = string.Concat(new object[]

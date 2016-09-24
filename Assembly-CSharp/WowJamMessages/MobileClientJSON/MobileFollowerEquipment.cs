@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamStruct(Name = "MobileFollowerEquipment", Version = 28333852u)]
 	public class MobileFollowerEquipment
 	{
-		[System.Runtime.Serialization.DataMember(Name = "spellID")]
 		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "spellID")]
 		public int SpellID { get; set; }
 
 		[FlexJamMember(Name = "garrAbilityID", Type = FlexJamType.Int32)]
@@ -20,8 +20,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "quantity")]
 		[FlexJamMember(Name = "quantity", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "quantity")]
 		public int Quantity { get; set; }
 	}
 }

@@ -226,8 +226,9 @@ public class AllPopups : MonoBehaviour
 		this.m_championDeactivationConfirmationDialog.Show(followerDetailView);
 	}
 
-	public void ShowLogoutConfirmationPopup()
+	public void ShowLogoutConfirmationPopup(bool goToWebAuth)
 	{
+		this.m_logoutConfirmation.GoToWebAuth = goToWebAuth;
 		this.m_logoutConfirmation.gameObject.SetActive(true);
 	}
 

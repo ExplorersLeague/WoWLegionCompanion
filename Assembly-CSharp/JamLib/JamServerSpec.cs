@@ -3,12 +3,12 @@ using System.Runtime.Serialization;
 
 namespace JamLib
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamServerSpec")]
+	[System.Runtime.Serialization.DataContract]
 	public struct JamServerSpec : IComparable<JamServerSpec>
 	{
-		[System.Runtime.Serialization.DataMember(Name = "realm")]
 		[FlexJamMember(Name = "realm", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "realm")]
 		public uint RealmAddress { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "type")]

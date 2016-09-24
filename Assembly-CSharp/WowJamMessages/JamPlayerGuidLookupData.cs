@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamPlayerGuidLookupData", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamPlayerGuidLookupData", Version = 28333852u)]
 	public class JamPlayerGuidLookupData
 	{
 		public JamPlayerGuidLookupData()
@@ -17,8 +17,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "level")]
 		public byte Level { get; set; }
 
-		[FlexJamMember(Name = "wowAccount", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "wowAccount")]
+		[FlexJamMember(Name = "wowAccount", Type = FlexJamType.WowGuid)]
 		public string WowAccount { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "declinedNames")]
@@ -33,24 +33,24 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
-		[FlexJamMember(Name = "race", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "race")]
+		[FlexJamMember(Name = "race", Type = FlexJamType.UInt8)]
 		public byte Race { get; set; }
 
-		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "classID")]
 		[FlexJamMember(Name = "classID", Type = FlexJamType.UInt8)]
 		public byte ClassID { get; set; }
 
-		[FlexJamMember(Name = "sex", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "sex")]
+		[FlexJamMember(Name = "sex", Type = FlexJamType.UInt8)]
 		public byte Sex { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "isDeleted")]
 		[FlexJamMember(Name = "isDeleted", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "isDeleted")]
 		public bool IsDeleted { get; set; }
 
 		[FlexJamMember(Name = "bnetAccount", Type = FlexJamType.WowGuid)]

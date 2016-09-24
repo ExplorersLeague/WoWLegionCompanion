@@ -8,12 +8,12 @@ namespace WowJamMessages.MobileJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileServerLogin
 	{
-		[System.Runtime.Serialization.DataMember(Name = "joinTicket")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "joinTicket", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "joinTicket")]
 		public byte[] JoinTicket { get; set; }
 
-		[FlexJamMember(Name = "locale", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "locale")]
+		[FlexJamMember(Name = "locale", Type = FlexJamType.String)]
 		public string Locale { get; set; }
 	}
 }

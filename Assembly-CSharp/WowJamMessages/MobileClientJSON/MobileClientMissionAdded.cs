@@ -12,20 +12,20 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "mission", Type = FlexJamType.Struct)]
 		public JamGarrisonMobileMission Mission { get; set; }
 
-		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "result")]
+		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		public int Result { get; set; }
 
 		[FlexJamMember(Name = "missionSource", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "missionSource")]
 		public byte MissionSource { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "canStartMission")]
 		[FlexJamMember(Name = "canStartMission", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "canStartMission")]
 		public bool CanStartMission { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
 		[FlexJamMember(Name = "garrTypeID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
 		public int GarrTypeID { get; set; }
 	}
 }

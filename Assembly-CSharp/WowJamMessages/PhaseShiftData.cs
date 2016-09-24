@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(ArrayDimensions = 1, Name = "phases", Type = FlexJamType.Struct)]
 		public PhaseShiftDataPhase[] Phases { get; set; }
 
-		[FlexJamMember(Name = "personalGUID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "personalGUID")]
+		[FlexJamMember(Name = "personalGUID", Type = FlexJamType.WowGuid)]
 		public string PersonalGUID { get; set; }
 	}
 }

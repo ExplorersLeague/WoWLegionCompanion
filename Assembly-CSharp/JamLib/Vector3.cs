@@ -11,8 +11,8 @@ namespace JamLib
 		[FlexJamMember(Name = "x", Type = FlexJamType.Float)]
 		public float X { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "y")]
 		[FlexJamMember(Name = "y", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "y")]
 		public float Y { get; set; }
 
 		[FlexJamMember(Name = "z", Type = FlexJamType.Float)]

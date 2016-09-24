@@ -277,12 +277,18 @@ public class FollowerListItem : MonoBehaviour
 
 	private void SelectMe()
 	{
-		this.selectedImage.SetActive(true);
+		if (this.selectedImage != null)
+		{
+			this.selectedImage.SetActive(true);
+		}
 	}
 
 	public void DeselectMe()
 	{
-		this.selectedImage.SetActive(false);
+		if (this.selectedImage != null)
+		{
+			this.selectedImage.SetActive(false);
+		}
 	}
 
 	public void SelectAndReplaceExistingCombatAlly()
