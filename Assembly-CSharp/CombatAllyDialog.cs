@@ -18,11 +18,6 @@ public class CombatAllyDialog : MonoBehaviour
 		Main.instance.m_UISound.Play_ShowGenericTooltip();
 		Main.instance.m_canvasBlurManager.AddBlurRef_MainCanvas();
 		Main.instance.m_backButtonManager.PushBackAction(BackAction.hideAllPopups, null);
-		if (this.m_missionPanelSlider.m_sliderPanel.IsShowing() || this.m_missionPanelSlider.m_sliderPanel.IsBusyMoving())
-		{
-			base.gameObject.SetActive(false);
-			return;
-		}
 	}
 
 	private void OnDisable()
@@ -103,6 +98,4 @@ public class CombatAllyDialog : MonoBehaviour
 	public Image m_combatAllyCostResourceIcon;
 
 	public Text m_titleText;
-
-	public MissionPanelSlider m_missionPanelSlider;
 }

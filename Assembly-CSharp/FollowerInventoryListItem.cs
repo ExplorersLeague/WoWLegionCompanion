@@ -56,6 +56,10 @@ public class FollowerInventoryListItem : MonoBehaviour
 		{
 			FollowerInventoryListItem.m_inBuildingString = StaticDB.GetString("IN_BUILDING", "In Building PH");
 		}
+		if (FollowerInventoryListItem.m_maxiLevelString == null)
+		{
+			FollowerInventoryListItem.m_maxiLevelString = StaticDB.GetString("MAX_ILVL", "Max iLvl PH");
+		}
 	}
 
 	public bool IsEquipment()
@@ -121,6 +125,7 @@ public class FollowerInventoryListItem : MonoBehaviour
 		if (jamGarrisonFollower != null && jamGarrisonFollower.CurrentMissionID != 0)
 		{
 			this.m_useItemButtonLabel.text = StaticDB.GetString("ON_MISSION", null);
+			this.m_useItemButtonLabel.color = new Color(0.5f, 0.5f, 0.5f, 1f);
 			this.m_useItemButton.interactable = false;
 		}
 		else
@@ -171,6 +176,13 @@ public class FollowerInventoryListItem : MonoBehaviour
 		if (jamGarrisonFollower != null && jamGarrisonFollower.CurrentMissionID != 0)
 		{
 			this.m_useItemButtonLabel.text = StaticDB.GetString("ON_MISSION", null);
+			this.m_useItemButtonLabel.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+			this.m_useItemButton.interactable = false;
+		}
+		else if (jamGarrisonFollower != null && (jamGarrisonFollower.ItemLevelArmor + jamGarrisonFollower.ItemLevelWeapon) / 2 >= 850)
+		{
+			this.m_useItemButtonLabel.text = FollowerInventoryListItem.m_maxiLevelString;
+			this.m_useItemButtonLabel.color = new Color(0.5f, 0.5f, 0.5f, 1f);
 			this.m_useItemButton.interactable = false;
 		}
 		else
@@ -499,4 +511,6 @@ public class FollowerInventoryListItem : MonoBehaviour
 	private static string m_fatiguedString;
 
 	private static string m_inBuildingString;
+
+	private static string m_maxiLevelString;
 }

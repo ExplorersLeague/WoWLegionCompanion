@@ -18,8 +18,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
 		public string Guid { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
 		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
 		public uint VirtualRealmAddress { get; set; }
 	}
 }

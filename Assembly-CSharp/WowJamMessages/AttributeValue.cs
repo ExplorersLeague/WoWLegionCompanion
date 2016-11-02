@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "AttributeValue", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class AttributeValue
 	{
 		public AttributeValue()
@@ -28,12 +28,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "type", Type = FlexJamType.Enum)]
 		public AttributeValueType Type { get; set; }
 
-		[FlexJamMember(Name = "floatValue", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "floatValue")]
+		[FlexJamMember(Name = "floatValue", Type = FlexJamType.Float)]
 		public float FloatValue { get; set; }
 
-		[FlexJamMember(Name = "stringValue", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "stringValue")]
+		[FlexJamMember(Name = "stringValue", Type = FlexJamType.String)]
 		public string StringValue { get; set; }
 
 		[FlexJamMember(Name = "guidValue", Type = FlexJamType.WowGuid)]

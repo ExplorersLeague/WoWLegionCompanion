@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamWhoRequestServerInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamWhoRequestServerInfo", Version = 28333852u)]
 	public class JamWhoRequestServerInfo
 	{
-		[FlexJamMember(Name = "factionGroup", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "factionGroup")]
+		[FlexJamMember(Name = "factionGroup", Type = FlexJamType.Int32)]
 		public int FactionGroup { get; set; }
 
 		[FlexJamMember(Name = "locale", Type = FlexJamType.Int32)]

@@ -33,7 +33,6 @@ public class AllPopups : MonoBehaviour
 		this.m_bountyInfoTooltip.gameObject.SetActive(false);
 		this.m_worldQuestTooltip.gameObject.SetActive(false);
 		this.m_genericPopup.gameObject.SetActive(false);
-		this.m_missionDescriptionTooltip.gameObject.SetActive(false);
 		this.m_armamentDialog.gameObject.SetActive(false);
 		this.m_equipmentDialog.gameObject.SetActive(false);
 		this.m_championActivationConfirmationDialog.gameObject.SetActive(false);
@@ -73,13 +72,6 @@ public class AllPopups : MonoBehaviour
 	public void HideCombatAllyDialog()
 	{
 		this.m_combatAllyDialog.gameObject.SetActive(false);
-	}
-
-	public void ShowMissionDescriptionTooltip(int garrMissionID)
-	{
-		this.HideAllPopups();
-		this.m_missionDescriptionTooltip.gameObject.SetActive(true);
-		this.m_missionDescriptionTooltip.SetMission(garrMissionID);
 	}
 
 	public void ShowWorldQuestTooltip(int questID)
@@ -182,6 +174,11 @@ public class AllPopups : MonoBehaviour
 		this.m_genericPopup.gameObject.SetActive(true);
 	}
 
+	public bool IsGenericPopupShowing()
+	{
+		return this.m_genericPopup.gameObject.activeSelf;
+	}
+
 	public void SetCurrentFollowerDetailView(FollowerDetailView followerDetailView)
 	{
 		this.m_currentFollowerDetailView = followerDetailView;
@@ -237,6 +234,17 @@ public class AllPopups : MonoBehaviour
 		this.m_regionConfirmation.gameObject.SetActive(true);
 	}
 
+	public void EnableMissionDialog()
+	{
+		this.m_missionDialog.gameObject.SetActive(true);
+	}
+
+	public void ShowLevelUpToast(int newLevel)
+	{
+		this.m_levelUpToast.gameObject.SetActive(true);
+		this.m_levelUpToast.Show(newLevel);
+	}
+
 	public static AllPopups instance;
 
 	public AbilityInfoPopup m_abilityInfoPopup;
@@ -265,8 +273,6 @@ public class AllPopups : MonoBehaviour
 
 	public GenericPopup m_genericPopup;
 
-	public MissionDescriptionTooltip m_missionDescriptionTooltip;
-
 	public ArmamentDialog m_armamentDialog;
 
 	public EquipmentDialog m_equipmentDialog;
@@ -286,6 +292,10 @@ public class AllPopups : MonoBehaviour
 	public RegionConfirmation m_regionConfirmation;
 
 	public EncounterPopup m_encounterPopup;
+
+	public MissionDialog m_missionDialog;
+
+	public LevelUpToast m_levelUpToast;
 
 	private FollowerDetailView m_currentFollowerDetailView;
 }

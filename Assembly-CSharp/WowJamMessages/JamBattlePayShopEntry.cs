@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamBattlePayShopEntry", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamBattlePayShopEntry", Version = 28333852u)]
 	public class JamBattlePayShopEntry
 	{
-		[FlexJamMember(Name = "entryID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "entryID")]
+		[FlexJamMember(Name = "entryID", Type = FlexJamType.UInt32)]
 		public uint EntryID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
@@ -32,8 +32,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]
 		public uint ProductID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "groupID")]
 		[FlexJamMember(Name = "groupID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "groupID")]
 		public uint GroupID { get; set; }
 	}
 }

@@ -173,7 +173,7 @@ public class TroopSlot : MonoBehaviour
 			}
 			else if (this.m_glowLoopHandle == null)
 			{
-				this.m_glowLoopHandle = UiAnimMgr.instance.PlayAnim("MinimapLoopPulseAnim", base.transform, Vector3.zero, 3f, 0f);
+				this.m_glowLoopHandle = UiAnimMgr.instance.PlayAnim("MinimapLoopPulseAnim", base.transform, Vector3.zero, 2f, 0f);
 				this.m_timeRemainingText.text = StaticDB.GetString("COLLECT", null);
 				Main.instance.m_UISound.Play_TroopsReadyToast();
 			}
@@ -243,7 +243,7 @@ public class TroopSlot : MonoBehaviour
 				}
 				this.m_glowLoopHandle = null;
 			}
-			UiAnimMgr.instance.PlayAnim("GreenCheck", this.m_greenCheckEffectRoot, Vector3.zero, 1.8f, 0f);
+			UiAnimMgr.instance.PlayAnim("GreenCheckRound", this.m_greenCheckEffectRoot, Vector3.zero, 1.8f, 0f);
 			Main.instance.m_UISound.Play_GreenCheck();
 			this.m_training = false;
 			this.m_troopBuildProgressRing.gameObject.SetActive(false);

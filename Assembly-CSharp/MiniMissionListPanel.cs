@@ -50,16 +50,6 @@ public class MiniMissionListPanel : MonoBehaviour
 		this.m_inProgressMissionsTabSelectedImage.gameObject.SetActive(true);
 	}
 
-	private void Update()
-	{
-		if (this.m_panelViewRT.sizeDelta.x != this.m_parentViewRT.rect.width)
-		{
-			this.m_multiPanelViewSizeDelta = this.m_panelViewRT.sizeDelta;
-			this.m_multiPanelViewSizeDelta.x = this.m_parentViewRT.rect.width;
-			this.m_panelViewRT.sizeDelta = this.m_multiPanelViewSizeDelta;
-		}
-	}
-
 	private void HandleGarrisonDataResetFinished()
 	{
 		this.InitMissionList();
@@ -156,11 +146,10 @@ public class MiniMissionListPanel : MonoBehaviour
 						else
 						{
 							gameObject.transform.SetParent(this.m_inProgressMission_listContents.transform, false);
+							this.ShowMissionStartedAnim();
 						}
 						MiniMissionListItem component = gameObject.GetComponent<MiniMissionListItem>();
 						component.SetMission(jamGarrisonMobileMission3);
-						AutoHide autoHide = gameObject.AddComponent<AutoHide>();
-						autoHide.m_clipRT = base.gameObject.GetComponent<RectTransform>();
 					}
 				}
 			}
@@ -175,9 +164,20 @@ public class MiniMissionListPanel : MonoBehaviour
 		this.m_noMissionsInProgressLabel.gameObject.SetActive(num2 == 0);
 	}
 
-	public RectTransform m_parentViewRT;
+	private void ShowMissionStartedAnim()
+	{
+		if (!this.m_missionListOrderHallNavButton.IsSelected())
+		{
+			return;
+		}
+		this.m_currentMissionStartedEffectObj = Object.Instantiate<GameObject>(this.m_missionStartedEffectObjPrefab);
+		this.m_currentMissionStartedEffectObj.transform.SetParent(this.m_inProgressMissionsTabButton.transform, false);
+		this.m_currentMissionStartedEffectObj.transform.localPosition = Vector3.zero;
+	}
 
-	public RectTransform m_panelViewRT;
+	private void Update()
+	{
+	}
 
 	public GameObject m_miniMissionListItemPrefab;
 
@@ -208,4 +208,10 @@ public class MiniMissionListPanel : MonoBehaviour
 	public CombatAllyListItem m_combatAllyListItem;
 
 	private Vector2 m_multiPanelViewSizeDelta;
+
+	public GameObject m_missionStartedEffectObjPrefab;
+
+	public OrderHallNavButton m_missionListOrderHallNavButton;
+
+	private GameObject m_currentMissionStartedEffectObj;
 }

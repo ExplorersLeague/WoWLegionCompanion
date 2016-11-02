@@ -24,8 +24,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "spellName", Type = FlexJamType.String)]
 		public string SpellName { get; set; }
 
-		[FlexJamMember(Name = "repeatFrequencyMin", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "repeatFrequencyMin")]
+		[FlexJamMember(Name = "repeatFrequencyMin", Type = FlexJamType.Int32)]
 		public int RepeatFrequencyMin { get; set; }
 
 		[FlexJamMember(Name = "priority", Type = FlexJamType.Int32)]
@@ -36,8 +36,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "initialDelayMin", Type = FlexJamType.Int32)]
 		public int InitialDelayMin { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "repeatFrequencyMax")]
 		[FlexJamMember(Name = "repeatFrequencyMax", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "repeatFrequencyMax")]
 		public int RepeatFrequencyMax { get; set; }
 	}
 }

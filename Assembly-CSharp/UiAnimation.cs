@@ -126,31 +126,41 @@ public class UiAnimation : MonoBehaviour
 							}
 							return true;
 						});
+						Sprite sprite = null;
 						if (textureAtlasMemberID > 0)
 						{
-							Sprite sprite = TextureAtlas.GetSprite(textureAtlasMemberID);
-							if (sprite != null)
+							sprite = TextureAtlas.GetSprite(textureAtlasMemberID);
+						}
+						else if (texture.m_resourceImage != null)
+						{
+							sprite = Resources.Load<Sprite>(texture.m_resourceImage);
+						}
+						if (sprite != null)
+						{
+							UiAnimation.UiTexture uiTexture2 = new UiAnimation.UiTexture();
+							uiTexture2.m_alpha = texture.m_alpha;
+							uiTexture2.m_alphaMode = texture.m_alphaMode;
+							uiTexture2.m_anchor = ((texture.m_anchors.Count <= 0) ? null : texture.m_anchors.ToArray()[0]);
+							uiTexture2.m_atlas = texture.m_atlas;
+							uiTexture2.m_resourceImage = texture.m_resourceImage;
+							uiTexture2.m_width = texture.m_width;
+							uiTexture2.m_height = texture.m_height;
+							uiTexture2.m_hidden = texture.m_hidden;
+							uiTexture2.m_parentKey = texture.m_parentKey;
+							uiTexture2.m_sprite = sprite;
+							this.m_textures.Add(texture.m_parentKey, uiTexture2);
+						}
+						else
+						{
+							Debug.Log(string.Concat(new object[]
 							{
-								UiAnimation.UiTexture uiTexture2 = new UiAnimation.UiTexture();
-								uiTexture2.m_alpha = texture.m_alpha;
-								uiTexture2.m_alphaMode = texture.m_alphaMode;
-								uiTexture2.m_anchor = ((texture.m_anchors.Count <= 0) ? null : texture.m_anchors.ToArray()[0]);
-								uiTexture2.m_atlas = texture.m_atlas;
-								uiTexture2.m_hidden = texture.m_hidden;
-								uiTexture2.m_parentKey = texture.m_parentKey;
-								uiTexture2.m_sprite = sprite;
-								this.m_textures.Add(texture.m_parentKey, uiTexture2);
-							}
-							else
-							{
-								Debug.Log(string.Concat(new object[]
-								{
-									"Could not find sprite for textureAtlasMemberID ",
-									textureAtlasMemberID,
-									" in Ui Animation ",
-									animName
-								}));
-							}
+								"Could not find sprite for textureAtlasMemberID ",
+								textureAtlasMemberID,
+								" resourceImage ",
+								texture.m_resourceImage,
+								" in Ui Animation ",
+								animName
+							}));
 						}
 					}
 				}
@@ -683,8 +693,17 @@ public class UiAnimation : MonoBehaviour
 		[XmlAttribute("useAtlasSize")]
 		public bool m_useAtlasSize;
 
-		[XmlArray("Anchors")]
+		[XmlAttribute("resourceImage")]
+		public string m_resourceImage;
+
+		[XmlAttribute("w")]
+		public string m_width;
+
+		[XmlAttribute("h")]
+		public string m_height;
+
 		[XmlArrayItem("Anchor")]
+		[XmlArray("Anchors")]
 		public List<UiAnimation.UiAnchor> m_anchors = new List<UiAnimation.UiAnchor>();
 	}
 
@@ -701,6 +720,12 @@ public class UiAnimation : MonoBehaviour
 		public string m_atlas;
 
 		public bool m_useAtlasSize;
+
+		public string m_resourceImage;
+
+		public string m_width;
+
+		public string m_height;
 
 		public UiAnimation.UiAnchor m_anchor;
 
@@ -739,8 +764,8 @@ public class UiAnimation : MonoBehaviour
 		[XmlElement("Size")]
 		public UiAnimation.UiSize size = new UiAnimation.UiSize();
 
-		[XmlArrayItem("Layer")]
 		[XmlArray("Layers")]
+		[XmlArrayItem("Layer")]
 		public List<UiAnimation.UiLayer> layers = new List<UiAnimation.UiLayer>();
 
 		[XmlElement("Animations")]

@@ -6,7 +6,7 @@ public class DownloadingPanel : MonoBehaviour
 {
 	private void Start()
 	{
-		this.m_downloadText.font = GeneralHelpers.LoadStandardFont();
+		this.m_downloadText.font = GeneralHelpers.LoadFancyFont();
 		string locale = Main.instance.GetLocale();
 		string text = locale;
 		switch (text)

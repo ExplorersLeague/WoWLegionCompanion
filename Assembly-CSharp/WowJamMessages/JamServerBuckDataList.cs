@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "mpID")]
 		public uint MpID { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "entries", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "entries")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "entries", Type = FlexJamType.Struct)]
 		public JamServerBuckDataEntry[] Entries { get; set; }
 	}
 }

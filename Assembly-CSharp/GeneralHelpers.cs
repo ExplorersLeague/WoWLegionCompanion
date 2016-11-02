@@ -286,16 +286,19 @@ public class GeneralHelpers : MonoBehaviour
 			{
 				text += "\n\n";
 			}
-			string text2 = text;
-			text = string.Concat(new string[]
+			if (itemRec.ID != 141028 && itemRec.ID != 137565 && itemRec.ID != 137560 && itemRec.ID != 137561)
 			{
-				text2,
-				"<color=#",
-				GeneralHelpers.s_defaultColor,
-				">\"",
-				WowTextParser.parser.Parse(itemRec.Description, 0),
-				"\"</color>"
-			});
+				string text2 = text;
+				text = string.Concat(new string[]
+				{
+					text2,
+					"<color=#",
+					GeneralHelpers.s_defaultColor,
+					">\"",
+					WowTextParser.parser.Parse(itemRec.Description, 0),
+					"\"</color>"
+				});
+			}
 		}
 		return text;
 	}
@@ -496,10 +499,10 @@ public class GeneralHelpers : MonoBehaviour
 
 	public static FollowerCanCounterMechanic HasFollowerWhoCanCounter(int garrMechanicTypeID)
 	{
-		GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3B <HasFollowerWhoCanCounter>c__AnonStorey3B = new GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3B();
-		<HasFollowerWhoCanCounter>c__AnonStorey3B.garrMechanicTypeID = garrMechanicTypeID;
-		<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterButBusy = false;
-		<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterAndIsAvailable = false;
+		GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3C <HasFollowerWhoCanCounter>c__AnonStorey3C = new GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3C();
+		<HasFollowerWhoCanCounter>c__AnonStorey3C.garrMechanicTypeID = garrMechanicTypeID;
+		<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterButBusy = false;
+		<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterAndIsAvailable = false;
 		JamGarrisonFollower follower;
 		foreach (JamGarrisonFollower follower2 in PersistentFollowerData.followerDictionary.Values)
 		{
@@ -529,7 +532,7 @@ public class GeneralHelpers : MonoBehaviour
 						{
 							return true;
 						}
-						if ((long)<HasFollowerWhoCanCounter>c__AnonStorey3B.garrMechanicTypeID != (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID))
+						if ((long)<HasFollowerWhoCanCounter>c__AnonStorey3C.garrMechanicTypeID != (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID))
 						{
 							return false;
 						}
@@ -539,20 +542,20 @@ public class GeneralHelpers : MonoBehaviour
 						bool flag4 = follower.CurrentBuildingID != 0;
 						if (flag || flag2 || flag3 || flag4)
 						{
-							<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterButBusy = true;
+							<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterButBusy = true;
 							return false;
 						}
-						<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterAndIsAvailable = true;
+						<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterAndIsAvailable = true;
 						return true;
 					});
 				}
 			}
 		}
-		if (<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterAndIsAvailable)
+		if (<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterAndIsAvailable)
 		{
 			return FollowerCanCounterMechanic.yesAndAvailable;
 		}
-		if (<HasFollowerWhoCanCounter>c__AnonStorey3B.canCounterButBusy)
+		if (<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterButBusy)
 		{
 			return FollowerCanCounterMechanic.yesButBusy;
 		}
@@ -607,55 +610,59 @@ public class GeneralHelpers : MonoBehaviour
 	public static Font LoadFancyFont()
 	{
 		string locale = Main.instance.GetLocale();
-		Font result;
-		if (locale == "koKR")
+		if (GeneralHelpers.s_fancyFont == null)
 		{
-			result = Resources.Load<Font>("Fonts/Official/K_Pagetext");
+			if (locale == "koKR")
+			{
+				GeneralHelpers.s_fancyFont = Resources.Load<Font>("Fonts/Official/K_Pagetext");
+			}
+			else if (locale == "zhCN")
+			{
+				GeneralHelpers.s_fancyFont = Resources.Load<Font>("Fonts/Official/ARKai_C");
+			}
+			else if (locale == "zhTW")
+			{
+				GeneralHelpers.s_fancyFont = Resources.Load<Font>("Fonts/Official/bLEI00D");
+			}
+			else if (locale == "ruRU")
+			{
+				GeneralHelpers.s_fancyFont = Resources.Load<Font>("Fonts/Official/MORPHEUS_CYR");
+			}
+			else
+			{
+				GeneralHelpers.s_fancyFont = Resources.Load<Font>("Fonts/Official/MORPHEUS");
+			}
 		}
-		else if (locale == "zhCN")
-		{
-			result = Resources.Load<Font>("Fonts/Official/ARKai_C");
-		}
-		else if (locale == "zhTW")
-		{
-			result = Resources.Load<Font>("Fonts/Official/bLEI00D");
-		}
-		else if (locale == "ruRU")
-		{
-			result = Resources.Load<Font>("Fonts/Official/MORPHEUS_CYR");
-		}
-		else
-		{
-			result = Resources.Load<Font>("Fonts/Official/MORPHEUS");
-		}
-		return result;
+		return GeneralHelpers.s_fancyFont;
 	}
 
 	public static Font LoadStandardFont()
 	{
 		string locale = Main.instance.GetLocale();
-		Font result;
-		if (locale == "koKR")
+		if (GeneralHelpers.s_standardFont == null)
 		{
-			result = Resources.Load<Font>("Fonts/Official/2002");
+			if (locale == "koKR")
+			{
+				GeneralHelpers.s_standardFont = Resources.Load<Font>("Fonts/Official/2002");
+			}
+			else if (locale == "zhCN")
+			{
+				GeneralHelpers.s_standardFont = Resources.Load<Font>("Fonts/Official/bHEI00M");
+			}
+			else if (locale == "zhTW")
+			{
+				GeneralHelpers.s_standardFont = Resources.Load<Font>("Fonts/Official/ARHei");
+			}
+			else if (locale == "ruRU")
+			{
+				GeneralHelpers.s_standardFont = Resources.Load<Font>("Fonts/Official/FRIZQT___CYR");
+			}
+			else
+			{
+				GeneralHelpers.s_standardFont = Resources.Load<Font>("Fonts/Official/BLIZQUADRATA");
+			}
 		}
-		else if (locale == "zhCN")
-		{
-			result = Resources.Load<Font>("Fonts/Official/bHEI00M");
-		}
-		else if (locale == "zhTW")
-		{
-			result = Resources.Load<Font>("Fonts/Official/ARHei");
-		}
-		else if (locale == "ruRU")
-		{
-			result = Resources.Load<Font>("Fonts/Official/FRIZQT___CYR");
-		}
-		else
-		{
-			result = Resources.Load<Font>("Fonts/Official/BLIZQUADRATA");
-		}
-		return result;
+		return GeneralHelpers.s_standardFont;
 	}
 
 	public static int CurrentUnixTime()
@@ -844,4 +851,8 @@ public class GeneralHelpers : MonoBehaviour
 	public static string s_normalColor = "ffffffff";
 
 	public static string s_friendlyColor = "00ff00ff";
+
+	private static Font s_fancyFont;
+
+	private static Font s_standardFont;
 }

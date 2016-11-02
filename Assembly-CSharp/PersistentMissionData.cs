@@ -45,7 +45,7 @@ public class PersistentMissionData
 		PersistentMissionData.instance.m_missionDictionary.Clear();
 	}
 
-	public static int GetNumCompletedMissions()
+	public static int GetNumCompletedMissions(bool skipSupportMissions = false)
 	{
 		int num = 0;
 		foreach (object obj in PersistentMissionData.missionDictionary.Values)
@@ -56,11 +56,14 @@ public class PersistentMissionData
 			{
 				if (record.GarrFollowerTypeID == 4u)
 				{
-					long num2 = GarrisonStatus.CurrentTime() - jamGarrisonMobileMission.StartTime;
-					long num3 = jamGarrisonMobileMission.MissionDuration - num2;
-					if ((jamGarrisonMobileMission.MissionState == 1 && num3 <= 0L) || jamGarrisonMobileMission.MissionState == 2 || jamGarrisonMobileMission.MissionState == 3)
+					if (!skipSupportMissions || (record.Flags & 16u) == 0u)
 					{
-						num++;
+						long num2 = GarrisonStatus.CurrentTime() - jamGarrisonMobileMission.StartTime;
+						long num3 = jamGarrisonMobileMission.MissionDuration - num2;
+						if ((jamGarrisonMobileMission.MissionState == 1 && num3 <= 0L) || jamGarrisonMobileMission.MissionState == 2 || jamGarrisonMobileMission.MissionState == 3)
+						{
+							num++;
+						}
 					}
 				}
 			}

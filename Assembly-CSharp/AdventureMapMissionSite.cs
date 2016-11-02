@@ -12,24 +12,20 @@ public class AdventureMapMissionSite : MonoBehaviour
 	{
 		AdventureMapPanel instance = AdventureMapPanel.instance;
 		instance.TestIconSizeChanged = (Action<float>)Delegate.Combine(instance.TestIconSizeChanged, new Action<float>(this.OnTestIconSizeChanged));
-		Main instance2 = Main.instance;
-		instance2.ClaimMissionBonusResultAction = (Action<int, bool, int>)Delegate.Combine(instance2.ClaimMissionBonusResultAction, new Action<int, bool, int>(this.HandleClaimMissionBonusResult));
-		Main instance3 = Main.instance;
-		instance3.CompleteMissionResultAction = (Action<int, bool>)Delegate.Combine(instance3.CompleteMissionResultAction, new Action<int, bool>(this.HandleCompleteMissionResult));
 		PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
-		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Combine(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
+		pinchZoomContentManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomContentManager.ZoomFactorChanged, new Action<bool>(this.HandleZoomChanged));
+		AdventureMapPanel instance2 = AdventureMapPanel.instance;
+		instance2.MissionMapSelectionChangedAction = (Action<int>)Delegate.Combine(instance2.MissionMapSelectionChangedAction, new Action<int>(this.HandleMissionChanged));
 	}
 
 	private void OnDisable()
 	{
 		AdventureMapPanel instance = AdventureMapPanel.instance;
 		instance.TestIconSizeChanged = (Action<float>)Delegate.Remove(instance.TestIconSizeChanged, new Action<float>(this.OnTestIconSizeChanged));
-		Main instance2 = Main.instance;
-		instance2.ClaimMissionBonusResultAction = (Action<int, bool, int>)Delegate.Remove(instance2.ClaimMissionBonusResultAction, new Action<int, bool, int>(this.HandleClaimMissionBonusResult));
-		Main instance3 = Main.instance;
-		instance3.CompleteMissionResultAction = (Action<int, bool>)Delegate.Remove(instance3.CompleteMissionResultAction, new Action<int, bool>(this.HandleCompleteMissionResult));
 		PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
-		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Remove(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
+		pinchZoomContentManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomContentManager.ZoomFactorChanged, new Action<bool>(this.HandleZoomChanged));
+		AdventureMapPanel instance2 = AdventureMapPanel.instance;
+		instance2.MissionMapSelectionChangedAction = (Action<int>)Delegate.Remove(instance2.MissionMapSelectionChangedAction, new Action<int>(this.HandleMissionChanged));
 	}
 
 	private void OnTestIconSizeChanged(float newScale)
@@ -37,7 +33,7 @@ public class AdventureMapMissionSite : MonoBehaviour
 		base.transform.localScale = Vector3.one * newScale;
 	}
 
-	private void HandleZoomChanged()
+	private void HandleZoomChanged(bool force)
 	{
 		this.m_zoomScaleRoot.sizeDelta = this.m_myRT.sizeDelta * AdventureMapPanel.instance.m_pinchZoomContentManager.m_zoomFactor;
 	}
@@ -45,8 +41,6 @@ public class AdventureMapMissionSite : MonoBehaviour
 	private void Awake()
 	{
 		this.m_selectionRing.gameObject.SetActive(false);
-		AdventureMapPanel instance = AdventureMapPanel.instance;
-		instance.MissionMapSelectionChangedAction = (Action<int>)Delegate.Combine(instance.MissionMapSelectionChangedAction, new Action<int>(this.HandleMissionChanged));
 		this.m_missionCompleteText.text = StaticDB.GetString("MISSION_COMPLETE", null);
 		this.m_isStackablePreview = false;
 		this.m_missionTimeRemaining = new Duration(0, false);
@@ -163,6 +157,12 @@ public class AdventureMapMissionSite : MonoBehaviour
 		}
 		this.m_missionLevelText.text = string.Empty + record.TargetLevel + ((record.TargetLevel != 110) ? string.Empty : (" (" + record.TargetItemLevel + ")"));
 		this.UpdateMissionRemainingTimeDisplay();
+	}
+
+	public bool ShouldShowCompletedMission()
+	{
+		JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[this.m_garrMissionID];
+		return jamGarrisonMobileMission.MissionState == 2 || jamGarrisonMobileMission.MissionState == 3 || (jamGarrisonMobileMission.MissionState == 1 && GarrisonStatus.CurrentTime() - this.m_missionStartedTime >= (long)this.m_missionDurationInSeconds);
 	}
 
 	public void HandleMissionChanged(int newMissionID)
@@ -289,7 +289,16 @@ public class AdventureMapMissionSite : MonoBehaviour
 		{
 			AdventureMapPanel.instance.ShowMissionResultAction(this.m_garrMissionID, 3, false);
 		}
-		Object.Destroy(base.gameObject);
+		StackableMapIcon component = base.gameObject.GetComponent<StackableMapIcon>();
+		GameObject gameObject = base.gameObject;
+		if (component != null)
+		{
+			component.RemoveFromContainer();
+		}
+		if (gameObject != null)
+		{
+			Object.Destroy(gameObject);
+		}
 	}
 
 	private void ShowMissionSuccess(bool awardOvermax)
@@ -298,7 +307,16 @@ public class AdventureMapMissionSite : MonoBehaviour
 		{
 			AdventureMapPanel.instance.ShowMissionResultAction(this.m_garrMissionID, 2, awardOvermax);
 		}
-		Object.Destroy(base.gameObject);
+		StackableMapIcon component = base.gameObject.GetComponent<StackableMapIcon>();
+		GameObject gameObject = base.gameObject;
+		if (component != null)
+		{
+			component.RemoveFromContainer();
+		}
+		if (gameObject != null)
+		{
+			Object.Destroy(gameObject);
+		}
 	}
 
 	public void ShowInProgressMissionDetails()
@@ -317,6 +335,11 @@ public class AdventureMapMissionSite : MonoBehaviour
 		{
 			gameObject.SetActive(!isPreview);
 		}
+	}
+
+	public int GetGarrMissionID()
+	{
+		return this.m_garrMissionID;
 	}
 
 	public Image m_errorImage;

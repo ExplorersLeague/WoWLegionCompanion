@@ -78,6 +78,11 @@ public class AllPanels : MonoBehaviour
 		this.ShowOrderHallMultiPanel(true);
 	}
 
+	public void ShowMissionList()
+	{
+		this.m_orderHallMultiPanel.ShowMissionListPanel();
+	}
+
 	public void ShowRealmListPanel()
 	{
 		this.HideAllPanels(true);
@@ -269,6 +274,10 @@ public class AllPanels : MonoBehaviour
 	public RecentCharacterArea m_recentCharacterArea;
 
 	public WebAuthPanel m_webAuthPanel;
+
+	public TroopsPanel m_troopsPanel;
+
+	public TalentTreePanel m_talentTreePanel;
 
 	public MissionResultsPanel m_missionResultsPanel;
 }

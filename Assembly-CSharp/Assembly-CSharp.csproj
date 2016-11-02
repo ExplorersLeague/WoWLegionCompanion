@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D4754A89-5967-4B5C-BA0C-30EC6818E808}</ProjectGuid>
+    <ProjectGuid>{A60F9A33-F9ED-4011-8C0D-B9C3A58C0542}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -497,6 +497,7 @@
     <Compile Include="BnGameAccountButton.cs" />
     <Compile Include="BnLoginButton.cs" />
     <Compile Include="BountyInfoTooltip.cs" />
+    <Compile Include="BountyLogo.cs" />
     <Compile Include="BountySite.cs" />
     <Compile Include="BuildNum.cs" />
     <Compile Include="ButtonSwipe.cs" />
@@ -597,6 +598,7 @@
     <Compile Include="JsonTestScript.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="KeyValue.cs" />
+    <Compile Include="LevelUpToast.cs" />
     <Compile Include="LFGEyeball.cs" />
     <Compile Include="LoadingSpinner.cs" />
     <Compile Include="LocalNotifications.cs" />
@@ -618,6 +620,7 @@
     <Compile Include="MissionDataCache.cs" />
     <Compile Include="MissionDescriptionTooltip.cs" />
     <Compile Include="MissionDetailView.cs" />
+    <Compile Include="MissionDialog.cs" />
     <Compile Include="MissionEncounter.cs" />
     <Compile Include="MissionFollowerSlot.cs" />
     <Compile Include="MissionFollowerSlotGroup.cs" />
@@ -632,6 +635,7 @@
     <Compile Include="MissionResultsPanel.cs" />
     <Compile Include="MissionResultsPopupView.cs" />
     <Compile Include="MissionRewardDisplay.cs" />
+    <Compile Include="MissionStartedEffect.cs" />
     <Compile Include="MissionTreasureView.cs" />
     <Compile Include="MobileDeviceLocale.cs" />
     <Compile Include="MobileNetwork.cs" />
@@ -832,6 +836,7 @@
     <Compile Include="ProtobufUtil.cs" />
     <Compile Include="ProtocolBufferException.cs" />
     <Compile Include="ProtocolParser.cs" />
+    <Compile Include="RaycastTargetHack.cs" />
     <Compile Include="RealmListPanel.cs" />
     <Compile Include="RealmListView.cs" />
     <Compile Include="RecentCharacterArea.cs" />
@@ -979,11 +984,13 @@
     <Compile Include="WowJamMessages\LOOT_LIST_DROP_TYPE.cs" />
     <Compile Include="WowJamMessages\LOOT_LIST_ITEM_TYPE.cs" />
     <Compile Include="WowJamMessages\MobileCharacterJSON\MobileCharacterTest.cs" />
+    <Compile Include="WowJamMessages\MobileClientJSON\MobileBountiesByWorldQuest.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileCharacterStatus.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientAccountCharacters.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientAdvanceMissionSetResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientArtifactInfoResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientAuthChallenge.cs" />
+    <Compile Include="WowJamMessages\MobileClientJSON\MobileClientBountiesByWorldQuestUpdate.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientCanResearchGarrisonTalentResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientChangeFollowerActiveResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientChat.cs" />
@@ -1007,10 +1014,13 @@
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientGuildMembersOnline.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientLoginResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientMissionAdded.cs" />
+    <Compile Include="WowJamMessages\MobileClientJSON\MobileClientPlayerLevelUp.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientPong.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientResearchGarrisonTalentResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientSetMissionDurationCheatResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientSetShipmentDurationCheatResult.cs" />
+    <Compile Include="WowJamMessages\MobileClientJSON\MobileClientShipmentItem.cs" />
+    <Compile Include="WowJamMessages\MobileClientJSON\MobileClientShipmentPushResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientShipmentsUpdate.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientShipmentType.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientShipmentTypes.cs" />
@@ -1019,6 +1029,7 @@
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientUpdateDailyMissionCounter.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientUseFollowerArmamentResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientWorldQuestBountiesResult.cs" />
+    <Compile Include="WowJamMessages\MobileClientJSON\MobileClientWorldQuestInactiveBountiesResult.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileClientWorldQuestUpdate.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileEmissaryFaction.cs" />
     <Compile Include="WowJamMessages\MobileClientJSON\MobileFollowerArmament.cs" />

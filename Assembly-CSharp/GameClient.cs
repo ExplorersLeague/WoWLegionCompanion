@@ -9,9 +9,10 @@ public class GameClient : MonoBehaviour
 		{
 			Object.Instantiate<GameObject>(this.pushManager);
 		}
+		GameClient.instance = this;
 	}
 
-	public void Register(string token, string locale)
+	public void RegisterPushManager(string token, string locale)
 	{
 		BLPushManagerBuilder blpushManagerBuilder = ScriptableObject.CreateInstance<BLPushManagerBuilder>();
 		if (Login.m_portal.ToLower() == "wow-dev")
@@ -48,4 +49,6 @@ public class GameClient : MonoBehaviour
 	}
 
 	public GameObject pushManager;
+
+	public static GameClient instance;
 }

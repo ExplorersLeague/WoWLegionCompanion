@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "SpawnEventDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "SpawnEventDebugInfo", Version = 28333852u)]
 	public class SpawnEventDebugInfo
 	{
 		public SpawnEventDebugInfo()
@@ -34,8 +34,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetID")]
 		public int AiGroupActionSetID { get; set; }
 
-		[FlexJamMember(Name = "aiGroupActionSetName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetName")]
+		[FlexJamMember(Name = "aiGroupActionSetName", Type = FlexJamType.String)]
 		public string AiGroupActionSetName { get; set; }
 	}
 }

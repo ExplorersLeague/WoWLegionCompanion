@@ -4,20 +4,20 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamMessage(Id = 4833, Name = "MobileClientGarrisonDataRequestResult", Version = 28333852u)]
+	[FlexJamMessage(Id = 4833, Name = "MobileClientGarrisonDataRequestResult", Version = 33577221u)]
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientGarrisonDataRequestResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "orderhallResourcesCurrency")]
 		[FlexJamMember(Name = "orderhallResourcesCurrency", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "orderhallResourcesCurrency")]
 		public int OrderhallResourcesCurrency { get; set; }
 
-		[FlexJamMember(Name = "pvpFaction", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "pvpFaction")]
+		[FlexJamMember(Name = "pvpFaction", Type = FlexJamType.Int32)]
 		public int PvpFaction { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "mission", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "mission")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "mission", Type = FlexJamType.Struct)]
 		public JamGarrisonMobileMission[] Mission { get; set; }
 
 		[FlexJamMember(Name = "oilCurrency", Type = FlexJamType.Int32)]
@@ -28,8 +28,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "follower")]
 		public JamGarrisonFollower[] Follower { get; set; }
 
-		[FlexJamMember(Name = "characterClassID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "characterClassID")]
+		[FlexJamMember(Name = "characterClassID", Type = FlexJamType.Int32)]
 		public int CharacterClassID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "goldCurrency")]
@@ -40,8 +40,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "characterLevel", Type = FlexJamType.Int32)]
 		public int CharacterLevel { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "serverTime")]
 		[FlexJamMember(Name = "serverTime", Type = FlexJamType.Int64)]
+		[System.Runtime.Serialization.DataMember(Name = "serverTime")]
 		public long ServerTime { get; set; }
 
 		[FlexJamMember(Name = "dailyMissionCount", Type = FlexJamType.Int32)]
@@ -60,8 +60,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "characterName")]
 		public string CharacterName { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
 		[FlexJamMember(Name = "garrTypeID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
 		public int GarrTypeID { get; set; }
 	}
 }

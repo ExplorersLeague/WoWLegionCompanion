@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 15033, Name = "JSONRealmListServerIPAddresses", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JSONRealmListServerIPAddresses
 	{
 		[System.Runtime.Serialization.DataMember(Name = "families")]

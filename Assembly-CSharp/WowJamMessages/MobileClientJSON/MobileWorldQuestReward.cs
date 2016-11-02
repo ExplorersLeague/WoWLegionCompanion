@@ -5,7 +5,7 @@ using JamLib;
 namespace WowJamMessages.MobileClientJSON
 {
 	[System.Runtime.Serialization.DataContract]
-	[FlexJamStruct(Name = "MobileWorldQuestReward", Version = 28333852u)]
+	[FlexJamStruct(Name = "MobileWorldQuestReward", Version = 33577221u)]
 	public class MobileWorldQuestReward
 	{
 		public MobileWorldQuestReward()
@@ -14,16 +14,16 @@ namespace WowJamMessages.MobileClientJSON
 			this.ItemContext = 0;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "itemContext")]
 		[FlexJamMember(Name = "itemContext", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemContext")]
 		public int ItemContext { get; set; }
 
-		[FlexJamMember(Name = "recordID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "recordID")]
+		[FlexJamMember(Name = "recordID", Type = FlexJamType.Int32)]
 		public int RecordID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "fileDataID")]
 		[FlexJamMember(Name = "fileDataID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "fileDataID")]
 		public int FileDataID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "quantity")]

@@ -178,7 +178,16 @@ public class MissionRewardDisplay : MonoBehaviour
 		{
 		case MissionRewardDisplay.RewardType.item:
 		{
-			Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, iconFileDataID);
+			Sprite sprite = null;
+			ItemRec record = StaticDB.itemDB.GetRecord(this.m_rewardID);
+			if (iconFileDataID > 0)
+			{
+				sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, iconFileDataID);
+			}
+			else if (record != null)
+			{
+				sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record.IconFileDataID);
+			}
 			if (sprite != null)
 			{
 				this.m_rewardIcon.sprite = sprite;
@@ -190,7 +199,6 @@ public class MissionRewardDisplay : MonoBehaviour
 			}
 			if (this.m_rewardName != null)
 			{
-				ItemRec record = StaticDB.itemDB.GetRecord(this.m_rewardID);
 				if (record != null)
 				{
 					this.m_rewardName.text = record.Display;

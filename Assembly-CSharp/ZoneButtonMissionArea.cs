@@ -10,21 +10,29 @@ public class ZoneButtonMissionArea : MonoBehaviour
 			ZoneButtonMissionArea.m_pinchZoomManager = base.gameObject.GetComponentInParent<PinchZoomContentManager>();
 		}
 		PinchZoomContentManager pinchZoomManager = ZoneButtonMissionArea.m_pinchZoomManager;
-		pinchZoomManager.ZoomFactorChanged = (Action)Delegate.Combine(pinchZoomManager.ZoomFactorChanged, new Action(this.OnZoomChanged));
+		pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
 	}
 
 	private void OnDisable()
 	{
 		PinchZoomContentManager pinchZoomManager = ZoneButtonMissionArea.m_pinchZoomManager;
-		pinchZoomManager.ZoomFactorChanged = (Action)Delegate.Remove(pinchZoomManager.ZoomFactorChanged, new Action(this.OnZoomChanged));
+		pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
 	}
 
-	private void OnZoomChanged()
+	private void OnZoomChanged(bool force)
 	{
 		MapInfo componentInParent = base.gameObject.GetComponentInParent<MapInfo>();
 		CanvasGroup component = base.gameObject.GetComponent<CanvasGroup>();
 		component.alpha = (ZoneButtonMissionArea.m_pinchZoomManager.m_zoomFactor - 1f) / (componentInParent.m_maxZoomFactor - 1f);
-		component.blocksRaycasts = (component.alpha > 0.99f);
+		bool flag = component.alpha > 0.99f;
+		if (flag != component.blocksRaycasts || force)
+		{
+			CanvasGroup[] componentsInChildren = base.gameObject.GetComponentsInChildren<CanvasGroup>(true);
+			foreach (CanvasGroup canvasGroup in componentsInChildren)
+			{
+				canvasGroup.blocksRaycasts = flag;
+			}
+		}
 	}
 
 	private static PinchZoomContentManager m_pinchZoomManager;

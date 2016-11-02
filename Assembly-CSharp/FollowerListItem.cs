@@ -26,11 +26,6 @@ public class FollowerListItem : MonoBehaviour
 			AssetBundleManager instance = AssetBundleManager.instance;
 			instance.InitializedAction = (Action)Delegate.Combine(instance.InitializedAction, new Action(this.OnAssetBundleManagerInitialized));
 		}
-		if (this.m_useArmamentsButton != null)
-		{
-			this.m_useArmamentsButton.SetActive(false);
-			this.m_statusText.gameObject.SetActive(true);
-		}
 		this.followerIDText.font = GeneralHelpers.LoadStandardFont();
 		this.portraitErrorText.font = GeneralHelpers.LoadStandardFont();
 		this.nameText.font = GeneralHelpers.LoadStandardFont();
@@ -316,7 +311,7 @@ public class FollowerListItem : MonoBehaviour
 	{
 		if (this.m_availableForMission)
 		{
-			MissionFollowerSlotGroup componentInChildren = base.gameObject.transform.parent.parent.parent.gameObject.GetComponentInChildren<MissionFollowerSlotGroup>();
+			MissionFollowerSlotGroup componentInChildren = base.gameObject.transform.parent.parent.parent.parent.gameObject.GetComponentInChildren<MissionFollowerSlotGroup>();
 			if (componentInChildren != null && componentInChildren.gameObject.activeSelf)
 			{
 				this.m_inParty = componentInChildren.SetFollower(this.m_followerID, this.followerPortrait.overrideSprite, this.qualityBorder.color, forceReplaceFirstSlot);
@@ -501,6 +496,10 @@ public class FollowerListItem : MonoBehaviour
 
 	public void UpdateUsefulAbilitiesDisplay(int currentGarrMissionID)
 	{
+		if (!PersistentFollowerData.followerDictionary.ContainsKey(this.m_followerID))
+		{
+			return;
+		}
 		AbilityDisplay[] componentsInChildren = this.usefulAbilitiesGroup.GetComponentsInChildren<AbilityDisplay>(true);
 		for (int i = 0; i < componentsInChildren.Length; i++)
 		{
@@ -582,15 +581,6 @@ public class FollowerListItem : MonoBehaviour
 	{
 		RectTransform component = this.m_followerDetailView.traitsAndAbilitiesRootObject.GetComponent<RectTransform>();
 		this.m_followerDetailViewLayoutElement.minHeight = component.rect.height + (float)this.m_followerDetailViewExtraHeight;
-		JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[this.m_followerID];
-		int num = (jamGarrisonFollower.ItemLevelWeapon + jamGarrisonFollower.ItemLevelArmor) / 2;
-		bool flag = (jamGarrisonFollower.Flags & 8) != 0;
-		GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(jamGarrisonFollower.GarrFollowerID);
-		if (record != null && num < 850 && jamGarrisonFollower.FollowerLevel == MissionDetailView.GarrisonFollower_GetMaxFollowerLevel((int)record.GarrFollowerTypeID) && !flag)
-		{
-			this.m_useArmamentsButton.SetActive(true);
-			this.m_statusText.gameObject.SetActive(false);
-		}
 	}
 
 	public void ContractDetailViewComplete()
@@ -649,6 +639,16 @@ public class FollowerListItem : MonoBehaviour
 			}
 			RectTransform component = this.m_followerDetailView.traitsAndAbilitiesRootObject.GetComponent<RectTransform>();
 			OrderHallFollowersPanel.instance.ScrollListTo(-base.transform.localPosition.y - ((!flag2) ? 0f : num) - 56f);
+			bool active = true;
+			JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[this.m_followerID];
+			int num2 = (jamGarrisonFollower.ItemLevelWeapon + jamGarrisonFollower.ItemLevelArmor) / 2;
+			bool flag3 = (jamGarrisonFollower.Flags & 8) != 0;
+			GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(jamGarrisonFollower.GarrFollowerID);
+			if (flag3 || jamGarrisonFollower.FollowerLevel < MissionDetailView.GarrisonFollower_GetMaxFollowerLevel((int)record.GarrFollowerTypeID))
+			{
+				active = false;
+			}
+			this.m_useArmamentsButton.SetActive(active);
 			iTween.ValueTo(base.gameObject, iTween.Hash(new object[]
 			{
 				"name",
@@ -692,8 +692,6 @@ public class FollowerListItem : MonoBehaviour
 			iTween.StopByName(base.gameObject, "FollowerDetailContract");
 			iTween.StopByName(base.gameObject, "FollowerDetailContractArrow");
 			this.DeselectMe();
-			this.m_useArmamentsButton.SetActive(false);
-			this.m_statusText.gameObject.SetActive(true);
 			iTween.ValueTo(base.gameObject, iTween.Hash(new object[]
 			{
 				"name",

@@ -150,7 +150,6 @@ public class MissionDetailView : MonoBehaviour
 				instance3.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Combine(instance3.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
 			}
 		}
-		this.HandleEnteredWorld();
 	}
 
 	private void OnDisable()
@@ -215,19 +214,6 @@ public class MissionDetailView : MonoBehaviour
 			button.enabled = true;
 		});
 		eventTrigger.triggers.Add(entry3);
-	}
-
-	public void HandleEnteredWorld()
-	{
-		AdventureMapPanel.instance.SelectMissionFromList(0);
-		if (this.missionFollowerSlotGroup != null)
-		{
-			MissionFollowerSlot[] componentsInChildren = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
-			for (int i = 0; i < componentsInChildren.Length; i++)
-			{
-				Object.DestroyImmediate(componentsInChildren[i].gameObject);
-			}
-		}
 	}
 
 	private int GetTrueMissionCost(GarrMissionRec garrMissionRec)
@@ -308,6 +294,7 @@ public class MissionDetailView : MonoBehaviour
 		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
 		if (record == null)
 		{
+			Debug.LogError("Invalid Mission ID:" + this.m_currentGarrMissionID);
 			return;
 		}
 		this.m_currentGarrMissionID = garrMissionID;
@@ -802,10 +789,6 @@ public class MissionDetailView : MonoBehaviour
 
 	private void OnMissionSuccessChanceChanged(int newChance)
 	{
-		if (this.m_currentGarrMissionID == 0)
-		{
-			return;
-		}
 		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(this.m_currentGarrMissionID);
 		if (record == null)
 		{
@@ -939,15 +922,10 @@ public class MissionDetailView : MonoBehaviour
 			}
 		}
 		Main.instance.StartMission(this.m_currentGarrMissionID, list.ToArray());
-		Main.instance.allPanels.ShowAdventureMap();
 		AdventureMapPanel.instance.SelectMissionFromMap(0);
 		AdventureMapPanel.instance.SelectMissionFromList(0);
 		AdventureMapPanel.instance.SetSelectedIconContainer(null);
-	}
-
-	public void ShowMissionDescriptionPopup()
-	{
-		AllPopups.instance.ShowMissionDescriptionTooltip(this.m_currentGarrMissionID);
+		Main.instance.allPanels.ShowMissionList();
 	}
 
 	public CombatAllyMissionState GetCombatAllyMissionState()

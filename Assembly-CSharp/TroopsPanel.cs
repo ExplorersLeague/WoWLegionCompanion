@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using WowJamMessages;
 using WowJamMessages.MobileClientJSON;
 using WowJamMessages.MobilePlayerJSON;
+using WowStaticData;
 
 public class TroopsPanel : MonoBehaviour
 {
@@ -21,7 +23,11 @@ public class TroopsPanel : MonoBehaviour
 		instance2.FollowerDataChangedAction = (Action)Delegate.Combine(instance2.FollowerDataChangedAction, new Action(this.HandleFollowerDataChanged));
 		Main instance3 = Main.instance;
 		instance3.ShipmentTypesUpdatedAction = (Action)Delegate.Combine(instance3.ShipmentTypesUpdatedAction, new Action(this.InitList));
-		this.HandleEnteredWorld();
+		Main instance4 = Main.instance;
+		instance4.ShipmentItemPushedAction = (Action<int, MobileClientShipmentItem>)Delegate.Combine(instance4.ShipmentItemPushedAction, new Action<int, MobileClientShipmentItem>(this.HandleShipmentItemPushed));
+		Main instance5 = Main.instance;
+		instance5.OrderHallNavButtonSelectedAction = (Action<OrderHallNavButton>)Delegate.Combine(instance5.OrderHallNavButtonSelectedAction, new Action<OrderHallNavButton>(this.HandleOrderHallNavButtonSelected));
+		this.InitList();
 	}
 
 	private void OnDisable()
@@ -32,16 +38,23 @@ public class TroopsPanel : MonoBehaviour
 		instance2.FollowerDataChangedAction = (Action)Delegate.Remove(instance2.FollowerDataChangedAction, new Action(this.HandleFollowerDataChanged));
 		Main instance3 = Main.instance;
 		instance3.ShipmentTypesUpdatedAction = (Action)Delegate.Remove(instance3.ShipmentTypesUpdatedAction, new Action(this.InitList));
+		Main instance4 = Main.instance;
+		instance4.ShipmentItemPushedAction = (Action<int, MobileClientShipmentItem>)Delegate.Remove(instance4.ShipmentItemPushedAction, new Action<int, MobileClientShipmentItem>(this.HandleShipmentItemPushed));
+		Main instance5 = Main.instance;
+		instance5.OrderHallNavButtonSelectedAction = (Action<OrderHallNavButton>)Delegate.Remove(instance5.OrderHallNavButtonSelectedAction, new Action<OrderHallNavButton>(this.HandleOrderHallNavButtonSelected));
+	}
+
+	public void HandleOrderHallNavButtonSelected(OrderHallNavButton navButton)
+	{
+		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>(true);
+		foreach (TroopsListItem troopsListItem in componentsInChildren)
+		{
+			troopsListItem.ClearAndHideLootArea();
+		}
 	}
 
 	private void Update()
 	{
-		if (this.m_panelViewRT.sizeDelta.x != this.m_parentViewRT.rect.width)
-		{
-			this.m_multiPanelViewSizeDelta = this.m_panelViewRT.sizeDelta;
-			this.m_multiPanelViewSizeDelta.x = this.m_parentViewRT.rect.width;
-			this.m_panelViewRT.sizeDelta = this.m_multiPanelViewSizeDelta;
-		}
 	}
 
 	private void HandleFollowerDataChanged()
@@ -60,6 +73,18 @@ public class TroopsPanel : MonoBehaviour
 		foreach (TroopsListItem troopsListItem in componentsInChildren)
 		{
 			Object.DestroyImmediate(troopsListItem.gameObject);
+		}
+	}
+
+	private void HandleShipmentItemPushed(int charShipmentID, MobileClientShipmentItem item)
+	{
+		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>(true);
+		foreach (TroopsListItem troopsListItem in componentsInChildren)
+		{
+			if (troopsListItem.GetCharShipmentTypeID() == charShipmentID)
+			{
+				troopsListItem.HandleShipmentItemPushed(item);
+			}
 		}
 	}
 
@@ -115,10 +140,28 @@ public class TroopsPanel : MonoBehaviour
 				GameObject gameObject = Object.Instantiate<GameObject>(this.m_troopsListItemPrefab);
 				gameObject.transform.SetParent(this.m_troopsListContents.transform, false);
 				TroopsListItem component = gameObject.GetComponent<TroopsListItem>();
-				component.SetCharShipment(availableShipmentTypes[k]);
+				component.SetCharShipment(availableShipmentTypes[k], false, null);
 				FancyEntrance component2 = component.GetComponent<FancyEntrance>();
 				component2.m_timeToDelayEntrance = this.m_listItemInitialEntranceDelay + this.m_listItemEntranceDelay * (float)k;
 				component2.Activate();
+			}
+		}
+		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		{
+			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+			if (!PersistentShipmentData.ShipmentTypeForShipmentIsAvailable(jamCharacterShipment.ShipmentRecID))
+			{
+				if (jamCharacterShipment.ShipmentRecID >= 372 && jamCharacterShipment.ShipmentRecID <= 383)
+				{
+					CharShipmentRec record = StaticDB.charShipmentDB.GetRecord(jamCharacterShipment.ShipmentRecID);
+					if (record != null)
+					{
+						GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_troopsListItemPrefab);
+						gameObject2.transform.SetParent(this.m_troopsListContents.transform, false);
+						TroopsListItem component3 = gameObject2.GetComponent<TroopsListItem>();
+						component3.SetCharShipment(null, true, record);
+					}
+				}
 			}
 		}
 	}
@@ -129,6 +172,15 @@ public class TroopsPanel : MonoBehaviour
 		{
 			MobilePlayerRequestShipments obj = new MobilePlayerRequestShipments();
 			Login.instance.SendToMobileServer(obj);
+		}
+	}
+
+	public void PurgeList()
+	{
+		TroopsListItem[] componentsInChildren = this.m_troopsListContents.GetComponentsInChildren<TroopsListItem>(true);
+		foreach (TroopsListItem troopsListItem in componentsInChildren)
+		{
+			Object.DestroyImmediate(troopsListItem.gameObject);
 		}
 	}
 
@@ -143,8 +195,4 @@ public class TroopsPanel : MonoBehaviour
 	public Text m_noRecruitsYetMessage;
 
 	public RectTransform m_panelViewRT;
-
-	public RectTransform m_parentViewRT;
-
-	private Vector2 m_multiPanelViewSizeDelta;
 }

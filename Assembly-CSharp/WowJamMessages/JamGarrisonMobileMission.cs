@@ -28,8 +28,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "encounter")]
 		public JamGarrisonEncounter[] Encounter { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "reward")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "reward", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "reward")]
 		public JamGarrisonMissionReward[] Reward { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "startTime")]
