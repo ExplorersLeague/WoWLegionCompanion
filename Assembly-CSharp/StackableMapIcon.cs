@@ -32,7 +32,7 @@ public class StackableMapIcon : MonoBehaviour
 		StackableMapIconManager.RegisterStackableMapIcon(this);
 	}
 
-	private void OnDestroy()
+	public void RemoveFromContainer()
 	{
 		if (this.m_iconContainer != null)
 		{

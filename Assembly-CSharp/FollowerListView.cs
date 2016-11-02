@@ -65,7 +65,7 @@ public class FollowerListView : MonoBehaviour
 		}
 	}
 
-	private void HandleMissionChanged(int garrMissionID)
+	public void HandleMissionChanged(int garrMissionID)
 	{
 		if (garrMissionID == 0)
 		{
@@ -99,13 +99,9 @@ public class FollowerListView : MonoBehaviour
 			}
 		}
 		GameObject gameObject = Object.Instantiate<GameObject>(this.m_followerListItemPrefab);
-		gameObject.transform.SetParent(this.m_followerListViewContents.transform);
-		gameObject.transform.localScale = Vector3.one;
-		gameObject.transform.localPosition = Vector3.zero;
+		gameObject.transform.SetParent(this.m_followerListViewContents.transform, false);
 		FollowerListItem component = gameObject.GetComponent<FollowerListItem>();
 		component.SetFollower(follower);
-		AutoHide autoHide = gameObject.AddComponent<AutoHide>();
-		autoHide.m_clipRT = base.gameObject.GetComponent<RectTransform>();
 		return component;
 	}
 
@@ -117,7 +113,7 @@ public class FollowerListView : MonoBehaviour
 		this.m_sortedFollowerList.Sort(followerComparer);
 	}
 
-	private void InitFollowerList()
+	public void InitFollowerList()
 	{
 		FollowerListItem[] componentsInChildren = this.m_followerListViewContents.GetComponentsInChildren<FollowerListItem>(true);
 		foreach (FollowerListItem followerListItem in componentsInChildren)

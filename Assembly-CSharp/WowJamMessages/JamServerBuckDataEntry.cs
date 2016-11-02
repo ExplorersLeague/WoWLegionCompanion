@@ -19,8 +19,8 @@ namespace WowJamMessages
 			this.Minimum = 2000000000UL;
 		}
 
-		[FlexJamMember(Name = "accum", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "accum")]
+		[FlexJamMember(Name = "accum", Type = FlexJamType.UInt64)]
 		public ulong Accum { get; set; }
 
 		[FlexJamMember(Name = "maximum", Type = FlexJamType.UInt64)]

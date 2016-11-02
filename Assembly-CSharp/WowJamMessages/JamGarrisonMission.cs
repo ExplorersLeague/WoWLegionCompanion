@@ -21,24 +21,24 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "successChance", Type = FlexJamType.Int32)]
 		public int SuccessChance { get; set; }
 
-		[FlexJamMember(Name = "travelDuration", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "travelDuration")]
+		[FlexJamMember(Name = "travelDuration", Type = FlexJamType.Int32)]
 		public int TravelDuration { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "missionRecID")]
 		[FlexJamMember(Name = "missionRecID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "missionRecID")]
 		public int MissionRecID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "missionState")]
 		[FlexJamMember(Name = "missionState", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "missionState")]
 		public int MissionState { get; set; }
 
-		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
+		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		public uint Flags { get; set; }
 
-		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "startTime")]
+		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
 		public int StartTime { get; set; }
 
 		[FlexJamMember(Name = "dbID", Type = FlexJamType.UInt64)]

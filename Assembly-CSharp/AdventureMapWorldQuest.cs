@@ -12,7 +12,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		AdventureMapPanel instance = AdventureMapPanel.instance;
 		instance.TestIconSizeChanged = (Action<float>)Delegate.Combine(instance.TestIconSizeChanged, new Action<float>(this.OnTestIconSizeChanged));
 		PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
-		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Combine(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
+		pinchZoomContentManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomContentManager.ZoomFactorChanged, new Action<bool>(this.HandleZoomChanged));
 		this.m_showLootIconInsteadOfMain = true;
 	}
 
@@ -21,7 +21,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		AdventureMapPanel instance = AdventureMapPanel.instance;
 		instance.TestIconSizeChanged = (Action<float>)Delegate.Remove(instance.TestIconSizeChanged, new Action<float>(this.OnTestIconSizeChanged));
 		PinchZoomContentManager pinchZoomContentManager = AdventureMapPanel.instance.m_pinchZoomContentManager;
-		pinchZoomContentManager.ZoomFactorChanged = (Action)Delegate.Remove(pinchZoomContentManager.ZoomFactorChanged, new Action(this.HandleZoomChanged));
+		pinchZoomContentManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomContentManager.ZoomFactorChanged, new Action<bool>(this.HandleZoomChanged));
 	}
 
 	private void ItemStatsUpdated(int itemID, int itemContext, MobileItemStats itemStats)
@@ -39,7 +39,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		base.transform.localScale = Vector3.one * newScale;
 	}
 
-	private void HandleZoomChanged()
+	private void HandleZoomChanged(bool force)
 	{
 		if (this.m_zoomScaleRoot != null)
 		{
@@ -187,7 +187,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				this.m_main.sprite = GeneralHelpers.GetLocalizedFollowerXpIcon();
 			}
 		}
-		this.m_endTime = (long)mobileWorldQuest.EndTime;
+		this.m_endTime = (long)(mobileWorldQuest.EndTime - 900);
 		int areaID = 0;
 		WorldMapAreaRec record3 = StaticDB.worldMapAreaDB.GetRecord(mobileWorldQuest.WorldMapAreaID);
 		if (record3 != null)
@@ -334,20 +334,20 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				text = "Mobile-Mining";
 				break;
 			}
-			goto IL_6CA;
+			goto IL_6D0;
 		}
 		case 3:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 			text = "Mobile-PVP";
-			goto IL_6CA;
+			goto IL_6D0;
 		case 4:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 			text = "Mobile-Pets";
-			goto IL_6CA;
+			goto IL_6D0;
 		}
 		uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 		text = "Mobile-QuestExclamationIcon";
-		IL_6CA:
+		IL_6D0:
 		if (!this.m_showLootIconInsteadOfMain)
 		{
 			if (text != null)
@@ -390,8 +390,17 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		this.m_expiringSoon.gameObject.SetActive(active);
 		if (num <= 0L)
 		{
-			Object.DestroyImmediate(base.gameObject);
-			return;
+			StackableMapIcon component = base.gameObject.GetComponent<StackableMapIcon>();
+			GameObject gameObject = base.gameObject;
+			if (component != null)
+			{
+				component.RemoveFromContainer();
+			}
+			if (gameObject != null)
+			{
+				Object.DestroyImmediate(gameObject);
+				return;
+			}
 		}
 	}
 

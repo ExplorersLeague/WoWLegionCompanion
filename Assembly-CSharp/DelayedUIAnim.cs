@@ -23,7 +23,7 @@ public class DelayedUIAnim : MonoBehaviour
 			{
 				if (this.m_sfxName != null)
 				{
-					Main.instance.m_UISound.PlayUISound(this.m_sfxName, 1f);
+					Main.instance.m_UISound.PlayUISound(this.m_sfxName, 1f, 3);
 				}
 				UiAnimMgr.instance.PlayAnim(this.m_animName, this.m_parentTransform, Vector3.zero, this.m_scale, 0f);
 				Object.DestroyImmediate(this);

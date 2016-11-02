@@ -3,20 +3,20 @@ using System.Runtime.Serialization;
 
 namespace JamLib
 {
-	[FlexJamStruct(Name = "JamServerSpec")]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamServerSpec")]
 	public struct JamServerSpec : IComparable<JamServerSpec>
 	{
-		[FlexJamMember(Name = "realm", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "realm")]
+		[FlexJamMember(Name = "realm", Type = FlexJamType.UInt32)]
 		public uint RealmAddress { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "type")]
 		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
 		public JAM_DESTINATION ServerType { get; set; }
 
-		[FlexJamMember(Name = "server", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "server")]
+		[FlexJamMember(Name = "server", Type = FlexJamType.UInt32)]
 		public uint ServerID { get; set; }
 
 		public override string ToString()

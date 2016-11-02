@@ -34,6 +34,11 @@ public class Login : MonoBehaviour
 		}
 		else
 		{
+			if (this.m_loginState == Login.eLoginState.UPDATE_REQUIRED_START || this.m_loginState == Login.eLoginState.UPDATE_REQUIRED_IDLE)
+			{
+				this.LoginLog("OnApplicationPause: Update required, exiting early.");
+				return;
+			}
 			int num = GeneralHelpers.CurrentUnixTime();
 			int num2 = num - this.m_pauseTimestamp;
 			bool flag = num2 > 30;
@@ -61,44 +66,69 @@ public class Login : MonoBehaviour
 				}
 			}
 			BattleNet.ApplicationWasUnpaused();
+			if (this.m_initialUnpause)
+			{
+				Debug.Log("No update test performed on initial unpause.");
+			}
+			else if (flag)
+			{
+				Debug.Log("reconnect update test");
+				AssetBundleManager.instance.UpdateVersion();
+				if (this.IsUpdateAvailable())
+				{
+					this.SetLoginState(Login.eLoginState.UPDATE_REQUIRED_START);
+					this.CancelWebAuth();
+					Debug.Log("updateFound = true");
+				}
+				else
+				{
+					Debug.Log("updateFound = false");
+				}
+			}
 			Login.eLoginState loginState = this.m_loginState;
 			switch (loginState)
 			{
-			case Login.eLoginState.WAIT_FOR_ASSET_BUNDLES:
-				this.LoginLog("OnApplicationPause: Wait for asset bundles");
+			case Login.eLoginState.MOBILE_LOGGING_IN:
+				this.LoginLog("OnApplicationPause: Reconnecting: mobile login states");
+				this.m_battlenetFailures = 0;
+				this.m_mobileNetwork.Disconnect();
+				this.BnLoginStart(true, true, true, false);
 				break;
-			case Login.eLoginState.WEB_AUTH_START:
-			case Login.eLoginState.WEB_AUTH_LOADING:
-			case Login.eLoginState.WEB_AUTH_IN_PROGRESS:
-				AllPanels.instance.HideConnectingPanel();
-				this.LoginLog("OnApplicationPause: Hiding all panels");
+			case Login.eLoginState.MOBILE_LOGGED_IN:
+			case Login.eLoginState.MOBILE_LOGGED_IN_IDLE:
+				if (flag)
+				{
+					this.LoginLog("OnApplicationPause: Reconnecting: mobile idle state");
+					this.m_battlenetFailures = 0;
+					this.m_mobileNetwork.Disconnect();
+					this.BnLoginStart(true, true, true, false);
+				}
+				else if (this.m_mobileNetwork != null && !this.m_mobileNetwork.IsConnected)
+				{
+					this.LoginLog("OnApplicationPause: Reconnecting, not connected after short pause time of " + num2);
+					this.m_battlenetFailures = 0;
+					this.m_mobileNetwork.Disconnect();
+					this.BnLoginStart(true, true, true, false);
+				}
+				else
+				{
+					this.LoginLog("OnApplicationPause: Still connected. Not reconnecting after short pause time of " + num2);
+				}
+				break;
+			case Login.eLoginState.UPDATE_REQUIRED_START:
+			case Login.eLoginState.UPDATE_REQUIRED_IDLE:
 				break;
 			default:
 				switch (loginState)
 				{
-				case Login.eLoginState.MOBILE_LOGGING_IN:
-					this.LoginLog("OnApplicationPause: Reconnecting: mobile login states");
-					this.m_mobileNetwork.Disconnect();
-					this.BnLoginStart(true, true, true, false);
+				case Login.eLoginState.WAIT_FOR_ASSET_BUNDLES:
+					this.LoginLog("OnApplicationPause: Wait for asset bundles");
 					break;
-				case Login.eLoginState.MOBILE_LOGGED_IN:
-				case Login.eLoginState.MOBILE_LOGGED_IN_IDLE:
-					if (flag)
-					{
-						this.LoginLog("OnApplicationPause: Reconnecting: mobile idle state");
-						this.m_mobileNetwork.Disconnect();
-						this.BnLoginStart(true, true, true, false);
-					}
-					else if (this.m_mobileNetwork != null && !this.m_mobileNetwork.IsConnected)
-					{
-						this.LoginLog("OnApplicationPause: Reconnecting, not connected after short pause time of " + num2);
-						this.m_mobileNetwork.Disconnect();
-						this.BnLoginStart(true, true, true, false);
-					}
-					else
-					{
-						this.LoginLog("OnApplicationPause: Still connected. Not reconnecting after short pause time of " + num2);
-					}
+				case Login.eLoginState.WEB_AUTH_START:
+				case Login.eLoginState.WEB_AUTH_LOADING:
+				case Login.eLoginState.WEB_AUTH_IN_PROGRESS:
+					AllPanels.instance.HideConnectingPanel();
+					this.LoginLog("OnApplicationPause: Hiding all panels");
 					break;
 				default:
 					if (loginState != Login.eLoginState.BN_CHARACTER_LIST_WAIT)
@@ -111,6 +141,7 @@ public class Login : MonoBehaviour
 					}
 					else if (flag)
 					{
+						this.m_battlenetFailures = 0;
 						this.LoginLog("OnApplicationPause: Reconnecting: character list wait state");
 						this.BnLoginStart(true, true, false, false);
 					}
@@ -122,6 +153,7 @@ public class Login : MonoBehaviour
 				}
 				break;
 			}
+			this.m_initialUnpause = false;
 		}
 	}
 
@@ -149,6 +181,11 @@ public class Login : MonoBehaviour
 
 	private void SetLoginState(Login.eLoginState newState)
 	{
+		if ((this.m_loginState == Login.eLoginState.UPDATE_REQUIRED_START || this.m_loginState == Login.eLoginState.UPDATE_REQUIRED_IDLE) && newState != Login.eLoginState.UPDATE_REQUIRED_START && newState != Login.eLoginState.UPDATE_REQUIRED_IDLE && (AssetBundleManager.instance.ForceUpgrade || newState != Login.eLoginState.IDLE))
+		{
+			this.LoginLog("SetLoginState(): Update required, igoring state change to " + newState.ToString() + ".");
+			return;
+		}
 		this.LoginLog(string.Concat(new string[]
 		{
 			"SetLoginState(): from ",
@@ -277,6 +314,12 @@ public class Login : MonoBehaviour
 		case Login.eLoginState.MOBILE_LOGGED_IN:
 			this.MobileLoggedIn();
 			break;
+		case Login.eLoginState.UPDATE_REQUIRED_START:
+			this.UpdateRequiredStart();
+			break;
+		case Login.eLoginState.UPDATE_REQUIRED_IDLE:
+			this.UpdateRequiredIdle();
+			break;
 		}
 	}
 
@@ -292,12 +335,9 @@ public class Login : MonoBehaviour
 		AllPanels.instance.SetConnectingPanelStatus(StaticDB.GetString("CONNECTING", null));
 		AllPanels.instance.ShowConnectingPanelCancelButton(true);
 		string @string = SecurePlayerPrefs.GetString("WebToken", Main.uniqueIdentifier);
-		if (AssetBundleManager.instance.LatestVersion > 0 && AssetBundleManager.instance.LatestVersion > BuildNum.CodeBuildNum)
+		if (this.IsUpdateAvailable())
 		{
-			AllPanels.instance.ShowTitlePanel();
-			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.UpdateAppPopupDisabledAction));
-			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("UPDATE_REQUIRED", null), StaticDB.GetString("UPDATE_REQUIRED_DESCRIPTION", null));
-			this.SetLoginState(Login.eLoginState.IDLE);
+			this.SetLoginState(Login.eLoginState.UPDATE_REQUIRED_START);
 		}
 		else if (@string != null && @string != string.Empty)
 		{
@@ -308,6 +348,40 @@ public class Login : MonoBehaviour
 		{
 			AllPanels.instance.ShowTitlePanel();
 			this.SetLoginState(Login.eLoginState.IDLE);
+		}
+	}
+
+	private bool IsUpdateAvailable()
+	{
+		return AssetBundleManager.instance.LatestVersion > 0 && AssetBundleManager.instance.LatestVersion > BuildNum.CodeBuildNum;
+	}
+
+	private void UpdateRequiredStart()
+	{
+		Debug.Log("UpdateRequiredStart()");
+		AllPanels.instance.ShowTitlePanel();
+		GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.UpdateAppPopupDisabledAction));
+		AllPopups.instance.ShowGenericPopup(StaticDB.GetString("UPDATE_REQUIRED", null), StaticDB.GetString("UPDATE_REQUIRED_DESCRIPTION", null));
+		if (AssetBundleManager.instance.ForceUpgrade)
+		{
+			Debug.Log("UpdateRequiredStart() force upgrade");
+			this.SetLoginState(Login.eLoginState.UPDATE_REQUIRED_IDLE);
+		}
+		else
+		{
+			Debug.Log("UpdateRequiredStart() do not force upgrade");
+			this.SetLoginState(Login.eLoginState.IDLE);
+		}
+	}
+
+	private void UpdateRequiredIdle()
+	{
+		if (AssetBundleManager.instance.ForceUpgrade && !AllPopups.instance.IsGenericPopupShowing())
+		{
+			Debug.Log("UpdateRequiredIdle() opening popup");
+			AllPanels.instance.ShowTitlePanel();
+			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.UpdateAppPopupDisabledAction));
+			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("UPDATE_REQUIRED", null), StaticDB.GetString("UPDATE_REQUIRED_DESCRIPTION", null));
 		}
 	}
 
@@ -326,10 +400,6 @@ public class Login : MonoBehaviour
 		if (text != null)
 		{
 			Application.OpenURL(text);
-		}
-		if (AssetBundleManager.instance.ForceUpgrade)
-		{
-			Application.Quit();
 		}
 	}
 
@@ -701,6 +771,7 @@ public class Login : MonoBehaviour
 
 	private void BnLoginSucceeded()
 	{
+		this.m_battlenetFailures = 0;
 		SecurePlayerPrefs.SetString("WebToken", this.m_webToken, Main.uniqueIdentifier);
 		PlayerPrefs.Save();
 		BattleNet.ProcessAurora();
@@ -711,6 +782,42 @@ public class Login : MonoBehaviour
 		}
 		this.m_loginGameAccounts.Clear();
 		this.RequestGameAccountNames();
+	}
+
+	private void RegisterPushManager(string token, string locale)
+	{
+		BLPushManagerBuilder blpushManagerBuilder = ScriptableObject.CreateInstance<BLPushManagerBuilder>();
+		if (Login.m_portal.ToLower() == "wow-dev")
+		{
+			blpushManagerBuilder.isDebug = true;
+			blpushManagerBuilder.applicationName = "test.wowcompanion";
+		}
+		else
+		{
+			blpushManagerBuilder.isDebug = false;
+			blpushManagerBuilder.applicationName = "wowcompanion";
+		}
+		blpushManagerBuilder.shouldRegisterwithBPNS = true;
+		blpushManagerBuilder.region = "US";
+		blpushManagerBuilder.locale = locale;
+		blpushManagerBuilder.authToken = token;
+		blpushManagerBuilder.authRegion = "US";
+		blpushManagerBuilder.appAccountID = string.Empty;
+		blpushManagerBuilder.senderId = "952133414280";
+		blpushManagerBuilder.didReceiveRegistrationTokenDelegate = new DidReceiveRegistrationTokenDelegate(this.DidReceiveRegistrationTokenHandler);
+		blpushManagerBuilder.didReceiveDeeplinkURLDelegate = new DidReceiveDeeplinkURLDelegate(this.DidReceiveDeeplinkURLDelegateHandler);
+		BLPushManager.instance.InitWithBuilder(blpushManagerBuilder);
+		BLPushManager.instance.RegisterForPushNotifications();
+	}
+
+	public void DidReceiveRegistrationTokenHandler(string deviceToken)
+	{
+		Debug.Log("DidReceiveRegistrationTokenHandler: device token " + deviceToken);
+	}
+
+	public void DidReceiveDeeplinkURLDelegateHandler(string url)
+	{
+		Debug.Log("DidReceiveDeeplinkURLDelegateHandler: url " + url);
 	}
 
 	public void AddGameAccountButton(EntityId gameAccount, string name, bool isBanned, bool isSuspended)
@@ -1068,7 +1175,10 @@ public class Login : MonoBehaviour
 		SecurePlayerPrefs.SetString("CharacterID", recentChar.Entry.PlayerGuid, Main.uniqueIdentifier);
 		SecurePlayerPrefs.SetString("CharacterName", recentChar.Entry.Name, Main.uniqueIdentifier);
 		PlayerPrefs.Save();
-		this.m_mobileNetwork.Disconnect();
+		if (this.m_mobileNetwork != null)
+		{
+			this.m_mobileNetwork.Disconnect();
+		}
 		this.BnLoginStart(true, true, true, false);
 	}
 
@@ -1177,12 +1287,35 @@ public class Login : MonoBehaviour
 		{
 			AllPopups.instance.ShowGenericPopupFull(popupTitle);
 		}
+		else if (this.m_battlenetFailures == 0)
+		{
+			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.ReconnectPopupDisabledAction));
+			if (Main.instance.GetLocale() == "enUS")
+			{
+				AllPopups.instance.ShowGenericPopup("Battle.net Error", "Unable to contact Battle.net, tap anywhere to retry.");
+			}
+			else
+			{
+				AllPopups.instance.ShowGenericPopup(StaticDB.GetString("NETWORK_ERROR", null), StaticDB.GetString("CANT_CONNECT", null));
+			}
+		}
 		else
 		{
 			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("NETWORK_ERROR", null), StaticDB.GetString("CANT_CONNECT", null));
 		}
+		this.m_battlenetFailures++;
 		this.SetLoginState(Login.eLoginState.IDLE);
-		Debug.Log("=================== BN Login Failed. ===================");
+		Debug.Log("=================== BN Login Failed. " + this.m_battlenetFailures + " ===================");
+	}
+
+	private void ReconnectPopupDisabledAction()
+	{
+		GenericPopup.DisabledAction = (Action)Delegate.Remove(GenericPopup.DisabledAction, new Action(this.ReconnectPopupDisabledAction));
+		if (this.m_mobileNetwork != null)
+		{
+			this.m_mobileNetwork.Disconnect();
+		}
+		this.BnLoginStart(true, true, true, false);
 	}
 
 	public void BnQuit()
@@ -1210,13 +1343,19 @@ public class Login : MonoBehaviour
 
 	public void ReconnectToMobileServerCharacterSelect()
 	{
-		this.m_mobileNetwork.Disconnect();
+		if (this.m_mobileNetwork != null)
+		{
+			this.m_mobileNetwork.Disconnect();
+		}
 		this.BnLoginStart(true, true, false, true);
 	}
 
 	public void ReconnectToMobileServerCharacter()
 	{
-		this.m_mobileNetwork.Disconnect();
+		if (this.m_mobileNetwork != null)
+		{
+			this.m_mobileNetwork.Disconnect();
+		}
 		this.m_useCachedCharacter = true;
 		this.ConnectToMobileServer(this.m_mobileServerAddress, this.m_mobileServerPort, this.m_bnetAccount, this.m_virtualRealmAddress, this.m_wowAccount, this.m_realmJoinTicket, true);
 	}
@@ -1869,6 +2008,10 @@ public class Login : MonoBehaviour
 
 	private float m_bnLoginStartTime;
 
+	private int m_battlenetFailures;
+
+	private bool m_initialUnpause = true;
+
 	public static string m_portal = "beta";
 
 	private class LoginGameAccount
@@ -1909,7 +2052,9 @@ public class Login : MonoBehaviour
 		MOBILE_DISCONNECTED_IDLE,
 		MOBILE_LOGGING_IN,
 		MOBILE_LOGGED_IN,
-		MOBILE_LOGGED_IN_IDLE
+		MOBILE_LOGGED_IN_IDLE,
+		UPDATE_REQUIRED_START,
+		UPDATE_REQUIRED_IDLE
 	}
 
 	private class GameAccountStateCallback
@@ -1928,8 +2073,16 @@ public class Login : MonoBehaviour
 
 		public void Callback(RPCContext context)
 		{
+			if (Login.instance == null || context == null || context.Payload == null || this.EntityID == null)
+			{
+				return;
+			}
 			Login.instance.LoginLog("GameAccountStateCallback called");
 			GetGameAccountStateResponse getGameAccountStateResponse = GetGameAccountStateResponse.ParseFrom(context.Payload);
+			if (getGameAccountStateResponse == null || getGameAccountStateResponse.State == null || getGameAccountStateResponse.State.GameLevelInfo == null || getGameAccountStateResponse.State.GameStatus == null || getGameAccountStateResponse.State.GameLevelInfo.Name == null)
+			{
+				return;
+			}
 			Login.instance.LoginLog(string.Concat(new object[]
 			{
 				"GameAccountStateCallback: Received name ",
@@ -1998,15 +2151,6 @@ public class Login : MonoBehaviour
 						this.m_updates = JsonConvert.DeserializeObject<JSONRealmListUpdates>(value);
 						foreach (JamJSONRealmListUpdatePart jamJSONRealmListUpdatePart in this.m_updates.Updates)
 						{
-							Login.instance.LoginLog(string.Concat(new object[]
-							{
-								"Found realm named ",
-								jamJSONRealmListUpdatePart.Update.Name,
-								", subregion ",
-								this.SubRegion,
-								", addr ",
-								jamJSONRealmListUpdatePart.Update.WowRealmAddress
-							}));
 						}
 					}
 					else if (attribute.Name == "Param_CharacterList")
@@ -2027,14 +2171,6 @@ public class Login : MonoBehaviour
 							{
 								string name = jamJSONRealmListUpdatePart2.Update.Name;
 								bool online = jamJSONRealmListUpdatePart2.Update.PopulationState != 0;
-								Login.instance.LoginLog(string.Concat(new string[]
-								{
-									jamJSONCharacterEntry.Name,
-									": Adding Character Button. Realm: ",
-									name,
-									", online: ",
-									online.ToString()
-								}));
 								AllPanels.instance.AddCharacterButton(jamJSONCharacterEntry, this.SubRegion, name, online);
 								flag = true;
 								break;
@@ -2042,7 +2178,6 @@ public class Login : MonoBehaviour
 						}
 						if (!flag)
 						{
-							Login.instance.LoginLog(jamJSONCharacterEntry.Name + ": Could not find entry for realm address " + jamJSONCharacterEntry.VirtualRealmAddress);
 						}
 						if (Login.instance.UseCachedCharacter() && @string != null && jamJSONCharacterEntry.PlayerGuid == @string)
 						{

@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class AITriggerActionSetDebugInfo
 	{
-		[FlexJamMember(Name = "aiTriggerActionSetID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "aiTriggerActionSetID")]
+		[FlexJamMember(Name = "aiTriggerActionSetID", Type = FlexJamType.Int32)]
 		public int AiTriggerActionSetID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "name")]

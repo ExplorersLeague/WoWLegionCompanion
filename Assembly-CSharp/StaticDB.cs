@@ -570,6 +570,10 @@ public class StaticDB : MonoBehaviour
 
 	public static string GetString(string baseTag, string fallbackString = null)
 	{
+		if (StaticDB.instance == null)
+		{
+			return string.Empty;
+		}
 		MobileStringsRec record = StaticDB.instance.m_mobileStringsDB.GetRecord(baseTag);
 		if (record == null)
 		{

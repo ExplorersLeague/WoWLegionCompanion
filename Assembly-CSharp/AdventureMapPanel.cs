@@ -169,14 +169,13 @@ public class AdventureMapPanel : MonoBehaviour
 		AdventureMapPanel.instance = this;
 		this.m_zoneID = AdventureMapPanel.eZone.None;
 		this.m_testMissionIconScale = 1f;
-		this.m_mapFilters = new bool[7];
+		this.m_mapFilters = new bool[14];
 		for (int i = 0; i < this.m_mapFilters.Length; i++)
 		{
 			this.m_mapFilters[i] = false;
 		}
 		this.EnableMapFilter(MapFilterType.All, true);
 		AllPanels.instance.m_missionResultsPanel.gameObject.SetActive(true);
-		Main.instance.RequestWorldQuests();
 	}
 
 	private void Start()
@@ -197,6 +196,7 @@ public class AdventureMapPanel : MonoBehaviour
 		main2.MissionAddedAction = (Action<int, int>)Delegate.Combine(main2.MissionAddedAction, new Action<int, int>(this.HandleMissionAdded));
 		Main main3 = Main.instance;
 		main3.BountyInfoUpdatedAction = (Action)Delegate.Combine(main3.BountyInfoUpdatedAction, new Action(this.HandleBountyInfoUpdated));
+		AllPopups.instance.EnableMissionDialog();
 	}
 
 	private void HandleMissionAdded(int garrMissionID, int result)
@@ -265,7 +265,16 @@ public class AdventureMapPanel : MonoBehaviour
 		{
 			if (adventureMapMissionSite != null)
 			{
-				Object.DestroyImmediate(adventureMapMissionSite.gameObject);
+				StackableMapIcon component = adventureMapMissionSite.GetComponent<StackableMapIcon>();
+				GameObject gameObject = adventureMapMissionSite.gameObject;
+				if (component != null)
+				{
+					component.RemoveFromContainer();
+				}
+				if (gameObject != null)
+				{
+					Object.DestroyImmediate(adventureMapMissionSite.gameObject);
+				}
 			}
 		}
 		foreach (object obj in PersistentMissionData.missionDictionary.Values)
@@ -280,7 +289,16 @@ public class AdventureMapPanel : MonoBehaviour
 		AdventureMapWorldQuest[] componentsInChildren = this.m_missionAndWordQuestArea.GetComponentsInChildren<AdventureMapWorldQuest>(true);
 		foreach (AdventureMapWorldQuest adventureMapWorldQuest in componentsInChildren)
 		{
-			Object.DestroyImmediate(adventureMapWorldQuest.gameObject);
+			StackableMapIcon component = adventureMapWorldQuest.GetComponent<StackableMapIcon>();
+			GameObject gameObject = adventureMapWorldQuest.gameObject;
+			if (component != null)
+			{
+				component.RemoveFromContainer();
+			}
+			if (gameObject != null)
+			{
+				Object.DestroyImmediate(adventureMapWorldQuest.gameObject);
+			}
 		}
 		foreach (object obj in WorldQuestData.worldQuestDictionary.Values)
 		{
@@ -357,35 +375,120 @@ public class AdventureMapPanel : MonoBehaviour
 						}
 					}
 				}
+				if (this.IsFilterEnabled(MapFilterType.Bounty_HighmountainTribes) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+				{
+					MobileBountiesByWorldQuest mobileBountiesByWorldQuest = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+					for (int num = 0; num < mobileBountiesByWorldQuest.BountyQuestID.Length; num++)
+					{
+						if (mobileBountiesByWorldQuest.BountyQuestID[num] == 42233)
+						{
+							matchesFilter = true;
+							break;
+						}
+					}
+				}
+				if (this.IsFilterEnabled(MapFilterType.Bounty_CourtOfFarondis) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+				{
+					MobileBountiesByWorldQuest mobileBountiesByWorldQuest2 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+					for (int num2 = 0; num2 < mobileBountiesByWorldQuest2.BountyQuestID.Length; num2++)
+					{
+						if (mobileBountiesByWorldQuest2.BountyQuestID[num2] == 42420)
+						{
+							matchesFilter = true;
+							break;
+						}
+					}
+				}
+				if (this.IsFilterEnabled(MapFilterType.Bounty_Dreamweavers) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+				{
+					MobileBountiesByWorldQuest mobileBountiesByWorldQuest3 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+					for (int num3 = 0; num3 < mobileBountiesByWorldQuest3.BountyQuestID.Length; num3++)
+					{
+						if (mobileBountiesByWorldQuest3.BountyQuestID[num3] == 42170)
+						{
+							matchesFilter = true;
+							break;
+						}
+					}
+				}
+				if (this.IsFilterEnabled(MapFilterType.Bounty_Wardens) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+				{
+					MobileBountiesByWorldQuest mobileBountiesByWorldQuest4 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+					for (int num4 = 0; num4 < mobileBountiesByWorldQuest4.BountyQuestID.Length; num4++)
+					{
+						if (mobileBountiesByWorldQuest4.BountyQuestID[num4] == 42422)
+						{
+							matchesFilter = true;
+							break;
+						}
+					}
+				}
+				if (this.IsFilterEnabled(MapFilterType.Bounty_Nightfallen) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+				{
+					MobileBountiesByWorldQuest mobileBountiesByWorldQuest5 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+					for (int num5 = 0; num5 < mobileBountiesByWorldQuest5.BountyQuestID.Length; num5++)
+					{
+						if (mobileBountiesByWorldQuest5.BountyQuestID[num5] == 42421)
+						{
+							matchesFilter = true;
+							break;
+						}
+					}
+				}
+				if (this.IsFilterEnabled(MapFilterType.Bounty_Valarjar) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+				{
+					MobileBountiesByWorldQuest mobileBountiesByWorldQuest6 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+					for (int num6 = 0; num6 < mobileBountiesByWorldQuest6.BountyQuestID.Length; num6++)
+					{
+						if (mobileBountiesByWorldQuest6.BountyQuestID[num6] == 42234)
+						{
+							matchesFilter = true;
+							break;
+						}
+					}
+				}
+				if (this.IsFilterEnabled(MapFilterType.Bounty_KirinTor) && PersistentBountyData.bountiesByWorldQuestDictionary.ContainsKey(mobileWorldQuest.QuestID))
+				{
+					MobileBountiesByWorldQuest mobileBountiesByWorldQuest7 = (MobileBountiesByWorldQuest)PersistentBountyData.bountiesByWorldQuestDictionary[mobileWorldQuest.QuestID];
+					for (int num7 = 0; num7 < mobileBountiesByWorldQuest7.BountyQuestID.Length; num7++)
+					{
+						if (mobileBountiesByWorldQuest7.BountyQuestID[num7] == 43179)
+						{
+							matchesFilter = true;
+							break;
+						}
+					}
+				}
 				if (!matchesFilter)
 				{
 					continue;
 				}
 			}
-			GameObject gameObject = Object.Instantiate<GameObject>(AdventureMapPanel.instance.m_AdvMapWorldQuestPrefab);
-			gameObject.transform.SetParent(this.m_missionAndWordQuestArea.transform, false);
-			float num = 0.10271506f;
-			float num2 = (float)mobileWorldQuest.StartLocationY * -num;
-			float num3 = (float)mobileWorldQuest.StartLocationX * num;
-			float num4 = 1036.88037f;
-			float num5 = 597.2115f;
-			num2 += num4;
-			num3 += num5;
+			GameObject gameObject2 = Object.Instantiate<GameObject>(AdventureMapPanel.instance.m_AdvMapWorldQuestPrefab);
+			gameObject2.transform.SetParent(this.m_missionAndWordQuestArea.transform, false);
+			float num8 = 0.10271506f;
+			float num9 = (float)mobileWorldQuest.StartLocationY * -num8;
+			float num10 = (float)mobileWorldQuest.StartLocationX * num8;
+			float num11 = 1036.88037f;
+			float num12 = 597.2115f;
+			num9 += num11;
+			num10 += num12;
 			float width = this.m_worldMapLowDetail.sprite.textureRect.width;
 			float height = this.m_worldMapLowDetail.sprite.textureRect.height;
-			Vector2 vector = new Vector3(num2 / width, num3 / height);
-			RectTransform component = gameObject.GetComponent<RectTransform>();
-			component.anchorMin = vector;
-			component.anchorMax = vector;
-			component.anchoredPosition = Vector2.zero;
-			AdventureMapWorldQuest component2 = gameObject.GetComponent<AdventureMapWorldQuest>();
-			component2.SetQuestID(mobileWorldQuest.QuestID);
-			StackableMapIcon component3 = gameObject.GetComponent<StackableMapIcon>();
-			if (component3 != null)
+			Vector2 vector = new Vector3(num9 / width, num10 / height);
+			RectTransform component2 = gameObject2.GetComponent<RectTransform>();
+			component2.anchorMin = vector;
+			component2.anchorMax = vector;
+			component2.anchoredPosition = Vector2.zero;
+			AdventureMapWorldQuest component3 = gameObject2.GetComponent<AdventureMapWorldQuest>();
+			component3.SetQuestID(mobileWorldQuest.QuestID);
+			StackableMapIcon component4 = gameObject2.GetComponent<StackableMapIcon>();
+			if (component4 != null)
 			{
-				component3.RegisterWithManager();
+				component4.RegisterWithManager();
 			}
 		}
+		this.m_pinchZoomContentManager.ForceZoomFactorChanged();
 	}
 
 	private void MissionPanelSliderLeftTweenCallback(float val)
@@ -407,12 +510,6 @@ public class AdventureMapPanel : MonoBehaviour
 		{
 			this.m_secondsMissionHasBeenSelected += Time.deltaTime;
 		}
-		if (this.m_mapAndRewardParentViewRT.sizeDelta.x != this.m_parentViewRT.rect.width)
-		{
-			this.m_multiPanelViewSizeDelta = this.m_mapAndRewardParentViewRT.sizeDelta;
-			this.m_multiPanelViewSizeDelta.x = this.m_parentViewRT.rect.width;
-			this.m_mapAndRewardParentViewRT.sizeDelta = this.m_multiPanelViewSizeDelta;
-		}
 	}
 
 	private void ZoomOutTweenCallback(float newZoomFactor)
@@ -427,8 +524,7 @@ public class AdventureMapPanel : MonoBehaviour
 
 	public void CenterAndZoomOut()
 	{
-		AutoCenterItem componentInParent = base.gameObject.GetComponentInParent<AutoCenterItem>();
-		if (componentInParent && componentInParent.IsCentered())
+		if (this.m_adventureMapOrderHallNavButton.IsSelected())
 		{
 			this.CenterAndZoom(Vector2.zero, null, false);
 		}
@@ -451,6 +547,8 @@ public class AdventureMapPanel : MonoBehaviour
 
 	public void CenterAndZoom(Vector2 tapPos, ZoneButton zoneButton, bool zoomIn)
 	{
+		iTween.Stop(this.m_mapViewContentsRT.gameObject);
+		iTween.Stop(base.gameObject);
 		this.m_lastTappedZoneButton = zoneButton;
 		Vector3[] array = new Vector3[4];
 		this.m_mapViewRT.GetWorldCorners(array);
@@ -566,26 +664,35 @@ public class AdventureMapPanel : MonoBehaviour
 		BountySite[] componentsInChildren = this.m_missionAndWordQuestArea.transform.GetComponentsInChildren<BountySite>(true);
 		foreach (BountySite bountySite in componentsInChildren)
 		{
-			Object.DestroyImmediate(bountySite.gameObject);
+			StackableMapIcon component = bountySite.GetComponent<StackableMapIcon>();
+			GameObject gameObject = bountySite.gameObject;
+			if (component != null)
+			{
+				component.RemoveFromContainer();
+			}
+			if (gameObject != null)
+			{
+				Object.DestroyImmediate(gameObject);
+			}
 		}
 		foreach (object obj in PersistentBountyData.bountyDictionary.Values)
 		{
 			MobileWorldQuestBounty mobileWorldQuestBounty = (MobileWorldQuestBounty)obj;
-			GameObject gameObject = Object.Instantiate<GameObject>(this.m_bountySitePrefab);
-			BountySite component = gameObject.GetComponent<BountySite>();
-			component.SetBounty(mobileWorldQuestBounty);
-			gameObject.name = "BountySite " + mobileWorldQuestBounty.QuestID;
-			RectTransform component2 = gameObject.GetComponent<RectTransform>();
-			gameObject.transform.SetParent(this.m_missionAndWordQuestArea.transform, false);
-			component2.anchorMin = new Vector2(0.5f, 0.5f);
-			component2.anchorMax = new Vector2(0.5f, 0.5f);
+			GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_bountySitePrefab);
+			BountySite component2 = gameObject2.GetComponent<BountySite>();
+			component2.SetBounty(mobileWorldQuestBounty);
+			gameObject2.name = "BountySite " + mobileWorldQuestBounty.QuestID;
+			RectTransform component3 = gameObject2.GetComponent<RectTransform>();
+			gameObject2.transform.SetParent(this.m_missionAndWordQuestArea.transform, false);
+			component3.anchorMin = new Vector2(0.5f, 0.5f);
+			component3.anchorMax = new Vector2(0.5f, 0.5f);
 			QuestV2Rec record = StaticDB.questDB.GetRecord(mobileWorldQuestBounty.QuestID);
 			bool flag = true;
 			ZoneMissionOverview zoneMissionOverview = null;
 			int questSortID = record.QuestSortID;
 			if (questSortID == 7502)
 			{
-				goto IL_1AA;
+				goto IL_1D7;
 			}
 			if (questSortID != 7503)
 			{
@@ -599,7 +706,7 @@ public class AdventureMapPanel : MonoBehaviour
 							{
 								if (questSortID == 8147)
 								{
-									goto IL_1AA;
+									goto IL_1D7;
 								}
 								flag = false;
 							}
@@ -627,35 +734,35 @@ public class AdventureMapPanel : MonoBehaviour
 			{
 				zoneMissionOverview = this.m_allZoneMissionOverviews[2];
 			}
-			IL_1C1:
+			IL_1EE:
 			if (flag)
 			{
 				if (zoneMissionOverview.zoneNameTag.Length > 0)
 				{
-					gameObject.transform.SetParent(zoneMissionOverview.m_bountyButtonRoot.transform, false);
+					gameObject2.transform.SetParent(zoneMissionOverview.m_bountyButtonRoot.transform, false);
 				}
 				else
 				{
-					gameObject.transform.SetParent(zoneMissionOverview.m_anonymousBountyButtonRoot.transform, false);
+					gameObject2.transform.SetParent(zoneMissionOverview.m_anonymousBountyButtonRoot.transform, false);
 				}
-				gameObject.transform.localPosition = Vector3.zero;
-				component.m_errorImage.gameObject.SetActive(false);
+				gameObject2.transform.localPosition = Vector3.zero;
+				component2.m_errorImage.gameObject.SetActive(false);
 			}
 			else
 			{
-				gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
-				component.m_errorImage.gameObject.SetActive(true);
+				gameObject2.transform.localPosition = new Vector3(0f, 0f, 0f);
+				component2.m_errorImage.gameObject.SetActive(true);
 			}
-			StackableMapIcon component3 = gameObject.GetComponent<StackableMapIcon>();
-			if (component3 != null)
+			StackableMapIcon component4 = gameObject2.GetComponent<StackableMapIcon>();
+			if (component4 != null)
 			{
-				component3.RegisterWithManager();
+				component4.RegisterWithManager();
 				continue;
 			}
 			continue;
-			IL_1AA:
+			IL_1D7:
 			zoneMissionOverview = this.m_allZoneMissionOverviews[6];
-			goto IL_1C1;
+			goto IL_1EE;
 		}
 	}
 
@@ -728,6 +835,8 @@ public class AdventureMapPanel : MonoBehaviour
 
 	public GuildChatSlider m_guildChatSlider_Bottom;
 
+	public OrderHallNavButton m_adventureMapOrderHallNavButton;
+
 	private int m_currentMapMission;
 
 	public Action<int> MissionSelectedFromMapAction;
@@ -771,10 +880,6 @@ public class AdventureMapPanel : MonoBehaviour
 	public float m_secondsMissionHasBeenSelected;
 
 	public CanvasGroup m_topLevelMapCanvasGroup;
-
-	public RectTransform m_parentViewRT;
-
-	private Vector2 m_multiPanelViewSizeDelta;
 
 	public PlayerInfoDisplay m_playerInfoDisplay;
 

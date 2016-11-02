@@ -21,12 +21,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
 		public Vector3 Position { get; set; }
 
-		[FlexJamMember(Name = "granted", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "granted")]
+		[FlexJamMember(Name = "granted", Type = FlexJamType.Bool)]
 		public bool Granted { get; set; }
 
-		[FlexJamMember(Name = "visibleRange", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "visibleRange")]
+		[FlexJamMember(Name = "visibleRange", Type = FlexJamType.Float)]
 		public float VisibleRange { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "displayID")]

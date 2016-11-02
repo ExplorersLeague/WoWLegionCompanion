@@ -126,13 +126,13 @@ public class TalentTreePanel : MonoBehaviour
 			Debug.LogError("No GarrTalentTree record found for class " + GarrisonStatus.CharacterClassID());
 			return;
 		}
-		List<TalentTreeItem> talentTreeItems = new List<TalentTreeItem>();
+		this.m_talentTreeItems = new List<TalentTreeItem>();
 		for (int k = 0; k < treeRec.MaxTiers; k++)
 		{
 			GameObject gameObject = Object.Instantiate<GameObject>(this.m_talentTreeItemPrefab);
 			gameObject.transform.SetParent(this.m_talentTreeItemRoot.transform, false);
 			TalentTreeItem component = gameObject.GetComponent<TalentTreeItem>();
-			talentTreeItems.Add(component);
+			this.m_talentTreeItems.Add(component);
 			if (k < this.m_romanNumeralPrefabs.Length)
 			{
 				GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_romanNumeralPrefabs[k]);
@@ -141,13 +141,13 @@ public class TalentTreePanel : MonoBehaviour
 		}
 		StaticDB.garrTalentDB.EnumRecordsByParentID(treeRec.ID, delegate(GarrTalentRec garrTalentRec)
 		{
-			talentTreeItems[garrTalentRec.Tier].SetTalent(garrTalentRec);
+			this.m_talentTreeItems[garrTalentRec.Tier].SetTalent(garrTalentRec);
 			MobilePlayerCanResearchGarrisonTalent mobilePlayerCanResearchGarrisonTalent = new MobilePlayerCanResearchGarrisonTalent();
 			mobilePlayerCanResearchGarrisonTalent.GarrTalentID = garrTalentRec.ID;
 			Login.instance.SendToMobileServer(mobilePlayerCanResearchGarrisonTalent);
 			return true;
 		});
-		foreach (TalentTreeItem talentTreeItem2 in talentTreeItems)
+		foreach (TalentTreeItem talentTreeItem2 in this.m_talentTreeItems)
 		{
 			talentTreeItem2.UpdateVisualStates();
 		}
@@ -168,12 +168,18 @@ public class TalentTreePanel : MonoBehaviour
 
 	private void Update()
 	{
-		if (this.m_panelViewRT.sizeDelta.x != this.m_parentViewRT.rect.width)
+	}
+
+	public bool TalentIsReadyToPlayGreenCheckAnim()
+	{
+		foreach (TalentTreeItem talentTreeItem in this.m_talentTreeItems)
 		{
-			this.m_multiPanelViewSizeDelta = this.m_panelViewRT.sizeDelta;
-			this.m_multiPanelViewSizeDelta.x = this.m_parentViewRT.rect.width;
-			this.m_panelViewRT.sizeDelta = this.m_multiPanelViewSizeDelta;
+			if (talentTreeItem.m_talentButtonLeft.IsReadyToShowGreenCheckAnim() || talentTreeItem.m_talentButtonRight.IsReadyToShowGreenCheckAnim() || talentTreeItem.m_talentButtonSolo.IsReadyToShowGreenCheckAnim())
+			{
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public Image m_classBG;
@@ -186,11 +192,9 @@ public class TalentTreePanel : MonoBehaviour
 
 	public GameObject[] m_romanNumeralPrefabs;
 
-	public RectTransform m_parentViewRT;
-
-	public RectTransform m_panelViewRT;
-
 	private Vector2 m_multiPanelViewSizeDelta;
 
 	private bool m_needsFullInit = true;
+
+	private List<TalentTreeItem> m_talentTreeItems;
 }

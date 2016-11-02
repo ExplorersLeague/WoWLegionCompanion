@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "alreadyOwns", Type = FlexJamType.Bool)]
 		public bool AlreadyOwns { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "choices")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "choices", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "choices")]
 		public JamBattlePayDeliverableChoice[] Choices { get; set; }
 
 		[FlexJamMember(Name = "deliverableID", Type = FlexJamType.UInt32)]
@@ -32,24 +32,24 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		public uint Flags { get; set; }
 
-		[FlexJamMember(Optional = true, Name = "displayInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "displayInfo")]
+		[FlexJamMember(Optional = true, Name = "displayInfo", Type = FlexJamType.Struct)]
 		public JamBattlepayDisplayInfo[] DisplayInfo { get; set; }
 
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		public uint ItemID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "type")]
 		[FlexJamMember(Name = "type", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public byte Type { get; set; }
 
 		[FlexJamMember(Name = "mountSpellID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "mountSpellID")]
 		public uint MountSpellID { get; set; }
 
-		[FlexJamMember(Name = "quantity", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "quantity")]
+		[FlexJamMember(Name = "quantity", Type = FlexJamType.UInt32)]
 		public uint Quantity { get; set; }
 	}
 }

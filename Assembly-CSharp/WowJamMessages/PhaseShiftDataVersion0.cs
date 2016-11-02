@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "phaseShiftFlags")]
 		public uint PhaseShiftFlags { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "phaseID")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "phaseID", Type = FlexJamType.UInt16)]
+		[System.Runtime.Serialization.DataMember(Name = "phaseID")]
 		public ushort[] PhaseID { get; set; }
 	}
 }

@@ -105,7 +105,21 @@ public class PinchZoomContentManager : MonoBehaviour
 		}
 		if (this.ZoomFactorChanged != null)
 		{
-			this.ZoomFactorChanged();
+			this.ZoomFactorChanged(false);
+		}
+	}
+
+	public bool IsZoomedIn()
+	{
+		MapInfo componentInChildren = base.GetComponentInChildren<MapInfo>();
+		return !(componentInChildren == null) && Mathf.Approximately(this.m_zoomFactor, componentInChildren.m_maxZoomFactor);
+	}
+
+	public void ForceZoomFactorChanged()
+	{
+		if (this.ZoomFactorChanged != null)
+		{
+			this.ZoomFactorChanged(true);
 		}
 	}
 
@@ -127,5 +141,5 @@ public class PinchZoomContentManager : MonoBehaviour
 
 	public float m_zoomOutThreshold;
 
-	public Action ZoomFactorChanged;
+	public Action<bool> ZoomFactorChanged;
 }

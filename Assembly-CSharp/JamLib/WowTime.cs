@@ -15,8 +15,8 @@ namespace JamLib
 		[System.Runtime.Serialization.DataMember(Name = "hour")]
 		public int Hour { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "weekday")]
 		[FlexJamMember(Name = "weekday", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "weekday")]
 		public int WeekDay { get; set; }
 
 		[FlexJamMember(Name = "monthDay", Type = FlexJamType.Int32)]
@@ -27,8 +27,8 @@ namespace JamLib
 		[System.Runtime.Serialization.DataMember(Name = "month")]
 		public int Month { get; set; }
 
-		[FlexJamMember(Name = "year", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "year")]
+		[FlexJamMember(Name = "year", Type = FlexJamType.Int32)]
 		public int Year { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "flags")]

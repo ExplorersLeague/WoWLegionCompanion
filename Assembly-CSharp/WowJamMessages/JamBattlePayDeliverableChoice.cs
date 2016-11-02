@@ -28,16 +28,16 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.UInt32)]
 		public uint ItemID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "type")]
 		[FlexJamMember(Name = "type", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public byte Type { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "mountSpellID")]
 		[FlexJamMember(Name = "mountSpellID", Type = FlexJamType.UInt32)]
 		public uint MountSpellID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "ID")]
 		[FlexJamMember(Name = "ID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "ID")]
 		public uint ID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "quantity")]

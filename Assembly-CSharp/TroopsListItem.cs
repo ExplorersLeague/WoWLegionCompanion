@@ -11,7 +11,7 @@ public class TroopsListItem : MonoBehaviour
 {
 	public void HandleFollowerDataChanged()
 	{
-		if (this.m_shipmentType == null)
+		if (this.m_charShipmentRec == null)
 		{
 			return;
 		}
@@ -69,6 +69,11 @@ public class TroopsListItem : MonoBehaviour
 		}
 	}
 
+	private void Awake()
+	{
+		this.ClearAndHideLootArea();
+	}
+
 	private void Start()
 	{
 		Main instance = Main.instance;
@@ -78,6 +83,8 @@ public class TroopsListItem : MonoBehaviour
 		this.m_itemResourceCostText.font = GeneralHelpers.LoadStandardFont();
 		this.m_recruitButtonText.font = GeneralHelpers.LoadStandardFont();
 		this.m_itemName.font = GeneralHelpers.LoadStandardFont();
+		this.m_youReceivedLoot.font = GeneralHelpers.LoadStandardFont();
+		this.m_youReceivedLoot.text = StaticDB.GetString("YOU_RECEIVED_LOOT", "You received loot:");
 	}
 
 	private void OnDestroy()
@@ -86,10 +93,16 @@ public class TroopsListItem : MonoBehaviour
 		instance.ShipmentAddedAction = (Action<int, ulong>)Delegate.Remove(instance.ShipmentAddedAction, new Action<int, ulong>(this.HandleShipmentAdded));
 	}
 
-	public void SetCharShipment(MobileClientShipmentType shipmentType)
+	public void SetCharShipment(MobileClientShipmentType shipmentType, bool isSealOfFateHack = false, CharShipmentRec sealOfFateHackCharShipmentRec = null)
 	{
-		this.m_shipmentCost = shipmentType.CurrencyCost;
-		this.m_shipmentType = shipmentType;
+		if (isSealOfFateHack)
+		{
+			this.m_shipmentCost = 0;
+		}
+		else
+		{
+			this.m_shipmentCost = shipmentType.CurrencyCost;
+		}
 		Transform[] componentsInChildren = this.m_troopHeartContainer.GetComponentsInChildren<Transform>(true);
 		foreach (Transform transform in componentsInChildren)
 		{
@@ -108,20 +121,20 @@ public class TroopsListItem : MonoBehaviour
 		{
 			Object.DestroyImmediate(troopSlot.gameObject);
 		}
-		CharShipmentRec record = StaticDB.charShipmentDB.GetRecord(shipmentType.CharShipmentID);
-		if (record == null)
+		CharShipmentRec charShipmentRec = (!isSealOfFateHack) ? StaticDB.charShipmentDB.GetRecord(shipmentType.CharShipmentID) : sealOfFateHackCharShipmentRec;
+		if (charShipmentRec == null)
 		{
 			Debug.LogError("Invalid Shipment ID: " + shipmentType.CharShipmentID);
 			this.m_troopName.text = "Invalid Shipment ID: " + shipmentType.CharShipmentID;
 			return;
 		}
-		if (record.GarrFollowerID > 0u)
+		if (charShipmentRec.GarrFollowerID > 0u)
 		{
-			this.SetCharShipmentTroop(shipmentType, record);
+			this.SetCharShipmentTroop(shipmentType, charShipmentRec);
 		}
-		else if (record.DummyItemID > 0)
+		else if (charShipmentRec.DummyItemID > 0)
 		{
-			this.SetCharShipmentItem(shipmentType, record);
+			this.SetCharShipmentItem(shipmentType, (!isSealOfFateHack) ? charShipmentRec : sealOfFateHackCharShipmentRec, isSealOfFateHack);
 		}
 	}
 
@@ -136,7 +149,7 @@ public class TroopsListItem : MonoBehaviour
 				GameObject gameObject = Object.Instantiate<GameObject>(this.m_troopSlotPrefab);
 				gameObject.transform.SetParent(this.m_troopSlotsRootObject.transform, false);
 				TroopSlot component = gameObject.GetComponent<TroopSlot>();
-				component.SetCharShipment(this.m_shipmentType.CharShipmentID, 0UL, 0, false, 0);
+				component.SetCharShipment(this.m_charShipmentRec.ID, 0UL, 0, false, 0);
 			}
 		}
 		if (componentsInChildren.Length > maxShipments)
@@ -151,20 +164,20 @@ public class TroopsListItem : MonoBehaviour
 		{
 			if (troopSlot.GetDBID() != 0UL && !PersistentShipmentData.shipmentDictionary.ContainsKey(troopSlot.GetDBID()))
 			{
-				troopSlot.SetCharShipment(this.m_shipmentType.CharShipmentID, 0UL, 0, false, 0);
+				troopSlot.SetCharShipment(this.m_charShipmentRec.ID, 0UL, 0, false, 0);
 			}
 		}
 		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
 		{
 			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			if (jamCharacterShipment.ShipmentRecID == this.m_shipmentType.CharShipmentID)
+			if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
 			{
 				this.SetTroopSlotForPendingShipment(componentsInChildren, jamCharacterShipment.ShipmentID);
 			}
 		}
 	}
 
-	private void SetCharShipmentItem(MobileClientShipmentType shipmentType, CharShipmentRec charShipmentRec)
+	private void SetCharShipmentItem(MobileClientShipmentType shipmentType, CharShipmentRec charShipmentRec, bool isSealOfFateHack = false)
 	{
 		this.m_isTroop = false;
 		this.m_charShipmentRec = charShipmentRec;
@@ -186,11 +199,16 @@ public class TroopsListItem : MonoBehaviour
 		{
 			this.m_troopSnapshotImage.sprite = sprite;
 		}
-		this.m_itemResourceCostText.text = string.Empty + shipmentType.CurrencyCost;
-		Sprite sprite2 = GeneralHelpers.LoadCurrencyIcon(shipmentType.CurrencyTypeID);
-		if (sprite2 != null)
+		this.m_itemResourceCostText.gameObject.SetActive(!isSealOfFateHack);
+		this.m_itemResourceIcon.gameObject.SetActive(!isSealOfFateHack);
+		if (!isSealOfFateHack)
 		{
-			this.m_itemResourceIcon.sprite = sprite2;
+			this.m_itemResourceCostText.text = string.Empty + shipmentType.CurrencyCost;
+			Sprite sprite2 = GeneralHelpers.LoadCurrencyIcon(shipmentType.CurrencyTypeID);
+			if (sprite2 != null)
+			{
+				this.m_itemResourceIcon.sprite = sprite2;
+			}
 		}
 		this.UpdateItemSlots();
 		this.UpdateRecruitButtonState();
@@ -216,7 +234,7 @@ public class TroopsListItem : MonoBehaviour
 			{
 				GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
 				int iconFileDataID = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceIconFileDataID : record.HordeIconFileDataID;
-				troopSlot2.SetCharShipment(this.m_shipmentType.CharShipmentID, 0UL, follower.GarrFollowerID, false, iconFileDataID);
+				troopSlot2.SetCharShipment(this.m_charShipmentRec.ID, 0UL, follower.GarrFollowerID, false, iconFileDataID);
 				return;
 			}
 		}
@@ -226,7 +244,7 @@ public class TroopsListItem : MonoBehaviour
 			{
 				GarrFollowerRec record2 = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
 				int iconFileDataID2 = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record2.AllianceIconFileDataID : record2.HordeIconFileDataID;
-				troopSlot3.SetCharShipment(this.m_shipmentType.CharShipmentID, 0UL, follower.GarrFollowerID, false, iconFileDataID2);
+				troopSlot3.SetCharShipment(this.m_charShipmentRec.ID, 0UL, follower.GarrFollowerID, false, iconFileDataID2);
 				return;
 			}
 		}
@@ -245,7 +263,7 @@ public class TroopsListItem : MonoBehaviour
 		{
 			if (troopSlot2.IsEmpty())
 			{
-				troopSlot2.SetCharShipment(this.m_shipmentType.CharShipmentID, shipmentDBID, 0, true, 0);
+				troopSlot2.SetCharShipment(this.m_charShipmentRec.ID, shipmentDBID, 0, true, 0);
 				return;
 			}
 		}
@@ -262,7 +280,7 @@ public class TroopsListItem : MonoBehaviour
 				GameObject gameObject = Object.Instantiate<GameObject>(this.m_troopSlotPrefab);
 				gameObject.transform.SetParent(this.m_troopSlotsRootObject.transform, false);
 				TroopSlot component = gameObject.GetComponent<TroopSlot>();
-				component.SetCharShipment(this.m_shipmentType.CharShipmentID, 0UL, 0, false, 0);
+				component.SetCharShipment(this.m_charShipmentRec.ID, 0UL, 0, false, 0);
 			}
 		}
 		if (componentsInChildren.Length > maxTroops)
@@ -278,7 +296,7 @@ public class TroopsListItem : MonoBehaviour
 			int ownedFollowerID = troopSlot.GetOwnedFollowerID();
 			if (ownedFollowerID != 0 && (!PersistentFollowerData.followerDictionary.ContainsKey(ownedFollowerID) || PersistentFollowerData.followerDictionary[ownedFollowerID].Durability == 0))
 			{
-				troopSlot.SetCharShipment(this.m_shipmentType.CharShipmentID, 0UL, 0, false, 0);
+				troopSlot.SetCharShipment(this.m_charShipmentRec.ID, 0UL, 0, false, 0);
 			}
 		}
 		uint num = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? this.m_followerRec.AllianceGarrClassSpecID : this.m_followerRec.HordeGarrClassSpecID;
@@ -291,11 +309,11 @@ public class TroopsListItem : MonoBehaviour
 				this.SetTroopSlotForExistingFollower(componentsInChildren, jamGarrisonFollower);
 			}
 		}
-		CharShipmentRec record2 = StaticDB.charShipmentDB.GetRecord(this.m_shipmentType.CharShipmentID);
+		CharShipmentRec record2 = StaticDB.charShipmentDB.GetRecord(this.m_charShipmentRec.ID);
 		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
 		{
 			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			if (jamCharacterShipment.ShipmentRecID == this.m_shipmentType.CharShipmentID)
+			if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
 			{
 				this.SetTroopSlotForPendingShipment(componentsInChildren, jamCharacterShipment.ShipmentID);
 			}
@@ -313,7 +331,7 @@ public class TroopsListItem : MonoBehaviour
 	private void SetCharShipmentTroop(MobileClientShipmentType shipmentType, CharShipmentRec charShipmentRec)
 	{
 		this.m_isTroop = true;
-		this.m_shipmentType = shipmentType;
+		this.m_charShipmentRec = charShipmentRec;
 		this.m_troopSpecificArea.SetActive(true);
 		this.m_itemSpecificArea.SetActive(false);
 		this.m_troopName.gameObject.SetActive(true);
@@ -369,9 +387,8 @@ public class TroopsListItem : MonoBehaviour
 
 	public void Recruit()
 	{
-		Debug.Log("Attempting To Recruit! CharShipment ID = " + this.m_shipmentType.CharShipmentID);
 		MobilePlayerCreateShipment mobilePlayerCreateShipment = new MobilePlayerCreateShipment();
-		mobilePlayerCreateShipment.CharShipmentID = this.m_shipmentType.CharShipmentID;
+		mobilePlayerCreateShipment.CharShipmentID = this.m_charShipmentRec.ID;
 		mobilePlayerCreateShipment.NumShipments = 1;
 		Login.instance.SendToMobileServer(mobilePlayerCreateShipment);
 		Main.instance.m_UISound.Play_RecruitTroop();
@@ -379,7 +396,7 @@ public class TroopsListItem : MonoBehaviour
 
 	private void HandleShipmentAdded(int charShipmentID, ulong shipmentDBID)
 	{
-		if (charShipmentID == this.m_shipmentType.CharShipmentID)
+		if (charShipmentID == this.m_charShipmentRec.ID)
 		{
 			TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
 			foreach (TroopSlot troopSlot in componentsInChildren)
@@ -438,11 +455,37 @@ public class TroopsListItem : MonoBehaviour
 
 	public int GetCharShipmentTypeID()
 	{
-		if (this.m_shipmentType == null)
+		if (this.m_charShipmentRec == null)
 		{
 			return 0;
 		}
-		return this.m_shipmentType.CharShipmentID;
+		return this.m_charShipmentRec.ID;
+	}
+
+	public void HandleShipmentItemPushed(MobileClientShipmentItem item)
+	{
+		if (!this.m_itemResourceCostText.gameObject.activeSelf)
+		{
+			return;
+		}
+		if (!this.m_lootDisplayArea.activeSelf)
+		{
+			this.m_lootDisplayArea.SetActive(true);
+		}
+		MissionRewardDisplay missionRewardDisplay = Object.Instantiate<MissionRewardDisplay>(this.m_rewardDisplayPrefab);
+		missionRewardDisplay.transform.SetParent(this.m_lootItemArea.transform, false);
+		missionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.item, item.ItemID, item.Count, item.Context, item.IconFileDataID);
+		UiAnimMgr.instance.PlayAnim("MinimapPulseAnim", missionRewardDisplay.transform, Vector3.zero, 1.5f, 0f);
+	}
+
+	public void ClearAndHideLootArea()
+	{
+		MissionRewardDisplay[] componentsInChildren = this.m_lootItemArea.GetComponentsInChildren<MissionRewardDisplay>(true);
+		foreach (MissionRewardDisplay missionRewardDisplay in componentsInChildren)
+		{
+			Object.DestroyObject(missionRewardDisplay.gameObject);
+		}
+		this.m_lootDisplayArea.SetActive(false);
 	}
 
 	public GameObject m_troopSpecificArea;
@@ -481,7 +524,13 @@ public class TroopsListItem : MonoBehaviour
 
 	public MissionRewardDisplay m_itemDisplay;
 
-	private MobileClientShipmentType m_shipmentType;
+	public GameObject m_lootDisplayArea;
+
+	public GameObject m_lootItemArea;
+
+	public MissionRewardDisplay m_rewardDisplayPrefab;
+
+	public Text m_youReceivedLoot;
 
 	private bool m_isTroop;
 

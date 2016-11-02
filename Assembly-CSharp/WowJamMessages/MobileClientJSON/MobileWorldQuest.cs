@@ -5,7 +5,7 @@ using JamLib;
 namespace WowJamMessages.MobileClientJSON
 {
 	[System.Runtime.Serialization.DataContract]
-	[FlexJamStruct(Name = "MobileWorldQuest", Version = 28333852u)]
+	[FlexJamStruct(Name = "MobileWorldQuest", Version = 33577221u)]
 	public class MobileWorldQuest
 	{
 		[FlexJamMember(ArrayDimensions = 1, Name = "item", Type = FlexJamType.Struct)]
@@ -16,20 +16,20 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "endTime", Type = FlexJamType.Int32)]
 		public int EndTime { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "worldMapAreaID")]
 		[FlexJamMember(Name = "worldMapAreaID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "worldMapAreaID")]
 		public int WorldMapAreaID { get; set; }
 
-		[FlexJamMember(Name = "experience", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "experience")]
+		[FlexJamMember(Name = "experience", Type = FlexJamType.Int32)]
 		public int Experience { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "startLocationMapID")]
 		[FlexJamMember(Name = "startLocationMapID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "startLocationMapID")]
 		public int StartLocationMapID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "questID")]
 		[FlexJamMember(Name = "questID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "questID")]
 		public int QuestID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "questInfoID")]
@@ -40,24 +40,24 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "money", Type = FlexJamType.Int32)]
 		public int Money { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "startTime")]
 		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "startTime")]
 		public int StartTime { get; set; }
 
-		[FlexJamMember(Name = "startLocationY", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "startLocationY")]
+		[FlexJamMember(Name = "startLocationY", Type = FlexJamType.Int32)]
 		public int StartLocationY { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "currency", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "currency")]
 		public MobileWorldQuestReward[] Currency { get; set; }
 
-		[FlexJamMember(Name = "startLocationX", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "startLocationX")]
+		[FlexJamMember(Name = "startLocationX", Type = FlexJamType.Int32)]
 		public int StartLocationX { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "faction")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "faction", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "faction")]
 		public MobileWorldQuestReward[] Faction { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "objective")]

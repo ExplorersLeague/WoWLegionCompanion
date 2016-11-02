@@ -55,26 +55,15 @@ public class NextCompletedMissionButton : MonoBehaviour
 
 	private void Update()
 	{
-		int num = 0;
-		AdventureMapMissionSite[] componentsInChildren = AdventureMapPanel.instance.m_missionAndWordQuestArea.GetComponentsInChildren<AdventureMapMissionSite>(true);
-		foreach (AdventureMapMissionSite adventureMapMissionSite in componentsInChildren)
+		int numCompletedMissions = PersistentMissionData.GetNumCompletedMissions(true);
+		if (numCompletedMissions != this.m_numReadyTroops)
 		{
-			if (!adventureMapMissionSite.m_isStackablePreview)
-			{
-				if (adventureMapMissionSite.m_completeMissionGroup.gameObject.activeSelf)
-				{
-					num++;
-				}
-			}
-		}
-		if (num != this.m_numReadyTroops)
-		{
-			this.m_theActualButton.SetActive(num > 0);
-			if (num == 0)
+			this.m_theActualButton.SetActive(numCompletedMissions > 0);
+			if (numCompletedMissions == 0)
 			{
 				this.ClearEffects();
 			}
-			if (num > this.m_numReadyTroops)
+			if (numCompletedMissions > this.m_numReadyTroops)
 			{
 				this.ClearEffects();
 				this.m_glowHandle = UiAnimMgr.instance.PlayAnim("MinimapPulseAnim", this.m_theActualButton.transform, Vector3.zero, 3f, 0f);
@@ -129,7 +118,7 @@ public class NextCompletedMissionButton : MonoBehaviour
 				}));
 				Main.instance.m_UISound.Play_LootReady();
 			}
-			this.m_numReadyTroops = num;
+			this.m_numReadyTroops = numCompletedMissions;
 			this.m_numReadyTroopsText.text = string.Empty + ((this.m_numReadyTroops <= 0) ? string.Empty : (string.Empty + this.m_numReadyTroops));
 			this.m_numReadyTroopsTextBG.SetActive(this.m_numReadyTroops > 0);
 		}
@@ -142,7 +131,7 @@ public class NextCompletedMissionButton : MonoBehaviour
 		{
 			if (!adventureMapMissionSite.m_isStackablePreview)
 			{
-				if (adventureMapMissionSite.m_completeMissionGroup.gameObject.activeSelf)
+				if (adventureMapMissionSite.ShouldShowCompletedMission())
 				{
 					adventureMapMissionSite.JustZoomToMission();
 					break;

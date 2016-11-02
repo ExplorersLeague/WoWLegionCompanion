@@ -24,8 +24,8 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "playerGuid")]
 		public string PlayerGuid { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "lastActiveTime")]
 		[FlexJamMember(Name = "lastActiveTime", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "lastActiveTime")]
 		public int LastActiveTime { get; set; }
 
 		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
@@ -36,12 +36,12 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "classID")]
 		[FlexJamMember(Name = "classID", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "classID")]
 		public byte ClassID { get; set; }
 
-		[FlexJamMember(Name = "sexID", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "sexID")]
+		[FlexJamMember(Name = "sexID", Type = FlexJamType.UInt8)]
 		public byte SexID { get; set; }
 	}
 }

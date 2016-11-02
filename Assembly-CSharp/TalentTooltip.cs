@@ -74,7 +74,7 @@ public class TalentTooltip : MonoBehaviour
 				this.m_statusText.text = string.Concat(new string[]
 				{
 					"<color=#FFC600FF>",
-					StaticDB.GetString("TIME_REMAINING", null),
+					StaticDB.GetString("TIME_LEFT", null),
 					"</color> <color=#ffffffff>",
 					duration2.DurationString,
 					"</color>"

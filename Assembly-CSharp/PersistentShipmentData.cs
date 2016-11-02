@@ -45,9 +45,37 @@ public class PersistentShipmentData
 		return PersistentShipmentData.instance.m_availableShipmentTypes;
 	}
 
+	public static bool ShipmentTypeForShipmentIsAvailable(int charShipmentID)
+	{
+		foreach (MobileClientShipmentType mobileClientShipmentType in PersistentShipmentData.instance.m_availableShipmentTypes)
+		{
+			if (mobileClientShipmentType.CharShipmentID == charShipmentID)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static void ClearData()
 	{
 		PersistentShipmentData.instance.m_shipmentDictionary.Clear();
+	}
+
+	public static int GetNumReadyShipments()
+	{
+		int num = 0;
+		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		{
+			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+			long num2 = GarrisonStatus.CurrentTime() - (long)jamCharacterShipment.CreationTime;
+			long num3 = (long)jamCharacterShipment.ShipmentDuration - num2;
+			if (num3 <= 0L)
+			{
+				num++;
+			}
+		}
+		return num;
 	}
 
 	private static PersistentShipmentData s_instance;

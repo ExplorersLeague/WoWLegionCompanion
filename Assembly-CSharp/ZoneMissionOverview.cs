@@ -11,13 +11,13 @@ public class ZoneMissionOverview : MonoBehaviour
 			ZoneMissionOverview.m_pinchZoomManager = base.gameObject.GetComponentInParent<PinchZoomContentManager>();
 		}
 		PinchZoomContentManager pinchZoomManager = ZoneMissionOverview.m_pinchZoomManager;
-		pinchZoomManager.ZoomFactorChanged = (Action)Delegate.Combine(pinchZoomManager.ZoomFactorChanged, new Action(this.OnZoomChanged));
+		pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
 	}
 
 	private void OnDisable()
 	{
 		PinchZoomContentManager pinchZoomManager = ZoneMissionOverview.m_pinchZoomManager;
-		pinchZoomManager.ZoomFactorChanged = (Action)Delegate.Remove(pinchZoomManager.ZoomFactorChanged, new Action(this.OnZoomChanged));
+		pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
 	}
 
 	private void Start()
@@ -37,7 +37,7 @@ public class ZoneMissionOverview : MonoBehaviour
 	{
 	}
 
-	private void OnZoomChanged()
+	private void OnZoomChanged(bool force)
 	{
 		CanvasGroup component = base.gameObject.GetComponent<CanvasGroup>();
 		MapInfo componentInParent = base.gameObject.GetComponentInParent<MapInfo>();

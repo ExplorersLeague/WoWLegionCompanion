@@ -82,7 +82,7 @@ public class AssetBundleManager : MonoBehaviour
 			}
 			else if (www.error.StartsWith("java.net.UnknownHostException") || www.error.StartsWith("A server with the specified hostname could not be found"))
 			{
-				Debug.Log("Couldn't connect to asset bundle server.");
+				Debug.Log("Couldn't connect to asset bundle server at " + manifestURL);
 			}
 			else
 			{
@@ -147,7 +147,7 @@ public class AssetBundleManager : MonoBehaviour
 		{
 			localizedStaticDB.Unload(true);
 		}
-		yield return base.StartCoroutine(this.FetchLatestVersion(this.m_assetServerURL + "version.txt"));
+		yield return base.StartCoroutine(this.FetchLatestVersion(this.m_assetServerURL + "update.txt"));
 		AssetBundleManager.s_initialized = true;
 		if (this.InitializedAction != null)
 		{
@@ -260,29 +260,39 @@ public class AssetBundleManager : MonoBehaviour
 	public IEnumerator LoadAssetBundle(string fileIdentifier, Action<AssetBundle> resultCallback)
 	{
 		string fileName = this.GetBundleFileName(fileIdentifier);
-		if (fileName != null)
+		if (fileName == null)
 		{
-			while (!Caching.ready)
-			{
-				yield return null;
-			}
-			string url = this.m_assetServerURL + fileName;
-			if (!Caching.IsVersionCached(url, 0))
-			{
-				Debug.Log("File " + fileIdentifier + " not cached. Will now load new file " + fileName);
-				if (!AllPanels.instance.IsShowingDownloadingPanel())
-				{
-					AllPanels.instance.ShowDownloadingPanel(true);
-				}
-			}
-			WWW download = WWW.LoadFromCacheOrDownload(url, 0);
-			this.m_currentWWW = download;
-			yield return download;
-			resultCallback(download.assetBundle);
-			yield break;
+			SecurePlayerPrefs.DeleteKey("locale");
+			throw new Exception("LoadAssetBundle: Error, file identifier " + fileIdentifier + " is unknown.");
 		}
-		SecurePlayerPrefs.DeleteKey("locale");
-		throw new Exception("LoadAssetBundle: Error, file identifier " + fileIdentifier + " is unknown.");
+		while (!Caching.ready)
+		{
+			yield return null;
+		}
+		string url = this.m_assetServerURL + fileName;
+		if (!Caching.IsVersionCached(url, 0))
+		{
+			Debug.Log("File " + fileIdentifier + " not cached. Will now load new file " + fileName);
+			if (!AllPanels.instance.IsShowingDownloadingPanel())
+			{
+				AllPanels.instance.ShowDownloadingPanel(true);
+			}
+		}
+		WWW download = WWW.LoadFromCacheOrDownload(url, 0);
+		this.m_currentWWW = download;
+		yield return download;
+		if (!string.IsNullOrEmpty(download.error))
+		{
+			Caching.CleanCache();
+			throw new Exception("LoadAssetBundle: Error: " + download.error);
+		}
+		if (download.assetBundle == null)
+		{
+			Caching.CleanCache();
+			throw new Exception("LoadAssetBundle: null bundle: " + fileName);
+		}
+		resultCallback(download.assetBundle);
+		yield break;
 	}
 
 	public IEnumerator LoadAssetBundleLocal(string fileIdentifier, Action<AssetBundle> resultCallback)
@@ -361,39 +371,81 @@ public class AssetBundleManager : MonoBehaviour
 				versionText = www.text;
 			}
 		}
+		this.ParseVersionFile(versionText);
+		yield break;
+	}
+
+	private bool ParseVersionFile(string versionText)
+	{
 		if (versionText != null)
 		{
-			char[] delimiters = new char[]
+			char[] separator = new char[]
 			{
 				'\r',
 				'\n'
 			};
-			string[] lines = versionText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-			this.LatestVersion = Convert.ToInt32(lines[0]);
-			this.ForceUpgrade = Convert.ToBoolean(lines[1]);
-			if (lines.Length >= 3)
+			string[] array = versionText.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+			this.LatestVersion = Convert.ToInt32(array[0]);
+			this.ForceUpgrade = Convert.ToBoolean(array[1]);
+			if (array.Length >= 3)
 			{
-				this.AppStoreUrl = lines[2];
+				this.AppStoreUrl = array[2];
 			}
 			else
 			{
 				this.AppStoreUrl = null;
 			}
-			if (lines.Length >= 4)
+			if (array.Length >= 4)
 			{
-				this.AppStoreUrl_CN = lines[3];
+				this.AppStoreUrl_CN = array[3];
 			}
 			else
 			{
 				this.AppStoreUrl_CN = null;
 			}
+			return true;
 		}
-		yield break;
+		return false;
+	}
+
+	public void UpdateVersion()
+	{
+		string text = this.m_assetServerIpAddress;
+		if (Login.instance.GetBnPortal() == "cn")
+		{
+			text = this.m_assetServerIpAddress_CN;
+		}
+		string text2 = string.Concat(new string[]
+		{
+			"http://",
+			text,
+			"/falcon/d",
+			string.Format("{0:D5}", BuildNum.DataBuildNum),
+			"/",
+			this.m_assetBundleDirectory,
+			"/"
+		});
+		text2 = text2 + this.m_platform + "/update.txt";
+		this.LatestVersion = 0;
+		this.ForceUpgrade = false;
+		string versionText = null;
+		float timeSinceLevelLoad = Time.timeSinceLevelLoad;
+		using (WWW www = new WWW(text2))
+		{
+			while (!www.isDone && (double)Time.timeSinceLevelLoad < (double)timeSinceLevelLoad + 5.0)
+			{
+			}
+			if (www.error == null)
+			{
+				versionText = www.text;
+			}
+		}
+		this.ParseVersionFile(versionText);
 	}
 
 	private const int HASH_LENGTH = 32;
 
-	private const string m_versionFile = "version.txt";
+	private const string m_versionFile = "update.txt";
 
 	private static AssetBundleManager s_instance;
 

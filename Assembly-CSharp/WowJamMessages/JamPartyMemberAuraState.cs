@@ -16,12 +16,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "aura", Type = FlexJamType.Int32)]
 		public int Aura { get; set; }
 
-		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
+		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt8)]
 		public byte Flags { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "points")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "points", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "points")]
 		public float[] Points { get; set; }
 	}
 }

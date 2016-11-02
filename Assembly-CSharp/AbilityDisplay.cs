@@ -8,12 +8,18 @@ public class AbilityDisplay : MonoBehaviour
 {
 	public void SetCanCounterStatus(FollowerCanCounterMechanic canCounterStatus)
 	{
+		this.m_canCounterStatus = canCounterStatus;
 		if (this.m_canCounterMechanicIcon == null || this.m_canCounterMechanicButBusyIcon == null)
 		{
 			return;
 		}
 		this.m_canCounterMechanicIcon.gameObject.SetActive(canCounterStatus == FollowerCanCounterMechanic.yesAndAvailable);
 		this.m_canCounterMechanicButBusyIcon.gameObject.SetActive(canCounterStatus == FollowerCanCounterMechanic.yesButBusy);
+	}
+
+	public FollowerCanCounterMechanic GetCanCounterStatus()
+	{
+		return this.m_canCounterStatus;
 	}
 
 	public void SetCountered(bool isCountered, bool playCounteredEffect = true)
@@ -180,4 +186,6 @@ public class AbilityDisplay : MonoBehaviour
 	private int m_garrAbilityID;
 
 	private int m_counteredGarrMechanicTypeID;
+
+	private FollowerCanCounterMechanic m_canCounterStatus;
 }

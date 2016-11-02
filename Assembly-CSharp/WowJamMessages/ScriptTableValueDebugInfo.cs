@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "ScriptTableValueDebugInfo", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class ScriptTableValueDebugInfo
 	{
-		[FlexJamMember(Name = "keyName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "keyName")]
+		[FlexJamMember(Name = "keyName", Type = FlexJamType.String)]
 		public string KeyName { get; set; }
 
 		[FlexJamMember(Name = "valueName", Type = FlexJamType.String)]

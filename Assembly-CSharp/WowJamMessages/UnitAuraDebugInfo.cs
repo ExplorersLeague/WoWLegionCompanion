@@ -20,12 +20,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "serverOnly", Type = FlexJamType.Bool)]
 		public bool ServerOnly { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "fromEnchantment")]
 		[FlexJamMember(Name = "fromEnchantment", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "fromEnchantment")]
 		public bool FromEnchantment { get; set; }
 
-		[FlexJamMember(Name = "enchantmentSlot", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "enchantmentSlot")]
+		[FlexJamMember(Name = "enchantmentSlot", Type = FlexJamType.Int32)]
 		public int EnchantmentSlot { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "effectDebugInfo")]
@@ -48,8 +48,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		public int ItemID { get; set; }
 
-		[FlexJamMember(Name = "fromItem", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "fromItem")]
+		[FlexJamMember(Name = "fromItem", Type = FlexJamType.Bool)]
 		public bool FromItem { get; set; }
 	}
 }

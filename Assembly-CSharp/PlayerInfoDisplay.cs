@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class PlayerInfoDisplay : MonoBehaviour
 {
-	private void OnEnable()
+	private void InitPlayerDisplay(int playerLevel)
 	{
 		this.m_characterName.text = GarrisonStatus.CharacterName();
 		if (Main.instance.GetLocale() == "frFR")
@@ -15,12 +15,12 @@ public class PlayerInfoDisplay : MonoBehaviour
 				" ",
 				StaticDB.GetString("LEVEL", null),
 				" ",
-				GarrisonStatus.CharacterLevel().ToString()
+				playerLevel.ToString()
 			});
 		}
 		else
 		{
-			this.m_characterClassName.text = GeneralHelpers.TextOrderString(StaticDB.GetString("LEVEL", null), GarrisonStatus.CharacterLevel().ToString()) + " " + GarrisonStatus.CharacterClassName();
+			this.m_characterClassName.text = GeneralHelpers.TextOrderString(StaticDB.GetString("LEVEL", null), playerLevel.ToString()) + " " + GarrisonStatus.CharacterClassName();
 		}
 		this.m_characterListButton.text = StaticDB.GetString("CHARACTER_LIST", null);
 		Sprite sprite = GeneralHelpers.LoadClassIcon(GarrisonStatus.CharacterClassID());
@@ -28,6 +28,24 @@ public class PlayerInfoDisplay : MonoBehaviour
 		{
 			this.m_classIcon.sprite = sprite;
 		}
+	}
+
+	private void OnEnable()
+	{
+		this.InitPlayerDisplay(GarrisonStatus.CharacterLevel());
+		Main instance = Main.instance;
+		instance.PlayerLeveledUpAction = (Action<int>)Delegate.Combine(instance.PlayerLeveledUpAction, new Action<int>(this.HandlePlayerLeveledUp));
+	}
+
+	private void OnDisable()
+	{
+		Main instance = Main.instance;
+		instance.PlayerLeveledUpAction = (Action<int>)Delegate.Remove(instance.PlayerLeveledUpAction, new Action<int>(this.HandlePlayerLeveledUp));
+	}
+
+	private void HandlePlayerLeveledUp(int newLevel)
+	{
+		this.InitPlayerDisplay(newLevel);
 	}
 
 	public void ToggleRecentCharacterPanel()

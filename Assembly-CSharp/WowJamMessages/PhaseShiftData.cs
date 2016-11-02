@@ -12,12 +12,12 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "phaseShiftFlags")]
 		public uint PhaseShiftFlags { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "phases")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "phases", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "phases")]
 		public PhaseShiftDataPhase[] Phases { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "personalGUID")]
 		[FlexJamMember(Name = "personalGUID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "personalGUID")]
 		public string PersonalGUID { get; set; }
 	}
 }

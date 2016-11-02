@@ -192,41 +192,45 @@ public class UiAnimMgr
 					break;
 				}
 			}
-			Vector2 anchoredPosition = default(Vector2);
+			Vector2 vector = default(Vector2);
 			if (uiTexture.m_anchor != null && uiTexture.m_anchor.point != null)
 			{
 				string text = uiTexture.m_anchor.point;
 				switch (text)
 				{
 				case "TOP":
-					anchoredPosition.Set(0f, -0.5f * uiTexture.m_image.sprite.rect.height);
+					vector.Set(0f, -0.5f * uiTexture.m_image.sprite.rect.height);
 					break;
 				case "BOTTOM":
-					anchoredPosition.Set(0f, 0.5f * uiTexture.m_image.sprite.rect.height);
+					vector.Set(0f, 0.5f * uiTexture.m_image.sprite.rect.height);
 					break;
 				case "LEFT":
-					anchoredPosition.Set(0.5f * uiTexture.m_image.sprite.rect.width, 0f);
+					vector.Set(0.5f * uiTexture.m_image.sprite.rect.width, 0f);
 					break;
 				case "RIGHT":
-					anchoredPosition.Set(-0.5f * uiTexture.m_image.sprite.rect.width, 0f);
+					vector.Set(-0.5f * uiTexture.m_image.sprite.rect.width, 0f);
 					break;
 				case "TOPLEFT":
-					anchoredPosition.Set(0.5f * uiTexture.m_image.sprite.rect.width, -0.5f * uiTexture.m_image.sprite.rect.height);
+					vector.Set(0.5f * uiTexture.m_image.sprite.rect.width, -0.5f * uiTexture.m_image.sprite.rect.height);
 					break;
 				case "TOPRIGHT":
-					anchoredPosition.Set(-0.5f * uiTexture.m_image.sprite.rect.width, -0.5f * uiTexture.m_image.sprite.rect.height);
+					vector.Set(-0.5f * uiTexture.m_image.sprite.rect.width, -0.5f * uiTexture.m_image.sprite.rect.height);
 					break;
 				case "BOTTOMLEFT":
-					anchoredPosition.Set(0.5f * uiTexture.m_image.sprite.rect.width, 0.5f * uiTexture.m_image.sprite.rect.height);
+					vector.Set(0.5f * uiTexture.m_image.sprite.rect.width, 0.5f * uiTexture.m_image.sprite.rect.height);
 					break;
 				case "BOTTOMRIGHT":
-					anchoredPosition.Set(-0.5f * uiTexture.m_image.sprite.rect.width, 0.5f * uiTexture.m_image.sprite.rect.height);
+					vector.Set(-0.5f * uiTexture.m_image.sprite.rect.width, 0.5f * uiTexture.m_image.sprite.rect.height);
 					break;
 				}
 			}
-			component2.anchoredPosition = anchoredPosition;
-			component2.SetSizeWithCurrentAnchors(0, uiTexture.m_image.sprite.rect.width);
-			component2.SetSizeWithCurrentAnchors(1, uiTexture.m_image.sprite.rect.height);
+			component2.anchoredPosition = new Vector2(vector.x + uiTexture.m_anchor.x, vector.y + uiTexture.m_anchor.y);
+			int num2 = 0;
+			int num3 = 0;
+			int.TryParse(uiTexture.m_width, out num2);
+			int.TryParse(uiTexture.m_height, out num3);
+			component2.SetSizeWithCurrentAnchors(0, (num2 <= 0) ? uiTexture.m_image.sprite.rect.width : ((float)num2));
+			component2.SetSizeWithCurrentAnchors(1, (num3 <= 0) ? uiTexture.m_image.sprite.rect.height : ((float)num3));
 		}
 		foreach (UiAnimation.UiTexture uiTexture2 in uiAnimation.m_textures.Values)
 		{

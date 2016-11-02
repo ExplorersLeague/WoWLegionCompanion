@@ -25,12 +25,6 @@ public class OrderHallFollowersPanel : MonoBehaviour
 
 	private void Update()
 	{
-		if (this.m_panelViewRT.sizeDelta.x != this.m_parentViewRT.rect.width)
-		{
-			this.m_multiPanelViewSizeDelta = this.m_panelViewRT.sizeDelta;
-			this.m_multiPanelViewSizeDelta.x = this.m_parentViewRT.rect.width;
-			this.m_panelViewRT.sizeDelta = this.m_multiPanelViewSizeDelta;
-		}
 	}
 
 	private void SortFollowerListData()
@@ -80,10 +74,6 @@ public class OrderHallFollowersPanel : MonoBehaviour
 		FollowerListItem followerListItem = Object.Instantiate<FollowerListItem>(this.m_followerDetailListItemPrefab);
 		followerListItem.transform.SetParent(this.m_followerDetailListContent.transform, false);
 		followerListItem.SetFollower(follower);
-		AutoHide autoHide = followerListItem.m_followerDetailView.gameObject.AddComponent<AutoHide>();
-		autoHide.m_clipRT = this.m_panelViewRT;
-		AutoHide autoHide2 = followerListItem.m_listItemArea.gameObject.AddComponent<AutoHide>();
-		autoHide2.m_clipRT = this.m_panelViewRT;
 	}
 
 	private void SyncVisibleListOrderToSortedFollowerList()
@@ -158,8 +148,6 @@ public class OrderHallFollowersPanel : MonoBehaviour
 				"</color>"
 			});
 		}
-		AutoHide autoHide = this.m_championsHeader.gameObject.AddComponent<AutoHide>();
-		autoHide.m_clipRT = this.m_panelViewRT;
 		foreach (KeyValuePair<int, JamGarrisonFollower> keyValuePair in this.m_sortedFollowerList)
 		{
 			bool flag2 = false;
@@ -186,8 +174,6 @@ public class OrderHallFollowersPanel : MonoBehaviour
 		this.m_troopsHeader.m_title.text = StaticDB.GetString("TROOPS", null) + ": ";
 		this.m_troopsHeader.m_count.font = GeneralHelpers.LoadStandardFont();
 		this.m_troopsHeader.m_count.text = string.Empty + numTroops;
-		autoHide = this.m_troopsHeader.gameObject.AddComponent<AutoHide>();
-		autoHide.m_clipRT = this.m_panelViewRT;
 		foreach (KeyValuePair<int, JamGarrisonFollower> keyValuePair2 in this.m_sortedFollowerList)
 		{
 			bool flag3 = false;
@@ -214,8 +200,6 @@ public class OrderHallFollowersPanel : MonoBehaviour
 		this.m_inactiveHeader.m_title.text = StaticDB.GetString("INACTIVE", null) + ": ";
 		this.m_inactiveHeader.m_count.font = GeneralHelpers.LoadStandardFont();
 		this.m_inactiveHeader.m_count.text = string.Empty + numInactiveChampions;
-		autoHide = this.m_inactiveHeader.gameObject.AddComponent<AutoHide>();
-		autoHide.m_clipRT = this.m_panelViewRT;
 		foreach (KeyValuePair<int, JamGarrisonFollower> keyValuePair3 in this.m_sortedFollowerList)
 		{
 			bool flag4 = false;
@@ -287,10 +271,6 @@ public class OrderHallFollowersPanel : MonoBehaviour
 			this.FollowerDetailListItemSelectedAction(garrFollowerID);
 		}
 	}
-
-	public RectTransform m_parentViewRT;
-
-	public RectTransform m_panelViewRT;
 
 	public FollowerListItem m_followerDetailListItemPrefab;
 
