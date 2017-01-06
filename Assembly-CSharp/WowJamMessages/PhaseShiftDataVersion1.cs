@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "PhaseShiftDataVersion1", Version = 28333852u)]
 	public class PhaseShiftDataVersion1
 	{
-		[System.Runtime.Serialization.DataMember(Name = "phaseShiftFlags")]
 		[FlexJamMember(Name = "phaseShiftFlags", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "phaseShiftFlags")]
 		public uint PhaseShiftFlags { get; set; }
 
 		[FlexJamMember(Name = "personalGUID", Type = FlexJamType.WowGuid)]

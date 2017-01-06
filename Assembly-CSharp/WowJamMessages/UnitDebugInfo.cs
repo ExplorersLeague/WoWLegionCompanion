@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "UnitDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "UnitDebugInfo", Version = 28333852u)]
 	public class UnitDebugInfo
 	{
 		public UnitDebugInfo()
@@ -21,28 +21,28 @@ namespace WowJamMessages
 			this.SpawnRegionName = string.Empty;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "level")]
 		[FlexJamMember(Name = "level", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "level")]
 		public int Level { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "aiTriggerActionDebugInfo")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "aiTriggerActionDebugInfo", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "aiTriggerActionDebugInfo")]
 		public AITriggerActionDebugInfo[] AiTriggerActionDebugInfo { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "spellDebugInfo")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "spellDebugInfo", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "spellDebugInfo")]
 		public CreatureSpellDebugInfo[] SpellDebugInfo { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "effectiveStatValues", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "effectiveStatValues")]
 		public int[] EffectiveStatValues { get; set; }
 
-		[FlexJamMember(Name = "spawnRegionName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "spawnRegionName")]
+		[FlexJamMember(Name = "spawnRegionName", Type = FlexJamType.String)]
 		public string SpawnRegionName { get; set; }
 
-		[FlexJamMember(Name = "spawnGroupName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "spawnGroupName")]
+		[FlexJamMember(Name = "spawnGroupName", Type = FlexJamType.String)]
 		public string SpawnGroupName { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "spawnRegionID")]
@@ -53,20 +53,20 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "classID", Type = FlexJamType.Int32)]
 		public int ClassID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "aiTriggerActionSetDebugInfo")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "aiTriggerActionSetDebugInfo", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "aiTriggerActionSetDebugInfo")]
 		public AITriggerActionSetDebugInfo[] AiTriggerActionSetDebugInfo { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "playerClassID")]
 		[FlexJamMember(Name = "playerClassID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "playerClassID")]
 		public int PlayerClassID { get; set; }
 
 		[FlexJamMember(Name = "percentSupportAction", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "percentSupportAction")]
 		public int PercentSupportAction { get; set; }
 
-		[FlexJamMember(Name = "spawnGroupID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "spawnGroupID")]
+		[FlexJamMember(Name = "spawnGroupID", Type = FlexJamType.Int32)]
 		public int SpawnGroupID { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "spawnEventDebugInfo", Type = FlexJamType.Struct)]
@@ -81,12 +81,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "creatureSpellDataID", Type = FlexJamType.Int32)]
 		public int CreatureSpellDataID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "zoneFlags")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "zoneFlags", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "zoneFlags")]
 		public uint[] ZoneFlags { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "percentRangedAttack")]
 		[FlexJamMember(Name = "percentRangedAttack", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "percentRangedAttack")]
 		public int PercentRangedAttack { get; set; }
 	}
 }

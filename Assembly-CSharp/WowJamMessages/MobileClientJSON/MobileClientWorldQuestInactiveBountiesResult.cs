@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4867, Name = "MobileClientWorldQuestInactiveBountiesResult", Version = 33577221u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileClientWorldQuestInactiveBountiesResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "bounty")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "bounty", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "bounty")]
 		public MobileWorldQuestBounty[] Bounty { get; set; }
 	}
 }

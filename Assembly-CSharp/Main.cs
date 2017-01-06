@@ -355,14 +355,17 @@ public class Main : MonoBehaviour
 		while ((ulong)num < (ulong)((long)msg.Follower.GetLength(0)))
 		{
 			JamGarrisonFollower jamGarrisonFollower = msg.Follower[(int)((UIntPtr)num)];
-			PersistentFollowerData.AddOrUpdateFollower(jamGarrisonFollower);
-			bool flag = (jamGarrisonFollower.Flags & 8) != 0;
-			if (flag && jamGarrisonFollower.Durability <= 0)
+			if (StaticDB.garrFollowerDB.GetRecord(jamGarrisonFollower.GarrFollowerID) != null)
 			{
-				Debug.Log("Follower " + jamGarrisonFollower.GarrFollowerID + " has expired.");
-				if (this.TroopExpiredAction != null)
+				PersistentFollowerData.AddOrUpdateFollower(jamGarrisonFollower);
+				bool flag = (jamGarrisonFollower.Flags & 8) != 0;
+				if (flag && jamGarrisonFollower.Durability <= 0)
 				{
-					this.TroopExpiredAction(jamGarrisonFollower);
+					Debug.Log("Follower " + jamGarrisonFollower.GarrFollowerID + " has expired.");
+					if (this.TroopExpiredAction != null)
+					{
+						this.TroopExpiredAction(jamGarrisonFollower);
+					}
 				}
 			}
 			num += 1u;
@@ -675,10 +678,141 @@ public class Main : MonoBehaviour
 
 	private void ClearPendingNotifications()
 	{
+		LocalNotifications.ClearPending();
 	}
 
 	private void ScheduleNotifications()
 	{
+		this.ClearPendingNotifications();
+		List<NotificationData> list = new List<NotificationData>();
+		List<JamGarrisonMobileMission> list2 = PersistentMissionData.missionDictionary.Values.OfType<JamGarrisonMobileMission>().ToList<JamGarrisonMobileMission>();
+		foreach (JamGarrisonMobileMission jamGarrisonMobileMission in list2)
+		{
+			GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(jamGarrisonMobileMission.MissionRecID);
+			if (record != null && record.GarrFollowerTypeID == 4u)
+			{
+				if (jamGarrisonMobileMission.MissionState == 1)
+				{
+					if ((record.Flags & 16u) == 0u)
+					{
+						long num = GarrisonStatus.CurrentTime() - jamGarrisonMobileMission.StartTime;
+						long secondsRemaining = jamGarrisonMobileMission.MissionDuration - num;
+						list.Add(new NotificationData
+						{
+							notificationText = record.Name,
+							secondsRemaining = secondsRemaining,
+							notificationType = NotificationType.missionCompete
+						});
+					}
+				}
+			}
+		}
+		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		{
+			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+			CharShipmentRec record2 = StaticDB.charShipmentDB.GetRecord(jamCharacterShipment.ShipmentRecID);
+			if (record2 == null)
+			{
+				Debug.LogError("Invalid Shipment ID: " + jamCharacterShipment.ShipmentRecID);
+			}
+			else
+			{
+				string notificationText = "Invalid";
+				if (record2.GarrFollowerID > 0u)
+				{
+					GarrFollowerRec record3 = StaticDB.garrFollowerDB.GetRecord((int)record2.GarrFollowerID);
+					if (record3 == null)
+					{
+						Debug.LogError("Invalid Follower ID: " + record2.GarrFollowerID);
+						continue;
+					}
+					int num2 = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record3.AllianceCreatureID : record3.HordeCreatureID;
+					CreatureRec record4 = StaticDB.creatureDB.GetRecord(num2);
+					if (record4 == null)
+					{
+						Debug.LogError("Invalid Creature ID: " + num2);
+						continue;
+					}
+					notificationText = record4.Name;
+				}
+				if (record2.DummyItemID > 0)
+				{
+					ItemRec record5 = StaticDB.itemDB.GetRecord(record2.DummyItemID);
+					if (record5 == null)
+					{
+						Debug.LogError("Invalid Item ID: " + record2.DummyItemID);
+						continue;
+					}
+					notificationText = record5.Display;
+				}
+				long num3 = GarrisonStatus.CurrentTime() - (long)jamCharacterShipment.CreationTime;
+				long secondsRemaining2 = (long)jamCharacterShipment.ShipmentDuration - num3;
+				list.Add(new NotificationData
+				{
+					notificationText = notificationText,
+					secondsRemaining = secondsRemaining2,
+					notificationType = NotificationType.workOrderReady
+				});
+			}
+		}
+		foreach (object obj2 in PersistentTalentData.talentDictionary.Values)
+		{
+			JamGarrisonTalent jamGarrisonTalent = (JamGarrisonTalent)obj2;
+			if ((jamGarrisonTalent.Flags & 1) == 0)
+			{
+				if (jamGarrisonTalent.StartTime > 0)
+				{
+					GarrTalentRec record6 = StaticDB.garrTalentDB.GetRecord(jamGarrisonTalent.GarrTalentID);
+					if (record6 != null)
+					{
+						long secondsRemaining3;
+						if ((jamGarrisonTalent.Flags & 2) == 0)
+						{
+							secondsRemaining3 = (long)record6.ResearchDurationSecs - (GarrisonStatus.CurrentTime() - (long)jamGarrisonTalent.StartTime);
+						}
+						else
+						{
+							secondsRemaining3 = (long)record6.RespecDurationSecs - (GarrisonStatus.CurrentTime() - (long)jamGarrisonTalent.StartTime);
+						}
+						list.Add(new NotificationData
+						{
+							notificationText = record6.Name,
+							secondsRemaining = secondsRemaining3,
+							notificationType = NotificationType.talentReady
+						});
+					}
+				}
+			}
+		}
+		list.Sort(new NotificationDataComparer());
+		int num4 = 0;
+		foreach (NotificationData notificationData in list)
+		{
+			if (notificationData.notificationType == NotificationType.missionCompete)
+			{
+				LocalNotifications.ScheduleMissionCompleteNotification(notificationData.notificationText, ++num4, notificationData.secondsRemaining);
+			}
+			if (notificationData.notificationType == NotificationType.workOrderReady)
+			{
+				LocalNotifications.ScheduleWorkOrderReadyNotification(notificationData.notificationText, ++num4, notificationData.secondsRemaining);
+			}
+			if (notificationData.notificationType == NotificationType.talentReady)
+			{
+				LocalNotifications.ScheduleTalentResearchCompleteNotification(notificationData.notificationText, ++num4, notificationData.secondsRemaining);
+			}
+			Debug.Log(string.Concat(new object[]
+			{
+				"Scheduling Notification for [",
+				notificationData.notificationType,
+				"] ",
+				notificationData.notificationText,
+				" (",
+				num4,
+				") in ",
+				notificationData.secondsRemaining,
+				" seconds"
+			}));
+		}
 	}
 
 	public void StartMission(int garrMissionID, ulong[] followerDBIDs)

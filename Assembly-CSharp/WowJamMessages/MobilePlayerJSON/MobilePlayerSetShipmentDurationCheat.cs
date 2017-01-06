@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.MobilePlayerJSON
 {
-	[FlexJamMessage(Id = 4798, Name = "MobilePlayerSetShipmentDurationCheat", Version = 33577221u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4798, Name = "MobilePlayerSetShipmentDurationCheat", Version = 33577221u)]
 	public class MobilePlayerSetShipmentDurationCheat
 	{
-		[System.Runtime.Serialization.DataMember(Name = "seconds")]
 		[FlexJamMember(Name = "seconds", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "seconds")]
 		public int Seconds { get; set; }
 	}
 }

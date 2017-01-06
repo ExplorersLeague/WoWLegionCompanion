@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: RuntimeCompatibility(WrapNonExceptionThrows = true)]
+[assembly: AssemblyTitle("SimpleJson")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Blizzard Entertainment")]
@@ -14,4 +14,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("5ac1c726-5406-4d96-9483-a2bf8d0c4dae")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AssemblyTitle("SimpleJson")]
+[assembly: RuntimeCompatibility(WrapNonExceptionThrows = true)]

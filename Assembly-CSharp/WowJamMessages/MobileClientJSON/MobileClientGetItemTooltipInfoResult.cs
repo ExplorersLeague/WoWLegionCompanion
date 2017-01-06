@@ -12,12 +12,12 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "itemContext", Type = FlexJamType.Int32)]
 		public int ItemContext { get; set; }
 
-		[FlexJamMember(Name = "stats", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "stats")]
+		[FlexJamMember(Name = "stats", Type = FlexJamType.Struct)]
 		public MobileItemStats Stats { get; set; }
 
-		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemID")]
+		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 	}
 }

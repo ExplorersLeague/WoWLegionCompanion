@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamServerBuckDataEntry", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamServerBuckDataEntry", Version = 28333852u)]
 	public class JamServerBuckDataEntry
 	{
 		public JamServerBuckDataEntry()
@@ -19,24 +19,24 @@ namespace WowJamMessages
 			this.Minimum = 2000000000UL;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "accum")]
 		[FlexJamMember(Name = "accum", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "accum")]
 		public ulong Accum { get; set; }
 
-		[FlexJamMember(Name = "maximum", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "maximum")]
+		[FlexJamMember(Name = "maximum", Type = FlexJamType.UInt64)]
 		public ulong Maximum { get; set; }
 
 		[FlexJamMember(Name = "sqaccum", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "sqaccum")]
 		public ulong Sqaccum { get; set; }
 
-		[FlexJamMember(Name = "arg", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "arg")]
+		[FlexJamMember(Name = "arg", Type = FlexJamType.UInt64)]
 		public ulong Arg { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "count")]
 		[FlexJamMember(Name = "count", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "count")]
 		public ulong Count { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "argname")]

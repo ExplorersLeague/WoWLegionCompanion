@@ -103,10 +103,9 @@ public class WorldQuestTooltip : MonoBehaviour
 						{
 							GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
 							gameObject2.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
-							this.m_worldQuestTimeText = gameObject2.GetComponent<Text>();
-							this.m_worldQuestTimeText.text = record.QuestTitle;
-							this.m_worldQuestTimeText.horizontalOverflow = 1;
-							this.m_worldQuestTimeText.color = new Color(1f, 0.773f, 0f, 1f);
+							Text component2 = gameObject2.GetComponent<Text>();
+							component2.text = record.QuestTitle;
+							component2.color = new Color(1f, 0.773f, 0f, 1f);
 							BountySite bountySite2 = Object.Instantiate<BountySite>(this.m_bountyLogoPrefab);
 							bountySite2.SetBounty(mobileWorldQuestBounty);
 							bountySite2.transform.SetParent(this.m_bountyLogoRoot.transform, false);
@@ -119,14 +118,13 @@ public class WorldQuestTooltip : MonoBehaviour
 		gameObject3.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
 		this.m_worldQuestTimeText = gameObject3.GetComponent<Text>();
 		this.m_worldQuestTimeText.text = mobileWorldQuest.QuestTitle;
-		this.m_worldQuestTimeText.horizontalOverflow = 1;
 		this.m_worldQuestTimeText.color = new Color(1f, 0.773f, 0f, 1f);
 		foreach (MobileWorldQuestObjective mobileWorldQuestObjective in mobileWorldQuest.Objective.AsEnumerable<MobileWorldQuestObjective>())
 		{
 			GameObject gameObject4 = Object.Instantiate<GameObject>(this.m_worldQuestObjectiveDisplayPrefab);
 			gameObject4.transform.SetParent(this.m_worldQuestObjectiveRoot.transform, false);
-			Text component2 = gameObject4.GetComponent<Text>();
-			component2.text = "-" + mobileWorldQuestObjective.Text;
+			Text component3 = gameObject4.GetComponent<Text>();
+			component3.text = "- " + mobileWorldQuestObjective.Text;
 		}
 		this.InitRewardInfoDisplay(mobileWorldQuest);
 		this.m_endTime = (long)(mobileWorldQuest.EndTime - 900);
@@ -270,20 +268,20 @@ public class WorldQuestTooltip : MonoBehaviour
 				text = "Mobile-Mining";
 				break;
 			}
-			goto IL_718;
+			goto IL_6F4;
 		}
 		case 3:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 			text = "Mobile-PVP";
-			goto IL_718;
+			goto IL_6F4;
 		case 4:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 			text = "Mobile-Pets";
-			goto IL_718;
+			goto IL_6F4;
 		}
 		uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 		text = "Mobile-QuestExclamationIcon";
-		IL_718:
+		IL_6F4:
 		if (text != null)
 		{
 			this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/" + text);

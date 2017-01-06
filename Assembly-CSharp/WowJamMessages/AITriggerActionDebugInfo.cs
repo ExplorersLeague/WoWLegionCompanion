@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "AITriggerActionDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "AITriggerActionDebugInfo", Version = 28333852u)]
 	public class AITriggerActionDebugInfo
 	{
 		public AITriggerActionDebugInfo()
@@ -21,32 +21,32 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "repeatCount", Type = FlexJamType.Int32)]
 		public int RepeatCount { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "triggerDescription")]
 		[FlexJamMember(Name = "triggerDescription", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "triggerDescription")]
 		public string TriggerDescription { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetID")]
 		[FlexJamMember(Name = "aiGroupActionSetID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetID")]
 		public int AiGroupActionSetID { get; set; }
 
 		[FlexJamMember(Name = "note", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "note")]
 		public string Note { get; set; }
 
-		[FlexJamMember(Name = "typeName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "typeName")]
+		[FlexJamMember(Name = "typeName", Type = FlexJamType.String)]
 		public string TypeName { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "triggerTime")]
 		[FlexJamMember(Name = "triggerTime", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "triggerTime")]
 		public uint TriggerTime { get; set; }
 
 		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public int Type { get; set; }
 
-		[FlexJamMember(Name = "triggerData", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "triggerData")]
+		[FlexJamMember(Name = "triggerData", Type = FlexJamType.Int32)]
 		public int TriggerData { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "param")]

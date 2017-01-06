@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "key", Type = FlexJamType.String)]
 		public string Key { get; set; }
 
-		[FlexJamMember(Name = "value", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "value")]
+		[FlexJamMember(Name = "value", Type = FlexJamType.Struct)]
 		public AttributeValue Value { get; set; }
 
 		[FlexJamMember(Name = "param", Type = FlexJamType.Int32)]

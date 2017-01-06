@@ -8,8 +8,8 @@ namespace WowJamMessages.MobilePlayerJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobilePlayerAddMissionCheat
 	{
-		[System.Runtime.Serialization.DataMember(Name = "garrMissionID")]
 		[FlexJamMember(Name = "garrMissionID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "garrMissionID")]
 		public int GarrMissionID { get; set; }
 	}
 }

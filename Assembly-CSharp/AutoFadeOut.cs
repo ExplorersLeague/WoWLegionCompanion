@@ -13,6 +13,7 @@ public class AutoFadeOut : MonoBehaviour
 		this.m_enableFadeOut = false;
 		this.m_canvasGroupToFadeOut.alpha = 1f;
 		this.m_elapsedFadeTime = 0f;
+		this.m_canvasGroupToFadeOut.blocksRaycasts = true;
 	}
 
 	private void Update()
@@ -21,6 +22,10 @@ public class AutoFadeOut : MonoBehaviour
 		{
 			this.m_elapsedFadeTime += Time.deltaTime;
 			this.m_canvasGroupToFadeOut.alpha = 1f - Mathf.Clamp01(this.m_elapsedFadeTime / this.m_fadeOutTime);
+			if (this.m_canvasGroupToFadeOut.alpha < 0.99f)
+			{
+				this.m_canvasGroupToFadeOut.blocksRaycasts = false;
+			}
 		}
 	}
 

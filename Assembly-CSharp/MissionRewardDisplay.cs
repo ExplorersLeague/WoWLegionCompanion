@@ -33,6 +33,14 @@ public class MissionRewardDisplay : MonoBehaviour
 				anim.Stop(0f);
 			}
 		}
+		if (this.m_glowEffectHandle != null)
+		{
+			UiAnimation anim2 = this.m_glowEffectHandle.GetAnim();
+			if (anim2 != null)
+			{
+				anim2.Stop(0f);
+			}
+		}
 	}
 
 	public void ShowResultSuccess(float delay)
@@ -64,6 +72,10 @@ public class MissionRewardDisplay : MonoBehaviour
 			if (this.m_enableLootEffect_success)
 			{
 				this.m_greenCheck.gameObject.SetActive(true);
+				if (this.m_glowEffectRootTransform != null)
+				{
+					this.m_glowEffectHandle = UiAnimMgr.instance.PlayAnim("GarrisonMissionRewardsEffectTemplate", this.m_glowEffectRootTransform, Vector3.zero, 1f, 0f);
+				}
 				this.m_effectHandle = UiAnimMgr.instance.PlayAnim(this.m_uiAnimation_success, this.m_greenCheckEffectRootTransform, Vector3.zero, this.m_animScale_success, 0f);
 				Main.instance.m_UISound.Play_GreenCheck();
 			}
@@ -321,6 +333,8 @@ public class MissionRewardDisplay : MonoBehaviour
 
 	public Transform m_redFailXEffectRootTransform;
 
+	public Transform m_glowEffectRootTransform;
+
 	[Header("Error reporting")]
 	public Text m_iconErrorText;
 
@@ -335,6 +349,8 @@ public class MissionRewardDisplay : MonoBehaviour
 	private int m_rewardID;
 
 	private UiAnimMgr.UiAnimHandle m_effectHandle;
+
+	private UiAnimMgr.UiAnimHandle m_glowEffectHandle;
 
 	public enum RewardType
 	{

@@ -11,8 +11,8 @@ namespace JamLib
 		[FlexJamMember(Name = "realm", Type = FlexJamType.UInt32)]
 		public uint RealmAddress { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "type")]
 		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public JAM_DESTINATION ServerType { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "server")]

@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JamJSONRealmEntry
 	{
-		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "wowRealmAddress")]
+		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		public uint WowRealmAddress { get; set; }
 
 		[FlexJamMember(Name = "cfgTimezonesID", Type = FlexJamType.Int32)]
@@ -24,8 +24,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "cfgCategoriesID", Type = FlexJamType.Int32)]
 		public int CfgCategoriesID { get; set; }
 
-		[FlexJamMember(Name = "version", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "version")]
+		[FlexJamMember(Name = "version", Type = FlexJamType.Struct)]
 		public JamJSONGameVersion Version { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "cfgRealmsID")]
@@ -44,8 +44,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "cfgConfigsID", Type = FlexJamType.Int32)]
 		public int CfgConfigsID { get; set; }
 
-		[FlexJamMember(Name = "cfgLanguagesID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "cfgLanguagesID")]
+		[FlexJamMember(Name = "cfgLanguagesID", Type = FlexJamType.Int32)]
 		public int CfgLanguagesID { get; set; }
 	}
 }

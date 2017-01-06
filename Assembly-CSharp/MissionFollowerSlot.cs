@@ -57,6 +57,7 @@ public class MissionFollowerSlot : MonoBehaviour
 		if (this.m_missionDetailView != null)
 		{
 			this.ClearFollower();
+			this.PlayUnslotSound();
 		}
 	}
 

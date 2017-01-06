@@ -33,20 +33,20 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "versionDataBuild")]
 		public uint VersionDataBuild { get; set; }
 
-		[FlexJamMember(Name = "audioLocale", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "audioLocale")]
+		[FlexJamMember(Name = "audioLocale", Type = FlexJamType.UInt32)]
 		public uint AudioLocale { get; set; }
 
 		[FlexJamMember(Name = "version", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "version")]
 		public JamJSONGameVersion Version { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "secret")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "secret", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "secret")]
 		public byte[] Secret { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "type")]
 		[FlexJamMember(Name = "type", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public uint Type { get; set; }
 
 		[FlexJamMember(Name = "textLocale", Type = FlexJamType.UInt32)]

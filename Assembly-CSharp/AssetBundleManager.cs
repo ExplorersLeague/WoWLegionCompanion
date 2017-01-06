@@ -59,6 +59,8 @@ public class AssetBundleManager : MonoBehaviour
 		{
 			assetAddress = this.m_assetServerIpAddress_CN;
 		}
+		string dataErrorTitle = this.GetDataErrorTitleText();
+		string dataErrorDescription = this.GetDataErrorDescriptionText();
 		this.m_assetServerURL = string.Concat(new string[]
 		{
 			"http://",
@@ -91,7 +93,17 @@ public class AssetBundleManager : MonoBehaviour
 		}
 		if (manifestText != null)
 		{
-			File.WriteAllText(Application.persistentDataPath + "/" + this.m_platform + ".manifest", manifestText);
+			string manifestPath = Application.persistentDataPath + "/" + this.m_platform + ".manifest";
+			Debug.Log("Manifest path is: " + manifestPath);
+			try
+			{
+				File.WriteAllText(manifestPath, manifestText);
+			}
+			catch (Exception ex2)
+			{
+				Exception ex = ex2;
+				Debug.Log("Error: Could not write manifest file to locale cache. " + ex.Message);
+			}
 		}
 		else
 		{
@@ -99,7 +111,10 @@ public class AssetBundleManager : MonoBehaviour
 			manifestText = File.ReadAllText(Application.persistentDataPath + "/" + this.m_platform + ".manifest");
 			if (manifestText == null)
 			{
-				throw new Exception("Error: Could not get manifest.");
+				Debug.Log("Error: Could not get local manifest.");
+				GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
+				AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+				yield break;
 			}
 		}
 		this.BuildManifest(manifestText);
@@ -112,6 +127,12 @@ public class AssetBundleManager : MonoBehaviour
 		{
 			this.<>f__this.m_iconsBundle = value;
 		}));
+		if (this.m_iconsBundle == null)
+		{
+			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
+			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+			yield break;
+		}
 		this.m_currentWWW = null;
 		this.m_priorProgress = 0.45f;
 		this.m_progressMultiplier = 0.45f;
@@ -120,6 +141,12 @@ public class AssetBundleManager : MonoBehaviour
 		{
 			this.<>f__this.m_portraitIconsBundle = value;
 		}));
+		if (this.m_portraitIconsBundle == null)
+		{
+			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
+			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+			yield break;
+		}
 		AssetBundle genericStaticDB = null;
 		AssetBundle localizedStaticDB = null;
 		this.m_currentWWW = null;
@@ -128,16 +155,28 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle("gnrc", delegate(AssetBundle value)
 		{
-			this.<genericStaticDB>__5 = value;
+			this.<genericStaticDB>__9 = value;
 		}));
+		if (genericStaticDB == null)
+		{
+			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
+			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+			yield break;
+		}
 		this.m_currentWWW = null;
 		this.m_priorProgress = 0.95f;
 		this.m_progressMultiplier = 0.05f;
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle(localeStaticIdentifier, delegate(AssetBundle value)
 		{
-			this.<localizedStaticDB>__6 = value;
+			this.<localizedStaticDB>__10 = value;
 		}));
+		if (localizedStaticDB == null)
+		{
+			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
+			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+			yield break;
+		}
 		StaticDB.instance.InitDBs(genericStaticDB, localizedStaticDB);
 		if (genericStaticDB != null)
 		{
@@ -154,6 +193,12 @@ public class AssetBundleManager : MonoBehaviour
 			this.InitializedAction();
 		}
 		yield break;
+	}
+
+	private void DataErrorPopupDisabled()
+	{
+		GenericPopup.DisabledAction = (Action)Delegate.Remove(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
+		Main.instance.OnQuitButton();
 	}
 
 	private IEnumerator InternalInitAssetBundleManagerLocal()
@@ -263,7 +308,9 @@ public class AssetBundleManager : MonoBehaviour
 		if (fileName == null)
 		{
 			SecurePlayerPrefs.DeleteKey("locale");
-			throw new Exception("LoadAssetBundle: Error, file identifier " + fileIdentifier + " is unknown.");
+			Debug.Log("LoadAssetBundle: Error, file identifier " + fileIdentifier + " is unknown.");
+			resultCallback(null);
+			yield break;
 		}
 		while (!Caching.ready)
 		{
@@ -284,12 +331,16 @@ public class AssetBundleManager : MonoBehaviour
 		if (!string.IsNullOrEmpty(download.error))
 		{
 			Caching.CleanCache();
-			throw new Exception("LoadAssetBundle: Error: " + download.error);
+			Debug.Log("LoadAssetBundle: Error: " + download.error);
+			resultCallback(null);
+			yield break;
 		}
 		if (download.assetBundle == null)
 		{
 			Caching.CleanCache();
-			throw new Exception("LoadAssetBundle: null bundle: " + fileName);
+			Debug.Log("LoadAssetBundle: null bundle: " + fileName);
+			resultCallback(null);
+			yield break;
 		}
 		resultCallback(download.assetBundle);
 		yield break;
@@ -441,6 +492,70 @@ public class AssetBundleManager : MonoBehaviour
 			}
 		}
 		this.ParseVersionFile(versionText);
+	}
+
+	private string GetDataErrorTitleText()
+	{
+		string locale = Main.instance.GetLocale();
+		string text = locale;
+		switch (text)
+		{
+		case "enUS":
+			return "Data Error";
+		case "koKR":
+			return "데이터 오류";
+		case "frFR":
+			return "Erreur de données";
+		case "deDE":
+			return "Datenfehler";
+		case "zhCN":
+			return "数据错误";
+		case "zhTW":
+			return "資料錯誤";
+		case "esES":
+			return "Error de datos";
+		case "esMX":
+			return "Error de datos";
+		case "ruRU":
+			return "Ошибка в данных";
+		case "ptBR":
+			return "Erro de dados";
+		case "itIT":
+			return "Errore di caricamento dati";
+		}
+		return "Data Error";
+	}
+
+	private string GetDataErrorDescriptionText()
+	{
+		string locale = Main.instance.GetLocale();
+		string text = locale;
+		switch (text)
+		{
+		case "enUS":
+			return "Unable to load data from device.";
+		case "koKR":
+			return "기기에서 데이터를 불러올 수 없습니다.\t";
+		case "frFR":
+			return "Impossible de charger les données depuis l’appareil.";
+		case "deDE":
+			return "Gerätedaten konnten nicht geladen werden.";
+		case "zhCN":
+			return "无法从设备中读取数据。";
+		case "zhTW":
+			return "無法從裝置上讀取資料。";
+		case "esES":
+			return "No se han podido cargar los datos del dispositivo.";
+		case "esMX":
+			return "No se pueden cargar los datos del dispositivo";
+		case "ruRU":
+			return "Невозможно загрузить данные с устройства.";
+		case "ptBR":
+			return "Não foi possível carregar os dados a partir do dispositivo.";
+		case "itIT":
+			return "Impossibile caricare i dati dal dispositivo.";
+		}
+		return "Unable to load data from device.";
 	}
 
 	private const int HASH_LENGTH = 32;

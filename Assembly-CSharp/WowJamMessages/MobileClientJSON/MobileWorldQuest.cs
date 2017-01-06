@@ -20,8 +20,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "worldMapAreaID")]
 		public int WorldMapAreaID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "experience")]
 		[FlexJamMember(Name = "experience", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "experience")]
 		public int Experience { get; set; }
 
 		[FlexJamMember(Name = "startLocationMapID", Type = FlexJamType.Int32)]
@@ -40,12 +40,12 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "money", Type = FlexJamType.Int32)]
 		public int Money { get; set; }
 
-		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "startTime")]
+		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
 		public int StartTime { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "startLocationY")]
 		[FlexJamMember(Name = "startLocationY", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "startLocationY")]
 		public int StartLocationY { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "currency", Type = FlexJamType.Struct)]
@@ -56,16 +56,16 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "startLocationX", Type = FlexJamType.Int32)]
 		public int StartLocationX { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "faction", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "faction")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "faction", Type = FlexJamType.Struct)]
 		public MobileWorldQuestReward[] Faction { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "objective")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "objective", Type = FlexJamType.Struct)]
 		public MobileWorldQuestObjective[] Objective { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "questTitle")]
 		[FlexJamMember(Name = "questTitle", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "questTitle")]
 		public string QuestTitle { get; set; }
 	}
 }

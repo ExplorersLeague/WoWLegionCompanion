@@ -25,20 +25,20 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "declinedNames")]
 		public string[] DeclinedNames { get; set; }
 
-		[FlexJamMember(Name = "guidActual", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "guidActual")]
+		[FlexJamMember(Name = "guidActual", Type = FlexJamType.WowGuid)]
 		public string GuidActual { get; set; }
 
-		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
+		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "race")]
 		[FlexJamMember(Name = "race", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "race")]
 		public byte Race { get; set; }
 
-		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "classID")]
@@ -49,12 +49,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "sex", Type = FlexJamType.UInt8)]
 		public byte Sex { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "isDeleted")]
 		[FlexJamMember(Name = "isDeleted", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "isDeleted")]
 		public bool IsDeleted { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "bnetAccount")]
 		[FlexJamMember(Name = "bnetAccount", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "bnetAccount")]
 		public string BnetAccount { get; set; }
 	}
 }

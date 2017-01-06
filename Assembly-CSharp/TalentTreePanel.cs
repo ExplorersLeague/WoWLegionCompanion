@@ -88,6 +88,11 @@ public class TalentTreePanel : MonoBehaviour
 		return result;
 	}
 
+	public void SetNeedsFullInit()
+	{
+		this.m_needsFullInit = true;
+	}
+
 	private void HandleEnteredWorld()
 	{
 		this.m_needsFullInit = true;
@@ -133,10 +138,32 @@ public class TalentTreePanel : MonoBehaviour
 			gameObject.transform.SetParent(this.m_talentTreeItemRoot.transform, false);
 			TalentTreeItem component = gameObject.GetComponent<TalentTreeItem>();
 			this.m_talentTreeItems.Add(component);
-			if (k < this.m_romanNumeralPrefabs.Length)
+			switch (k)
 			{
-				GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_romanNumeralPrefabs[k]);
-				gameObject2.transform.SetParent(this.m_romanNumeralRoot.transform, false);
+			case 0:
+				component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-One");
+				break;
+			case 1:
+				component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Two");
+				break;
+			case 2:
+				component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Three");
+				break;
+			case 3:
+				component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Four");
+				break;
+			case 4:
+				component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Five");
+				break;
+			case 5:
+				component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Six");
+				break;
+			case 6:
+				component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Seven");
+				break;
+			case 7:
+				component.m_talentTier.sprite = Resources.Load<Sprite>("OrderAdvancement/Number-Eight");
+				break;
 			}
 		}
 		StaticDB.garrTalentDB.EnumRecordsByParentID(treeRec.ID, delegate(GarrTalentRec garrTalentRec)
@@ -189,8 +216,6 @@ public class TalentTreePanel : MonoBehaviour
 	public GameObject m_talentTreeItemPrefab;
 
 	public GameObject m_romanNumeralRoot;
-
-	public GameObject[] m_romanNumeralPrefabs;
 
 	private Vector2 m_multiPanelViewSizeDelta;
 

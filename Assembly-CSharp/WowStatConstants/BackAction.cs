@@ -6,6 +6,7 @@ namespace WowStatConstants
 	{
 		hideAllPopups,
 		hideSliderPanel,
-		hideMissionResults
+		hideMissionResults,
+		hideMissionDialog
 	}
 }

@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "MobileClientShipmentItem", Version = 33577221u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileClientShipmentItem
 	{
-		[System.Runtime.Serialization.DataMember(Name = "context")]
 		[FlexJamMember(Name = "context", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "context")]
 		public int Context { get; set; }
 
 		[FlexJamMember(Name = "iconFileDataID", Type = FlexJamType.Int32)]
@@ -24,8 +24,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 
-		[FlexJamMember(Name = "count", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "count")]
+		[FlexJamMember(Name = "count", Type = FlexJamType.Int32)]
 		public int Count { get; set; }
 	}
 }

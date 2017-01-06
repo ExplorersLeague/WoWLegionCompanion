@@ -23,6 +23,40 @@ public class MiniMissionListItem : MonoBehaviour
 		this.m_missionOfferTimeSB = new StringBuilder(16);
 	}
 
+	private int GetUncounteredMissionDuration(JamGarrisonMobileMission mission)
+	{
+		if (mission == null)
+		{
+			return 0;
+		}
+		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(mission.MissionRecID);
+		if (record == null)
+		{
+			return 0;
+		}
+		int missionDuration = record.MissionDuration;
+		float actionFlat = 0f;
+		foreach (JamGarrisonEncounter jamGarrisonEncounter in mission.Encounter)
+		{
+			foreach (int id in jamGarrisonEncounter.MechanicID)
+			{
+				GarrMechanicRec record2 = StaticDB.garrMechanicDB.GetRecord(id);
+				if (record2 != null)
+				{
+					StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(record2.GarrAbilityID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+					{
+						if (garrAbilityEffectRec.AbilityAction == 17u)
+						{
+							actionFlat += 1f - garrAbilityEffectRec.ActionValueFlat;
+						}
+						return true;
+					});
+				}
+			}
+		}
+		return missionDuration - (int)((float)missionDuration * actionFlat);
+	}
+
 	public void SetMission(JamGarrisonMobileMission mission)
 	{
 		this.m_statusDarkener.gameObject.SetActive(false);
@@ -48,7 +82,8 @@ public class MiniMissionListItem : MonoBehaviour
 			this.m_missionTime.gameObject.SetActive(false);
 		}
 		this.m_previewMechanicsGroup.SetActive(!flag);
-		Duration duration = new Duration(record.MissionDuration, false);
+		int uncounteredMissionDuration = this.GetUncounteredMissionDuration(mission);
+		Duration duration = new Duration(uncounteredMissionDuration, false);
 		string str;
 		if (duration.DurationValue >= 28800)
 		{

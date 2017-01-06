@@ -16,16 +16,16 @@ namespace WowJamMessages.MobileJSON
 		[System.Runtime.Serialization.DataMember(Name = "wowAccount")]
 		public string WowAccount { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "characterID")]
 		[FlexJamMember(Name = "characterID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "characterID")]
 		public string CharacterID { get; set; }
 
-		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
+		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
-		[FlexJamMember(Name = "bnetAccount", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "bnetAccount")]
+		[FlexJamMember(Name = "bnetAccount", Type = FlexJamType.WowGuid)]
 		public string BnetAccount { get; set; }
 	}
 }

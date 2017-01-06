@@ -661,7 +661,7 @@ public class AdventureMapPanel : MonoBehaviour
 
 	public void HandleBountyInfoUpdated()
 	{
-		BountySite[] componentsInChildren = this.m_missionAndWordQuestArea.transform.GetComponentsInChildren<BountySite>(true);
+		BountySite[] componentsInChildren = this.m_mapViewContentsRT.GetComponentsInChildren<BountySite>(true);
 		foreach (BountySite bountySite in componentsInChildren)
 		{
 			StackableMapIcon component = bountySite.GetComponent<StackableMapIcon>();
@@ -692,7 +692,7 @@ public class AdventureMapPanel : MonoBehaviour
 			int questSortID = record.QuestSortID;
 			if (questSortID == 7502)
 			{
-				goto IL_1D7;
+				goto IL_1D2;
 			}
 			if (questSortID != 7503)
 			{
@@ -706,7 +706,7 @@ public class AdventureMapPanel : MonoBehaviour
 							{
 								if (questSortID == 8147)
 								{
-									goto IL_1D7;
+									goto IL_1D2;
 								}
 								flag = false;
 							}
@@ -734,7 +734,7 @@ public class AdventureMapPanel : MonoBehaviour
 			{
 				zoneMissionOverview = this.m_allZoneMissionOverviews[2];
 			}
-			IL_1EE:
+			IL_1E9:
 			if (flag)
 			{
 				if (zoneMissionOverview.zoneNameTag.Length > 0)
@@ -760,9 +760,9 @@ public class AdventureMapPanel : MonoBehaviour
 				continue;
 			}
 			continue;
-			IL_1D7:
+			IL_1D2:
 			zoneMissionOverview = this.m_allZoneMissionOverviews[6];
-			goto IL_1EE;
+			goto IL_1E9;
 		}
 	}
 

@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JamJSONGameVersion
 	{
-		[FlexJamMember(Name = "versionMajor", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "versionMajor")]
+		[FlexJamMember(Name = "versionMajor", Type = FlexJamType.UInt32)]
 		public uint VersionMajor { get; set; }
 
 		[FlexJamMember(Name = "versionBuild", Type = FlexJamType.UInt32)]
@@ -20,8 +20,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "versionMinor", Type = FlexJamType.UInt32)]
 		public uint VersionMinor { get; set; }
 
-		[FlexJamMember(Name = "versionRevision", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "versionRevision")]
+		[FlexJamMember(Name = "versionRevision", Type = FlexJamType.UInt32)]
 		public uint VersionRevision { get; set; }
 	}
 }

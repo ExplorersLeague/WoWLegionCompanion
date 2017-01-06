@@ -12,12 +12,12 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "idleTime")]
 		public uint IdleTime { get; set; }
 
-		[FlexJamMember(Name = "player", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "player")]
+		[FlexJamMember(Name = "player", Type = FlexJamType.WowGuid)]
 		public string Player { get; set; }
 
-		[FlexJamMember(Name = "activeTime", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "activeTime")]
+		[FlexJamMember(Name = "activeTime", Type = FlexJamType.UInt32)]
 		public uint ActiveTime { get; set; }
 	}
 }

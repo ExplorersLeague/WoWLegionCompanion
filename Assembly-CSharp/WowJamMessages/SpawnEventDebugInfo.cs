@@ -14,8 +14,8 @@ namespace WowJamMessages
 			this.AiGroupActionSetName = string.Empty;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "eventID")]
 		[FlexJamMember(Name = "eventID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "eventID")]
 		public int EventID { get; set; }
 
 		[FlexJamMember(Name = "eventName", Type = FlexJamType.String)]
@@ -34,8 +34,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetID")]
 		public int AiGroupActionSetID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetName")]
 		[FlexJamMember(Name = "aiGroupActionSetName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetName")]
 		public string AiGroupActionSetName { get; set; }
 	}
 }

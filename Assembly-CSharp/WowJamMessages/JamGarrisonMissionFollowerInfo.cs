@@ -8,12 +8,12 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamGarrisonMissionFollowerInfo
 	{
-		[System.Runtime.Serialization.DataMember(Name = "followerDBID")]
 		[FlexJamMember(Name = "followerDBID", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "followerDBID")]
 		public ulong FollowerDBID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "missionCompleteState")]
 		[FlexJamMember(Name = "missionCompleteState", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "missionCompleteState")]
 		public uint MissionCompleteState { get; set; }
 	}
 }

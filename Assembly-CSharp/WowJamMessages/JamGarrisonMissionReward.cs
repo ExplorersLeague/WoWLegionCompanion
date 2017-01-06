@@ -17,8 +17,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "itemFileDataID", Type = FlexJamType.Int32)]
 		public int ItemFileDataID { get; set; }
 
-		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemID")]
+		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "currencyType")]
@@ -33,8 +33,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "currencyQuantity", Type = FlexJamType.UInt32)]
 		public uint CurrencyQuantity { get; set; }
 
-		[FlexJamMember(Name = "itemQuantity", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemQuantity")]
+		[FlexJamMember(Name = "itemQuantity", Type = FlexJamType.UInt32)]
 		public uint ItemQuantity { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "garrMssnBonusAbilityID")]

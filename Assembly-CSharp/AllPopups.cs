@@ -19,9 +19,9 @@ public class AllPopups : MonoBehaviour
 	{
 	}
 
-	public void HideAllPopups()
+	public void HideLevel2Popups()
 	{
-		this.m_abilityInfoPopup.gameObject.SetActive(false);
+		this.HideCombatAllyDialog();
 		this.m_rewardInfoPopup.gameObject.SetActive(false);
 		this.m_cheatCompleteMissionPopup.gameObject.SetActive(false);
 		this.m_debugOptionsPopup.gameObject.SetActive(false);
@@ -37,13 +37,23 @@ public class AllPopups : MonoBehaviour
 		this.m_equipmentDialog.gameObject.SetActive(false);
 		this.m_championActivationConfirmationDialog.gameObject.SetActive(false);
 		this.m_championDeactivationConfirmationDialog.gameObject.SetActive(false);
-		this.m_partyBuffsPopup.gameObject.SetActive(false);
 		this.m_unassignCombatAllyConfirmationDialog.gameObject.SetActive(false);
 		this.m_logoutConfirmation.gameObject.SetActive(false);
 		this.m_regionConfirmation.gameObject.SetActive(false);
+	}
+
+	public void HideLevel3Popups()
+	{
+		this.m_abilityInfoPopup.gameObject.SetActive(false);
 		this.m_talentTooltip.gameObject.SetActive(false);
-		this.HideCombatAllyDialog();
+		this.m_partyBuffsPopup.gameObject.SetActive(false);
 		this.m_encounterPopup.gameObject.SetActive(false);
+	}
+
+	public void HideAllPopups()
+	{
+		this.HideLevel2Popups();
+		this.HideLevel3Popups();
 	}
 
 	public void ShowUnassignCombatAllyConfirmationDialog()
@@ -103,7 +113,7 @@ public class AllPopups : MonoBehaviour
 
 	public void ShowSpellInfoPopup(int spellID)
 	{
-		this.HideAllPopups();
+		this.HideLevel3Popups();
 		this.m_abilityInfoPopup.gameObject.SetActive(true);
 		this.m_abilityInfoPopup.SetSpell(spellID);
 	}
