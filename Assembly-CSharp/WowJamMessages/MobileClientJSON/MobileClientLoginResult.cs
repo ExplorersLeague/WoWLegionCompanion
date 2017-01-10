@@ -17,8 +17,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "success")]
 		public bool Success { get; set; }
 
-		[FlexJamMember(Name = "version", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "version")]
+		[FlexJamMember(Name = "version", Type = FlexJamType.Int32)]
 		public int Version { get; set; }
 	}
 }

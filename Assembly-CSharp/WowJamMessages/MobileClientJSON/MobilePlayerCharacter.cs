@@ -8,16 +8,16 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobilePlayerCharacter
 	{
-		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		public string Guid { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "charLevel")]
 		[FlexJamMember(Name = "charLevel", Type = FlexJamType.UInt8)]
 		public byte CharLevel { get; set; }
 
-		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
 		[FlexJamMember(Name = "status", Type = FlexJamType.Int32)]
@@ -28,8 +28,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "charClass", Type = FlexJamType.UInt8)]
 		public byte CharClass { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "charRace")]
 		[FlexJamMember(Name = "charRace", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "charRace")]
 		public byte CharRace { get; set; }
 	}
 }

@@ -7,12 +7,12 @@ namespace JamLib
 	[System.Runtime.Serialization.DataContract]
 	public struct Vector3
 	{
-		[System.Runtime.Serialization.DataMember(Name = "x")]
 		[FlexJamMember(Name = "x", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "x")]
 		public float X { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "y")]
 		[FlexJamMember(Name = "y", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "y")]
 		public float Y { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "z")]

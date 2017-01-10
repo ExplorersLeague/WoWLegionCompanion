@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientFollowerActivationDataResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "goldCost")]
 		[FlexJamMember(Name = "goldCost", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "goldCost")]
 		public int GoldCost { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "activationsRemaining")]

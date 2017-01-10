@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "encounterID", Type = FlexJamType.Int32)]
 		public int EncounterID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "mechanicID")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "mechanicID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "mechanicID")]
 		public int[] MechanicID { get; set; }
 	}
 }

@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "locale", Type = FlexJamType.Int32)]
 		public int Locale { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "requesterVirtualRealmAddress")]
 		[FlexJamMember(Name = "requesterVirtualRealmAddress", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "requesterVirtualRealmAddress")]
 		public uint RequesterVirtualRealmAddress { get; set; }
 	}
 }

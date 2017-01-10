@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JamJSONRealmListServerIPAddress
 	{
-		[System.Runtime.Serialization.DataMember(Name = "ip")]
 		[FlexJamMember(Name = "ip", Type = FlexJamType.SockAddr)]
+		[System.Runtime.Serialization.DataMember(Name = "ip")]
 		public string Ip { get; set; }
 
 		[FlexJamMember(Name = "port", Type = FlexJamType.UInt16)]

@@ -19,32 +19,32 @@ namespace WowJamMessages
 			this.Minimum = 2000000000UL;
 		}
 
-		[FlexJamMember(Name = "accum", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "accum")]
+		[FlexJamMember(Name = "accum", Type = FlexJamType.UInt64)]
 		public ulong Accum { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "maximum")]
 		[FlexJamMember(Name = "maximum", Type = FlexJamType.UInt64)]
 		public ulong Maximum { get; set; }
 
-		[FlexJamMember(Name = "sqaccum", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "sqaccum")]
+		[FlexJamMember(Name = "sqaccum", Type = FlexJamType.UInt64)]
 		public ulong Sqaccum { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "arg")]
 		[FlexJamMember(Name = "arg", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "arg")]
 		public ulong Arg { get; set; }
 
-		[FlexJamMember(Name = "count", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "count")]
+		[FlexJamMember(Name = "count", Type = FlexJamType.UInt64)]
 		public ulong Count { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "argname")]
 		[FlexJamMember(Name = "argname", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "argname")]
 		public string Argname { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "minimum")]
 		[FlexJamMember(Name = "minimum", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "minimum")]
 		public ulong Minimum { get; set; }
 	}
 }

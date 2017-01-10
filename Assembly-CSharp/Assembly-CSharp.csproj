@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{764FEE31-06EC-4ED0-9603-B8CF2D24DF79}</ProjectGuid>
+    <ProjectGuid>{E0D483FB-FAD6-426B-A4A2-AB942D38F33E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -62,7 +62,9 @@
     <Compile Include="Assets\DustinHorne\JsonDotNetUnity\TestCases\TestModels\SampleChild.cs" />
     <Compile Include="Assets\DustinHorne\JsonDotNetUnity\TestCases\TestModels\SimpleClassObject.cs" />
     <Compile Include="Assets\SimpleAndroidNotifications\NotificationExample.cs" />
+    <Compile Include="Assets\SimpleAndroidNotifications\NotificationExecuteMode.cs" />
     <Compile Include="Assets\SimpleAndroidNotifications\NotificationIcon.cs" />
+    <Compile Include="Assets\SimpleAndroidNotifications\NotificationIdHandler.cs" />
     <Compile Include="Assets\SimpleAndroidNotifications\NotificationManager.cs" />
     <Compile Include="Assets\SimpleAndroidNotifications\NotificationParams.cs" />
     <Compile Include="AutoCenterItem.cs" />

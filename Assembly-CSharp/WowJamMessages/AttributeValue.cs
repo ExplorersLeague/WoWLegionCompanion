@@ -36,8 +36,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "stringValue", Type = FlexJamType.String)]
 		public string StringValue { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "guidValue")]
 		[FlexJamMember(Name = "guidValue", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "guidValue")]
 		public string GuidValue { get; set; }
 	}
 }

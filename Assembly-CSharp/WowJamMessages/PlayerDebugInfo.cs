@@ -13,8 +13,8 @@ namespace WowJamMessages
 			this.CombatRatings = new int[32];
 		}
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "combatRatings", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "combatRatings")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "combatRatings", Type = FlexJamType.Int32)]
 		public int[] CombatRatings { get; set; }
 	}
 }

@@ -36,8 +36,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "messageTextHash", Type = FlexJamType.Int32)]
 		public int MessageTextHash { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "eventNameHash")]
 		[FlexJamMember(Name = "eventNameHash", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "eventNameHash")]
 		public int EventNameHash { get; set; }
 	}
 }

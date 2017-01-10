@@ -31,17 +31,30 @@ namespace Assets.SimpleAndroidNotifications
 			{
 				NotificationParams notificationParams = new NotificationParams
 				{
-					Id = Random.Range(0, int.MaxValue),
+					Id = NotificationIdHandler.GetNotificationId(),
 					Delay = TimeSpan.FromSeconds(5.0),
 					Title = "Custom notification",
 					Message = "Message",
 					Ticker = "Ticker",
 					Sound = true,
 					Vibrate = true,
+					Vibration = new int[]
+					{
+						500,
+						500,
+						500,
+						500,
+						500,
+						500
+					},
 					Light = true,
-					SmallIcon = NotificationIcon.Heart,
+					LightOnMs = 1000,
+					LightOffMs = 1000,
+					LightColor = Color.red,
+					SmallIcon = NotificationIcon.Biohazard,
 					SmallIconColor = new Color(0f, 0.5f, 0f),
-					LargeIcon = "app_icon"
+					LargeIcon = "app_icon",
+					Mode = NotificationExecuteMode.Schedule
 				};
 				NotificationManager.SendCustom(notificationParams);
 			}

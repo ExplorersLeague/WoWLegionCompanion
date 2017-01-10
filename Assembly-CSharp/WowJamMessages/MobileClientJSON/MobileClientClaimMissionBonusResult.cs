@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4837, Name = "MobileClientClaimMissionBonusResult", Version = 33577221u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileClientClaimMissionBonusResult
 	{
 		[FlexJamMember(Name = "awardOvermax", Type = FlexJamType.Bool)]

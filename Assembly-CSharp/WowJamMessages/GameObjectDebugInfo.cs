@@ -20,8 +20,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		public uint Flags { get; set; }
 
-		[FlexJamMember(Name = "gameObjectType", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "gameObjectType")]
+		[FlexJamMember(Name = "gameObjectType", Type = FlexJamType.Int32)]
 		public int GameObjectType { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "debugName")]

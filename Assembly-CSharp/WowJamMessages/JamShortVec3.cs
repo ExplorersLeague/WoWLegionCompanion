@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamShortVec3", Version = 28333852u)]
 	public class JamShortVec3
 	{
-		[System.Runtime.Serialization.DataMember(Name = "z")]
 		[FlexJamMember(Name = "z", Type = FlexJamType.Int16)]
+		[System.Runtime.Serialization.DataMember(Name = "z")]
 		public short Z { get; set; }
 
 		[FlexJamMember(Name = "x", Type = FlexJamType.Int16)]

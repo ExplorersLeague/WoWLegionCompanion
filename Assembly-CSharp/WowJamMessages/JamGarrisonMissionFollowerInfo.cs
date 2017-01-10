@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamGarrisonMissionFollowerInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamGarrisonMissionFollowerInfo", Version = 28333852u)]
 	public class JamGarrisonMissionFollowerInfo
 	{
-		[FlexJamMember(Name = "followerDBID", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "followerDBID")]
+		[FlexJamMember(Name = "followerDBID", Type = FlexJamType.UInt64)]
 		public ulong FollowerDBID { get; set; }
 
 		[FlexJamMember(Name = "missionCompleteState", Type = FlexJamType.UInt32)]

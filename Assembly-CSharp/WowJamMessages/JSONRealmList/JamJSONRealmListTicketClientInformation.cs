@@ -13,8 +13,8 @@ namespace WowJamMessages.JSONRealmList
 			this.Secret = new byte[32];
 		}
 
-		[FlexJamMember(Name = "platform", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "platform")]
+		[FlexJamMember(Name = "platform", Type = FlexJamType.UInt32)]
 		public uint Platform { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "currentTime")]
@@ -25,12 +25,12 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "buildVariant")]
 		public string BuildVariant { get; set; }
 
-		[FlexJamMember(Name = "timeZone", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "timeZone")]
+		[FlexJamMember(Name = "timeZone", Type = FlexJamType.String)]
 		public string TimeZone { get; set; }
 
-		[FlexJamMember(Name = "versionDataBuild", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "versionDataBuild")]
+		[FlexJamMember(Name = "versionDataBuild", Type = FlexJamType.UInt32)]
 		public uint VersionDataBuild { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "audioLocale")]
@@ -45,8 +45,8 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "secret")]
 		public byte[] Secret { get; set; }
 
-		[FlexJamMember(Name = "type", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "type")]
+		[FlexJamMember(Name = "type", Type = FlexJamType.UInt32)]
 		public uint Type { get; set; }
 
 		[FlexJamMember(Name = "textLocale", Type = FlexJamType.UInt32)]

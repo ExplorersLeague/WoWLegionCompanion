@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.SimpleAndroidNotifications
@@ -9,7 +10,7 @@ namespace Assets.SimpleAndroidNotifications
 		{
 			return NotificationManager.SendCustom(new NotificationParams
 			{
-				Id = Random.Range(0, int.MaxValue),
+				Id = NotificationIdHandler.GetNotificationId(),
 				Delay = delay,
 				Title = title,
 				Message = message,
@@ -19,7 +20,8 @@ namespace Assets.SimpleAndroidNotifications
 				Light = true,
 				SmallIcon = smallIcon,
 				SmallIconColor = smallIconColor,
-				LargeIcon = string.Empty
+				LargeIcon = string.Empty,
+				Mode = NotificationExecuteMode.Schedule
 			});
 		}
 
@@ -27,7 +29,7 @@ namespace Assets.SimpleAndroidNotifications
 		{
 			return NotificationManager.SendCustom(new NotificationParams
 			{
-				Id = Random.Range(0, int.MaxValue),
+				Id = NotificationIdHandler.GetNotificationId(),
 				Delay = delay,
 				Title = title,
 				Message = message,
@@ -37,13 +39,16 @@ namespace Assets.SimpleAndroidNotifications
 				Light = true,
 				SmallIcon = smallIcon,
 				SmallIconColor = smallIconColor,
-				LargeIcon = "app_icon"
+				LargeIcon = "app_icon",
+				Mode = NotificationExecuteMode.Schedule
 			});
 		}
 
 		public static int SendCustom(NotificationParams notificationParams)
 		{
 			long num = (long)notificationParams.Delay.TotalMilliseconds;
+			string text = string.Join(",", (from i in notificationParams.Vibration
+			select i.ToString()).ToArray<string>());
 			new AndroidJavaClass("com.hippogames.simpleandroidnotifications.Controller").CallStatic("SetNotification", new object[]
 			{
 				notificationParams.Id,
@@ -53,12 +58,18 @@ namespace Assets.SimpleAndroidNotifications
 				notificationParams.Ticker,
 				(!notificationParams.Sound) ? 0 : 1,
 				(!notificationParams.Vibrate) ? 0 : 1,
+				text,
 				(!notificationParams.Light) ? 0 : 1,
+				notificationParams.LightOnMs,
+				notificationParams.LightOffMs,
+				NotificationManager.ColotToInt(notificationParams.LightColor),
 				notificationParams.LargeIcon,
 				NotificationManager.GetSmallIconName(notificationParams.SmallIcon),
 				NotificationManager.ColotToInt(notificationParams.SmallIconColor),
+				(int)notificationParams.Mode,
 				"com.blizzard.wowcompanion.CompanionNativeActivity"
 			});
+			NotificationIdHandler.AddScheduledNotificaion(notificationParams.Id);
 			return notificationParams.Id;
 		}
 
@@ -68,6 +79,7 @@ namespace Assets.SimpleAndroidNotifications
 			{
 				id
 			});
+			NotificationIdHandler.RemoveScheduledNotificaion(id);
 		}
 
 		public static void CancelAll()

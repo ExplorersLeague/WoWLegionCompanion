@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamStruct(Name = "MobileClientShipmentType", Version = 33577221u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "MobileClientShipmentType", Version = 33577221u)]
 	public class MobileClientShipmentType
 	{
 		[System.Runtime.Serialization.DataMember(Name = "currencyTypeID")]

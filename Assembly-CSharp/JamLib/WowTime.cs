@@ -3,20 +3,20 @@ using System.Runtime.Serialization;
 
 namespace JamLib
 {
-	[FlexJamStruct(Name = "WowTime")]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "WowTime")]
 	public struct WowTime
 	{
 		[System.Runtime.Serialization.DataMember(Name = "minute")]
 		[FlexJamMember(Name = "minute", Type = FlexJamType.Int32)]
 		public int Minute { get; set; }
 
-		[FlexJamMember(Name = "hour", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "hour")]
+		[FlexJamMember(Name = "hour", Type = FlexJamType.Int32)]
 		public int Hour { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "weekday")]
 		[FlexJamMember(Name = "weekday", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "weekday")]
 		public int WeekDay { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "monthDay")]
@@ -35,8 +35,8 @@ namespace JamLib
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		public int Flags { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "holidayOffset")]
 		[FlexJamMember(Name = "holidayOffset", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "holidayOffset")]
 		public int HolidayOffset { get; set; }
 	}
 }

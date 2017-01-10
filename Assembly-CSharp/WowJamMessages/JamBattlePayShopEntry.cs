@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "entryID")]
 		public uint EntryID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		public uint Flags { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "displayInfo")]
@@ -24,8 +24,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "ordering", Type = FlexJamType.Int32)]
 		public int Ordering { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "bannerType")]
 		[FlexJamMember(Name = "bannerType", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "bannerType")]
 		public byte BannerType { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "productID")]

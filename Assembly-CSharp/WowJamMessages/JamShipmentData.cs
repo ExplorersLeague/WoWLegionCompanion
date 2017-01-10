@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamShipmentData", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamShipmentData", Version = 28333852u)]
 	public class JamShipmentData
 	{
 		public JamShipmentData()
@@ -13,16 +13,16 @@ namespace WowJamMessages
 			this.ResetPending = false;
 		}
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "shipment", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "shipment")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "shipment", Type = FlexJamType.Struct)]
 		public JamCharacterShipment[] Shipment { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "resetPending")]
 		[FlexJamMember(Name = "resetPending", Type = FlexJamType.Bool)]
 		public bool ResetPending { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "pendingShipment", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "pendingShipment")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "pendingShipment", Type = FlexJamType.Int32)]
 		public int[] PendingShipment { get; set; }
 	}
 }

@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamBattlePayProduct", Version = 28333852u)]
 	public class JamBattlePayProduct
 	{
-		[System.Runtime.Serialization.DataMember(Name = "currentPriceFixedPoint")]
 		[FlexJamMember(Name = "currentPriceFixedPoint", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "currentPriceFixedPoint")]
 		public ulong CurrentPriceFixedPoint { get; set; }
 
 		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
@@ -20,8 +20,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "displayInfo")]
 		public JamBattlepayDisplayInfo[] DisplayInfo { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "normalPriceFixedPoint")]
 		[FlexJamMember(Name = "normalPriceFixedPoint", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "normalPriceFixedPoint")]
 		public ulong NormalPriceFixedPoint { get; set; }
 
 		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]

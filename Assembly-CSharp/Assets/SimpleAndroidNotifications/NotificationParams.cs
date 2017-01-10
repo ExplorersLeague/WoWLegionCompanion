@@ -19,12 +19,26 @@ namespace Assets.SimpleAndroidNotifications
 
 		public bool Vibrate = true;
 
+		public int[] Vibration = new int[]
+		{
+			1000,
+			1000
+		};
+
 		public bool Light = true;
+
+		public int LightOnMs = 3000;
+
+		public int LightOffMs = 3000;
+
+		public Color LightColor = Color.green;
 
 		public NotificationIcon SmallIcon;
 
 		public Color SmallIconColor;
 
 		public string LargeIcon;
+
+		public NotificationExecuteMode Mode;
 	}
 }

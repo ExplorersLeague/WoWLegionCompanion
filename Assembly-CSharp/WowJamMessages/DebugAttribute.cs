@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "DebugAttribute", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class DebugAttribute
 	{
 		[System.Runtime.Serialization.DataMember(Name = "key")]
@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "value", Type = FlexJamType.Struct)]
 		public AttributeValue Value { get; set; }
 
-		[FlexJamMember(Name = "param", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "param")]
+		[FlexJamMember(Name = "param", Type = FlexJamType.Int32)]
 		public int Param { get; set; }
 	}
 }

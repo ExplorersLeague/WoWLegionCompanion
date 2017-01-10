@@ -25,48 +25,48 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "currentBuildingID", Type = FlexJamType.Int32)]
 		public int CurrentBuildingID { get; set; }
 
-		[FlexJamMember(Name = "zoneSupportSpellID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "zoneSupportSpellID")]
+		[FlexJamMember(Name = "zoneSupportSpellID", Type = FlexJamType.Int32)]
 		public int ZoneSupportSpellID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "currentMissionID")]
 		[FlexJamMember(Name = "currentMissionID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "currentMissionID")]
 		public int CurrentMissionID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "followerLevel")]
 		[FlexJamMember(Name = "followerLevel", Type = FlexJamType.Int32)]
 		public int FollowerLevel { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		[FlexJamMember(Name = "flags", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		public int Flags { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "itemLevelArmor")]
 		[FlexJamMember(Name = "itemLevelArmor", Type = FlexJamType.Int32)]
 		public int ItemLevelArmor { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "xp")]
 		[FlexJamMember(Name = "xp", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "xp")]
 		public int Xp { get; set; }
 
-		[FlexJamMember(Name = "dbID", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "dbID")]
+		[FlexJamMember(Name = "dbID", Type = FlexJamType.UInt64)]
 		public ulong DbID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "garrFollowerID")]
 		[FlexJamMember(Name = "garrFollowerID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "garrFollowerID")]
 		public int GarrFollowerID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "quality")]
 		[FlexJamMember(Name = "quality", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "quality")]
 		public int Quality { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "durability")]
 		[FlexJamMember(Name = "durability", Type = FlexJamType.Int32)]
 		public int Durability { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "abilityID")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "abilityID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "abilityID")]
 		public int[] AbilityID { get; set; }
 	}
 }

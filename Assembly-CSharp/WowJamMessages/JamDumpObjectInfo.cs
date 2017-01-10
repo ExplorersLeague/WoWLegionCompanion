@@ -13,12 +13,12 @@ namespace WowJamMessages
 			this.Granted = true;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		public string Guid { get; set; }
 
-		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "position")]
+		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
 		public Vector3 Position { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "granted")]
@@ -29,8 +29,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "visibleRange", Type = FlexJamType.Float)]
 		public float VisibleRange { get; set; }
 
-		[FlexJamMember(Name = "displayID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "displayID")]
+		[FlexJamMember(Name = "displayID", Type = FlexJamType.UInt32)]
 		public uint DisplayID { get; set; }
 	}
 }

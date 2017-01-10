@@ -5,10 +5,28 @@ namespace Assets.SimpleAndroidNotifications
 	public enum NotificationIcon
 	{
 		Bell,
+		Biohazard,
 		Clock,
+		Cloud,
+		Coin,
+		Crown,
+		Diamond,
+		Dollar,
 		Event,
+		Gear,
 		Heart,
 		Message,
-		Star
+		Power,
+		Return,
+		Save,
+		Search,
+		Skull,
+		Star,
+		Sync,
+		Wrench,
+		Mission,
+		WorkOrder,
+		Talent,
+		WoW
 	}
 }

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamSpawnRegionPlayerActivity", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamSpawnRegionPlayerActivity
 	{
 		[FlexJamMember(Name = "idleTime", Type = FlexJamType.UInt32)]
@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "player", Type = FlexJamType.WowGuid)]
 		public string Player { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "activeTime")]
 		[FlexJamMember(Name = "activeTime", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "activeTime")]
 		public uint ActiveTime { get; set; }
 	}
 }

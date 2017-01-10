@@ -8,12 +8,12 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamBattlePayPurchase", Version = 28333852u)]
 	public class JamBattlePayPurchase
 	{
-		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
 		[FlexJamMember(Name = "purchaseID", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
 		public ulong PurchaseID { get; set; }
 
-		[FlexJamMember(Name = "status", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "status")]
+		[FlexJamMember(Name = "status", Type = FlexJamType.UInt32)]
 		public uint Status { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "resultCode")]

@@ -8,12 +8,12 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "ObjectPhaseDebugInfo", Version = 28333852u)]
 	public class ObjectPhaseDebugInfo
 	{
-		[FlexJamMember(Name = "phaseName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "phaseName")]
+		[FlexJamMember(Name = "phaseName", Type = FlexJamType.String)]
 		public string PhaseName { get; set; }
 
-		[FlexJamMember(Name = "phaseID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "phaseID")]
+		[FlexJamMember(Name = "phaseID", Type = FlexJamType.Int32)]
 		public int PhaseID { get; set; }
 	}
 }
