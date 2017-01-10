@@ -8,12 +8,12 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class ScriptTableValueDebugInfo
 	{
-		[System.Runtime.Serialization.DataMember(Name = "keyName")]
 		[FlexJamMember(Name = "keyName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "keyName")]
 		public string KeyName { get; set; }
 
-		[FlexJamMember(Name = "valueName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "valueName")]
+		[FlexJamMember(Name = "valueName", Type = FlexJamType.String)]
 		public string ValueName { get; set; }
 	}
 }

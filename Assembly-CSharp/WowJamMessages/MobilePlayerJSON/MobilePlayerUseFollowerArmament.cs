@@ -12,8 +12,8 @@ namespace WowJamMessages.MobilePlayerJSON
 		[FlexJamMember(Name = "garrFollowerTypeID", Type = FlexJamType.Int32)]
 		public int GarrFollowerTypeID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "garrFollowerID")]
 		[FlexJamMember(Name = "garrFollowerID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "garrFollowerID")]
 		public int GarrFollowerID { get; set; }
 
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]

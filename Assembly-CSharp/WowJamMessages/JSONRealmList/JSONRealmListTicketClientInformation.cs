@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JSONRealmListTicketClientInformation
 	{
-		[FlexJamMember(Name = "info", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "info")]
+		[FlexJamMember(Name = "info", Type = FlexJamType.Struct)]
 		public JamJSONRealmListTicketClientInformation Info { get; set; }
 	}
 }

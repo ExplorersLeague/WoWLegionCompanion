@@ -20,8 +20,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "resultCode", Type = FlexJamType.UInt32)]
 		public uint ResultCode { get; set; }
 
-		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "productID")]
+		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]
 		public uint ProductID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "walletName")]

@@ -11,6 +11,7 @@ public class TroopSlot : MonoBehaviour
 	private void Awake()
 	{
 		this.m_collected = false;
+		this.m_pendingCreate = false;
 		this.m_collectingSpinner.SetActive(false);
 	}
 
@@ -55,6 +56,7 @@ public class TroopSlot : MonoBehaviour
 			this.m_glowLoopHandle = null;
 		}
 		this.m_collected = false;
+		this.m_pendingCreate = false;
 		this.m_collectingSpinner.SetActive(false);
 		this.m_ownedGarrFollowerID = ownedGarrFollowerID;
 		this.m_training = training;
@@ -182,7 +184,12 @@ public class TroopSlot : MonoBehaviour
 
 	public bool IsEmpty()
 	{
-		return !this.m_training && this.m_ownedGarrFollowerID == 0;
+		return !this.m_training && !this.m_collected && !this.m_pendingCreate && this.m_ownedGarrFollowerID == 0;
+	}
+
+	public bool IsPendingCreate()
+	{
+		return this.m_pendingCreate;
 	}
 
 	public bool IsTraining()
@@ -208,6 +215,12 @@ public class TroopSlot : MonoBehaviour
 	public ulong GetDBID()
 	{
 		return this.m_shipmentDBID;
+	}
+
+	public void SetPendingCreate()
+	{
+		this.m_pendingCreate = true;
+		this.m_collectingSpinner.SetActive(true);
 	}
 
 	public void OnCollectTroop()
@@ -286,6 +299,8 @@ public class TroopSlot : MonoBehaviour
 	private bool m_training;
 
 	private bool m_collected;
+
+	private bool m_pendingCreate;
 
 	private int m_shipmentCreationTime;
 

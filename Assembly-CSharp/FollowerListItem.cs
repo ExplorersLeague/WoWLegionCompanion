@@ -641,7 +641,6 @@ public class FollowerListItem : MonoBehaviour
 			OrderHallFollowersPanel.instance.ScrollListTo(-base.transform.localPosition.y - ((!flag2) ? 0f : num) - 56f);
 			bool active = true;
 			JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[this.m_followerID];
-			int num2 = (jamGarrisonFollower.ItemLevelWeapon + jamGarrisonFollower.ItemLevelArmor) / 2;
 			bool flag3 = (jamGarrisonFollower.Flags & 8) != 0;
 			GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(jamGarrisonFollower.GarrFollowerID);
 			if (flag3 || jamGarrisonFollower.FollowerLevel < MissionDetailView.GarrisonFollower_GetMaxFollowerLevel((int)record.GarrFollowerTypeID))

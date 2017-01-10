@@ -20,24 +20,24 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "name2", Type = FlexJamType.String)]
 		public string Name2 { get; set; }
 
-		[FlexJamMember(Name = "name3", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name3")]
+		[FlexJamMember(Name = "name3", Type = FlexJamType.String)]
 		public string Name3 { get; set; }
 
-		[FlexJamMember(Optional = true, Name = "overrideBackground", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "overrideBackground")]
+		[FlexJamMember(Optional = true, Name = "overrideBackground", Type = FlexJamType.UInt32)]
 		public uint[] OverrideBackground { get; set; }
 
-		[FlexJamMember(Optional = true, Name = "overrideTexture", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "overrideTexture")]
+		[FlexJamMember(Optional = true, Name = "overrideTexture", Type = FlexJamType.UInt32)]
 		public uint[] OverrideTexture { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		[FlexJamMember(Optional = true, Name = "flags", Type = FlexJamType.UInt32)]
 		public uint[] Flags { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "creatureDisplayInfoID")]
 		[FlexJamMember(Optional = true, Name = "creatureDisplayInfoID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "creatureDisplayInfoID")]
 		public uint[] CreatureDisplayInfoID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "fileDataID")]

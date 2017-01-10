@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "UnitAuraDebugInfo", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class UnitAuraDebugInfo
 	{
 		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
@@ -24,8 +24,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "fromEnchantment")]
 		public bool FromEnchantment { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "enchantmentSlot")]
 		[FlexJamMember(Name = "enchantmentSlot", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "enchantmentSlot")]
 		public int EnchantmentSlot { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "effectDebugInfo")]
@@ -44,12 +44,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
-		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemID")]
+		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "fromItem")]
 		[FlexJamMember(Name = "fromItem", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "fromItem")]
 		public bool FromItem { get; set; }
 	}
 }

@@ -64,6 +64,11 @@ public class DebugOptionsPopup : MonoBehaviour
 		PlayerPrefs.Save();
 	}
 
+	public void TestUIEffect()
+	{
+		UiAnimMgr.instance.PlayAnim("GarrisonMissionRewardsEffectTemplate", this.m_testEffectArea.transform, Vector3.zero, 2f, 0f);
+	}
+
 	public Toggle m_enableDetailedZoneMaps;
 
 	public Toggle m_enableAutoZoomInOut;
@@ -75,4 +80,6 @@ public class DebugOptionsPopup : MonoBehaviour
 	public GameObject m_cheatCompleteButton;
 
 	public Dropdown m_localeDropdown;
+
+	public GameObject m_testEffectArea;
 }

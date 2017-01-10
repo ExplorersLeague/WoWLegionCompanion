@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamBattlePayDeliverableChoice
 	{
-		[FlexJamMember(Name = "alreadyOwns", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "alreadyOwns")]
+		[FlexJamMember(Name = "alreadyOwns", Type = FlexJamType.Bool)]
 		public bool AlreadyOwns { get; set; }
 
 		[FlexJamMember(Name = "battlePetCreatureID", Type = FlexJamType.UInt32)]
@@ -24,16 +24,16 @@ namespace WowJamMessages
 		[FlexJamMember(Optional = true, Name = "displayInfo", Type = FlexJamType.Struct)]
 		public JamBattlepayDisplayInfo[] DisplayInfo { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		public uint ItemID { get; set; }
 
 		[FlexJamMember(Name = "type", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public byte Type { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "mountSpellID")]
 		[FlexJamMember(Name = "mountSpellID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "mountSpellID")]
 		public uint MountSpellID { get; set; }
 
 		[FlexJamMember(Name = "ID", Type = FlexJamType.UInt32)]

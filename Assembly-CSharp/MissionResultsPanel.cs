@@ -11,6 +11,7 @@ public class MissionResultsPanel : MonoBehaviour
 {
 	private void Awake()
 	{
+		this.m_bonusLootInitialLocalPosition = this.m_bonusMissionRewardDisplay.m_rewardIcon.transform.localPosition;
 		this.m_attemptedAutoComplete = false;
 		this.m_darknessBG.SetActive(false);
 		this.m_popupView.SetActive(false);
@@ -30,6 +31,7 @@ public class MissionResultsPanel : MonoBehaviour
 		this.m_missionSuccessMessage.SetActive(false);
 		this.m_missionFailMessage.SetActive(false);
 		this.m_missionInProgressMessage.SetActive(false);
+		this.m_bonusMissionRewardDisplay.m_rewardIcon.transform.localPosition = this.m_bonusLootInitialLocalPosition;
 		if (Main.instance != null)
 		{
 			Main instance = Main.instance;
@@ -214,11 +216,12 @@ public class MissionResultsPanel : MonoBehaviour
 			this.m_bonusLootChanceText.text = string.Concat(new object[]
 			{
 				"<color=#ffff00ff>",
-				StaticDB.GetString("BONUS_ROLL", null),
+				StaticDB.GetString("BONUS", null),
 				" </color>\n<color=#ff8600ff>",
 				Math.Max(0, chance - 100),
 				"%</color>"
 			});
+			this.m_bonusLootChance = Math.Max(0, chance - 100);
 		}
 	}
 
@@ -411,7 +414,6 @@ public class MissionResultsPanel : MonoBehaviour
 		if (missionResultType == 2)
 		{
 			this.InitFollowerExperienceDisplays();
-			Main.instance.m_UISound.Play_MissionSuccess();
 			this.m_missionInProgressMessage.SetActive(false);
 			this.m_missionSuccessMessage.SetActive(true);
 			this.m_missionFailMessage.SetActive(false);
@@ -431,11 +433,34 @@ public class MissionResultsPanel : MonoBehaviour
 			this.m_fancyEntrance.m_punchScaleAmount = this.m_messagePunchScaleAmount;
 			this.m_fancyEntrance.m_punchScaleDuration = this.m_messagePunchScaleDuration;
 			this.m_fancyEntrance.m_timeToDelayEntrance = this.m_messageTimeToDelayEntrance;
+			this.m_fancyEntrance.m_activateOnEnable = true;
+			this.m_fancyEntrance.m_objectToNotifyOnBegin = base.gameObject;
+			this.m_fancyEntrance.m_notifyOnBeginCallbackName = "OnShowSuccessMessage";
 			this.m_missionSuccessMessage.SetActive(true);
 			MissionRewardDisplay[] componentsInChildren5 = this.m_lootGroupObj.GetComponentsInChildren<MissionRewardDisplay>(true);
 			for (int n = 0; n < componentsInChildren5.Length; n++)
 			{
 				componentsInChildren5[n].ShowResultSuccess(this.m_lootEffectInitialDelay + this.m_lootEffectDelay * (float)n);
+			}
+			if (this.m_bonusLootChance > 0)
+			{
+				iTween.ValueTo(base.gameObject, iTween.Hash(new object[]
+				{
+					"name",
+					"ShakeIt",
+					"from",
+					0.3f,
+					"to",
+					1f,
+					"delay",
+					this.m_bonusLootShakeInitialDelay,
+					"time",
+					this.m_bonusLootShakeDuration,
+					"onupdate",
+					"OnBonusLootShakeUpdate",
+					"oncomplete",
+					"OnBonusLootShakeComplete"
+				}));
 			}
 			if (awardOvermax)
 			{
@@ -449,7 +474,6 @@ public class MissionResultsPanel : MonoBehaviour
 		if (missionResultType == 3)
 		{
 			this.InitFollowerExperienceDisplays();
-			Main.instance.m_UISound.Play_MissionFailure();
 			this.m_missionInProgressMessage.SetActive(false);
 			this.m_missionSuccessMessage.SetActive(false);
 			this.m_missionFailMessage.SetActive(true);
@@ -469,13 +493,16 @@ public class MissionResultsPanel : MonoBehaviour
 			this.m_fancyEntrance.m_punchScaleAmount = this.m_messagePunchScaleAmount;
 			this.m_fancyEntrance.m_punchScaleDuration = this.m_messagePunchScaleDuration;
 			this.m_fancyEntrance.m_timeToDelayEntrance = this.m_messageTimeToDelayEntrance;
+			this.m_fancyEntrance.m_activateOnEnable = true;
+			this.m_fancyEntrance.m_objectToNotifyOnBegin = base.gameObject;
+			this.m_fancyEntrance.m_notifyOnBeginCallbackName = "OnShowFailMessage";
 			this.m_missionFailMessage.SetActive(true);
 			MissionRewardDisplay[] componentsInChildren6 = this.m_lootGroupObj.GetComponentsInChildren<MissionRewardDisplay>(true);
 			for (int num3 = 0; num3 < componentsInChildren6.Length; num3++)
 			{
-				componentsInChildren6[num3].ShowResultFail(this.m_lootEffectInitialDelay + this.m_lootEffectDelay * (float)num3);
+				componentsInChildren6[num3].ShowResultFail(this.m_lootEffectInitialDelay);
 			}
-			this.m_bonusMissionRewardDisplay.ShowResultFail(this.m_lootEffectInitialDelay + this.m_lootEffectDelay * (float)componentsInChildren6.Length);
+			this.m_bonusMissionRewardDisplay.ShowResultFail(this.m_lootEffectInitialDelay);
 		}
 		if (missionResultType == 0)
 		{
@@ -520,6 +547,26 @@ public class MissionResultsPanel : MonoBehaviour
 			}
 		}
 		this.m_partyBuffGroup.SetActive(num6 > 0);
+	}
+
+	private void OnShowSuccessMessage()
+	{
+		Main.instance.m_UISound.Play_MissionSuccess();
+	}
+
+	private void OnShowFailMessage()
+	{
+		Main.instance.m_UISound.Play_MissionFailure();
+	}
+
+	private void OnBonusLootShakeUpdate(float val)
+	{
+		this.m_bonusMissionRewardDisplay.m_rewardIcon.transform.localPosition = new Vector3(this.m_bonusLootInitialLocalPosition.x + Random.Range(-this.m_bonusLootShakeAmountX * val, this.m_bonusLootShakeAmountX * val), this.m_bonusLootInitialLocalPosition.y + Random.Range(-this.m_bonusLootShakeAmountY * val, this.m_bonusLootShakeAmountY * val), this.m_bonusLootInitialLocalPosition.z);
+	}
+
+	private void OnBonusLootShakeComplete()
+	{
+		this.m_bonusMissionRewardDisplay.m_rewardIcon.transform.localPosition = this.m_bonusLootInitialLocalPosition;
 	}
 
 	public void OnPartyBuffSectionTapped()
@@ -683,9 +730,21 @@ public class MissionResultsPanel : MonoBehaviour
 	[Header("Bonus Loot")]
 	public GameObject m_bonusLootDisplay;
 
+	private int m_bonusLootChance;
+
 	public Text m_bonusLootChanceText;
 
 	public MissionRewardDisplay m_bonusMissionRewardDisplay;
+
+	private Vector3 m_bonusLootInitialLocalPosition;
+
+	public float m_bonusLootShakeInitialDelay;
+
+	public float m_bonusLootShakeDuration;
+
+	public float m_bonusLootShakeAmountX;
+
+	public float m_bonusLootShakeAmountY;
 
 	[Header("XP Display")]
 	public GameObject m_followerExperienceDisplayArea;

@@ -18,8 +18,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		public string Guid { get; set; }
 
-		[FlexJamMember(Name = "rawFacing", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "rawFacing")]
+		[FlexJamMember(Name = "rawFacing", Type = FlexJamType.Float)]
 		public float RawFacing { get; set; }
 
 		[FlexJamMember(Optional = true, Name = "gameObjectDebugInfo", Type = FlexJamType.Struct)]
@@ -30,8 +30,8 @@ namespace WowJamMessages
 		[FlexJamMember(ArrayDimensions = 1, Name = "attributeDescriptions", Type = FlexJamType.Struct)]
 		public DebugAttributeDescription[] AttributeDescriptions { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "updateTime")]
 		[FlexJamMember(Name = "updateTime", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "updateTime")]
 		public int UpdateTime { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "attributes", Type = FlexJamType.Struct)]
@@ -50,36 +50,36 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
 		public Vector3 Position { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "rawPosition")]
 		[FlexJamMember(Name = "rawPosition", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "rawPosition")]
 		public Vector3 RawPosition { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "scriptTableValueDebugInfo")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "scriptTableValueDebugInfo", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "scriptTableValueDebugInfo")]
 		public ScriptTableValueDebugInfo[] ScriptTableValueDebugInfo { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "phaseInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "phaseInfo")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "phaseInfo", Type = FlexJamType.Struct)]
 		public ObjectPhaseDebugInfo[] PhaseInfo { get; set; }
 
-		[FlexJamMember(Name = "ID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "ID")]
+		[FlexJamMember(Name = "ID", Type = FlexJamType.Int32)]
 		public int ID { get; set; }
 
-		[FlexJamMember(Name = "initialized", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "initialized")]
+		[FlexJamMember(Name = "initialized", Type = FlexJamType.Bool)]
 		public bool Initialized { get; set; }
 
-		[FlexJamMember(Optional = true, Name = "playerDebugInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "playerDebugInfo")]
+		[FlexJamMember(Optional = true, Name = "playerDebugInfo", Type = FlexJamType.Struct)]
 		public PlayerDebugInfo[] PlayerDebugInfo { get; set; }
 
-		[FlexJamMember(Optional = true, Name = "unitDebugInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "unitDebugInfo")]
+		[FlexJamMember(Optional = true, Name = "unitDebugInfo", Type = FlexJamType.Struct)]
 		public UnitDebugInfo[] UnitDebugInfo { get; set; }
 
-		[FlexJamMember(Name = "facing", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "facing")]
+		[FlexJamMember(Name = "facing", Type = FlexJamType.Float)]
 		public float Facing { get; set; }
 
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "ScreenshotJFIFComment", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "ScreenshotJFIFComment", Version = 28333852u)]
 	public class ScreenshotJFIFComment
 	{
 		[System.Runtime.Serialization.DataMember(Name = "guid")]
@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "level", Type = FlexJamType.Int32)]
 		public int Level { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "raceID")]
 		[FlexJamMember(Name = "raceID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "raceID")]
 		public uint RaceID { get; set; }
 
 		[FlexJamMember(Name = "worldport", Type = FlexJamType.String)]
@@ -40,8 +40,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "facing", Type = FlexJamType.Float)]
 		public float Facing { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "mapID")]
 		[FlexJamMember(Name = "mapID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "mapID")]
 		public uint MapID { get; set; }
 
 		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
@@ -56,8 +56,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "classID", Type = FlexJamType.UInt32)]
 		public uint ClassID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "sex")]
 		[FlexJamMember(Name = "sex", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "sex")]
 		public uint Sex { get; set; }
 
 		[FlexJamMember(Name = "mapName", Type = FlexJamType.String)]

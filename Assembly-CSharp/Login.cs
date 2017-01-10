@@ -784,8 +784,9 @@ public class Login : MonoBehaviour
 		this.RequestGameAccountNames();
 	}
 
-	private void RegisterPushManager(string token, string locale)
+	private void RegisterPushManager(string token, string locale, string bnetAccountID)
 	{
+		string text = locale.Substring(2);
 		BLPushManagerBuilder blpushManagerBuilder = ScriptableObject.CreateInstance<BLPushManagerBuilder>();
 		if (Login.m_portal.ToLower() == "wow-dev")
 		{
@@ -798,16 +799,17 @@ public class Login : MonoBehaviour
 			blpushManagerBuilder.applicationName = "wowcompanion";
 		}
 		blpushManagerBuilder.shouldRegisterwithBPNS = true;
-		blpushManagerBuilder.region = "US";
+		blpushManagerBuilder.region = text;
 		blpushManagerBuilder.locale = locale;
 		blpushManagerBuilder.authToken = token;
-		blpushManagerBuilder.authRegion = "US";
-		blpushManagerBuilder.appAccountID = string.Empty;
+		blpushManagerBuilder.authRegion = text;
+		blpushManagerBuilder.appAccountID = bnetAccountID;
 		blpushManagerBuilder.senderId = "952133414280";
 		blpushManagerBuilder.didReceiveRegistrationTokenDelegate = new DidReceiveRegistrationTokenDelegate(this.DidReceiveRegistrationTokenHandler);
 		blpushManagerBuilder.didReceiveDeeplinkURLDelegate = new DidReceiveDeeplinkURLDelegate(this.DidReceiveDeeplinkURLDelegateHandler);
 		BLPushManager.instance.InitWithBuilder(blpushManagerBuilder);
 		BLPushManager.instance.RegisterForPushNotifications();
+		Debug.Log("Registered for push using game account " + bnetAccountID + ", region " + text);
 	}
 
 	public void DidReceiveRegistrationTokenHandler(string deviceToken)
@@ -2149,9 +2151,6 @@ public class Login : MonoBehaviour
 					{
 						string value = Login.DecompressJsonAttribBlob(attribute.Value.BlobValue);
 						this.m_updates = JsonConvert.DeserializeObject<JSONRealmListUpdates>(value);
-						foreach (JamJSONRealmListUpdatePart jamJSONRealmListUpdatePart in this.m_updates.Updates)
-						{
-						}
 					}
 					else if (attribute.Name == "Param_CharacterList")
 					{
@@ -2165,12 +2164,12 @@ public class Login : MonoBehaviour
 					foreach (JamJSONCharacterEntry jamJSONCharacterEntry in this.m_characters.CharacterList)
 					{
 						bool flag = false;
-						foreach (JamJSONRealmListUpdatePart jamJSONRealmListUpdatePart2 in this.m_updates.Updates)
+						foreach (JamJSONRealmListUpdatePart jamJSONRealmListUpdatePart in this.m_updates.Updates)
 						{
-							if (jamJSONRealmListUpdatePart2.Update.WowRealmAddress == jamJSONCharacterEntry.VirtualRealmAddress)
+							if (jamJSONRealmListUpdatePart.Update.WowRealmAddress == jamJSONCharacterEntry.VirtualRealmAddress)
 							{
-								string name = jamJSONRealmListUpdatePart2.Update.Name;
-								bool online = jamJSONRealmListUpdatePart2.Update.PopulationState != 0;
+								string name = jamJSONRealmListUpdatePart.Update.Name;
+								bool online = jamJSONRealmListUpdatePart.Update.PopulationState != 0;
 								AllPanels.instance.AddCharacterButton(jamJSONCharacterEntry, this.SubRegion, name, online);
 								flag = true;
 								break;

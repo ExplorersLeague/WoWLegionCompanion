@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamPartyMemberAuraState", Version = 28333852u)]
 	public class JamPartyMemberAuraState
 	{
-		[System.Runtime.Serialization.DataMember(Name = "activeFlags")]
 		[FlexJamMember(Name = "activeFlags", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "activeFlags")]
 		public uint ActiveFlags { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "aura")]

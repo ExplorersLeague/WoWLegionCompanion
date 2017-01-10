@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "lockReason", Type = FlexJamType.UInt32)]
 		public uint LockReason { get; set; }
 
-		[FlexJamMember(Name = "ticketGUID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "ticketGUID")]
+		[FlexJamMember(Name = "ticketGUID", Type = FlexJamType.WowGuid)]
 		public string TicketGUID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "lockResourceGUID")]

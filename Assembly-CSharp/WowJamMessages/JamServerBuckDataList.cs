@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamServerBuckDataList", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamServerBuckDataList", Version = 28333852u)]
 	public class JamServerBuckDataList
 	{
 		[FlexJamMember(Name = "mpID", Type = FlexJamType.UInt32)]

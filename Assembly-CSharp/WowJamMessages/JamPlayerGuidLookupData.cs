@@ -13,24 +13,24 @@ namespace WowJamMessages
 			this.DeclinedNames = new string[5];
 		}
 
-		[FlexJamMember(Name = "level", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "level")]
+		[FlexJamMember(Name = "level", Type = FlexJamType.UInt8)]
 		public byte Level { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "wowAccount")]
 		[FlexJamMember(Name = "wowAccount", Type = FlexJamType.WowGuid)]
 		public string WowAccount { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "declinedNames", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "declinedNames")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "declinedNames", Type = FlexJamType.String)]
 		public string[] DeclinedNames { get; set; }
 
-		[FlexJamMember(Name = "guidActual", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "guidActual")]
+		[FlexJamMember(Name = "guidActual", Type = FlexJamType.WowGuid)]
 		public string GuidActual { get; set; }
 
-		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
+		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "race")]

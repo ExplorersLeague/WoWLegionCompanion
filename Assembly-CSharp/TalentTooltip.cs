@@ -40,7 +40,7 @@ public class TalentTooltip : MonoBehaviour
 		{
 			this.m_abilityIcon.sprite = sprite;
 		}
-		this.m_researchTimeAndCostSection.SetActive(false);
+		this.m_researchTimeAndCostSection.SetActive(true);
 		int num = (!abilityButton.CanRespec()) ? this.m_garrTalentRec.ResearchCost : this.m_garrTalentRec.RespecCost;
 		this.m_resourceCostText.text = ((GarrisonStatus.Resources() >= num) ? "<color=#ffffffff>" : "<color=#FF0000FF>") + ((!abilityButton.CanRespec()) ? this.m_garrTalentRec.ResearchCost : this.m_garrTalentRec.RespecCost) + "</color>";
 		Sprite sprite2 = GeneralHelpers.LoadCurrencyIcon((int)this.m_garrTalentRec.ResearchCostCurrencyTypesID);
@@ -57,7 +57,6 @@ public class TalentTooltip : MonoBehaviour
 			this.m_unavailableForResearchSection.SetActive(false);
 			this.m_researchOrRespecText.text = ((!abilityButton.CanRespec()) ? StaticDB.GetString("RESEARCH", null) : StaticDB.GetString("RESPEC", null));
 			this.m_yourResourcesDisplayObj.SetActive(true);
-			this.m_researchTimeAndCostSection.SetActive(true);
 		}
 		else
 		{
@@ -67,6 +66,7 @@ public class TalentTooltip : MonoBehaviour
 			{
 				this.m_yourResourcesDisplayObj.SetActive(false);
 				this.m_statusText.text = "<color=#ffffffff>" + StaticDB.GetString("TALENT_OWNED", null) + "</color>";
+				this.m_researchTimeAndCostSection.SetActive(false);
 			}
 			else if (this.m_abilityButton.IsResearching())
 			{
@@ -82,7 +82,6 @@ public class TalentTooltip : MonoBehaviour
 			}
 			else if (GarrisonStatus.Resources() < num)
 			{
-				this.m_researchTimeAndCostSection.SetActive(true);
 				this.m_yourResourcesDisplayObj.SetActive(true);
 				this.m_statusText.text = "<color=#FF0000FF>" + StaticDB.GetString("NEED_MORE_RESOURCES", null) + "</color>";
 			}

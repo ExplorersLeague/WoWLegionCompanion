@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientSetShipmentDurationCheatResult
 	{
-		[FlexJamMember(Name = "success", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "success")]
+		[FlexJamMember(Name = "success", Type = FlexJamType.Bool)]
 		public bool Success { get; set; }
 	}
 }

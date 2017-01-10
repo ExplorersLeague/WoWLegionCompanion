@@ -8,16 +8,16 @@ namespace WowJamMessages.JSONRealmList
 	[FlexJamStruct(Name = "JamJSONCharacterEntry", Version = 28333852u)]
 	public class JamJSONCharacterEntry
 	{
-		[FlexJamMember(Name = "raceID", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "raceID")]
+		[FlexJamMember(Name = "raceID", Type = FlexJamType.UInt8)]
 		public byte RaceID { get; set; }
 
-		[FlexJamMember(Name = "hasMobileAccess", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "hasMobileAccess")]
+		[FlexJamMember(Name = "hasMobileAccess", Type = FlexJamType.Bool)]
 		public bool HasMobileAccess { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "experienceLevel")]
 		[FlexJamMember(Name = "experienceLevel", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "experienceLevel")]
 		public byte ExperienceLevel { get; set; }
 
 		[FlexJamMember(Name = "playerGuid", Type = FlexJamType.WowGuid)]
@@ -36,8 +36,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
-		[FlexJamMember(Name = "classID", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "classID")]
+		[FlexJamMember(Name = "classID", Type = FlexJamType.UInt8)]
 		public byte ClassID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "sexID")]

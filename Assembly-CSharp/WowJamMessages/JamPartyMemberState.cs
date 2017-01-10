@@ -13,28 +13,28 @@ namespace WowJamMessages
 			this.PartyType = new byte[2];
 		}
 
-		[FlexJamMember(Name = "level", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "level")]
+		[FlexJamMember(Name = "level", Type = FlexJamType.UInt16)]
 		public ushort Level { get; set; }
 
-		[FlexJamMember(Name = "overrideDisplayPower", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "overrideDisplayPower")]
+		[FlexJamMember(Name = "overrideDisplayPower", Type = FlexJamType.UInt16)]
 		public ushort OverrideDisplayPower { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "maxHealth")]
 		[FlexJamMember(Name = "maxHealth", Type = FlexJamType.Int32)]
 		public int MaxHealth { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "maxPower")]
 		[FlexJamMember(Name = "maxPower", Type = FlexJamType.UInt16)]
+		[System.Runtime.Serialization.DataMember(Name = "maxPower")]
 		public ushort MaxPower { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "displayPower")]
 		[FlexJamMember(Name = "displayPower", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "displayPower")]
 		public byte DisplayPower { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "wmoDoodadPlacementID")]
 		[FlexJamMember(Name = "wmoDoodadPlacementID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "wmoDoodadPlacementID")]
 		public uint WmoDoodadPlacementID { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "auras", Type = FlexJamType.Struct)]
@@ -49,20 +49,20 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "vehicleSeatRecID")]
 		public int VehicleSeatRecID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "phase")]
 		[FlexJamMember(Name = "phase", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "phase")]
 		public PhaseShiftData Phase { get; set; }
 
-		[FlexJamMember(Name = "loc", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "loc")]
+		[FlexJamMember(Name = "loc", Type = FlexJamType.Struct)]
 		public JamShortVec3 Loc { get; set; }
 
 		[FlexJamMember(Name = "areaID", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "areaID")]
 		public ushort AreaID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "wmoGroupID")]
 		[FlexJamMember(Name = "wmoGroupID", Type = FlexJamType.UInt16)]
+		[System.Runtime.Serialization.DataMember(Name = "wmoGroupID")]
 		public ushort WmoGroupID { get; set; }
 
 		[FlexJamMember(Name = "health", Type = FlexJamType.Int32)]
@@ -73,16 +73,16 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "partyType")]
 		public byte[] PartyType { get; set; }
 
-		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
+		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt16)]
 		public ushort Flags { get; set; }
 
-		[FlexJamMember(Optional = true, Name = "pet", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "pet")]
+		[FlexJamMember(Optional = true, Name = "pet", Type = FlexJamType.Struct)]
 		public JamPartyMemberPetState[] Pet { get; set; }
 
-		[FlexJamMember(Name = "power", Type = FlexJamType.UInt16)]
 		[System.Runtime.Serialization.DataMember(Name = "power")]
+		[FlexJamMember(Name = "power", Type = FlexJamType.UInt16)]
 		public ushort Power { get; set; }
 	}
 }

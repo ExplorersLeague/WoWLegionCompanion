@@ -677,25 +677,26 @@ public class GeneralHelpers : MonoBehaviour
 		{
 			return abilityIDList.ToArray();
 		}
-		JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[garrFollowerID];
-		for (int i = 0; i < jamGarrisonFollower.AbilityID.Length; i++)
+		JamGarrisonFollower follower = PersistentFollowerData.followerDictionary[garrFollowerID];
+		for (int i = 0; i < follower.AbilityID.Length; i++)
 		{
-			GarrAbilityRec garrAbilityRec = StaticDB.garrAbilityDB.GetRecord(jamGarrisonFollower.AbilityID[i]);
+			GarrAbilityRec garrAbilityRec = StaticDB.garrAbilityDB.GetRecord(follower.AbilityID[i]);
 			if (garrAbilityRec == null)
 			{
 				Debug.Log(string.Concat(new object[]
 				{
 					"Invalid Ability ID ",
-					jamGarrisonFollower.AbilityID[i],
+					follower.AbilityID[i],
 					" from follower ",
-					jamGarrisonFollower.GarrFollowerID
+					follower.GarrFollowerID
 				}));
 			}
 			else
 			{
 				StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(garrAbilityRec.ID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 				{
-					switch (garrAbilityEffectRec.AbilityAction)
+					uint abilityAction = garrAbilityEffectRec.AbilityAction;
+					switch (abilityAction)
 					{
 					case 0u:
 						return true;
@@ -716,12 +717,99 @@ public class GeneralHelpers : MonoBehaviour
 						}
 						break;
 					}
+					default:
+						if (abilityAction != 22u)
+						{
+							if (abilityAction != 23u)
+							{
+								if (abilityAction == 37u)
+								{
+									return true;
+								}
+							}
+							else
+							{
+								bool flag = false;
+								if (PersistentMissionData.missionDictionary.ContainsKey(garrMissionID))
+								{
+									JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[garrMissionID];
+									for (int k = 0; k < jamGarrisonMobileMission.Encounter.Length; k++)
+									{
+										for (int l = 0; l < jamGarrisonMobileMission.Encounter[k].MechanicID.Length; l++)
+										{
+											GarrMechanicRec record = StaticDB.garrMechanicDB.GetRecord(jamGarrisonMobileMission.Encounter[k].MechanicID[l]);
+											if (record != null && garrAbilityEffectRec.GarrMechanicTypeID == record.GarrMechanicTypeID)
+											{
+												flag = true;
+												break;
+											}
+										}
+									}
+								}
+								if (!flag)
+								{
+									return true;
+								}
+							}
+						}
+						else
+						{
+							MissionFollowerSlot[] componentsInChildren2 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+							bool flag2 = false;
+							foreach (MissionFollowerSlot missionFollowerSlot2 in componentsInChildren2)
+							{
+								int currentGarrFollowerID = missionFollowerSlot2.GetCurrentGarrFollowerID();
+								if (currentGarrFollowerID > 0 && currentGarrFollowerID != follower.GarrFollowerID)
+								{
+									GarrFollowerRec record2 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID);
+									if (record2 != null)
+									{
+										uint num2 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record2.HordeGarrClassSpecID : record2.AllianceGarrClassSpecID;
+										if (num2 == garrAbilityEffectRec.ActionRecordID)
+										{
+											flag2 = true;
+											break;
+										}
+									}
+								}
+							}
+							if (!flag2)
+							{
+								return true;
+							}
+						}
+						break;
 					case 5u:
-						return true;
+					{
+						MissionFollowerSlot[] componentsInChildren3 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+						bool flag3 = false;
+						foreach (MissionFollowerSlot missionFollowerSlot3 in componentsInChildren3)
+						{
+							int currentGarrFollowerID2 = missionFollowerSlot3.GetCurrentGarrFollowerID();
+							if (currentGarrFollowerID2 > 0 && currentGarrFollowerID2 != follower.GarrFollowerID)
+							{
+								GarrFollowerRec record3 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID2);
+								if (record3 != null)
+								{
+									uint num3 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record3.HordeGarrFollRaceID : record3.AllianceGarrFollRaceID;
+									if (num3 == garrAbilityEffectRec.ActionRace)
+									{
+										flag3 = true;
+										break;
+									}
+								}
+							}
+						}
+						if (!flag3)
+						{
+							return true;
+						}
+						break;
+					}
 					case 6u:
 					{
-						GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record != null && (float)record.MissionDuration < garrAbilityEffectRec.ActionHours * 3600f)
+						GarrMissionRec record4 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+						if (record4 != null && (float)record4.MissionDuration < garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -729,8 +817,8 @@ public class GeneralHelpers : MonoBehaviour
 					}
 					case 7u:
 					{
-						GarrMissionRec record2 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record2 != null && (float)record2.MissionDuration > garrAbilityEffectRec.ActionHours * 3600f)
+						GarrMissionRec record5 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+						if (record5 != null && (float)record5.MissionDuration > garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -738,8 +826,8 @@ public class GeneralHelpers : MonoBehaviour
 					}
 					case 9u:
 					{
-						GarrMissionRec record3 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record3 != null && record3.TravelDuration < garrAbilityEffectRec.ActionHours * 3600f)
+						GarrMissionRec record6 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+						if (record6 != null && record6.TravelDuration < garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -747,8 +835,8 @@ public class GeneralHelpers : MonoBehaviour
 					}
 					case 10u:
 					{
-						GarrMissionRec record4 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record4 != null && record4.TravelDuration > garrAbilityEffectRec.ActionHours * 3600f)
+						GarrMissionRec record7 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+						if (record7 != null && record7.TravelDuration > garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}

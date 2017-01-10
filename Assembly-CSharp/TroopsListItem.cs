@@ -240,11 +240,21 @@ public class TroopsListItem : MonoBehaviour
 		}
 		foreach (TroopSlot troopSlot3 in troopSlots)
 		{
-			if (troopSlot3.IsEmpty())
+			if (troopSlot3.IsPendingCreate())
 			{
 				GarrFollowerRec record2 = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
 				int iconFileDataID2 = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record2.AllianceIconFileDataID : record2.HordeIconFileDataID;
 				troopSlot3.SetCharShipment(this.m_charShipmentRec.ID, 0UL, follower.GarrFollowerID, false, iconFileDataID2);
+				return;
+			}
+		}
+		foreach (TroopSlot troopSlot4 in troopSlots)
+		{
+			if (troopSlot4.IsEmpty())
+			{
+				GarrFollowerRec record3 = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
+				int iconFileDataID3 = (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record3.AllianceIconFileDataID : record3.HordeIconFileDataID;
+				troopSlot4.SetCharShipment(this.m_charShipmentRec.ID, 0UL, follower.GarrFollowerID, false, iconFileDataID3);
 				return;
 			}
 		}
@@ -261,9 +271,17 @@ public class TroopsListItem : MonoBehaviour
 		}
 		foreach (TroopSlot troopSlot2 in troopSlots)
 		{
-			if (troopSlot2.IsEmpty())
+			if (troopSlot2.IsPendingCreate())
 			{
 				troopSlot2.SetCharShipment(this.m_charShipmentRec.ID, shipmentDBID, 0, true, 0);
+				return;
+			}
+		}
+		foreach (TroopSlot troopSlot3 in troopSlots)
+		{
+			if (troopSlot3.IsEmpty())
+			{
+				troopSlot3.SetCharShipment(this.m_charShipmentRec.ID, shipmentDBID, 0, true, 0);
 				return;
 			}
 		}
@@ -387,6 +405,25 @@ public class TroopsListItem : MonoBehaviour
 
 	public void Recruit()
 	{
+		if (this.m_charShipmentRec.GarrFollowerID == 0u)
+		{
+			TroopSlot troopSlot = null;
+			TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
+			foreach (TroopSlot troopSlot2 in componentsInChildren)
+			{
+				if (troopSlot2.IsEmpty())
+				{
+					troopSlot = troopSlot2;
+					break;
+				}
+			}
+			if (troopSlot == null)
+			{
+				return;
+			}
+			troopSlot.SetPendingCreate();
+			this.UpdateRecruitButtonState();
+		}
 		MobilePlayerCreateShipment mobilePlayerCreateShipment = new MobilePlayerCreateShipment();
 		mobilePlayerCreateShipment.CharShipmentID = this.m_charShipmentRec.ID;
 		mobilePlayerCreateShipment.NumShipments = 1;
@@ -408,13 +445,22 @@ public class TroopsListItem : MonoBehaviour
 			}
 			foreach (TroopSlot troopSlot2 in componentsInChildren)
 			{
-				if (troopSlot2.IsEmpty())
+				if (troopSlot2.IsPendingCreate())
 				{
 					troopSlot2.SetCharShipment(charShipmentID, shipmentDBID, 0, true, 0);
-					break;
+					this.UpdateRecruitButtonState();
+					return;
 				}
 			}
-			this.UpdateRecruitButtonState();
+			foreach (TroopSlot troopSlot3 in componentsInChildren)
+			{
+				if (troopSlot3.IsEmpty())
+				{
+					troopSlot3.SetCharShipment(charShipmentID, shipmentDBID, 0, true, 0);
+					this.UpdateRecruitButtonState();
+					return;
+				}
+			}
 		}
 	}
 

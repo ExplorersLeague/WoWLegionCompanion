@@ -101,7 +101,7 @@ public class FollowerExperienceDisplay : MonoBehaviour
 			{
 				DelayedUIAnim delayedUIAnim = base.gameObject.AddComponent<DelayedUIAnim>();
 				float num4 = initialEntranceDelay + (float)(jamGarrisonFollower.Durability - follower.Durability) * num + 1f;
-				delayedUIAnim.Init(num4, "RedFailX", "SFX/UI_Mission_Fail_Red_X", this.m_followerPortrait.transform, 1.5f);
+				delayedUIAnim.Init(num4, "RedFailX", "SFX/UI_Mission_Fail_Red_X", this.m_followerPortrait.transform, 1.5f, 0.3f);
 				DelayedObjectEnable delayedObjectEnable = base.gameObject.AddComponent<DelayedObjectEnable>();
 				delayedObjectEnable.Init(num4 + 0.25f, this.m_expiredPortraitX);
 			}

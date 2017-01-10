@@ -164,6 +164,7 @@ public class TalentTreeItem : MonoBehaviour
 		{
 			Main.instance.m_UISound.Play_BeginResearch();
 		}
+		AllPanels.instance.m_talentTreePanel.SetNeedsFullInit();
 		MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
 		mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
 		Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
@@ -204,4 +205,6 @@ public class TalentTreeItem : MonoBehaviour
 	public GameObject m_dualDisplayRoot;
 
 	public GameObject m_soloDisplayRoot;
+
+	public Image m_talentTier;
 }

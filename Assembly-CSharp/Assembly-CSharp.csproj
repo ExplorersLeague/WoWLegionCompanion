@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4F093104-1561-46C2-9FA6-AFDD5866A49D}</ProjectGuid>
+    <ProjectGuid>{2F62D6E2-86A6-47CB-8236-0585B7AF4AE7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -61,6 +61,12 @@
     <Compile Include="Assets\DustinHorne\JsonDotNetUnity\TestCases\TestModels\SampleBase.cs" />
     <Compile Include="Assets\DustinHorne\JsonDotNetUnity\TestCases\TestModels\SampleChild.cs" />
     <Compile Include="Assets\DustinHorne\JsonDotNetUnity\TestCases\TestModels\SimpleClassObject.cs" />
+    <Compile Include="Assets\SimpleAndroidNotifications\NotificationExample.cs" />
+    <Compile Include="Assets\SimpleAndroidNotifications\NotificationExecuteMode.cs" />
+    <Compile Include="Assets\SimpleAndroidNotifications\NotificationIcon.cs" />
+    <Compile Include="Assets\SimpleAndroidNotifications\NotificationIdHandler.cs" />
+    <Compile Include="Assets\SimpleAndroidNotifications\NotificationManager.cs" />
+    <Compile Include="Assets\SimpleAndroidNotifications\NotificationParams.cs" />
     <Compile Include="AutoCenterItem.cs" />
     <Compile Include="AutoCenterScrollRect.cs" />
     <Compile Include="AutoFadeOut.cs" />
@@ -558,6 +564,7 @@
     <Compile Include="FollowerListView.cs" />
     <Compile Include="FollowerMissionButtonView.cs" />
     <Compile Include="FollowerModelSpinningBase.cs" />
+    <Compile Include="FPSThrottler.cs" />
     <Compile Include="FreezeFrame.cs" />
     <Compile Include="GameClient.cs" />
     <Compile Include="GarbageFreeStringBuilder\StringBuilderExtensions.cs" />

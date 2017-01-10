@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamMessage(Id = 4855, Name = "MobileClientWorldQuestUpdate", Version = 33577221u)]
 	public class MobileClientWorldQuestUpdate
 	{
-		[FlexJamMember(ArrayDimensions = 1, Name = "quest", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "quest")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "quest", Type = FlexJamType.Struct)]
 		public MobileWorldQuest[] Quest { get; set; }
 	}
 }

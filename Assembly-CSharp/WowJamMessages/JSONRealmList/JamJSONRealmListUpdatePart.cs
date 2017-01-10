@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JamJSONRealmListUpdatePart
 	{
-		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "wowRealmAddress")]
+		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		public uint WowRealmAddress { get; set; }
 
 		[FlexJamMember(Name = "update", Type = FlexJamType.Struct)]

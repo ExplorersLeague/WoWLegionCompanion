@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobilePlayerJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4788, Name = "MobilePlayerGarrisonAdvanceMissionSet", Version = 33577221u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobilePlayerGarrisonAdvanceMissionSet
 	{
 		[System.Runtime.Serialization.DataMember(Name = "missionSetID")]

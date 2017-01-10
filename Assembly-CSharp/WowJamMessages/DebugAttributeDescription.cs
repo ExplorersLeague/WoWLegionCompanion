@@ -12,12 +12,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "key", Type = FlexJamType.String)]
 		public string Key { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "descriptionData")]
 		[FlexJamMember(Name = "descriptionData", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "descriptionData")]
 		public string DescriptionData { get; set; }
 
-		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "type")]
+		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
 		public int Type { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "flags")]

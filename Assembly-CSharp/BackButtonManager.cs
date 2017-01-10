@@ -50,6 +50,9 @@ public class BackButtonManager : MonoBehaviour
 			case BackAction.hideMissionResults:
 				AllPanels.instance.m_missionResultsPanel.HideMissionResults();
 				break;
+			case BackAction.hideMissionDialog:
+				AllPopups.instance.m_missionDialog.m_missionDetailView.HideMissionDetailView();
+				break;
 			}
 		}
 	}

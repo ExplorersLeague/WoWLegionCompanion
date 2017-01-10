@@ -18,20 +18,20 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "eventID", Type = FlexJamType.Int32)]
 		public int EventID { get; set; }
 
-		[FlexJamMember(Name = "eventName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "eventName")]
+		[FlexJamMember(Name = "eventName", Type = FlexJamType.String)]
 		public string EventName { get; set; }
 
-		[FlexJamMember(Name = "entryNum", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "entryNum")]
+		[FlexJamMember(Name = "entryNum", Type = FlexJamType.Int32)]
 		public int EntryNum { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "eventPercent")]
 		[FlexJamMember(Name = "eventPercent", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "eventPercent")]
 		public int EventPercent { get; set; }
 
-		[FlexJamMember(Name = "aiGroupActionSetID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetID")]
+		[FlexJamMember(Name = "aiGroupActionSetID", Type = FlexJamType.Int32)]
 		public int AiGroupActionSetID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "aiGroupActionSetName")]

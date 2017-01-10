@@ -12,20 +12,20 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "itemDelay", Type = FlexJamType.Int32)]
 		public int ItemDelay { get; set; }
 
-		[FlexJamMember(Name = "dpr", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "dpr")]
+		[FlexJamMember(Name = "dpr", Type = FlexJamType.Float)]
 		public float Dpr { get; set; }
 
-		[FlexJamMember(Name = "effectiveArmor", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "effectiveArmor")]
+		[FlexJamMember(Name = "effectiveArmor", Type = FlexJamType.Int32)]
 		public int EffectiveArmor { get; set; }
 
 		[FlexJamMember(Name = "weaponSpeed", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "weaponSpeed")]
 		public float WeaponSpeed { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "itemLevel")]
 		[FlexJamMember(Name = "itemLevel", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemLevel")]
 		public int ItemLevel { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "bonusStat", Type = FlexJamType.Struct)]

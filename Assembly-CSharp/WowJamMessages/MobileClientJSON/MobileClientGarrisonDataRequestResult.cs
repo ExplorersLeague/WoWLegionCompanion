@@ -12,12 +12,12 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "orderhallResourcesCurrency")]
 		public int OrderhallResourcesCurrency { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "pvpFaction")]
 		[FlexJamMember(Name = "pvpFaction", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "pvpFaction")]
 		public int PvpFaction { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "mission")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "mission", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "mission")]
 		public JamGarrisonMobileMission[] Mission { get; set; }
 
 		[FlexJamMember(Name = "oilCurrency", Type = FlexJamType.Int32)]
@@ -28,8 +28,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "follower")]
 		public JamGarrisonFollower[] Follower { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "characterClassID")]
 		[FlexJamMember(Name = "characterClassID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "characterClassID")]
 		public int CharacterClassID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "goldCurrency")]
@@ -52,16 +52,16 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "resourcesCurrency", Type = FlexJamType.Int32)]
 		public int ResourcesCurrency { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "talent")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "talent", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "talent")]
 		public JamGarrisonTalent[] Talent { get; set; }
 
 		[FlexJamMember(Name = "characterName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "characterName")]
 		public string CharacterName { get; set; }
 
-		[FlexJamMember(Name = "garrTypeID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
+		[FlexJamMember(Name = "garrTypeID", Type = FlexJamType.Int32)]
 		public int GarrTypeID { get; set; }
 	}
 }

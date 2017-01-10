@@ -11,6 +11,7 @@ public class FancyEntrance : MonoBehaviour
 	public void Reset()
 	{
 		iTween.StopByName(base.gameObject, "FancyAppearancePunch");
+		this.m_calledStartCallback = false;
 		if (this.m_activateOnEnable)
 		{
 			this.Activate();
@@ -53,6 +54,14 @@ public class FancyEntrance : MonoBehaviour
 			return;
 		}
 		this.m_entranceDelayDuration = 0f;
+		if (!this.m_calledStartCallback)
+		{
+			if (this.m_objectToNotifyOnBegin != null && this.m_notifyOnBeginCallbackName != null)
+			{
+				this.m_objectToNotifyOnBegin.BroadcastMessage(this.m_notifyOnBeginCallbackName, 1);
+			}
+			this.m_calledStartCallback = true;
+		}
 		if (this.m_fadeInTimeElapsed < this.m_fadeInTime)
 		{
 			this.m_fadeInTimeElapsed += Time.deltaTime;
@@ -104,6 +113,10 @@ public class FancyEntrance : MonoBehaviour
 
 	public float m_timeToDelayEntrance;
 
+	public GameObject m_objectToNotifyOnBegin;
+
+	public string m_notifyOnBeginCallbackName;
+
 	[Header("Fade In")]
 	public CanvasGroup m_fadeInCanvasGroup;
 
@@ -132,4 +145,6 @@ public class FancyEntrance : MonoBehaviour
 	private bool m_scaledUp;
 
 	private bool m_active;
+
+	private bool m_calledStartCallback;
 }

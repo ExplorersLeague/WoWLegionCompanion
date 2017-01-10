@@ -24,12 +24,12 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "vector3Value")]
 		public Vector3 Vector3Value { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "type")]
 		[FlexJamMember(Name = "type", Type = FlexJamType.Enum)]
+		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public AttributeValueType Type { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "floatValue")]
 		[FlexJamMember(Name = "floatValue", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "floatValue")]
 		public float FloatValue { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "stringValue")]

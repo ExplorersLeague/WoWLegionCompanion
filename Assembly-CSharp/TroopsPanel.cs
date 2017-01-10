@@ -151,7 +151,17 @@ public class TroopsPanel : MonoBehaviour
 			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
 			if (!PersistentShipmentData.ShipmentTypeForShipmentIsAvailable(jamCharacterShipment.ShipmentRecID))
 			{
-				if (jamCharacterShipment.ShipmentRecID >= 372 && jamCharacterShipment.ShipmentRecID <= 383)
+				bool flag3 = true;
+				bool flag4 = false;
+				if (jamCharacterShipment.ShipmentRecID < 372 || jamCharacterShipment.ShipmentRecID > 383)
+				{
+					flag3 = false;
+				}
+				if (jamCharacterShipment.ShipmentRecID == 178 || jamCharacterShipment.ShipmentRecID == 179 || jamCharacterShipment.ShipmentRecID == 180 || jamCharacterShipment.ShipmentRecID == 192 || jamCharacterShipment.ShipmentRecID == 194 || jamCharacterShipment.ShipmentRecID == 195)
+				{
+					flag4 = true;
+				}
+				if (flag3 || flag4)
 				{
 					CharShipmentRec record = StaticDB.charShipmentDB.GetRecord(jamCharacterShipment.ShipmentRecID);
 					if (record != null)

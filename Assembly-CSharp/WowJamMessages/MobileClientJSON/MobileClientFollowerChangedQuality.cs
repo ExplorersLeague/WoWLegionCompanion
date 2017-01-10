@@ -8,12 +8,12 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientFollowerChangedQuality
 	{
-		[System.Runtime.Serialization.DataMember(Name = "oldFollower")]
 		[FlexJamMember(Name = "oldFollower", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "oldFollower")]
 		public JamGarrisonFollower OldFollower { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "follower")]
 		[FlexJamMember(Name = "follower", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "follower")]
 		public JamGarrisonFollower Follower { get; set; }
 	}
 }

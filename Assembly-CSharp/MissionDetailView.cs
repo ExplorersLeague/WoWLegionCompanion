@@ -130,6 +130,12 @@ public class MissionDetailView : MonoBehaviour
 		MissionDetailView.m_iLevelText = StaticDB.GetString("ITEM_LEVEL_ABBREVIATION", null);
 	}
 
+	public void HideMissionDetailView()
+	{
+		Main.instance.m_UISound.Play_CloseButton();
+		base.gameObject.SetActive(false);
+	}
+
 	private void OnEnable()
 	{
 		if (!this.m_isCombatAlly)
@@ -150,6 +156,7 @@ public class MissionDetailView : MonoBehaviour
 				instance3.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Combine(instance3.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
 			}
 		}
+		Main.instance.m_backButtonManager.PushBackAction(BackAction.hideMissionDialog, null);
 	}
 
 	private void OnDisable()
@@ -172,6 +179,7 @@ public class MissionDetailView : MonoBehaviour
 				instance3.MissionSuccessChanceChangedAction = (Action<int>)Delegate.Remove(instance3.MissionSuccessChanceChangedAction, new Action<int>(this.OnMissionSuccessChanceChanged));
 			}
 		}
+		Main.instance.m_backButtonManager.PopBackAction();
 	}
 
 	private void SetupInputForPreviewSlider(Button button)

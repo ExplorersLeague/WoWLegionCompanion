@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class SpawnTrackerData
 	{
-		[System.Runtime.Serialization.DataMember(Name = "questID")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "questID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "questID")]
 		public int[] QuestID { get; set; }
 	}
 }

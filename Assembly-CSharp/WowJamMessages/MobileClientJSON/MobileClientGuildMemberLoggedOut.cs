@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientGuildMemberLoggedOut
 	{
-		[FlexJamMember(Name = "member", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "member")]
+		[FlexJamMember(Name = "member", Type = FlexJamType.Struct)]
 		public MobileGuildMember Member { get; set; }
 	}
 }
