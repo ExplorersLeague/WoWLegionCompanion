@@ -20,12 +20,12 @@ namespace WowJamMessages
 		[FlexJamMember(Optional = true, Name = "displayInfo", Type = FlexJamType.Struct)]
 		public JamBattlepayDisplayInfo[] DisplayInfo { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "ordering")]
 		[FlexJamMember(Name = "ordering", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "ordering")]
 		public int Ordering { get; set; }
 
-		[FlexJamMember(Name = "bannerType", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "bannerType")]
+		[FlexJamMember(Name = "bannerType", Type = FlexJamType.UInt8)]
 		public byte BannerType { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "productID")]

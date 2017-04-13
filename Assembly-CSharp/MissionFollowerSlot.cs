@@ -104,8 +104,10 @@ public class MissionFollowerSlot : MonoBehaviour
 				this.m_heartPanel.SetActive(false);
 			}
 			this.m_levelBorderImage.gameObject.SetActive(false);
+			this.m_levelBorderImage_TitleQuality.gameObject.SetActive(false);
 			this.m_portraitImage.gameObject.SetActive(false);
 			this.m_qualityColorImage.gameObject.SetActive(false);
+			this.m_qualityColorImage_TitleQuality.gameObject.SetActive(false);
 			this.m_levelBorderImage.color = Color.white;
 			this.m_levelText.gameObject.SetActive(false);
 			this.isOccupied = false;
@@ -217,11 +219,11 @@ public class MissionFollowerSlot : MonoBehaviour
 		this.m_levelText.gameObject.SetActive(true);
 		if (jamGarrisonFollower.FollowerLevel < 110)
 		{
-			this.m_levelText.text = StaticDB.GetString("LEVEL", null) + " " + jamGarrisonFollower.FollowerLevel;
+			this.m_levelText.text = GeneralHelpers.TextOrderString(StaticDB.GetString("LEVEL", null), jamGarrisonFollower.FollowerLevel.ToString());
 		}
 		else
 		{
-			this.m_levelText.text = StaticDB.GetString("ILVL", null) + " " + (jamGarrisonFollower.ItemLevelArmor + jamGarrisonFollower.ItemLevelWeapon) / 2;
+			this.m_levelText.text = GeneralHelpers.TextOrderString(StaticDB.GetString("ILVL", null), ((jamGarrisonFollower.ItemLevelArmor + jamGarrisonFollower.ItemLevelWeapon) / 2).ToString());
 		}
 		this.m_portraitImage.gameObject.SetActive(true);
 		Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.PortraitIcons, (GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceIconFileDataID : record.HordeIconFileDataID);
@@ -229,9 +231,23 @@ public class MissionFollowerSlot : MonoBehaviour
 		{
 			this.m_portraitImage.sprite = sprite;
 		}
-		Color qualityColor = GeneralHelpers.GetQualityColor(jamGarrisonFollower.Quality);
-		this.m_qualityColorImage.color = qualityColor;
-		this.m_levelBorderImage.color = qualityColor;
+		if (jamGarrisonFollower.Quality == 6)
+		{
+			this.m_qualityColorImage_TitleQuality.gameObject.SetActive(true);
+			this.m_levelBorderImage_TitleQuality.gameObject.SetActive(true);
+			this.m_qualityColorImage.gameObject.SetActive(false);
+			this.m_levelBorderImage.gameObject.SetActive(false);
+		}
+		else
+		{
+			this.m_qualityColorImage_TitleQuality.gameObject.SetActive(false);
+			this.m_levelBorderImage_TitleQuality.gameObject.SetActive(false);
+			this.m_qualityColorImage.gameObject.SetActive(true);
+			this.m_levelBorderImage.gameObject.SetActive(true);
+			Color qualityColor = GeneralHelpers.GetQualityColor(jamGarrisonFollower.Quality);
+			this.m_qualityColorImage.color = qualityColor;
+			this.m_levelBorderImage.color = qualityColor;
+		}
 		this.isOccupied = true;
 		bool flag2 = (jamGarrisonFollower.Flags & 8) != 0;
 		this.m_qualityColorImage.gameObject.SetActive(!flag2);
@@ -305,9 +321,13 @@ public class MissionFollowerSlot : MonoBehaviour
 
 	public Image m_qualityColorImage;
 
+	public Image m_qualityColorImage_TitleQuality;
+
 	public Image m_portraitRingImage;
 
 	public Image m_levelBorderImage;
+
+	public Image m_levelBorderImage_TitleQuality;
 
 	public Text m_levelText;
 

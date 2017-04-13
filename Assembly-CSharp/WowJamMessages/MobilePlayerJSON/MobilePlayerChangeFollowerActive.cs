@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.MobilePlayerJSON
 {
-	[FlexJamMessage(Id = 4807, Name = "MobilePlayerChangeFollowerActive", Version = 33577221u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4806, Name = "MobilePlayerChangeFollowerActive", Version = 38820897u)]
 	public class MobilePlayerChangeFollowerActive
 	{
-		[System.Runtime.Serialization.DataMember(Name = "setInactive")]
 		[FlexJamMember(Name = "setInactive", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "setInactive")]
 		public bool SetInactive { get; set; }
 
 		[FlexJamMember(Name = "garrFollowerID", Type = FlexJamType.Int32)]

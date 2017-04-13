@@ -104,7 +104,7 @@ public class FollowerInventoryListItem : MonoBehaviour
 				});
 			}
 		}
-		this.m_equipmentDescription.text = WowTextParser.parser.Parse(this.m_equipmentDescription.text, 0);
+		this.m_equipmentDescription.text = GeneralHelpers.LimitZhLineLength(WowTextParser.parser.Parse(this.m_equipmentDescription.text, 0), 18);
 		this.m_equipmentDescription.supportRichText = WowTextParser.parser.IsRichText();
 		if (this.m_iconErrorText != null)
 		{
@@ -134,12 +134,19 @@ public class FollowerInventoryListItem : MonoBehaviour
 		}
 	}
 
-	public void SetArmament(MobileFollowerArmament item, FollowerDetailView followerDetailView)
+	public void SetArmament(MobileFollowerArmamentExt item, FollowerDetailView followerDetailView)
 	{
 		this.m_armamentItem = item;
 		this.m_followerDetailView = followerDetailView;
 		ItemRec record = StaticDB.itemDB.GetRecord(item.ItemID);
-		this.m_equipmentName.text = GeneralHelpers.GetItemQualityColorTag(record.OverallQualityID) + record.Display + "</color>";
+		if (record != null)
+		{
+			this.m_equipmentName.text = GeneralHelpers.GetItemQualityColorTag(record.OverallQualityID) + record.Display + "</color>";
+		}
+		else
+		{
+			this.m_equipmentName.text = "Unknown Item " + item.ItemID;
+		}
 		SpellTooltipRec record2 = StaticDB.spellTooltipDB.GetRecord(item.SpellID);
 		if (record2 != null)
 		{
@@ -161,25 +168,39 @@ public class FollowerInventoryListItem : MonoBehaviour
 		{
 			this.m_iconErrorText.gameObject.SetActive(false);
 		}
-		Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record.IconFileDataID);
-		if (sprite != null)
+		if (record != null)
 		{
-			this.m_equipmentIcon.sprite = sprite;
-		}
-		else if (this.m_iconErrorText != null)
-		{
-			this.m_iconErrorText.gameObject.SetActive(true);
-			this.m_iconErrorText.text = string.Empty + record.IconFileDataID;
+			Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record.IconFileDataID);
+			if (sprite != null)
+			{
+				this.m_equipmentIcon.sprite = sprite;
+			}
+			else if (this.m_iconErrorText != null)
+			{
+				this.m_iconErrorText.gameObject.SetActive(true);
+				this.m_iconErrorText.text = string.Empty + record.IconFileDataID;
+			}
 		}
 		this.m_equipmentQuantity.text = ((item.Quantity <= 1) ? string.Empty : (string.Empty + item.Quantity));
 		JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[this.m_followerDetailView.GetCurrentFollower()];
+		bool flag = false;
 		if (jamGarrisonFollower != null && jamGarrisonFollower.CurrentMissionID != 0)
+		{
+			GarrMissionRec record3 = StaticDB.garrMissionDB.GetRecord(jamGarrisonFollower.CurrentMissionID);
+			if (record3 != null && (record3.Flags & 16u) != 0u)
+			{
+				flag = true;
+			}
+		}
+		int num = (jamGarrisonFollower.ItemLevelArmor + jamGarrisonFollower.ItemLevelWeapon) / 2;
+		bool flag2 = num >= item.MinItemLevel && num < item.MaxItemLevel;
+		if (jamGarrisonFollower != null && jamGarrisonFollower.CurrentMissionID != 0 && !flag)
 		{
 			this.m_useItemButtonLabel.text = StaticDB.GetString("ON_MISSION", null);
 			this.m_useItemButtonLabel.color = new Color(0.5f, 0.5f, 0.5f, 1f);
 			this.m_useItemButton.interactable = false;
 		}
-		else if (jamGarrisonFollower != null && (jamGarrisonFollower.ItemLevelArmor + jamGarrisonFollower.ItemLevelWeapon) / 2 >= 850)
+		else if (!flag2 || (long)num >= (long)((ulong)GeneralHelpers.GetMaxFollowerItemLevel()))
 		{
 			this.m_useItemButtonLabel.text = FollowerInventoryListItem.m_maxiLevelString;
 			this.m_useItemButtonLabel.color = new Color(0.5f, 0.5f, 0.5f, 1f);
@@ -242,7 +263,14 @@ public class FollowerInventoryListItem : MonoBehaviour
 		this.m_combatAllySlot.SetFollower(follower.GarrFollowerID);
 		GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(follower.GarrFollowerID);
 		CreatureRec record2 = StaticDB.creatureDB.GetRecord((GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record.HordeCreatureID : record.AllianceCreatureID);
-		this.m_combatAllyName.text = record2.Name;
+		if (follower.Quality == 6 && record.TitleName != null && record.TitleName.Length > 0)
+		{
+			this.m_combatAllyName.text = record.TitleName;
+		}
+		else if (record != null)
+		{
+			this.m_combatAllyName.text = record2.Name;
+		}
 		this.m_combatAllyName.color = GeneralHelpers.GetQualityColor(this.m_combatAllyChampion.Quality);
 		if (missionCost <= GarrisonStatus.Resources())
 		{
@@ -255,10 +283,10 @@ public class FollowerInventoryListItem : MonoBehaviour
 			this.m_useItemButton.interactable = false;
 		}
 		int numActiveChampions = GeneralHelpers.GetNumActiveChampions();
-		int maxActiveChampions = GeneralHelpers.GetMaxActiveChampions();
+		int maxActiveFollowers = GarrisonStatus.GetMaxActiveFollowers();
 		this.m_isOverMaxChampionSoftCap = false;
 		this.m_needMoreResources = false;
-		if (numActiveChampions > maxActiveChampions)
+		if (numActiveChampions > maxActiveFollowers)
 		{
 			this.m_isOverMaxChampionSoftCap = true;
 		}
@@ -490,7 +518,7 @@ public class FollowerInventoryListItem : MonoBehaviour
 
 	private FollowerDetailView m_followerDetailView;
 
-	private MobileFollowerArmament m_armamentItem;
+	private MobileFollowerArmamentExt m_armamentItem;
 
 	private MobileFollowerEquipment m_equipmentItem;
 

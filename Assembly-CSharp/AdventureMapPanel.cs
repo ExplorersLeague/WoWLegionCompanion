@@ -11,11 +11,16 @@ public class AdventureMapPanel : MonoBehaviour
 	private void OnEnable()
 	{
 		this.MapFiltersChanged = (Action)Delegate.Combine(this.MapFiltersChanged, new Action(this.UpdateWorldQuests));
+		this.HandleInvasionPOIChanged();
+		Main main = Main.instance;
+		main.InvasionPOIChangedAction = (Action)Delegate.Combine(main.InvasionPOIChangedAction, new Action(this.HandleInvasionPOIChanged));
 	}
 
 	private void OnDisable()
 	{
 		this.MapFiltersChanged = (Action)Delegate.Remove(this.MapFiltersChanged, new Action(this.UpdateWorldQuests));
+		Main main = Main.instance;
+		main.InvasionPOIChangedAction = (Action)Delegate.Remove(main.InvasionPOIChangedAction, new Action(this.HandleInvasionPOIChanged));
 	}
 
 	public void DeselectAllFollowerListItems()
@@ -166,10 +171,11 @@ public class AdventureMapPanel : MonoBehaviour
 
 	private void Awake()
 	{
+		this.m_invasionTimeRemainingDuration = new Duration(0, false);
 		AdventureMapPanel.instance = this;
 		this.m_zoneID = AdventureMapPanel.eZone.None;
 		this.m_testMissionIconScale = 1f;
-		this.m_mapFilters = new bool[14];
+		this.m_mapFilters = new bool[15];
 		for (int i = 0; i < this.m_mapFilters.Length; i++)
 		{
 			this.m_mapFilters[i] = false;
@@ -181,7 +187,6 @@ public class AdventureMapPanel : MonoBehaviour
 	private void Start()
 	{
 		this.m_pinchZoomContentManager.SetZoom(1f, false);
-		this.m_guildChatSlider_Bottom.Hide();
 		StackableMapIconContainer[] componentsInChildren = this.m_missionAndWordQuestArea.GetComponentsInChildren<StackableMapIconContainer>(true);
 		foreach (StackableMapIconContainer stackableMapIconContainer in componentsInChildren)
 		{
@@ -201,7 +206,6 @@ public class AdventureMapPanel : MonoBehaviour
 
 	private void HandleMissionAdded(int garrMissionID, int result)
 	{
-		Debug.LogWarning("MISSION ADDED!!");
 	}
 
 	private void CreateMissionSite(int garrMissionID)
@@ -459,6 +463,19 @@ public class AdventureMapPanel : MonoBehaviour
 						}
 					}
 				}
+				if (this.IsFilterEnabled(MapFilterType.Invasion))
+				{
+					QuestInfoRec record3 = StaticDB.questInfoDB.GetRecord(mobileWorldQuest.QuestInfoID);
+					if (record3 == null)
+					{
+						break;
+					}
+					bool flag = record3.Type == 7;
+					if (flag)
+					{
+						matchesFilter = true;
+					}
+				}
 				if (!matchesFilter)
 				{
 					continue;
@@ -509,6 +526,22 @@ public class AdventureMapPanel : MonoBehaviour
 		if (this.m_currentMapMission > 0)
 		{
 			this.m_secondsMissionHasBeenSelected += Time.deltaTime;
+		}
+		if (this.m_invasionNotification.gameObject.activeSelf)
+		{
+			long num = LegionfallData.GetCurrentInvasionExpirationTime() - GarrisonStatus.CurrentTime();
+			num = ((num <= 0L) ? 0L : num);
+			if (num > 0L)
+			{
+				this.m_invasionTimeRemainingDuration.FormatDurationString((int)num, false);
+				this.m_invasionTimeRemaining.text = this.m_invasionTimeRemainingDuration.DurationString;
+			}
+			else
+			{
+				this.m_invasionNotification.gameObject.SetActive(false);
+				this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 820f);
+				Main.instance.RequestWorldQuests();
+			}
 		}
 	}
 
@@ -771,6 +804,23 @@ public class AdventureMapPanel : MonoBehaviour
 		this.m_playerInfoDisplay.HideRecentCharacterPanel();
 	}
 
+	private void HandleInvasionPOIChanged()
+	{
+		JamMobileAreaPOI currentInvasionPOI = LegionfallData.GetCurrentInvasionPOI();
+		if (currentInvasionPOI == null)
+		{
+			this.m_invasionNotification.gameObject.SetActive(false);
+			this.m_mapViewRT.sizeDelta = new Vector2(this.m_mapViewRT.sizeDelta.x, 820f);
+			return;
+		}
+		this.m_invasionNotification.gameObject.SetActive(true);
+		this.m_invasionTitle.text = currentInvasionPOI.Description;
+		long num = LegionfallData.GetCurrentInvasionExpirationTime() - GarrisonStatus.CurrentTime();
+		num = ((num <= 0L) ? 0L : num);
+		this.m_invasionTimeRemainingDuration.FormatDurationString((int)num, false);
+		this.m_invasionTimeRemaining.text = this.m_invasionTimeRemainingDuration.DurationString;
+	}
+
 	public bool m_testEnableDetailedZoneMaps;
 
 	public bool m_testEnableAutoZoomInOut;
@@ -833,8 +883,6 @@ public class AdventureMapPanel : MonoBehaviour
 
 	public ZoneButton m_currentVisibleZone;
 
-	public GuildChatSlider m_guildChatSlider_Bottom;
-
 	public OrderHallNavButton m_adventureMapOrderHallNavButton;
 
 	private int m_currentMapMission;
@@ -884,6 +932,14 @@ public class AdventureMapPanel : MonoBehaviour
 	public PlayerInfoDisplay m_playerInfoDisplay;
 
 	private bool[] m_mapFilters;
+
+	public RectTransform m_invasionNotification;
+
+	public Text m_invasionTitle;
+
+	public Text m_invasionTimeRemaining;
+
+	private Duration m_invasionTimeRemainingDuration;
 
 	public enum eZone
 	{

@@ -9,12 +9,26 @@ public class TitlePanel : MonoBehaviour
 
 	private void Start()
 	{
+		DateTime today = DateTime.Today;
+		Debug.Log(string.Concat(new object[]
+		{
+			"Date: ",
+			today.Month,
+			"/",
+			today.Day,
+			"/",
+			today.Year
+		}));
+		if (today.Year > 2017 || today.Month > 3 || today.Day > 27)
+		{
+			this.m_showPTR = false;
+		}
 		if (Login.instance.IsDevRegionList())
 		{
 			this.m_regionOptions = new string[]
 			{
 				"WoW-Dev",
-				"Beta",
+				"PTR",
 				"ST-US",
 				"ST-EU",
 				"ST-KR",
@@ -24,6 +38,10 @@ public class TitlePanel : MonoBehaviour
 				"CN",
 				"KR"
 			};
+		}
+		else if (this.m_showPTR)
+		{
+			this.m_regionOptions = new string[5];
 		}
 		else
 		{
@@ -41,6 +59,10 @@ public class TitlePanel : MonoBehaviour
 			this.m_regionOptions[1] = StaticDB.GetString("EUROPE", "Europe");
 			this.m_regionOptions[2] = StaticDB.GetString("KOREA_AND_TAIWAN", "Korea and Taiwan");
 			this.m_regionOptions[3] = StaticDB.GetString("CHINA", "China");
+			if (this.m_showPTR)
+			{
+				this.m_regionOptions[4] = "PTR";
+			}
 		}
 		for (int i = 0; i < this.m_regionOptions.Length; i++)
 		{
@@ -106,6 +128,9 @@ public class TitlePanel : MonoBehaviour
 			case "cn":
 				value = 3;
 				break;
+			case "beta":
+				value = 4;
+				break;
 			}
 			this.m_showDialog = false;
 			this.m_portalDropdown.value = value;
@@ -151,6 +176,9 @@ public class TitlePanel : MonoBehaviour
 				break;
 			case 3:
 				result = "cn";
+				break;
+			case 4:
+				result = "beta";
 				break;
 			}
 		}
@@ -223,6 +251,8 @@ public class TitlePanel : MonoBehaviour
 	public Button m_resumeButton;
 
 	private bool m_showDialog = true;
+
+	private bool m_showPTR = true;
 
 	private string[] m_regionOptions;
 }

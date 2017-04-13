@@ -217,6 +217,21 @@ public class UISound : MonoBehaviour
 		this.PlayUISound("SFX/uEscapeScreenClose", 1f, 3);
 	}
 
+	public void Play_ContributeSuccess()
+	{
+		this.PlayUISound("SFX/UI_72_Buildings_Contribute_Resources", 1f, 3);
+	}
+
+	public void Play_GetItem()
+	{
+		this.PlayUISound("SFX/UI_72_Buildings_Get_Item", 1f, 3);
+	}
+
+	public void Play_ArtifactClick()
+	{
+		this.PlayUISound("SFX/UI_72_ArtifactNote_Click", 1f, 3);
+	}
+
 	private const int maxSounds = 10;
 
 	public AudioSource[] m_oneShotAudioSources;

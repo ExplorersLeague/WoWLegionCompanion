@@ -18,6 +18,7 @@ namespace WowStatConstants
 		Bounty_Dreamweavers,
 		Bounty_CourtOfFarondis,
 		Bounty_HighmountainTribes,
+		Invasion,
 		NumFilters
 	}
 }

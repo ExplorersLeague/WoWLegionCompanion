@@ -187,7 +187,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				this.m_main.sprite = GeneralHelpers.GetLocalizedFollowerXpIcon();
 			}
 		}
-		this.m_endTime = (long)(mobileWorldQuest.EndTime - 900);
+		this.m_endTime = (long)mobileWorldQuest.EndTime;
 		int areaID = 0;
 		WorldMapAreaRec record3 = StaticDB.worldMapAreaDB.GetRecord(mobileWorldQuest.WorldMapAreaID);
 		if (record3 != null)
@@ -202,13 +202,16 @@ public class AdventureMapWorldQuest : MonoBehaviour
 		}
 		bool active = (record4.Modifiers & 2) != 0;
 		this.m_dragonFrame.gameObject.SetActive(active);
-		bool flag2 = (record4.Modifiers & 1) != 0;
-		if (flag2 && record4.Type != 3)
+		bool flag2 = record4.Type == 7;
+		this.m_normalGlow.gameObject.SetActive(!flag2);
+		this.m_legionAssaultGlow.gameObject.SetActive(flag2);
+		bool flag3 = (record4.Modifiers & 1) != 0;
+		if (flag3 && record4.Type != 3)
 		{
 			this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-RareQuest");
 		}
-		bool flag3 = (record4.Modifiers & 4) != 0;
-		if (flag3 && record4.Type != 3)
+		bool flag4 = (record4.Modifiers & 4) != 0;
+		if (flag4 && record4.Type != 3)
 		{
 			this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-EpicQuest");
 		}
@@ -334,20 +337,20 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				text = "Mobile-Mining";
 				break;
 			}
-			goto IL_6D0;
+			goto IL_6FD;
 		}
 		case 3:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 			text = "Mobile-PVP";
-			goto IL_6D0;
+			goto IL_6FD;
 		case 4:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 			text = "Mobile-Pets";
-			goto IL_6D0;
+			goto IL_6FD;
 		}
 		uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 		text = "Mobile-QuestExclamationIcon";
-		IL_6D0:
+		IL_6FD:
 		if (!this.m_showLootIconInsteadOfMain)
 		{
 			if (text != null)
@@ -425,6 +428,10 @@ public class AdventureMapWorldQuest : MonoBehaviour
 	public GameObject m_quantityArea;
 
 	public Text m_quantity;
+
+	public Image m_normalGlow;
+
+	public Image m_legionAssaultGlow;
 
 	private int m_questID;
 

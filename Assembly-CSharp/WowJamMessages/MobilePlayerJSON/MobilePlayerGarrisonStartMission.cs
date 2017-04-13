@@ -4,16 +4,16 @@ using JamLib;
 
 namespace WowJamMessages.MobilePlayerJSON
 {
-	[FlexJamMessage(Id = 4782, Name = "MobilePlayerGarrisonStartMission", Version = 33577221u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4781, Name = "MobilePlayerGarrisonStartMission", Version = 38820897u)]
 	public class MobilePlayerGarrisonStartMission
 	{
-		[FlexJamMember(Name = "garrMissionID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "garrMissionID")]
+		[FlexJamMember(Name = "garrMissionID", Type = FlexJamType.Int32)]
 		public int GarrMissionID { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "followerDBIDs", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "followerDBIDs")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "followerDBIDs", Type = FlexJamType.UInt64)]
 		public ulong[] FollowerDBIDs { get; set; }
 	}
 }

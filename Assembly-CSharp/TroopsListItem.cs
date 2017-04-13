@@ -28,25 +28,44 @@ public class TroopsListItem : MonoBehaviour
 
 	private void UpdateRecruitButtonState()
 	{
+		bool flag = GarrisonStatus.Resources() >= this.m_shipmentCost;
+		this.m_itemResourceCostText.color = ((!flag) ? Color.red : Color.white);
+		bool flag2 = true;
+		if (this.m_charShipmentRec != null && !PersistentShipmentData.CanOrderShipmentType(this.m_charShipmentRec.ID))
+		{
+			flag2 = false;
+		}
+		if (this.m_isArtifactResearch && ArtifactKnowledgeData.s_artifactKnowledgeInfo != null)
+		{
+			if (this.m_akResearchDisabled)
+			{
+				this.m_recruitTroopsButton.gameObject.SetActive(false);
+			}
+			if (!flag2 || ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel >= ArtifactKnowledgeData.s_artifactKnowledgeInfo.MaxLevel)
+			{
+				this.m_recruitButtonText.text = StaticDB.GetString("PLACE_ORDER", null);
+				this.m_recruitButtonText.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+				this.m_recruitTroopsButton.interactable = false;
+				return;
+			}
+		}
 		TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
-		bool flag = false;
+		bool flag3 = false;
 		foreach (TroopSlot troopSlot in componentsInChildren)
 		{
 			if (troopSlot.IsEmpty())
 			{
-				flag = true;
+				flag3 = true;
 				break;
 			}
 		}
-		bool flag2 = GarrisonStatus.Resources() >= this.m_shipmentCost;
-		this.m_itemResourceCostText.color = ((!flag2) ? Color.red : Color.white);
 		this.m_recruitButtonText.color = new Color(1f, 0.82f, 0f, 1f);
-		if (!flag)
+		if (!flag3)
 		{
 			this.m_recruitButtonText.text = StaticDB.GetString("SLOTS_FULL", null);
 			this.m_recruitButtonText.color = new Color(0.5f, 0.5f, 0.5f, 1f);
 		}
-		else if (!flag2)
+		else if (!flag)
 		{
 			this.m_recruitButtonText.text = StaticDB.GetString("CANT_AFFORD", "Can't Afford");
 			this.m_recruitButtonText.color = new Color(0.5f, 0.5f, 0.5f, 1f);
@@ -59,19 +78,25 @@ public class TroopsListItem : MonoBehaviour
 		{
 			this.m_recruitButtonText.text = StaticDB.GetString("PLACE_ORDER", null);
 		}
-		if (flag && flag2)
+		if (flag3 && flag && flag2)
 		{
 			this.m_recruitTroopsButton.interactable = true;
 		}
 		else
 		{
 			this.m_recruitTroopsButton.interactable = false;
+			this.m_recruitButtonText.color = new Color(0.5f, 0.5f, 0.5f, 1f);
 		}
 	}
 
 	private void Awake()
 	{
 		this.ClearAndHideLootArea();
+		this.m_akLevelBefore = 0;
+		if (ArtifactKnowledgeData.s_artifactKnowledgeInfo != null)
+		{
+			this.m_akLevelBefore = ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel;
+		}
 	}
 
 	private void Start()
@@ -84,17 +109,36 @@ public class TroopsListItem : MonoBehaviour
 		this.m_recruitButtonText.font = GeneralHelpers.LoadStandardFont();
 		this.m_itemName.font = GeneralHelpers.LoadStandardFont();
 		this.m_youReceivedLoot.font = GeneralHelpers.LoadStandardFont();
-		this.m_youReceivedLoot.text = StaticDB.GetString("YOU_RECEIVED_LOOT", "You received loot:");
+		if (this.m_isArtifactResearch)
+		{
+			this.m_youReceivedLoot.text = StaticDB.GetString("USABLE_ITEMS", "Usable Items: (PH)");
+		}
+		else
+		{
+			this.m_youReceivedLoot.text = StaticDB.GetString("YOU_RECEIVED_LOOT", "You received loot:");
+		}
+		this.m_akHintText.font = GeneralHelpers.LoadStandardFont();
+		this.m_artifactKnowledgeLevelIncreasedLabel.font = GeneralHelpers.LoadStandardFont();
+		this.m_artifactKnowledgeLevelIncreasedLabel.gameObject.SetActive(false);
 	}
 
-	private void OnDestroy()
+	private void OnEnable()
+	{
+		Main instance = Main.instance;
+		instance.ArtifactKnowledgeInfoChangedAction = (Action)Delegate.Combine(instance.ArtifactKnowledgeInfoChangedAction, new Action(this.HandleArtifactKnowledgeInfoChanged));
+	}
+
+	private void OnDisable()
 	{
 		Main instance = Main.instance;
 		instance.ShipmentAddedAction = (Action<int, ulong>)Delegate.Remove(instance.ShipmentAddedAction, new Action<int, ulong>(this.HandleShipmentAdded));
+		Main instance2 = Main.instance;
+		instance2.ArtifactKnowledgeInfoChangedAction = (Action)Delegate.Remove(instance2.ArtifactKnowledgeInfoChangedAction, new Action(this.HandleArtifactKnowledgeInfoChanged));
 	}
 
 	public void SetCharShipment(MobileClientShipmentType shipmentType, bool isSealOfFateHack = false, CharShipmentRec sealOfFateHackCharShipmentRec = null)
 	{
+		this.m_akHintText.gameObject.SetActive(false);
 		if (isSealOfFateHack)
 		{
 			this.m_shipmentCost = 0;
@@ -140,11 +184,55 @@ public class TroopsListItem : MonoBehaviour
 
 	private void UpdateItemSlots()
 	{
-		int maxShipments = (int)this.m_charShipmentRec.MaxShipments;
-		TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
-		if (componentsInChildren.Length < maxShipments)
+		if (this.m_isArtifactResearch && this.m_akResearchDisabled)
 		{
-			for (int i = componentsInChildren.Length; i < maxShipments; i++)
+			TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
+			for (int i = 0; i < componentsInChildren.Length; i++)
+			{
+				Object.DestroyImmediate(componentsInChildren[i].gameObject);
+			}
+			return;
+		}
+		bool flag = true;
+		if (this.m_charShipmentRec != null && !PersistentShipmentData.CanPickupShipmentType(this.m_charShipmentRec.ID))
+		{
+			flag = false;
+		}
+		int num = 0;
+		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		{
+			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+			if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
+			{
+				num++;
+				break;
+			}
+		}
+		if ((num > 0 && !flag) || (this.m_isArtifactResearch && ArtifactKnowledgeData.s_artifactKnowledgeInfo != null && ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel >= ArtifactKnowledgeData.s_artifactKnowledgeInfo.MaxLevel))
+		{
+			this.m_troopSlotsCanvasGroup.alpha = 0f;
+			this.m_troopSlotsCanvasGroup.interactable = false;
+			this.m_troopSlotsCanvasGroup.blocksRaycasts = false;
+		}
+		else
+		{
+			this.m_troopSlotsCanvasGroup.alpha = 1f;
+			this.m_troopSlotsCanvasGroup.interactable = true;
+			this.m_troopSlotsCanvasGroup.blocksRaycasts = true;
+		}
+		int num2 = (int)this.m_charShipmentRec.MaxShipments;
+		if (this.m_isArtifactResearch && ArtifactKnowledgeData.s_artifactKnowledgeInfo != null)
+		{
+			int num3 = ArtifactKnowledgeData.s_artifactKnowledgeInfo.MaxLevel - ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel;
+			if (num3 > 0 && num3 < num2)
+			{
+				num2 = num3;
+			}
+		}
+		TroopSlot[] componentsInChildren2 = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
+		if (componentsInChildren2.Length < num2)
+		{
+			for (int j = componentsInChildren2.Length; j < num2; j++)
 			{
 				GameObject gameObject = Object.Instantiate<GameObject>(this.m_troopSlotPrefab);
 				gameObject.transform.SetParent(this.m_troopSlotsRootObject.transform, false);
@@ -152,33 +240,52 @@ public class TroopsListItem : MonoBehaviour
 				component.SetCharShipment(this.m_charShipmentRec.ID, 0UL, 0, false, 0);
 			}
 		}
-		if (componentsInChildren.Length > maxShipments)
+		if (componentsInChildren2.Length > num2)
 		{
-			for (int j = maxShipments; j < componentsInChildren.Length; j++)
+			for (int k = num2; k < componentsInChildren2.Length; k++)
 			{
-				Object.DestroyImmediate(componentsInChildren[j].gameObject);
+				Object.DestroyImmediate(componentsInChildren2[k].gameObject);
 			}
 		}
-		componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
-		foreach (TroopSlot troopSlot in componentsInChildren)
+		componentsInChildren2 = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
+		foreach (TroopSlot troopSlot in componentsInChildren2)
 		{
 			if (troopSlot.GetDBID() != 0UL && !PersistentShipmentData.shipmentDictionary.ContainsKey(troopSlot.GetDBID()))
 			{
 				troopSlot.SetCharShipment(this.m_charShipmentRec.ID, 0UL, 0, false, 0);
 			}
 		}
-		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		foreach (object obj2 in PersistentShipmentData.shipmentDictionary.Values)
 		{
-			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
+			JamCharacterShipment jamCharacterShipment2 = (JamCharacterShipment)obj2;
+			if (jamCharacterShipment2.ShipmentRecID == this.m_charShipmentRec.ID)
 			{
-				this.SetTroopSlotForPendingShipment(componentsInChildren, jamCharacterShipment.ShipmentID);
+				this.SetTroopSlotForPendingShipment(componentsInChildren2, jamCharacterShipment2.ShipmentID);
 			}
 		}
 	}
 
+	private string GetCurrentArtifactPowerText()
+	{
+		if (ArtifactKnowledgeData.s_artifactKnowledgeInfo == null)
+		{
+			return string.Empty;
+		}
+		return string.Concat(new object[]
+		{
+			" <color=#ffffffff>(",
+			StaticDB.GetString("LVL", "Lvl"),
+			" ",
+			ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel,
+			"/",
+			ArtifactKnowledgeData.s_artifactKnowledgeInfo.MaxLevel,
+			")</color>"
+		});
+	}
+
 	private void SetCharShipmentItem(MobileClientShipmentType shipmentType, CharShipmentRec charShipmentRec, bool isSealOfFateHack = false)
 	{
+		this.m_rightStackLayoutElement.minHeight = 120f;
 		this.m_isTroop = false;
 		this.m_charShipmentRec = charShipmentRec;
 		this.m_troopSpecificArea.SetActive(false);
@@ -193,7 +300,8 @@ public class TroopsListItem : MonoBehaviour
 			return;
 		}
 		this.m_itemDisplay.InitReward(MissionRewardDisplay.RewardType.item, charShipmentRec.DummyItemID, 1, 0, record.IconFileDataID);
-		this.m_itemName.text = record.Display;
+		this.m_isArtifactResearch = (record.ID == 139390 || record.ID == 146745);
+		this.m_itemName.text = record.Display + ((!this.m_isArtifactResearch) ? string.Empty : this.GetCurrentArtifactPowerText());
 		Sprite sprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, record.IconFileDataID);
 		if (sprite != null)
 		{
@@ -210,8 +318,90 @@ public class TroopsListItem : MonoBehaviour
 				this.m_itemResourceIcon.sprite = sprite2;
 			}
 		}
+		this.UpdateAKStatus();
 		this.UpdateItemSlots();
 		this.UpdateRecruitButtonState();
+	}
+
+	private void HandleArtifactKnowledgeInfoAboutToChange()
+	{
+		this.m_akLevelBefore = ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel;
+	}
+
+	private void UpdateAKStatus()
+	{
+		if (!this.m_isArtifactResearch || ArtifactKnowledgeData.s_artifactKnowledgeInfo == null)
+		{
+			return;
+		}
+		this.m_akHintText.gameObject.SetActive(false);
+		int num = 0;
+		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
+		{
+			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
+			if (jamCharacterShipment.ShipmentRecID == this.m_charShipmentRec.ID)
+			{
+				num++;
+				break;
+			}
+		}
+		this.m_akResearchDisabled = true;
+		if (ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel < 25)
+		{
+			this.m_akHintText.gameObject.SetActive(true);
+			this.m_akHintText.text = GeneralHelpers.LimitZhLineLength(StaticDB.GetString("AK_BELOW_25_MSG", "Visit your Order Hall to increase your AK (PH)"), 14);
+		}
+		else if (ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel == 25)
+		{
+			this.m_akHintText.gameObject.SetActive(true);
+			this.m_akHintText.text = GeneralHelpers.LimitZhLineLength(StaticDB.GetString("AK_AT_25_MSG", "Go see Khadgar (PH)"), 14);
+		}
+		else if (ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel + ArtifactKnowledgeData.s_artifactKnowledgeInfo.ActiveShipments + ArtifactKnowledgeData.s_artifactKnowledgeInfo.ItemsInBags + ArtifactKnowledgeData.s_artifactKnowledgeInfo.ItemsInBank + ArtifactKnowledgeData.s_artifactKnowledgeInfo.ItemsInMail >= ArtifactKnowledgeData.s_artifactKnowledgeInfo.MaxLevel && num == 0)
+		{
+			this.m_akHintText.gameObject.SetActive(true);
+			this.m_akHintText.text = GeneralHelpers.LimitZhLineLength(StaticDB.GetString("AK_AT_MAX_MSG", "No more research available (PH)"), 14);
+		}
+		else
+		{
+			this.m_akHintText.gameObject.SetActive(false);
+			this.m_akResearchDisabled = false;
+		}
+		if (this.m_akResearchDisabled)
+		{
+			this.m_itemResourceCostText.gameObject.SetActive(false);
+		}
+	}
+
+	private void HandleArtifactKnowledgeInfoChanged()
+	{
+		if (!this.m_isArtifactResearch)
+		{
+			return;
+		}
+		ItemRec record = StaticDB.itemDB.GetRecord(this.m_charShipmentRec.DummyItemID);
+		this.m_itemName.text = record.Display + this.GetCurrentArtifactPowerText();
+		this.ClearAndHideLootArea();
+		this.AddInventoryItems();
+		this.UpdateAKStatus();
+		this.UpdateItemSlots();
+		this.UpdateRecruitButtonState();
+		this.AddInventoryItems();
+		if (ArtifactKnowledgeData.s_artifactKnowledgeInfo != null && this.m_akLevelBefore != ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel)
+		{
+			this.m_artifactKnowledgeLevelIncreasedLabel.gameObject.SetActive(true);
+			this.m_artifactKnowledgeLevelIncreasedLabel.text = string.Concat(new object[]
+			{
+				StaticDB.GetString("ARTIFACT_KNOWLEDGE_INCREASED_TO", "Artifact Knowledge Increased to"),
+				" ",
+				StaticDB.GetString("LVL", "LvL"),
+				" ",
+				ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel
+			});
+		}
+		else
+		{
+			this.m_artifactKnowledgeLevelIncreasedLabel.gameObject.SetActive(false);
+		}
 	}
 
 	private void SetTroopSlotForExistingFollower(TroopSlot[] troopSlots, JamGarrisonFollower follower)
@@ -348,6 +538,7 @@ public class TroopsListItem : MonoBehaviour
 
 	private void SetCharShipmentTroop(MobileClientShipmentType shipmentType, CharShipmentRec charShipmentRec)
 	{
+		this.m_rightStackLayoutElement.minHeight = 170f;
 		this.m_isTroop = true;
 		this.m_charShipmentRec = charShipmentRec;
 		this.m_troopSpecificArea.SetActive(true);
@@ -400,6 +591,7 @@ public class TroopsListItem : MonoBehaviour
 		{
 			this.m_troopResourceIcon.sprite = sprite2;
 		}
+		this.UpdateAKStatus();
 		this.UpdateRecruitButtonState();
 	}
 
@@ -448,6 +640,7 @@ public class TroopsListItem : MonoBehaviour
 				if (troopSlot2.IsPendingCreate())
 				{
 					troopSlot2.SetCharShipment(charShipmentID, shipmentDBID, 0, true, 0);
+					this.UpdateAKStatus();
 					this.UpdateRecruitButtonState();
 					return;
 				}
@@ -457,6 +650,7 @@ public class TroopsListItem : MonoBehaviour
 				if (troopSlot3.IsEmpty())
 				{
 					troopSlot3.SetCharShipment(charShipmentID, shipmentDBID, 0, true, 0);
+					this.UpdateAKStatus();
 					this.UpdateRecruitButtonState();
 					return;
 				}
@@ -518,10 +712,30 @@ public class TroopsListItem : MonoBehaviour
 		{
 			this.m_lootDisplayArea.SetActive(true);
 		}
-		MissionRewardDisplay missionRewardDisplay = Object.Instantiate<MissionRewardDisplay>(this.m_rewardDisplayPrefab);
-		missionRewardDisplay.transform.SetParent(this.m_lootItemArea.transform, false);
-		missionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.item, item.ItemID, item.Count, item.Context, item.IconFileDataID);
-		UiAnimMgr.instance.PlayAnim("MinimapPulseAnim", missionRewardDisplay.transform, Vector3.zero, 1.5f, 0f);
+		int charShipmentTypeID = this.GetCharShipmentTypeID();
+		MissionRewardDisplay missionRewardDisplay = null;
+		if (this.m_isArtifactResearch)
+		{
+			this.HandleArtifactKnowledgeInfoAboutToChange();
+			MobilePlayerRequestArtifactKnowledgeInfo obj = new MobilePlayerRequestArtifactKnowledgeInfo();
+			Login.instance.SendToMobileServer(obj);
+		}
+		else if (charShipmentTypeID >= 372 && charShipmentTypeID <= 383)
+		{
+			missionRewardDisplay = Object.Instantiate<MissionRewardDisplay>(this.m_rewardDisplayPrefab);
+			missionRewardDisplay.transform.SetParent(this.m_lootItemArea.transform, false);
+			missionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.currency, item.ItemID, item.Count, 0, 0);
+		}
+		else
+		{
+			missionRewardDisplay = Object.Instantiate<MissionRewardDisplay>(this.m_rewardDisplayPrefab);
+			missionRewardDisplay.transform.SetParent(this.m_lootItemArea.transform, false);
+			missionRewardDisplay.InitReward(MissionRewardDisplay.RewardType.item, item.ItemID, item.Count, item.Context, item.IconFileDataID);
+		}
+		if (missionRewardDisplay != null)
+		{
+			UiAnimMgr.instance.PlayAnim("MinimapPulseAnim", missionRewardDisplay.transform, Vector3.zero, 1.5f, 0f);
+		}
 	}
 
 	public void ClearAndHideLootArea()
@@ -534,9 +748,38 @@ public class TroopsListItem : MonoBehaviour
 		this.m_lootDisplayArea.SetActive(false);
 	}
 
+	public void AddInventoryItems()
+	{
+		if (this.m_isArtifactResearch)
+		{
+			ItemRec record = StaticDB.itemDB.GetRecord(this.m_charShipmentRec.DummyItemID);
+			if (record == null)
+			{
+				return;
+			}
+			MissionRewardDisplay[] componentsInChildren = this.m_lootItemArea.GetComponentsInChildren<MissionRewardDisplay>();
+			foreach (MissionRewardDisplay missionRewardDisplay in componentsInChildren)
+			{
+				Object.DestroyImmediate(missionRewardDisplay.gameObject);
+			}
+			for (int j = 0; j < ArtifactKnowledgeData.s_artifactKnowledgeInfo.ItemsInBags; j++)
+			{
+				MissionRewardDisplay missionRewardDisplay2 = Object.Instantiate<MissionRewardDisplay>(this.m_artifactResearchNotesDisplayPrefab);
+				missionRewardDisplay2.transform.SetParent(this.m_lootItemArea.transform, false);
+				missionRewardDisplay2.InitReward(MissionRewardDisplay.RewardType.item, record.ID, 1, 0, record.IconFileDataID);
+				UiAnimMgr.instance.PlayAnim("ItemReadyToUseGlowLoop", missionRewardDisplay2.transform, Vector3.zero, 1.2f, 0f);
+			}
+			this.m_lootDisplayArea.SetActive(ArtifactKnowledgeData.s_artifactKnowledgeInfo.ItemsInBags > 0);
+		}
+	}
+
 	public GameObject m_troopSpecificArea;
 
 	public GameObject m_itemSpecificArea;
+
+	public LayoutElement m_rightStackLayoutElement;
+
+	public Text m_akHintText;
 
 	public Image m_troopSnapshotImage;
 
@@ -551,6 +794,8 @@ public class TroopsListItem : MonoBehaviour
 	public GameObject m_abilityDisplayPrefab;
 
 	public GameObject m_troopSlotsRootObject;
+
+	public CanvasGroup m_troopSlotsCanvasGroup;
 
 	public GameObject m_troopSlotPrefab;
 
@@ -578,6 +823,10 @@ public class TroopsListItem : MonoBehaviour
 
 	public Text m_youReceivedLoot;
 
+	public Text m_artifactKnowledgeLevelIncreasedLabel;
+
+	public MissionRewardDisplay m_artifactResearchNotesDisplayPrefab;
+
 	private bool m_isTroop;
 
 	private int m_shipmentCost;
@@ -585,4 +834,10 @@ public class TroopsListItem : MonoBehaviour
 	private GarrFollowerRec m_followerRec;
 
 	private CharShipmentRec m_charShipmentRec;
+
+	private bool m_isArtifactResearch;
+
+	private int m_akLevelBefore;
+
+	private bool m_akResearchDisabled;
 }

@@ -68,14 +68,41 @@ public class PersistentShipmentData
 		foreach (object obj in PersistentShipmentData.shipmentDictionary.Values)
 		{
 			JamCharacterShipment jamCharacterShipment = (JamCharacterShipment)obj;
-			long num2 = GarrisonStatus.CurrentTime() - (long)jamCharacterShipment.CreationTime;
-			long num3 = (long)jamCharacterShipment.ShipmentDuration - num2;
-			if (num3 <= 0L)
+			if (PersistentShipmentData.ShipmentTypeForShipmentIsAvailable(jamCharacterShipment.ShipmentRecID))
 			{
-				num++;
+				long num2 = GarrisonStatus.CurrentTime() - (long)jamCharacterShipment.CreationTime;
+				long num3 = (long)jamCharacterShipment.ShipmentDuration - num2;
+				if (num3 <= 0L)
+				{
+					num++;
+				}
 			}
 		}
 		return num;
+	}
+
+	public static bool CanOrderShipmentType(int charShipmentID)
+	{
+		foreach (MobileClientShipmentType mobileClientShipmentType in PersistentShipmentData.instance.m_availableShipmentTypes)
+		{
+			if (mobileClientShipmentType.CharShipmentID == charShipmentID)
+			{
+				return mobileClientShipmentType.CanOrder;
+			}
+		}
+		return false;
+	}
+
+	public static bool CanPickupShipmentType(int charShipmentID)
+	{
+		foreach (MobileClientShipmentType mobileClientShipmentType in PersistentShipmentData.instance.m_availableShipmentTypes)
+		{
+			if (mobileClientShipmentType.CharShipmentID == charShipmentID)
+			{
+				return mobileClientShipmentType.CanPickup;
+			}
+		}
+		return false;
 	}
 
 	private static PersistentShipmentData s_instance;

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobilePlayerJSON
 {
+	[FlexJamMessage(Id = 4809, Name = "MobilePlayerGetItemTooltipInfo", Version = 38820897u)]
 	[System.Runtime.Serialization.DataContract]
-	[FlexJamMessage(Id = 4810, Name = "MobilePlayerGetItemTooltipInfo", Version = 33577221u)]
 	public class MobilePlayerGetItemTooltipInfo
 	{
 		[FlexJamMember(Name = "itemContext", Type = FlexJamType.Int32)]

@@ -62,6 +62,8 @@ namespace WowStaticData
 
 		public int AllianceFlavorGarrStringID { get; private set; }
 
+		public string TitleName { get; private set; }
+
 		public void Deserialize(string valueLine)
 		{
 			int num = 0;
@@ -171,6 +173,9 @@ namespace WowStaticData
 				break;
 			case 28:
 				this.AllianceFlavorGarrStringID = Convert.ToInt32(valueText);
+				break;
+			case 29:
+				this.TitleName = valueText;
 				break;
 			}
 		}

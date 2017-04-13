@@ -173,16 +173,19 @@ public class TalentTreeItem : MonoBehaviour
 	public void SetTalent(GarrTalentRec garrTalentRec)
 	{
 		TalentTreeItemAbilityButton talentTreeItemAbilityButton;
+		TalentTreeItemAbilityButton sameTierButton;
 		if (garrTalentRec.UiOrder == 0)
 		{
 			talentTreeItemAbilityButton = this.m_talentButtonLeft;
+			sameTierButton = this.m_talentButtonRight;
 		}
 		else
 		{
 			talentTreeItemAbilityButton = this.m_talentButtonRight;
+			sameTierButton = this.m_talentButtonLeft;
 		}
-		talentTreeItemAbilityButton.SetTalent(garrTalentRec.ID);
-		this.m_talentButtonSolo.SetTalent(garrTalentRec.ID);
+		talentTreeItemAbilityButton.SetTalent(garrTalentRec.ID, sameTierButton);
+		this.m_talentButtonSolo.SetTalent(garrTalentRec.ID, null);
 	}
 
 	public void PlayClickSound()

@@ -17,7 +17,7 @@ public class ArmamentPopup : MonoBehaviour
 		Main.instance.m_canvasBlurManager.RemoveBlurRef_MainCanvas();
 	}
 
-	public void SetArmament(MobileFollowerArmament item, int garrFollowerID)
+	public void SetArmament(MobileFollowerArmamentExt item, int garrFollowerID)
 	{
 		this.m_garrFollowerID = garrFollowerID;
 		this.m_item = item;
@@ -83,5 +83,5 @@ public class ArmamentPopup : MonoBehaviour
 
 	private int m_garrFollowerID;
 
-	private MobileFollowerArmament m_item;
+	private MobileFollowerArmamentExt m_item;
 }

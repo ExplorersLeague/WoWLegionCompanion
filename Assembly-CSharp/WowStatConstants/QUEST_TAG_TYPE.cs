@@ -9,6 +9,8 @@ namespace WowStatConstants
 		NORMAL,
 		PVP,
 		PET_BATTLE,
-		BOUNTY
+		BOUNTY,
+		DUNGEON,
+		INVASION
 	}
 }

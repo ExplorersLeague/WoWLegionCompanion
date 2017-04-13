@@ -17,6 +17,7 @@ public class Main : MonoBehaviour
 	private void Awake()
 	{
 		Main.instance = this;
+		this.m_enableNotifications = true;
 		this.GenerateUniqueIdentifier();
 		this.canvasAnimator = this.mainCanvas.GetComponent<Animator>();
 		this.allPanels.ShowConnectingPanel();
@@ -93,6 +94,8 @@ public class Main : MonoBehaviour
 		AllPanels.instance.m_orderHallMultiPanel.m_adventureMapPanel.CenterAndZoom(Vector2.zero, null, false);
 		AllPanels.instance.m_orderHallMultiPanel.SelectDefaultNavButton();
 		this.PrecacheMissionChances();
+		MobilePlayerRequestAreaPoiInfo obj = new MobilePlayerRequestAreaPoiInfo();
+		Login.instance.SendToMobileServer(obj);
 	}
 
 	public void MobileLoggedIn()
@@ -284,6 +287,10 @@ public class Main : MonoBehaviour
 		{
 			this.MobileClientFollowerArmamentsResultHandler((MobileClientFollowerArmamentsResult)msg);
 		}
+		else if (msg is MobileClientFollowerArmamentsExtendedResult)
+		{
+			this.MobileClientFollowerArmamentsExtendedResultHandler((MobileClientFollowerArmamentsExtendedResult)msg);
+		}
 		else if (msg is MobileClientUseFollowerArmamentResult)
 		{
 			this.MobileClientUseFollowerArmamentResultHandler((MobileClientUseFollowerArmamentResult)msg);
@@ -319,6 +326,30 @@ public class Main : MonoBehaviour
 		else if (msg is MobileClientPlayerLevelUp)
 		{
 			this.MobileClientPlayerLevelUpHandler((MobileClientPlayerLevelUp)msg);
+		}
+		else if (msg is MobileClientRequestContributionInfoResult)
+		{
+			this.MobileClientRequestContributionInfoResultHandler((MobileClientRequestContributionInfoResult)msg);
+		}
+		else if (msg is MobileClientRequestAreaPoiInfoResult)
+		{
+			this.MobileClientRequestAreaPoiInfoResultHandler((MobileClientRequestAreaPoiInfoResult)msg);
+		}
+		else if (msg is MobileClientMakeContributionResult)
+		{
+			this.MobileClientMakeContributionResultHandler((MobileClientMakeContributionResult)msg);
+		}
+		else if (msg is MobileClientArtifactKnowledgeInfoResult)
+		{
+			this.MobileClientArtifactKnowledgeInfoResultHandler((MobileClientArtifactKnowledgeInfoResult)msg);
+		}
+		else if (msg is MobileClientRequestMaxFollowersResult)
+		{
+			this.MobileClientRequestMaxFollowersResultHandler((MobileClientRequestMaxFollowersResult)msg);
+		}
+		else if (msg is MobileClientQuestCompleted)
+		{
+			this.MobileClientQuestCompletedHandler((MobileClientQuestCompleted)msg);
 		}
 		else
 		{
@@ -591,7 +622,6 @@ public class Main : MonoBehaviour
 			}));
 			GuildData.AddGuildMember(mobileGuildMember);
 		}
-		this.allPanels.adventureMapPanel.m_guildChatSlider_Bottom.UpdateGuildMateRoster();
 	}
 
 	private void MobileClientGuildMemberLoggedInHandler(MobileClientGuildMemberLoggedIn msg)
@@ -605,7 +635,6 @@ public class Main : MonoBehaviour
 			") logged in."
 		}));
 		GuildData.AddGuildMember(msg.Member);
-		this.allPanels.adventureMapPanel.m_guildChatSlider_Bottom.UpdateGuildMateRoster();
 	}
 
 	private void MobileClientGuildMemberLoggedOutHandler(MobileClientGuildMemberLoggedOut msg)
@@ -619,7 +648,6 @@ public class Main : MonoBehaviour
 			") logged out."
 		}));
 		GuildData.RemoveGuildMember(msg.Member.Guid);
-		this.allPanels.adventureMapPanel.m_guildChatSlider_Bottom.UpdateGuildMateRoster();
 	}
 
 	public void SetChatScript(GuildChatSlider script)
@@ -647,14 +675,22 @@ public class Main : MonoBehaviour
 		MobilePlayerFollowerEquipmentRequest mobilePlayerFollowerEquipmentRequest = new MobilePlayerFollowerEquipmentRequest();
 		mobilePlayerFollowerEquipmentRequest.GarrFollowerTypeID = 4;
 		Login.instance.SendToMobileServer(mobilePlayerFollowerEquipmentRequest);
-		MobilePlayerFollowerArmamentsRequest mobilePlayerFollowerArmamentsRequest = new MobilePlayerFollowerArmamentsRequest();
-		mobilePlayerFollowerArmamentsRequest.GarrFollowerTypeID = 4;
-		Login.instance.SendToMobileServer(mobilePlayerFollowerArmamentsRequest);
+		MobilePlayerFollowerArmamentsExtendedRequest mobilePlayerFollowerArmamentsExtendedRequest = new MobilePlayerFollowerArmamentsExtendedRequest();
+		mobilePlayerFollowerArmamentsExtendedRequest.GarrFollowerTypeID = 4;
+		Login.instance.SendToMobileServer(mobilePlayerFollowerArmamentsExtendedRequest);
 		MobilePlayerFollowerActivationDataRequest mobilePlayerFollowerActivationDataRequest = new MobilePlayerFollowerActivationDataRequest();
 		mobilePlayerFollowerActivationDataRequest.GarrTypeID = 3;
 		Login.instance.SendToMobileServer(mobilePlayerFollowerActivationDataRequest);
 		MobilePlayerGetArtifactInfo obj4 = new MobilePlayerGetArtifactInfo();
 		Login.instance.SendToMobileServer(obj4);
+		MobilePlayerRequestContributionInfo obj5 = new MobilePlayerRequestContributionInfo();
+		Login.instance.SendToMobileServer(obj5);
+		MobilePlayerRequestAreaPoiInfo obj6 = new MobilePlayerRequestAreaPoiInfo();
+		Login.instance.SendToMobileServer(obj6);
+		MobilePlayerRequestArtifactKnowledgeInfo obj7 = new MobilePlayerRequestArtifactKnowledgeInfo();
+		Login.instance.SendToMobileServer(obj7);
+		MobilePlayerRequestMaxFollowers obj8 = new MobilePlayerRequestMaxFollowers();
+		Login.instance.SendToMobileServer(obj8);
 		MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
 		mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
 		Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
@@ -684,6 +720,10 @@ public class Main : MonoBehaviour
 	private void ScheduleNotifications()
 	{
 		this.ClearPendingNotifications();
+		if (!Main.instance.m_enableNotifications)
+		{
+			return;
+		}
 		List<NotificationData> list = new List<NotificationData>();
 		List<JamGarrisonMobileMission> list2 = PersistentMissionData.missionDictionary.Values.OfType<JamGarrisonMobileMission>().ToList<JamGarrisonMobileMission>();
 		foreach (JamGarrisonMobileMission jamGarrisonMobileMission in list2)
@@ -1041,6 +1081,24 @@ public class Main : MonoBehaviour
 		Login.instance.SendToMobileServer(mobilePlayerSetShipmentDurationCheat);
 	}
 
+	public void AllTalentsCheat()
+	{
+		MobilePlayerGarrisonCompleteAllTalentsCheat obj = new MobilePlayerGarrisonCompleteAllTalentsCheat();
+		Login.instance.SendToMobileServer(obj);
+		MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
+		mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
+		Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
+	}
+
+	public void RemoveTalentsCheat()
+	{
+		MobilePlayerGarrisonRemoveAllTalentsCheat obj = new MobilePlayerGarrisonRemoveAllTalentsCheat();
+		Login.instance.SendToMobileServer(obj);
+		MobilePlayerGarrisonDataRequest mobilePlayerGarrisonDataRequest = new MobilePlayerGarrisonDataRequest();
+		mobilePlayerGarrisonDataRequest.GarrTypeID = 3;
+		Login.instance.SendToMobileServer(mobilePlayerGarrisonDataRequest);
+	}
+
 	private void MobileClientSetShipmentDurationCheatResultHandler(MobileClientSetShipmentDurationCheatResult msg)
 	{
 		AllPopups.instance.HideAllPopups();
@@ -1048,25 +1106,11 @@ public class Main : MonoBehaviour
 
 	private void MobileClientShipmentPushResultHandler(MobileClientShipmentPushResult msg)
 	{
-		Debug.Log("Shipment Push Result for item " + msg.CharShipmentID);
-		foreach (MobileClientShipmentItem mobileClientShipmentItem in msg.Items)
+		foreach (MobileClientShipmentItem arg in msg.Items)
 		{
-			Debug.Log(string.Concat(new object[]
-			{
-				"Received qty ",
-				mobileClientShipmentItem.Count,
-				" of item ",
-				mobileClientShipmentItem.ItemID,
-				" with context ",
-				mobileClientShipmentItem.Context,
-				", file ID ",
-				mobileClientShipmentItem.IconFileDataID,
-				", mailed = ",
-				mobileClientShipmentItem.Mailed
-			}));
 			if (this.ShipmentItemPushedAction != null)
 			{
-				this.ShipmentItemPushedAction(msg.CharShipmentID, mobileClientShipmentItem);
+				this.ShipmentItemPushedAction(msg.CharShipmentID, arg);
 			}
 		}
 	}
@@ -1126,6 +1170,10 @@ public class Main : MonoBehaviour
 
 	private void MobileClientFollowerArmamentsResultHandler(MobileClientFollowerArmamentsResult msg)
 	{
+	}
+
+	private void MobileClientFollowerArmamentsExtendedResultHandler(MobileClientFollowerArmamentsExtendedResult msg)
+	{
 		PersistentArmamentData.ClearData();
 		uint num = 0u;
 		while ((ulong)num < (ulong)((long)msg.Armament.Length))
@@ -1144,9 +1192,9 @@ public class Main : MonoBehaviour
 		if (msg.Result == 0)
 		{
 			PersistentFollowerData.AddOrUpdateFollower(msg.Follower);
-			MobilePlayerFollowerArmamentsRequest mobilePlayerFollowerArmamentsRequest = new MobilePlayerFollowerArmamentsRequest();
-			mobilePlayerFollowerArmamentsRequest.GarrFollowerTypeID = 4;
-			Login.instance.SendToMobileServer(mobilePlayerFollowerArmamentsRequest);
+			MobilePlayerFollowerArmamentsExtendedRequest mobilePlayerFollowerArmamentsExtendedRequest = new MobilePlayerFollowerArmamentsExtendedRequest();
+			mobilePlayerFollowerArmamentsExtendedRequest.GarrFollowerTypeID = 4;
+			Login.instance.SendToMobileServer(mobilePlayerFollowerArmamentsExtendedRequest);
 		}
 		else
 		{
@@ -1241,6 +1289,82 @@ public class Main : MonoBehaviour
 		if (this.PlayerLeveledUpAction != null)
 		{
 			this.PlayerLeveledUpAction(msg.NewLevel);
+		}
+	}
+
+	private void MobileClientRequestContributionInfoResultHandler(MobileClientRequestContributionInfoResult msg)
+	{
+		LegionfallData.ClearData();
+		LegionfallData.SetLegionfallWarResources(msg.LegionfallWarResources);
+		LegionfallData.SetHasAccess(msg.HasAccess);
+		foreach (MobileContribution contribution2 in msg.Contribution)
+		{
+			LegionfallData.AddOrUpdateLegionfallBuilding(contribution2);
+		}
+		if (this.ContributionInfoChangedAction != null)
+		{
+			this.ContributionInfoChangedAction();
+		}
+	}
+
+	private void MobileClientMakeContributionResultHandler(MobileClientMakeContributionResult msg)
+	{
+		Debug.Log(string.Concat(new object[]
+		{
+			"Make Contribution Result for ID ",
+			msg.ContributionID,
+			" is ",
+			msg.Result
+		}));
+		MobilePlayerRequestContributionInfo obj = new MobilePlayerRequestContributionInfo();
+		Login.instance.SendToMobileServer(obj);
+		if (this.ContributionInfoChangedAction != null)
+		{
+			this.ContributionInfoChangedAction();
+		}
+	}
+
+	private void MobileClientRequestAreaPoiInfoResultHandler(MobileClientRequestAreaPoiInfoResult msg)
+	{
+		LegionfallData.SetCurrentInvasionPOI(null);
+		if (msg.PoiData != null && msg.PoiData.Length > 0)
+		{
+			LegionfallData.SetCurrentInvasionPOI(msg.PoiData[0]);
+			LegionfallData.SetCurrentInvasionExpirationTime(msg.PoiData[0].TimeRemaining);
+		}
+		if (this.InvasionPOIChangedAction != null)
+		{
+			this.InvasionPOIChangedAction();
+		}
+	}
+
+	private void MobileClientArtifactKnowledgeInfoResultHandler(MobileClientArtifactKnowledgeInfoResult msg)
+	{
+		ArtifactKnowledgeData.ClearData();
+		ArtifactKnowledgeData.SetArtifactKnowledgeInfo(msg);
+		if (this.ArtifactKnowledgeInfoChangedAction != null)
+		{
+			this.ArtifactKnowledgeInfoChangedAction();
+		}
+	}
+
+	private void MobileClientRequestMaxFollowersResultHandler(MobileClientRequestMaxFollowersResult msg)
+	{
+		GarrisonStatus.SetMaxActiveFollowers(msg.MaxFollowers);
+		if (this.MaxActiveFollowersChangedAction != null)
+		{
+			this.MaxActiveFollowersChangedAction();
+		}
+	}
+
+	private void MobileClientQuestCompletedHandler(MobileClientQuestCompleted msg)
+	{
+		foreach (MobileQuestItem mobileQuestItem in msg.Item)
+		{
+			if (this.GotItemFromQuestCompletionAction != null)
+			{
+				this.GotItemFromQuestCompletionAction(mobileQuestItem.ItemID, mobileQuestItem.Quantity, msg.QuestID);
+			}
 		}
 	}
 
@@ -1416,6 +1540,8 @@ public class Main : MonoBehaviour
 
 	public UISound m_UISound;
 
+	public bool m_enableNotifications;
+
 	public static Main instance;
 
 	private GuildChatSlider m_chatPopup;
@@ -1467,6 +1593,18 @@ public class Main : MonoBehaviour
 	public Action<int, MobileClientShipmentItem> ShipmentItemPushedAction;
 
 	public Action<int> PlayerLeveledUpAction;
+
+	public Action MakeContributionRequestInitiatedAction;
+
+	public Action ContributionInfoChangedAction;
+
+	public Action InvasionPOIChangedAction;
+
+	public Action ArtifactKnowledgeInfoChangedAction;
+
+	public Action MaxActiveFollowersChangedAction;
+
+	public Action<int, int, int> GotItemFromQuestCompletionAction;
 
 	public GameObject m_debugButton;
 

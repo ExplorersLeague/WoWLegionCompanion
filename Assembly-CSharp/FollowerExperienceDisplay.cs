@@ -14,8 +14,6 @@ public class FollowerExperienceDisplay : MonoBehaviour
 		this.m_classText.font = GeneralHelpers.LoadStandardFont();
 		this.m_xpAmountText.font = GeneralHelpers.LoadStandardFont();
 		this.m_toNextLevelOrUpgradeText.font = GeneralHelpers.LoadStandardFont();
-		this.m_XPLabel.font = GeneralHelpers.LoadStandardFont();
-		this.m_XPLabel.text = StaticDB.GetString("XP2", null);
 	}
 
 	private void OnEnable()
@@ -114,26 +112,50 @@ public class FollowerExperienceDisplay : MonoBehaviour
 		}
 		if (isTroop)
 		{
+			this.m_qualityBorder_TitleQuality.gameObject.SetActive(false);
+			this.m_levelBorder_TitleQuality.gameObject.SetActive(false);
 			this.m_qualityBorder.gameObject.SetActive(false);
 			this.m_levelBorder.gameObject.SetActive(false);
 			this.m_followerNameText.color = Color.white;
+			this.m_iLevelText.gameObject.SetActive(false);
 		}
 		else
 		{
+			if (follower.Quality == 6)
+			{
+				this.m_qualityBorder_TitleQuality.gameObject.SetActive(true);
+				this.m_levelBorder_TitleQuality.gameObject.SetActive(true);
+				this.m_qualityBorder.gameObject.SetActive(false);
+				this.m_levelBorder.gameObject.SetActive(false);
+			}
+			else
+			{
+				this.m_qualityBorder_TitleQuality.gameObject.SetActive(false);
+				this.m_levelBorder_TitleQuality.gameObject.SetActive(false);
+				this.m_qualityBorder.gameObject.SetActive(true);
+				this.m_levelBorder.gameObject.SetActive(true);
+			}
 			Color qualityColor = GeneralHelpers.GetQualityColor(follower.Quality);
 			this.m_qualityBorder.color = qualityColor;
 			this.m_levelBorder.color = qualityColor;
 			this.m_followerNameText.color = qualityColor;
 		}
 		CreatureRec record2 = StaticDB.creatureDB.GetRecord((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceCreatureID : record.HordeCreatureID);
-		this.m_followerNameText.text = record2.Name;
+		if (follower.Quality == 6 && record.TitleName != null && record.TitleName.Length > 0)
+		{
+			this.m_followerNameText.text = record.TitleName;
+		}
+		else if (record != null)
+		{
+			this.m_followerNameText.text = record2.Name;
+		}
 		if (follower.FollowerLevel < 110)
 		{
-			this.m_iLevelText.text = StaticDB.GetString("LEVEL", null) + " " + follower.FollowerLevel;
+			this.m_iLevelText.text = GeneralHelpers.TextOrderString(StaticDB.GetString("LEVEL", null), follower.FollowerLevel.ToString());
 		}
 		else
 		{
-			this.m_iLevelText.text = StaticDB.GetString("ILVL", null) + " " + (follower.ItemLevelArmor + follower.ItemLevelWeapon) / 2;
+			this.m_iLevelText.text = StaticDB.GetString("ILVL", null) + " " + ((follower.ItemLevelArmor + follower.ItemLevelWeapon) / 2).ToString();
 		}
 		GarrClassSpecRec record3 = StaticDB.garrClassSpecDB.GetRecord((int)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceGarrClassSpecID : record.HordeGarrClassSpecID));
 		this.m_classText.text = record3.ClassSpec;
@@ -185,6 +207,7 @@ public class FollowerExperienceDisplay : MonoBehaviour
 		GeneralHelpers.GetXpCapInfo(oldFollower.FollowerLevel, oldFollower.Quality, out this.m_currentCap, out nextCapIsForQuality, out isMaxLevelAndMaxQuality);
 		this.SetFollowerAppearance(oldFollower, nextCapIsForQuality, isMaxLevelAndMaxQuality, false, initialEffectDelay);
 		GeneralHelpers.GetXpCapInfo(newFollower.FollowerLevel, newFollower.Quality, out this.m_newCap, out this.m_newCapIsQuality, out this.m_newFollowerIsMaxLevelAndMaxQuality);
+		this.m_fancyNumberDisplay.SetNumberLabel(StaticDB.GetString("XP2", null));
 		this.m_fancyNumberDisplay.SetValue((int)(this.m_currentCap - (uint)oldFollower.Xp), true, 0f);
 		if (oldFollower.FollowerLevel != newFollower.FollowerLevel || oldFollower.Quality != newFollower.Quality)
 		{
@@ -236,13 +259,15 @@ public class FollowerExperienceDisplay : MonoBehaviour
 
 	public Image m_qualityBorder;
 
+	public Image m_qualityBorder_TitleQuality;
+
 	public Image m_levelBorder;
+
+	public Image m_levelBorder_TitleQuality;
 
 	public Text m_followerNameText;
 
 	public Text m_iLevelText;
-
-	public Text m_XPLabel;
 
 	public Image m_classIcon;
 

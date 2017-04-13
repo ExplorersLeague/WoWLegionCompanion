@@ -4,16 +4,16 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "UnitAuraDebugInfo", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "UnitAuraDebugInfo", Version = 28333852u)]
 	public class UnitAuraDebugInfo
 	{
 		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "spellID")]
 		public int SpellID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "fromItemSet")]
 		[FlexJamMember(Name = "fromItemSet", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "fromItemSet")]
 		public bool FromItemSet { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "serverOnly")]
@@ -28,28 +28,28 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "enchantmentSlot")]
 		public int EnchantmentSlot { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "effectDebugInfo")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "effectDebugInfo", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "effectDebugInfo")]
 		public UnitAuraEffectDebugInfo[] EffectDebugInfo { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "paused")]
 		[FlexJamMember(Name = "paused", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "paused")]
 		public bool Paused { get; set; }
 
-		[FlexJamMember(Name = "itemName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "itemName")]
+		[FlexJamMember(Name = "itemName", Type = FlexJamType.String)]
 		public string ItemName { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "name")]
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		public int ItemID { get; set; }
 
-		[FlexJamMember(Name = "fromItem", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "fromItem")]
+		[FlexJamMember(Name = "fromItem", Type = FlexJamType.Bool)]
 		public bool FromItem { get; set; }
 	}
 }

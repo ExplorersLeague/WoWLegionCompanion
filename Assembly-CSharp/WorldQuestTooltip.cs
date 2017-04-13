@@ -27,41 +27,65 @@ public class WorldQuestTooltip : MonoBehaviour
 		Main.instance.m_backButtonManager.PopBackAction();
 	}
 
+	private void EnableAdditionalRewardDisplays(int highestActiveIndex)
+	{
+		this.m_rewardInfo[1].gameObject.SetActive(highestActiveIndex >= 1);
+		this.m_rewardInfo[2].gameObject.SetActive(highestActiveIndex >= 2);
+	}
+
 	private void InitRewardInfoDisplay(MobileWorldQuest worldQuest)
 	{
+		int num = 0;
+		this.m_rewardInfo[0].gameObject.SetActive(true);
+		this.m_rewardInfo[1].gameObject.SetActive(false);
+		this.m_rewardInfo[2].gameObject.SetActive(false);
 		if (worldQuest.Item != null && worldQuest.Item.Count<MobileWorldQuestReward>() > 0)
 		{
-			MobileWorldQuestReward[] item = worldQuest.Item;
-			int num = 0;
-			if (num < item.Length)
+			foreach (MobileWorldQuestReward mobileWorldQuestReward in worldQuest.Item)
 			{
-				MobileWorldQuestReward mobileWorldQuestReward = item[num];
 				Sprite rewardSprite = GeneralHelpers.LoadIconAsset(AssetBundleType.Icons, mobileWorldQuestReward.FileDataID);
-				this.m_rewardInfo.SetReward(MissionRewardDisplay.RewardType.item, mobileWorldQuestReward.RecordID, mobileWorldQuestReward.Quantity, rewardSprite, mobileWorldQuestReward.ItemContext);
+				this.m_rewardInfo[num].SetReward(MissionRewardDisplay.RewardType.item, mobileWorldQuestReward.RecordID, mobileWorldQuestReward.Quantity, rewardSprite, mobileWorldQuestReward.ItemContext);
+				this.EnableAdditionalRewardDisplays(num++);
+				if (num >= 3)
+				{
+					return;
+				}
 			}
 		}
 		else if (worldQuest.Currency.Count<MobileWorldQuestReward>() > 0)
 		{
-			MobileWorldQuestReward[] currency = worldQuest.Currency;
-			int num2 = 0;
-			if (num2 < currency.Length)
+			foreach (MobileWorldQuestReward mobileWorldQuestReward2 in worldQuest.Currency)
 			{
-				MobileWorldQuestReward mobileWorldQuestReward2 = currency[num2];
 				Sprite iconSprite = GeneralHelpers.LoadCurrencyIcon(mobileWorldQuestReward2.RecordID);
 				CurrencyTypesRec record = StaticDB.currencyTypesDB.GetRecord(mobileWorldQuestReward2.RecordID);
 				int quantity = mobileWorldQuestReward2.Quantity / (((record.Flags & 8u) == 0u) ? 1 : 100);
-				this.m_rewardInfo.SetCurrency(mobileWorldQuestReward2.RecordID, quantity, iconSprite);
+				this.m_rewardInfo[num].SetCurrency(mobileWorldQuestReward2.RecordID, quantity, iconSprite);
+				this.EnableAdditionalRewardDisplays(num++);
+				if (num >= 3)
+				{
+					return;
+				}
 			}
 		}
 		else if (worldQuest.Money > 0)
 		{
 			Sprite iconSprite2 = Resources.Load<Sprite>("MiscIcons/INV_Misc_Coin_01");
-			this.m_rewardInfo.SetGold(worldQuest.Money / 10000, iconSprite2);
+			this.m_rewardInfo[num].SetGold(worldQuest.Money / 10000, iconSprite2);
+			this.EnableAdditionalRewardDisplays(num++);
+			if (num >= 3)
+			{
+				return;
+			}
 		}
 		else if (worldQuest.Experience > 0)
 		{
 			Sprite localizedFollowerXpIcon = GeneralHelpers.GetLocalizedFollowerXpIcon();
-			this.m_rewardInfo.SetFollowerXP(worldQuest.Experience, localizedFollowerXpIcon);
+			this.m_rewardInfo[num].SetFollowerXP(worldQuest.Experience, localizedFollowerXpIcon);
+			this.EnableAdditionalRewardDisplays(num++);
+			if (num >= 3)
+			{
+				return;
+			}
 		}
 	}
 
@@ -127,7 +151,7 @@ public class WorldQuestTooltip : MonoBehaviour
 			component3.text = "- " + mobileWorldQuestObjective.Text;
 		}
 		this.InitRewardInfoDisplay(mobileWorldQuest);
-		this.m_endTime = (long)(mobileWorldQuest.EndTime - 900);
+		this.m_endTime = (long)mobileWorldQuest.EndTime;
 		QuestInfoRec record2 = StaticDB.questInfoDB.GetRecord(mobileWorldQuest.QuestInfoID);
 		if (record2 == null)
 		{
@@ -135,6 +159,12 @@ public class WorldQuestTooltip : MonoBehaviour
 		}
 		bool active = (record2.Modifiers & 2) != 0;
 		this.m_dragonFrame.gameObject.SetActive(active);
+		if (record2.Type == 7)
+		{
+			this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-NormalQuest");
+			this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/Map-LegionInvasion-SargerasCrest");
+			return;
+		}
 		this.m_background.sprite = Resources.Load<Sprite>("NewWorldQuest/Mobile-NormalQuest");
 		bool flag = (record2.Modifiers & 1) != 0;
 		if (flag && record2.Type != 3)
@@ -268,20 +298,20 @@ public class WorldQuestTooltip : MonoBehaviour
 				text = "Mobile-Mining";
 				break;
 			}
-			goto IL_6F4;
+			goto IL_726;
 		}
 		case 3:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 			text = "Mobile-PVP";
-			goto IL_6F4;
+			goto IL_726;
 		case 4:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 			text = "Mobile-Pets";
-			goto IL_6F4;
+			goto IL_726;
 		}
 		uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 		text = "Mobile-QuestExclamationIcon";
-		IL_6F4:
+		IL_726:
 		if (text != null)
 		{
 			this.m_main.sprite = Resources.Load<Sprite>("NewWorldQuest/" + text);
@@ -337,7 +367,7 @@ public class WorldQuestTooltip : MonoBehaviour
 	public BountySite m_bountyLogoPrefab;
 
 	[Header("Misc")]
-	public RewardInfoPopup m_rewardInfo;
+	public RewardInfoPopup[] m_rewardInfo;
 
 	public Text m_rewardsLabel;
 

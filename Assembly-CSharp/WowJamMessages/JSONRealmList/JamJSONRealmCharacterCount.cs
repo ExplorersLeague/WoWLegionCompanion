@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[FlexJamStruct(Name = "JamJSONRealmCharacterCount", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamJSONRealmCharacterCount", Version = 28333852u)]
 	public class JamJSONRealmCharacterCount
 	{
 		[System.Runtime.Serialization.DataMember(Name = "wowRealmAddress")]

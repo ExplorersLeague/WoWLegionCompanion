@@ -682,11 +682,11 @@ public class MissionDetailView : MonoBehaviour
 			int trueMissionCost = this.GetTrueMissionCost(record);
 			this.missionCostText.text = GarrisonStatus.Resources().ToString("N0") + " / " + trueMissionCost.ToString("N0");
 			int numActiveChampions = GeneralHelpers.GetNumActiveChampions();
-			int maxActiveChampions = GeneralHelpers.GetMaxActiveChampions();
+			int maxActiveFollowers = GarrisonStatus.GetMaxActiveFollowers();
 			this.m_isOverMaxChampionSoftCap = false;
 			this.m_needMoreResources = false;
 			this.m_needAtLeastOneChampion = false;
-			if (numActiveChampions > maxActiveChampions)
+			if (numActiveChampions > maxActiveFollowers)
 			{
 				this.m_isOverMaxChampionSoftCap = true;
 			}

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamBattlePayPurchase", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamBattlePayPurchase
 	{
 		[FlexJamMember(Name = "purchaseID", Type = FlexJamType.UInt64)]
@@ -20,12 +20,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "resultCode", Type = FlexJamType.UInt32)]
 		public uint ResultCode { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "productID")]
 		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "productID")]
 		public uint ProductID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "walletName")]
 		[FlexJamMember(Name = "walletName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "walletName")]
 		public string WalletName { get; set; }
 	}
 }

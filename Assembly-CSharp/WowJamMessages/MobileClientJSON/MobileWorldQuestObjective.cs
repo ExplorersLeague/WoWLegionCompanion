@@ -5,7 +5,7 @@ using JamLib;
 namespace WowJamMessages.MobileClientJSON
 {
 	[System.Runtime.Serialization.DataContract]
-	[FlexJamStruct(Name = "MobileWorldQuestObjective", Version = 33577221u)]
+	[FlexJamStruct(Name = "MobileWorldQuestObjective", Version = 39869590u)]
 	public class MobileWorldQuestObjective
 	{
 		[System.Runtime.Serialization.DataMember(Name = "text")]

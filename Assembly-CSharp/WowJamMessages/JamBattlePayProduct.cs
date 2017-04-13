@@ -16,16 +16,16 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		public uint Flags { get; set; }
 
-		[FlexJamMember(Optional = true, Name = "displayInfo", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "displayInfo")]
+		[FlexJamMember(Optional = true, Name = "displayInfo", Type = FlexJamType.Struct)]
 		public JamBattlepayDisplayInfo[] DisplayInfo { get; set; }
 
-		[FlexJamMember(Name = "normalPriceFixedPoint", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "normalPriceFixedPoint")]
+		[FlexJamMember(Name = "normalPriceFixedPoint", Type = FlexJamType.UInt64)]
 		public ulong NormalPriceFixedPoint { get; set; }
 
-		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "productID")]
+		[FlexJamMember(Name = "productID", Type = FlexJamType.UInt32)]
 		public uint ProductID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "type")]
