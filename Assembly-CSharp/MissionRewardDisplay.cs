@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using WowJamMessages;
 using WowJamMessages.MobileClientJSON;
+using WowJamMessages.MobilePlayerJSON;
 using WowStatConstants;
 using WowStaticData;
 
@@ -11,6 +12,19 @@ public class MissionRewardDisplay : MonoBehaviour
 	private void Awake()
 	{
 		this.ClearResults();
+		if (this.m_collectingSpinner != null)
+		{
+			this.m_collectingSpinner.SetActive(false);
+		}
+		if (this.m_rewardName != null)
+		{
+			this.m_rewardName.font = GeneralHelpers.LoadStandardFont();
+		}
+		if (this.m_useItemMessage != null)
+		{
+			this.m_useItemMessage.font = GeneralHelpers.LoadStandardFont();
+			this.m_useItemMessage.text = StaticDB.GetString("USE", "Use");
+		}
 	}
 
 	public void ClearResults()
@@ -41,6 +55,14 @@ public class MissionRewardDisplay : MonoBehaviour
 				anim2.Stop(0f);
 			}
 		}
+		if (this.m_akReadyToConsumeEffectHandle != null)
+		{
+			UiAnimation anim3 = this.m_akReadyToConsumeEffectHandle.GetAnim();
+			if (anim3 != null)
+			{
+				anim3.Stop(0f);
+			}
+		}
 	}
 
 	public void ShowResultSuccess(float delay)
@@ -58,6 +80,24 @@ public class MissionRewardDisplay : MonoBehaviour
 	public void ShowRewardTooltip()
 	{
 		Main.instance.allPopups.ShowRewardTooltip(this.m_rewardType, this.m_rewardID, this.m_rewardQuantity, this.m_rewardIcon, this.m_itemContext);
+	}
+
+	public void PlayAKReadyToUseAnim()
+	{
+		this.m_akReadyToConsumeEffectHandle = UiAnimMgr.instance.PlayAnim("ItemReadyToUseGlowLoop", base.transform, Vector3.zero, 1.2f, 0f);
+	}
+
+	public void StopAKReadyToUseAnim()
+	{
+		if (this.m_akReadyToConsumeEffectHandle != null)
+		{
+			UiAnimation anim = this.m_akReadyToConsumeEffectHandle.GetAnim();
+			if (anim != null)
+			{
+				anim.Stop(0f);
+			}
+			this.m_akReadyToConsumeEffectHandle = null;
+		}
 	}
 
 	private void Update()
@@ -302,6 +342,23 @@ public class MissionRewardDisplay : MonoBehaviour
 		}
 	}
 
+	public void ConsumeThisItem()
+	{
+		Main.instance.m_UISound.Play_ArtifactClick();
+		this.m_mainButton.enabled = false;
+		if (this.m_collectingSpinner != null)
+		{
+			this.m_collectingSpinner.SetActive(true);
+		}
+		if (this.m_useItemMessageBaseObj != null)
+		{
+			this.m_useItemMessageBaseObj.SetActive(false);
+		}
+		this.StopAKReadyToUseAnim();
+		MobilePlayerConsumeArtifactKnowledgeItem obj = new MobilePlayerConsumeArtifactKnowledgeItem();
+		Login.instance.SendToMobileServer(obj);
+	}
+
 	public bool m_isExpandedDisplay;
 
 	public Image m_rewardIcon;
@@ -335,6 +392,15 @@ public class MissionRewardDisplay : MonoBehaviour
 
 	public Transform m_glowEffectRootTransform;
 
+	[Header("Consume this item")]
+	public Transform m_readyToUseGlowEffectRootTransform;
+
+	public GameObject m_collectingSpinner;
+
+	public GameObject m_useItemMessageBaseObj;
+
+	public Text m_useItemMessage;
+
 	[Header("Error reporting")]
 	public Text m_iconErrorText;
 
@@ -351,6 +417,8 @@ public class MissionRewardDisplay : MonoBehaviour
 	private UiAnimMgr.UiAnimHandle m_effectHandle;
 
 	private UiAnimMgr.UiAnimHandle m_glowEffectHandle;
+
+	private UiAnimMgr.UiAnimHandle m_akReadyToConsumeEffectHandle;
 
 	public enum RewardType
 	{

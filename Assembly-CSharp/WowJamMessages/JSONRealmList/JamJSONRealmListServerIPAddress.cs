@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[FlexJamStruct(Name = "JamJSONRealmListServerIPAddress", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamJSONRealmListServerIPAddress", Version = 28333852u)]
 	public class JamJSONRealmListServerIPAddress
 	{
-		[FlexJamMember(Name = "ip", Type = FlexJamType.SockAddr)]
 		[System.Runtime.Serialization.DataMember(Name = "ip")]
+		[FlexJamMember(Name = "ip", Type = FlexJamType.SockAddr)]
 		public string Ip { get; set; }
 
 		[FlexJamMember(Name = "port", Type = FlexJamType.UInt16)]

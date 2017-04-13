@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using WowJamMessages.MobileClientJSON;
 
 public class ZoneMissionOverview : MonoBehaviour
 {
@@ -12,22 +13,30 @@ public class ZoneMissionOverview : MonoBehaviour
 		}
 		PinchZoomContentManager pinchZoomManager = ZoneMissionOverview.m_pinchZoomManager;
 		pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Combine(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
+		Main instance = Main.instance;
+		instance.InvasionPOIChangedAction = (Action)Delegate.Combine(instance.InvasionPOIChangedAction, new Action(this.HandleInvasionPOIChanged));
 	}
 
 	private void OnDisable()
 	{
 		PinchZoomContentManager pinchZoomManager = ZoneMissionOverview.m_pinchZoomManager;
 		pinchZoomManager.ZoomFactorChanged = (Action<bool>)Delegate.Remove(pinchZoomManager.ZoomFactorChanged, new Action<bool>(this.OnZoomChanged));
+		Main instance = Main.instance;
+		instance.InvasionPOIChangedAction = (Action)Delegate.Remove(instance.InvasionPOIChangedAction, new Action(this.HandleInvasionPOIChanged));
 	}
 
 	private void Start()
 	{
 		if (this.zoneNameTag.Length > 0)
 		{
+			this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
 			this.zoneNameText.text = StaticDB.GetString(this.zoneNameTag, null);
+			this.m_invasionZoneNameText.text = StaticDB.GetString(this.zoneNameTag, null);
+			this.HandleInvasionPOIChanged();
 		}
 		else
 		{
+			this.m_invasionZoneNameArea.SetActive(false);
 			this.m_zoneNameArea.SetActive(false);
 			this.m_statsArea.SetActive(false);
 		}
@@ -35,6 +44,16 @@ public class ZoneMissionOverview : MonoBehaviour
 
 	private void Update()
 	{
+		if (this.m_invasionZoneNameArea.activeSelf)
+		{
+			long num = LegionfallData.GetCurrentInvasionExpirationTime() - GarrisonStatus.CurrentTime();
+			num = ((num <= 0L) ? 0L : num);
+			if (num <= 0L)
+			{
+				this.m_invasionZoneNameArea.SetActive(false);
+				this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
+			}
+		}
 	}
 
 	private void OnZoomChanged(bool force)
@@ -49,6 +68,21 @@ public class ZoneMissionOverview : MonoBehaviour
 		else
 		{
 			component.interactable = true;
+		}
+	}
+
+	private void HandleInvasionPOIChanged()
+	{
+		JamMobileAreaPOI currentInvasionPOI = LegionfallData.GetCurrentInvasionPOI();
+		if (currentInvasionPOI != null && currentInvasionPOI.AreaPoiID == this.m_invasionPOIID)
+		{
+			this.m_invasionZoneNameArea.SetActive(true);
+			this.m_zoneNameArea.SetActive(false);
+		}
+		else
+		{
+			this.m_invasionZoneNameArea.SetActive(false);
+			this.m_zoneNameArea.SetActive(this.zoneNameTag.Length > 0);
 		}
 	}
 
@@ -73,6 +107,12 @@ public class ZoneMissionOverview : MonoBehaviour
 	public string zoneNameTag;
 
 	public Text zoneNameText;
+
+	public int m_invasionPOIID;
+
+	public GameObject m_invasionZoneNameArea;
+
+	public Text m_invasionZoneNameText;
 
 	private static PinchZoomContentManager m_pinchZoomManager;
 }

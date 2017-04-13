@@ -5,11 +5,11 @@ using JamLib;
 namespace WowJamMessages.MobileClientJSON
 {
 	[System.Runtime.Serialization.DataContract]
-	[FlexJamMessage(Id = 4852, Name = "MobileClientShipmentTypes", Version = 33577221u)]
+	[FlexJamMessage(Id = 4862, Name = "MobileClientShipmentTypes", Version = 39869590u)]
 	public class MobileClientShipmentTypes
 	{
-		[System.Runtime.Serialization.DataMember(Name = "shipment")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "shipment", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "shipment")]
 		public MobileClientShipmentType[] Shipment { get; set; }
 	}
 }

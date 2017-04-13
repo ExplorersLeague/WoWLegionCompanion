@@ -30,6 +30,8 @@ public class GeneralHelpers : MonoBehaviour
 			return result2;
 		case 5:
 			return result3;
+		case 6:
+			return result2;
 		default:
 			return Color.red;
 		}
@@ -71,10 +73,7 @@ public class GeneralHelpers : MonoBehaviour
 		if (iconFileDataID == 894556)
 		{
 			string locale = Main.instance.GetLocale();
-			if (locale != "enUS")
-			{
-				return Resources.Load<Sprite>("MiscIcons/LocalizedIcons/" + locale + "/XP_Icon");
-			}
+			return Resources.Load<Sprite>("MiscIcons/LocalizedIcons/" + locale + "/XP_Icon");
 		}
 		if (iconFileDataID == 1380306)
 		{
@@ -164,6 +163,12 @@ public class GeneralHelpers : MonoBehaviour
 		{
 			isMaxLevelAndMaxQuality = true;
 		}
+	}
+
+	public static uint GetMaxFollowerItemLevel()
+	{
+		GarrFollowerTypeRec record = StaticDB.garrFollowerTypeDB.GetRecord(4);
+		return record.MaxItemLevel;
 	}
 
 	public static FollowerStatus GetFollowerStatus(JamGarrisonFollower follower)
@@ -365,12 +370,6 @@ public class GeneralHelpers : MonoBehaviour
 			}
 		}
 		return num;
-	}
-
-	public static int GetMaxActiveChampions()
-	{
-		GarrFollowerTypeRec record = StaticDB.garrFollowerTypeDB.GetRecord(4);
-		return (int)record.MaxFollowers;
 	}
 
 	public static string GetInventoryTypeString(INVENTORY_TYPE invType)
@@ -927,11 +926,23 @@ public class GeneralHelpers : MonoBehaviour
 	public static Sprite GetLocalizedFollowerXpIcon()
 	{
 		string locale = Main.instance.GetLocale();
-		if (locale == "enUS")
-		{
-			return Resources.Load<Sprite>("MiscIcons/XPBonus_Icon");
-		}
 		return Resources.Load<Sprite>("MiscIcons/LocalizedIcons/" + locale + "/XPBonus_Icon");
+	}
+
+	public static string LimitZhLineLength(string inText, int length)
+	{
+		if (Main.instance.GetLocale() == "zhCN" || Main.instance.GetLocale() == "zhTW")
+		{
+			int num = 0;
+			string str = string.Empty;
+			while (inText.Substring(num).Length > length)
+			{
+				str = str + inText.Substring(num, length) + " ";
+				num += length;
+			}
+			return str + inText.Substring(num);
+		}
+		return inText;
 	}
 
 	public static string s_defaultColor = "ffd200ff";

@@ -22,9 +22,9 @@ public class ArmamentDialog : MonoBehaviour
 		Main.instance.m_canvasBlurManager.AddBlurRef_MainCanvas();
 		Main instance = Main.instance;
 		instance.ArmamentInventoryChangedAction = (Action)Delegate.Combine(instance.ArmamentInventoryChangedAction, new Action(this.HandleArmamentsChanged));
-		MobilePlayerFollowerArmamentsRequest mobilePlayerFollowerArmamentsRequest = new MobilePlayerFollowerArmamentsRequest();
-		mobilePlayerFollowerArmamentsRequest.GarrFollowerTypeID = 4;
-		Login.instance.SendToMobileServer(mobilePlayerFollowerArmamentsRequest);
+		MobilePlayerFollowerArmamentsExtendedRequest mobilePlayerFollowerArmamentsExtendedRequest = new MobilePlayerFollowerArmamentsExtendedRequest();
+		mobilePlayerFollowerArmamentsExtendedRequest.GarrFollowerTypeID = 4;
+		Login.instance.SendToMobileServer(mobilePlayerFollowerArmamentsExtendedRequest);
 	}
 
 	private void OnDisable()
@@ -47,7 +47,7 @@ public class ArmamentDialog : MonoBehaviour
 		bool active = true;
 		foreach (object obj in PersistentArmamentData.armamentDictionary.Values)
 		{
-			MobileFollowerArmament item = (MobileFollowerArmament)obj;
+			MobileFollowerArmamentExt item = (MobileFollowerArmamentExt)obj;
 			FollowerInventoryListItem followerInventoryListItem2 = Object.Instantiate<FollowerInventoryListItem>(this.m_armamentListItemPrefab);
 			followerInventoryListItem2.transform.SetParent(this.m_armamentListContent.transform, false);
 			followerInventoryListItem2.SetArmament(item, followerDetailView);

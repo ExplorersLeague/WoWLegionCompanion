@@ -48,9 +48,10 @@ public class TalentTreeItemAbilityButton : MonoBehaviour
 		}
 	}
 
-	public void SetTalent(int garrTalentID)
+	public void SetTalent(int garrTalentID, TalentTreeItemAbilityButton sameTierButton)
 	{
 		this.m_garrTalentID = garrTalentID;
+		this.m_sameTierButton = sameTierButton;
 		this.m_talent = null;
 		if (PersistentTalentData.talentDictionary.ContainsKey(garrTalentID))
 		{
@@ -217,6 +218,11 @@ public class TalentTreeItemAbilityButton : MonoBehaviour
 		return this.m_shouldShowCheckAnim;
 	}
 
+	public TalentTreeItemAbilityButton GetSameTierButton()
+	{
+		return this.m_sameTierButton;
+	}
+
 	public Image m_abilityIcon;
 
 	public Image m_greenFrameGlow;
@@ -252,4 +258,6 @@ public class TalentTreeItemAbilityButton : MonoBehaviour
 	private bool m_playedShowCheckAnim;
 
 	private bool m_playedTalentToast;
+
+	private TalentTreeItemAbilityButton m_sameTierButton;
 }

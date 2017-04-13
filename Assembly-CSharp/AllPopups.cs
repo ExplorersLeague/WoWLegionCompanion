@@ -40,6 +40,7 @@ public class AllPopups : MonoBehaviour
 		this.m_unassignCombatAllyConfirmationDialog.gameObject.SetActive(false);
 		this.m_logoutConfirmation.gameObject.SetActive(false);
 		this.m_regionConfirmation.gameObject.SetActive(false);
+		this.m_legionfallDialog.gameObject.SetActive(false);
 	}
 
 	public void HideLevel3Popups()
@@ -306,6 +307,8 @@ public class AllPopups : MonoBehaviour
 	public MissionDialog m_missionDialog;
 
 	public LevelUpToast m_levelUpToast;
+
+	public LegionfallDialog m_legionfallDialog;
 
 	private FollowerDetailView m_currentFollowerDetailView;
 }

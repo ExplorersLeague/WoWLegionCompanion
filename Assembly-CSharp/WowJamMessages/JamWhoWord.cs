@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamWhoWord", Version = 28333852u)]
 	public class JamWhoWord
 	{
-		[FlexJamMember(Name = "word", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "word")]
+		[FlexJamMember(Name = "word", Type = FlexJamType.String)]
 		public string Word { get; set; }
 	}
 }

@@ -25,7 +25,7 @@ public class PersistentArmamentData
 		}
 	}
 
-	public static void AddOrUpdateArmament(MobileFollowerArmament armament)
+	public static void AddOrUpdateArmament(MobileFollowerArmamentExt armament)
 	{
 		if (PersistentArmamentData.instance.m_armamentDictionary.ContainsKey(armament.ItemID))
 		{

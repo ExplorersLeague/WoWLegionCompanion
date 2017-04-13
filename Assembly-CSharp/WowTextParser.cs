@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using WowStaticData;
 
 public class WowTextParser
@@ -107,13 +106,44 @@ public class WowTextParser
 
 	private string ParseForArtifactXP(string input, int spellID)
 	{
-		string value = Regex.Match(input, "\\d+").Value;
-		if (value == string.Empty)
+		int num = 0;
+		while (!this.CharacterIsNumeric(input[num]) && num < input.Length)
+		{
+			num++;
+		}
+		if (num >= input.Length)
 		{
 			return input;
 		}
-		int inputAmount = int.Parse(value);
-		return input.Replace(value, GeneralHelpers.ApplyArtifactXPMultiplier(inputAmount, GarrisonStatus.ArtifactXpMultiplier).ToString());
+		string text = string.Empty;
+		string text2 = string.Empty;
+		while (num < input.Length && (this.CharacterIsNumeric(input[num]) || input[num] == ','))
+		{
+			if (input[num] != ',')
+			{
+				text += input[num];
+			}
+			text2 += input[num];
+			num++;
+		}
+		if (text == string.Empty)
+		{
+			return input;
+		}
+		int inputAmount = int.Parse(text);
+		int num2 = GeneralHelpers.ApplyArtifactXPMultiplier(inputAmount, GarrisonStatus.ArtifactXpMultiplier);
+		if (num2 > 1000000)
+		{
+			double num3 = (double)((float)num2) / 1000000.0;
+			string newValue = string.Format("{0:F1} {1}", num3, StaticDB.GetString("MILLION", "million"));
+			return input.Replace(text2, newValue);
+		}
+		if (num2 > 999)
+		{
+			string newValue2 = string.Format("{0},{1:D3}", num2 / 1000, num2 % 1000);
+			return input.Replace(text2, newValue2);
+		}
+		return input.Replace(text2, num2.ToString());
 	}
 
 	private void SimplifyTokens()
@@ -625,6 +655,10 @@ public class WowTextParser
 		}
 		this.ConsumeCharacters(10);
 		this.ReadAndConsumeNumber();
+		if (this.m_currentValue == string.Empty)
+		{
+			return;
+		}
 		int id = Convert.ToInt32(this.m_currentValue);
 		GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(id);
 		if (record != null)

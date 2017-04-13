@@ -59,8 +59,6 @@ public class AssetBundleManager : MonoBehaviour
 		{
 			assetAddress = this.m_assetServerIpAddress_CN;
 		}
-		string dataErrorTitle = this.GetDataErrorTitleText();
-		string dataErrorDescription = this.GetDataErrorDescriptionText();
 		this.m_assetServerURL = string.Concat(new string[]
 		{
 			"http://",
@@ -155,7 +153,7 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle("gnrc", delegate(AssetBundle value)
 		{
-			this.<genericStaticDB>__9 = value;
+			this.<genericStaticDB>__7 = value;
 		}));
 		if (genericStaticDB == null)
 		{
@@ -169,7 +167,7 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle(localeStaticIdentifier, delegate(AssetBundle value)
 		{
-			this.<localizedStaticDB>__10 = value;
+			this.<localizedStaticDB>__8 = value;
 		}));
 		if (localizedStaticDB == null)
 		{

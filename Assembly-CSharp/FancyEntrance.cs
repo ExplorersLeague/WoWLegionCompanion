@@ -20,6 +20,7 @@ public class FancyEntrance : MonoBehaviour
 
 	public void Activate()
 	{
+		base.gameObject.transform.localScale = Vector3.one;
 		this.m_entranceDelayDuration = this.m_timeToDelayEntrance;
 		this.m_fadeInTimeElapsed = 0f;
 		this.m_fadeInCanvasGroup.alpha = 0f;

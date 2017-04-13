@@ -312,8 +312,9 @@ public class FollowerDetailView : MonoBehaviour
 			bool flag3 = GarrisonStatus.GetRemainingFollowerActivations() > 0;
 			this.m_activateChampionButton.SetActive(flag2 && flag3);
 			int numActiveChampions = GeneralHelpers.GetNumActiveChampions();
-			int maxActiveChampions = GeneralHelpers.GetMaxActiveChampions();
-			this.m_deactivateChampionButton.SetActive(!flag2 && numActiveChampions > maxActiveChampions);
+			int maxActiveFollowers = GarrisonStatus.GetMaxActiveFollowers();
+			bool flag4 = follower.CurrentMissionID != 0;
+			this.m_deactivateChampionButton.SetActive(!flag2 && !flag4 && numActiveChampions > maxActiveFollowers);
 		}
 	}
 

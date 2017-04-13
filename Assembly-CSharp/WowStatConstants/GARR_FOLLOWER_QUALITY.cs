@@ -9,6 +9,7 @@ namespace WowStatConstants
 		UNCOMMON,
 		RARE,
 		EPIC,
-		LEGENDARY
+		LEGENDARY,
+		TITLE
 	}
 }

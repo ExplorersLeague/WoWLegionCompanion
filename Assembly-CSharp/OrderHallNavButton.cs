@@ -164,12 +164,16 @@ public class OrderHallNavButton : MonoBehaviour
 		}
 		case OrderHallNavButton.NavButtonType.recruit:
 		{
-			int numReadyShipments = PersistentShipmentData.GetNumReadyShipments();
-			if (numReadyShipments == 0 && this.m_notificationBadgeRoot.activeSelf)
+			int num = PersistentShipmentData.GetNumReadyShipments();
+			if (ArtifactKnowledgeData.s_artifactKnowledgeInfo != null && ArtifactKnowledgeData.s_artifactKnowledgeInfo.CurrentLevel < ArtifactKnowledgeData.s_artifactKnowledgeInfo.MaxLevel)
+			{
+				num += ArtifactKnowledgeData.s_artifactKnowledgeInfo.ItemsInBags;
+			}
+			if (num == 0 && this.m_notificationBadgeRoot.activeSelf)
 			{
 				this.m_notificationBadgeRoot.SetActive(false);
 			}
-			else if (numReadyShipments > 0)
+			else if (num > 0)
 			{
 				if (!this.m_notificationBadgeRoot.activeSelf)
 				{
@@ -179,7 +183,7 @@ public class OrderHallNavButton : MonoBehaviour
 				{
 					this.m_notificationPulseHandle = UiAnimMgr.instance.PlayAnim("MinimapLoopPulseAnim", this.m_notificationBadgeRoot.transform, Vector3.zero, 1f, 0f);
 				}
-				this.m_notificationBadgeText.text = string.Empty + numReadyShipments;
+				this.m_notificationBadgeText.text = string.Empty + num;
 			}
 			break;
 		}

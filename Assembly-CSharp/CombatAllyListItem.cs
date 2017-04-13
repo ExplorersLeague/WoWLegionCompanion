@@ -94,7 +94,14 @@ public class CombatAllyListItem : MonoBehaviour
 					this.m_championName.gameObject.SetActive(true);
 					GarrFollowerRec record2 = StaticDB.garrFollowerDB.GetRecord(jamGarrisonFollower.GarrFollowerID);
 					CreatureRec record3 = StaticDB.creatureDB.GetRecord((GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record2.HordeCreatureID : record2.AllianceCreatureID);
-					this.m_championName.text = record3.Name;
+					if (jamGarrisonFollower.Quality == 6 && record2.TitleName != null && record2.TitleName.Length > 0)
+					{
+						this.m_championName.text = record2.TitleName;
+					}
+					else if (record2 != null)
+					{
+						this.m_championName.text = record3.Name;
+					}
 					this.m_championName.color = GeneralHelpers.GetQualityColor(jamGarrisonFollower.Quality);
 					this.m_combatAllySupportSpellDisplay.gameObject.SetActive(true);
 					this.m_combatAllySupportSpellDisplay.SetSpell(jamGarrisonFollower.ZoneSupportSpellID);

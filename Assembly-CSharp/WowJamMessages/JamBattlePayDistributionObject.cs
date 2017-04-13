@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamBattlePayDistributionObject", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamBattlePayDistributionObject
 	{
 		[FlexJamMember(Name = "revoked", Type = FlexJamType.Bool)]
@@ -20,16 +20,16 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "targetPlayer")]
 		public string TargetPlayer { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "deliverable")]
 		[FlexJamMember(Optional = true, Name = "deliverable", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "deliverable")]
 		public JamBattlePayDeliverable[] Deliverable { get; set; }
 
-		[FlexJamMember(Name = "purchaseID", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
+		[FlexJamMember(Name = "purchaseID", Type = FlexJamType.UInt64)]
 		public ulong PurchaseID { get; set; }
 
-		[FlexJamMember(Name = "status", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "status")]
+		[FlexJamMember(Name = "status", Type = FlexJamType.UInt32)]
 		public uint Status { get; set; }
 
 		[FlexJamMember(Name = "targetNativeRealm", Type = FlexJamType.UInt32)]

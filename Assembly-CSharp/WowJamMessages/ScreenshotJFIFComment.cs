@@ -12,12 +12,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
 		public string Guid { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "level")]
 		[FlexJamMember(Name = "level", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "level")]
 		public int Level { get; set; }
 
-		[FlexJamMember(Name = "raceID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "raceID")]
+		[FlexJamMember(Name = "raceID", Type = FlexJamType.UInt32)]
 		public uint RaceID { get; set; }
 
 		[FlexJamMember(Name = "worldport", Type = FlexJamType.String)]
@@ -32,8 +32,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "realmName")]
 		public string RealmName { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "zoneName")]
 		[FlexJamMember(Name = "zoneName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "zoneName")]
 		public string ZoneName { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "facing")]
@@ -44,24 +44,24 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "mapID")]
 		public uint MapID { get; set; }
 
-		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "position")]
+		[FlexJamMember(Name = "position", Type = FlexJamType.Struct)]
 		public Vector3 Position { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "name")]
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "classID")]
 		[FlexJamMember(Name = "classID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "classID")]
 		public uint ClassID { get; set; }
 
-		[FlexJamMember(Name = "sex", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "sex")]
+		[FlexJamMember(Name = "sex", Type = FlexJamType.UInt32)]
 		public uint Sex { get; set; }
 
-		[FlexJamMember(Name = "mapName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "mapName")]
+		[FlexJamMember(Name = "mapName", Type = FlexJamType.String)]
 		public string MapName { get; set; }
 	}
 }

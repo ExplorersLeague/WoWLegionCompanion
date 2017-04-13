@@ -17,40 +17,40 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "offerTime")]
 		public int OfferTime { get; set; }
 
-		[FlexJamMember(Name = "successChance", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "successChance")]
+		[FlexJamMember(Name = "successChance", Type = FlexJamType.Int32)]
 		public int SuccessChance { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "travelDuration")]
 		[FlexJamMember(Name = "travelDuration", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "travelDuration")]
 		public int TravelDuration { get; set; }
 
 		[FlexJamMember(Name = "missionRecID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "missionRecID")]
 		public int MissionRecID { get; set; }
 
-		[FlexJamMember(Name = "missionState", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "missionState")]
+		[FlexJamMember(Name = "missionState", Type = FlexJamType.Int32)]
 		public int MissionState { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
 		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		public uint Flags { get; set; }
 
-		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "startTime")]
+		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
 		public int StartTime { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "dbID")]
 		[FlexJamMember(Name = "dbID", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "dbID")]
 		public ulong DbID { get; set; }
 
-		[FlexJamMember(Name = "offerDuration", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "offerDuration")]
+		[FlexJamMember(Name = "offerDuration", Type = FlexJamType.Int32)]
 		public int OfferDuration { get; set; }
 
-		[FlexJamMember(Name = "missionDuration", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "missionDuration")]
+		[FlexJamMember(Name = "missionDuration", Type = FlexJamType.Int32)]
 		public int MissionDuration { get; set; }
 	}
 }

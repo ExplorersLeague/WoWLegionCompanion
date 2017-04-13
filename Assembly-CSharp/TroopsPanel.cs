@@ -50,6 +50,7 @@ public class TroopsPanel : MonoBehaviour
 		foreach (TroopsListItem troopsListItem in componentsInChildren)
 		{
 			troopsListItem.ClearAndHideLootArea();
+			troopsListItem.AddInventoryItems();
 		}
 	}
 

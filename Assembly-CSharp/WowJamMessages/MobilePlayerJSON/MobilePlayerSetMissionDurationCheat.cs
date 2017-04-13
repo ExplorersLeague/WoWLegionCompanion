@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobilePlayerJSON
 {
+	[FlexJamMessage(Id = 4796, Name = "MobilePlayerSetMissionDurationCheat", Version = 38820897u)]
 	[System.Runtime.Serialization.DataContract]
-	[FlexJamMessage(Id = 4797, Name = "MobilePlayerSetMissionDurationCheat", Version = 33577221u)]
 	public class MobilePlayerSetMissionDurationCheat
 	{
 		[FlexJamMember(Name = "seconds", Type = FlexJamType.Int32)]

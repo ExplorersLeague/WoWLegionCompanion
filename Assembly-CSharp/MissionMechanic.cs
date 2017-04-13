@@ -59,17 +59,21 @@ public class MissionMechanic : MonoBehaviour
 		JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[garrFollowerID];
 		foreach (int abilityID in jamGarrisonFollower.AbilityID)
 		{
-			if (abilityID != 414 && abilityID != 415)
+			GarrAbilityRec record = StaticDB.garrAbilityDB.GetRecord(abilityID);
+			if (record != null)
 			{
-				StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(abilityID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+				if ((record.Flags & 1024u) != 0u)
 				{
-					if (garrAbilityEffectRec.AbilityAction == 0u)
+					StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(abilityID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
 					{
+						if (garrAbilityEffectRec.AbilityAction == 0u)
+						{
+							return true;
+						}
+						<GetUsefulBuffAbilitiesForFollower>c__AnonStorey.usefulBuffAbilityIDs.Add(abilityID);
 						return true;
-					}
-					<GetUsefulBuffAbilitiesForFollower>c__AnonStorey.usefulBuffAbilityIDs.Add(abilityID);
-					return true;
-				});
+					});
+				}
 			}
 		}
 		return <GetUsefulBuffAbilitiesForFollower>c__AnonStorey.usefulBuffAbilityIDs;

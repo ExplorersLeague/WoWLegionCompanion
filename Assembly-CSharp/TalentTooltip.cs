@@ -48,7 +48,14 @@ public class TalentTooltip : MonoBehaviour
 		{
 			this.m_resourceIcon.sprite = sprite2;
 		}
-		Duration duration = new Duration((!abilityButton.CanRespec()) ? this.m_garrTalentRec.ResearchDurationSecs : this.m_garrTalentRec.RespecDurationSecs, false);
+		bool flag = abilityButton.IsResearching() && abilityButton.IsRespec();
+		bool flag2 = false;
+		TalentTreeItemAbilityButton sameTierButton = abilityButton.GetSameTierButton();
+		if (sameTierButton != null && (sameTierButton.IsOwned() || (sameTierButton.IsResearching() && sameTierButton.IsRespec())))
+		{
+			flag2 = true;
+		}
+		Duration duration = new Duration((!abilityButton.CanRespec() && !flag && !flag2) ? this.m_garrTalentRec.ResearchDurationSecs : this.m_garrTalentRec.RespecDurationSecs, false);
 		this.m_researchDurationText.text = duration.DurationString;
 		this.m_yourResourcesDisplayObj.SetActive(false);
 		if (abilityButton.CanResearch() || abilityButton.CanRespec())

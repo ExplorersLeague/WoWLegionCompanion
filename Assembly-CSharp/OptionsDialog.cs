@@ -24,6 +24,7 @@ public class OptionsDialog : MonoBehaviour
 		this.m_mapFilters[11].onValueChanged.RemoveListener(new UnityAction<bool>(this.OnValueChanged_EnableBountyDreamweavers));
 		this.m_mapFilters[12].onValueChanged.RemoveListener(new UnityAction<bool>(this.OnValueChanged_EnableBountyCourtOfFarondis));
 		this.m_mapFilters[13].onValueChanged.RemoveListener(new UnityAction<bool>(this.OnValueChanged_EnableBountyHighmountainTribes));
+		this.m_mapFilters[14].onValueChanged.RemoveListener(new UnityAction<bool>(this.OnValueChanged_EnableInvasion));
 		bool flag = Main.instance.m_UISound.IsSFXEnabled();
 		string @string = SecurePlayerPrefs.GetString("EnableSFX", Main.uniqueIdentifier);
 		if (@string != null)
@@ -41,7 +42,25 @@ public class OptionsDialog : MonoBehaviour
 		{
 			Main.instance.m_UISound.EnableSFX(flag);
 		}
+		bool flag2 = Main.instance.m_enableNotifications;
+		string string2 = SecurePlayerPrefs.GetString("EnableNotifications", Main.uniqueIdentifier);
+		if (string2 != null)
+		{
+			if (string2 == "true")
+			{
+				flag2 = true;
+			}
+			else if (string2 == "false")
+			{
+				flag2 = false;
+			}
+		}
+		if (Main.instance.m_enableNotifications != flag2)
+		{
+			Main.instance.m_enableNotifications = flag2;
+		}
 		this.m_enableSFX.isOn = Main.instance.m_UISound.IsSFXEnabled();
+		this.m_enableNotifications.isOn = Main.instance.m_enableNotifications;
 		this.m_mapFilters[0].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.All);
 		this.m_mapFilters[1].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.ArtifactPower);
 		this.m_mapFilters[3].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.Gear);
@@ -56,6 +75,7 @@ public class OptionsDialog : MonoBehaviour
 		this.m_mapFilters[11].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.Bounty_Dreamweavers);
 		this.m_mapFilters[12].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.Bounty_CourtOfFarondis);
 		this.m_mapFilters[13].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.Bounty_HighmountainTribes);
+		this.m_mapFilters[14].isOn = AdventureMapPanel.instance.IsFilterEnabled(MapFilterType.Invasion);
 		this.m_mapFilters[0].onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableAll));
 		this.m_mapFilters[1].onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableArtifactPower));
 		this.m_mapFilters[3].onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableGear));
@@ -70,6 +90,7 @@ public class OptionsDialog : MonoBehaviour
 		this.m_mapFilters[11].onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableBountyDreamweavers));
 		this.m_mapFilters[12].onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableBountyCourtOfFarondis));
 		this.m_mapFilters[13].onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableBountyHighmountainTribes));
+		this.m_mapFilters[14].onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableInvasion));
 	}
 
 	private string GetQuestTitle(int questID)
@@ -99,6 +120,7 @@ public class OptionsDialog : MonoBehaviour
 	private void Start()
 	{
 		this.m_enableSFX.onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableSFX));
+		this.m_enableNotifications.onValueChanged.AddListener(new UnityAction<bool>(this.OnValueChanged_EnableNotifications));
 		this.m_titleText.font = GeneralHelpers.LoadStandardFont();
 		this.m_okText.font = GeneralHelpers.LoadStandardFont();
 		this.m_filterTitleText.font = GeneralHelpers.LoadStandardFont();
@@ -107,6 +129,7 @@ public class OptionsDialog : MonoBehaviour
 		this.m_okText.text = StaticDB.GetString("OK", null);
 		this.m_filterTitleText.text = StaticDB.GetString("WORLD_QUEST_FILTERS", null);
 		this.m_sfxText.text = StaticDB.GetString("ENABLE_SFX", null);
+		this.m_notificationsText.text = StaticDB.GetString("ENABLE_NOTIFICATIONS", "Enable Notifications (PH)");
 		this.m_mapFilters[0].GetComponentInChildren<Text>().text = StaticDB.GetString("SHOW_ALL", "Show All");
 		this.m_mapFilters[1].GetComponentInChildren<Text>().text = StaticDB.GetString("ARTIFACT_POWER", "Artifact Power");
 		this.m_mapFilters[3].GetComponentInChildren<Text>().text = StaticDB.GetString("EQUIPMENT", null);
@@ -121,6 +144,7 @@ public class OptionsDialog : MonoBehaviour
 		this.m_mapFilters[11].GetComponentInChildren<Text>().text = this.GetQuestTitle(42170);
 		this.m_mapFilters[12].GetComponentInChildren<Text>().text = this.GetQuestTitle(42420);
 		this.m_mapFilters[13].GetComponentInChildren<Text>().text = this.GetQuestTitle(42233);
+		this.m_mapFilters[14].GetComponentInChildren<Text>().text = StaticDB.GetString("DEMON_ASSAULT", "Demon Assault PH");
 		this.SyncWithOptions();
 	}
 
@@ -149,6 +173,13 @@ public class OptionsDialog : MonoBehaviour
 		Main.instance.m_UISound.Play_ButtonBlackClick();
 		Main.instance.m_UISound.EnableSFX(isOn);
 		SecurePlayerPrefs.SetString("EnableSFX", isOn.ToString().ToLower(), Main.uniqueIdentifier);
+	}
+
+	private void OnValueChanged_EnableNotifications(bool isOn)
+	{
+		Main.instance.m_UISound.Play_ButtonBlackClick();
+		Main.instance.m_enableNotifications = isOn;
+		SecurePlayerPrefs.SetString("EnableNotifications", isOn.ToString().ToLower(), Main.uniqueIdentifier);
 	}
 
 	private void OnValueChanged_EnableAll(bool isOn)
@@ -235,7 +266,15 @@ public class OptionsDialog : MonoBehaviour
 		AdventureMapPanel.instance.EnableMapFilter(MapFilterType.Bounty_HighmountainTribes, isOn);
 	}
 
+	private void OnValueChanged_EnableInvasion(bool isOn)
+	{
+		Main.instance.m_UISound.Play_ButtonBlackClick();
+		AdventureMapPanel.instance.EnableMapFilter(MapFilterType.Invasion, isOn);
+	}
+
 	public Toggle m_enableSFX;
+
+	public Toggle m_enableNotifications;
 
 	public Toggle[] m_mapFilters;
 
@@ -246,4 +285,6 @@ public class OptionsDialog : MonoBehaviour
 	public Text m_filterTitleText;
 
 	public Text m_sfxText;
+
+	public Text m_notificationsText;
 }

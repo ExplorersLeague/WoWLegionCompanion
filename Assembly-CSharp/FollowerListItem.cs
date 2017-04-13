@@ -151,7 +151,11 @@ public class FollowerListItem : MonoBehaviour
 		{
 			return;
 		}
-		if (record != null)
+		if (follower.Quality == 6 && record.TitleName != null && record.TitleName.Length > 0)
+		{
+			this.nameText.text = record.TitleName;
+		}
+		else if (record != null)
 		{
 			CreatureRec record2 = StaticDB.creatureDB.GetRecord((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? record.AllianceCreatureID : record.HordeCreatureID);
 			this.nameText.text = record2.Name;
@@ -186,8 +190,8 @@ public class FollowerListItem : MonoBehaviour
 		bool flag = (follower.Flags & 8) != 0;
 		if (flag)
 		{
-			this.qualityBorder.color = Color.white;
-			this.levelBorder.color = Color.white;
+			this.m_portraitQualityRing.color = Color.white;
+			this.m_levelBorder.color = Color.white;
 			this.nameText.color = Color.white;
 			int j;
 			for (j = 0; j < follower.Durability; j++)
@@ -200,16 +204,34 @@ public class FollowerListItem : MonoBehaviour
 				GameObject gameObject2 = Object.Instantiate<GameObject>(this.m_troopEmptyHeartPrefab);
 				gameObject2.transform.SetParent(this.m_troopHeartContainer.transform, false);
 			}
-			this.qualityBorder.gameObject.SetActive(false);
-			this.levelBorder.gameObject.SetActive(false);
+			this.m_portraitQualityRing.gameObject.SetActive(false);
+			this.m_portraitQualityRing_TitleQuality.gameObject.SetActive(false);
+			this.m_levelBorder.gameObject.SetActive(false);
+			this.m_levelBorder_TitleQuality.gameObject.SetActive(false);
 			this.followerPortraitFrame.enabled = false;
 			this.m_progressBarObj.SetActive(false);
+			this.m_levelText.gameObject.SetActive(false);
 		}
 		else
 		{
+			this.m_levelText.gameObject.SetActive(true);
+			if (follower.Quality == 6)
+			{
+				this.m_portraitQualityRing.gameObject.SetActive(false);
+				this.m_portraitQualityRing_TitleQuality.gameObject.SetActive(true);
+				this.m_levelBorder.gameObject.SetActive(false);
+				this.m_levelBorder_TitleQuality.gameObject.SetActive(true);
+			}
+			else
+			{
+				this.m_portraitQualityRing.gameObject.SetActive(true);
+				this.m_portraitQualityRing_TitleQuality.gameObject.SetActive(false);
+				this.m_levelBorder.gameObject.SetActive(true);
+				this.m_levelBorder_TitleQuality.gameObject.SetActive(false);
+			}
 			Color qualityColor = GeneralHelpers.GetQualityColor(follower.Quality);
-			this.qualityBorder.color = qualityColor;
-			this.levelBorder.color = qualityColor;
+			this.m_portraitQualityRing.color = qualityColor;
+			this.m_levelBorder.color = qualityColor;
 			if (follower.Quality <= 1)
 			{
 				this.nameText.color = Color.white;
@@ -314,7 +336,7 @@ public class FollowerListItem : MonoBehaviour
 			MissionFollowerSlotGroup componentInChildren = base.gameObject.transform.parent.parent.parent.parent.gameObject.GetComponentInChildren<MissionFollowerSlotGroup>();
 			if (componentInChildren != null && componentInChildren.gameObject.activeSelf)
 			{
-				this.m_inParty = componentInChildren.SetFollower(this.m_followerID, this.followerPortrait.overrideSprite, this.qualityBorder.color, forceReplaceFirstSlot);
+				this.m_inParty = componentInChildren.SetFollower(this.m_followerID, this.followerPortrait.overrideSprite, this.m_portraitQualityRing.color, forceReplaceFirstSlot);
 				if (this.m_inParty)
 				{
 					JamGarrisonFollower jamGarrisonFollower = PersistentFollowerData.followerDictionary[this.m_followerID];
@@ -755,9 +777,13 @@ public class FollowerListItem : MonoBehaviour
 
 	public GameObject selectedImage;
 
-	public Image qualityBorder;
+	public Image m_portraitQualityRing;
 
-	public Image levelBorder;
+	public Image m_portraitQualityRing_TitleQuality;
+
+	public Image m_levelBorder;
+
+	public Image m_levelBorder_TitleQuality;
 
 	public Image darkeningImage;
 

@@ -117,6 +117,16 @@ public class GarrisonStatus
 		return GarrisonStatus.s_followerActivationGoldCost;
 	}
 
+	public static void SetMaxActiveFollowers(int maxActiveFollowers)
+	{
+		GarrisonStatus.s_maxActiveFollowers = maxActiveFollowers;
+	}
+
+	public static int GetMaxActiveFollowers()
+	{
+		return GarrisonStatus.s_maxActiveFollowers;
+	}
+
 	private static long s_serverConnectTime;
 
 	private static long s_clientConnectTime;
@@ -140,4 +150,6 @@ public class GarrisonStatus
 	private static int s_remainingFollowerActivations;
 
 	private static int s_followerActivationGoldCost;
+
+	private static int s_maxActiveFollowers;
 }

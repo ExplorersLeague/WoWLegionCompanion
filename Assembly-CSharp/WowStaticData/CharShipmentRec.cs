@@ -16,6 +16,8 @@ namespace WowStaticData
 
 		public int DummyItemID { get; private set; }
 
+		public uint Flags { get; private set; }
+
 		public void Deserialize(string valueLine)
 		{
 			int num = 0;
@@ -56,6 +58,9 @@ namespace WowStaticData
 				break;
 			case 5:
 				this.DummyItemID = Convert.ToInt32(valueText);
+				break;
+			case 6:
+				this.Flags = Convert.ToUInt32(valueText);
 				break;
 			}
 		}

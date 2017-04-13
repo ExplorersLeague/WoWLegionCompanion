@@ -66,7 +66,7 @@ public class DebugOptionsPopup : MonoBehaviour
 
 	public void TestUIEffect()
 	{
-		UiAnimMgr.instance.PlayAnim("GarrisonMissionRewardsEffectTemplate", this.m_testEffectArea.transform, Vector3.zero, 2f, 0f);
+		UiAnimMgr.instance.PlayAnim("ItemReadyToUseGlowLoop", this.m_testEffectArea.transform, Vector3.zero, 2f, 0f);
 	}
 
 	public Toggle m_enableDetailedZoneMaps;

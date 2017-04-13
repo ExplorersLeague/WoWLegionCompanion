@@ -64,7 +64,7 @@ public class FollowerInventoryListView : MonoBehaviour
 		int num2 = 0;
 		foreach (object obj2 in PersistentArmamentData.armamentDictionary.Values)
 		{
-			MobileFollowerArmament item2 = (MobileFollowerArmament)obj2;
+			MobileFollowerArmamentExt item2 = (MobileFollowerArmamentExt)obj2;
 			if (num2 == 0)
 			{
 				GameObject gameObject4 = Object.Instantiate<GameObject>(this.m_headerPrefab);

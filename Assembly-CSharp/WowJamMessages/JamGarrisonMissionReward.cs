@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamGarrisonMissionReward", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamGarrisonMissionReward
 	{
 		public JamGarrisonMissionReward()
@@ -21,20 +21,20 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 
-		[FlexJamMember(Name = "currencyType", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "currencyType")]
+		[FlexJamMember(Name = "currencyType", Type = FlexJamType.Int32)]
 		public int CurrencyType { get; set; }
 
-		[FlexJamMember(Name = "followerXP", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "followerXP")]
+		[FlexJamMember(Name = "followerXP", Type = FlexJamType.UInt32)]
 		public uint FollowerXP { get; set; }
 
 		[FlexJamMember(Name = "currencyQuantity", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "currencyQuantity")]
 		public uint CurrencyQuantity { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "itemQuantity")]
 		[FlexJamMember(Name = "itemQuantity", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemQuantity")]
 		public uint ItemQuantity { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "garrMssnBonusAbilityID")]

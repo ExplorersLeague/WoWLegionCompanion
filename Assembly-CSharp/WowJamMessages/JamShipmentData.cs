@@ -13,16 +13,16 @@ namespace WowJamMessages
 			this.ResetPending = false;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "shipment")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "shipment", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "shipment")]
 		public JamCharacterShipment[] Shipment { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "resetPending")]
 		[FlexJamMember(Name = "resetPending", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "resetPending")]
 		public bool ResetPending { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "pendingShipment")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "pendingShipment", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "pendingShipment")]
 		public int[] PendingShipment { get; set; }
 	}
 }

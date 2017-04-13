@@ -126,15 +126,15 @@ public class OrderHallFollowersPanel : MonoBehaviour
 		this.m_championsHeader.m_title.font = GeneralHelpers.LoadStandardFont();
 		this.m_championsHeader.m_title.text = StaticDB.GetString("CHAMPIONS", null) + ": ";
 		int numActiveChampions = GeneralHelpers.GetNumActiveChampions();
-		int maxActiveChampions = GeneralHelpers.GetMaxActiveChampions();
-		if (numActiveChampions <= maxActiveChampions)
+		int maxActiveFollowers = GarrisonStatus.GetMaxActiveFollowers();
+		if (numActiveChampions <= maxActiveFollowers)
 		{
 			this.m_championsHeader.m_count.text = string.Concat(new object[]
 			{
 				string.Empty,
 				numActiveChampions,
 				"/",
-				maxActiveChampions
+				maxActiveFollowers
 			});
 		}
 		else
@@ -144,7 +144,7 @@ public class OrderHallFollowersPanel : MonoBehaviour
 				"<color=#ff0000ff>",
 				numActiveChampions,
 				"/",
-				maxActiveChampions,
+				maxActiveFollowers,
 				"</color>"
 			});
 		}

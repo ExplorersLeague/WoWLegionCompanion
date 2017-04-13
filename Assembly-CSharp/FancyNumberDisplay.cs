@@ -4,6 +4,11 @@ using UnityEngine.UI;
 
 public class FancyNumberDisplay : MonoBehaviour
 {
+	public void SetNumberLabel(string numberLabel)
+	{
+		this.m_numberLabel = numberLabel;
+	}
+
 	public void SetValue(int newValue, float delayStartTimerTime = 0f)
 	{
 		this.SetValue(newValue, false, delayStartTimerTime);
@@ -18,7 +23,14 @@ public class FancyNumberDisplay : MonoBehaviour
 		if (instant)
 		{
 			this.m_currentValue = newValue;
-			this.m_numberText.text = string.Empty + newValue;
+			if (this.m_numberLabel != null)
+			{
+				this.m_numberText.text = GeneralHelpers.TextOrderString(newValue.ToString(), this.m_numberLabel);
+			}
+			else
+			{
+				this.m_numberText.text = newValue.ToString();
+			}
 		}
 		this.m_initialized = true;
 	}
@@ -60,7 +72,14 @@ public class FancyNumberDisplay : MonoBehaviour
 	private void TimerUpdateCB(int newValue)
 	{
 		this.m_currentValue = newValue;
-		this.m_numberText.text = string.Empty + newValue;
+		if (this.m_numberLabel != null)
+		{
+			this.m_numberText.text = GeneralHelpers.TextOrderString(newValue.ToString(), this.m_numberLabel);
+		}
+		else
+		{
+			this.m_numberText.text = newValue.ToString();
+		}
 		if (this.TimerUpdateAction != null)
 		{
 			this.TimerUpdateAction(newValue);
@@ -70,7 +89,14 @@ public class FancyNumberDisplay : MonoBehaviour
 	private void TimerEndedCB()
 	{
 		this.m_currentValue = this.m_actualValue;
-		this.m_numberText.text = string.Empty + this.m_currentValue;
+		if (this.m_numberLabel != null)
+		{
+			this.m_numberText.text = GeneralHelpers.TextOrderString(this.m_currentValue.ToString(), this.m_numberLabel);
+		}
+		else
+		{
+			this.m_numberText.text = this.m_currentValue.ToString();
+		}
 		if (this.TimerEndedAction != null)
 		{
 			this.TimerEndedAction();
@@ -100,4 +126,6 @@ public class FancyNumberDisplay : MonoBehaviour
 	private bool m_startedTimer;
 
 	private float m_timeRemainingUntilStartTimer;
+
+	private string m_numberLabel;
 }
