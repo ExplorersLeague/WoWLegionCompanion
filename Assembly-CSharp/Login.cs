@@ -66,23 +66,22 @@ public class Login : MonoBehaviour
 				}
 			}
 			BattleNet.ApplicationWasUnpaused();
-			if (this.m_initialUnpause)
+			if (!this.m_initialUnpause)
 			{
-				Debug.Log("No update test performed on initial unpause.");
-			}
-			else if (flag)
-			{
-				Debug.Log("reconnect update test");
-				AssetBundleManager.instance.UpdateVersion();
-				if (this.IsUpdateAvailable())
+				if (flag)
 				{
-					this.SetLoginState(Login.eLoginState.UPDATE_REQUIRED_START);
-					this.CancelWebAuth();
-					Debug.Log("updateFound = true");
-				}
-				else
-				{
-					Debug.Log("updateFound = false");
+					Debug.Log("reconnect update test");
+					AssetBundleManager.instance.UpdateVersion();
+					if (this.IsUpdateAvailable())
+					{
+						this.SetLoginState(Login.eLoginState.UPDATE_REQUIRED_START);
+						this.CancelWebAuth();
+						Debug.Log("updateFound = true");
+					}
+					else
+					{
+						Debug.Log("updateFound = false");
+					}
 				}
 			}
 			Login.eLoginState loginState = this.m_loginState;
@@ -408,6 +407,18 @@ public class Login : MonoBehaviour
 		return false;
 	}
 
+	public bool IsDevPortal(string portal)
+	{
+		foreach (string b in Login.m_devPortals)
+		{
+			if (portal == b)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public string GetBnServerString()
 	{
 		string @string = SecurePlayerPrefs.GetString("Portal", Main.uniqueIdentifier);
@@ -415,7 +426,15 @@ public class Login : MonoBehaviour
 		{
 			Login.m_portal = @string;
 		}
-		string text = Login.m_portal + ".actual.battle.net";
+		string text;
+		if (this.IsDevPortal(Login.m_portal))
+		{
+			text = Login.m_portal + ".bgs.battle.net";
+		}
+		else
+		{
+			text = Login.m_portal + ".actual.battle.net";
+		}
 		this.LoginLog("BnServerString is " + text);
 		return text;
 	}
@@ -2015,6 +2034,23 @@ public class Login : MonoBehaviour
 	private bool m_initialUnpause = true;
 
 	public static string m_portal = "beta";
+
+	public static string[] m_devPortals = new string[]
+	{
+		"wow-dev",
+		"st1",
+		"st-us",
+		"st2",
+		"st-eu",
+		"st3",
+		"st-kr",
+		"st5",
+		"st-cn",
+		"st21",
+		"st22",
+		"st23",
+		"st25"
+	};
 
 	private class LoginGameAccount
 	{

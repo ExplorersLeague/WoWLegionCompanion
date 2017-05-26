@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "UnitAuraEffectDebugInfo", Version = 28333852u)]
 	public class UnitAuraEffectDebugInfo
 	{
-		[FlexJamMember(Name = "active", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "active")]
+		[FlexJamMember(Name = "active", Type = FlexJamType.Bool)]
 		public bool Active { get; set; }
 
 		[FlexJamMember(Name = "effectIndex", Type = FlexJamType.Int32)]

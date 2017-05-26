@@ -4,20 +4,20 @@ using JamLib;
 
 namespace WowJamMessages.MobileJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4741, Name = "MobileServerDevLogin", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileServerDevLogin
 	{
-		[FlexJamMember(Name = "locale", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "locale")]
+		[FlexJamMember(Name = "locale", Type = FlexJamType.String)]
 		public string Locale { get; set; }
 
 		[FlexJamMember(Name = "wowAccount", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "wowAccount")]
 		public string WowAccount { get; set; }
 
-		[FlexJamMember(Name = "characterID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "characterID")]
+		[FlexJamMember(Name = "characterID", Type = FlexJamType.WowGuid)]
 		public string CharacterID { get; set; }
 
 		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]

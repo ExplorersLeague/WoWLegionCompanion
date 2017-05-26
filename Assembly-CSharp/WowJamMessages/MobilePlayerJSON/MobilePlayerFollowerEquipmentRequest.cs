@@ -8,8 +8,8 @@ namespace WowJamMessages.MobilePlayerJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobilePlayerFollowerEquipmentRequest
 	{
-		[System.Runtime.Serialization.DataMember(Name = "garrFollowerTypeID")]
 		[FlexJamMember(Name = "garrFollowerTypeID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "garrFollowerTypeID")]
 		public int GarrFollowerTypeID { get; set; }
 	}
 }

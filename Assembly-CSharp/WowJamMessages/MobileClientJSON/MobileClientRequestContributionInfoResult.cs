@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4885, Name = "MobileClientRequestContributionInfoResult", Version = 39869590u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileClientRequestContributionInfoResult
 	{
 		[FlexJamMember(Name = "hasAccess", Type = FlexJamType.Bool)]
@@ -16,8 +16,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "contribution")]
 		public MobileContribution[] Contribution { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "legionfallWarResources")]
 		[FlexJamMember(Name = "legionfallWarResources", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "legionfallWarResources")]
 		public int LegionfallWarResources { get; set; }
 	}
 }

@@ -12,16 +12,16 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "x")]
 		public float X { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "description")]
 		[FlexJamMember(Name = "description", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "description")]
 		public string Description { get; set; }
 
-		[FlexJamMember(Name = "y", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "y")]
+		[FlexJamMember(Name = "y", Type = FlexJamType.Float)]
 		public float Y { get; set; }
 
-		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
 		[FlexJamMember(Name = "timeRemaining", Type = FlexJamType.Int32)]

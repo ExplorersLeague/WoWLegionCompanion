@@ -764,8 +764,8 @@ public class UiAnimation : MonoBehaviour
 		[XmlElement("Size")]
 		public UiAnimation.UiSize size = new UiAnimation.UiSize();
 
-		[XmlArray("Layers")]
 		[XmlArrayItem("Layer")]
+		[XmlArray("Layers")]
 		public List<UiAnimation.UiLayer> layers = new List<UiAnimation.UiLayer>();
 
 		[XmlElement("Animations")]

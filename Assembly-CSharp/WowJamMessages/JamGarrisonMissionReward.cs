@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamGarrisonMissionReward", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamGarrisonMissionReward", Version = 28333852u)]
 	public class JamGarrisonMissionReward
 	{
 		public JamGarrisonMissionReward()
@@ -17,8 +17,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "itemFileDataID", Type = FlexJamType.Int32)]
 		public int ItemFileDataID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		public int ItemID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "currencyType")]
@@ -33,8 +33,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "currencyQuantity")]
 		public uint CurrencyQuantity { get; set; }
 
-		[FlexJamMember(Name = "itemQuantity", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemQuantity")]
+		[FlexJamMember(Name = "itemQuantity", Type = FlexJamType.UInt32)]
 		public uint ItemQuantity { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "garrMssnBonusAbilityID")]

@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "itemSubclass", Type = FlexJamType.Int32)]
 		public int ItemSubclass { get; set; }
 
-		[FlexJamMember(Name = "invTypeMask", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "invTypeMask")]
+		[FlexJamMember(Name = "invTypeMask", Type = FlexJamType.UInt32)]
 		public uint InvTypeMask { get; set; }
 	}
 }

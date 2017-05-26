@@ -19,7 +19,7 @@ public class TitlePanel : MonoBehaviour
 			"/",
 			today.Year
 		}));
-		if (today.Year > 2017 || today.Month > 3 || today.Day > 27)
+		if (today.Year > 2017 || today.Month > 6 || today.Day > 12)
 		{
 			this.m_showPTR = false;
 		}
@@ -156,33 +156,37 @@ public class TitlePanel : MonoBehaviour
 
 	private string GetDropdownPortalText()
 	{
-		string result;
+		string text;
 		if (Login.instance.IsDevRegionList())
 		{
-			result = this.m_portalDropdown.options.ToArray()[this.m_portalDropdown.value].text.ToLower();
+			text = this.m_portalDropdown.options.ToArray()[this.m_portalDropdown.value].text.ToLower();
+			if (text.ToLower() == "ptr")
+			{
+				text = "beta";
+			}
 		}
 		else
 		{
 			switch (this.m_portalDropdown.value)
 			{
 			default:
-				result = "us";
+				text = "us";
 				break;
 			case 1:
-				result = "eu";
+				text = "eu";
 				break;
 			case 2:
-				result = "kr";
+				text = "kr";
 				break;
 			case 3:
-				result = "cn";
+				text = "cn";
 				break;
 			case 4:
-				result = "beta";
+				text = "beta";
 				break;
 			}
 		}
-		return result;
+		return text;
 	}
 
 	public void SetRegionIndex()

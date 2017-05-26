@@ -59,6 +59,8 @@ public class AssetBundleManager : MonoBehaviour
 		{
 			assetAddress = this.m_assetServerIpAddress_CN;
 		}
+		string dataErrorTitle = this.GetDataErrorTitleText();
+		string dataErrorDescription = this.GetDataErrorDescriptionText();
 		this.m_assetServerURL = string.Concat(new string[]
 		{
 			"http://",
@@ -72,7 +74,6 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_assetServerURL = this.m_assetServerURL + this.m_platform + "/";
 		string manifestURL = this.m_assetServerURL + this.m_platform + ".manifest";
 		string manifestText = null;
-		Debug.Log("Fetching manifest from " + manifestURL);
 		using (WWW www = new WWW(manifestURL))
 		{
 			yield return www;
@@ -92,7 +93,6 @@ public class AssetBundleManager : MonoBehaviour
 		if (manifestText != null)
 		{
 			string manifestPath = Application.persistentDataPath + "/" + this.m_platform + ".manifest";
-			Debug.Log("Manifest path is: " + manifestPath);
 			try
 			{
 				File.WriteAllText(manifestPath, manifestText);
@@ -100,7 +100,7 @@ public class AssetBundleManager : MonoBehaviour
 			catch (Exception ex2)
 			{
 				Exception ex = ex2;
-				Debug.Log("Error: Could not write manifest file to locale cache. " + ex.Message);
+				Debug.Log("Error: Could not write manifest file to local cache. " + ex.Message);
 			}
 		}
 		else
@@ -111,7 +111,7 @@ public class AssetBundleManager : MonoBehaviour
 			{
 				Debug.Log("Error: Could not get local manifest.");
 				GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
-				AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+				AllPopups.instance.ShowGenericPopup(dataErrorTitle, dataErrorDescription);
 				yield break;
 			}
 		}
@@ -128,7 +128,7 @@ public class AssetBundleManager : MonoBehaviour
 		if (this.m_iconsBundle == null)
 		{
 			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
-			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+			AllPopups.instance.ShowGenericPopup(dataErrorTitle, dataErrorDescription);
 			yield break;
 		}
 		this.m_currentWWW = null;
@@ -142,7 +142,7 @@ public class AssetBundleManager : MonoBehaviour
 		if (this.m_portraitIconsBundle == null)
 		{
 			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
-			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+			AllPopups.instance.ShowGenericPopup(dataErrorTitle, dataErrorDescription);
 			yield break;
 		}
 		AssetBundle genericStaticDB = null;
@@ -153,12 +153,12 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle("gnrc", delegate(AssetBundle value)
 		{
-			this.<genericStaticDB>__7 = value;
+			this.<genericStaticDB>__9 = value;
 		}));
 		if (genericStaticDB == null)
 		{
 			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
-			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+			AllPopups.instance.ShowGenericPopup(dataErrorTitle, dataErrorDescription);
 			yield break;
 		}
 		this.m_currentWWW = null;
@@ -167,12 +167,12 @@ public class AssetBundleManager : MonoBehaviour
 		this.m_progressStartTime = Time.timeSinceLevelLoad;
 		yield return base.StartCoroutine(this.LoadAssetBundle(localeStaticIdentifier, delegate(AssetBundle value)
 		{
-			this.<localizedStaticDB>__8 = value;
+			this.<localizedStaticDB>__10 = value;
 		}));
 		if (localizedStaticDB == null)
 		{
 			GenericPopup.DisabledAction = (Action)Delegate.Combine(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
-			AllPopups.instance.ShowGenericPopup(StaticDB.GetString("DATA_ERROR", null), StaticDB.GetString("UNABLE_TO_LOAD_DATA", null));
+			AllPopups.instance.ShowGenericPopup(dataErrorTitle, dataErrorDescription);
 			yield break;
 		}
 		StaticDB.instance.InitDBs(genericStaticDB, localizedStaticDB);
@@ -197,60 +197,6 @@ public class AssetBundleManager : MonoBehaviour
 	{
 		GenericPopup.DisabledAction = (Action)Delegate.Remove(GenericPopup.DisabledAction, new Action(this.DataErrorPopupDisabled));
 		Main.instance.OnQuitButton();
-	}
-
-	private IEnumerator InternalInitAssetBundleManagerLocal()
-	{
-		AllPanels.instance.SetConnectingPanelStatus("Loading...");
-		AllPanels.instance.connectingPanel.m_cancelButton.gameObject.SetActive(false);
-		string filePath = string.Concat(new string[]
-		{
-			this.m_assetBundleDirectory,
-			"/",
-			this.m_platform,
-			"/",
-			this.m_platform
-		});
-		TextAsset manifestText = Resources.Load<TextAsset>(filePath);
-		if (manifestText == null)
-		{
-			throw new Exception("Could not load manifest at path " + filePath);
-		}
-		this.BuildManifest(manifestText.text);
-		string localStaticIdentifier = "staticdb_" + Main.instance.GetLocale().ToLower();
-		yield return base.StartCoroutine(this.LoadAssetBundleLocal("icons", delegate(AssetBundle value)
-		{
-			this.<>f__this.m_iconsBundle = value;
-		}));
-		yield return base.StartCoroutine(this.LoadAssetBundleLocal("portraiticons", delegate(AssetBundle value)
-		{
-			this.<>f__this.m_portraitIconsBundle = value;
-		}));
-		AssetBundle genericStaticDB = null;
-		AssetBundle localizedStaticDB = null;
-		yield return base.StartCoroutine(this.LoadAssetBundleLocal("staticdb_gnrc", delegate(AssetBundle value)
-		{
-			this.<genericStaticDB>__3 = value;
-		}));
-		yield return base.StartCoroutine(this.LoadAssetBundleLocal(localStaticIdentifier, delegate(AssetBundle value)
-		{
-			this.<localizedStaticDB>__4 = value;
-		}));
-		StaticDB.instance.InitDBs(genericStaticDB, localizedStaticDB);
-		if (genericStaticDB != null)
-		{
-			genericStaticDB.Unload(true);
-		}
-		if (localizedStaticDB != null)
-		{
-			localizedStaticDB.Unload(true);
-		}
-		AssetBundleManager.s_initialized = true;
-		if (this.InitializedAction != null)
-		{
-			this.InitializedAction();
-		}
-		yield break;
 	}
 
 	private void BuildManifest(string manifestText)
@@ -305,7 +251,6 @@ public class AssetBundleManager : MonoBehaviour
 		string fileName = this.GetBundleFileName(fileIdentifier);
 		if (fileName == null)
 		{
-			SecurePlayerPrefs.DeleteKey("locale");
 			Debug.Log("LoadAssetBundle: Error, file identifier " + fileIdentifier + " is unknown.");
 			resultCallback(null);
 			yield break;
@@ -341,38 +286,6 @@ public class AssetBundleManager : MonoBehaviour
 			yield break;
 		}
 		resultCallback(download.assetBundle);
-		yield break;
-	}
-
-	public IEnumerator LoadAssetBundleLocal(string fileIdentifier, Action<AssetBundle> resultCallback)
-	{
-		string fileName = this.GetBundleFileName(fileIdentifier);
-		string filePath = string.Concat(new string[]
-		{
-			this.m_assetBundleDirectory,
-			"/",
-			this.m_platform,
-			"/",
-			fileName
-		});
-		if (fileName == null)
-		{
-			SecurePlayerPrefs.DeleteKey("locale");
-			throw new Exception("LoadAssetBundle: Error, file identifier " + fileIdentifier + " is unknown.");
-		}
-		ResourceRequest resourceRequest = Resources.LoadAsync<TextAsset>(filePath);
-		while (!resourceRequest.isDone)
-		{
-			yield return 0;
-		}
-		TextAsset bundleText = resourceRequest.asset as TextAsset;
-		if (bundleText == null)
-		{
-			throw new Exception("Unable to load asset bundle " + filePath);
-		}
-		AssetBundle bundle = AssetBundle.LoadFromMemory(bundleText.bytes);
-		yield return bundle;
-		resultCallback(bundle);
 		yield break;
 	}
 

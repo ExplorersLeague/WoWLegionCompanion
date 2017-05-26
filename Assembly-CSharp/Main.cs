@@ -460,9 +460,7 @@ public class Main : MonoBehaviour
 			"CompleteMissionResult: ID=",
 			msg.GarrMissionID,
 			", result=",
-			msg.Result,
-			" success chance was ",
-			msg.MissionSuccessChance
+			msg.Result
 		}));
 		PersistentMissionData.UpdateMission(msg.Mission);
 		AdventureMapMissionSite[] componentsInChildren = AdventureMapPanel.instance.m_missionAndWordQuestArea.GetComponentsInChildren<AdventureMapMissionSite>(true);

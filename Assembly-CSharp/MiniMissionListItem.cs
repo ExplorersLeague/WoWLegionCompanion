@@ -34,8 +34,7 @@ public class MiniMissionListItem : MonoBehaviour
 		{
 			return 0;
 		}
-		int missionDuration = record.MissionDuration;
-		float actionFlat = 0f;
+		float missionDuration = (float)record.MissionDuration;
 		foreach (JamGarrisonEncounter jamGarrisonEncounter in mission.Encounter)
 		{
 			foreach (int id in jamGarrisonEncounter.MechanicID)
@@ -47,14 +46,15 @@ public class MiniMissionListItem : MonoBehaviour
 					{
 						if (garrAbilityEffectRec.AbilityAction == 17u)
 						{
-							actionFlat += 1f - garrAbilityEffectRec.ActionValueFlat;
+							missionDuration *= garrAbilityEffectRec.ActionValueFlat;
 						}
 						return true;
 					});
 				}
 			}
 		}
-		return missionDuration - (int)((float)missionDuration * actionFlat);
+		missionDuration *= GeneralHelpers.GetMissionDurationTalentMultiplier();
+		return (int)missionDuration;
 	}
 
 	public void SetMission(JamGarrisonMobileMission mission)

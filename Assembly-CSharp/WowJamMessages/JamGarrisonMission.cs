@@ -17,8 +17,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "offerTime")]
 		public int OfferTime { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "successChance")]
 		[FlexJamMember(Name = "successChance", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "successChance")]
 		public int SuccessChance { get; set; }
 
 		[FlexJamMember(Name = "travelDuration", Type = FlexJamType.Int32)]
@@ -37,20 +37,20 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		public uint Flags { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "startTime")]
 		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "startTime")]
 		public int StartTime { get; set; }
 
 		[FlexJamMember(Name = "dbID", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "dbID")]
 		public ulong DbID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "offerDuration")]
 		[FlexJamMember(Name = "offerDuration", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "offerDuration")]
 		public int OfferDuration { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "missionDuration")]
 		[FlexJamMember(Name = "missionDuration", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "missionDuration")]
 		public int MissionDuration { get; set; }
 	}
 }

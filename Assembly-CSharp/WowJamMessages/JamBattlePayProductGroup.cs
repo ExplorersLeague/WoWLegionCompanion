@@ -8,12 +8,12 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamBattlePayProductGroup
 	{
-		[System.Runtime.Serialization.DataMember(Name = "iconFileDataID")]
 		[FlexJamMember(Name = "iconFileDataID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "iconFileDataID")]
 		public int IconFileDataID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "name")]
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "displayType")]
@@ -24,8 +24,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "ordering")]
 		public int Ordering { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "groupID")]
 		[FlexJamMember(Name = "groupID", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "groupID")]
 		public uint GroupID { get; set; }
 	}
 }

@@ -498,10 +498,10 @@ public class GeneralHelpers : MonoBehaviour
 
 	public static FollowerCanCounterMechanic HasFollowerWhoCanCounter(int garrMechanicTypeID)
 	{
-		GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3C <HasFollowerWhoCanCounter>c__AnonStorey3C = new GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3C();
-		<HasFollowerWhoCanCounter>c__AnonStorey3C.garrMechanicTypeID = garrMechanicTypeID;
-		<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterButBusy = false;
-		<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterAndIsAvailable = false;
+		GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3A <HasFollowerWhoCanCounter>c__AnonStorey3A = new GeneralHelpers.<HasFollowerWhoCanCounter>c__AnonStorey3A();
+		<HasFollowerWhoCanCounter>c__AnonStorey3A.garrMechanicTypeID = garrMechanicTypeID;
+		<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy = false;
+		<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable = false;
 		JamGarrisonFollower follower;
 		foreach (JamGarrisonFollower follower2 in PersistentFollowerData.followerDictionary.Values)
 		{
@@ -531,7 +531,7 @@ public class GeneralHelpers : MonoBehaviour
 						{
 							return true;
 						}
-						if ((long)<HasFollowerWhoCanCounter>c__AnonStorey3C.garrMechanicTypeID != (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID))
+						if ((long)<HasFollowerWhoCanCounter>c__AnonStorey3A.garrMechanicTypeID != (long)((ulong)garrAbilityEffectRec.GarrMechanicTypeID))
 						{
 							return false;
 						}
@@ -541,20 +541,20 @@ public class GeneralHelpers : MonoBehaviour
 						bool flag4 = follower.CurrentBuildingID != 0;
 						if (flag || flag2 || flag3 || flag4)
 						{
-							<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterButBusy = true;
+							<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy = true;
 							return false;
 						}
-						<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterAndIsAvailable = true;
+						<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable = true;
 						return true;
 					});
 				}
 			}
 		}
-		if (<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterAndIsAvailable)
+		if (<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterAndIsAvailable)
 		{
 			return FollowerCanCounterMechanic.yesAndAvailable;
 		}
-		if (<HasFollowerWhoCanCounter>c__AnonStorey3C.canCounterButBusy)
+		if (<HasFollowerWhoCanCounter>c__AnonStorey3A.canCounterButBusy)
 		{
 			return FollowerCanCounterMechanic.yesButBusy;
 		}
@@ -943,6 +943,34 @@ public class GeneralHelpers : MonoBehaviour
 			return str + inText.Substring(num);
 		}
 		return inText;
+	}
+
+	public static float GetMissionDurationTalentMultiplier()
+	{
+		float multiplier = 1f;
+		foreach (object obj in PersistentTalentData.talentDictionary.Values)
+		{
+			JamGarrisonTalent jamGarrisonTalent = (JamGarrisonTalent)obj;
+			if ((jamGarrisonTalent.Flags & 1) != 0)
+			{
+				GarrTalentRec record = StaticDB.garrTalentDB.GetRecord(jamGarrisonTalent.GarrTalentID);
+				if (record != null)
+				{
+					if (record.GarrAbilityID > 0u)
+					{
+						StaticDB.garrAbilityEffectDB.EnumRecordsByParentID((int)record.GarrAbilityID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+						{
+							if (garrAbilityEffectRec.AbilityAction == 17u)
+							{
+								multiplier *= garrAbilityEffectRec.ActionValueFlat;
+							}
+							return true;
+						});
+					}
+				}
+			}
+		}
+		return multiplier;
 	}
 
 	public static string s_defaultColor = "ffd200ff";
