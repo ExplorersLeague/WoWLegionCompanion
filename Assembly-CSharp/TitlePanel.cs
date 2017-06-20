@@ -19,7 +19,7 @@ public class TitlePanel : MonoBehaviour
 			"/",
 			today.Year
 		}));
-		if (today.Year > 2017 || today.Month > 6 || today.Day > 12)
+		if (today.Year > 2017 || today.Month > 6 || today.Day > 23)
 		{
 			this.m_showPTR = false;
 		}

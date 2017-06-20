@@ -7,7 +7,7 @@ public class BuildNum : MonoBehaviour
 	{
 		get
 		{
-			return 96;
+			return 97;
 		}
 	}
 
@@ -15,11 +15,11 @@ public class BuildNum : MonoBehaviour
 	{
 		get
 		{
-			return 44;
+			return 45;
 		}
 	}
 
-	private const int s_buildNum = 96;
+	private const int s_buildNum = 97;
 
-	private const int s_dataBuildNum = 44;
+	private const int s_dataBuildNum = 45;
 }
