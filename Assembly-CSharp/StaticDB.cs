@@ -655,8 +655,6 @@ public class StaticDB : MonoBehaviour
 
 	private string m_firstAssetServerURL;
 
-	private string m_locale;
-
 	private CharShipmentDB m_charShipmentDB;
 
 	private CharShipmentContainerDB m_charShipmentContainerDB;

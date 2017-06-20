@@ -8,20 +8,20 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileFollowerEquipment
 	{
-		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "spellID")]
+		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		public int SpellID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "garrAbilityID")]
 		[FlexJamMember(Name = "garrAbilityID", Type = FlexJamType.Int32)]
 		public int GarrAbilityID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemID")]
 		public int ItemID { get; set; }
 
-		[FlexJamMember(Name = "quantity", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "quantity")]
+		[FlexJamMember(Name = "quantity", Type = FlexJamType.Int32)]
 		public int Quantity { get; set; }
 	}
 }

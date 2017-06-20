@@ -4,16 +4,16 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamMessage(Id = 4876, Name = "MobileClientUseFollowerArmamentResult", Version = 39869590u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileClientUseFollowerArmamentResult
 	{
 		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "result")]
 		public int Result { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "follower")]
 		[FlexJamMember(Name = "follower", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "follower")]
 		public JamGarrisonFollower Follower { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "oldFollower")]

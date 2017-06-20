@@ -140,7 +140,10 @@ public class MissionResultsPanel : MonoBehaviour
 				if (componentsInChildren3[k].countersMissionMechanicTypeID == componentsInChildren[l].m_missionMechanicTypeID && !componentsInChildren[l].IsCountered())
 				{
 					componentsInChildren[l].SetCountered(true, false, false);
-					componentsInChildren2[l].SetCountered(true, false);
+					if (l < componentsInChildren2.Length)
+					{
+						componentsInChildren2[l].SetCountered(true, false);
+					}
 					break;
 				}
 			}

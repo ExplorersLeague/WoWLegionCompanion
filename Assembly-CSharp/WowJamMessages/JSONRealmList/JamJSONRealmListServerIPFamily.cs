@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[FlexJamStruct(Name = "JamJSONRealmListServerIPFamily", Version = 28333852u)]
 	public class JamJSONRealmListServerIPFamily
 	{
-		[System.Runtime.Serialization.DataMember(Name = "family")]
 		[FlexJamMember(Name = "family", Type = FlexJamType.Int8)]
+		[System.Runtime.Serialization.DataMember(Name = "family")]
 		public sbyte Family { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "addresses")]

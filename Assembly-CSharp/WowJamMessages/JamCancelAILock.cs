@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamCancelAILock", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamCancelAILock
 	{
 		[FlexJamMember(Name = "lockReason", Type = FlexJamType.UInt32)]
@@ -16,12 +16,12 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "ticketGUID")]
 		public string TicketGUID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "lockGUID")]
 		[FlexJamMember(Name = "lockGUID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "lockGUID")]
 		public string LockGUID { get; set; }
 
-		[FlexJamMember(Name = "lockResourceGUID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "lockResourceGUID")]
+		[FlexJamMember(Name = "lockResourceGUID", Type = FlexJamType.WowGuid)]
 		public string LockResourceGUID { get; set; }
 	}
 }

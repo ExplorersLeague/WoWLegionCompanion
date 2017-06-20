@@ -479,6 +479,10 @@ public class TroopsListItem : MonoBehaviour
 
 	private void UpdateTroopSlots()
 	{
+		if (this.m_followerRec == null || this.m_charShipmentRec == null)
+		{
+			return;
+		}
 		int maxTroops = this.GetMaxTroops((int)((GarrisonStatus.Faction() != PVP_FACTION.HORDE) ? this.m_followerRec.AllianceGarrClassSpecID : this.m_followerRec.HordeGarrClassSpecID));
 		TroopSlot[] componentsInChildren = this.m_troopSlotsRootObject.GetComponentsInChildren<TroopSlot>(true);
 		if (componentsInChildren.Length < maxTroops)

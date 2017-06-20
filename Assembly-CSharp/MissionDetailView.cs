@@ -224,12 +224,11 @@ public class MissionDetailView : MonoBehaviour
 		eventTrigger.triggers.Add(entry3);
 	}
 
-	private int GetTrueMissionCost(GarrMissionRec garrMissionRec)
+	private int GetTrueMissionCost(GarrMissionRec garrMissionRec, List<int> followerBuffAbilityIDs)
 	{
-		int num = (int)garrMissionRec.MissionCost;
+		float missionCost = garrMissionRec.MissionCost;
 		if (this.enemyPortraitsGroup != null)
 		{
-			float actionFlat = 0f;
 			MissionMechanic[] componentsInChildren = this.enemyPortraitsGroup.GetComponentsInChildren<MissionMechanic>(true);
 			foreach (MissionMechanic missionMechanic in componentsInChildren)
 			{
@@ -241,22 +240,32 @@ public class MissionDetailView : MonoBehaviour
 						{
 							if (garrAbilityEffectRec.AbilityAction == 39u)
 							{
-								actionFlat -= garrAbilityEffectRec.ActionValueFlat;
+								missionCost *= garrAbilityEffectRec.ActionValueFlat;
 							}
 							return true;
 						});
 					}
 				}
 			}
-			num += (int)((float)num * actionFlat);
 		}
-		return num;
+		foreach (int parentID in followerBuffAbilityIDs)
+		{
+			StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(parentID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+			{
+				if (garrAbilityEffectRec.AbilityAction == 39u)
+				{
+					missionCost *= garrAbilityEffectRec.ActionValueFlat;
+					Debug.Log("follower modified Cost: " + missionCost);
+				}
+				return true;
+			});
+		}
+		return (int)missionCost;
 	}
 
 	private int GetTrueMissionDuration(GarrMissionRec garrMissionRec, List<int> followerBuffAbilityIDs)
 	{
-		int num = garrMissionRec.MissionDuration;
-		float actionFlat = 0f;
+		float missionDuration = (float)garrMissionRec.MissionDuration;
 		if (this.enemyPortraitsGroup != null)
 		{
 			MissionMechanic[] componentsInChildren = this.enemyPortraitsGroup.GetComponentsInChildren<MissionMechanic>(true);
@@ -270,7 +279,7 @@ public class MissionDetailView : MonoBehaviour
 						{
 							if (garrAbilityEffectRec.AbilityAction == 17u)
 							{
-								actionFlat += 1f - garrAbilityEffectRec.ActionValueFlat;
+								missionDuration *= garrAbilityEffectRec.ActionValueFlat;
 							}
 							return true;
 						});
@@ -284,13 +293,13 @@ public class MissionDetailView : MonoBehaviour
 			{
 				if (garrAbilityEffectRec.AbilityAction == 17u)
 				{
-					actionFlat += 1f - garrAbilityEffectRec.ActionValueFlat;
+					missionDuration *= garrAbilityEffectRec.ActionValueFlat;
 				}
 				return true;
 			});
 		}
-		num -= (int)((float)num * actionFlat);
-		return num;
+		missionDuration *= GeneralHelpers.GetMissionDurationTalentMultiplier();
+		return (int)missionDuration;
 	}
 
 	public void HandleMissionSelected(int garrMissionID)
@@ -587,27 +596,37 @@ public class MissionDetailView : MonoBehaviour
 				{
 					return;
 				}
-				for (int i = 0; i < componentsInChildren.Length; i++)
+				int num = (componentsInChildren3.Length <= 0) ? 1 : componentsInChildren3.Length;
+				bool[] array = new bool[num];
+				for (int i = 0; i < num; i++)
+				{
+					array[i] = false;
+				}
+				for (int j = 0; j < componentsInChildren.Length; j++)
 				{
 					bool isCountered = false;
-					for (int j = 0; j < componentsInChildren3.Length; j++)
+					for (int k = 0; k < componentsInChildren3.Length; k++)
 					{
-						componentsInChildren3[j].usedIcon.gameObject.SetActive(false);
-						if (componentsInChildren3[j].countersMissionMechanicTypeID == componentsInChildren[i].m_missionMechanicTypeID)
+						componentsInChildren3[k].usedIcon.gameObject.SetActive(false);
+						if (componentsInChildren3[k].countersMissionMechanicTypeID == componentsInChildren[j].m_missionMechanicTypeID && !array[k])
 						{
 							isCountered = true;
+							array[k] = true;
 							break;
 						}
 					}
-					componentsInChildren[i].SetCountered(isCountered, false, true);
-					componentsInChildren2[i].SetCountered(isCountered, true);
+					componentsInChildren[j].SetCountered(isCountered, false, true);
+					if (j < componentsInChildren2.Length)
+					{
+						componentsInChildren2[j].SetCountered(isCountered, true);
+					}
 				}
 			}
 			MissionFollowerSlot[] componentsInChildren4 = base.gameObject.GetComponentsInChildren<MissionFollowerSlot>(true);
 			List<JamGarrisonFollower> list = new List<JamGarrisonFollower>();
-			for (int k = 0; k < componentsInChildren4.Length; k++)
+			for (int l = 0; l < componentsInChildren4.Length; l++)
 			{
-				int currentGarrFollowerID = componentsInChildren4[k].GetCurrentGarrFollowerID();
+				int currentGarrFollowerID = componentsInChildren4[l].GetCurrentGarrFollowerID();
 				if (PersistentFollowerData.followerDictionary.ContainsKey(currentGarrFollowerID))
 				{
 					JamGarrisonFollower item = PersistentFollowerData.followerDictionary[currentGarrFollowerID];
@@ -617,10 +636,10 @@ public class MissionDetailView : MonoBehaviour
 			MobilePlayerEvaluateMission mobilePlayerEvaluateMission = new MobilePlayerEvaluateMission();
 			mobilePlayerEvaluateMission.GarrMissionID = this.m_currentGarrMissionID;
 			mobilePlayerEvaluateMission.GarrFollowerID = new int[list.Count];
-			int num = 0;
+			int num2 = 0;
 			foreach (JamGarrisonFollower jamGarrisonFollower in list)
 			{
-				mobilePlayerEvaluateMission.GarrFollowerID[num++] = jamGarrisonFollower.GarrFollowerID;
+				mobilePlayerEvaluateMission.GarrFollowerID[num2++] = jamGarrisonFollower.GarrFollowerID;
 			}
 			Login.instance.SendToMobileServer(mobilePlayerEvaluateMission);
 			if (this.missionPercentChanceText != null)
@@ -645,9 +664,9 @@ public class MissionDetailView : MonoBehaviour
 				}
 			}
 			List<int> list2 = new List<int>();
-			int num2 = 0;
 			int num3 = 0;
 			int num4 = 0;
+			int num5 = 0;
 			MissionFollowerSlot[] componentsInChildren7 = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
 			foreach (MissionFollowerSlot missionFollowerSlot in componentsInChildren7)
 			{
@@ -655,31 +674,31 @@ public class MissionDetailView : MonoBehaviour
 				if (currentGarrFollowerID2 != 0)
 				{
 					int[] buffsForCurrentMission = GeneralHelpers.GetBuffsForCurrentMission(currentGarrFollowerID2, this.m_currentGarrMissionID, this.missionFollowerSlotGroup);
-					num2 += buffsForCurrentMission.Length;
-					foreach (int num6 in buffsForCurrentMission)
+					num3 += buffsForCurrentMission.Length;
+					foreach (int num8 in buffsForCurrentMission)
 					{
-						list2.Add(num6);
+						list2.Add(num8);
 						GameObject gameObject = Object.Instantiate<GameObject>(this.m_mechanicEffectDisplayPrefab);
 						gameObject.transform.SetParent(this.m_partyBuffGroup.transform, false);
 						AbilityDisplay component = gameObject.GetComponent<AbilityDisplay>();
-						component.SetAbility(num6, false, false, null);
+						component.SetAbility(num8, false, false, null);
 					}
 					JamGarrisonFollower jamGarrisonFollower2 = PersistentFollowerData.followerDictionary[currentGarrFollowerID2];
 					if ((jamGarrisonFollower2.Flags & 8) == 0)
 					{
-						num4++;
+						num5++;
 					}
 				}
 			}
 			if (this.m_partyBuffGroup != null)
 			{
-				this.m_partyBuffGroup.SetActive(num2 > 0);
+				this.m_partyBuffGroup.SetActive(num3 > 0);
 			}
 			if (this.m_partyDebuffGroup != null)
 			{
-				this.m_partyDebuffGroup.SetActive(num3 > 0);
+				this.m_partyDebuffGroup.SetActive(num4 > 0);
 			}
-			int trueMissionCost = this.GetTrueMissionCost(record);
+			int trueMissionCost = this.GetTrueMissionCost(record, list2);
 			this.missionCostText.text = GarrisonStatus.Resources().ToString("N0") + " / " + trueMissionCost.ToString("N0");
 			int numActiveChampions = GeneralHelpers.GetNumActiveChampions();
 			int maxActiveFollowers = GarrisonStatus.GetMaxActiveFollowers();
@@ -694,7 +713,7 @@ public class MissionDetailView : MonoBehaviour
 			{
 				this.m_needMoreResources = true;
 			}
-			if (num4 < 1)
+			if (num5 < 1)
 			{
 				this.m_needAtLeastOneChampion = true;
 			}

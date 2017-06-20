@@ -56,14 +56,6 @@ public class DebugOptionsPopup : MonoBehaviour
 		this.m_cheatCompleteButton.SetActive(isOn);
 	}
 
-	public void OnValueChanged_LocaleDropdown(int index)
-	{
-		string text = this.m_localeDropdown.options.ToArray()[this.m_localeDropdown.value].text;
-		Debug.Log("Locale option is now " + text);
-		SecurePlayerPrefs.SetString("locale", text, Main.uniqueIdentifier);
-		PlayerPrefs.Save();
-	}
-
 	public void TestUIEffect()
 	{
 		UiAnimMgr.instance.PlayAnim("ItemReadyToUseGlowLoop", this.m_testEffectArea.transform, Vector3.zero, 2f, 0f);

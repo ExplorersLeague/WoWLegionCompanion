@@ -14,8 +14,8 @@ namespace WowJamMessages.MobilePlayerJSON
 			this.ChatText = string.Empty;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "slashCmd")]
 		[FlexJamMember(Name = "slashCmd", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "slashCmd")]
 		public byte SlashCmd { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "chatText")]

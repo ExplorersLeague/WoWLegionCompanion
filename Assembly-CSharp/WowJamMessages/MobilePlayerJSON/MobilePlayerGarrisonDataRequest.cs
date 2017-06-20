@@ -8,8 +8,8 @@ namespace WowJamMessages.MobilePlayerJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobilePlayerGarrisonDataRequest
 	{
-		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
 		[FlexJamMember(Name = "garrTypeID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "garrTypeID")]
 		public int GarrTypeID { get; set; }
 	}
 }

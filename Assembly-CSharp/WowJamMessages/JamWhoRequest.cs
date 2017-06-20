@@ -16,28 +16,28 @@ namespace WowJamMessages
 		[FlexJamMember(Optional = true, Name = "serverInfo", Type = FlexJamType.Struct)]
 		public JamWhoRequestServerInfo[] ServerInfo { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "minLevel")]
 		[FlexJamMember(Name = "minLevel", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "minLevel")]
 		public int MinLevel { get; set; }
 
-		[FlexJamMember(Name = "classFilter", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "classFilter")]
+		[FlexJamMember(Name = "classFilter", Type = FlexJamType.Int32)]
 		public int ClassFilter { get; set; }
 
 		[FlexJamMember(Name = "showEnemies", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "showEnemies")]
 		public bool ShowEnemies { get; set; }
 
-		[FlexJamMember(Name = "guildVirtualRealmName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "guildVirtualRealmName")]
+		[FlexJamMember(Name = "guildVirtualRealmName", Type = FlexJamType.String)]
 		public string GuildVirtualRealmName { get; set; }
 
 		[FlexJamMember(Name = "showArenaPlayers", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "showArenaPlayers")]
 		public bool ShowArenaPlayers { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "maxLevel")]
 		[FlexJamMember(Name = "maxLevel", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "maxLevel")]
 		public int MaxLevel { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "name")]
@@ -56,8 +56,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "virtualRealmName", Type = FlexJamType.String)]
 		public string VirtualRealmName { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "exactName")]
 		[FlexJamMember(Name = "exactName", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "exactName")]
 		public bool ExactName { get; set; }
 	}
 }

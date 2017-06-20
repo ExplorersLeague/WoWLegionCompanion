@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamMessage(Id = 4851, Name = "MobileClientFollowerChangedXP", Version = 39869590u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4851, Name = "MobileClientFollowerChangedXP", Version = 39869590u)]
 	public class MobileClientFollowerChangedXP
 	{
 		[System.Runtime.Serialization.DataMember(Name = "follower")]
@@ -20,8 +20,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "source")]
 		public int Source { get; set; }
 
-		[FlexJamMember(Name = "oldFollower", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "oldFollower")]
+		[FlexJamMember(Name = "oldFollower", Type = FlexJamType.Struct)]
 		public JamGarrisonFollower OldFollower { get; set; }
 	}
 }

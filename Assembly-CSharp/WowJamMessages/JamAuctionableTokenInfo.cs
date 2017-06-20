@@ -8,16 +8,16 @@ namespace WowJamMessages
 	[FlexJamStruct(Name = "JamAuctionableTokenInfo", Version = 28333852u)]
 	public class JamAuctionableTokenInfo
 	{
-		[FlexJamMember(Name = "price", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "price")]
+		[FlexJamMember(Name = "price", Type = FlexJamType.UInt64)]
 		public ulong Price { get; set; }
 
-		[FlexJamMember(Name = "status", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "status")]
+		[FlexJamMember(Name = "status", Type = FlexJamType.Int32)]
 		public int Status { get; set; }
 
-		[FlexJamMember(Name = "expectedSecondsUntilSold", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "expectedSecondsUntilSold")]
+		[FlexJamMember(Name = "expectedSecondsUntilSold", Type = FlexJamType.UInt32)]
 		public uint ExpectedSecondsUntilSold { get; set; }
 
 		[FlexJamMember(Name = "id", Type = FlexJamType.UInt64)]

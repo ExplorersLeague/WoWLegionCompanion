@@ -7,12 +7,12 @@ namespace JamLib
 	[FlexJamStruct(Name = "WowTime")]
 	public struct WowTime
 	{
-		[System.Runtime.Serialization.DataMember(Name = "minute")]
 		[FlexJamMember(Name = "minute", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "minute")]
 		public int Minute { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "hour")]
 		[FlexJamMember(Name = "hour", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "hour")]
 		public int Hour { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "weekday")]
@@ -23,12 +23,12 @@ namespace JamLib
 		[System.Runtime.Serialization.DataMember(Name = "monthDay")]
 		public int MonthDay { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "month")]
 		[FlexJamMember(Name = "month", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "month")]
 		public int Month { get; set; }
 
-		[FlexJamMember(Name = "year", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "year")]
+		[FlexJamMember(Name = "year", Type = FlexJamType.Int32)]
 		public int Year { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "flags")]

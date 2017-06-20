@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientRequestMaxFollowersResult
 	{
-		[FlexJamMember(Name = "maxFollowers", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "maxFollowers")]
+		[FlexJamMember(Name = "maxFollowers", Type = FlexJamType.Int32)]
 		public int MaxFollowers { get; set; }
 	}
 }

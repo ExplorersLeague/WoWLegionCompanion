@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamServerBuckDataEntry", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamServerBuckDataEntry", Version = 28333852u)]
 	public class JamServerBuckDataEntry
 	{
 		public JamServerBuckDataEntry()
@@ -23,8 +23,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "accum", Type = FlexJamType.UInt64)]
 		public ulong Accum { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "maximum")]
 		[FlexJamMember(Name = "maximum", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "maximum")]
 		public ulong Maximum { get; set; }
 
 		[FlexJamMember(Name = "sqaccum", Type = FlexJamType.UInt64)]

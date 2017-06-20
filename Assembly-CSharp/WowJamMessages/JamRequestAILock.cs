@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamRequestAILock", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamRequestAILock", Version = 28333852u)]
 	public class JamRequestAILock
 	{
 		[System.Runtime.Serialization.DataMember(Name = "lockReason")]
@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "ticketGUID")]
 		public string TicketGUID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "lockResourceGUID")]
 		[FlexJamMember(Name = "lockResourceGUID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "lockResourceGUID")]
 		public string LockResourceGUID { get; set; }
 	}
 }

@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[FlexJamStruct(Name = "JamJSONGameVersion", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamJSONGameVersion", Version = 28333852u)]
 	public class JamJSONGameVersion
 	{
-		[System.Runtime.Serialization.DataMember(Name = "versionMajor")]
 		[FlexJamMember(Name = "versionMajor", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "versionMajor")]
 		public uint VersionMajor { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "versionBuild")]

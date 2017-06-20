@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "garrMssnBonusAbilityID", Type = FlexJamType.Int32)]
 		public int GarrMssnBonusAbilityID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "startTime")]
 		[FlexJamMember(Name = "startTime", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "startTime")]
 		public int StartTime { get; set; }
 	}
 }

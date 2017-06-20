@@ -130,7 +130,15 @@ public class WowTextParser
 		{
 			return input;
 		}
-		int inputAmount = int.Parse(text);
+		int inputAmount = 0;
+		try
+		{
+			inputAmount = int.Parse(text);
+		}
+		catch (Exception ex)
+		{
+			return input;
+		}
 		int num2 = GeneralHelpers.ApplyArtifactXPMultiplier(inputAmount, GarrisonStatus.ArtifactXpMultiplier);
 		if (num2 > 1000000)
 		{
