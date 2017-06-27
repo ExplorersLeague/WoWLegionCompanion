@@ -758,6 +758,7 @@ public class Login : MonoBehaviour
 		{
 			this.LoginLog("CheckWebAuth was true in BnLoginUpdate, starting WebAuth.");
 			this.SetLoginState(Login.eLoginState.WEB_AUTH_START);
+			return;
 		}
 		switch (BattleNet.BattleNetStatus())
 		{
@@ -1929,6 +1930,34 @@ public class Login : MonoBehaviour
 			this.m_recentCharacters.Remove(item);
 		}
 		this.SaveRecentCharacters();
+	}
+
+	public void InvalidateRecentTokens()
+	{
+		int num = 0;
+		while (num < this.m_recentCharacters.Count && num < 3)
+		{
+			StringBuilder stringBuilder = new StringBuilder(this.m_recentCharacters[num].WebToken);
+			if (stringBuilder.Length > 10)
+			{
+				stringBuilder[6] = '0';
+				stringBuilder[7] = '0';
+				stringBuilder[8] = '0';
+				stringBuilder[9] = '0';
+				this.m_recentCharacters[num].WebToken = stringBuilder.ToString();
+			}
+			num++;
+		}
+		this.SaveRecentCharacters();
+		StringBuilder stringBuilder2 = new StringBuilder(SecurePlayerPrefs.GetString("WebToken", Main.uniqueIdentifier));
+		if (stringBuilder2.Length > 10)
+		{
+			stringBuilder2[6] = '0';
+			stringBuilder2[7] = '0';
+			stringBuilder2[8] = '0';
+			stringBuilder2[9] = '0';
+			SecurePlayerPrefs.SetString("WebToken", stringBuilder2.ToString(), Main.uniqueIdentifier);
+		}
 	}
 
 	private const float m_characterListRefreshWaitTime = 30f;
