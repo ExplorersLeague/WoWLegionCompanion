@@ -27,8 +27,9 @@ public class StackableMapIcon : MonoBehaviour
 		return this.m_iconContainer;
 	}
 
-	public void RegisterWithManager()
+	public void RegisterWithManager(int startLocationMapID)
 	{
+		this.m_startLocationMapID = startLocationMapID;
 		StackableMapIconManager.RegisterStackableMapIcon(this);
 	}
 
@@ -43,4 +44,6 @@ public class StackableMapIcon : MonoBehaviour
 	public RectTransform m_iconBoundsRT;
 
 	private StackableMapIconContainer m_iconContainer;
+
+	public int m_startLocationMapID;
 }

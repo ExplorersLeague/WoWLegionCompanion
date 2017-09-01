@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "player", Type = FlexJamType.WowGuid)]
 		public string Player { get; set; }
 
-		[FlexJamMember(Name = "activeTime", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "activeTime")]
+		[FlexJamMember(Name = "activeTime", Type = FlexJamType.UInt32)]
 		public uint ActiveTime { get; set; }
 	}
 }

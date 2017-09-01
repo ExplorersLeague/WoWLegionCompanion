@@ -263,45 +263,6 @@ public class MissionDetailView : MonoBehaviour
 		return (int)missionCost;
 	}
 
-	private int GetTrueMissionDuration(GarrMissionRec garrMissionRec, List<int> followerBuffAbilityIDs)
-	{
-		float missionDuration = (float)garrMissionRec.MissionDuration;
-		if (this.enemyPortraitsGroup != null)
-		{
-			MissionMechanic[] componentsInChildren = this.enemyPortraitsGroup.GetComponentsInChildren<MissionMechanic>(true);
-			foreach (MissionMechanic missionMechanic in componentsInChildren)
-			{
-				if (!missionMechanic.IsCountered())
-				{
-					if (missionMechanic.AbilityID() != 0)
-					{
-						StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(missionMechanic.AbilityID(), delegate(GarrAbilityEffectRec garrAbilityEffectRec)
-						{
-							if (garrAbilityEffectRec.AbilityAction == 17u)
-							{
-								missionDuration *= garrAbilityEffectRec.ActionValueFlat;
-							}
-							return true;
-						});
-					}
-				}
-			}
-		}
-		foreach (int parentID in followerBuffAbilityIDs)
-		{
-			StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(parentID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
-			{
-				if (garrAbilityEffectRec.AbilityAction == 17u)
-				{
-					missionDuration *= garrAbilityEffectRec.ActionValueFlat;
-				}
-				return true;
-			});
-		}
-		missionDuration *= GeneralHelpers.GetMissionDurationTalentMultiplier();
-		return (int)missionDuration;
-	}
-
 	public void HandleMissionSelected(int garrMissionID)
 	{
 		if (garrMissionID <= 0)
@@ -663,6 +624,7 @@ public class MissionDetailView : MonoBehaviour
 					Object.DestroyImmediate(abilityDisplay2.gameObject);
 				}
 			}
+			int adjustedMissionDuration = GeneralHelpers.GetAdjustedMissionDuration(record, list, this.enemyPortraitsGroup);
 			List<int> list2 = new List<int>();
 			int num3 = 0;
 			int num4 = 0;
@@ -673,7 +635,7 @@ public class MissionDetailView : MonoBehaviour
 				int currentGarrFollowerID2 = missionFollowerSlot.GetCurrentGarrFollowerID();
 				if (currentGarrFollowerID2 != 0)
 				{
-					int[] buffsForCurrentMission = GeneralHelpers.GetBuffsForCurrentMission(currentGarrFollowerID2, this.m_currentGarrMissionID, this.missionFollowerSlotGroup);
+					int[] buffsForCurrentMission = GeneralHelpers.GetBuffsForCurrentMission(currentGarrFollowerID2, this.m_currentGarrMissionID, this.missionFollowerSlotGroup, adjustedMissionDuration);
 					num3 += buffsForCurrentMission.Length;
 					foreach (int num8 in buffsForCurrentMission)
 					{
@@ -740,8 +702,7 @@ public class MissionDetailView : MonoBehaviour
 				Shadow component3 = this.m_startMissionButtonText.GetComponent<Shadow>();
 				component3.enabled = false;
 			}
-			int trueMissionDuration = this.GetTrueMissionDuration(record, list2);
-			Duration duration = new Duration(trueMissionDuration, false);
+			Duration duration = new Duration(adjustedMissionDuration, false);
 			if (this.missionLocationText != null)
 			{
 				this.missionLocationText.text = string.Concat(new object[]
@@ -758,7 +719,7 @@ public class MissionDetailView : MonoBehaviour
 			{
 				this.m_previewMissionTimeText.text = string.Concat(new string[]
 				{
-					"<color=#ffff00ff>",
+					"Hoopy <color=#ffff00ff>",
 					MissionDetailView.m_timeText,
 					": </color><color=#ff8600ff>",
 					duration.DurationString,
@@ -799,15 +760,31 @@ public class MissionDetailView : MonoBehaviour
 	{
 		List<int> list = new List<int>();
 		MissionFollowerSlot[] componentsInChildren = this.missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+		List<JamGarrisonFollower> list2 = new List<JamGarrisonFollower>();
+		for (int i = 0; i < componentsInChildren.Length; i++)
+		{
+			int currentGarrFollowerID = componentsInChildren[i].GetCurrentGarrFollowerID();
+			if (PersistentFollowerData.followerDictionary.ContainsKey(currentGarrFollowerID))
+			{
+				JamGarrisonFollower item = PersistentFollowerData.followerDictionary[currentGarrFollowerID];
+				list2.Add(item);
+			}
+		}
+		GarrMissionRec record = StaticDB.garrMissionDB.GetRecord(this.m_currentGarrMissionID);
+		if (record == null)
+		{
+			return;
+		}
+		int adjustedMissionDuration = GeneralHelpers.GetAdjustedMissionDuration(record, list2, this.enemyPortraitsGroup);
 		foreach (MissionFollowerSlot missionFollowerSlot in componentsInChildren)
 		{
-			int currentGarrFollowerID = missionFollowerSlot.GetCurrentGarrFollowerID();
-			if (currentGarrFollowerID != 0)
+			int currentGarrFollowerID2 = missionFollowerSlot.GetCurrentGarrFollowerID();
+			if (currentGarrFollowerID2 != 0)
 			{
-				int[] buffsForCurrentMission = GeneralHelpers.GetBuffsForCurrentMission(currentGarrFollowerID, this.m_currentGarrMissionID, this.missionFollowerSlotGroup);
-				foreach (int item in buffsForCurrentMission)
+				int[] buffsForCurrentMission = GeneralHelpers.GetBuffsForCurrentMission(currentGarrFollowerID2, this.m_currentGarrMissionID, this.missionFollowerSlotGroup, adjustedMissionDuration);
+				foreach (int item2 in buffsForCurrentMission)
 				{
-					list.Add(item);
+					list.Add(item2);
 				}
 			}
 		}

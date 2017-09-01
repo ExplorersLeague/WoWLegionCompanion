@@ -126,7 +126,8 @@ public class NextCompletedMissionButton : MonoBehaviour
 
 	public void ZoomToNextCompleteMission()
 	{
-		AdventureMapMissionSite[] componentsInChildren = AdventureMapPanel.instance.m_missionAndWordQuestArea.GetComponentsInChildren<AdventureMapMissionSite>(true);
+		GameObject gameObject = (!AdventureMapPanel.instance.m_mapInfo_BrokenIsles.gameObject.activeSelf) ? AdventureMapPanel.instance.m_missionAndWorldQuestArea_Argus : AdventureMapPanel.instance.m_missionAndWorldQuestArea_BrokenIsles;
+		AdventureMapMissionSite[] componentsInChildren = gameObject.GetComponentsInChildren<AdventureMapMissionSite>(true);
 		foreach (AdventureMapMissionSite adventureMapMissionSite in componentsInChildren)
 		{
 			if (!adventureMapMissionSite.m_isStackablePreview)

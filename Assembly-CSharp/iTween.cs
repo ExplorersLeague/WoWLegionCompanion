@@ -1056,33 +1056,6 @@ public class iTween : MonoBehaviour
 			string text2 = this.method;
 			if (text2 != null)
 			{
-				if (iTween.<>f__switch$map13 == null)
-				{
-					iTween.<>f__switch$map13 = new Dictionary<string, int>(1)
-					{
-						{
-							"to",
-							0
-						}
-					};
-				}
-				int num2;
-				if (iTween.<>f__switch$map13.TryGetValue(text2, out num2))
-				{
-					if (num2 == 0)
-					{
-						this.GenerateColorToTargets();
-						this.apply = new iTween.ApplyTween(this.ApplyColorToTargets);
-					}
-				}
-			}
-			break;
-		}
-		case "audio":
-		{
-			string text2 = this.method;
-			if (text2 != null)
-			{
 				if (iTween.<>f__switch$map14 == null)
 				{
 					iTween.<>f__switch$map14 = new Dictionary<string, int>(1)
@@ -1098,6 +1071,33 @@ public class iTween : MonoBehaviour
 				{
 					if (num2 == 0)
 					{
+						this.GenerateColorToTargets();
+						this.apply = new iTween.ApplyTween(this.ApplyColorToTargets);
+					}
+				}
+			}
+			break;
+		}
+		case "audio":
+		{
+			string text2 = this.method;
+			if (text2 != null)
+			{
+				if (iTween.<>f__switch$map15 == null)
+				{
+					iTween.<>f__switch$map15 = new Dictionary<string, int>(1)
+					{
+						{
+							"to",
+							0
+						}
+					};
+				}
+				int num2;
+				if (iTween.<>f__switch$map15.TryGetValue(text2, out num2))
+				{
+					if (num2 == 0)
+					{
 						this.GenerateAudioToTargets();
 						this.apply = new iTween.ApplyTween(this.ApplyAudioToTargets);
 					}
@@ -1110,9 +1110,9 @@ public class iTween : MonoBehaviour
 			string text2 = this.method;
 			if (text2 != null)
 			{
-				if (iTween.<>f__switch$map15 == null)
+				if (iTween.<>f__switch$map16 == null)
 				{
-					iTween.<>f__switch$map15 = new Dictionary<string, int>(3)
+					iTween.<>f__switch$map16 = new Dictionary<string, int>(3)
 					{
 						{
 							"to",
@@ -1129,7 +1129,7 @@ public class iTween : MonoBehaviour
 					};
 				}
 				int num2;
-				if (iTween.<>f__switch$map15.TryGetValue(text2, out num2))
+				if (iTween.<>f__switch$map16.TryGetValue(text2, out num2))
 				{
 					if (num2 != 0)
 					{
@@ -1238,9 +1238,9 @@ public class iTween : MonoBehaviour
 			string text2 = this.method;
 			if (text2 != null)
 			{
-				if (iTween.<>f__switch$map1A == null)
+				if (iTween.<>f__switch$map1B == null)
 				{
-					iTween.<>f__switch$map1A = new Dictionary<string, int>(1)
+					iTween.<>f__switch$map1B = new Dictionary<string, int>(1)
 					{
 						{
 							"to",
@@ -1249,7 +1249,7 @@ public class iTween : MonoBehaviour
 					};
 				}
 				int num2;
-				if (iTween.<>f__switch$map1A.TryGetValue(text2, out num2))
+				if (iTween.<>f__switch$map1B.TryGetValue(text2, out num2))
 				{
 					if (num2 == 0)
 					{

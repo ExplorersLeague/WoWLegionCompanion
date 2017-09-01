@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamMessage(Id = 4882, Name = "MobileClientArtifactInfoResult", Version = 39869590u)]
 	public class MobileClientArtifactInfoResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "knowledgeLevel")]
 		[FlexJamMember(Name = "knowledgeLevel", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "knowledgeLevel")]
 		public int KnowledgeLevel { get; set; }
 
 		[FlexJamMember(Name = "xpMultiplier", Type = FlexJamType.Float)]

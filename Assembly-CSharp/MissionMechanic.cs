@@ -88,7 +88,7 @@ public class MissionMechanic : MonoBehaviour
 			{
 				return true;
 			}
-			if (garrFollowerRec.ChrClassID != GarrisonStatus.CharacterClassID())
+			if (garrFollowerRec.ChrClassID != GarrisonStatus.CharacterClassID() && garrFollowerRec.ChrClassID != 0)
 			{
 				return true;
 			}

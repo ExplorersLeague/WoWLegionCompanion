@@ -130,25 +130,74 @@ public class WowTextParser
 		{
 			return input;
 		}
-		int inputAmount = 0;
+		long inputAmount = 0L;
 		try
 		{
-			inputAmount = int.Parse(text);
+			inputAmount = long.Parse(text);
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 			return input;
 		}
-		int num2 = GeneralHelpers.ApplyArtifactXPMultiplier(inputAmount, GarrisonStatus.ArtifactXpMultiplier);
-		if (num2 > 1000000)
+		long num2 = GeneralHelpers.ApplyArtifactXPMultiplier(inputAmount, (double)GarrisonStatus.ArtifactXpMultiplier);
+		if (num2 > 1000000L)
 		{
-			double num3 = (double)((float)num2) / 1000000.0;
-			string newValue = string.Format("{0:F1} {1}", num3, StaticDB.GetString("MILLION", "million"));
+			long num3 = num2 / 1000000L;
+			long num4 = num2 % 1000000L / 100000L;
+			string @string = StaticDB.GetString("MILLION", "million");
+			if (num2 > 1000000000L)
+			{
+				num3 = num2 / 1000000000L;
+				num4 = num2 % 1000000000L / 100000000L;
+				@string = StaticDB.GetString("BILLION", "billion");
+			}
+			string text3 = ".";
+			string text4 = string.Empty;
+			string locale = Main.instance.GetLocale();
+			switch (locale)
+			{
+			case "esES":
+			case "frFR":
+				text3 = ",";
+				text4 = " de";
+				break;
+			case "itIT":
+				text3 = ",";
+				text4 = " di";
+				break;
+			case "deDE":
+			case "ruRU":
+				text3 = ",";
+				break;
+			}
+			string newValue;
+			if (num4 > 0L)
+			{
+				newValue = string.Format("{0:D}{1}{2:D} {3}{4}", new object[]
+				{
+					num3,
+					text3,
+					num4,
+					@string,
+					text4
+				});
+			}
+			else
+			{
+				newValue = string.Format("{0:D} {3}{4}", new object[]
+				{
+					num3,
+					text3,
+					num4,
+					@string,
+					text4
+				});
+			}
 			return input.Replace(text2, newValue);
 		}
-		if (num2 > 999)
+		if (num2 > 999L)
 		{
-			string newValue2 = string.Format("{0},{1:D3}", num2 / 1000, num2 % 1000);
+			string newValue2 = string.Format("{0},{1:D3}", num2 / 1000L, num2 % 1000L);
 			return input.Replace(text2, newValue2);
 		}
 		return input.Replace(text2, num2.ToString());

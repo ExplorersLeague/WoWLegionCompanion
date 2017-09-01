@@ -26,9 +26,9 @@ namespace bgs
 				{
 					goto IL_1E6;
 				}
-				if (RPCMeterConfigParser.<>f__switch$mapE == null)
+				if (RPCMeterConfigParser.<>f__switch$mapF == null)
 				{
-					RPCMeterConfigParser.<>f__switch$mapE = new Dictionary<string, int>(11)
+					RPCMeterConfigParser.<>f__switch$mapF = new Dictionary<string, int>(11)
 					{
 						{
 							"service_name:",
@@ -77,7 +77,7 @@ namespace bgs
 					};
 				}
 				int num;
-				if (!RPCMeterConfigParser.<>f__switch$mapE.TryGetValue(text2, out num))
+				if (!RPCMeterConfigParser.<>f__switch$mapF.TryGetValue(text2, out num))
 				{
 					goto IL_1E6;
 				}
@@ -142,9 +142,9 @@ namespace bgs
 				{
 					goto IL_108;
 				}
-				if (RPCMeterConfigParser.<>f__switch$mapF == null)
+				if (RPCMeterConfigParser.<>f__switch$map10 == null)
 				{
-					RPCMeterConfigParser.<>f__switch$mapF = new Dictionary<string, int>(5)
+					RPCMeterConfigParser.<>f__switch$map10 = new Dictionary<string, int>(5)
 					{
 						{
 							"method",
@@ -169,7 +169,7 @@ namespace bgs
 					};
 				}
 				int num;
-				if (!RPCMeterConfigParser.<>f__switch$mapF.TryGetValue(text2, out num))
+				if (!RPCMeterConfigParser.<>f__switch$map10.TryGetValue(text2, out num))
 				{
 					goto IL_108;
 				}

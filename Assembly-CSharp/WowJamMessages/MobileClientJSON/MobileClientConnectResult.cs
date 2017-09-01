@@ -17,8 +17,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "result", Type = FlexJamType.Enum)]
 		public MOBILE_CONNECT_RESULT Result { get; set; }
 
-		[FlexJamMember(Name = "version", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "version")]
+		[FlexJamMember(Name = "version", Type = FlexJamType.Int32)]
 		public int Version { get; set; }
 	}
 }

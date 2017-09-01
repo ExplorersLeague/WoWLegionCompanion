@@ -463,7 +463,7 @@ public class Main : MonoBehaviour
 			msg.Result
 		}));
 		PersistentMissionData.UpdateMission(msg.Mission);
-		AdventureMapMissionSite[] componentsInChildren = AdventureMapPanel.instance.m_missionAndWordQuestArea.GetComponentsInChildren<AdventureMapMissionSite>(true);
+		AdventureMapMissionSite[] componentsInChildren = AdventureMapPanel.instance.m_mapViewContentsRT.GetComponentsInChildren<AdventureMapMissionSite>(true);
 		foreach (AdventureMapMissionSite adventureMapMissionSite in componentsInChildren)
 		{
 			if (!adventureMapMissionSite.m_isStackablePreview)
@@ -475,6 +475,22 @@ public class Main : MonoBehaviour
 						adventureMapMissionSite.gameObject.SetActive(true);
 					}
 					adventureMapMissionSite.HandleCompleteMissionResult(msg.GarrMissionID, msg.BonusRollSucceeded);
+					break;
+				}
+			}
+		}
+		componentsInChildren = AdventureMapPanel.instance.m_missionAndWorldQuestArea_Argus.GetComponentsInChildren<AdventureMapMissionSite>(true);
+		foreach (AdventureMapMissionSite adventureMapMissionSite2 in componentsInChildren)
+		{
+			if (!adventureMapMissionSite2.m_isStackablePreview)
+			{
+				if (adventureMapMissionSite2.GetGarrMissionID() == msg.GarrMissionID)
+				{
+					if (!adventureMapMissionSite2.gameObject.activeSelf)
+					{
+						adventureMapMissionSite2.gameObject.SetActive(true);
+					}
+					adventureMapMissionSite2.HandleCompleteMissionResult(msg.GarrMissionID, msg.BonusRollSucceeded);
 					break;
 				}
 			}
@@ -494,7 +510,7 @@ public class Main : MonoBehaviour
 	private void MobileClientClaimMissionBonusResultHandler(MobileClientClaimMissionBonusResult msg)
 	{
 		PersistentMissionData.UpdateMission(msg.Mission);
-		AdventureMapMissionSite[] componentsInChildren = AdventureMapPanel.instance.m_missionAndWordQuestArea.GetComponentsInChildren<AdventureMapMissionSite>(true);
+		AdventureMapMissionSite[] componentsInChildren = AdventureMapPanel.instance.m_mapViewContentsRT.GetComponentsInChildren<AdventureMapMissionSite>(true);
 		foreach (AdventureMapMissionSite adventureMapMissionSite in componentsInChildren)
 		{
 			if (!adventureMapMissionSite.m_isStackablePreview)
@@ -506,6 +522,22 @@ public class Main : MonoBehaviour
 						adventureMapMissionSite.gameObject.SetActive(true);
 					}
 					adventureMapMissionSite.HandleClaimMissionBonusResult(msg.GarrMissionID, msg.AwardOvermax, msg.Result);
+					break;
+				}
+			}
+		}
+		componentsInChildren = AdventureMapPanel.instance.m_missionAndWorldQuestArea_Argus.GetComponentsInChildren<AdventureMapMissionSite>(true);
+		foreach (AdventureMapMissionSite adventureMapMissionSite2 in componentsInChildren)
+		{
+			if (!adventureMapMissionSite2.m_isStackablePreview)
+			{
+				if (adventureMapMissionSite2.GetGarrMissionID() == msg.GarrMissionID)
+				{
+					if (!adventureMapMissionSite2.gameObject.activeSelf)
+					{
+						adventureMapMissionSite2.gameObject.SetActive(true);
+					}
+					adventureMapMissionSite2.HandleClaimMissionBonusResult(msg.GarrMissionID, msg.AwardOvermax, msg.Result);
 					break;
 				}
 			}
@@ -1025,13 +1057,25 @@ public class Main : MonoBehaviour
 		WorldQuestData.ClearData();
 		foreach (MobileWorldQuest mobileWorldQuest in msg.Quest)
 		{
-			if (mobileWorldQuest.StartLocationMapID == 1220)
+			if (mobileWorldQuest.StartLocationMapID == 1220 || mobileWorldQuest.StartLocationMapID == 1669)
 			{
 				WorldQuestData.AddWorldQuest(mobileWorldQuest);
 				for (int j = 0; j < mobileWorldQuest.Item.Count<MobileWorldQuestReward>(); j++)
 				{
 					ItemStatCache.instance.GetItemStats(mobileWorldQuest.Item[j].RecordID, mobileWorldQuest.Item[j].ItemContext);
 				}
+			}
+			else
+			{
+				Debug.Log(string.Concat(new object[]
+				{
+					"UNHANDLED WORLD QUEST ",
+					mobileWorldQuest.QuestID,
+					" MapID ",
+					mobileWorldQuest.StartLocationMapID,
+					" AreaID ",
+					mobileWorldQuest.WorldMapAreaID
+				}));
 			}
 		}
 	}

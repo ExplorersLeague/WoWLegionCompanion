@@ -12,8 +12,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		public int Result { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "activationsRemaining")]
 		[FlexJamMember(Name = "activationsRemaining", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "activationsRemaining")]
 		public int ActivationsRemaining { get; set; }
 
 		[FlexJamMember(Name = "follower", Type = FlexJamType.Struct)]

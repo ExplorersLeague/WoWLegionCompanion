@@ -153,8 +153,15 @@ public class MissionRewardDisplay : MonoBehaviour
 				else
 				{
 					CurrencyTypesRec record = StaticDB.currencyTypesDB.GetRecord(jamGarrisonMissionReward.CurrencyType);
-					int rewardQuantity = (int)((ulong)jamGarrisonMissionReward.CurrencyQuantity / (ulong)(((record.Flags & 8u) == 0u) ? 1L : 100L));
-					component.InitReward(MissionRewardDisplay.RewardType.currency, jamGarrisonMissionReward.CurrencyType, rewardQuantity, 0, 0);
+					if (record != null)
+					{
+						int rewardQuantity = (int)((ulong)jamGarrisonMissionReward.CurrencyQuantity / (ulong)(((record.Flags & 8u) == 0u) ? 1L : 100L));
+						component.InitReward(MissionRewardDisplay.RewardType.currency, jamGarrisonMissionReward.CurrencyType, rewardQuantity, 0, 0);
+					}
+					else
+					{
+						Debug.LogError("Unknown CurrencyType ID " + jamGarrisonMissionReward.CurrencyType);
+					}
 				}
 			}
 		}

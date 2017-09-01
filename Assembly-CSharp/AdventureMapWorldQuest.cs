@@ -121,7 +121,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				if (this.m_showLootIconInsteadOfMain)
 				{
 					bool isArtifactXP = false;
-					int quantity = 0;
+					long quantity = 0L;
 					StaticDB.itemEffectDB.EnumRecordsByParentID(mobileWorldQuestReward.RecordID, delegate(ItemEffectRec itemEffectRec)
 					{
 						StaticDB.spellEffectDB.EnumRecordsByParentID(itemEffectRec.SpellID, delegate(SpellEffectRec spellEffectRec)
@@ -129,7 +129,7 @@ public class AdventureMapWorldQuest : MonoBehaviour
 							if (spellEffectRec.Effect == 240)
 							{
 								isArtifactXP = true;
-								quantity = GeneralHelpers.ApplyArtifactXPMultiplier(spellEffectRec.EffectBasePoints, GarrisonStatus.ArtifactXpMultiplier);
+								quantity = GeneralHelpers.ApplyArtifactXPMultiplier((long)spellEffectRec.EffectBasePoints, (double)GarrisonStatus.ArtifactXpMultiplier);
 								return false;
 							}
 							return true;
@@ -337,20 +337,20 @@ public class AdventureMapWorldQuest : MonoBehaviour
 				text = "Mobile-Mining";
 				break;
 			}
-			goto IL_6FD;
+			goto IL_6FE;
 		}
 		case 3:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-pvp-ffa");
 			text = "Mobile-PVP";
-			goto IL_6FD;
+			goto IL_6FE;
 		case 4:
 			uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-icon-petbattle");
 			text = "Mobile-Pets";
-			goto IL_6FD;
+			goto IL_6FE;
 		}
 		uitextureAtlasMemberID = TextureAtlas.GetUITextureAtlasMemberID("worldquest-questmarker-questbang");
 		text = "Mobile-QuestExclamationIcon";
-		IL_6FD:
+		IL_6FE:
 		if (!this.m_showLootIconInsteadOfMain)
 		{
 			if (text != null)

@@ -12,8 +12,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "shipmentID", Type = FlexJamType.UInt64)]
 		public ulong ShipmentID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "result")]
 		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "result")]
 		public int Result { get; set; }
 	}
 }

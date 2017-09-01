@@ -26,16 +26,16 @@ namespace WowJamMessages.MobileJSON
 		[FlexJamMember(ArrayDimensions = 1, Name = "joinTicket", Type = FlexJamType.UInt8)]
 		public byte[] JoinTicket { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "characterID")]
 		[FlexJamMember(Name = "characterID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "characterID")]
 		public string CharacterID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "build")]
 		[FlexJamMember(Name = "build", Type = FlexJamType.UInt16)]
+		[System.Runtime.Serialization.DataMember(Name = "build")]
 		public ushort Build { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "buildType")]
 		[FlexJamMember(Name = "buildType", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "buildType")]
 		public uint BuildType { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "clientChallenge")]

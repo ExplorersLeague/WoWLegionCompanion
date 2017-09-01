@@ -41,9 +41,9 @@ public class MobileDeviceLocale
 			string text2 = text;
 			if (text2 != null)
 			{
-				if (MobileDeviceLocale.<>f__switch$map9 == null)
+				if (MobileDeviceLocale.<>f__switch$mapA == null)
 				{
-					MobileDeviceLocale.<>f__switch$map9 = new Dictionary<string, int>(2)
+					MobileDeviceLocale.<>f__switch$mapA = new Dictionary<string, int>(2)
 					{
 						{
 							"es",
@@ -56,7 +56,7 @@ public class MobileDeviceLocale
 					};
 				}
 				int num2;
-				if (MobileDeviceLocale.<>f__switch$map9.TryGetValue(text2, out num2))
+				if (MobileDeviceLocale.<>f__switch$mapA.TryGetValue(text2, out num2))
 				{
 					if (num2 == 0)
 					{
