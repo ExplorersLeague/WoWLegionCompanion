@@ -12,8 +12,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "charShipmentID", Type = FlexJamType.Int32)]
 		public int CharShipmentID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "items")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "items", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "items")]
 		public MobileClientShipmentItem[] Items { get; set; }
 	}
 }

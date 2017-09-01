@@ -19,7 +19,10 @@ public class TitlePanel : MonoBehaviour
 			"/",
 			today.Year
 		}));
-		this.m_showPTR = false;
+		if (today.Year > 2017 || today.Month > 8 || today.Day > 28)
+		{
+			this.m_showPTR = false;
+		}
 		if (Login.instance.IsDevRegionList())
 		{
 			this.m_regionOptions = new string[]

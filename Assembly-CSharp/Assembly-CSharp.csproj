@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E94F2165-AC1A-4346-AD57-E65DF8882127}</ProjectGuid>
+    <ProjectGuid>{6F393258-5A75-4294-A0F1-BE5EDDECE312}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Assembly-CSharp</RootNamespace>
@@ -856,6 +856,7 @@
     <Compile Include="RecentCharacterButton.cs" />
     <Compile Include="RecruitTroopsButton.cs" />
     <Compile Include="RegionConfirmation.cs" />
+    <Compile Include="ResetScaleOnEnable.cs" />
     <Compile Include="ResourcesDisplay.cs" />
     <Compile Include="RewardInfoPopup.cs" />
     <Compile Include="RewardPanelSlider.cs" />

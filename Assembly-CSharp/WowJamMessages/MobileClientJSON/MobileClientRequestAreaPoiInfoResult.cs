@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamMessage(Id = 4887, Name = "MobileClientRequestAreaPoiInfoResult", Version = 39869590u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4887, Name = "MobileClientRequestAreaPoiInfoResult", Version = 39869590u)]
 	public class MobileClientRequestAreaPoiInfoResult
 	{
 		[FlexJamMember(ArrayDimensions = 1, Name = "poiData", Type = FlexJamType.Struct)]

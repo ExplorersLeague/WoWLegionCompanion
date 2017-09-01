@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[FlexJamStruct(Name = "JamJSONRealmListLoginHistoryEntry", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamJSONRealmListLoginHistoryEntry", Version = 28333852u)]
 	public class JamJSONRealmListLoginHistoryEntry
 	{
 		[System.Runtime.Serialization.DataMember(Name = "characterGUID")]
@@ -16,8 +16,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "lastPlayedTime")]
 		[FlexJamMember(Name = "lastPlayedTime", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "lastPlayedTime")]
 		public int LastPlayedTime { get; set; }
 	}
 }

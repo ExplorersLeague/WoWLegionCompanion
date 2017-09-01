@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamJSONRealmCharacterCount", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamJSONRealmCharacterCount
 	{
-		[System.Runtime.Serialization.DataMember(Name = "wowRealmAddress")]
 		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "wowRealmAddress")]
 		public uint WowRealmAddress { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "count")]

@@ -20,8 +20,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "initialDelayMax", Type = FlexJamType.Int32)]
 		public int InitialDelayMax { get; set; }
 
-		[FlexJamMember(Name = "spellName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "spellName")]
+		[FlexJamMember(Name = "spellName", Type = FlexJamType.String)]
 		public string SpellName { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "repeatFrequencyMin")]

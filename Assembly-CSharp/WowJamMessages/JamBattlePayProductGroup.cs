@@ -16,16 +16,16 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "displayType")]
 		[FlexJamMember(Name = "displayType", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "displayType")]
 		public byte DisplayType { get; set; }
 
 		[FlexJamMember(Name = "ordering", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "ordering")]
 		public int Ordering { get; set; }
 
-		[FlexJamMember(Name = "groupID", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "groupID")]
+		[FlexJamMember(Name = "groupID", Type = FlexJamType.UInt32)]
 		public uint GroupID { get; set; }
 	}
 }

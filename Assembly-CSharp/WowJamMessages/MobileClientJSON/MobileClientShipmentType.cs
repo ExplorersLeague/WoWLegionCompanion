@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamStruct(Name = "MobileClientShipmentType", Version = 39869590u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "MobileClientShipmentType", Version = 39869590u)]
 	public class MobileClientShipmentType
 	{
 		[FlexJamMember(Name = "canOrder", Type = FlexJamType.Bool)]
@@ -16,8 +16,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "charShipmentID")]
 		public int CharShipmentID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "canPickup")]
 		[FlexJamMember(Name = "canPickup", Type = FlexJamType.Bool)]
+		[System.Runtime.Serialization.DataMember(Name = "canPickup")]
 		public bool CanPickup { get; set; }
 
 		[FlexJamMember(Name = "currencyTypeID", Type = FlexJamType.Int32)]

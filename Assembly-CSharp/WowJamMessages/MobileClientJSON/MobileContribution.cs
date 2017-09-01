@@ -4,32 +4,32 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "MobileContribution", Version = 39869590u)]
+	[System.Runtime.Serialization.DataContract]
 	public class MobileContribution
 	{
-		[FlexJamMember(Name = "contributionCurrencyType", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "contributionCurrencyType")]
+		[FlexJamMember(Name = "contributionCurrencyType", Type = FlexJamType.Int32)]
 		public int ContributionCurrencyType { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "unitCompletion")]
 		[FlexJamMember(Name = "unitCompletion", Type = FlexJamType.Float)]
 		public float UnitCompletion { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "currentValue")]
 		[FlexJamMember(Name = "currentValue", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "currentValue")]
 		public float CurrentValue { get; set; }
 
-		[FlexJamMember(Name = "state", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "state")]
+		[FlexJamMember(Name = "state", Type = FlexJamType.Int32)]
 		public int State { get; set; }
 
 		[FlexJamMember(Name = "uitextureAtlasMemberIDDestroyed", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "uitextureAtlasMemberIDDestroyed")]
 		public int UitextureAtlasMemberIDDestroyed { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "upperValue")]
 		[FlexJamMember(Name = "upperValue", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "upperValue")]
 		public float UpperValue { get; set; }
 
 		[FlexJamMember(Name = "uitextureAtlasMemberIDUnderConstruction", Type = FlexJamType.Int32)]
@@ -40,12 +40,12 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "uitextureAtlasMemberIDActive")]
 		public int UitextureAtlasMemberIDActive { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "spell", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "spell")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "spell", Type = FlexJamType.Int32)]
 		public int[] Spell { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "contributionID")]
 		[FlexJamMember(Name = "contributionID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "contributionID")]
 		public int ContributionID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "description")]
@@ -56,8 +56,8 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "uitextureAtlasMemberIDUnderAttack")]
 		[FlexJamMember(Name = "uitextureAtlasMemberIDUnderAttack", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "uitextureAtlasMemberIDUnderAttack")]
 		public int UitextureAtlasMemberIDUnderAttack { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "contributionCurrencyCost")]

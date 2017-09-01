@@ -8,20 +8,20 @@ namespace WowJamMessages.MobileJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileServerDevLogin
 	{
-		[System.Runtime.Serialization.DataMember(Name = "locale")]
 		[FlexJamMember(Name = "locale", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "locale")]
 		public string Locale { get; set; }
 
-		[FlexJamMember(Name = "wowAccount", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "wowAccount")]
+		[FlexJamMember(Name = "wowAccount", Type = FlexJamType.WowGuid)]
 		public string WowAccount { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "characterID")]
 		[FlexJamMember(Name = "characterID", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "characterID")]
 		public string CharacterID { get; set; }
 
-		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
+		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "bnetAccount")]

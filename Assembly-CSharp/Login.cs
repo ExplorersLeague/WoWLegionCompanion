@@ -1204,6 +1204,23 @@ public class Login : MonoBehaviour
 		this.BnLoginStart(true, true, true, false);
 	}
 
+	private void RemoveWebTokenFromCaches()
+	{
+		RecentCharacter recentCharacter = null;
+		foreach (RecentCharacter recentCharacter2 in this.m_recentCharacters)
+		{
+			if (recentCharacter2.WebToken == this.m_webToken)
+			{
+				recentCharacter = recentCharacter2;
+			}
+		}
+		if (recentCharacter != null)
+		{
+			this.m_recentCharacters.Remove(recentCharacter);
+			this.SaveRecentCharacters();
+		}
+	}
+
 	public void SelectCharacter(string characterGUID, string characterName)
 	{
 	}
@@ -1796,7 +1813,7 @@ public class Login : MonoBehaviour
 				if (obj is RecentCharacter)
 				{
 					RecentCharacter recentCharacter = (RecentCharacter)obj;
-					if (recentCharacter.Version == 1)
+					if (recentCharacter.Version == 2)
 					{
 						this.m_recentCharacters.Add(recentCharacter);
 					}
@@ -1834,7 +1851,7 @@ public class Login : MonoBehaviour
 		recentCharacter.UnixTime = GeneralHelpers.CurrentUnixTime();
 		recentCharacter.WebToken = this.m_webToken;
 		recentCharacter.SubRegion = this.m_subRegion;
-		recentCharacter.Version = 1;
+		recentCharacter.Version = 2;
 		RecentCharacter recentCharacter2 = null;
 		foreach (RecentCharacter recentCharacter3 in this.m_recentCharacters)
 		{
@@ -1972,7 +1989,7 @@ public class Login : MonoBehaviour
 
 	private const int m_unpauseReconnectTime = 30;
 
-	private const int m_recentCharacterVersion = 1;
+	private const int m_recentCharacterVersion = 2;
 
 	private const float m_bnLoginTimeout = 20f;
 

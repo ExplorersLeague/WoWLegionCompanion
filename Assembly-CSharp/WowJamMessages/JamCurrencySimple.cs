@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamCurrencySimple
 	{
-		[System.Runtime.Serialization.DataMember(Name = "type")]
 		[FlexJamMember(Name = "type", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public int Type { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "quantity")]

@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientQuestCompleted
 	{
-		[System.Runtime.Serialization.DataMember(Name = "item")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "item", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "item")]
 		public MobileQuestItem[] Item { get; set; }
 
 		[FlexJamMember(Name = "questID", Type = FlexJamType.Int32)]

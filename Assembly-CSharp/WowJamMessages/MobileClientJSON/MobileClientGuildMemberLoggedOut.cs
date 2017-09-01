@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamMessage(Id = 4857, Name = "MobileClientGuildMemberLoggedOut", Version = 39869590u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4857, Name = "MobileClientGuildMemberLoggedOut", Version = 39869590u)]
 	public class MobileClientGuildMemberLoggedOut
 	{
 		[System.Runtime.Serialization.DataMember(Name = "member")]

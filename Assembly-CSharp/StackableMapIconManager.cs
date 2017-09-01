@@ -29,14 +29,17 @@ public class StackableMapIconManager : MonoBehaviour
 			{
 				if (stackableMapIconContainer.gameObject.activeSelf)
 				{
-					Rect worldRect = stackableMapIconContainer.GetWorldRect();
-					if (icon.GetWorldRect().Overlaps(worldRect))
+					if (stackableMapIconContainer.m_startLocationMapID == icon.m_startLocationMapID)
 					{
-						stackableMapIconContainer.AddStackableMapIcon(icon);
-						icon.SetContainer(stackableMapIconContainer);
-						StackableMapIconManager.s_instance.m_containers.Add(stackableMapIconContainer);
-						flag = true;
-						break;
+						Rect worldRect = stackableMapIconContainer.GetWorldRect();
+						if (icon.GetWorldRect().Overlaps(worldRect))
+						{
+							stackableMapIconContainer.AddStackableMapIcon(icon);
+							icon.SetContainer(stackableMapIconContainer);
+							StackableMapIconManager.s_instance.m_containers.Add(stackableMapIconContainer);
+							flag = true;
+							break;
+						}
 					}
 				}
 			}
@@ -54,6 +57,7 @@ public class StackableMapIconManager : MonoBehaviour
 			StackableMapIconContainer component3 = gameObject.GetComponent<StackableMapIconContainer>();
 			if (component3 != null)
 			{
+				component3.m_startLocationMapID = icon.m_startLocationMapID;
 				component3.AddStackableMapIcon(icon);
 				icon.SetContainer(component3);
 				StackableMapIconManager.s_instance.m_containers.Add(component3);

@@ -13,8 +13,8 @@ namespace WowJamMessages
 			this.Guid = "0000000000000000";
 		}
 
-		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "guid")]
+		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
 		public string Guid { get; set; }
 
 		[FlexJamMember(Name = "health", Type = FlexJamType.Int32)]
@@ -25,8 +25,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "maxHealth", Type = FlexJamType.Int32)]
 		public int MaxHealth { get; set; }
 
-		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "name")]
+		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
 		public string Name { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "auras")]

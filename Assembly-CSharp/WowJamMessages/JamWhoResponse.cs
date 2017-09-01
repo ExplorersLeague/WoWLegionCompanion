@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamWhoResponse", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamWhoResponse", Version = 28333852u)]
 	public class JamWhoResponse
 	{
-		[FlexJamMember(ArrayDimensions = 1, Name = "entries", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "entries")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "entries", Type = FlexJamType.Struct)]
 		public JamWhoEntry[] Entries { get; set; }
 	}
 }

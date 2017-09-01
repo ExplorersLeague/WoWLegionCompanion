@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "SpawnTrackerData", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class SpawnTrackerData
 	{
 		[System.Runtime.Serialization.DataMember(Name = "questID")]

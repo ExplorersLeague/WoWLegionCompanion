@@ -12,8 +12,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "hasAccess")]
 		public bool HasAccess { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "contribution", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "contribution")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "contribution", Type = FlexJamType.Struct)]
 		public MobileContribution[] Contribution { get; set; }
 
 		[FlexJamMember(Name = "legionfallWarResources", Type = FlexJamType.Int32)]

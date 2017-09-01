@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamGarrisonFollower", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamGarrisonFollower
 	{
 		public JamGarrisonFollower()
@@ -13,20 +13,20 @@ namespace WowJamMessages
 			this.CustomName = string.Empty;
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "customName")]
 		[FlexJamMember(Name = "customName", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "customName")]
 		public string CustomName { get; set; }
 
-		[FlexJamMember(Name = "itemLevelWeapon", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemLevelWeapon")]
+		[FlexJamMember(Name = "itemLevelWeapon", Type = FlexJamType.Int32)]
 		public int ItemLevelWeapon { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "currentBuildingID")]
 		[FlexJamMember(Name = "currentBuildingID", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "currentBuildingID")]
 		public int CurrentBuildingID { get; set; }
 
-		[FlexJamMember(Name = "zoneSupportSpellID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "zoneSupportSpellID")]
+		[FlexJamMember(Name = "zoneSupportSpellID", Type = FlexJamType.Int32)]
 		public int ZoneSupportSpellID { get; set; }
 
 		[FlexJamMember(Name = "currentMissionID", Type = FlexJamType.Int32)]
@@ -37,8 +37,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "followerLevel")]
 		public int FollowerLevel { get; set; }
 
-		[FlexJamMember(Name = "flags", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
+		[FlexJamMember(Name = "flags", Type = FlexJamType.Int32)]
 		public int Flags { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "itemLevelArmor")]
@@ -53,12 +53,12 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "dbID", Type = FlexJamType.UInt64)]
 		public ulong DbID { get; set; }
 
-		[FlexJamMember(Name = "garrFollowerID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "garrFollowerID")]
+		[FlexJamMember(Name = "garrFollowerID", Type = FlexJamType.Int32)]
 		public int GarrFollowerID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "quality")]
 		[FlexJamMember(Name = "quality", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "quality")]
 		public int Quality { get; set; }
 
 		[FlexJamMember(Name = "durability", Type = FlexJamType.Int32)]

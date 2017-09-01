@@ -12,8 +12,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "factionID")]
 		public ushort FactionID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "factionAmount")]
 		[FlexJamMember(Name = "factionAmount", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "factionAmount")]
 		public int FactionAmount { get; set; }
 	}
 }

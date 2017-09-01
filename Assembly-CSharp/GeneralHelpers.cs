@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using WowJamMessages;
 using WowJamMessages.MobileClientJSON;
@@ -669,7 +670,7 @@ public class GeneralHelpers : MonoBehaviour
 		return (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 	}
 
-	public static int[] GetBuffsForCurrentMission(int garrFollowerID, int garrMissionID, GameObject missionFollowerSlotGroup)
+	public static int[] GetBuffsForCurrentMission(int garrFollowerID, int garrMissionID, GameObject missionFollowerSlotGroup, int missionDuration)
 	{
 		List<int> abilityIDList = new List<int>();
 		if (!PersistentFollowerData.followerDictionary.ContainsKey(garrFollowerID))
@@ -717,54 +718,47 @@ public class GeneralHelpers : MonoBehaviour
 						break;
 					}
 					default:
-						if (abilityAction != 22u)
+						switch (abilityAction)
 						{
-							if (abilityAction != 23u)
-							{
-								if (abilityAction == 37u)
-								{
-									return true;
-								}
-							}
-							else
-							{
-								bool flag = false;
-								if (PersistentMissionData.missionDictionary.ContainsKey(garrMissionID))
-								{
-									JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[garrMissionID];
-									for (int k = 0; k < jamGarrisonMobileMission.Encounter.Length; k++)
-									{
-										for (int l = 0; l < jamGarrisonMobileMission.Encounter[k].MechanicID.Length; l++)
-										{
-											GarrMechanicRec record = StaticDB.garrMechanicDB.GetRecord(jamGarrisonMobileMission.Encounter[k].MechanicID[l]);
-											if (record != null && garrAbilityEffectRec.GarrMechanicTypeID == record.GarrMechanicTypeID)
-											{
-												flag = true;
-												break;
-											}
-										}
-									}
-								}
-								if (!flag)
-								{
-									return true;
-								}
-							}
-						}
-						else
+						case 22u:
 						{
 							MissionFollowerSlot[] componentsInChildren2 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
-							bool flag2 = false;
+							bool flag = false;
 							foreach (MissionFollowerSlot missionFollowerSlot2 in componentsInChildren2)
 							{
 								int currentGarrFollowerID = missionFollowerSlot2.GetCurrentGarrFollowerID();
 								if (currentGarrFollowerID > 0 && currentGarrFollowerID != follower.GarrFollowerID)
 								{
-									GarrFollowerRec record2 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID);
-									if (record2 != null)
+									GarrFollowerRec record = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID);
+									if (record != null)
 									{
-										uint num2 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record2.HordeGarrClassSpecID : record2.AllianceGarrClassSpecID;
+										uint num2 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record.HordeGarrClassSpecID : record.AllianceGarrClassSpecID;
 										if (num2 == garrAbilityEffectRec.ActionRecordID)
+										{
+											flag = true;
+											break;
+										}
+									}
+								}
+							}
+							if (!flag)
+							{
+								return true;
+							}
+							break;
+						}
+						case 23u:
+						{
+							bool flag2 = false;
+							if (PersistentMissionData.missionDictionary.ContainsKey(garrMissionID))
+							{
+								JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[garrMissionID];
+								for (int l = 0; l < jamGarrisonMobileMission.Encounter.Length; l++)
+								{
+									for (int m = 0; m < jamGarrisonMobileMission.Encounter[l].MechanicID.Length; m++)
+									{
+										GarrMechanicRec record2 = StaticDB.garrMechanicDB.GetRecord(jamGarrisonMobileMission.Encounter[l].MechanicID[m]);
+										if (record2 != null && garrAbilityEffectRec.GarrMechanicTypeID == record2.GarrMechanicTypeID)
 										{
 											flag2 = true;
 											break;
@@ -776,57 +770,78 @@ public class GeneralHelpers : MonoBehaviour
 							{
 								return true;
 							}
+							break;
+						}
+						default:
+							if (abilityAction == 37u)
+							{
+								return true;
+							}
+							break;
+						case 26u:
+						{
+							MissionFollowerSlot[] componentsInChildren3 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+							bool flag3 = false;
+							foreach (MissionFollowerSlot missionFollowerSlot3 in componentsInChildren3)
+							{
+								int currentGarrFollowerID2 = missionFollowerSlot3.GetCurrentGarrFollowerID();
+								if (currentGarrFollowerID2 > 0 && currentGarrFollowerID2 != follower.GarrFollowerID && (ulong)garrAbilityEffectRec.ActionRecordID == (ulong)((long)currentGarrFollowerID2))
+								{
+									flag3 = true;
+									break;
+								}
+							}
+							if (!flag3)
+							{
+								return true;
+							}
+							break;
+						}
 						}
 						break;
 					case 5u:
 					{
-						MissionFollowerSlot[] componentsInChildren3 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
-						bool flag3 = false;
-						foreach (MissionFollowerSlot missionFollowerSlot3 in componentsInChildren3)
+						MissionFollowerSlot[] componentsInChildren4 = missionFollowerSlotGroup.GetComponentsInChildren<MissionFollowerSlot>(true);
+						bool flag4 = false;
+						foreach (MissionFollowerSlot missionFollowerSlot4 in componentsInChildren4)
 						{
-							int currentGarrFollowerID2 = missionFollowerSlot3.GetCurrentGarrFollowerID();
-							if (currentGarrFollowerID2 > 0 && currentGarrFollowerID2 != follower.GarrFollowerID)
+							int currentGarrFollowerID3 = missionFollowerSlot4.GetCurrentGarrFollowerID();
+							if (currentGarrFollowerID3 > 0 && currentGarrFollowerID3 != follower.GarrFollowerID)
 							{
-								GarrFollowerRec record3 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID2);
+								GarrFollowerRec record3 = StaticDB.garrFollowerDB.GetRecord(currentGarrFollowerID3);
 								if (record3 != null)
 								{
-									uint num3 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record3.HordeGarrFollRaceID : record3.AllianceGarrFollRaceID;
-									if (num3 == garrAbilityEffectRec.ActionRace)
+									uint num4 = (GarrisonStatus.Faction() != PVP_FACTION.ALLIANCE) ? record3.HordeGarrFollRaceID : record3.AllianceGarrFollRaceID;
+									if (num4 == garrAbilityEffectRec.ActionRace)
 									{
-										flag3 = true;
+										flag4 = true;
 										break;
 									}
 								}
 							}
 						}
-						if (!flag3)
+						if (!flag4)
 						{
 							return true;
 						}
 						break;
 					}
 					case 6u:
-					{
-						GarrMissionRec record4 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record4 != null && (float)record4.MissionDuration < garrAbilityEffectRec.ActionHours * 3600f)
+						if ((float)missionDuration < garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
 						break;
-					}
 					case 7u:
-					{
-						GarrMissionRec record5 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record5 != null && (float)record5.MissionDuration > garrAbilityEffectRec.ActionHours * 3600f)
+						if ((float)missionDuration > garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
 						break;
-					}
 					case 9u:
 					{
-						GarrMissionRec record6 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record6 != null && record6.TravelDuration < garrAbilityEffectRec.ActionHours * 3600f)
+						GarrMissionRec record4 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+						if (record4 != null && record4.TravelDuration < garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -834,8 +849,8 @@ public class GeneralHelpers : MonoBehaviour
 					}
 					case 10u:
 					{
-						GarrMissionRec record7 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
-						if (record7 != null && record7.TravelDuration > garrAbilityEffectRec.ActionHours * 3600f)
+						GarrMissionRec record5 = StaticDB.garrMissionDB.GetRecord(garrMissionID);
+						if (record5 != null && record5.TravelDuration > garrAbilityEffectRec.ActionHours * 3600f)
 						{
 							return true;
 						}
@@ -855,29 +870,71 @@ public class GeneralHelpers : MonoBehaviour
 		return abilityIDList.ToArray();
 	}
 
-	public static int ApplyArtifactXPMultiplier(int inputAmount, float multiplier)
+	public static int GetAdjustedMissionDuration(GarrMissionRec garrMissionRec, List<JamGarrisonFollower> followerList, GameObject enemyPortraits)
 	{
-		if (multiplier > 1f)
+		float missionDuration = (float)garrMissionRec.MissionDuration;
+		if (enemyPortraits != null)
 		{
-			float num = (float)inputAmount * multiplier;
-			int num2;
-			if (num < 50f)
+			MissionMechanic[] componentsInChildren = enemyPortraits.GetComponentsInChildren<MissionMechanic>(true);
+			foreach (MissionMechanic missionMechanic in componentsInChildren)
 			{
-				num2 = 1;
+				if (!missionMechanic.IsCountered())
+				{
+					if (missionMechanic.AbilityID() != 0)
+					{
+						StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(missionMechanic.AbilityID(), delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+						{
+							if (garrAbilityEffectRec.AbilityAction == 17u)
+							{
+								missionDuration *= garrAbilityEffectRec.ActionValueFlat;
+							}
+							return true;
+						});
+					}
+				}
 			}
-			else if (num < 1000f)
+		}
+		foreach (JamGarrisonFollower jamGarrisonFollower in followerList)
+		{
+			foreach (int parentID in jamGarrisonFollower.AbilityID)
 			{
-				num2 = 5;
+				StaticDB.garrAbilityEffectDB.EnumRecordsByParentID(parentID, delegate(GarrAbilityEffectRec garrAbilityEffectRec)
+				{
+					if (garrAbilityEffectRec.AbilityAction == 17u)
+					{
+						missionDuration *= garrAbilityEffectRec.ActionValueFlat;
+					}
+					return true;
+				});
 			}
-			else if (num < 5000f)
+		}
+		missionDuration *= GeneralHelpers.GetMissionDurationTalentMultiplier();
+		return (int)missionDuration;
+	}
+
+	public static long ApplyArtifactXPMultiplier(long inputAmount, double multiplier)
+	{
+		if (multiplier > 1.0)
+		{
+			double num = (double)inputAmount * multiplier;
+			long num2;
+			if (num < 50.0)
 			{
-				num2 = 25;
+				num2 = 1L;
+			}
+			else if (num < 1000.0)
+			{
+				num2 = 5L;
+			}
+			else if (num < 5000.0)
+			{
+				num2 = 25L;
 			}
 			else
 			{
-				num2 = 50;
+				num2 = 50L;
 			}
-			return num2 * (int)Math.Round((double)(num / (float)num2));
+			return num2 * (long)Math.Round(num / (double)num2);
 		}
 		return inputAmount;
 	}
@@ -931,18 +988,36 @@ public class GeneralHelpers : MonoBehaviour
 
 	public static string LimitZhLineLength(string inText, int length)
 	{
-		if (Main.instance.GetLocale() == "zhCN" || Main.instance.GetLocale() == "zhTW")
+		if (Main.instance.GetLocale() != "zhCN" && Main.instance.GetLocale() != "zhTW")
 		{
-			int num = 0;
-			string str = string.Empty;
-			while (inText.Substring(num).Length > length)
-			{
-				str = str + inText.Substring(num, length) + " ";
-				num += length;
-			}
-			return str + inText.Substring(num);
+			return inText;
 		}
-		return inText;
+		bool flag = false;
+		int num = 0;
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < inText.Length; i++)
+		{
+			string text = inText.Substring(i, 1);
+			stringBuilder.Append(text);
+			if (text == "<")
+			{
+				flag = true;
+			}
+			else if (text == ">")
+			{
+				flag = false;
+			}
+			else if (!flag)
+			{
+				num++;
+				if (num > length)
+				{
+					stringBuilder.Append(" ");
+					num = 0;
+				}
+			}
+		}
+		return stringBuilder.ToString();
 	}
 
 	public static float GetMissionDurationTalentMultiplier()
