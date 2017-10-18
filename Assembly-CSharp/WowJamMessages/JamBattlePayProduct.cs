@@ -28,8 +28,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "productID")]
 		public uint ProductID { get; set; }
 
-		[FlexJamMember(Name = "type", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "type")]
+		[FlexJamMember(Name = "type", Type = FlexJamType.UInt8)]
 		public byte Type { get; set; }
 
 		[FlexJamMember(ArrayDimensions = 1, Name = "deliverables", Type = FlexJamType.UInt32)]

@@ -11,12 +11,12 @@ namespace JamLib
 		[System.Runtime.Serialization.DataMember(Name = "x")]
 		public float X { get; set; }
 
-		[FlexJamMember(Name = "y", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "y")]
+		[FlexJamMember(Name = "y", Type = FlexJamType.Float)]
 		public float Y { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "z")]
 		[FlexJamMember(Name = "z", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "z")]
 		public float Z { get; set; }
 	}
 }

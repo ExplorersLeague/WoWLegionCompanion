@@ -12,20 +12,20 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "pending", Type = FlexJamType.Int32)]
 		public int Pending { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "numThresholdsHit")]
 		[FlexJamMember(Name = "numThresholdsHit", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "numThresholdsHit")]
 		public int NumThresholdsHit { get; set; }
 
-		[FlexJamMember(Name = "maxThreshold", Type = FlexJamType.Float)]
 		[System.Runtime.Serialization.DataMember(Name = "maxThreshold")]
+		[FlexJamMember(Name = "maxThreshold", Type = FlexJamType.Float)]
 		public float MaxThreshold { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "numGroups")]
 		[FlexJamMember(Name = "numGroups", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "numGroups")]
 		public int NumGroups { get; set; }
 
-		[FlexJamMember(Name = "checkingThreshold", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "checkingThreshold")]
+		[FlexJamMember(Name = "checkingThreshold", Type = FlexJamType.Bool)]
 		public bool CheckingThreshold { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "isFarmed")]
@@ -44,8 +44,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "regionID")]
 		public int RegionID { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "players")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "players", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "players")]
 		public JamSpawnRegionPlayerActivity[] Players { get; set; }
 	}
 }

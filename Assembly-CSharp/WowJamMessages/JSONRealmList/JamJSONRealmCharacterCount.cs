@@ -8,12 +8,12 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JamJSONRealmCharacterCount
 	{
-		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "wowRealmAddress")]
+		[FlexJamMember(Name = "wowRealmAddress", Type = FlexJamType.UInt32)]
 		public uint WowRealmAddress { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "count")]
 		[FlexJamMember(Name = "count", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "count")]
 		public byte Count { get; set; }
 	}
 }

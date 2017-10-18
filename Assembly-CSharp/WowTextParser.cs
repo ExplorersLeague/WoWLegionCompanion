@@ -27,7 +27,11 @@ public class WowTextParser
 		this.m_spellID = spellID;
 		if (spellID > 0 && GeneralHelpers.SpellGrantsArtifactXP(spellID))
 		{
-			return this.ParseForArtifactXP(input, spellID);
+			if (!(Main.instance.GetLocale() != "enUS"))
+			{
+				return this.ParseForArtifactXP(input, spellID);
+			}
+			this.m_input = this.ParseForArtifactXP(input, spellID);
 		}
 		for (;;)
 		{
@@ -67,11 +71,11 @@ public class WowTextParser
 			}
 			if (!this.CharacterIsValid())
 			{
-				goto Block_10;
+				goto Block_11;
 			}
 		}
 		throw new Exception("Parse: loop failed to advance in string " + this.m_input);
-		Block_10:
+		Block_11:
 		this.AddTextToken();
 		this.SimplifyTokens();
 		string text = string.Empty;
@@ -140,7 +144,7 @@ public class WowTextParser
 			return input;
 		}
 		long num2 = GeneralHelpers.ApplyArtifactXPMultiplier(inputAmount, (double)GarrisonStatus.ArtifactXpMultiplier);
-		if (num2 > 1000000L)
+		if (num2 >= 1000000L)
 		{
 			long num3 = num2 / 1000000L;
 			long num4 = num2 % 1000000L / 100000L;
@@ -666,10 +670,47 @@ public class WowTextParser
 		{
 			this.ParseInlineIcon();
 		}
+		else if (this.ReadCharacter() == '7')
+		{
+			this.ParseMillionBillion();
+		}
 		else
 		{
 			this.ParseCharacter();
 		}
+	}
+
+	private void ParseMillionBillion()
+	{
+		this.ConsumeCharacter();
+		this.m_currentValue = string.Empty;
+		bool flag = true;
+		if (flag)
+		{
+			while (this.ReadCharacter() != ':' && this.ConsumeCharacter())
+			{
+			}
+			this.ConsumeCharacter();
+			while (this.ReadCharacter() != ';')
+			{
+				this.m_currentValue += this.ReadCharacter();
+				this.ConsumeCharacter();
+			}
+			this.ConsumeCharacter();
+		}
+		else
+		{
+			while (this.ReadCharacter() != ':')
+			{
+				this.m_currentValue += this.ReadCharacter();
+				this.ConsumeCharacter();
+			}
+			while (this.ReadCharacter() != ';' && this.ConsumeCharacter())
+			{
+			}
+			this.ConsumeCharacter();
+		}
+		this.AddTextToken();
 	}
 
 	private void ParseColorStart()

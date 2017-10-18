@@ -390,13 +390,9 @@ public class Main : MonoBehaviour
 			{
 				PersistentFollowerData.AddOrUpdateFollower(jamGarrisonFollower);
 				bool flag = (jamGarrisonFollower.Flags & 8) != 0;
-				if (flag && jamGarrisonFollower.Durability <= 0)
+				if (flag && jamGarrisonFollower.Durability <= 0 && this.TroopExpiredAction != null)
 				{
-					Debug.Log("Follower " + jamGarrisonFollower.GarrFollowerID + " has expired.");
-					if (this.TroopExpiredAction != null)
-					{
-						this.TroopExpiredAction(jamGarrisonFollower);
-					}
+					this.TroopExpiredAction(jamGarrisonFollower);
 				}
 			}
 			num += 1u;
@@ -423,13 +419,6 @@ public class Main : MonoBehaviour
 
 	private void MobileClientStartMissionResultHandler(MobileClientStartMissionResult msg)
 	{
-		Debug.Log(string.Concat(new object[]
-		{
-			"StartMissionResult: ID=",
-			msg.GarrMissionID,
-			", result=",
-			msg.Result
-		}));
 		if (msg.Result != 0)
 		{
 			GARRISON_RESULT result = (GARRISON_RESULT)msg.Result;
@@ -455,13 +444,6 @@ public class Main : MonoBehaviour
 
 	private void MobileClientCompleteMissionResultHandler(MobileClientCompleteMissionResult msg)
 	{
-		Debug.Log(string.Concat(new object[]
-		{
-			"CompleteMissionResult: ID=",
-			msg.GarrMissionID,
-			", result=",
-			msg.Result
-		}));
 		PersistentMissionData.UpdateMission(msg.Mission);
 		AdventureMapMissionSite[] componentsInChildren = AdventureMapPanel.instance.m_mapViewContentsRT.GetComponentsInChildren<AdventureMapMissionSite>(true);
 		foreach (AdventureMapMissionSite adventureMapMissionSite in componentsInChildren)
@@ -574,13 +556,6 @@ public class Main : MonoBehaviour
 
 	private void MobileClientFollowerChangedXPHandler(MobileClientFollowerChangedXP msg)
 	{
-		Debug.Log(string.Concat(new object[]
-		{
-			"MobileClientFollowerChangedXPHandler: follower ",
-			msg.Follower.GarrFollowerID,
-			" xp changed by ",
-			msg.XpChange
-		}));
 		if (this.FollowerChangedXPAction != null)
 		{
 			this.FollowerChangedXPAction(msg.OldFollower, msg.Follower);
@@ -887,7 +862,6 @@ public class Main : MonoBehaviour
 
 	public void StartMission(int garrMissionID, ulong[] followerDBIDs)
 	{
-		Debug.Log("Main.StartMission() " + garrMissionID);
 		MobilePlayerGarrisonStartMission mobilePlayerGarrisonStartMission = new MobilePlayerGarrisonStartMission();
 		mobilePlayerGarrisonStartMission.GarrMissionID = garrMissionID;
 		mobilePlayerGarrisonStartMission.FollowerDBIDs = followerDBIDs;
@@ -896,7 +870,6 @@ public class Main : MonoBehaviour
 
 	public void CompleteMission(int garrMissionID)
 	{
-		Debug.Log("Main.CompleteMission() " + garrMissionID);
 		MobilePlayerGarrisonCompleteMission mobilePlayerGarrisonCompleteMission = new MobilePlayerGarrisonCompleteMission();
 		mobilePlayerGarrisonCompleteMission.GarrMissionID = garrMissionID;
 		Login.instance.SendToMobileServer(mobilePlayerGarrisonCompleteMission);
@@ -904,13 +877,6 @@ public class Main : MonoBehaviour
 
 	public void ClaimMissionBonus(int garrMissionID)
 	{
-		Debug.Log(string.Concat(new object[]
-		{
-			"Main.ClaimMissionBonus() ",
-			garrMissionID,
-			" State is: ",
-			((JamGarrisonMobileMission)PersistentMissionData.missionDictionary[garrMissionID]).MissionState
-		}));
 		MobilePlayerClaimMissionBonus mobilePlayerClaimMissionBonus = new MobilePlayerClaimMissionBonus();
 		mobilePlayerClaimMissionBonus.GarrMissionID = garrMissionID;
 		Login.instance.SendToMobileServer(mobilePlayerClaimMissionBonus);

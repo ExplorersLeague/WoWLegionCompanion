@@ -3,8 +3,8 @@ using System.Runtime.Serialization;
 
 namespace JamLib
 {
-	[FlexJamStruct(Name = "CiRange")]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "CiRange")]
 	public struct IntRange
 	{
 		[System.Runtime.Serialization.DataMember(Name = "l")]

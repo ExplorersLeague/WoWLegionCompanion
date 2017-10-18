@@ -8,12 +8,12 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamMessage(Id = 4879, Name = "MobileClientFollowerActivationDataResult", Version = 39869590u)]
 	public class MobileClientFollowerActivationDataResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "goldCost")]
 		[FlexJamMember(Name = "goldCost", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "goldCost")]
 		public int GoldCost { get; set; }
 
-		[FlexJamMember(Name = "activationsRemaining", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "activationsRemaining")]
+		[FlexJamMember(Name = "activationsRemaining", Type = FlexJamType.Int32)]
 		public int ActivationsRemaining { get; set; }
 	}
 }

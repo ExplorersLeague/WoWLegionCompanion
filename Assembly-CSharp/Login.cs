@@ -2079,7 +2079,7 @@ public class Login : MonoBehaviour
 
 	private bool m_initialUnpause = true;
 
-	public static string m_portal = "beta";
+	public static string m_portal = "test";
 
 	public static string[] m_devPortals = new string[]
 	{

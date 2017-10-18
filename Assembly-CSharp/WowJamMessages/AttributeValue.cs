@@ -16,28 +16,28 @@ namespace WowJamMessages
 			this.GuidValue = "0000000000000000";
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "intValue")]
 		[FlexJamMember(Name = "intValue", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "intValue")]
 		public int IntValue { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "vector3Value")]
 		[FlexJamMember(Name = "vector3Value", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "vector3Value")]
 		public Vector3 Vector3Value { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "type")]
 		[FlexJamMember(Name = "type", Type = FlexJamType.Enum)]
+		[System.Runtime.Serialization.DataMember(Name = "type")]
 		public AttributeValueType Type { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "floatValue")]
 		[FlexJamMember(Name = "floatValue", Type = FlexJamType.Float)]
 		public float FloatValue { get; set; }
 
-		[FlexJamMember(Name = "stringValue", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "stringValue")]
+		[FlexJamMember(Name = "stringValue", Type = FlexJamType.String)]
 		public string StringValue { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "guidValue")]
 		[FlexJamMember(Name = "guidValue", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "guidValue")]
 		public string GuidValue { get; set; }
 	}
 }

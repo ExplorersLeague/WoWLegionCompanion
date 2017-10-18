@@ -8,12 +8,12 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class JamMobileAreaPOI
 	{
-		[System.Runtime.Serialization.DataMember(Name = "x")]
 		[FlexJamMember(Name = "x", Type = FlexJamType.Float)]
+		[System.Runtime.Serialization.DataMember(Name = "x")]
 		public float X { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "description")]
 		[FlexJamMember(Name = "description", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "description")]
 		public string Description { get; set; }
 
 		[FlexJamMember(Name = "y", Type = FlexJamType.Float)]
@@ -24,8 +24,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "timeRemaining")]
 		[FlexJamMember(Name = "timeRemaining", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "timeRemaining")]
 		public int TimeRemaining { get; set; }
 
 		[FlexJamMember(Name = "areaPoiID", Type = FlexJamType.Int32)]

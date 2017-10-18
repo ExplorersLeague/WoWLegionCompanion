@@ -8,8 +8,8 @@ namespace WowJamMessages
 	[System.Runtime.Serialization.DataContract]
 	public class JamBattlePayPurchase
 	{
-		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
 		[FlexJamMember(Name = "purchaseID", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "purchaseID")]
 		public ulong PurchaseID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "status")]

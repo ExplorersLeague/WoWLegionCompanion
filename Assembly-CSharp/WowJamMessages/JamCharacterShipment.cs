@@ -12,8 +12,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "shipmentDuration", Type = FlexJamType.Int32)]
 		public int ShipmentDuration { get; set; }
 
-		[FlexJamMember(Name = "assignedFollowerDBID", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "assignedFollowerDBID")]
+		[FlexJamMember(Name = "assignedFollowerDBID", Type = FlexJamType.UInt64)]
 		public ulong AssignedFollowerDBID { get; set; }
 
 		[FlexJamMember(Name = "shipmentID", Type = FlexJamType.UInt64)]
@@ -24,8 +24,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "shipmentRecID")]
 		public int ShipmentRecID { get; set; }
 
-		[FlexJamMember(Name = "creationTime", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "creationTime")]
+		[FlexJamMember(Name = "creationTime", Type = FlexJamType.Int32)]
 		public int CreationTime { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "buildingType")]

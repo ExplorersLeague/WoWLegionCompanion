@@ -16,24 +16,24 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "itemsInMail")]
 		public int ItemsInMail { get; set; }
 
-		[FlexJamMember(Name = "activeShipments", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "activeShipments")]
+		[FlexJamMember(Name = "activeShipments", Type = FlexJamType.Int32)]
 		public int ActiveShipments { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "maxLevel")]
 		[FlexJamMember(Name = "maxLevel", Type = FlexJamType.Int32)]
 		public int MaxLevel { get; set; }
 
-		[FlexJamMember(Name = "itemsInBank", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemsInBank")]
+		[FlexJamMember(Name = "itemsInBank", Type = FlexJamType.Int32)]
 		public int ItemsInBank { get; set; }
 
 		[FlexJamMember(Name = "currentLevel", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "currentLevel")]
 		public int CurrentLevel { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "itemsInLoot")]
 		[FlexJamMember(Name = "itemsInLoot", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "itemsInLoot")]
 		public int ItemsInLoot { get; set; }
 	}
 }

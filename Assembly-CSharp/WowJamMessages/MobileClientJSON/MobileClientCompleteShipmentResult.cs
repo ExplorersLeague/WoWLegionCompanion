@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[System.Runtime.Serialization.DataContract]
 	public class MobileClientCompleteShipmentResult
 	{
-		[System.Runtime.Serialization.DataMember(Name = "shipmentID")]
 		[FlexJamMember(Name = "shipmentID", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "shipmentID")]
 		public ulong ShipmentID { get; set; }
 
 		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]

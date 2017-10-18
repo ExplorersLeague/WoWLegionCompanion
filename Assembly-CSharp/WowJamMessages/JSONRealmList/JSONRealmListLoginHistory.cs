@@ -8,8 +8,8 @@ namespace WowJamMessages.JSONRealmList
 	[System.Runtime.Serialization.DataContract]
 	public class JSONRealmListLoginHistory
 	{
-		[FlexJamMember(ArrayDimensions = 1, Name = "history", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "history")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "history", Type = FlexJamType.Struct)]
 		public JamJSONRealmListLoginHistoryEntry[] History { get; set; }
 	}
 }

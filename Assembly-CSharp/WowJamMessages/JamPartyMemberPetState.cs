@@ -21,20 +21,20 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "health")]
 		public int Health { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "maxHealth")]
 		[FlexJamMember(Name = "maxHealth", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "maxHealth")]
 		public int MaxHealth { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "name")]
 		[FlexJamMember(Name = "name", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "auras")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "auras", Type = FlexJamType.Struct)]
 		public JamPartyMemberAuraState[] Auras { get; set; }
 
-		[FlexJamMember(Name = "displayID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "displayID")]
+		[FlexJamMember(Name = "displayID", Type = FlexJamType.Int32)]
 		public int DisplayID { get; set; }
 	}
 }

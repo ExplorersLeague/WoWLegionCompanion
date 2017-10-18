@@ -14,12 +14,12 @@ namespace WowJamMessages
 			this.Guid = "0000000000000000";
 		}
 
-		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		[FlexJamMember(Name = "guid", Type = FlexJamType.WowGuid)]
+		[System.Runtime.Serialization.DataMember(Name = "guid")]
 		public string Guid { get; set; }
 
-		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
+		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint VirtualRealmAddress { get; set; }
 	}
 }
