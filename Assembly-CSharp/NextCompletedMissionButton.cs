@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using WowJamMessages;
 using WowStatConstants;
 
 public class NextCompletedMissionButton : MonoBehaviour
@@ -126,16 +127,22 @@ public class NextCompletedMissionButton : MonoBehaviour
 
 	public void ZoomToNextCompleteMission()
 	{
-		GameObject gameObject = (!AdventureMapPanel.instance.m_mapInfo_BrokenIsles.gameObject.activeSelf) ? AdventureMapPanel.instance.m_missionAndWorldQuestArea_Argus : AdventureMapPanel.instance.m_missionAndWorldQuestArea_BrokenIsles;
-		AdventureMapMissionSite[] componentsInChildren = gameObject.GetComponentsInChildren<AdventureMapMissionSite>(true);
-		foreach (AdventureMapMissionSite adventureMapMissionSite in componentsInChildren)
+		AllPanels.instance.m_orderHallMultiPanel.m_miniMissionListPanel.InitMissionList();
+		MiniMissionListItem[] componentsInChildren = AllPanels.instance.m_orderHallMultiPanel.m_miniMissionListPanel.m_inProgressMission_listContents.GetComponentsInChildren<MiniMissionListItem>(true);
+		foreach (MiniMissionListItem miniMissionListItem in componentsInChildren)
 		{
-			if (!adventureMapMissionSite.m_isStackablePreview)
+			JamGarrisonMobileMission jamGarrisonMobileMission = (JamGarrisonMobileMission)PersistentMissionData.missionDictionary[miniMissionListItem.GetMissionID()];
+			if (jamGarrisonMobileMission != null)
 			{
-				if (adventureMapMissionSite.ShouldShowCompletedMission())
+				if (jamGarrisonMobileMission.MissionState == 1)
 				{
-					adventureMapMissionSite.JustZoomToMission();
-					break;
+					long num = GarrisonStatus.CurrentTime() - jamGarrisonMobileMission.StartTime;
+					long num2 = jamGarrisonMobileMission.MissionDuration - num;
+					if (num2 <= 0L)
+					{
+						AdventureMapPanel.instance.ShowMissionResultAction(jamGarrisonMobileMission.MissionRecID, 0, false);
+						break;
+					}
 				}
 			}
 		}

@@ -22,12 +22,12 @@ namespace WowJamMessages.MobileJSON
 		[FlexJamMember(Name = "realmAddress", Type = FlexJamType.UInt32)]
 		public uint RealmAddress { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "joinTicket")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "joinTicket", Type = FlexJamType.UInt8)]
+		[System.Runtime.Serialization.DataMember(Name = "joinTicket")]
 		public byte[] JoinTicket { get; set; }
 
-		[FlexJamMember(Name = "characterID", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "characterID")]
+		[FlexJamMember(Name = "characterID", Type = FlexJamType.WowGuid)]
 		public string CharacterID { get; set; }
 
 		[FlexJamMember(Name = "build", Type = FlexJamType.UInt16)]

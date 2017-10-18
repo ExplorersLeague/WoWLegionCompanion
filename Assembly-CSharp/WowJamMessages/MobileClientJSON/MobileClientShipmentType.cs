@@ -16,8 +16,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "charShipmentID")]
 		public int CharShipmentID { get; set; }
 
-		[FlexJamMember(Name = "canPickup", Type = FlexJamType.Bool)]
 		[System.Runtime.Serialization.DataMember(Name = "canPickup")]
+		[FlexJamMember(Name = "canPickup", Type = FlexJamType.Bool)]
 		public bool CanPickup { get; set; }
 
 		[FlexJamMember(Name = "currencyTypeID", Type = FlexJamType.Int32)]

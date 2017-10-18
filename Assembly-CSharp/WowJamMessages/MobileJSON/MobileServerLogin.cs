@@ -12,8 +12,8 @@ namespace WowJamMessages.MobileJSON
 		[System.Runtime.Serialization.DataMember(Name = "joinTicket")]
 		public byte[] JoinTicket { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "locale")]
 		[FlexJamMember(Name = "locale", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "locale")]
 		public string Locale { get; set; }
 	}
 }

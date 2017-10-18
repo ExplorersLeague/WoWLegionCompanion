@@ -12,24 +12,24 @@ namespace WowJamMessages.MobileClientJSON
 		[FlexJamMember(Name = "spellID", Type = FlexJamType.Int32)]
 		public int SpellID { get; set; }
 
-		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "itemID")]
+		[FlexJamMember(Name = "itemID", Type = FlexJamType.Int32)]
 		public int ItemID { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "minItemLevel")]
 		[FlexJamMember(Name = "minItemLevel", Type = FlexJamType.Int32)]
 		public int MinItemLevel { get; set; }
 
-		[FlexJamMember(Name = "maxItemLevel", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "maxItemLevel")]
+		[FlexJamMember(Name = "maxItemLevel", Type = FlexJamType.Int32)]
 		public int MaxItemLevel { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "quantity")]
 		[FlexJamMember(Name = "quantity", Type = FlexJamType.Int32)]
 		public int Quantity { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "operation")]
 		[FlexJamMember(Name = "operation", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "operation")]
 		public int Operation { get; set; }
 	}
 }

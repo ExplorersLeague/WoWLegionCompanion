@@ -17,20 +17,20 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "name")]
 		public string Name { get; set; }
 
-		[FlexJamMember(ArrayDimensions = 1, Name = "attributeDescriptions", Type = FlexJamType.Struct)]
 		[System.Runtime.Serialization.DataMember(Name = "attributeDescriptions")]
+		[FlexJamMember(ArrayDimensions = 1, Name = "attributeDescriptions", Type = FlexJamType.Struct)]
 		public DebugAttributeDescription[] AttributeDescriptions { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "updateTime")]
 		[FlexJamMember(Name = "updateTime", Type = FlexJamType.Int32)]
 		public int UpdateTime { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "attributes")]
 		[FlexJamMember(ArrayDimensions = 1, Name = "attributes", Type = FlexJamType.Struct)]
+		[System.Runtime.Serialization.DataMember(Name = "attributes")]
 		public DebugAttribute[] Attributes { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "requestParameter")]
 		[FlexJamMember(Name = "requestParameter", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "requestParameter")]
 		public string RequestParameter { get; set; }
 	}
 }

@@ -29,8 +29,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "m_deadLine")]
 		public int M_deadLine { get; set; }
 
-		[FlexJamMember(Name = "m_maxSignatures", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "m_maxSignatures")]
+		[FlexJamMember(Name = "m_maxSignatures", Type = FlexJamType.Int32)]
 		public int M_maxSignatures { get; set; }
 
 		[FlexJamMember(Name = "m_title", Type = FlexJamType.String)]
@@ -45,32 +45,32 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "m_petitioner", Type = FlexJamType.WowGuid)]
 		public string M_petitioner { get; set; }
 
-		[FlexJamMember(Name = "m_bodyText", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "m_bodyText")]
+		[FlexJamMember(Name = "m_bodyText", Type = FlexJamType.String)]
 		public string M_bodyText { get; set; }
 
-		[FlexJamMember(Name = "m_allowedMaxLevel", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "m_allowedMaxLevel")]
+		[FlexJamMember(Name = "m_allowedMaxLevel", Type = FlexJamType.Int32)]
 		public int M_allowedMaxLevel { get; set; }
 
 		[FlexJamMember(Name = "m_minSignatures", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "m_minSignatures")]
 		public int M_minSignatures { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "m_staticType")]
 		[FlexJamMember(Name = "m_staticType", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "m_staticType")]
 		public int M_staticType { get; set; }
 
 		[FlexJamMember(Name = "m_numChoices", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "m_numChoices")]
 		public int M_numChoices { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "m_issueDate")]
 		[FlexJamMember(Name = "m_issueDate", Type = FlexJamType.Int32)]
+		[System.Runtime.Serialization.DataMember(Name = "m_issueDate")]
 		public int M_issueDate { get; set; }
 
-		[FlexJamMember(Name = "m_allowedRaces", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "m_allowedRaces")]
+		[FlexJamMember(Name = "m_allowedRaces", Type = FlexJamType.Int32)]
 		public int M_allowedRaces { get; set; }
 
 		[FlexJamMember(Name = "m_petitionID", Type = FlexJamType.Int32)]

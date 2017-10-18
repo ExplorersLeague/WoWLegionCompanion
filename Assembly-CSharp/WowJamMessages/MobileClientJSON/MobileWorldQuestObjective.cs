@@ -8,8 +8,8 @@ namespace WowJamMessages.MobileClientJSON
 	[FlexJamStruct(Name = "MobileWorldQuestObjective", Version = 39869590u)]
 	public class MobileWorldQuestObjective
 	{
-		[System.Runtime.Serialization.DataMember(Name = "text")]
 		[FlexJamMember(Name = "text", Type = FlexJamType.String)]
+		[System.Runtime.Serialization.DataMember(Name = "text")]
 		public string Text { get; set; }
 	}
 }

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.MobileClientJSON
 {
-	[FlexJamMessage(Id = 4846, Name = "MobileClientCompleteMissionResult", Version = 39869590u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamMessage(Id = 4846, Name = "MobileClientCompleteMissionResult", Version = 39869590u)]
 	public class MobileClientCompleteMissionResult
 	{
 		[System.Runtime.Serialization.DataMember(Name = "garrMissionID")]
@@ -24,8 +24,8 @@ namespace WowJamMessages.MobileClientJSON
 		[System.Runtime.Serialization.DataMember(Name = "bonusRollSucceeded")]
 		public bool BonusRollSucceeded { get; set; }
 
-		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		[System.Runtime.Serialization.DataMember(Name = "result")]
+		[FlexJamMember(Name = "result", Type = FlexJamType.Int32)]
 		public int Result { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "followerInfo")]

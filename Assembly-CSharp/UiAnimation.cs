@@ -702,8 +702,8 @@ public class UiAnimation : MonoBehaviour
 		[XmlAttribute("h")]
 		public string m_height;
 
-		[XmlArray("Anchors")]
 		[XmlArrayItem("Anchor")]
+		[XmlArray("Anchors")]
 		public List<UiAnimation.UiAnchor> m_anchors = new List<UiAnimation.UiAnchor>();
 	}
 
@@ -764,8 +764,8 @@ public class UiAnimation : MonoBehaviour
 		[XmlElement("Size")]
 		public UiAnimation.UiSize size = new UiAnimation.UiSize();
 
-		[XmlArrayItem("Layer")]
 		[XmlArray("Layers")]
+		[XmlArrayItem("Layer")]
 		public List<UiAnimation.UiLayer> layers = new List<UiAnimation.UiLayer>();
 
 		[XmlElement("Animations")]

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages.JSONRealmList
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamJSONCharacterEntry", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamJSONCharacterEntry
 	{
 		[FlexJamMember(Name = "raceID", Type = FlexJamType.UInt8)]
@@ -20,16 +20,16 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "experienceLevel")]
 		public byte ExperienceLevel { get; set; }
 
-		[FlexJamMember(Name = "playerGuid", Type = FlexJamType.WowGuid)]
 		[System.Runtime.Serialization.DataMember(Name = "playerGuid")]
+		[FlexJamMember(Name = "playerGuid", Type = FlexJamType.WowGuid)]
 		public string PlayerGuid { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "lastActiveTime")]
 		[FlexJamMember(Name = "lastActiveTime", Type = FlexJamType.Int32)]
 		public int LastActiveTime { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
 		[FlexJamMember(Name = "virtualRealmAddress", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "virtualRealmAddress")]
 		public uint VirtualRealmAddress { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "name")]
@@ -40,8 +40,8 @@ namespace WowJamMessages.JSONRealmList
 		[FlexJamMember(Name = "classID", Type = FlexJamType.UInt8)]
 		public byte ClassID { get; set; }
 
-		[FlexJamMember(Name = "sexID", Type = FlexJamType.UInt8)]
 		[System.Runtime.Serialization.DataMember(Name = "sexID")]
+		[FlexJamMember(Name = "sexID", Type = FlexJamType.UInt8)]
 		public byte SexID { get; set; }
 	}
 }

@@ -4,8 +4,8 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[FlexJamStruct(Name = "JamWhoEntry", Version = 28333852u)]
 	[System.Runtime.Serialization.DataContract]
+	[FlexJamStruct(Name = "JamWhoEntry", Version = 28333852u)]
 	public class JamWhoEntry
 	{
 		[FlexJamMember(Name = "guildGUID", Type = FlexJamType.WowGuid)]
@@ -20,8 +20,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "guildVirtualRealmAddress", Type = FlexJamType.UInt32)]
 		public uint GuildVirtualRealmAddress { get; set; }
 
-		[FlexJamMember(Name = "guildName", Type = FlexJamType.String)]
 		[System.Runtime.Serialization.DataMember(Name = "guildName")]
+		[FlexJamMember(Name = "guildName", Type = FlexJamType.String)]
 		public string GuildName { get; set; }
 
 		[FlexJamMember(Name = "playerData", Type = FlexJamType.Struct)]

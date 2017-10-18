@@ -129,6 +129,7 @@ public class TitlePanel : MonoBehaviour
 				value = 3;
 				break;
 			case "beta":
+			case "test":
 				value = 4;
 				break;
 			}
@@ -162,7 +163,7 @@ public class TitlePanel : MonoBehaviour
 			text = this.m_portalDropdown.options.ToArray()[this.m_portalDropdown.value].text.ToLower();
 			if (text.ToLower() == "ptr")
 			{
-				text = "beta";
+				text = "test";
 			}
 		}
 		else
@@ -182,7 +183,7 @@ public class TitlePanel : MonoBehaviour
 				text = "cn";
 				break;
 			case 4:
-				text = "beta";
+				text = "test";
 				break;
 			}
 		}

@@ -4,12 +4,12 @@ using JamLib;
 
 namespace WowJamMessages
 {
-	[System.Runtime.Serialization.DataContract]
 	[FlexJamStruct(Name = "JamAuctionableTokenInfo", Version = 28333852u)]
+	[System.Runtime.Serialization.DataContract]
 	public class JamAuctionableTokenInfo
 	{
-		[System.Runtime.Serialization.DataMember(Name = "price")]
 		[FlexJamMember(Name = "price", Type = FlexJamType.UInt64)]
+		[System.Runtime.Serialization.DataMember(Name = "price")]
 		public ulong Price { get; set; }
 
 		[FlexJamMember(Name = "status", Type = FlexJamType.Int32)]
@@ -20,8 +20,8 @@ namespace WowJamMessages
 		[FlexJamMember(Name = "expectedSecondsUntilSold", Type = FlexJamType.UInt32)]
 		public uint ExpectedSecondsUntilSold { get; set; }
 
-		[FlexJamMember(Name = "id", Type = FlexJamType.UInt64)]
 		[System.Runtime.Serialization.DataMember(Name = "id")]
+		[FlexJamMember(Name = "id", Type = FlexJamType.UInt64)]
 		public ulong Id { get; set; }
 
 		[System.Runtime.Serialization.DataMember(Name = "lastUpdate")]

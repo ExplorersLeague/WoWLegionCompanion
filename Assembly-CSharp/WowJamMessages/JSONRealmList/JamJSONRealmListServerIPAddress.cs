@@ -12,8 +12,8 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "ip")]
 		public string Ip { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "port")]
 		[FlexJamMember(Name = "port", Type = FlexJamType.UInt16)]
+		[System.Runtime.Serialization.DataMember(Name = "port")]
 		public ushort Port { get; set; }
 	}
 }

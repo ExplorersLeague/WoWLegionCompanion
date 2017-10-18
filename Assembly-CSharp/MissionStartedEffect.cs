@@ -114,6 +114,14 @@ public class MissionStartedEffect : MonoBehaviour
 		Object.DestroyObject(base.gameObject);
 	}
 
+	private void OnApplicationPause(bool paused)
+	{
+		if (paused)
+		{
+			Object.DestroyObject(base.gameObject);
+		}
+	}
+
 	public CanvasGroup m_toastCanvasGroup;
 
 	public RectTransform m_rootRT;

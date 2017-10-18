@@ -891,7 +891,7 @@ public class AdventureMapPanel : MonoBehaviour
 								}
 							}
 							gameObject2.transform.localPosition = Vector3.zero;
-							if (component2.m_errorImage != null)
+							if (component2.m_errorImage != null && component2.m_errorImage.gameObject != null)
 							{
 								component2.m_errorImage.gameObject.SetActive(false);
 							}
@@ -899,7 +899,7 @@ public class AdventureMapPanel : MonoBehaviour
 						else
 						{
 							gameObject2.transform.localPosition = new Vector3(0f, 0f, 0f);
-							if (component2.m_errorImage != null)
+							if (component2.m_errorImage != null && component2.m_errorImage.gameObject != null)
 							{
 								component2.m_errorImage.gameObject.SetActive(true);
 							}

@@ -16,8 +16,8 @@ namespace WowJamMessages
 		[System.Runtime.Serialization.DataMember(Name = "state")]
 		public int State { get; set; }
 
-		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		[System.Runtime.Serialization.DataMember(Name = "flags")]
+		[FlexJamMember(Name = "flags", Type = FlexJamType.UInt32)]
 		public uint Flags { get; set; }
 
 		[FlexJamMember(Name = "gameObjectType", Type = FlexJamType.Int32)]

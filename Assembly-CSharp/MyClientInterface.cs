@@ -52,7 +52,7 @@ internal class MyClientInterface : ClientInterface
 		{
 			if (MyClientInterface.<>f__switch$map9 == null)
 			{
-				MyClientInterface.<>f__switch$map9 = new Dictionary<string, int>(6)
+				MyClientInterface.<>f__switch$map9 = new Dictionary<string, int>(7)
 				{
 					{
 						"us",
@@ -76,6 +76,10 @@ internal class MyClientInterface : ClientInterface
 					},
 					{
 						"beta",
+						0
+					},
+					{
+						"test",
 						0
 					}
 				};

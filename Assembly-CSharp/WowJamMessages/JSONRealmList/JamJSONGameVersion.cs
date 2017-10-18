@@ -20,8 +20,8 @@ namespace WowJamMessages.JSONRealmList
 		[System.Runtime.Serialization.DataMember(Name = "versionMinor")]
 		public uint VersionMinor { get; set; }
 
-		[System.Runtime.Serialization.DataMember(Name = "versionRevision")]
 		[FlexJamMember(Name = "versionRevision", Type = FlexJamType.UInt32)]
+		[System.Runtime.Serialization.DataMember(Name = "versionRevision")]
 		public uint VersionRevision { get; set; }
 	}
 }
